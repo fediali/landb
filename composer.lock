@@ -224,7 +224,7 @@
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/api",
-                "reference": "ce4f8da507d6b6e5acaa195bb14ee43ff9fbddfc"
+                "reference": "45eee8047a53b8341f04c20ac0012943427d0e32"
             },
             "require": {
                 "botble/platform": "*@dev",
@@ -351,7 +351,7 @@
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/optimize",
-                "reference": "aff93503968284ff1a2a384e630f41a1271ab55f"
+                "reference": "92fe6275d68fee8fee88d4e6154861e71046c7ff"
             },
             "require": {
                 "botble/platform": "*@dev"
@@ -11255,7 +11255,7 @@
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/plugin-generator",
-                "reference": "081cd882f2261333a9a4808f7867331425efb828"
+                "reference": "98e485dfc8a5ce0b58ed84ad035f6dfc7400c793"
             },
             "require": {
                 "botble/platform": "*@dev",
@@ -11285,7 +11285,7 @@
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/theme-generator",
-                "reference": "cbcc0b6fb06c65413b4ace6f5e292aab8fb4655f"
+                "reference": "3a0ceeb8cad2ce16acc0bf212be7c19cd3246e73"
             },
             "require": {
                 "botble/platform": "*@dev",
