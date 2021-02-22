@@ -14,7 +14,7 @@
                     <li>
                         <a href="{{ route('contacts.edit', $contact->id) }}">
                             <span class="photo">
-                                <img src="{{ (new \Botble\Base\Supports\Avatar)->create($contact->name)->toBase64() }}" class="rounded-circle" alt="{{ $contact->name }}">
+                                {{--<img src="{{ (new \Botble\Base\Supports\Avatar)->create($contact->name)->toBase64() }}" class="rounded-circle" alt="{{ $contact->name }}">--}}
                             </span>
                             <span class="subject"><span class="from"> {{ $contact->name }} </span><span class="time">{{ Carbon\Carbon::parse($contact->created_at)->toDateTimeString() }} </span></span>
                             <span class="message"> {{ $contact->phone }} - {{ $contact->email }} </span>
