@@ -1,0 +1,9 @@
+{
+    "name": "Fits",
+    "namespace": "Botble\\Fits\\",
+    "provider": "Botble\\Fits\\Providers\\FitsServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module fits"
+}

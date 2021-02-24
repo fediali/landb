@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class {Module}Create{Name}Table extends Migration
+class FabricsCreateFabricsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,10 @@ class {Module}Create{Name}Table extends Migration
      */
     public function up()
     {
-        Schema::create('{names}', function (Blueprint $table) {
+        Schema::create('fabrics', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
             $table->string('status', 60)->default('published');
-            $table->integer('business_id')->default(1);
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->softDeletes();
@@ -31,6 +30,6 @@ class {Module}Create{Name}Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('{names}');
+        Schema::dropIfExists('fabrics');
     }
 }
