@@ -1,0 +1,9 @@
+{
+    "name": "Fabrics",
+    "namespace": "Botble\\Fabrics\\",
+    "provider": "Botble\\Fabrics\\Providers\\FabricsServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module fabrics"
+}
