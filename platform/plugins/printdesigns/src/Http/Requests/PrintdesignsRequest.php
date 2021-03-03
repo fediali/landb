@@ -17,7 +17,10 @@ class PrintdesignsRequest extends Request
     public function rules()
     {
         return [
-            'name'   => 'required',
+            'name'   => 'required|max:255',
+            'designer_id'   => 'required|exists:users,id',
+            'sku'   => 'required|max:255',
+            'file'   => 'required',
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
     }

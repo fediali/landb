@@ -11,6 +11,7 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 use Yajra\DataTables\DataTables;
 use Botble\Printdesigns\Models\Printdesigns;
 use Html;
+use RvMedia;
 
 class PrintdesignsTable extends TableAbstract
 {
@@ -50,11 +51,18 @@ class PrintdesignsTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            ->editColumn('designer_id', function ($item) {
+                return $item->designer ? $item->designer->getFullName() : null;
+            })
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('printdesigns.edit')) {
                     return $item->name;
                 }
                 return Html::link(route('printdesigns.edit', $item->id), $item->name);
+            })*/
+            ->editColumn('file', function ($item) {
+                return Html::image(RvMedia::getImageUrl($item->file, 'thumb', false, RvMedia::getDefaultImage()),
+                    $item->name, ['width' => 50]);
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -82,12 +90,21 @@ class PrintdesignsTable extends TableAbstract
         $model = $this->repository->getModel();
         $select = [
             'printdesigns.id',
+            'printdesigns.designer_id',
             'printdesigns.name',
+            'printdesigns.sku',
+            'printdesigns.file',
             'printdesigns.created_at',
             'printdesigns.status',
         ];
 
-        $query = $model->select($select);
+        $query = $model
+            ->with([
+                'designer'     => function ($query) {
+                    $query->select(['id', 'first_name', 'last_name']);
+                },
+            ])
+            ->select($select);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
@@ -103,10 +120,27 @@ class PrintdesignsTable extends TableAbstract
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
+            'designer_id'  => [
+                'name'      => 'printdesigns.designer_id',
+                'title'     => 'Designer',
+                'width'     => '150px',
+                'class'     => 'no-sort text-center',
+                'orderable' => false,
+            ],
             'name' => [
                 'name'  => 'printdesigns.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
+            ],
+            'sku' => [
+                'name'  => 'printdesigns.sku',
+                'title' => 'SKU',
+                'class' => 'text-left',
+            ],
+            'file'      => [
+                'name'  => 'printdesigns.file',
+                'title' => 'File',
+                'width' => '70px',
             ],
             'created_at' => [
                 'name'  => 'printdesigns.created_at',

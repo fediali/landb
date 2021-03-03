@@ -2,9 +2,11 @@
 
 namespace Botble\Printdesigns\Models;
 
+use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Printdesigns extends BaseModel
 {
@@ -21,8 +23,15 @@ class Printdesigns extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'designer_id',
         'name',
+        'sku',
+        'file',
+        'file_type',
         'status',
+        'business_id',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -31,4 +40,14 @@ class Printdesigns extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    /**
+     * @deprecated
+     * @return BelongsTo
+     */
+    public function designer(): BelongsTo
+    {
+        return $this->belongsTo(User::class)->withDefault();
+    }
+
 }
