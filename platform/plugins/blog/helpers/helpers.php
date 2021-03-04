@@ -255,3 +255,17 @@ if (!function_exists('get_post_formats')) {
         return PostFormat::getPostFormats($convertToList);
     }
 }
+
+if (!function_exists('get_designers')) {
+    function get_designers()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 2)->pluck('users.username','users.id')->all();
+    }
+}
+
+if (!function_exists('get_vendors')) {
+    function get_vendors()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 3)->pluck('users.username','users.id')->all();
+    }
+}
