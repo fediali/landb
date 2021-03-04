@@ -123,8 +123,7 @@ class PrintdesignsTable extends TableAbstract
             'designer_id'  => [
                 'name'      => 'printdesigns.designer_id',
                 'title'     => 'Designer',
-                'width'     => '150px',
-                'class'     => 'no-sort text-center',
+                'class'     => 'no-sort text-left',
                 'orderable' => false,
             ],
             'name' => [

@@ -50,11 +50,14 @@ class ThreadTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('thread.edit')) {
                     return $item->name;
                 }
                 return Html::link(route('thread.edit', $item->id), $item->name);
+            })*/
+            ->editColumn('designer_id', function ($item) {
+                return $item->designer ? $item->designer->getFullName() : null;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -83,11 +86,18 @@ class ThreadTable extends TableAbstract
         $select = [
             'threads.id',
             'threads.name',
+            'threads.designer_id',
             'threads.created_at',
             'threads.status',
         ];
 
-        $query = $model->select($select);
+        $query = $model
+            ->with([
+                'designer' => function ($query) {
+                    $query->select(['id', 'first_name', 'last_name']);
+                },
+            ])
+            ->select($select);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
@@ -107,6 +117,12 @@ class ThreadTable extends TableAbstract
                 'name'  => 'threads.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
+            ],
+            'designer_id'  => [
+                'name'      => 'threads.designer_id',
+                'title'     => 'Designer',
+                'class'     => 'no-sort text-left',
+                'orderable' => false,
             ],
             'created_at' => [
                 'name'  => 'threads.created_at',

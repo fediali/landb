@@ -269,3 +269,45 @@ if (!function_exists('get_vendors')) {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 3)->pluck('users.username','users.id')->all();
     }
 }
+
+if (!function_exists('get_seasons')) {
+    function get_seasons()
+    {
+        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_product_categories')) {
+    function get_product_categories()
+    {
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_designs')) {
+    function get_designs()
+    {
+        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_fits')) {
+    function get_fits()
+    {
+        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_rises')) {
+    function get_rises()
+    {
+        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_fabrics')) {
+    function get_fabrics()
+    {
+        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
+    }
+}
