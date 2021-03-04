@@ -212,7 +212,7 @@ class InventoryController extends BaseController
 
 
     public function getProductByBarcode(Request $request){
-      $product = Product::where('barcode' , $request->get('barcode'))->where('status', 'published')->first();
+      $product = Product::where('barcode',$request->get('barcode'))->orWhere('sku', $request->get('barcode'))->where('status', 'published')->first();
       if($product){
         return response()->json(['product' => $product, 'status' => 'success'], 200);
       }else{
