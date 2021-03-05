@@ -277,8 +277,8 @@ if (!function_exists('get_seasons')) {
     }
 }
 
-if (!function_exists('get_product_categories')) {
-    function get_product_categories()
+if (!function_exists('get_product_categories_custom')) {
+    function get_product_categories_custom()
     {
         return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->pluck('name','id')->all();
     }
