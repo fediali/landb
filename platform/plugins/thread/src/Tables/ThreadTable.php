@@ -86,7 +86,6 @@ class ThreadTable extends TableAbstract
             'threads.created_at',
             'threads.status',
         ];
-
         $query = $model->select($select);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
