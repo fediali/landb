@@ -15,7 +15,38 @@ class ThreadCreateThreadTable extends Migration
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->integer('designer_id')->index('th_designer_id_fk');
+            $table->integer('vendor_id')->index('th_vendor_id_fk');
+            $table->integer('season_id')->index('th_season_id_fk');
+            $table->string('order_no', 255);
+            $table->string('order_status', 100)->default('new');
+            $table->integer('category_id')->index('th_category_id_fk');
+            $table->integer('design_id')->index('th_design_id_fk');
+            $table->string('pp_request', 50)->default('no');
+            $table->string('pp_sample', 50)->default('no');
+            $table->string('pp_sample_size', 100)->nullable();
+            $table->timestamp('pp_sample_date')->useCurrent();
+            $table->string('material', 150)->nullable();
+            $table->string('sleeve', 150)->nullable();
+            $table->string('label', 150)->nullable();
+            $table->string('shipping_method', 100)->default('sea');
+            $table->timestamp('order_date')->useCurrent();
+            $table->timestamp('ship_date')->useCurrent();
+            $table->timestamp('cancel_date')->useCurrent();
+            $table->string('is_denim', 50)->default('no');
+            $table->string('inseam', 150)->nullable();
+            $table->integer('fit_id')->nullable()->index('th_fit_id_fk');
+            $table->integer('rise_id')->nullable()->index('th_rise_id_fk');
+            $table->integer('fabric_id')->nullable()->index('th_fabric_id_fk');
+            $table->string('fabric_print_direction', 150)->nullable();
+            $table->string('wash', 150)->nullable();
+            $table->string('spec_file', 255);
+            $table->text('description')->nullable();
             $table->string('status', 60)->default('published');
+            $table->integer('business_id')->default(1);
+            $table->integer('created_by')->default(0);
+            $table->integer('updated_by')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
