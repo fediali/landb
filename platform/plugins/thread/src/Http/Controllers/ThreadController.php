@@ -15,6 +15,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Thread\Forms\ThreadForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Str;
 
 class ThreadController extends BaseController
 {
@@ -61,7 +62,11 @@ class ThreadController extends BaseController
      */
     public function store(ThreadRequest $request, BaseHttpResponse $response)
     {
-        $thread = $this->threadRepository->createOrUpdate($request->input());
+        $requestData = $request->input();
+
+        $requestData['order_no'] = strtoupper(Str::random(8));
+
+        $thread = $this->threadRepository->createOrUpdate($requestData);
 
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 

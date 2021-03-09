@@ -16,14 +16,14 @@ class ThreadCreateThreadTable extends Migration
             $table->id();
             $table->string('name', 255);
             $table->integer('designer_id')->index('th_designer_id_fk');
-            $table->integer('vendor_id')->index('th_vendor_id_fk');
+            $table->integer('vendor_id')->nullable()->index('th_vendor_id_fk');
             $table->integer('season_id')->index('th_season_id_fk');
             $table->string('order_no', 255);
             $table->string('order_status', 100)->default('new');
             $table->integer('category_id')->index('th_category_id_fk');
-            $table->integer('design_id')->index('th_design_id_fk');
-            $table->string('pp_request', 50)->default('no');
-            $table->string('pp_sample', 50)->default('no');
+            $table->integer('design_id')->nullable()->index('th_design_id_fk');
+            $table->string('pp_request', 50)->nullable()->default('no');
+            $table->string('pp_sample', 50)->nullable()->default('no');
             $table->string('pp_sample_size', 100)->nullable();
             $table->timestamp('pp_sample_date')->useCurrent();
             $table->string('material', 150)->nullable();

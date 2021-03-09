@@ -4,6 +4,7 @@ namespace Botble\Thread\Forms;
 
 use Botble\Base\Forms\FormAbstract;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Thread\Forms\Fields\AddDenimFields;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
 
@@ -24,6 +25,7 @@ class ThreadForm extends FormAbstract
         $rises = get_rises();
         $fabrics = get_fabrics();
 
+        $this->formHelper->addCustomField('addDenimFields', AddDenimFields::class);
         $this
             ->setupModel(new Thread)
             ->setValidatorClass(ThreadRequest::class)
@@ -47,7 +49,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('vendor_id', 'customSelect', [
                 'label'      => 'Select Vendor',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Vendor',
                     'class' => 'select-search-full',
@@ -72,7 +74,7 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => $categories,
             ])
-            ->add('design_id', 'customSelect', [
+            /*->add('design_id', 'customSelect', [
                 'label'      => 'Select Design',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
@@ -83,16 +85,16 @@ class ThreadForm extends FormAbstract
             ])
             ->add('pp_request', 'customSelect', [
                 'label'      => 'Select PP Request',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select PP Request',
                     'class' => 'select-search-full',
                 ],
                 'choices'    => Thread::$statuses,
-            ])
+            ])*/
             ->add('pp_sample', 'customSelect', [
                 'label'      => 'Select PP Sample',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select PP Sample',
                     'class' => 'select-search-full',
@@ -101,7 +103,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('pp_sample_size', 'text', [
                 'label'      => 'PP Sample Size',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'PP Sample Size',
                     'data-counter' => 120,
@@ -130,7 +132,15 @@ class ThreadForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'default_value' => false,
             ])
-            ->add('inseam', 'text', [
+            ->add('DenimFields', 'addDenimFields', [
+                'label'      => 'Denim Fields',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Denim Fields',
+                ],
+                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics]
+            ])
+            /*->add('inseam', 'text', [
                 'label'      => 'Inseam',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
@@ -180,7 +190,7 @@ class ThreadForm extends FormAbstract
                     'placeholder'  => 'Wash',
                     'data-counter' => 120,
                 ],
-            ])
+            ])*/
             ->add('description', 'editor', [
                 'label'      => 'Description',
                 'label_attr' => ['class' => 'control-label'],
@@ -199,14 +209,14 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => BaseStatusEnum::labels(),
             ])
-            ->add('order_no', 'text', [
+            /*->add('order_no', 'text', [
                 'label'      => 'Order No.',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => 'Order No.',
                     'data-counter' => 120,
                 ],
-            ])
+            ])*/
             ->add('order_status', 'customSelect', [
                 'label'      => 'Select Order Status',
                 'label_attr' => ['class' => 'control-label required'],
@@ -218,7 +228,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('material', 'text', [
                 'label'      => 'Material',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Material',
                     'data-counter' => 120,
@@ -226,7 +236,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('sleeve', 'text', [
                 'label'      => 'Sleeve',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Sleeve',
                     'data-counter' => 120,
@@ -234,7 +244,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('label', 'text', [
                 'label'      => 'Label',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Label',
                     'data-counter' => 120,
