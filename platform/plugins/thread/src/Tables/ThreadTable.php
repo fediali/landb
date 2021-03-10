@@ -71,7 +71,8 @@ class ThreadTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('thread.edit', 'thread.destroy', $item);
+                $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
+                return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);

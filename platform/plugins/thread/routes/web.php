@@ -11,6 +11,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@deletes',
                 'permission' => 'thread.destroy',
             ]);
+            Route::get('clone-item/{id}', [
+                'as'         => 'cloneItem',
+                'uses'       => 'ThreadController@cloneItem',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

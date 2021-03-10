@@ -68,7 +68,7 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
-        $thread->product_categories()->attach($requestData['category_id']);
+        $thread->product_categories()->sync($requestData['category_id']);
 
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
@@ -166,4 +166,36 @@ class ThreadController extends BaseController
 
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
+
+    /**
+     * @param int $id
+     * @param BaseHttpResponse $response
+     * @return BaseHttpResponse
+     */
+    public function cloneItem($id, BaseHttpResponse $response, Request $request)
+    {
+        $requestData = $this->threadRepository->findOrFail($id);
+
+        $categories = $requestData->product_categories()->pluck('product_category_id')->all();
+
+        unset($requestData->id);
+        unset($requestData->created_at);
+        unset($requestData->updated_at);
+        unset($requestData->deleted_at);
+
+        $requestData->order_no = strtoupper(Str::random(8));
+
+        $thread = $this->threadRepository->createOrUpdate($requestData->toArray());
+
+        $thread->product_categories()->sync($categories);
+
+        event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
+
+        return $response
+            ->setPreviousUrl(route('thread.index'))
+            ->setNextUrl(route('thread.edit', $thread->id))
+            ->setMessage(trans('core/base::notices.create_success_message'));
+
+    }
+
 }

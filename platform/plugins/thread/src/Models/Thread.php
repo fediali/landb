@@ -88,6 +88,10 @@ class Thread extends BaseModel
         'status' => BaseStatusEnum::class,
     ];
 
+    protected $with = [
+        'product_categories'
+    ];
+
     const NEW = 'new';
     const REORDER = 'reorder';
     const CANCEL = 'cancel';
