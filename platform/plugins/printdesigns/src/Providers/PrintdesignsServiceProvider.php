@@ -34,7 +34,7 @@ class PrintdesignsServiceProvider extends ServiceProvider
             ->loadAndPublishViews()
             ->loadRoutes(['web']);
 
-        Event::listen(RouteMatched::class, function () {
+        /*Event::listen(RouteMatched::class, function () {
             if (defined('LANGUAGE_MODULE_SCREEN_NAME')) {
                 \Language::registerModule([Printdesigns::class]);
             }
@@ -48,6 +48,6 @@ class PrintdesignsServiceProvider extends ServiceProvider
                 'url'         => route('printdesigns.index'),
                 'permissions' => ['printdesigns.index'],
             ]);
-        });
+        });*/
     }
 }

@@ -34,7 +34,7 @@ class PacksServiceProvider extends ServiceProvider
             ->loadAndPublishViews()
             ->loadRoutes(['web']);
 
-        Event::listen(RouteMatched::class, function () {
+        /*Event::listen(RouteMatched::class, function () {
             if (defined('LANGUAGE_MODULE_SCREEN_NAME')) {
                 \Language::registerModule([Packs::class]);
             }
@@ -48,6 +48,6 @@ class PacksServiceProvider extends ServiceProvider
                 'url'         => route('packs.index'),
                 'permissions' => ['packs.index'],
             ]);
-        });
+        });*/
     }
 }
