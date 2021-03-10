@@ -20,10 +20,15 @@ class ThreadForm extends FormAbstract
         $vendors = get_vendors();
         $seasons = get_seasons();
         $categories = get_product_categories_custom();
-        $designs = get_designs();
+        //$designs = get_designs();
         $fits = get_fits();
         $rises = get_rises();
         $fabrics = get_fabrics();
+
+        $selectedCategories = [];
+        if ($this->getModel()) {
+            $selectedCategories = $this->getModel()->product_categories()->pluck('product_category_id')->all();
+        }
 
         $this->formHelper->addCustomField('addDenimFields', AddDenimFields::class);
         $this
@@ -69,10 +74,12 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Category',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Category',
+                    //'placeholder'  => 'Select Category',
                     'class' => 'select-search-full',
+                    'multiple' => 'multiple'
                 ],
                 'choices'    => $categories,
+                'default_value'      => old('category_id', $selectedCategories),
             ])
             /*->add('design_id', 'customSelect', [
                 'label'      => 'Select Design',
@@ -114,9 +121,9 @@ class ThreadForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('shipping_method', 'customSelect', [
                 'label'      => 'Select Shipping Method',
@@ -138,7 +145,7 @@ class ThreadForm extends FormAbstract
                 'attr'       => [
                     'placeholder'  => 'Denim Fields',
                 ],
-                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics]
+                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics,'model'=>$this->model]
             ])
             /*->add('inseam', 'text', [
                 'label'      => 'Inseam',
@@ -197,7 +204,8 @@ class ThreadForm extends FormAbstract
                 'attr'       => [
                     'rows'            => 2,
                     'placeholder'     => 'Description',
-                    'with-short-code' => true,
+                    //'with-short-code' => true,
+                    'without-buttons' => false,
                 ],
             ])
 
@@ -255,27 +263,27 @@ class ThreadForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('ship_date', 'text', [
                 'label'      => 'Ship Date',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('cancel_date', 'text', [
                 'label'      => 'Cancel Date',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('spec_file', 'mediaImage', [
                 'label'      => 'Tech Spec File',

@@ -68,6 +68,8 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
+        $thread->product_categories()->attach($requestData['category_id']);
+
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response
@@ -103,9 +105,13 @@ class ThreadController extends BaseController
     {
         $thread = $this->threadRepository->findOrFail($id);
 
-        $thread->fill($request->input());
+        $requestData = $request->input();
+
+        $thread->fill($requestData);
 
         $this->threadRepository->createOrUpdate($thread);
+
+        $thread->product_categories()->sync($requestData['category_id']);
 
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
