@@ -3,7 +3,9 @@
 namespace Botble\Thread\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
+use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
@@ -196,6 +198,16 @@ class ThreadController extends BaseController
             ->setNextUrl(route('thread.edit', $thread->id))
             ->setMessage(trans('core/base::notices.create_success_message'));
 
+    }
+
+    public function show($id, Request $request, FormBuilder $formBuilder){
+      $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
+//dd($thread);
+      event(new BeforeEditContentEvent($request, $thread));
+
+      page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
+
+      return $formBuilder->create(ThreadDetailsForm::class, ['model' => $thread])->renderForm();
     }
 
 }
