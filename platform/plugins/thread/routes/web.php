@@ -21,6 +21,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@createOrder',
                 'permission' => 'thread.create',
             ]);
+            Route::get('details/{id}', [
+                'as'         => 'details',
+                'uses'       => 'ThreadController@show',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

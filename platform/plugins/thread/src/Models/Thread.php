@@ -127,7 +127,7 @@ class Thread extends BaseModel
      */
     public function designer(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->belongsTo(User::class, 'designer_id')->withDefault();
     }
 
     /**
@@ -136,7 +136,7 @@ class Thread extends BaseModel
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->belongsTo(User::class, 'vendor_id')->withDefault();
     }
 
     /**

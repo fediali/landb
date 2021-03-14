@@ -263,6 +263,13 @@ if (!function_exists('get_designers')) {
     }
 }
 
+if (!function_exists('get_print_designs')) {
+    function get_print_designs()
+    {
+        return \Botble\Printdesigns\Models\Printdesigns::pluck('name','id')->all();
+    }
+}
+
 if (!function_exists('get_vendors')) {
     function get_vendors()
     {

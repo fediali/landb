@@ -6,6 +6,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Thread\Forms\ThreadOrderForm;
+use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
@@ -78,8 +79,8 @@ class ThreadController extends BaseController
         $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
         $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
 
-        $reg_sku = strtoupper(substr($thread->designer->first_name,0,2).substr($reg,0,2).Str::random(4));
-        $plu_sku = strtoupper(substr($thread->designer->first_name,0,2).substr($plu,0,2).Str::random(4));
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
             if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -137,8 +138,8 @@ class ThreadController extends BaseController
         $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
         $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
 
-        $reg_sku = strtoupper(substr($thread->designer->first_name,0,2).substr($reg,0,2).Str::random(4));
-        $plu_sku = strtoupper(substr($thread->designer->first_name,0,2).substr($plu,0,2).Str::random(4));
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
             if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -220,8 +221,8 @@ class ThreadController extends BaseController
         $reg = ProductCategory::where('id', $reg_category)->value('name');
         $plu = ProductCategory::where('id', $plu_category)->value('name');
 
-        $reg_sku = strtoupper(substr($requestData->designer->first_name,0,2).substr($reg,0,2).Str::random(4));
-        $plu_sku = strtoupper(substr($requestData->designer->first_name,0,2).substr($plu,0,2).Str::random(4));
+        $reg_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
 
         unset($requestData->id);
         unset($requestData->created_at);
@@ -267,6 +268,18 @@ class ThreadController extends BaseController
         page_title()->setTitle('Create Order "' . $thread->name . '"');
 
         return $formBuilder->create(ThreadOrderForm::class, ['model' => $thread])->renderForm();
+    }
+
+    public function show($id, Request $request, FormBuilder $formBuilder)
+    {
+        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
+
+        event(new BeforeEditContentEvent($request, $thread));
+
+        page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
+
+        return $formBuilder->create(ThreadDetailsForm::class, ['model' => $thread])->renderForm();
+
     }
 
 }

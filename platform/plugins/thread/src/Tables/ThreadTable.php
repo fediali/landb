@@ -73,6 +73,7 @@ class ThreadTable extends TableAbstract
             ->addColumn('operations', function ($item) {
                 $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
                 $html .= '<a href="'.route('thread.createOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
+                $html .= '<a href="'.route('thread.details', $item->id).'" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
                 return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
             ->escapeColumns([])
