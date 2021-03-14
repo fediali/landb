@@ -1,0 +1,9 @@
+{
+    "name": "Categorysizes",
+    "namespace": "Botble\\Categorysizes\\",
+    "provider": "Botble\\Categorysizes\\Providers\\CategorysizesServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module categorysizes"
+}

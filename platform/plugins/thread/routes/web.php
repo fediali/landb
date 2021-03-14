@@ -16,6 +16,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@cloneItem',
                 'permission' => 'thread.create',
             ]);
+            Route::get('create-order/{id}', [
+                'as'         => 'createOrder',
+                'uses'       => 'ThreadController@createOrder',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

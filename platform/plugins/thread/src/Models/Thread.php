@@ -51,9 +51,6 @@ class Thread extends BaseModel
         'season_id',
         'order_no',
         'order_status',
-        //'category_id',
-        //'design_id',
-        //'pp_request',
         'pp_sample',
         'pp_sample_size',
         'pp_sample_date',
@@ -70,9 +67,7 @@ class Thread extends BaseModel
         'rise_id',
         'fabric_id',
         'fabric_print_direction',
-        'wash',
         'spec_file',
-        'description',
         'business_id',
         'created_by',
         'updated_by',
@@ -88,13 +83,11 @@ class Thread extends BaseModel
         'status' => BaseStatusEnum::class,
     ];
 
-    protected $with = [
-        'product_categories'
-    ];
+    protected $with = [];
 
-    const NEW = 'new';
-    const REORDER = 'reorder';
-    const CANCEL = 'cancel';
+    public const NEW = 'new';
+    public const REORDER = 'reorder';
+    public const CANCEL = 'cancel';
 
     public static $order_statuses = [
         self::NEW => self::NEW,
@@ -102,22 +95,30 @@ class Thread extends BaseModel
         self::CANCEL => self::CANCEL,
     ];
 
-    const YES = 'yes';
-    const NO = 'no';
+    public const YES = 'yes';
+    public const NO = 'no';
 
     public static $statuses = [
         self::YES => self::YES,
         self::NO => self::NO,
     ];
 
-    const AIR = 'air';
-    const UCL = 'ucl';
-    const SEA = 'sea';
+    public const AIR = 'air';
+    public const UCL = 'ucl';
+    public const SEA = 'sea';
 
     public static $shipping_methods = [
         self::AIR => self::AIR,
         self::UCL => self::UCL,
         self::SEA => self::SEA,
+    ];
+
+    public const REGULAR = 'regular';
+    public const PLUS = 'plus';
+
+    public static $category_types = [
+        self::REGULAR => self::REGULAR,
+        self::PLUS => self::PLUS,
     ];
 
     /**
@@ -150,18 +151,15 @@ class Thread extends BaseModel
     /**
      * @return BelongsToMany
      */
-    public function product_categories(): BelongsToMany
-    {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads');
+    public function regular_product_categories() {
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR);
     }
 
     /**
-     * @deprecated
-     * @return BelongsTo
+     * @return BelongsToMany
      */
-    public function design(): BelongsTo
-    {
-        return $this->belongsTo(Printdesigns::class)->withDefault();
+    public function plus_product_categories() {
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS);
     }
 
     /**

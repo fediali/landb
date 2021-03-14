@@ -25,6 +25,12 @@ class ProductCategoryForm extends FormAbstract
         $categories[0] = trans('plugins/ecommerce::product-categories.none');
         $categories = Arr::sortRecursive($categories);
 
+        $category_sizes = get_category_sizes();
+        $selectedCatSizes = [];
+        if ($this->getModel()) {
+            $selectedCatSizes = $this->getModel()->category_sizes()->pluck('category_size_id')->all();
+        }
+
         $this
             ->setupModel(new ProductCategory)
             ->setValidatorClass(ProductCategoryRequest::class)
@@ -75,6 +81,21 @@ class ProductCategoryForm extends FormAbstract
                 'label'         => trans('core/base::forms.is_featured'),
                 'label_attr'    => ['class' => 'control-label'],
                 'default_value' => false,
+            ])
+            ->add('is_plus_cat', 'onOff', [
+                'label'         => 'Is Plus Category?',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+            ])
+            ->add('category_size_id', 'customSelect', [
+                'label'      => 'Select Category Sizes',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'select-search-full',
+                    'multiple' => 'multiple'
+                ],
+                'choices'    => $category_sizes,
+                'default_value'      => old('category_size_id', $selectedCatSizes),
             ])
             ->setBreakFieldPoint('status');
     }

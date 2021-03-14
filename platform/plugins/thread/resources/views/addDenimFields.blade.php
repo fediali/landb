@@ -47,10 +47,10 @@
         <input class="form-control" placeholder="Fabric Print Direction" data-counter="120" name="fabric_print_direction" type="text" id="fabric_print_direction" value="{{$options['data']['model']->fabric_print_direction}}">
     </div>
 
-    <div class="form-group" id="Wash-div">
+    {{--<div class="form-group" id="Wash-div">
         <label for="wash" class="control-label">Wash</label>
         <input class="form-control" placeholder="Wash" data-counter="120" name="wash" type="text" id="wash" value="{{$options['data']['model']->wash}}">
-    </div>
+    </div>--}}
 
 </div>
 

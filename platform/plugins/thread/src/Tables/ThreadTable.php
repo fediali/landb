@@ -72,6 +72,7 @@ class ThreadTable extends TableAbstract
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
+                $html .= '<a href="'.route('thread.createOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
                 return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
             ->escapeColumns([])
@@ -116,7 +117,7 @@ class ThreadTable extends TableAbstract
             ],
             'name' => [
                 'name'  => 'threads.name',
-                'title' => trans('core/base::tables.name'),
+                'title' => 'Description',
                 'class' => 'text-left',
             ],
             'designer_id'  => [
@@ -134,7 +135,7 @@ class ThreadTable extends TableAbstract
                 'name'  => 'threads.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
-            ],
+            ]
         ];
     }
 
