@@ -21,6 +21,31 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@show',
                 'permission' => 'thread.create',
             ]);
+            Route::post('add-variations', [
+                'as'         => 'addVariation',
+                'uses'       => 'ThreadController@addVariation',
+                'permission' => 'thread.create',
+            ]);
+            Route::post('postComment', [
+                'as'         => 'postComment',
+                'uses'       => 'ThreadController@postComment',
+                'permission' => 'thread.create',
+            ]);
+            Route::post('addVariationPrints', [
+                'as'         => 'addVariationPrints',
+                'uses'       => 'ThreadController@addVariationPrints',
+                'permission' => 'thread.create',
+            ]);
+            Route::get('updateVariationStatus/{id}/{status}', [
+                'as'         => 'updateVariationStatus',
+                'uses'       => 'ThreadController@updateVariationStatus',
+                'permission' => 'thread.create',
+            ]);
+            Route::get('removeFabric/{id}', [
+                'as'         => 'removeFabric',
+                'uses'       => 'ThreadController@removeFabric',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

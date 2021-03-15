@@ -1,0 +1,361 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap");
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+.denim_table table {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.denim_table table .tablelogo img {
+    width: 100px;
+}
+
+.denim_table table,
+.denim_table th,
+.denim_table td {
+    border: 1px solid #333;
+    border-collapse: collapse;
+    height: 100%;
+}
+
+.denim_table th,
+.denim_table td {
+    padding: 8px;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.tabrow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tabrow.additionalnote {
+    min-height: 200px;
+}
+
+.tabrow .item {
+    margin-right: 10px;
+}
+
+.tabrow .item {
+    padding-right: 10px;
+    border-right: solid 1px #ccc;
+}
+
+.tabrow b {
+    text-transform: uppercase;
+    margin-right: 5px;
+}
+
+.tabrow .item:last-child {
+    padding-right: 0px;
+    border: 0;
+}
+
+.denim_table .checkbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.denim_table .checkbox label {
+    margin: 0px 5px 0 0;
+}
+
+.regpack h6 {
+    font-size: 12px;
+    background: #333;
+    color: #fff;
+    padding: 4px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.regpack .sizediv {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: red;
+    font-weight: 700;
+    text-align: center;
+}
+
+.style_specification {
+    margin: 30px 0;
+    border: solid 1px #333;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.style_specification h4 {
+    text-align: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.specificationwrap th {
+    text-transform: uppercase;
+}
+
+.orderbox_wrap h6 {
+    color: red;
+}
+
+.orderbox_wrap p {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.orderbox_wrap p label {
+    margin: 0;
+}
+
+.orderbox_wrap .variationdiv {
+    display: inline-block;
+    border: solid 1px #333;
+    padding: 15px;
+    width: 100%;
+    min-height: 230px;
+    position: relative;
+}
+
+.orderbox_wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(31%, 1fr));
+    grid-gap: 24px;
+}
+
+.reg_bottom {
+    position: absolute;
+    bottom: 10px;
+}
+
+.reg_bottom p {
+    color: green;
+}
+
+.orderbox_wrap .variationdiv h5 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* Messageboard */
+
+.messageboard {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.messageboard .card {
+    height: calc(100vh - 75px);
+    border-radius: 15px !important;
+}
+
+.messageboard .contacts_body {
+    padding: 0.75rem 0 !important;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+.messageboard .msg_card_body {
+    overflow-y: auto;
+}
+
+.messageboard .card-footer {
+    border-radius: 0 0 15px 15px !important;
+    border-top: 0 !important;
+}
+
+.type_msg {
+    background-color: #fff !important;
+    border: 0 !important;
+    color: #333 !important;
+    height: 50px !important;
+    overflow-y: auto;
+    font-size: 13px;
+}
+
+.type_msg:focus {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.attach_btn {
+    border-radius: 15px 0 0 15px !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    border: 0 !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.send_btn {
+    border-radius: 0 15px 15px 0 !important;
+    background-color: #fff !important;
+    border: 0 !important;
+    color: #333 !important;
+    cursor: pointer;
+}
+
+.messageboard .active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.messageboard .user_img {
+    height: 70px;
+    width: 70px;
+    border: 1.5px solid #f5f6fa;
+}
+
+.user_img_msg {
+    height: 40px;
+    width: 40px;
+    border: 1.5px solid #f5f6fa;
+}
+
+.img_cont_msg {
+    height: 40px;
+    width: 40px;
+}
+
+.user_info {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 15px;
+}
+
+.user_info span {
+    font-size: 20px;
+    color: #333;
+}
+
+.user_info p {
+    font-size: 10px;
+    color: #ccc;
+}
+
+.msg_cotainer {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 15px;
+    background-color: #F2F3F5;
+    padding: 10px;
+    position: relative;
+}
+
+.msg_cotainer_send {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    border-radius: 15px;
+    background-color: #F2F3F5;
+    padding: 10px;
+    position: relative;
+}
+
+.msg_time {
+    position: absolute;
+    left: 0;
+    bottom: -20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.msg_time a {
+    color: #9a9a9a;
+    margin-right: 5px;
+}
+
+.msg_time a.reply {
+    color: #636363;
+    font-weight: 600;
+}
+
+.msg_head {
+    position: relative;
+}
+
+.msg_cotainer h6 {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.msg_cotainer p {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.msg_cotainer_send h6 {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.msg_cotainer_send p {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 500;
+}
+
+
+/* mediaqueries */
+
+@media (max-width:768px) {
+    .denim_table th,
+    .denim_table td {
+        padding: 5px;
+        font-size: 12px;
+    }
+    .regpack h6 {
+        font-size: 10px;
+    }
+    .regpack .sizediv {
+        font-size: 12px;
+    }
+}
+
+@media (max-width:767px) {
+    .denim_table th,
+    .denim_table td {
+        display: block;
+        border: 0;
+        border-bottom: solid 1px #333;
+    }
+    td.tablelogo {
+        text-align: center;
+    }
+    .style_specification {
+        margin: 15px 0;
+    }
+    .stylebox {
+        margin-bottom: 24px;
+    }
+    .tabrow {
+        display: block;
+    }
+    .tabrow .item {
+        padding-right: 0;
+        border-right: 0;
+    }
+    .specificationwrap th {
+        display: inline-block;
+        width: 50%;
+    }
+    .orderbox_wrap {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
+}

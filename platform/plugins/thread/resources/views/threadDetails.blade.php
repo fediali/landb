@@ -1,10 +1,8 @@
 <?php $thread = $options['data']['thread']; ?>
+<?php $variations = $options['data']['variations']; ?>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Details</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Vendor Discussions</button>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -50,11 +48,7 @@
                 </div>
                 <!-- /.row -->
             </div>
-
-
-
-
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-md-12">
                     <!-- Box Comment -->
                     <div class="box box-default">
@@ -216,121 +210,261 @@
                                 </div>
                                 <br>
                             </section>
-                            <a href="javascript:void(0)" class="btn btn-secondary" data-toggle="modal" data-target="#add_variation"> Add Variation</a>
-                            <a href="javascript:void(0)" class="btn btn-secondary" data-toggle="modal" data-target="#view_variation"> View Variations</a>
-                        </div>
-
-                        <div class="modal fade in" id="modal-default" style="display: none; padding-right: 17px;">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title">Add More Fabric to <span class="variation-name"></span></h4>
-                                    </div>
-                                    <form method="POST" action="http://laravel.landbw.co/admin/thread-variation-prints" accept-charset="UTF-8" enctype="multipart/form-data"><input name="_token" type="hidden" value="rJ72m23pRe146zGHzXsY3NJBWgGge99m1MquMyhK">
-                                        <div class="modal-body">
-                                            <p>
-                                                <label for="name">Variation Name:</label>
-                                                <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="name">
-                                                <label for="print_id">Print / Solid:</label>
-                                                <select class="form-control" id="print_id" name="print_id"><option selected="selected" value="">Enter Print</option></select>
-                                                <input class="form-control thread_variation_id" placeholder="Enter Print" name="thread_variation_id" type="hidden">
-                                                <input class="form-control" placeholder="Enter Print" name="input" type="hidden" value="1">
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                            <input class="btn btn-primary" type="submit" value="Save">
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- /.modal-content -->
-                            </div>
-                            <!-- /.modal-dialog -->
-                        </div>
-                        <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span></button>
-                                        <h4 class="modal-title">Adding Variations<span class="variation-name"></span></h4>
-                                    </div>
-                                    <form method="POST" action="{{ URL::to('/admin/threads/add-variations') }}" accept-charset="UTF-8" enctype="multipart/form-data">
-                                        @csrf
-                                        <input name="thread_id" type="hidden" value="33">
-                                        <div class="modal-body">
-                                            <table class="table table-striped table-bordered">
-
-                                                <tbody id="multi-variations">
-                                                <tr>
-                                                    <td style="width: 13%;">
-                                                        <button type="button" class="add_row form-control btn btn-secondary" id="add-new"><i class="fa fa-plus"></i> Add:</button>
-                                                    </td>
-                                                </tr>
-                                                <tr class="duplicate" id="duplicate-variation">
-                                                    <td width="10%">
-                                                        <label for="name">Name:</label>
-                                                        <input class="form-control" placeholder="Add Name" name="name[]" type="text">
-                                                    </td>
-
-                                                    <td width="20%">
-                                                        <label for="print_id">Print / Solid:</label>
-                                                        <select class="form-control select" name="print_id[]">
-                                                            <option selected="selected" value="">Select Print</option>
-                                                            @foreach($options['data']['printdesigns'] as $key => $print)
-                                                                <option value="{{ $key }}">{{ $print }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </td>
-                                                    <td width="15%">
-                                                        <label for="pack_id">Regular:</label>
-                                                        <input class="form-control" placeholder="Add Regular Quantity" name="regular_qty[]" type="text">
-                                                    </td>
-                                                    <td width="10%">
-                                                        <label for="pack_id">Plus:</label>
-                                                        <input class="form-control" placeholder="Add Plus Quantity" name="plus_qty[]" type="text">
-                                                    </td>
-                                                    <td width="15%">
-                                                        <label for="cost">Cost:</label>
-                                                        <input class="form-control" placeholder="Add Cost" name="cost[]" type="text">
-                                                    </td>
-                                                    <td width="15%">
-                                                        <label for="Notes">Notes:</label>
-                                                        <textarea class="form-control" placeholder="Add Notes" name="notes[]" cols="50" rows="2"></textarea>
-                                                    </td>
-                                                    <td width="10%">
-
-                                                        <label for="row">Remove</label>
-                                                        <button type="button" class="remove_row form-control btn btn-info"><i class="fa fa-trash"></i></button>
-                                                    </td>
-                                                    <td>
-                                                    </td>
-                                                </tr>
-
-
-                                                </tbody></table>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                            <input class="btn btn-primary" type="submit" value="Save">
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- /.modal-content -->
-                            </div>
-                            <!-- /.modal-dialog -->
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--}}
+
+            <section class="denim_table new_clothing">
+                <div class="container">
+                    <div class="table-responsive">
+                        <table>
+
+                            <tbody>
+                            <tr>
+                                <td colspan="1" rowspan="2" class="tablelogo"><img src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
+                                <td colspan="1" rowspan="1">Order#: <br>  </td>
+                                <td rowspan="1" colspan="3">Description <br> {{ $thread->description }}</td>
+                                <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ $thread->pp_sample_date->toDateString() }}</td>
+                                <td colspan="1" rowspan="2">
+                                    <div class="regpack">
+                                        <h6>Reg Size Run</h6>
+                                        <div class="sizediv">
+                                            S - 2
+                                        </div>
+                                        <div class="sizediv">
+                                            M- 2
+                                        </div>
+                                        <div class="sizediv">
+                                            L - 2
+                                        </div>
+
+                                    </div>
+                                </td>
+                                <td colspan="1" rowspan="4">
+                                    <div class="regpack">
+                                        <h6>Plus Size Run</h6>
+                                        <div class="sizediv">
+                                            XL - 2
+                                        </div>
+                                        <div class="sizediv">
+                                            2X - 2
+                                        </div>
+                                        <div class="sizediv">
+                                            3X - 2
+                                        </div>
+
+
+                                    </div>
+                                </td>
+                                <td colspan="1">Designer: <br> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</td>
+                                <td colspan="1">Vendor: <br> {{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</td>
+                                <td colspan="1">Status: <br> {{ $thread->status }}</td>
+
+
+                            </tr>
+                            <tr>
+                                <td colspan="1" rowspan="1">Order Date: </td>
+                                <td>Style # <br>  {{ $thread->sku }}</td>
+                                <td>Category <br>
+                                    @if(@$thread->product_categories)
+                                        @foreach($thread->product_categories as $category)
+                                            {{ $loop->iteration.')- '. $category->name }}<br>
+                                        @endforeach
+                                    @endif</td>
+                                <td>Season: <br> {{ @$thread->season->name }}</td>
+                                <td>Request PP Sample: <br> {{ @$thread->pp_sample }}</td>
+                                <td>PP Sample Size: <br> {{ @$thread->pp_sample_size }}</td>
+                                <td>Shipping Method: <br> {{ $thread->shipping_method }}</td>
+                                <td>Ship Date: <br> {{ $thread->ship_date }}</td>
+                                <td>No Later Than <br> {{ $thread->cancel_date }}</td>
+
+                            </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="style_specification">
+                        <div class="row ">
+                            <div class="col-md-4 ">
+                                <h4>Style</h4>
+                                <div class="stylebox table-responsive">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+
+                                                <img height="100px" width="140px" src="{{ asset('storage/'.$thread->spec_file) }}" style=" object-fit: cover;">
+
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                @if($thread->is_denim == 1)
+                                    <div class="specificationwrap">
+                                        <h4>Secifications</h4>
+                                        <div class="table-responsive">
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
+                                                    <th colspan="1" rowspan="1">Label: {{ $thread->name }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+
+                                                    <td colspan="12">
+                                                        <div class="tabrow">
+                                                            <b>Fit</b>
+                                                            @foreach(array_chunk($options['data']['fits'], 5, true) as $fits)
+                                                                <div class="item">
+                                                                    @foreach($fits as $key => $fit)
+                                                                        <div class="checkbox">
+                                                                            <label for=""> {{ $fit }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="tabrow">
+                                                            <b>Rise</b>
+                                                            @foreach(array_chunk($options['data']['rises'], 1, true) as $rises)
+                                                                <div class="item">
+                                                                    @foreach($rises as $key => $rise)
+                                                                        <div class="checkbox">
+                                                                            <label for=""> {{ $rise }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+
+
+
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="tabrow">
+                                                            <b>Fabric:</b>
+                                                            @foreach(array_chunk($options['data']['fabrics'], 1, true) as $fabrics)
+                                                                <div class="item">
+                                                                    @foreach($fabrics as $key => $fabric)
+                                                                        <div class="checkbox">
+                                                                            <label for=""> {{ $fabric }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+
+
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="tabrow">
+                                                            <b>Fabric Print Direction: </b>{{ $thread->fabric_print_direction }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="tabrow">
+                                                            <b>Wash: </b>{{ $thread->wash }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="tabrow additionalnote">
+                                                            <b>Additional Notes: </b>{{ $thread->description }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="specificationwrap">
+                                        <h4>Order</h4>
+                                        <div class="table-responsive">
+                                            <table>
+
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        Fabric: {{ $thread->printdesign->name }}
+                                                    </td>
+                                                    <td rowspan="2">Additional Notes:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sleeve Length:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12">
+                                                        <div class="orderbox_wrap">
+                                                            @foreach($variations as $variation)
+                                                                <div class="box">
+                                                                    <h6>SKU: {{ $variation->sku }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button></h6>
+                                                                </div>
+                                                            @endforeach
+
+                                                            @foreach($variations as $variation)
+                                                                @foreach($variation->fabrics as $fabric)
+                                                                    <div class="box">
+                                                                        <h6>SKU: {{ $variation->sku }}</h6>
+                                                                        <div class="variationdiv">
+                                                                            <h5>Variation: {{ $variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
+                                                                            <p><label for="">Fabric:</label>{{ $fabric->printdesign->name }}</p>
+                                                                            <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                            <div class="reg_bottom">
+                                                                                <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }}</p>
+                                                                                <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            @endforeach
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                @endif
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
     </div>
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">.2..</div>
 </div>
 
+<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 <style>
     .details-table td{
         border: 1px solid black;
@@ -338,12 +472,5 @@
 </style>
 
 <script>
-
-    $(document).ready(function () {
-      $('#add-new').on('click', function () {
-        $('#multi-variations').append('<tr>'+$('#duplicate-variation').html()+'</tr>');
-        /*$('#multi-variations').append('<br>');*/
-      })
-    })
 
 </script>

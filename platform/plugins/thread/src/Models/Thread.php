@@ -188,7 +188,7 @@ class Thread extends BaseModel
      */
     public function fabric(): BelongsTo
     {
-        return $this->belongsTo(Fabrics::class)->withDefault();
+        return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
 
 }
