@@ -263,6 +263,34 @@ if (!function_exists('get_designers')) {
     }
 }
 
+if (!function_exists('get_print_designs')) {
+    function get_print_designs()
+    {
+        return \Botble\Printdesigns\Models\Printdesigns::pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_thread_variations')) {
+    function get_thread_variations($id)
+    {
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign','fabrics'])->get();
+    }
+}
+
+if (!function_exists('get_thread_comments')) {
+    function get_thread_comments($id)
+    {
+        return \App\Models\ThreadComment::where('thread_id', $id)->with(['user'])->get();
+    }
+}
+
+if (!function_exists('generate_sku_by_thread_variation')) {
+    function generate_sku_by_thread_variation($thread)
+    {
+        return 'asd123';
+    }
+}
+
 if (!function_exists('get_vendors')) {
     function get_vendors()
     {

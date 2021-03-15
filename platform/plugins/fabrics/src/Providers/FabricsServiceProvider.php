@@ -34,7 +34,7 @@ class FabricsServiceProvider extends ServiceProvider
             ->loadAndPublishViews()
             ->loadRoutes(['web']);
 
-        Event::listen(RouteMatched::class, function () {
+        /*Event::listen(RouteMatched::class, function () {
             if (defined('LANGUAGE_MODULE_SCREEN_NAME')) {
                 \Language::registerModule([Fabrics::class]);
             }
@@ -48,6 +48,6 @@ class FabricsServiceProvider extends ServiceProvider
                 'url'         => route('fabrics.index'),
                 'permissions' => ['fabrics.index'],
             ]);
-        });
+        });*/
     }
 }

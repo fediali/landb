@@ -4,6 +4,7 @@ namespace Botble\Thread\Forms;
 
 use Botble\Base\Forms\FormAbstract;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Thread\Forms\Fields\AddDenimFields;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
 
@@ -19,11 +20,17 @@ class ThreadForm extends FormAbstract
         $vendors = get_vendors();
         $seasons = get_seasons();
         $categories = get_product_categories_custom();
-        $designs = get_designs();
+        //$designs = get_designs();
         $fits = get_fits();
         $rises = get_rises();
         $fabrics = get_fabrics();
 
+        $selectedCategories = [];
+        if ($this->getModel()) {
+            $selectedCategories = $this->getModel()->product_categories()->pluck('product_category_id')->all();
+        }
+
+        $this->formHelper->addCustomField('addDenimFields', AddDenimFields::class);
         $this
             ->setupModel(new Thread)
             ->setValidatorClass(ThreadRequest::class)
@@ -47,7 +54,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('vendor_id', 'customSelect', [
                 'label'      => 'Select Vendor',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Vendor',
                     'class' => 'select-search-full',
@@ -67,12 +74,14 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Category',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Category',
+                    //'placeholder'  => 'Select Category',
                     'class' => 'select-search-full',
+                    'multiple' => 'multiple'
                 ],
                 'choices'    => $categories,
+                'default_value'      => old('category_id', $selectedCategories),
             ])
-            ->add('design_id', 'customSelect', [
+            /*->add('design_id', 'customSelect', [
                 'label'      => 'Select Design',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
@@ -83,16 +92,16 @@ class ThreadForm extends FormAbstract
             ])
             ->add('pp_request', 'customSelect', [
                 'label'      => 'Select PP Request',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select PP Request',
                     'class' => 'select-search-full',
                 ],
                 'choices'    => Thread::$statuses,
-            ])
+            ])*/
             ->add('pp_sample', 'customSelect', [
                 'label'      => 'Select PP Sample',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select PP Sample',
                     'class' => 'select-search-full',
@@ -101,7 +110,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('pp_sample_size', 'text', [
                 'label'      => 'PP Sample Size',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'PP Sample Size',
                     'data-counter' => 120,
@@ -112,9 +121,9 @@ class ThreadForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('shipping_method', 'customSelect', [
                 'label'      => 'Select Shipping Method',
@@ -130,7 +139,15 @@ class ThreadForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'default_value' => false,
             ])
-            ->add('inseam', 'text', [
+            ->add('DenimFields', 'addDenimFields', [
+                'label'      => 'Denim Fields',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Denim Fields',
+                ],
+                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics,'model'=>$this->model]
+            ])
+            /*->add('inseam', 'text', [
                 'label'      => 'Inseam',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
@@ -180,14 +197,15 @@ class ThreadForm extends FormAbstract
                     'placeholder'  => 'Wash',
                     'data-counter' => 120,
                 ],
-            ])
+            ])*/
             ->add('description', 'editor', [
                 'label'      => 'Description',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'rows'            => 2,
                     'placeholder'     => 'Description',
-                    'with-short-code' => true,
+                    //'with-short-code' => true,
+                    'without-buttons' => false,
                 ],
             ])
 
@@ -199,14 +217,14 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => BaseStatusEnum::labels(),
             ])
-            ->add('order_no', 'text', [
+            /*->add('order_no', 'text', [
                 'label'      => 'Order No.',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => 'Order No.',
                     'data-counter' => 120,
                 ],
-            ])
+            ])*/
             ->add('order_status', 'customSelect', [
                 'label'      => 'Select Order Status',
                 'label_attr' => ['class' => 'control-label required'],
@@ -218,7 +236,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('material', 'text', [
                 'label'      => 'Material',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Material',
                     'data-counter' => 120,
@@ -226,7 +244,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('sleeve', 'text', [
                 'label'      => 'Sleeve',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Sleeve',
                     'data-counter' => 120,
@@ -234,7 +252,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('label', 'text', [
                 'label'      => 'Label',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Label',
                     'data-counter' => 120,
@@ -245,27 +263,27 @@ class ThreadForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('ship_date', 'text', [
                 'label'      => 'Ship Date',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('cancel_date', 'text', [
                 'label'      => 'Cancel Date',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
-                    'data-date-format' => 'yyyy/mm/dd',
+                    'data-date-format' => 'yyyy-mm-dd',
                 ],
-                'default_value' => now(config('app.timezone'))->format('Y/m/d'),
+                'default_value' => now(config('app.timezone'))->format('Y-m-d'),
             ])
             ->add('spec_file', 'mediaImage', [
                 'label'      => 'Tech Spec File',

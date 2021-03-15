@@ -34,7 +34,7 @@ class SeasonsServiceProvider extends ServiceProvider
             ->loadAndPublishViews()
             ->loadRoutes(['web']);
 
-        Event::listen(RouteMatched::class, function () {
+        /*Event::listen(RouteMatched::class, function () {
             if (defined('LANGUAGE_MODULE_SCREEN_NAME')) {
                 \Language::registerModule([Seasons::class]);
             }
@@ -48,6 +48,6 @@ class SeasonsServiceProvider extends ServiceProvider
                 'url'         => route('seasons.index'),
                 'permissions' => ['seasons.index'],
             ]);
-        });
+        });*/
     }
 }

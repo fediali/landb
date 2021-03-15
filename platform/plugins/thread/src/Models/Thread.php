@@ -6,6 +6,7 @@ use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
+use Botble\Blog\Models\Category;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Fabrics\Models\Fabrics;
 use Botble\Fits\Models\Fits;
@@ -13,6 +14,7 @@ use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Thread extends BaseModel
 {
@@ -49,9 +51,9 @@ class Thread extends BaseModel
         'season_id',
         'order_no',
         'order_status',
-        'category_id',
-        'design_id',
-        'pp_request',
+        //'category_id',
+        //'design_id',
+        //'pp_request',
         'pp_sample',
         'pp_sample_size',
         'pp_sample_date',
@@ -84,6 +86,10 @@ class Thread extends BaseModel
      */
     protected $casts = [
         'status' => BaseStatusEnum::class,
+    ];
+
+    protected $with = [
+        'product_categories'
     ];
 
     const NEW = 'new';
@@ -120,7 +126,7 @@ class Thread extends BaseModel
      */
     public function designer(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->belongsTo(User::class, 'designer_id')->withDefault();
     }
 
     /**
@@ -129,7 +135,7 @@ class Thread extends BaseModel
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withDefault();
+        return $this->belongsTo(User::class, 'vendor_id')->withDefault();
     }
 
     /**
@@ -142,12 +148,11 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
-     * @return BelongsTo
+     * @return BelongsToMany
      */
-    public function category(): BelongsTo
+    public function product_categories(): BelongsToMany
     {
-        return $this->belongsTo(ProductCategory::class)->withDefault();
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads');
     }
 
     /**
@@ -183,7 +188,7 @@ class Thread extends BaseModel
      */
     public function fabric(): BelongsTo
     {
-        return $this->belongsTo(Fabrics::class)->withDefault();
+        return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
 
 }
