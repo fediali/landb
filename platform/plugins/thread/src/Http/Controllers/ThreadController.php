@@ -259,23 +259,6 @@ class ThreadController extends BaseController
 
     }
 
-    /**
-     * @param int $id
-     * @param Request $request
-     * @param FormBuilder $formBuilder
-     * @return string
-     */
-    public function createOrder($id, FormBuilder $formBuilder, Request $request)
-    {
-        $thread = $this->threadRepository->findOrFail($id);
-
-        event(new BeforeEditContentEvent($request, $thread));
-
-        page_title()->setTitle('Create Order "' . $thread->name . '"');
-
-        return $formBuilder->create(ThreadOrderForm::class, ['model' => $thread])->renderForm();
-    }
-
     public function show($id, Request $request, FormBuilder $formBuilder)
     {
         $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
