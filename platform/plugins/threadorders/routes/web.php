@@ -16,6 +16,16 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
                 'uses'       => 'ThreadordersController@createThreadOrder',
                 'permission' => 'threadorders.create',
             ]);
+            Route::post('create-thread-order/{id}', [
+                'as'         => 'storeThreadOrder',
+                'uses'       => 'ThreadordersController@storeThreadOrder',
+                'permission' => 'threadorders.create',
+            ]);
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'ThreadordersController@changeStatus',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

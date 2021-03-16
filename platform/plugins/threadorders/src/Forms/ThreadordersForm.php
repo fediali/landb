@@ -32,6 +32,9 @@ class ThreadordersForm extends FormAbstract
             ->setupModel(new Threadorders)
             ->setValidatorClass(ThreadordersRequest::class)
             ->withCustomFields()
+            ->add('thread_id', 'hidden', [
+                'value' => $this->model->id
+            ])
             ->add('vendor_id', 'customSelect', [
                 'label'      => 'Select Vendor',
                 'label_attr' => ['class' => 'control-label required'],
