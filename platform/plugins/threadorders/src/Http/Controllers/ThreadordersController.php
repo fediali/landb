@@ -194,7 +194,7 @@ class ThreadordersController extends BaseController
     {
         $requestData = $request->input();
 
-        $thread = $thread2 = $this->threadRepository->findOrFail($id);
+        $thread = $this->threadRepository->findOrFail($id);
 
         unset($thread->id);
         unset($thread->created_at);
@@ -218,34 +218,36 @@ class ThreadordersController extends BaseController
 
         $threadorders = $this->threadordersRepository->createOrUpdate($threadData);
 
+        $thread2 = $this->threadRepository->findOrFail($id);
+
         foreach ($thread2->thread_variations as $thread_variation) {
             $threadOrderVar = [
                 'thread_order_id' => $threadorders->id,
                 'category_type' => 'regular',
-                'product_category_id' => $thread2->regular_product_categories[0]->product_category_id,
+                'product_category_id' => $thread2->regular_product_categories[0]->pivot->product_category_id,
                 'thread_variation_id' => $thread_variation->id,
                 'print_design_id' => $thread_variation->print_id,
                 'name' => $thread_variation->name,
-                'sku' => $thread2->regular_product_categories[0]->sku,
+                'sku' => $thread2->regular_product_categories[0]->pivot->sku,
                 'quantity' => $requestData['regular_qty'][$thread_variation->id],
                 'cost' => $requestData['cost'][$thread_variation->id],
                 'notes' => $thread_variation->notes,
             ];
-            DB::table('thread_order_variations')->create($threadOrderVar);
+            DB::table('thread_order_variations')->insert($threadOrderVar);
             if (isset($thread2->plus_product_categories[0])) {
                 $threadOrderVar = [
                     'thread_order_id' => $threadorders->id,
                     'category_type' => 'plus',
-                    'product_category_id' => $thread2->plus_product_categories[0]->product_category_id,
+                    'product_category_id' => $thread2->plus_product_categories[0]->pivot->product_category_id,
                     'thread_variation_id' => $thread_variation->id,
                     'print_design_id' => $thread_variation->print_id,
                     'name' => $thread_variation->name,
-                    'sku' => $thread2->plus_product_categories[0]->sku,
+                    'sku' => $thread2->plus_product_categories[0]->pivot->sku,
                     'quantity' => $requestData['plus_qty'][$thread_variation->id],
                     'cost' => $requestData['cost'][$thread_variation->id],
                     'notes' => $thread_variation->notes,
                 ];
-                DB::table('thread_order_variations')->create($threadOrderVar);
+                DB::table('thread_order_variations')->insert($threadOrderVar);
             }
         }
 

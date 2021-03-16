@@ -153,14 +153,14 @@ class Thread extends BaseModel
      * @return BelongsToMany
      */
     public function regular_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR);
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR)->withPivot('sku');
     }
 
     /**
      * @return BelongsToMany
      */
     public function plus_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS);
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS)->withPivot('sku');
     }
 
     /**
