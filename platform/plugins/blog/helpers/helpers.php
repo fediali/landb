@@ -305,10 +305,17 @@ if (!function_exists('get_seasons')) {
     }
 }
 
-if (!function_exists('get_product_categories_custom')) {
-    function get_product_categories_custom()
+if (!function_exists('get_reg_product_categories_custom')) {
+    function get_reg_product_categories_custom()
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_plu_product_categories_custom')) {
+    function get_plu_product_categories_custom()
+    {
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
     }
 }
 
@@ -337,5 +344,12 @@ if (!function_exists('get_fabrics')) {
     function get_fabrics()
     {
         return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_category_sizes')) {
+    function get_category_sizes()
+    {
+        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name','id')->all();
     }
 }

@@ -2,10 +2,13 @@
 
 namespace Botble\Thread\Http\Controllers;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Ecommerce\Models\ProductCategory;
+use Botble\Thread\Forms\ThreadOrderForm;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
@@ -73,10 +76,28 @@ class ThreadController extends BaseController
         $requestData = $request->input();
 
         $requestData['order_no'] = strtoupper(Str::random(8));
+        $requestData['status'] = BaseStatusEnum::PENDING;
+        $requestData['created_by'] = auth()->user()->id;
+        $requestData['updated_by'] = auth()->user()->id;
 
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
-        $thread->product_categories()->sync($requestData['category_id']);
+        $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
+        $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
+
+        if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+                $thread->regular_product_categories()->sync([
+                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku],
+                    $requestData['plus_category_id'] => ['category_type' => Thread::PLUS, 'sku' => $plu_sku]
+                ]);
+            } else {
+                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku]]);
+            }
+        }
 
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
@@ -114,12 +135,28 @@ class ThreadController extends BaseController
         $thread = $this->threadRepository->findOrFail($id);
 
         $requestData = $request->input();
+        $requestData['updated_by'] = auth()->user()->id;
 
         $thread->fill($requestData);
 
         $this->threadRepository->createOrUpdate($thread);
 
-        $thread->product_categories()->sync($requestData['category_id']);
+        $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
+        $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
+
+        if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+                $thread->regular_product_categories()->sync([
+                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku],
+                    $requestData['plus_category_id'] => ['category_type' => Thread::PLUS, 'sku' => $plu_sku]
+                ]);
+            } else {
+                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku]]);
+            }
+        }
 
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
@@ -184,7 +221,14 @@ class ThreadController extends BaseController
     {
         $requestData = $this->threadRepository->findOrFail($id);
 
-        $categories = $requestData->product_categories()->pluck('product_category_id')->all();
+        $reg_category = $requestData->regular_product_categories()->value('product_category_id');
+        $plu_category = $requestData->plus_product_categories()->value('product_category_id');
+
+        $reg = ProductCategory::where('id', $reg_category)->value('name');
+        $plu = ProductCategory::where('id', $plu_category)->value('name');
+
+        $reg_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
+        $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
 
         unset($requestData->id);
         unset($requestData->created_at);
@@ -195,7 +239,16 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData->toArray());
 
-        $thread->product_categories()->sync($categories);
+        if ($reg_category > 0) {
+            if ($plu_category > 0) {
+                $thread->regular_product_categories()->sync([
+                    $reg_category => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku],
+                    $plu_category => ['category_type' => Thread::PLUS, 'sku' => $plu_sku]
+                ]);
+            } else {
+                $thread->regular_product_categories()->sync([$reg_category => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku]]);
+            }
+        }
 
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
@@ -206,14 +259,33 @@ class ThreadController extends BaseController
 
     }
 
-    public function show($id, Request $request, FormBuilder $formBuilder){
-      $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
-//dd($thread);
-      event(new BeforeEditContentEvent($request, $thread));
+    /**
+     * @param int $id
+     * @param Request $request
+     * @param FormBuilder $formBuilder
+     * @return string
+     */
+    public function createOrder($id, FormBuilder $formBuilder, Request $request)
+    {
+        $thread = $this->threadRepository->findOrFail($id);
 
-      page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
+        event(new BeforeEditContentEvent($request, $thread));
 
-      return $formBuilder->create(ThreadDetailsForm::class, ['model' => $thread])->renderForm();
+        page_title()->setTitle('Create Order "' . $thread->name . '"');
+
+        return $formBuilder->create(ThreadOrderForm::class, ['model' => $thread])->renderForm();
+    }
+
+    public function show($id, Request $request, FormBuilder $formBuilder)
+    {
+        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
+
+        event(new BeforeEditContentEvent($request, $thread));
+
+        page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
+
+        return $formBuilder->create(ThreadDetailsForm::class, ['model' => $thread])->renderForm();
+
     }
 
     public function addVariation(Request $request){

@@ -71,6 +71,9 @@ class ProductCategoryTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
+            ->editColumn('is_plus_cat', function ($item) {
+                return $item->is_plus_cat_html;
+            })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -95,6 +98,7 @@ class ProductCategoryTable extends TableAbstract
         $select = [
             'ec_product_categories.id',
             'ec_product_categories.name',
+            'ec_product_categories.is_plus_cat',
             'ec_product_categories.status',
             'ec_product_categories.order',
             'ec_product_categories.image',
@@ -131,6 +135,12 @@ class ProductCategoryTable extends TableAbstract
             'name'       => [
                 'name'  => 'ec_product_categories.name',
                 'title' => trans('core/base::tables.name'),
+                'class' => 'text-left',
+            ],
+            'is_plus_cat'   => [
+                'name'  => 'is_plus_cat',
+                'title' => 'Is Plus Category',
+                'width' => '100px',
                 'class' => 'text-left',
             ],
             'created_at' => [

@@ -112,6 +112,15 @@ class ThreadServiceProvider extends ServiceProvider
                     'icon'        => null,
                     'url'         => route('printdesigns.index'),
                     'permissions' => ['printdesigns.index'],
+                ])
+                ->registerItem([
+                    'id'          => 'cms-plugins-categorysizes',
+                    'priority'    => 8,
+                    'parent_id'   => 'cms-plugins-thread',
+                    'name'        => 'plugins/categorysizes::categorysizes.name',
+                    'icon'        => null,
+                    'url'         => route('categorysizes.index'),
+                    'permissions' => ['categorysizes.index'],
                 ]);
         });
 
