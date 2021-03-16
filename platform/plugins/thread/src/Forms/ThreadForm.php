@@ -149,7 +149,7 @@ class ThreadForm extends FormAbstract
                     'class' => 'form-control select-full',
                 ],
                 'choices'    => BaseStatusEnum::labels(),
-            ])*/
+            ])
             ->add('order_status', 'customSelect', [
                 'label'      => 'Select Order Status',
                 'label_attr' => ['class' => 'control-label required'],
@@ -158,7 +158,7 @@ class ThreadForm extends FormAbstract
                     'class' => 'form-control select-full',
                 ],
                 'choices'    => Thread::$order_statuses,
-            ])
+            ])*/
             ->add('material', 'text', [
                 'label'      => 'Material',
                 'label_attr' => ['class' => 'control-label'],
@@ -214,6 +214,6 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Tech Spec File',
                 'label_attr' => ['class' => 'control-label'],
             ])
-            ->setBreakFieldPoint('order_status');
+            ->setBreakFieldPoint('material');
     }
 }

@@ -8,7 +8,6 @@ use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\ProductCategory;
-use Botble\Thread\Forms\ThreadOrderForm;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
@@ -77,6 +76,7 @@ class ThreadController extends BaseController
 
         $requestData['order_no'] = strtoupper(Str::random(8));
         $requestData['status'] = BaseStatusEnum::PENDING;
+        $requestData['order_status'] = Thread::NEW;
         $requestData['created_by'] = auth()->user()->id;
         $requestData['updated_by'] = auth()->user()->id;
 
@@ -350,6 +350,26 @@ class ThreadController extends BaseController
       }else{
         return redirect()->back()->with('error',  'Server error');
       }
+    }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $thread = $this->threadRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $thread->fill($requestData);
+
+        $this->threadRepository->createOrUpdate($thread);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
+
+        return $response;
     }
 
 }

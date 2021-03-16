@@ -2,7 +2,9 @@
 
 namespace Botble\Threadorders\Http\Controllers;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
 use Botble\Threadorders\Repositories\Interfaces\ThreadordersInterface;
@@ -16,6 +18,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Threadorders\Forms\ThreadordersForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Facades\DB;
 
 class ThreadordersController extends BaseController
 {
@@ -181,4 +184,98 @@ class ThreadordersController extends BaseController
         return $formBuilder->create(ThreadordersForm::class, ['model' => $thread])->renderForm();
     }
 
+    /**
+     * @param int $id
+     * @param ThreadordersRequest $request
+     * @param BaseHttpResponse $response
+     * @return BaseHttpResponse
+     */
+    public function storeThreadOrder($id, ThreadordersRequest $request, BaseHttpResponse $response)
+    {
+        $requestData = $request->input();
+
+        $thread = $this->threadRepository->findOrFail($id);
+
+        unset($thread->id);
+        unset($thread->created_at);
+        unset($thread->updated_at);
+        unset($thread->deleted_at);
+
+        $threadData = $thread->toArray();
+        $threadData['thread_id'] = $requestData['thread_id'];
+        $threadData['name'] = $requestData['name'];
+        $threadData['pp_sample'] = $requestData['pp_sample'];
+        $threadData['material'] = $requestData['material'];
+        $threadData['shipping_method'] = $requestData['shipping_method'];
+        $threadData['order_date'] = $requestData['order_date'];
+        $threadData['ship_date'] = $requestData['ship_date'];
+        $threadData['cancel_date'] = $requestData['cancel_date'];
+
+        $threadData['status'] = BaseStatusEnum::PENDING;
+        $threadData['order_status'] = Thread::NEW;
+        $threadData['created_by'] = auth()->user()->id;
+        $threadData['updated_by'] = auth()->user()->id;
+
+        $threadorders = $this->threadordersRepository->createOrUpdate($threadData);
+
+        $thread2 = $this->threadRepository->findOrFail($id);
+
+        foreach ($thread2->thread_variations as $thread_variation) {
+            $threadOrderVar = [
+                'thread_order_id' => $threadorders->id,
+                'category_type' => 'regular',
+                'product_category_id' => $thread2->regular_product_categories[0]->pivot->product_category_id,
+                'thread_variation_id' => $thread_variation->id,
+                'print_design_id' => $thread_variation->print_id,
+                'name' => $thread_variation->name,
+                'sku' => $thread2->regular_product_categories[0]->pivot->sku,
+                'quantity' => $requestData['regular_qty'][$thread_variation->id],
+                'cost' => $requestData['cost'][$thread_variation->id],
+                'notes' => $thread_variation->notes,
+            ];
+            DB::table('thread_order_variations')->insert($threadOrderVar);
+            if (isset($thread2->plus_product_categories[0])) {
+                $threadOrderVar = [
+                    'thread_order_id' => $threadorders->id,
+                    'category_type' => 'plus',
+                    'product_category_id' => $thread2->plus_product_categories[0]->pivot->product_category_id,
+                    'thread_variation_id' => $thread_variation->id,
+                    'print_design_id' => $thread_variation->print_id,
+                    'name' => $thread_variation->name,
+                    'sku' => $thread2->plus_product_categories[0]->pivot->sku,
+                    'quantity' => $requestData['plus_qty'][$thread_variation->id],
+                    'cost' => $requestData['cost'][$thread_variation->id],
+                    'notes' => $thread_variation->notes,
+                ];
+                DB::table('thread_order_variations')->insert($threadOrderVar);
+            }
+        }
+
+        event(new CreatedContentEvent(THREADORDERS_MODULE_SCREEN_NAME, $request, $threadorders));
+
+        return $response
+            ->setPreviousUrl(route('threadorders.index'))
+            ->setNextUrl(route('threadorders.edit', $threadorders->id))
+            ->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $threadorders = $this->threadordersRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $threadorders->fill($requestData);
+
+        $this->threadordersRepository->createOrUpdate($threadorders);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $threadorders));
+
+        return $response;
+    }
 }

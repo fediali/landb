@@ -2,6 +2,7 @@
 
 namespace Botble\Thread\Models;
 
+use App\Models\ThreadVariation;
 use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -152,14 +153,14 @@ class Thread extends BaseModel
      * @return BelongsToMany
      */
     public function regular_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR);
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR)->withPivot('sku');
     }
 
     /**
      * @return BelongsToMany
      */
     public function plus_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS);
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS)->withPivot('sku');
     }
 
     /**
@@ -187,6 +188,11 @@ class Thread extends BaseModel
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
+    }
+
+    public function getThreadVariationsAttribute()
+    {
+        return ThreadVariation::where('thread_id', $this->id)->get();
     }
 
 }

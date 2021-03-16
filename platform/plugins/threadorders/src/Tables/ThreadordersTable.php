@@ -51,10 +51,7 @@ class ThreadordersTable extends TableAbstract
         $data = $this->table
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                if (!Auth::user()->hasPermission('threadorders.edit')) {
-                    return $item->name;
-                }
-                return Html::link(route('threadorders.edit', $item->id), $item->name);
+                return $item->name;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -63,12 +60,14 @@ class ThreadordersTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                // return $item->status->toHtml();
+                return view('plugins/threadorders::threadOrderStatus', ['item' => $item])->render();
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('threadorders.edit', 'threadorders.destroy', $item);
+                return '<a href="#" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
+                //return $this->getOperations('threadorders.edit', 'threadorders.destroy', $item);
             })
             ->escapeColumns([])
             ->make(true);
@@ -126,7 +125,7 @@ class ThreadordersTable extends TableAbstract
      */
     public function buttons()
     {
-        $buttons = $this->addCreateButton(route('threadorders.create'), 'threadorders.create');
+        $buttons = []; //$this->addCreateButton(route('threadorders.create'), 'threadorders.create');
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Threadorders::class);
     }
@@ -134,9 +133,17 @@ class ThreadordersTable extends TableAbstract
     /**
      * {@inheritDoc}
      */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
+        return []; // $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
     }
 
     /**
@@ -145,7 +152,7 @@ class ThreadordersTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'threadorders.name' => [
+            /*'threadorders.name' => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
@@ -159,7 +166,7 @@ class ThreadordersTable extends TableAbstract
             'threadorders.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 
