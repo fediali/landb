@@ -269,7 +269,7 @@
                                 <td>Category <br>
                                     @if(@$thread->product_categories)
                                         @foreach($thread->product_categories as $category)
-                                            {{ $loop->iteration.')- '. $category->name }}<br>
+                                            {{ $loop->iteration.')- '. @$category->name }}<br>
                                         @endforeach
                                     @endif</td>
                                 <td>Season: <br> {{ @$thread->season->name }}</td>
@@ -313,7 +313,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
-                                                    <th colspan="1" rowspan="1">Label: {{ $thread->name }}</th>
+                                                    <th colspan="1" rowspan="1">Label: {{ @$thread->name }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -409,7 +409,7 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Fabric: {{ $thread->printdesign->name }}
+                                                        Fabric: {{ @$thread->printdesign->name }}
                                                     </td>
                                                     <td rowspan="2">Additional Notes:</td>
                                                 </tr>
@@ -432,8 +432,8 @@
                                                                     <div class="box">
                                                                         <h6>SKU: {{ $variation->sku }}</h6>
                                                                         <div class="variationdiv">
-                                                                            <h5>Variation: {{ $variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
-                                                                            <p><label for="">Fabric:</label>{{ $fabric->printdesign->name }}</p>
+                                                                            <h5>Variation: {{ @$variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
+                                                                            <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
                                                                             <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
                                                                             <div class="reg_bottom">
                                                                                 <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }}</p>

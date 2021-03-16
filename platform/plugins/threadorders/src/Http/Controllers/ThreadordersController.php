@@ -3,6 +3,7 @@
 namespace Botble\Threadorders\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
 use Botble\Threadorders\Repositories\Interfaces\ThreadordersInterface;
 use Botble\Base\Http\Controllers\BaseController;
@@ -24,11 +25,18 @@ class ThreadordersController extends BaseController
     protected $threadordersRepository;
 
     /**
-     * @param ThreadordersInterface $threadordersRepository
+     * @var ThreadInterface
      */
-    public function __construct(ThreadordersInterface $threadordersRepository)
+    protected $threadRepository;
+
+    /**
+     * @param ThreadordersInterface $threadordersRepository
+     * @param ThreadInterface $threadRepository
+     */
+    public function __construct(ThreadordersInterface $threadordersRepository, ThreadInterface $threadRepository)
     {
         $this->threadordersRepository = $threadordersRepository;
+        $this->threadRepository = $threadRepository;
     }
 
     /**
@@ -155,4 +163,22 @@ class ThreadordersController extends BaseController
 
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @param FormBuilder $formBuilder
+     * @return string
+     */
+    public function createThreadOrder($id, FormBuilder $formBuilder, Request $request)
+    {
+        $thread = $this->threadRepository->findOrFail($id);
+
+        event(new BeforeEditContentEvent($request, $thread));
+
+        page_title()->setTitle(trans('plugins/threadorders::threadorders.create'));
+
+        return $formBuilder->create(ThreadordersForm::class, ['model' => $thread])->renderForm();
+    }
+
 }

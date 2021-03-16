@@ -11,6 +11,11 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
                 'uses'       => 'ThreadordersController@deletes',
                 'permission' => 'threadorders.destroy',
             ]);
+            Route::get('create-thread-order/{id}', [
+                'as'         => 'createThreadOrder',
+                'uses'       => 'ThreadordersController@createThreadOrder',
+                'permission' => 'threadorders.create',
+            ]);
         });
     });
 
