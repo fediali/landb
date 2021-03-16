@@ -12,6 +12,7 @@ use Yajra\DataTables\DataTables;
 use Botble\Thread\Models\Thread;
 use Html;
 
+
 class ThreadTable extends TableAbstract
 {
 
@@ -66,13 +67,16 @@ class ThreadTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                //return $item->status->toHtml();
+                return view('plugins/thread::threadStatus', ['item' => $item])->render();
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
-                $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
+                if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
+                    $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
+                }
                 $html .= '<a href="'.route('thread.details', $item->id).'" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
                 return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
@@ -90,6 +94,7 @@ class ThreadTable extends TableAbstract
             'threads.id',
             'threads.name',
             'threads.designer_id',
+            'threads.vendor_id',
             'threads.created_at',
             'threads.status',
         ];
@@ -148,6 +153,14 @@ class ThreadTable extends TableAbstract
         $buttons = $this->addCreateButton(route('thread.create'), 'thread.create');
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Thread::class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
     }
 
     /**

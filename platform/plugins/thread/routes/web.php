@@ -46,6 +46,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeFabric',
                 'permission' => 'thread.create',
             ]);
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'ThreadController@changeStatus',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

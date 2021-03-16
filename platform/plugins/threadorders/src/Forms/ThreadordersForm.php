@@ -3,8 +3,8 @@
 namespace Botble\Threadorders\Forms;
 
 use Botble\Base\Forms\FormAbstract;
-use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Thread\Models\Thread;
+use Botble\Threadorders\Forms\Fields\AddThreadOrderVariationFields;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
 use Botble\Threadorders\Models\Threadorders;
 
@@ -20,10 +20,60 @@ class ThreadordersForm extends FormAbstract
         $regular_categories = get_reg_product_categories_custom();
         $plus_categories = get_plu_product_categories_custom();
 
+        $selectedRegCat = [];
+        $selectedPluCat = [];
+        if ($this->getModel()) {
+            $selectedRegCat = $this->getModel()->regular_product_categories()->pluck('product_category_id')->all();
+            $selectedPluCat = $this->getModel()->plus_product_categories()->pluck('product_category_id')->all();
+        }
+
+        $this->formHelper->addCustomField('addThreadOrderVariationFields', AddThreadOrderVariationFields::class);
         $this
             ->setupModel(new Threadorders)
             ->setValidatorClass(ThreadordersRequest::class)
             ->withCustomFields()
+            ->add('vendor_id', 'customSelect', [
+                'label'      => 'Select Vendor',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => 'Select Vendor',
+                    'class' => 'select-search-full',
+                    'disabled'
+                ],
+                'choices'    => $vendors,
+            ])
+            ->add('order_no', 'text', [
+                'label'      => 'Order No.',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Order No.',
+                    'data-counter' => 120,
+                    'readonly'
+                ],
+            ])
+            ->add('regular_category_id', 'customSelect', [
+                'label'      => 'Select Regular Category',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => 'Select Regular Category',
+                    'class' => 'select-search-full',
+                    'disabled'
+                ],
+                'choices'    => $regular_categories,
+                'default_value'      => old('regular_category_id', $selectedRegCat),
+            ])
+            ->add('plus_category_id', 'customSelect', [
+                'label'      => 'Select Plus Category',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Select Plus Category',
+                    'class' => 'select-search-full',
+                    'disabled'
+                ],
+                'choices'    => $plus_categories,
+                'default_value'      => old('plus_category_id', $selectedPluCat),
+            ])
+
             ->add('name', 'text', [
                 'label'      => trans('core/base::forms.name'),
                 'label_attr' => ['class' => 'control-label required'],
@@ -31,15 +81,6 @@ class ThreadordersForm extends FormAbstract
                     'placeholder'  => trans('core/base::forms.name_placeholder'),
                     'data-counter' => 120,
                 ],
-            ])
-            ->add('vendor_id', 'customSelect', [
-                'label'      => 'Select Vendor',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr'       => [
-                    'placeholder'  => 'Select Vendor',
-                    'class' => 'select-search-full',
-                ],
-                'choices'    => $vendors,
             ])
             ->add('pp_sample', 'customSelect', [
                 'label'      => 'Select PP Sample',
@@ -66,6 +107,10 @@ class ThreadordersForm extends FormAbstract
                     'class' => 'select-search-full',
                 ],
                 'choices'    => Thread::$shipping_methods,
+            ])
+
+            ->add('addThreadOrderVariationFields', 'addThreadOrderVariationFields', [
+                'data' => $this->model
             ])
 
             ->add('order_date', 'text', [

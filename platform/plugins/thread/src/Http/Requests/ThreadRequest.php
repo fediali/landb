@@ -22,7 +22,7 @@ class ThreadRequest extends Request
             //'vendor_id'   => 'required|exists:users,id',
             'season_id'   => 'required|exists:seasons,id',
             //'order_no'   => 'required',
-            'order_status'   => 'required',
+            //'order_status'   => 'required',
             'regular_category_id' => 'required|exists:ec_product_categories,id',
             'plus_category_id'    => 'nullable|exists:ec_product_categories,id',
             //'design_id'   => 'required|exists:printdesigns,id',
