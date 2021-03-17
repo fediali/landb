@@ -31,7 +31,7 @@
                     <!-- /.col -->
                     <div class="col-sm-4 border-right">
                         <div class="description-block">
-                            <h5 class="description-header">0</h5>
+                            <h5 class="description-header">{{ get_total_designs() }}</h5>
                             <span class="description-text">Total Design</span>
                         </div>
                         <!-- /.description-block -->
@@ -39,7 +39,7 @@
                     <!-- /.col -->
                     <div class="col-sm-4">
                         <div class="description-block">
-                            <h5 class="description-header">0</h5>
+                            <h5 class="description-header">{{ get_approved_designs() }}</h5>
                             <span class="description-text">Approved Design</span>
                         </div>
                         <!-- /.description-block -->

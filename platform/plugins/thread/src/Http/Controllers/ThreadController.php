@@ -361,7 +361,6 @@ class ThreadController extends BaseController
     public function changeStatus(Request $request, BaseHttpResponse $response)
     {
         $thread = $this->threadRepository->findOrFail($request->input('pk'));
-
         $requestData['status'] = $request->input('value');
         $requestData['updated_by'] = auth()->user()->id;
 
@@ -376,12 +375,14 @@ class ThreadController extends BaseController
 
     public function removeVariation($id)
     {
-        $remove = ThreadVariation::find($id)->delete();
-        if ($remove) {
-            return redirect()->back()->with('success', 'Variation deleted');
-        } else {
-            return redirect()->back()->with('error', 'Server error');
-        }
+      $variation = ThreadVariation::find($id);
+      $variation->fabrics()->delete();
+      $remove = $variation->delete();
+      if($remove){
+        return redirect()->back()->with('success',  'Variation deleted');
+      }else{
+        return redirect()->back()->with('error',  'Server error');
+      }
     }
 
 }
