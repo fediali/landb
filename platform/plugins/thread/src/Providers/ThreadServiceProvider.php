@@ -121,6 +121,15 @@ class ThreadServiceProvider extends ServiceProvider
                     'icon'        => null,
                     'url'         => route('categorysizes.index'),
                     'permissions' => ['categorysizes.index'],
+                ])
+                ->registerItem([
+                    'id'          => 'cms-plugins-wash',
+                    'priority'    => 9,
+                    'parent_id'   => 'cms-plugins-thread',
+                    'name'        => 'plugins/wash::wash.name',
+                    'icon'        => null,
+                    'url'         => route('wash.index'),
+                    'permissions' => ['wash.index'],
                 ]);
         });
 

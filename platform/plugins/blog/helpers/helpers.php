@@ -285,10 +285,28 @@ if (!function_exists('get_thread_comments')) {
 }
 
 if (!function_exists('generate_sku_by_thread_variation')) {
-    function generate_sku_by_thread_variation($thread)
+    function generate_sku_by_thread_variation($thread, $print_id)
     {
-        return 'asd123';
+      $reg_sku = $plus_cat = null;
+      $print = \Botble\Printdesigns\Models\Printdesigns::find($print_id)->pluck('name')->first();
+      $selectedRegCat = $selectedPluCat = null;
+      if($thread){
+        $selectedRegCat = $thread->regular_product_categories()->pluck('product_category_id')->first();
+        $selectedPluCat = $thread->plus_product_categories()->pluck('product_category_id')->first();
+      }
+
+      if(!empty($selectedRegCat)){
+        $reg_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedRegCat)->pluck('name')->first();
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($reg_cat, 0, 2) . rand(10,999) . substr($print, 0, 3));
+      }
+      if(!empty($selectedPluCat)){
+        $plus_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedPluCat)->pluck('name')->first();
+        $plus_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($plus_cat, 0, 2) . rand(10,999) . substr($print, 0, 3). '-X');
+      }
+
+      return ['reg' => $reg_sku , 'plus' => $plus_sku];
     }
+
 }
 
 if (!function_exists('get_vendors')) {
@@ -344,6 +362,13 @@ if (!function_exists('get_fabrics')) {
     function get_fabrics()
     {
         return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_washes')) {
+    function get_washes()
+    {
+        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name','id')->all();
     }
 }
 

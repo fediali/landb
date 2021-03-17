@@ -51,6 +51,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeFabric',
                 'permission' => 'thread.create',
             ]);
+            Route::get('removeVariation/{id}', [
+                'as'         => 'removeVariation',
+                'uses'       => 'ThreadController@removeVariation',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

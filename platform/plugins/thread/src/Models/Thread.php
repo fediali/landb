@@ -74,6 +74,7 @@ class Thread extends BaseModel
         'status',
         'created_at',
         'updated_at',
+        'wash_id'
     ];
 
     /**

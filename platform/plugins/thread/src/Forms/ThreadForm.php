@@ -24,6 +24,7 @@ class ThreadForm extends FormAbstract
         $fits = get_fits();
         $rises = get_rises();
         $fabrics = get_fabrics();
+        $wash = get_washes();
 
         $selectedRegCat = [];
         $selectedPluCat = [];
@@ -139,7 +140,7 @@ class ThreadForm extends FormAbstract
                 'attr'       => [
                     'placeholder'  => 'Denim Fields',
                 ],
-                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics,'model'=>$this->model]
+                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics,'model'=>$this->model, 'wash' => $wash]
             ])
 
             /*->add('status', 'customSelect', [
