@@ -16,7 +16,8 @@ $variations = $options['data']['variations'];
                     <th scope="col">Fabric or Print</th>
                     <th scope="col">Cost</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Sku</th>
+                    <th scope="col">Regular Sku</th>
+                    <th scope="col">Plus Sku</th>
                     <th scope="col">Status</th>
                     <th scope="col">Regular Qty</th>
                     <th scope="col">Plus Qty</th>
@@ -32,6 +33,7 @@ $variations = $options['data']['variations'];
                         <td>{{ $variation->cost }}</td>
                         <td>{{ $variation->name }}</td>
                         <td>{{ $variation->sku }}</td>
+                        <td>{{ $variation->plus_sku }}</td>
                         <td>
                             @if($variation->status == 'active')
                                 <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}" class="btn btn-success">{{ ucfirst($variation->status) }}</a>
@@ -44,9 +46,9 @@ $variations = $options['data']['variations'];
                         <td>{{ $variation->notes }}</td>
                         <td>
                             <div class="table-actions" style="display: inline-block; font-size: 5px">
-                               {{-- <a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>--}}
+                                {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
+                                <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -67,27 +69,24 @@ $variations = $options['data']['variations'];
                     <span aria-hidden="true">×</span></button>
                 <h4 class="modal-title">Add More Fabric to <span class="variation-name"></span></h4>
             </div>
-            <form method="post" action="{{ route('thread.addVariationPrints') }}">
-                @csrf
                 <div class="modal-body">
                     <p>
                         <label for="name">Variation Name:</label>
-                        <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="name">
+                        <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
                         <label for="print_id">Print / Solid:</label>
-                        <select class="form-control" id="print_id" name="print_id">
+                        <select class="form-control" id="variation_print_id" name="variation_print_id">
                             <option selected="selected" value="">Enter Print</option>
                             @foreach($options['data']['printdesigns'] as $key => $print)
                                 <option value="{{ $key }}">{{ $print }}</option>
                             @endforeach
                         </select>
-                        <input class="thread_variation_id" name="thread_variation_id" type="hidden">
+                        <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
                     </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input class="btn btn-primary" type="submit" value="Save">
+                    <input class="btn btn-primary" value="Save" id="submitVariationFabric">
                 </div>
-            </form>
         </div>
         <!-- /.modal-content -->
     </div>
@@ -182,6 +181,32 @@ $variations = $options['data']['variations'];
       $("#add-new").on("click", function () {
         $tr = $(this).closest("tr").next().clone();
         $tr.insertAfter($(this).closest("tr"));
+      });
+
+      $(document).on('click', '.add_print', function () {
+        var variation_id = $(this).data('id');
+        $('.thread_variation_id').val(variation_id);
+      });
+
+      $(document).on('click', '#submitVariationFabric', function () {
+       $.ajax({
+
+            url : '{{ route('thread.addVariationPrints') }}',
+            type : 'post',
+            data : {
+                'thread_variation_id' : $('#thread_variation_id').val(),
+                '_token' : '{{ csrf_token() }}',
+                'name' : $('#variation_fabic_name').val(),
+                'print_id' : $('#variation_print_id').val(),
+            },
+            success : function(data) {
+              location.reload();
+            },
+            error : function(request,error)
+            {
+              location.reload();
+            }
+        });
       });
 
     });

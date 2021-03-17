@@ -4,6 +4,7 @@ namespace Botble\Thread\Forms;
 
 use Botble\Base\Forms\FormAbstract;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Thread\Forms\Fields\AddDenimFields;
 use Botble\Thread\Forms\Fields\CommentBox;
 use Botble\Thread\Forms\Fields\ThreadDetails;
@@ -26,6 +27,16 @@ class ThreadDetailsForm extends FormAbstract
       $fits = get_fits();
       $rises = get_rises();
       $fabrics = get_fabrics();
+      $wash = get_washes();
+
+      $selectedRegCat = $selectedPluCat = null;
+      if($this->getModel()){
+        $selectedRegCat = $this->getModel()->regular_product_categories()->pluck('product_category_id')->first();
+        $selectedPluCat = $this->getModel()->plus_product_categories()->pluck('product_category_id')->first();
+      }
+      $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat);
+      $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat);
+
       //dd($fits);
       //dd($comments);
         $this->formHelper->addCustomField('threadDetails', ThreadDetails::class);
@@ -36,11 +47,11 @@ class ThreadDetailsForm extends FormAbstract
             ->withCustomFields()
             ->add('Details', 'threadDetails', [
                 'label'      => 'Details',
-                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'seasons' => $seasons, 'rises' => $rises, 'fits' => $fits, 'fabrics' => $fabrics]
+                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'seasons' => $seasons, 'rises' => $rises, 'fits' => $fits, 'fabrics' => $fabrics, 'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
                 ]
             )->add('Variations', 'threadVariations', [
                 'label'      => 'threadVariations',
-                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations]
+                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
                 ]
             )->add('Comments', 'CommentBox', [
                 'label'      => 'CommentBox',

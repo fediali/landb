@@ -20,6 +20,7 @@ class ThreadVariation extends Model
         'created_by',
         'status',
         'sku',
+        'plus_sku'
     ];
     public function printDesign(){
       return $this->belongsTo(Printdesigns::class, 'print_id');
