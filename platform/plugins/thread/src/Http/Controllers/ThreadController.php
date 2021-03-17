@@ -373,7 +373,9 @@ class ThreadController extends BaseController
 
     public function removeVariation($id){
 
-      $remove = ThreadVariation::find($id)->delete();
+      $variation = ThreadVariation::find($id);
+      $variation->fabrics()->delete();
+      $remove = $variation->delete();
       if($remove){
         return redirect()->back()->with('success',  'Variation deleted');
       }else{
