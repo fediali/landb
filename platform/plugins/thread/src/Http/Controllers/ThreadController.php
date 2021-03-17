@@ -285,7 +285,9 @@ class ThreadController extends BaseController
         $input['cost'] = $data['cost'][$i];
         $input['notes'] = $data['notes'][$i];
         $input['status'] = 'active';
-        $input['sku'] = generate_sku_by_thread_variation($thread);
+        $skus = generate_sku_by_thread_variation($thread, $input['print_id']);
+        $input['sku'] = $skus['reg'];
+        $input['plus_sku'] = $skus['plus'];
         $input['created_by'] = Auth::user()->id;
         $create = $variation->create($input);
         if(!$create){
@@ -336,9 +338,9 @@ class ThreadController extends BaseController
       $input = VariationFabric::create($data);
 
       if($input){
-        return redirect()->back()->with('success',  'Fabric added');
+        return response()->json(['status' => 'success'], 200);
       }else{
-        return redirect()->back()->with('error',  'Server error');
+        return response()->json(['status' => 'error'], 500);
       }
     }
 
@@ -370,6 +372,16 @@ class ThreadController extends BaseController
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response;
+    }
+
+    public function removeVariation($id)
+    {
+        $remove = ThreadVariation::find($id)->delete();
+        if ($remove) {
+            return redirect()->back()->with('success', 'Variation deleted');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
     }
 
 }

@@ -229,31 +229,21 @@
                                 <td colspan="1" rowspan="2">
                                     <div class="regpack">
                                         <h6>Reg Size Run</h6>
-                                        <div class="sizediv">
-                                            S - 2
-                                        </div>
-                                        <div class="sizediv">
-                                            M- 2
-                                        </div>
-                                        <div class="sizediv">
-                                            L - 2
-                                        </div>
-
+                                        @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
+                                            <div class="sizediv">
+                                                {{ $reg_cat->name }}
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </td>
                                 <td colspan="1" rowspan="4">
                                     <div class="regpack">
                                         <h6>Plus Size Run</h6>
-                                        <div class="sizediv">
-                                            XL - 2
-                                        </div>
-                                        <div class="sizediv">
-                                            2X - 2
-                                        </div>
-                                        <div class="sizediv">
-                                            3X - 2
-                                        </div>
-
+                                        @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                            <div class="sizediv">
+                                                {{ $plus_cat->name }}
+                                            </div>
+                                        @endforeach
 
                                     </div>
                                 </td>
@@ -296,7 +286,9 @@
                                         <tr>
                                             <td>
 
+                                                @if(!empty($thread->spec_file))
                                                 <img height="100px" width="140px" src="{{ asset('storage/'.$thread->spec_file) }}" style=" object-fit: cover;">
+                                                @endif
 
                                             </td>
                                         </tr>
@@ -326,7 +318,7 @@
                                                                 <div class="item">
                                                                     @foreach($fits as $key => $fit)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $fit }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $fit }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -343,7 +335,7 @@
                                                                 <div class="item">
                                                                     @foreach($rises as $key => $rise)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $rise }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $rise }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -363,7 +355,7 @@
                                                                 <div class="item">
                                                                     @foreach($fabrics as $key => $fabric)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $fabric }}</label> <input type="checkbox" {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $fabric }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -384,7 +376,16 @@
                                                 <tr>
                                                     <td colspan="12">
                                                         <div class="tabrow">
-                                                            <b>Wash: </b>{{ $thread->wash }}
+                                                            <b>Wash: </b>
+                                                            @foreach(array_chunk($options['data']['washes'], 5, true) as $washes)
+                                                                <div class="item">
+                                                                    @foreach($washes as $key => $wash)
+                                                                        <div class="checkbox">
+                                                                            <label for=""> {{ $wash }}</label> <input type="checkbox" disabled {!! ($key == $thread->wash_id) ? 'checked' : '' !!}>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endforeach
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -409,19 +410,19 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Fabric: {{ @$thread->printdesign->name }}
+                                                        Fabric: {{ @$thread->material }}
                                                     </td>
-                                                    <td rowspan="2">Additional Notes:</td>
+                                                    <td rowspan="2">Additional Notes: {{ @$thread->label }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Sleeve Length:</td>
+                                                    <td>Sleeve Length: {{ @$thread->sleeve }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
                                                         <div class="orderbox_wrap">
                                                             @foreach($variations as $variation)
                                                                 <div class="box">
-                                                                    <h6>SKU: {{ $variation->sku }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
+                                                                    <h6>{{ $variation->name }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button></h6>
                                                                 </div>
@@ -430,14 +431,14 @@
                                                             @foreach($variations as $variation)
                                                                 @foreach($variation->fabrics as $fabric)
                                                                     <div class="box">
-                                                                        <h6>SKU: {{ $variation->sku }}</h6>
+                                                                        {{--<h6>Variation: {{ $variation->name }}</h6>--}}
                                                                         <div class="variationdiv">
                                                                             <h5>Variation: {{ @$variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
                                                                             <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
                                                                             <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
                                                                             <div class="reg_bottom">
-                                                                                <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }}</p>
-                                                                                <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }}</p>
+                                                                                <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
+                                                                                <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>

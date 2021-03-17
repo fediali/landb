@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class CreateVariationFabricsTable extends Migration
+class WashCreateWashTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +12,14 @@ class CreateVariationFabricsTable extends Migration
      */
     public function up()
     {
-        Schema::create('variation_fabrics', function (Blueprint $table) {
+        Schema::create('washes', function (Blueprint $table) {
             $table->id();
-            $table->integer('thread_variation_id');
-            $table->string('name');
-            $table->integer('print_id');
+            $table->string('name', 255);
+            $table->string('status', 60)->default('published');
+            $table->integer('business_id')->default(1);
             $table->integer('created_by');
+            $table->integer('updated_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateVariationFabricsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variation_fabrics');
+        Schema::dropIfExists('washes');
     }
 }
