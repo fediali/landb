@@ -91,7 +91,7 @@ $variations = $options['data']['variations'];
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     @foreach($options['data']['printdesigns'] as $key => $print)
-                                                        <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
+                                                        <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                                                     @endforeach
 
                                                 </div>
@@ -228,9 +228,8 @@ $variations = $options['data']['variations'];
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     @foreach($options['data']['printdesigns'] as $key => $print)
-                                                        <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
+                                                        <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                                                     @endforeach
-
                                                 </div>
                                             </div>
                                         </td>
@@ -290,12 +289,17 @@ $variations = $options['data']['variations'];
                         <label for="name">Variation Name:</label>
                         <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
                         <label for="print_id">Print / Solid:</label>
-                        <select class="form-control" id="variation_print_id" name="variation_print_id">
-                            <option selected="selected" value="">Enter Print</option>
+                        <input type="hidden" class="print_id" id="variation_print_id" name="print_id">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Print
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @foreach($options['data']['printdesigns'] as $key => $print)
-                                <option value="{{ $print->id }}">{{ $print->name }}</option>
+                                <a class="dropdown-item print_id_droper" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                             @endforeach
-                        </select>
+                        </div>
+                    </div>
                         <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
                     </p>
                 </div>
@@ -328,7 +332,12 @@ $variations = $options['data']['variations'];
 
       $('.print_id_drop').on('click', function () {
         $(this).closest('tr').find('.print_id').val($(this).data('id'));
-      })
+        $(this).closest('.dropdown').find('#dropdownMenuButton').html($(this).data('name'));
+      });
+      $('.print_id_droper').on('click', function () {
+        $('#variation_print_id').val($(this).data('id'));
+        $(this).closest('.dropdown').find('#dropdownMenuButton').html($(this).data('name'));
+      });
 
       $(document).on('click', '.add_print', function () {
         var variation_id = $(this).data('id');
