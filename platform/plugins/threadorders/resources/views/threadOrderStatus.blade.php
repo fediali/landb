@@ -1,5 +1,5 @@
-<link media="all" type="text/css" rel="stylesheet" href="http://landb.qa/vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css">
-<script src="http://landb.qa/vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<link media="all" type="text/css" rel="stylesheet" href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
+<script src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
 
 <a data-type="select"
    data-source="{{ json_encode([ ['value' => 'pending', 'text' => 'Pending'], ['value' => 'draft', 'text' => 'Draft'], ['value' => 'published', 'text' => 'Published'],  ]) }}"
