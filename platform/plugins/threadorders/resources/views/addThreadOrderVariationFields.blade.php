@@ -18,8 +18,6 @@
 
 
 
-
-
 <script>
   $(document).ready(function () {
 
