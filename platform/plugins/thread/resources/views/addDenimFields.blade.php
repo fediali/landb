@@ -42,18 +42,6 @@
         </div>
     </div>
 
-    <div class="form-group" id="wash-div">
-        <label for="wash_id" class="control-label">Select Wash</label>
-        <div class="form-group">
-            <select class="select-search-full" id="wash_id" name="wash_id">
-                <option selected="selected" disabled value="">Select Wash</option>
-                @foreach($options['data']['wash'] as $key => $wash)
-                    <option value="{{$key}}" {{$options['data']['model']->wash_id == $key ? 'selected' : ''}}>{{$wash}}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
     <div class="form-group" id="fabric_print_direction-div">
         <label for="fabric_print_direction" class="control-label">Fabric Print Direction</label>
         <input class="form-control" placeholder="Fabric Print Direction" data-counter="120" name="fabric_print_direction" type="text" id="fabric_print_direction" value="{{$options['data']['model']->fabric_print_direction}}">

@@ -223,9 +223,9 @@
                             <tbody>
                             <tr>
                                 <td colspan="1" rowspan="2" class="tablelogo"><img src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
-                                <td colspan="1" rowspan="1">Order#: <br>  </td>
+                                <td colspan="1" rowspan="1">Order#: <br> {{ $thread->order_no }} </td>
                                 <td rowspan="1" colspan="3">Description <br> {{ $thread->description }}</td>
-                                <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ $thread->pp_sample_date->toDateString() }}</td>
+                                <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ parse_date($thread->pp_sample_date) }}</td>
                                 <td colspan="1" rowspan="2">
                                     <div class="regpack">
                                         <h6>Reg Size Run</h6>
@@ -254,20 +254,17 @@
 
                             </tr>
                             <tr>
-                                <td colspan="1" rowspan="1">Order Date: </td>
-                                <td>Style # <br>  {{ $thread->sku }}</td>
+                                <td colspan="1" rowspan="1">Order Date: {{ parse_date($thread->order_date) }}</td>
+                                <td>Style # <br> Reg:  {{ $options['data']['reg_sku'] }} <br> Plus:  {{ $options['data']['plus_sku'] }}</td>
                                 <td>Category <br>
-                                    @if(@$thread->product_categories)
-                                        @foreach($thread->product_categories as $category)
-                                            {{ $loop->iteration.')- '. @$category->name }}<br>
-                                        @endforeach
-                                    @endif</td>
+                                    Reg: {{ $options['data']['reg_cat']->name }}<br>
+                                    Plus: {{ $options['data']['plus_cat']->name }}</td>
                                 <td>Season: <br> {{ @$thread->season->name }}</td>
                                 <td>Request PP Sample: <br> {{ @$thread->pp_sample }}</td>
                                 <td>PP Sample Size: <br> {{ @$thread->pp_sample_size }}</td>
                                 <td>Shipping Method: <br> {{ $thread->shipping_method }}</td>
-                                <td>Ship Date: <br> {{ $thread->ship_date }}</td>
-                                <td>No Later Than <br> {{ $thread->cancel_date }}</td>
+                                <td>Ship Date: <br> {{ parse_date($thread->ship_date) }}</td>
+                                <td>No Later Than <br> {{ parse_date($thread->cancel_date) }}</td>
 
                             </tr>
 
@@ -375,22 +372,6 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
-                                                        <div class="tabrow">
-                                                            <b>Wash: </b>
-                                                            @foreach(array_chunk($options['data']['washes'], 5, true) as $washes)
-                                                                <div class="item">
-                                                                    @foreach($washes as $key => $wash)
-                                                                        <div class="checkbox">
-                                                                            <label for=""> {{ $wash }}</label> <input type="checkbox" disabled {!! ($key == $thread->wash_id) ? 'checked' : '' !!}>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12">
                                                         <div class="tabrow additionalnote">
                                                             <b>Additional Notes: </b>{{ $thread->description }}
                                                         </div>
@@ -410,9 +391,9 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Fabric: {{ @$thread->material }}
+                                                        Material: {{ @$thread->material }}
                                                     </td>
-                                                    <td rowspan="2">Additional Notes: {{ @$thread->label }}</td>
+                                                    <td rowspan="2">Label: {{ @$thread->label }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sleeve Length: {{ @$thread->sleeve }}</td>
@@ -421,11 +402,13 @@
                                                     <td colspan="12">
                                                         <div class="orderbox_wrap">
                                                             @foreach($variations as $variation)
+                                                                @if($variation->is_denim == 0)
                                                                 <div class="box">
                                                                     <h6>{{ $variation->name }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button></h6>
                                                                 </div>
+                                                                @endif
                                                             @endforeach
 
                                                             @foreach($variations as $variation)

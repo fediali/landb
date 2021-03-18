@@ -266,14 +266,14 @@ if (!function_exists('get_designers')) {
 if (!function_exists('get_print_designs')) {
     function get_print_designs()
     {
-        return \Botble\Printdesigns\Models\Printdesigns::pluck('name','id')->all();
+        return \Botble\Printdesigns\Models\Printdesigns::all();
     }
 }
 
 if (!function_exists('get_thread_variations')) {
     function get_thread_variations($id)
     {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign','fabrics'])->get();
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign','fabrics', 'wash'])->get();
     }
 }
 
@@ -391,5 +391,13 @@ if (!function_exists('get_category_sizes')) {
     function get_category_sizes()
     {
         return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+
+if (!function_exists('parse_date')) {
+    function parse_date($date)
+    {
+        return date('M d,Y', strtotime($date));
     }
 }

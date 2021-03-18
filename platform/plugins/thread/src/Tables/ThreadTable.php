@@ -66,6 +66,10 @@ class ThreadTable extends TableAbstract
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
+            ->editColumn('order', function ($item) {
+              $html = '<a href="'.route('thread.orderItem', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Order</a>';
+              return $html;
+            })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();
                 return view('plugins/thread::threadStatus', ['item' => $item])->render();
@@ -131,6 +135,11 @@ class ThreadTable extends TableAbstract
                 'title'     => 'Designer',
                 'class'     => 'no-sort text-left',
                 'orderable' => false,
+            ],
+            'order' => [
+                'name'  => 'threads.order',
+                'title' => 'Order',
+                'width' => '100px',
             ],
             'created_at' => [
                 'name'  => 'threads.created_at',

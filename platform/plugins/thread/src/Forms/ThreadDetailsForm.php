@@ -21,6 +21,7 @@ class ThreadDetailsForm extends FormAbstract
     public function buildForm()
     {
       $printdesigns = get_print_designs();
+      //dd($printdesigns);
       $variations = get_thread_variations($this->model->id);
       $comments = get_thread_comments($this->model->id);
       $seasons = get_seasons();
@@ -29,13 +30,18 @@ class ThreadDetailsForm extends FormAbstract
       $fabrics = get_fabrics();
       $wash = get_washes();
 
-      $selectedRegCat = $selectedPluCat = null;
+      $selectedRegCat = $selectedPluCat =  $reg_cat = $plus_cat = null;
+      $reg_sku = $plus_sku = '';
       if($this->getModel()){
-        $selectedRegCat = $this->getModel()->regular_product_categories()->pluck('product_category_id')->first();
-        $selectedPluCat = $this->getModel()->plus_product_categories()->pluck('product_category_id')->first();
+        $selectedRegCat = $this->getModel()->regular_product_categories()->first(['product_category_id', 'sku']);
+        $selectedPluCat = $this->getModel()->plus_product_categories()->first(['product_category_id', 'sku']);
+
+        $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat->product_category_id);
+        $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat->product_category_id);
+
+        $reg_sku = $selectedRegCat->sku;
+        $plus_sku = $selectedPluCat->sku;
       }
-      $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat);
-      $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat);
 
       //dd($fits);
       //dd($comments);
@@ -47,11 +53,11 @@ class ThreadDetailsForm extends FormAbstract
             ->withCustomFields()
             ->add('Details', 'threadDetails', [
                 'label'      => 'Details',
-                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'seasons' => $seasons, 'rises' => $rises, 'fits' => $fits, 'fabrics' => $fabrics, 'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
+                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'seasons' => $seasons, 'rises' => $rises, 'fits' => $fits, 'fabrics' => $fabrics, 'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat, 'reg_sku' => $reg_sku, 'plus_sku' => $plus_sku]
                 ]
             )->add('Variations', 'threadVariations', [
                 'label'      => 'threadVariations',
-                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
+                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations,'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
                 ]
             )->add('Comments', 'CommentBox', [
                 'label'      => 'CommentBox',

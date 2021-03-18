@@ -273,17 +273,20 @@ class ThreadController extends BaseController
 
     public function addVariation(Request $request){
       $data = $request->all();
+      //dd($data);
       $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
       for ($i=0; $i<=count($data['name'])-1 ; $i++ ) {
         $variation = new ThreadVariation();
         $input = array();
-        $input['thread_id'] = $data['thread_id'][$i];
-        $input['name'] = $data['name'][$i];
-        $input['print_id'] = $data['print_id'][$i];
-        $input['regular_qty'] = $data['regular_qty'][$i];
-        $input['plus_qty'] = $data['plus_qty'][$i];
-        $input['cost'] = $data['cost'][$i];
-        $input['notes'] = $data['notes'][$i];
+        $input['thread_id'] = @$data['thread_id'];
+        $input['is_denim'] = @$data['is_denim'];
+        $input['name'] = @$data['name'][$i];
+        $input['print_id'] = @$data['print_id'][$i];
+        $input['wash_id'] = @$data['wash_id'][$i];
+        $input['regular_qty'] = @$data['regular_qty'][$i];
+        $input['plus_qty'] = @$data['plus_qty'][$i];
+        $input['cost'] = @$data['cost'][$i];
+        $input['notes'] = @$data['notes'][$i];
         $input['status'] = 'active';
         $skus = generate_sku_by_thread_variation($thread, $input['print_id']);
         $input['sku'] = $skus['reg'];
@@ -291,10 +294,10 @@ class ThreadController extends BaseController
         $input['created_by'] = Auth::user()->id;
         $create = $variation->create($input);
         if(!$create){
-          return redirect()->back()->with('error', 'Error adding Variation(s)');
+          return  response()->json(['status' => 'error'], 500);
         }
       }
-        return redirect()->back()->with('success', 'Variation(s) added successfully');
+        return  response()->json(['status' => 'success'], 200);
 
 
     }
