@@ -413,22 +413,31 @@
                                                                 @endif
                                                             @endforeach
 
+                                                            <hr>
                                                             @foreach($variations as $variation)
-                                                                @foreach($variation->fabrics as $fabric)
-                                                                    <div class="box">
-                                                                        {{--<h6>Variation: {{ $variation->name }}</h6>--}}
-                                                                        <div class="variationdiv">
-                                                                            <h5>Variation: {{ @$variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
-                                                                            <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
-                                                                            <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
-                                                                            <div class="reg_bottom">
-                                                                                <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
-                                                                                <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
-                                                                            </div>
+                                                                <div class="box">
+                                                                    <div class="variationdiv">
+                                                                        <h5>Variation: {{ @$variation->name }}</h5>
+                                                                        <p><label for="">Fabric:</label>{{ @$variation->printdesign->name }}</p>
+                                                                        <img src="{{ asset('storage/'.$variation->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                        <div class="reg_bottom">
+                                                                            <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
+                                                                            <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @endforeach
+                                                                    @foreach($variation->fabrics as $fabric)
+                                                                        <div class="variationdiv">
+                                                                        <h5>Variation: {{ @$fabric->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
+                                                                        <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
+                                                                        <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                        <div class="reg_bottom">
+                                                                            <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
+                                                                            <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    @endforeach
+                                                            </div>
+                                                        @endforeach
 
                                                         </div>
                                                     </td>
