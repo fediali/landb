@@ -287,7 +287,7 @@ if (!function_exists('get_thread_comments')) {
 if (!function_exists('generate_sku_by_thread_variation')) {
     function generate_sku_by_thread_variation($thread, $print_id)
     {
-      $reg_sku = $plus_cat = null;
+      $reg_sku = $reg_cat = $plus_sku = $plus_cat = null;
       $print = \Botble\Printdesigns\Models\Printdesigns::find($print_id)->pluck('name')->first();
       $selectedRegCat = $selectedPluCat = null;
       if($thread){

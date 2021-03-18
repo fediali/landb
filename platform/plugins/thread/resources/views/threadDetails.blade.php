@@ -224,7 +224,7 @@
                             <tr>
                                 <td colspan="1" rowspan="2" class="tablelogo"><img src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
                                 <td colspan="1" rowspan="1">Order#: <br> {{ $thread->order_no }} </td>
-                                <td rowspan="1" colspan="3">Description <br> {{ $thread->description }}</td>
+                                <td rowspan="1" colspan="3">Description <br> {{ $thread->name }}</td>
                                 <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ parse_date($thread->pp_sample_date) }}</td>
                                 <td colspan="1" rowspan="2">
                                     <div class="regpack">
@@ -236,17 +236,19 @@
                                         @endforeach
                                     </div>
                                 </td>
+                                @if(!empty($options['data']['plus_cat']))
                                 <td colspan="1" rowspan="4">
                                     <div class="regpack">
                                         <h6>Plus Size Run</h6>
+
                                         @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                             <div class="sizediv">
                                                 {{ $plus_cat->name }}
                                             </div>
                                         @endforeach
-
                                     </div>
                                 </td>
+                                @endif
                                 <td colspan="1">Designer: <br> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</td>
                                 <td colspan="1">Vendor: <br> {{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</td>
                                 <td colspan="1">Status: <br> {{ $thread->status }}</td>
@@ -255,10 +257,10 @@
                             </tr>
                             <tr>
                                 <td colspan="1" rowspan="1">Order Date: {{ parse_date($thread->order_date) }}</td>
-                                <td>Style # <br> Reg:  {{ $options['data']['reg_sku'] }} <br> Plus:  {{ $options['data']['plus_sku'] }}</td>
+                                <td>Style # <br> Reg:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku'])) Plus:  {{ $options['data']['plus_sku'] }} @endif</td>
                                 <td>Category <br>
                                     Reg: {{ $options['data']['reg_cat']->name }}<br>
-                                    Plus: {{ $options['data']['plus_cat']->name }}</td>
+                                  @if(!empty($options['data']['plus_cat']))  Plus: {{ $options['data']['plus_cat']->name }} @endif</td>
                                 <td>Season: <br> {{ @$thread->season->name }}</td>
                                 <td>Request PP Sample: <br> {{ @$thread->pp_sample }}</td>
                                 <td>PP Sample Size: <br> {{ @$thread->pp_sample_size }}</td>

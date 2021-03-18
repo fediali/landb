@@ -341,7 +341,7 @@ $variations = $options['data']['variations'];
             url : '{{ route('thread.addVariationPrints') }}',
             type : 'post',
             data : {
-                'thread_id' : $('#thread_id').val(),
+                'thread_variation_id' : $('#thread_variation_id').val(),
                 '_token' : '{{ csrf_token() }}',
                 'name' : $('#variation_fabic_name').val(),
                 'print_id' : $('#variation_print_id').val(),

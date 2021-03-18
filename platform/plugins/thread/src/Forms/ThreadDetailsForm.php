@@ -36,11 +36,14 @@ class ThreadDetailsForm extends FormAbstract
         $selectedRegCat = $this->getModel()->regular_product_categories()->first(['product_category_id', 'sku']);
         $selectedPluCat = $this->getModel()->plus_product_categories()->first(['product_category_id', 'sku']);
 
-        $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat->product_category_id);
-        $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat->product_category_id);
+        if(!empty($selectedRegCat->product_category_id)){
+          $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat->product_category_id);
+        }if(!empty($selectedPluCat->product_category_id)){
+          $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat->product_category_id);
+        }
 
-        $reg_sku = $selectedRegCat->sku;
-        $plus_sku = $selectedPluCat->sku;
+        $reg_sku = @$selectedRegCat->sku;
+        $plus_sku = @$selectedPluCat->sku;
       }
 
       //dd($fits);
