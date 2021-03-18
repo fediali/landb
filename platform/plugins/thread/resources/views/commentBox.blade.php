@@ -47,11 +47,11 @@
 
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <input type="hidden" name="thread_id" value="{{ $thread->id }}">
-                        <input type="text" name="comment" class="form-control type_msg" placeholder="Type your message...">
+                        <input id="comment_input" type="text" name="comment" class="form-control type_msg" placeholder="Type your message...">
                         <input type="file" name="image" id="attachimage" hidden>
                         <div class="input-group-append">
                             <span class="input-group-text send_btn"><span onclick="document.getElementById('attachimage').click()" class="fabutton"><i class="fa fa-camera"></i></span></span>
-                            <span class="input-group-text send_btn"><button type="submit" id="completed-task" class="fabutton"><i class="fa fa-paper-plane"></i></button></span>
+                            <span class="input-group-text send_btn"><button id="completed-task" class="fabutton"><i class="fa fa-paper-plane"></i></button></span>
                         </div>
                     </div>
                 </form>
@@ -98,5 +98,56 @@
   $('#deleteImage').on('click', function () {
     $('.img_wrp').hide();
     $('#attachimage').val('');
+  });
+
+  $(document).on('click', '#completed-task', function (e) {
+    e.preventDefault();
+    var formData = new FormData();
+    formData.append('user_id', $('input[name="user_id"]').val());
+    formData.append('thread_id', $('input[name="thread_id"]').val());
+    formData.append('comment', $('input[name="comment"]').val());
+
+    var image = $('input[name="image"]')[0].files;
+    if(image.length > 0){
+      formData.append('image', image[0]);
+    }
+
+    console.log(formData);
+    $.ajax({
+
+      url : '{{ route('thread.postComment') }}',
+      type : 'post',
+      data : formData,
+      processData: false,
+      contentType: false,
+      success : function(data) {
+        var comment = data.comment;
+        var image = '';
+        var text = comment.comment;
+        text = (text === null) ? '' : text;
+        if(comment.image){
+          image = '<img height="300px" width="390px" src="{{ URL::to('/') }}/'+ comment.image +'" style=" object-fit: cover; margin-top: 5px;">';
+        }
+        $('.msg_card_body').append('<div class="d-flex justify-content-start mb-4">\n' +
+            '                        <div class="img_cont_msg">\n' +
+            '                            <img src="{{ URL::to('/images/chat-bubble.png') }}" class=" user_img_msg">\n' +
+            '                        </div>\n' +
+            '                        <div class="msg_cotainer">\n' +
+            '                            <h6>{{ Auth::user()->first_name. ' ' . Auth::user()->last_name }}</h6>\n' +
+            '                            <p>'+text+'</p>\n' +
+            '                            \n' + image +
+            '                                \n' +
+            '                            \n' +
+            '                            <span class="msg_time">{{--<a href="#" class="reply">Reply</a> --}}<a href="#">'+ comment.time +'</a></span>\n' +
+            '                        </div>\n' +
+            '                    </div>');
+        $('#deleteImage').trigger('click');
+        $('input[name="comment"]').val('');
+      },
+      error : function(request,error)
+      {
+        console.log('server error');
+      }
+    });
   });
 </script>

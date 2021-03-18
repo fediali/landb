@@ -223,9 +223,9 @@
                             <tbody>
                             <tr>
                                 <td colspan="1" rowspan="2" class="tablelogo"><img src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
-                                <td colspan="1" rowspan="1">Order#: <br>  </td>
-                                <td rowspan="1" colspan="3">Description <br> {{ $thread->description }}</td>
-                                <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ $thread->pp_sample_date->toDateString() }}</td>
+                                <td colspan="1" rowspan="1">Order#: <br> {{ $thread->order_no }} </td>
+                                <td rowspan="1" colspan="3">Description <br> {{ $thread->name }}</td>
+                                <td rowspan="1" colspan="2">PP Sample Due Date <br> {{ parse_date($thread->pp_sample_date) }}</td>
                                 <td colspan="1" rowspan="2">
                                     <div class="regpack">
                                         <h6>Reg Size Run</h6>
@@ -236,17 +236,19 @@
                                         @endforeach
                                     </div>
                                 </td>
+                                @if(!empty($options['data']['plus_cat']))
                                 <td colspan="1" rowspan="4">
                                     <div class="regpack">
                                         <h6>Plus Size Run</h6>
+
                                         @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                             <div class="sizediv">
                                                 {{ $plus_cat->name }}
                                             </div>
                                         @endforeach
-
                                     </div>
                                 </td>
+                                @endif
                                 <td colspan="1">Designer: <br> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</td>
                                 <td colspan="1">Vendor: <br> {{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</td>
                                 <td colspan="1">Status: <br> {{ $thread->status }}</td>
@@ -254,20 +256,17 @@
 
                             </tr>
                             <tr>
-                                <td colspan="1" rowspan="1">Order Date: </td>
-                                <td>Style # <br>  {{ $thread->sku }}</td>
+                                <td colspan="1" rowspan="1">Order Date: {{ parse_date($thread->order_date) }}</td>
+                                <td>Style # <br> Reg:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku'])) Plus:  {{ $options['data']['plus_sku'] }} @endif</td>
                                 <td>Category <br>
-                                    @if(@$thread->product_categories)
-                                        @foreach($thread->product_categories as $category)
-                                            {{ $loop->iteration.')- '. @$category->name }}<br>
-                                        @endforeach
-                                    @endif</td>
+                                    Reg: {{ $options['data']['reg_cat']->name }}<br>
+                                  @if(!empty($options['data']['plus_cat']))  Plus: {{ $options['data']['plus_cat']->name }} @endif</td>
                                 <td>Season: <br> {{ @$thread->season->name }}</td>
                                 <td>Request PP Sample: <br> {{ @$thread->pp_sample }}</td>
                                 <td>PP Sample Size: <br> {{ @$thread->pp_sample_size }}</td>
                                 <td>Shipping Method: <br> {{ $thread->shipping_method }}</td>
-                                <td>Ship Date: <br> {{ $thread->ship_date }}</td>
-                                <td>No Later Than <br> {{ $thread->cancel_date }}</td>
+                                <td>Ship Date: <br> {{ parse_date($thread->ship_date) }}</td>
+                                <td>No Later Than <br> {{ parse_date($thread->cancel_date) }}</td>
 
                             </tr>
 
@@ -375,22 +374,6 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
-                                                        <div class="tabrow">
-                                                            <b>Wash: </b>
-                                                            @foreach(array_chunk($options['data']['washes'], 5, true) as $washes)
-                                                                <div class="item">
-                                                                    @foreach($washes as $key => $wash)
-                                                                        <div class="checkbox">
-                                                                            <label for=""> {{ $wash }}</label> <input type="checkbox" disabled {!! ($key == $thread->wash_id) ? 'checked' : '' !!}>
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="12">
                                                         <div class="tabrow additionalnote">
                                                             <b>Additional Notes: </b>{{ $thread->description }}
                                                         </div>
@@ -410,9 +393,9 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Fabric: {{ @$thread->material }}
+                                                        Material: {{ @$thread->material }}
                                                     </td>
-                                                    <td rowspan="2">Additional Notes: {{ @$thread->label }}</td>
+                                                    <td rowspan="2">Label: {{ @$thread->label }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sleeve Length: {{ @$thread->sleeve }}</td>
@@ -421,29 +404,41 @@
                                                     <td colspan="12">
                                                         <div class="orderbox_wrap">
                                                             @foreach($variations as $variation)
+                                                                @if($variation->is_denim == 0 && $variation->status == 'active')
                                                                 <div class="box">
                                                                     <h6>{{ $variation->name }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
                                                                             <i class="fa fa-plus"></i>
                                                                         </button></h6>
                                                                 </div>
+                                                                @endif
                                                             @endforeach
 
                                                             @foreach($variations as $variation)
-                                                                @foreach($variation->fabrics as $fabric)
-                                                                    <div class="box">
-                                                                        {{--<h6>Variation: {{ $variation->name }}</h6>--}}
-                                                                        <div class="variationdiv">
-                                                                            <h5>Variation: {{ @$variation->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
-                                                                            <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
-                                                                            <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
-                                                                            <div class="reg_bottom">
-                                                                                <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
-                                                                                <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
-                                                                            </div>
+                                                                @if($variation->status == 'active')
+                                                                <div class="box">
+                                                                    <div class="variationdiv">
+                                                                        <h5>Variation: {{ @$variation->name }}</h5>
+                                                                        <p><label for="">Fabric:</label>{{ @$variation->printdesign->name }}</p>
+                                                                        <img src="{{ asset('storage/'.$variation->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                        <div class="reg_bottom">
+                                                                            <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
+                                                                            <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
                                                                         </div>
                                                                     </div>
-                                                                @endforeach
-                                                            @endforeach
+                                                                    @foreach($variation->fabrics as $fabric)
+                                                                        <div class="variationdiv">
+                                                                        <h5>Variation: {{ @$fabric->name }} <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i class="float-right fa fa-times"></i></a></h5>
+                                                                        <p><label for="">Fabric:</label>{{ @$fabric->printdesign->name }}</p>
+                                                                        <img src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                        <div class="reg_bottom">
+                                                                            <p><label for="">REG. Packs:</label> {{ $variation->regular_qty }} | Sku: {{ $variation->sku }}</p>
+                                                                            <p><label for="">PLUS Packs:</label> {{ $variation->plus_qty }} | Plus Sku: {{ $variation->plus_sku }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    @endforeach
+                                                            </div>
+                                                                    @endif
+                                                        @endforeach
 
                                                         </div>
                                                     </td>
