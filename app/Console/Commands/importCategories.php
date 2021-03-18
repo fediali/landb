@@ -80,5 +80,21 @@ class importCategories extends Command
             DB::table('product_categories_sizes')->insert($data2);
         }*/
 
+        /*$getPrints = DB::table('print')->orderBy('id')->get();
+        foreach ($getPrints as $getPrint) {
+            $data = [
+                'id' => $getPrint->id,
+                'designer_id' => $getPrint->user_id,
+                'name' => $getPrint->name,
+                'sku' => $getPrint->sku,
+                'file' => $getPrint->file,
+                'file_type' => $getPrint->type,
+                'status' => 'published',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            DB::table('printdesigns')->insert($data);
+        }*/
+
     }
 }
