@@ -404,7 +404,7 @@
                                                     <td colspan="12">
                                                         <div class="orderbox_wrap">
                                                             @foreach($variations as $variation)
-                                                                @if($variation->is_denim == 0)
+                                                                @if($variation->is_denim == 0 && $variation->status == 'active')
                                                                 <div class="box">
                                                                     <h6>{{ $variation->name }} <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="test">
                                                                             <i class="fa fa-plus"></i>
@@ -413,8 +413,8 @@
                                                                 @endif
                                                             @endforeach
 
-                                                            <hr>
                                                             @foreach($variations as $variation)
+                                                                @if($variation->status == 'active')
                                                                 <div class="box">
                                                                     <div class="variationdiv">
                                                                         <h5>Variation: {{ @$variation->name }}</h5>
@@ -437,6 +437,7 @@
                                                                     </div>
                                                                     @endforeach
                                                             </div>
+                                                                    @endif
                                                         @endforeach
 
                                                         </div>

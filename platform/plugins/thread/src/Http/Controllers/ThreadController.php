@@ -13,6 +13,7 @@ use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Botble\Thread\Tables\ThreadTable;
@@ -327,9 +328,11 @@ class ThreadController extends BaseController
       $input = ThreadComment::create($data);
 
       if($input){
-        return redirect()->back()->with('success',  'Comment posted');
+        $time = $input->created_at->diffForHumans();
+        $input->time = $time;
+        return response()->json(['comment' => $input], 200);
       }else{
-        return redirect()->back()->with('error',  'Server error');
+        return  response()->json(500);
       }
     }
 
