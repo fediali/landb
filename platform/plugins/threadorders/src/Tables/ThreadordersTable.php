@@ -82,6 +82,7 @@ class ThreadordersTable extends TableAbstract
         $select = [
             'threadorders.id',
             'threadorders.name',
+            'threadorders.order_status',
             'threadorders.created_at',
             'threadorders.status',
         ];
@@ -105,6 +106,11 @@ class ThreadordersTable extends TableAbstract
             'name' => [
                 'name'  => 'threadorders.name',
                 'title' => trans('core/base::tables.name'),
+                'class' => 'text-left',
+            ],
+            'order_status' => [
+                'name'  => 'threadorders.order_status',
+                'title' => 'Order Status',
                 'class' => 'text-left',
             ],
             'created_at' => [

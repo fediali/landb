@@ -195,6 +195,7 @@ class ThreadordersController extends BaseController
         $requestData = $request->input();
 
         $thread = $this->threadRepository->findOrFail($id);
+        $thread_order_status = $thread->thread_has_order ? Thread::REORDER: Thread::NEW;
 
         unset($thread->id);
         unset($thread->created_at);
@@ -212,7 +213,7 @@ class ThreadordersController extends BaseController
         $threadData['cancel_date'] = $requestData['cancel_date'];
 
         $threadData['status'] = BaseStatusEnum::PENDING;
-        $threadData['order_status'] = Thread::NEW;
+        $threadData['order_status'] = $thread_order_status;
         $threadData['created_by'] = auth()->user()->id;
         $threadData['updated_by'] = auth()->user()->id;
 

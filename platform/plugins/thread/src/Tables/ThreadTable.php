@@ -66,9 +66,14 @@ class ThreadTable extends TableAbstract
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
-            ->editColumn('order', function ($item) {
-              $html = '<a href="'.route('thread.orderItem', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Order</a>';
-              return $html;
+            ->addColumn('create_thread_order', function ($item) {
+                if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && $item->thread_has_order) {
+                    return '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
+                } elseif ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
+                    return '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i> Order</a>';
+                } else {
+                    return 'N/A';
+                }
             })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();
@@ -78,9 +83,9 @@ class ThreadTable extends TableAbstract
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
-                if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
+                /*if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
                     $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
-                }
+                }*/
                 $html .= '<a href="'.route('thread.details', $item->id).'" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
                 return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
@@ -136,9 +141,9 @@ class ThreadTable extends TableAbstract
                 'class'     => 'no-sort text-left',
                 'orderable' => false,
             ],
-            'order' => [
-                'name'  => 'threads.order',
-                'title' => 'Order',
+            'create_thread_order' => [
+                'name'  => 'thread_order',
+                'title' => 'Create Order',
                 'width' => '100px',
             ],
             'created_at' => [

@@ -56,11 +56,6 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeVariation',
                 'permission' => 'thread.create',
             ]);
-            Route::get('orderItem/{id}', [
-                'as'         => 'orderItem',
-                'uses'       => 'ThreadController@removeVariation',
-                'permission' => 'thread.create',
-            ]);
         });
     });
 

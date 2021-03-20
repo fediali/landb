@@ -3,6 +3,7 @@
 namespace Botble\ACL\Http\Controllers;
 
 use Assets;
+use Botble\ACL\Models\UserOtherEmail;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Media\Services\ThumbnailService;
 use File;
@@ -269,6 +270,15 @@ class UserController extends BaseController
 
         $user->fill($request->input());
         $this->userRepository->createOrUpdate($user);
+
+        if (isset($request->other_emails) && count($request->other_emails)) {
+            $other_emails = $request->other_emails;
+            UserOtherEmail::where('user_id', $id)->delete();
+            foreach ($other_emails as $other_email) {
+                UserOtherEmail::create(['user_id' => $id, 'email' => $other_email]);
+            }
+        }
+
         do_action(USER_ACTION_AFTER_UPDATE_PROFILE, USER_MODULE_SCREEN_NAME, $request, $user);
 
         event(new UpdatedContentEvent(USER_MODULE_SCREEN_NAME, $request, $user));

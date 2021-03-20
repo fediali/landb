@@ -13,6 +13,7 @@ class ProfileForm extends FormAbstract
      */
     public function buildForm()
     {
+        $other_emails = $this->model->user_other_emails()->pluck('email')->all();
         $this
             ->setupModel(new User)
             ->setFormOption('template', 'core/base::forms.form-no-wrap')
@@ -60,6 +61,18 @@ class ProfileForm extends FormAbstract
                 'wrapper'    => [
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
                 ],
+            ])
+            ->add('other_emails', 'textarea', [
+                'label'      => 'Other Emails (separated by coma(,) )',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Enter your other Emails',
+                    'rows' => 3
+                ],
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
+                'default_value' => implode(',', $other_emails)
             ])
             ->setActionButtons(view('core/acl::users.profile.actions')->render());
     }

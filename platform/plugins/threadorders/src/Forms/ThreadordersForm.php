@@ -85,6 +85,16 @@ class ThreadordersForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])
+            ->add('pp_sample_date', 'text', [
+                'label'         => 'PP Sample Date',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'            => 'form-control datepicker',
+                    'data-date-format' => 'd M, yyyy',
+                ],
+                'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => old('pp_sample_date', date('d M, Y', strtotime($this->model->pp_sample_date)))
+            ])
             ->add('pp_sample', 'customSelect', [
                 'label'      => 'Select PP Sample',
                 'label_attr' => ['class' => 'control-label required'],
@@ -124,6 +134,7 @@ class ThreadordersForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => old('order_date', date('d M, Y', strtotime($this->model->order_date)))
             ])
             ->add('ship_date', 'text', [
                 'label'      => 'Ship Date',
@@ -133,6 +144,7 @@ class ThreadordersForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => old('ship_date', date('d M, Y', strtotime($this->model->ship_date)))
             ])
             ->add('cancel_date', 'text', [
                 'label'      => 'Cancel Date',
@@ -142,6 +154,7 @@ class ThreadordersForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => old('cancel_date', date('d M, Y', strtotime($this->model->cancel_date)))
             ])
             ->setBreakFieldPoint('order_date');
     }
