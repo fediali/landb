@@ -32,7 +32,7 @@
 
             <li class="dropdown dropdown-user">
                 <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img alt="{{ Auth::user()->getFullName() }}" class="rounded-circle" src="{{ Auth::user()->avatar_url }}" />
+                    {{--<img alt="{{ Auth::user()->getFullName() }}" class="rounded-circle" src="{{ Auth::user()->avatar_url }}" />--}}
                     <span class="username"> {{ Auth::user()->getFullName() }} </span>
                     <i class="fa fa-angle-down"></i>
                 </a>

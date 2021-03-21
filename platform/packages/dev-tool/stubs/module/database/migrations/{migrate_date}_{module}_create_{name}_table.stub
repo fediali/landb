@@ -16,6 +16,10 @@ class {Module}Create{Name}Table extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('status', 60)->default('published');
+            $table->integer('business_id')->default(1);
+            $table->integer('created_by');
+            $table->integer('updated_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

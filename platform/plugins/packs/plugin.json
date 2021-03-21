@@ -1,0 +1,9 @@
+{
+    "name": "Packs",
+    "namespace": "Botble\\Packs\\",
+    "provider": "Botble\\Packs\\Providers\\PacksServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module packs"
+}
