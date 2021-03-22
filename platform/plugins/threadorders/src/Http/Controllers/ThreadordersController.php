@@ -2,6 +2,7 @@
 
 namespace Botble\Threadorders\Http\Controllers;
 
+use Botble\ACL\Models\UserOtherEmail;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Thread\Models\Thread;
@@ -19,6 +20,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Threadorders\Forms\ThreadordersForm;
 use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ThreadordersController extends BaseController
 {
@@ -195,6 +197,7 @@ class ThreadordersController extends BaseController
         $requestData = $request->input();
 
         $thread = $this->threadRepository->findOrFail($id);
+        $thread_order_status = $thread->thread_has_order ? Thread::REORDER: Thread::NEW;
 
         unset($thread->id);
         unset($thread->created_at);
@@ -212,7 +215,7 @@ class ThreadordersController extends BaseController
         $threadData['cancel_date'] = $requestData['cancel_date'];
 
         $threadData['status'] = BaseStatusEnum::PENDING;
-        $threadData['order_status'] = Thread::NEW;
+        $threadData['order_status'] = $thread_order_status;
         $threadData['created_by'] = auth()->user()->id;
         $threadData['updated_by'] = auth()->user()->id;
 
@@ -250,6 +253,13 @@ class ThreadordersController extends BaseController
                 DB::table('thread_order_variations')->insert($threadOrderVar);
             }
         }
+
+        $emails_send_to = UserOtherEmail::where('user_id', $threadData['vendor_id'])->pluck('email')->all();
+        $emails_send_to[] = $thread2->vendor->email;
+
+        Mail::send('emails.thread_order_created', $threadData, function($message) use($emails_send_to) {
+            $message->to($emails_send_to)->subject('[L&B New Thread Order]');
+        });
 
         event(new CreatedContentEvent(THREADORDERS_MODULE_SCREEN_NAME, $request, $threadorders));
 

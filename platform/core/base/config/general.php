@@ -31,11 +31,11 @@ return [
     ],
     'enable_https_support'      => env('ENABLE_HTTPS_SUPPORT', false),
     'date_format'               => [
-        'date'      => 'Y-m-d',
-        'date_time' => 'Y-m-d H:i:s',
+        'date'      => 'd M, Y',
+        'date_time' => 'd M, Y H:i:s',
         'js'        => [
-            'date'      => 'yyyy-mm-dd',
-            'date_time' => 'yyyy-mm-dd H:i:s',
+            'date'      => 'd M, yyyy',
+            'date_time' => 'd M, yyyy H:i:s',
         ],
     ],
     'cache_site_map'            => env('ENABLE_CACHE_SITE_MAP', false),

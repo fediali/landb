@@ -14,6 +14,7 @@ use Botble\Fits\Models\Fits;
 use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
+use Botble\Threadorders\Models\Threadorders;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -85,6 +86,8 @@ class Thread extends BaseModel
     ];
 
     protected $with = [];
+
+    protected $appends = ['thread_has_order'];
 
     public const NEW = 'new';
     public const REORDER = 'reorder';
@@ -192,7 +195,16 @@ class Thread extends BaseModel
 
     public function getThreadVariationsAttribute()
     {
-        return ThreadVariation::where('thread_id', $this->id)->get();
+        return ThreadVariation::where('thread_id', $this->id)->where('status', 'active')->get();
+    }
+
+    public function getThreadHasOrderAttribute()
+    {
+        $check = Threadorders::where('thread_id', $this->id)->where('order_status', self::NEW)->value('id');
+        if ($check) {
+            return true;
+        }
+        return false;
     }
 
 }

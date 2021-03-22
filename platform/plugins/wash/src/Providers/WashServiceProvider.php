@@ -34,7 +34,7 @@ class WashServiceProvider extends ServiceProvider
             ->loadAndPublishViews()
             ->loadRoutes(['web']);
 
-        Event::listen(RouteMatched::class, function () {
+        /*Event::listen(RouteMatched::class, function () {
             if (defined('LANGUAGE_MODULE_SCREEN_NAME')) {
                 \Language::registerModule([Wash::class]);
             }
@@ -48,6 +48,6 @@ class WashServiceProvider extends ServiceProvider
                 'url'         => route('wash.index'),
                 'permissions' => ['wash.index'],
             ]);
-        });
+        });*/
     }
 }

@@ -251,4 +251,13 @@ class User extends Authenticatable
 
         return parent::delete();
     }
+
+    /**
+     * @return HasMany
+     */
+    public function user_other_emails()
+    {
+        return $this->hasMany(UserOtherEmail::class, 'user_id');
+    }
+
 }
