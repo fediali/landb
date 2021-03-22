@@ -1,3 +1,5 @@
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <?php $thread = $options['data']['thread']; ?>
 <?php $variations = $options['data']['variations']; ?>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -420,9 +422,21 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
-                                                        <div class="tabrow additionalnote">
+                                                        <div class="tabrow ">
                                                             <b>Additional Notes: </b>{{ $thread->description }}
                                                         </div>
+                                                        <div class="d-flex">
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        <img style="height: 400px; width: 400px;" src="http://localhost/landb/public/storage/jeans.png" />
+                                                        </div>
+                                                        
                                                     </td>
                                                 </tr>
 
@@ -516,4 +530,6 @@
         border: 1px solid black;
     }
 </style>
+
+
  
