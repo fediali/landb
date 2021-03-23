@@ -12,6 +12,7 @@ use Botble\Fits\Models\Fits;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Botble\Thread\Models\Thread;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -61,6 +62,7 @@ class Threadorders extends BaseModel
         'order_date',
         'ship_date',
         'cancel_date',
+        'elastic_waste_pant',
         'is_denim',
         'inseam',
         'fit_id',
@@ -84,6 +86,16 @@ class Threadorders extends BaseModel
     ];
 
     protected $with = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (auth()->user()->roles[0]->slug == 'vendor') {
+                $query->where('vendor_id', auth()->user()->id);
+            }
+        });
+    }
 
     /**
      * @deprecated

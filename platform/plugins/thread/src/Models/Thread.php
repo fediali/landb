@@ -15,6 +15,7 @@ use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Botble\Threadorders\Models\Threadorders;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -63,13 +64,14 @@ class Thread extends BaseModel
         'order_date',
         'ship_date',
         'cancel_date',
+        'elastic_waste_pant',
         'is_denim',
         'inseam',
         'fit_id',
         'rise_id',
         'fabric_id',
         'fabric_print_direction',
-        'spec_file',
+        //'spec_file',
         'business_id',
         'created_by',
         'updated_by',
@@ -124,6 +126,16 @@ class Thread extends BaseModel
         self::REGULAR => self::REGULAR,
         self::PLUS => self::PLUS,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (auth()->user()->roles[0]->slug == 'designer') {
+                $query->where('designer_id', auth()->user()->id);
+            }
+        });
+    }
 
     /**
      * @deprecated
@@ -191,6 +203,11 @@ class Thread extends BaseModel
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
+    }
+
+    public function spec_files()
+    {
+        return $this->hasMany(ThreadSpecFile::class, 'thread_id');
     }
 
     public function getThreadVariationsAttribute()

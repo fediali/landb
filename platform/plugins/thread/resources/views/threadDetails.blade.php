@@ -511,11 +511,11 @@
 
                                                 <tbody>
                                                 <tr>
-                                                    <td>
-                                                        <p class="font-bold font-12"> Material: <span
-                                                                class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span>
-                                                        </p>
-                                                    </td>
+
+                                                    <p class="font-bold font-12"> Fabric: <span
+                                                            class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span>
+                                                    </p>
+
                                                     <td rowspan="2"><p class="font-bold font-12">Label:<span
                                                                 class="widget-title-color-red text-uppercase"> {{ @$thread->label }}</span>
                                                         </p></td>
