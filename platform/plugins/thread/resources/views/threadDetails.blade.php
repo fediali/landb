@@ -665,45 +665,8 @@
                                                                              </p> 
                                                                         </div> 
                                                                      </div>  
-                                                                 </div> 
-                                                                 <div class="col-lg-6"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
-                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
-                                                                         <div class="mt-2 mb-2"> 
-                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div> 
-                                                                 <div class="col-lg-6"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
-                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
-                                                                         <div class="mt-2 mb-2"> 
-                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div> 
-                                                             </div> 
-                                                          
-                                                      
-
+                                                                 </div>  
+                                                             </div>  
                                                 </div>
                                                      </td> 
 
