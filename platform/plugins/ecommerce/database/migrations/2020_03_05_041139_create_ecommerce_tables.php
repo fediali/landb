@@ -282,7 +282,7 @@ class CreateEcommerceTables extends Migration
         Schema::create('ec_cart', function (Blueprint $table) {
             $table->string('identifier');
             $table->string('instance');
-            $table->longText('content');
+            $table->Text('content');
             $table->nullableTimestamps();
 
             $table->primary(['identifier', 'instance']);

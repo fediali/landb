@@ -79,7 +79,6 @@ class ProductCategory extends BaseModel
     protected static function boot()
     {
         parent::boot();
-
         self::deleting(function (ProductCategory $productCategory) {
             $productCategory->products()->detach();
         });
@@ -87,7 +86,7 @@ class ProductCategory extends BaseModel
 
     public function getIsPlusCatHtmlAttribute()
     {
-        if($this->is_plus_cat) {
+        if ($this->is_plus_cat) {
             return '<span class="label-success status-label">Yes</span>';
         }
         return '<span class="label-warning status-label">No</span>';
