@@ -526,149 +526,149 @@
                                                         </p></td>
                                                 </tr>
                                                 <tr>
-                                                {{-- <td colspan="12">--}}
- {{--                                                       <div class="order-box mb-2 mt-2">--}}
- {{--                                                           <div class="box w-100">--}}
- {{--                                                               <h6>Fedi--}}
-  {{--                                                                  <button type="button"
-                                                                            class="btn btn-warning add_print"
-                                                                            data-toggle="modal"
-                                                                            data-target="#modal-default"
-                                                                            data-id="s"
-                                                                            data-name="test">--}}
- {{--                                                                       <i class="fa fa-plus"></i>--}}
-  {{--                                                                  </button>--}}
-  {{--                                                              </h6>--}}
-   {{--                                                         </div>--}}
-   {{--                                                     </div>--}}
-     {{--                                               </td>--}}
-{{--                                                    <td colspan="12">--}}
-{{--                                                        <div class="order-box mb-2 mt-2">--}}
-{{--                                                            @foreach($variations as $variation)--}}
-{{--                                                                @if($variation->is_denim == 0 && $variation->status == 'active')--}}
-{{--                                                                    <div class="box w-100">--}}
-{{--                                                                        <h6>{{ $variation->name }}--}}
-{{--                                                                            <button type="button"--}}
-{{--                                                                                    class="btn btn-warning add_print"--}}
-{{--                                                                                    data-toggle="modal"--}}
-{{--                                                                                    data-target="#modal-default"--}}
-{{--                                                                                    data-id="{{ $variation->id }}"--}}
-{{--                                                                                    data-name="test">--}}
-{{--                                                                                <i class="fa fa-plus"></i>--}}
-{{--                                                                            </button>--}}
-{{--                                                                        </h6>--}}
-{{--                                                                    </div>--}}
-{{--                                                                @endif--}}
-{{--                                                            @endforeach--}}
+                                                    {{-- <td colspan="12">--}}
+                                                    {{--                                                       <div class="order-box mb-2 mt-2">--}}
+                                                    {{--                                                           <div class="box w-100">--}}
+                                                    {{--                                                               <h6>Fedi--}}
+                                                    {{--                                                                  <button type="button"
+                                                                                                                              class="btn btn-warning add_print"
+                                                                                                                              data-toggle="modal"
+                                                                                                                              data-target="#modal-default"
+                                                                                                                              data-id="s"
+                                                                                                                              data-name="test">--}}
+                                                    {{--                                                                       <i class="fa fa-plus"></i>--}}
+                                                    {{--                                                                  </button>--}}
+                                                    {{--                                                              </h6>--}}
+                                                    {{--                                                         </div>--}}
+                                                    {{--                                                     </div>--}}
+                                                    {{--                                               </td>--}}
+                                                    {{--                                                    <td colspan="12">--}}
+                                                    {{--                                                        <div class="order-box mb-2 mt-2">--}}
+                                                    {{--                                                            @foreach($variations as $variation)--}}
+                                                    {{--                                                                @if($variation->is_denim == 0 && $variation->status == 'active')--}}
+                                                    {{--                                                                    <div class="box w-100">--}}
+                                                    {{--                                                                        <h6>{{ $variation->name }}--}}
+                                                    {{--                                                                            <button type="button"--}}
+                                                    {{--                                                                                    class="btn btn-warning add_print"--}}
+                                                    {{--                                                                                    data-toggle="modal"--}}
+                                                    {{--                                                                                    data-target="#modal-default"--}}
+                                                    {{--                                                                                    data-id="{{ $variation->id }}"--}}
+                                                    {{--                                                                                    data-name="test">--}}
+                                                    {{--                                                                                <i class="fa fa-plus"></i>--}}
+                                                    {{--                                                                            </button>--}}
+                                                    {{--                                                                        </h6>--}}
+                                                    {{--                                                                    </div>--}}
+                                                    {{--                                                                @endif--}}
+                                                    {{--                                                            @endforeach--}}
 
-{{--                                                            @foreach($variations as $variation)--}}
-{{--                                                                @if($variation->status == 'active')--}}
-{{--                                                                    <div class="box row d-mt-block">--}}
-{{--                                                                        <div class="col-lg-6">--}}
-{{--                                                                            <div--}}
-{{--                                                                                class="variationdiv variation-div pl-3 pr-3 mb-3">--}}
-{{--                                                                                <h5 class=" mt-2">--}}
-{{--                                                                                    Variation: {{ @$variation->name }}</h5>--}}
-{{--                                                                                <p><label--}}
-{{--                                                                                        for="">Fabric:</label>{{ @$variation->printdesign->name }}--}}
-{{--                                                                                </p>--}}
-{{--                                                                                <img class="w-100"--}}
-{{--                                                                                     src="{{ asset('storage/'.$variation->printdesign->file) }}"--}}
-{{--                                                                                     height="120" width="120"--}}
-{{--                                                                                     style="object-fit: cover">--}}
-{{--                                                                                <div class="mt-2 mb-2">--}}
-{{--                                                                                    <p class="text-black"><span for="">REG. Packs:</span> {{ $variation->regular_qty }}--}}
-{{--                                                                                        | <span--}}
-{{--                                                                                            class="widget-title-color-red">Sku: {{ $variation->sku }} </span>--}}
-{{--                                                                                    </p>--}}
-{{--                                                                                    <p class="text-black"><span for="">PLUS Packs:</span> {{ $variation->plus_qty }}--}}
-{{--                                                                                        | <span--}}
-{{--                                                                                            class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>--}}
-{{--                                                                                    </p>--}}
-{{--                                                                                </div>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </div>--}}
-{{--                                                                        @foreach($variation->fabrics as $fabric)--}}
-{{--                                                                            <div class="col-lg-6">--}}
-{{--                                                                                <div--}}
-{{--                                                                                    class="variationdiv variation-div pl-3 pr-3  mb-3">--}}
-{{--                                                                                    <h5 class="mt-2">--}}
-{{--                                                                                        Variation: {{ @$fabric->name }}--}}
-{{--                                                                                        <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i--}}
-{{--                                                                                                class="float-right fa fa-times"></i></a>--}}
-{{--                                                                                    </h5>--}}
-{{--                                                                                    <p><label--}}
-{{--                                                                                            for="">Fabric:</label>{{ @$fabric->printdesign->name }}--}}
-{{--                                                                                    </p>--}}
-{{--                                                                                    <img class="w-100"--}}
-{{--                                                                                         src="{{ asset('storage/'.$fabric->printdesign->file) }}"--}}
-{{--                                                                                         height="120" width="120"--}}
-{{--                                                                                         style="object-fit: cover">--}}
-{{--                                                                                    <div>--}}
-{{--                                                                                        <p class="text-black"><span--}}
-{{--                                                                                                for="">REG. Packs:</span> {{ $variation->regular_qty }}--}}
-{{--                                                                                            | <span--}}
-{{--                                                                                                class="widget-title-color-red"> Sku: {{ $variation->sku }}</span>--}}
-{{--                                                                                        </p>--}}
-{{--                                                                                        <p class="text-black"><span--}}
-{{--                                                                                                for="">PLUS Packs:</span> {{ $variation->plus_qty }}--}}
-{{--                                                                                            | <span--}}
-{{--                                                                                                class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>--}}
-{{--                                                                                        </p>--}}
-{{--                                                                                    </div>--}}
-{{--                                                                                </div>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        @endforeach--}}
-{{--                                                                    </div>--}}
-{{--                                                                @endif--}}
-{{--                                                            @endforeach--}}
+                                                    {{--                                                            @foreach($variations as $variation)--}}
+                                                    {{--                                                                @if($variation->status == 'active')--}}
+                                                    {{--                                                                    <div class="box row d-mt-block">--}}
+                                                    {{--                                                                        <div class="col-lg-6">--}}
+                                                    {{--                                                                            <div--}}
+                                                    {{--                                                                                class="variationdiv variation-div pl-3 pr-3 mb-3">--}}
+                                                    {{--                                                                                <h5 class=" mt-2">--}}
+                                                    {{--                                                                                    Variation: {{ @$variation->name }}</h5>--}}
+                                                    {{--                                                                                <p><label--}}
+                                                    {{--                                                                                        for="">Fabric:</label>{{ @$variation->printdesign->name }}--}}
+                                                    {{--                                                                                </p>--}}
+                                                    {{--                                                                                <img class="w-100"--}}
+                                                    {{--                                                                                     src="{{ asset('storage/'.$variation->printdesign->file) }}"--}}
+                                                    {{--                                                                                     height="120" width="120"--}}
+                                                    {{--                                                                                     style="object-fit: cover">--}}
+                                                    {{--                                                                                <div class="mt-2 mb-2">--}}
+                                                    {{--                                                                                    <p class="text-black"><span for="">REG. Packs:</span> {{ $variation->regular_qty }}--}}
+                                                    {{--                                                                                        | <span--}}
+                                                    {{--                                                                                            class="widget-title-color-red">Sku: {{ $variation->sku }} </span>--}}
+                                                    {{--                                                                                    </p>--}}
+                                                    {{--                                                                                    <p class="text-black"><span for="">PLUS Packs:</span> {{ $variation->plus_qty }}--}}
+                                                    {{--                                                                                        | <span--}}
+                                                    {{--                                                                                            class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>--}}
+                                                    {{--                                                                                    </p>--}}
+                                                    {{--                                                                                </div>--}}
+                                                    {{--                                                                            </div>--}}
+                                                    {{--                                                                        </div>--}}
+                                                    {{--                                                                        @foreach($variation->fabrics as $fabric)--}}
+                                                    {{--                                                                            <div class="col-lg-6">--}}
+                                                    {{--                                                                                <div--}}
+                                                    {{--                                                                                    class="variationdiv variation-div pl-3 pr-3  mb-3">--}}
+                                                    {{--                                                                                    <h5 class="mt-2">--}}
+                                                    {{--                                                                                        Variation: {{ @$fabric->name }}--}}
+                                                    {{--                                                                                        <a href="{{ route('thread.removeFabric', ['id' => $fabric->id]) }}"><i--}}
+                                                    {{--                                                                                                class="float-right fa fa-times"></i></a>--}}
+                                                    {{--                                                                                    </h5>--}}
+                                                    {{--                                                                                    <p><label--}}
+                                                    {{--                                                                                            for="">Fabric:</label>{{ @$fabric->printdesign->name }}--}}
+                                                    {{--                                                                                    </p>--}}
+                                                    {{--                                                                                    <img class="w-100"--}}
+                                                    {{--                                                                                         src="{{ asset('storage/'.$fabric->printdesign->file) }}"--}}
+                                                    {{--                                                                                         height="120" width="120"--}}
+                                                    {{--                                                                                         style="object-fit: cover">--}}
+                                                    {{--                                                                                    <div>--}}
+                                                    {{--                                                                                        <p class="text-black"><span--}}
+                                                    {{--                                                                                                for="">REG. Packs:</span> {{ $variation->regular_qty }}--}}
+                                                    {{--                                                                                            | <span--}}
+                                                    {{--                                                                                                class="widget-title-color-red"> Sku: {{ $variation->sku }}</span>--}}
+                                                    {{--                                                                                        </p>--}}
+                                                    {{--                                                                                        <p class="text-black"><span--}}
+                                                    {{--                                                                                                for="">PLUS Packs:</span> {{ $variation->plus_qty }}--}}
+                                                    {{--                                                                                            | <span--}}
+                                                    {{--                                                                                                class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>--}}
+                                                    {{--                                                                                        </p>--}}
+                                                    {{--                                                                                    </div>--}}
+                                                    {{--                                                                                </div>--}}
+                                                    {{--                                                                            </div>--}}
+                                                    {{--                                                                        @endforeach--}}
+                                                    {{--                                                                    </div>--}}
+                                                    {{--                                                                @endif--}}
+                                                    {{--                                                            @endforeach--}}
 
-{{--                                                        </div>--}}
-{{--                                                    </td>--}}
+                                                    {{--                                                        </div>--}}
+                                                    {{--                                                    </td>--}}
 
-<td colspan="12"> 
-<div class="order-box mb-2 mt-2"> 
-                                                            
-                                                                 
-                                                            <div class="box w-100"> 
-                                                                 <h6>Osama Ali 
-                                                                    <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="7" data-name="test"> 
-                                                                         <i class="fa fa-plus"></i> 
-                                                                     </button> 
-                                                                 </h6> 
-                                                             </div>  
-                                                          
-                                                             <div class="box row d-mt-block"> 
-                                                                 <div class="col-lg-12"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
+<td colspan="12">
+<div class="order-box mb-2 mt-2">
+
+
+                                                            <div class="box w-100">
+                                                                 <h6>Osama Ali
+                                                                    <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="7" data-name="test">
+                                                                         <i class="fa fa-plus"></i>
+                                                                     </button>
+                                                                 </h6>
+                                                             </div>
+
+                                                             <div class="box row d-mt-block">
+                                                                 <div class="col-lg-12">
+                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                         <h5 class=" mt-2">
+                                                                             Variation: Osama Ali</h5>
                                                                         <div class="row">
                                                                             <div class="col-lg-6">
-                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
+                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
                                                                             </div>
                                                                             <div class="col-lg-6">
-                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
+                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
                                                                             </div>
                                                                         </div>
-                                                                        
-                                                                         <div class="mt-3 mb-2"> 
-                                                                            <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div>  
-                                                             </div>  
+
+                                                                         <div class="mt-3 mb-2">
+                                                                            <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                             </p>
+                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                             </p>
+                                                                        </div>
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
                                                 </div>
-                                                     </td> 
+                                                     </td>
 
                                                 </tr>
 
@@ -692,6 +692,14 @@
 <style>
     .details-table td {
         border: 1px solid black;
+    }
+
+    .widget.meta-boxes.form-actions.form-actions-default.action-horizontal {
+        display: none;
+    }
+
+    .main-form {
+        width: 125% !important;
     }
 </style>
 
