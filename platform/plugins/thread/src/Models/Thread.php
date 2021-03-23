@@ -63,13 +63,14 @@ class Thread extends BaseModel
         'order_date',
         'ship_date',
         'cancel_date',
+        'elastic_waste_pant',
         'is_denim',
         'inseam',
         'fit_id',
         'rise_id',
         'fabric_id',
         'fabric_print_direction',
-        'spec_file',
+        //'spec_file',
         'business_id',
         'created_by',
         'updated_by',
@@ -191,6 +192,11 @@ class Thread extends BaseModel
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
+    }
+
+    public function spec_files()
+    {
+        return $this->hasMany(ThreadSpecFile::class, 'thread_id');
     }
 
     public function getThreadVariationsAttribute()

@@ -38,6 +38,7 @@ class ThreadForm extends FormAbstract
             ->setupModel(new Thread)
             ->setValidatorClass(ThreadRequest::class)
             ->withCustomFields()
+            ->setFormOption('enctype','multipart/form-data')
             ->add('name', 'text', [
                 'label'      => 'Description',
                 'label_attr' => ['class' => 'control-label required'],
@@ -119,15 +120,7 @@ class ThreadForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
-            ])
-            ->add('shipping_method', 'customSelect', [
-                'label'      => 'Select Shipping Method',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr'       => [
-                    'placeholder'  => 'Select Shipping Method',
-                    'class' => 'select-search-full',
-                ],
-                'choices'    => Thread::$shipping_methods,
+                'value' => $this->model->pp_sample_date ? date('d M, Y', strtotime($this->model->pp_sample_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('is_denim', 'onOff', [
                 'label'         => 'Denim',
@@ -160,11 +153,25 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => Thread::$order_statuses,
             ])*/
-            ->add('material', 'text', [
-                'label'      => 'Material',
-                'label_attr' => ['class' => 'control-label'],
+            ->add('shipping_method', 'customSelect', [
+                'label'      => 'Select Shipping Method',
+                'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Material',
+                    'placeholder'  => 'Select Shipping Method',
+                    'class' => 'select-search-full',
+                ],
+                'choices'    => Thread::$shipping_methods,
+            ])
+            ->add('elastic_waste_pant', 'onOff', [
+                'label'         => 'Elastic Waste Pant',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+            ])
+            ->add('material', 'text', [
+                'label'      => 'Fabric',
+                'label_attr' => ['class' => 'control-label material-ip'],
+                'attr'       => [
+                    'placeholder'  => 'Fabric',
                     'data-counter' => 120,
                 ],
             ])
@@ -192,6 +199,7 @@ class ThreadForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => $this->model->order_date ? date('d M, Y', strtotime($this->model->order_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('ship_date', 'text', [
                 'label'      => 'Ship Date',
@@ -201,20 +209,22 @@ class ThreadForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => $this->model->ship_date ? date('d M, Y', strtotime($this->model->ship_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('cancel_date', 'text', [
-                'label'      => 'Cancel Date',
+                'label'      => 'No later than',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => $this->model->cancel_date ? date('d M, Y', strtotime($this->model->cancel_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
-            ->add('spec_file', 'mediaImage', [
+            /*->add('spec_file', 'mediaImage', [
                 'label'      => 'Tech Spec File',
                 'label_attr' => ['class' => 'control-label'],
-            ])
-            ->setBreakFieldPoint('material');
+            ])*/
+            ->setBreakFieldPoint('shipping_method');
     }
 }
