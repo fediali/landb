@@ -62,6 +62,16 @@ class ProfileForm extends FormAbstract
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
                 ],
             ])
+            ->add('name_initials', 'text', [
+                'label'      => 'Name Initials',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'data-counter' => 30,
+                ],
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
+            ])
             ->add('other_emails', 'textarea', [
                 'label'      => 'Other Emails (separated by coma(,) )',
                 'label_attr' => ['class' => 'control-label'],
