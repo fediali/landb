@@ -91,8 +91,10 @@ class Threadorders extends BaseModel
     {
         parent::boot();
         static::addGlobalScope('userScope', function (Builder $query) {
-            if (auth()->user()->roles[0]->slug == 'vendor') {
-                $query->where('vendor_id', auth()->user()->id);
+            if (isset(auth()->user()->roles[0])) {
+                if (auth()->user()->roles[0]->slug == 'vendor') {
+                    $query->where('vendor_id', auth()->user()->id);
+                }
             }
         });
     }

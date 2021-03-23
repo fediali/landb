@@ -131,8 +131,10 @@ class Thread extends BaseModel
     {
         parent::boot();
         static::addGlobalScope('userScope', function (Builder $query) {
-            if (auth()->user()->roles[0]->slug == 'designer') {
-                $query->where('designer_id', auth()->user()->id);
+            if (isset(auth()->user()->roles[0])) {
+                if (auth()->user()->roles[0]->slug == 'designer') {
+                    $query->where('designer_id', auth()->user()->id);
+                }
             }
         });
     }
