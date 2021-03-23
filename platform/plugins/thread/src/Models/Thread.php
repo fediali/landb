@@ -71,6 +71,8 @@ class Thread extends BaseModel
         'rise_id',
         'fabric_id',
         'fabric_print_direction',
+        'reg_pack_qty',
+        'plus_pack_qty',
         //'spec_file',
         'business_id',
         'created_by',
