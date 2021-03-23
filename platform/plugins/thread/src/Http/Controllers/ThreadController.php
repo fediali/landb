@@ -76,7 +76,14 @@ class ThreadController extends BaseController
     {
         $requestData = $request->input();
 
-        $requestData['order_no'] = strtoupper(Str::random(8));
+        $getTodayThreadCnt = Thread::whereDate('created_at', date('Y-m-d'))->count();
+        if ($getTodayThreadCnt) {
+            $po_gen = str_replace('-','',date('d-m-Y')).($getTodayThreadCnt+1);
+        } else {
+            $po_gen = str_replace('-','',date('d-m-Y')).'1';
+        }
+
+        $requestData['order_no'] = $po_gen;
         $requestData['status'] = BaseStatusEnum::PENDING;
         $requestData['order_status'] = Thread::NEW;
         $requestData['created_by'] = auth()->user()->id;
