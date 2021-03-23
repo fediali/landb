@@ -626,86 +626,86 @@
 {{--                                                        </div>--}}
 {{--                                                    </td>--}}
 
-<td colspan="12"> 
-<div class="order-box mb-2 mt-2"> 
-                                                            
-                                                                 
-                                                            <div class="box w-100"> 
-                                                                 <h6>Osama Ali 
-                                                                    <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="7" data-name="test"> 
-                                                                         <i class="fa fa-plus"></i> 
-                                                                     </button> 
-                                                                 </h6> 
-                                                             </div>  
-                                                          
-                                                             <div class="box row d-mt-block"> 
-                                                                 <div class="col-lg-12"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
+<td colspan="12">
+<div class="order-box mb-2 mt-2">
+
+
+                                                            <div class="box w-100">
+                                                                 <h6>Osama Ali
+                                                                    <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="7" data-name="test">
+                                                                         <i class="fa fa-plus"></i>
+                                                                     </button>
+                                                                 </h6>
+                                                             </div>
+
+                                                             <div class="box row d-mt-block">
+                                                                 <div class="col-lg-12">
+                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                         <h5 class=" mt-2">
+                                                                             Variation: Osama Ali</h5>
                                                                         <div class="row">
                                                                             <div class="col-lg-6">
-                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
+                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
                                                                             </div>
                                                                             <div class="col-lg-6">
-                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
+                                                                            <p class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
                                                                             </div>
                                                                         </div>
-                                                                        
-                                                                         <div class="mt-3 mb-2"> 
-                                                                            <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div> 
-                                                                 <div class="col-lg-6"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
-                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
-                                                                         <div class="mt-2 mb-2"> 
-                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div> 
-                                                                 <div class="col-lg-6"> 
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3"> 
-                                                                         <h5 class=" mt-2"> 
-                                                                             Variation: Osama Ali</h5> 
-                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd 
-                                                                         </p> 
-                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover"> 
-                                                                         <div class="mt-2 mb-2"> 
-                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span> 
-                                                                             </p> 
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2 
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span> 
-                                                                             </p> 
-                                                                        </div> 
-                                                                     </div>  
-                                                                 </div> 
-                                                             </div> 
-                                                          
-                                                      
+
+                                                                         <div class="mt-3 mb-2">
+                                                                            <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                             </p>
+                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                             </p>
+                                                                        </div>
+                                                                     </div>
+                                                                 </div>
+                                                                 <div class="col-lg-6">
+                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                         <h5 class=" mt-2">
+                                                                             Variation: Osama Ali</h5>
+                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
+                                                                         <div class="mt-2 mb-2">
+                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                             </p>
+                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                             </p>
+                                                                        </div>
+                                                                     </div>
+                                                                 </div>
+                                                                 <div class="col-lg-6">
+                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                         <h5 class=" mt-2">
+                                                                             Variation: Osama Ali</h5>
+                                                                         <p  class="mb-0 mt-2"><label for="">Fabric:</label>asd
+                                                                         </p>
+                                                                         <img class="w-100" src="http://localhost/landb/public/storage/image-1.jpg" height="120" width="120" style="object-fit: cover">
+                                                                         <div class="mt-2 mb-2">
+                                                                         <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                             </p>
+                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> 2
+                                                                                 | <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                             </p>
+                                                                        </div>
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
+
+
 
                                                 </div>
-                                                     </td> 
+                                                     </td>
 
                                                 </tr>
 
