@@ -11,6 +11,7 @@ use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
+use Botble\Thread\Models\ThreadSpecFile;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Carbon\Carbon;
@@ -100,6 +101,14 @@ class ThreadController extends BaseController
             }
         }
 
+        if ($request->hasfile('spec_files')) {
+            foreach ($request->file('spec_files') as $spec_file) {
+                $spec_file_name = time() . rand(1, 100) . '.' . $spec_file->extension();
+                $spec_file->move(public_path('storage/spec_files'), $spec_file_name);
+                ThreadSpecFile::create(['thread_id' => $thread->id, 'spec_file' => 'storage/spec_files/' . $spec_file_name]);
+            }
+        }
+
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response
@@ -156,6 +165,14 @@ class ThreadController extends BaseController
                 ]);
             } else {
                 $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku]]);
+            }
+        }
+
+        if ($request->hasfile('spec_files')) {
+            foreach ($request->file('spec_files') as $spec_file) {
+                $spec_file_name = time() . rand(1, 100) . '.' . $spec_file->extension();
+                $spec_file->move(public_path('storage/spec_files'), $spec_file_name);
+                ThreadSpecFile::create(['thread_id' => $thread->id, 'spec_file' => 'storage/spec_files/' . $spec_file_name]);
             }
         }
 
@@ -272,92 +289,97 @@ class ThreadController extends BaseController
 
     }
 
-    public function addVariation(Request $request){
-      $data = $request->all();
-      //dd($data);
-      $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
-      for ($i=0; $i<=count($data['name'])-1 ; $i++ ) {
-        $variation = new ThreadVariation();
-        $input = array();
-        $input['thread_id'] = @$data['thread_id'];
-        $input['is_denim'] = @$data['is_denim'];
-        $input['name'] = @$data['name'][$i];
-        $input['print_id'] = @$data['print_id'][$i];
-        $input['wash_id'] = @$data['wash_id'][$i];
-        $input['regular_qty'] = @$data['regular_qty'][$i];
-        $input['plus_qty'] = @$data['plus_qty'][$i];
-        $input['cost'] = @$data['cost'][$i];
-        $input['notes'] = @$data['notes'][$i];
-        $input['status'] = 'active';
-        $skus = generate_sku_by_thread_variation($thread, $input['print_id']);
-        $input['sku'] = $skus['reg'];
-        $input['plus_sku'] = $skus['plus'];
-        $input['created_by'] = Auth::user()->id;
-        $create = $variation->create($input);
-        if(!$create){
-          return  response()->json(['status' => 'error'], 500);
+    public function addVariation(Request $request)
+    {
+        $data = $request->all();
+        //dd($data);
+        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
+        for ($i = 0; $i <= count($data['name']) - 1; $i++) {
+            $variation = new ThreadVariation();
+            $input = array();
+            $input['thread_id'] = @$data['thread_id'];
+            $input['is_denim'] = @$data['is_denim'];
+            $input['name'] = @$data['name'][$i];
+            $input['print_id'] = @$data['print_id'][$i];
+            $input['wash_id'] = @$data['wash_id'][$i];
+            $input['regular_qty'] = @$data['regular_qty'][$i];
+            $input['plus_qty'] = @$data['plus_qty'][$i];
+            $input['cost'] = @$data['cost'][$i];
+            $input['notes'] = @$data['notes'][$i];
+            $input['status'] = 'active';
+            $skus = generate_sku_by_thread_variation($thread, $input['print_id']);
+            $input['sku'] = $skus['reg'];
+            $input['plus_sku'] = $skus['plus'];
+            $input['created_by'] = Auth::user()->id;
+            $create = $variation->create($input);
+            if (!$create) {
+                return response()->json(['status' => 'error'], 500);
+            }
         }
-      }
-        return  response()->json(['status' => 'success'], 200);
-
-
-    }
-
-    public function updateVariationStatus($id, $status){
-     $update = ThreadVariation::find($id)->update(['status' => $status]);
-      if($update){
-        return redirect()->back()->with('success',  'Status updated');
-      }else{
-        return redirect()->back()->with('error',  'Server error');
-      }
-    }
-
-    public function postComment(Request $request){
-      $data = $request->all();
-      $file = $request->file('image');
-      if($file){
-        $type = strtolower($file->getClientOriginalExtension());
-        $image = str_replace(' ', '_' , $data['comment'].'_'. substr(microtime(), 2,7)).'.'.$type;
-        $imageFile = Image::make($request->file('image'))->stream();
-        $move = Storage::disk('public')->put('images/comments/' . $image, $imageFile);
-        if($move){
-          $data['image'] = 'storage/images/comments/' . $image;
-        }
-      }
-
-      $input = ThreadComment::create($data);
-
-      if($input){
-        $time = $input->created_at->diffForHumans();
-        $input->time = $time;
-        return response()->json(['comment' => $input], 200);
-      }else{
-        return  response()->json(500);
-      }
-    }
-
-    public function addVariationPrints(Request $request){
-      $data = $request->all();
-
-      $data['created_by'] = Auth::user()->id;
-
-      $input = VariationFabric::create($data);
-
-      if($input){
         return response()->json(['status' => 'success'], 200);
-      }else{
-        return response()->json(['status' => 'error'], 500);
-      }
+
+
     }
 
-    public function removeFabric($id){
+    public function updateVariationStatus($id, $status)
+    {
+        $update = ThreadVariation::find($id)->update(['status' => $status]);
+        if ($update) {
+            return redirect()->back()->with('success', 'Status updated');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
 
-      $remove = VariationFabric::find($id)->delete();
-      if($remove){
-        return redirect()->back()->with('success',  'Fabric deleted');
-      }else{
-        return redirect()->back()->with('error',  'Server error');
-      }
+    public function postComment(Request $request)
+    {
+        $data = $request->all();
+        $file = $request->file('image');
+        if ($file) {
+            $type = strtolower($file->getClientOriginalExtension());
+            $image = str_replace(' ', '_', $data['comment'] . '_' . substr(microtime(), 2, 7)) . '.' . $type;
+            $imageFile = Image::make($request->file('image'))->stream();
+            $move = Storage::disk('public')->put('images/comments/' . $image, $imageFile);
+            if ($move) {
+                $data['image'] = 'storage/images/comments/' . $image;
+            }
+        }
+
+        $input = ThreadComment::create($data);
+
+        if ($input) {
+            $time = $input->created_at->diffForHumans();
+            $input->time = $time;
+            return response()->json(['comment' => $input], 200);
+        } else {
+            return response()->json(500);
+        }
+    }
+
+    public function addVariationPrints(Request $request)
+    {
+        $data = $request->all();
+
+        $data['created_by'] = Auth::user()->id;
+
+        $input = VariationFabric::create($data);
+
+        if ($input) {
+            return response()->json(['status' => 'success'], 200);
+        } else {
+            return response()->json(['status' => 'error'], 500);
+        }
+    }
+
+    public function removeFabric($id)
+    {
+
+        $remove = VariationFabric::find($id)->delete();
+        if ($remove) {
+            return redirect()->back()->with('success', 'Fabric deleted');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
     }
 
     /**
@@ -386,6 +408,16 @@ class ThreadController extends BaseController
         $remove = $variation->delete();
         if ($remove) {
             return redirect()->back()->with('success', 'Variation deleted');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
+
+    public function removeThreadSpecFile($id)
+    {
+        $remove = ThreadSpecFile::find($id)->delete();
+        if ($remove) {
+            return redirect()->back()->with('success', 'Thread Spec File deleted');
         } else {
             return redirect()->back()->with('error', 'Server error');
         }

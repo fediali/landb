@@ -61,6 +61,7 @@ class Threadorders extends BaseModel
         'order_date',
         'ship_date',
         'cancel_date',
+        'elastic_waste_pant',
         'is_denim',
         'inseam',
         'fit_id',

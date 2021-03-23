@@ -56,6 +56,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeVariation',
                 'permission' => 'thread.create',
             ]);
+            Route::get('removeThreadSpecFile/{id}', [
+                'as'         => 'removeThreadSpecFile',
+                'uses'       => 'ThreadController@removeThreadSpecFile',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

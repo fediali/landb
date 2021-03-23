@@ -259,7 +259,10 @@ if (!function_exists('get_post_formats')) {
 if (!function_exists('get_designers')) {
     function get_designers()
     {
-        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 2)->pluck('users.username','users.id')->all();
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->where('roles.slug', 'designer')
+            ->pluck('users.username','users.id')->all();
     }
 }
 
@@ -312,7 +315,10 @@ if (!function_exists('generate_sku_by_thread_variation')) {
 if (!function_exists('get_vendors')) {
     function get_vendors()
     {
-        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 3)->pluck('users.username','users.id')->all();
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->where('roles.slug', 'vendor')
+            ->pluck('users.username','users.id')->all();
     }
 }
 
@@ -398,6 +404,6 @@ if (!function_exists('get_category_sizes')) {
 if (!function_exists('parse_date')) {
     function parse_date($date)
     {
-        return date('M d,Y', strtotime($date));
+        return date('d F, Y', strtotime($date));
     }
 }

@@ -105,10 +105,10 @@ class ThreadordersForm extends FormAbstract
                 'choices'    => Thread::$statuses,
             ])
             ->add('material', 'text', [
-                'label'      => 'Material',
+                'label'      => 'Fabric',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Material',
+                    'placeholder'  => 'Fabric',
                     'data-counter' => 120,
                 ],
             ])
@@ -147,7 +147,7 @@ class ThreadordersForm extends FormAbstract
                 'value' => old('ship_date', date('d M, Y', strtotime($this->model->ship_date)))
             ])
             ->add('cancel_date', 'text', [
-                'label'      => 'Cancel Date',
+                'label'      => 'No later than',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',

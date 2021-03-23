@@ -393,7 +393,7 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Material: {{ @$thread->material }}
+                                                        Fabric: {{ @$thread->material }}
                                                     </td>
                                                     <td rowspan="2">Label: {{ @$thread->label }}</td>
                                                 </tr>
