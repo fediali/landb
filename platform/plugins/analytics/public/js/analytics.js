@@ -1,1 +1,93 @@
-(()=>{function t(t,a){for(var e=0;e<a.length;e++){var n=a[e];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}var a=function(){function a(){!function(t,a){if(!(t instanceof a))throw new TypeError("Cannot call a class as a function")}(this,a)}var e,n;return e=a,n=[{key:"initCharts",value:function(){var t=$("div[data-stats]").data("stats"),a=$("div[data-country-stats]").data("country-stats"),e=$("div[data-lang-pageviews]").data("lang-pageviews"),n=$("div[data-lang-visits]").data("lang-visits"),i=[];$.each(t,(function(t,a){i.push({axis:a.axis,visitors:a.visitors,pageViews:a.pageViews})})),new Morris.Area({element:"stats-chart",resize:!0,data:i,xkey:"axis",ykeys:["visitors","pageViews"],labels:[n,e],lineColors:["#dd4d37","#3c8dbc"],hideHover:"auto",parseTime:!1});var o={};$.each(a,(function(t,a){o[a[0]]=a[1]})),$(document).find("#world-map").vectorMap({map:"world_mill_en",backgroundColor:"transparent",regionStyle:{initial:{fill:"#e4e4e4","fill-opacity":1,stroke:"none","stroke-width":0,"stroke-opacity":1}},series:{regions:[{values:o,scale:["#c64333","#dd4b39"],normalizeFunction:"polynomial"}]},onRegionLabelShow:function(t,a,e){void 0!==o[e]&&a.html(a.html()+": "+o[e]+" "+n)}})}}],null&&t(e.prototype,null),n&&t(e,n),a}();$(document).ready((function(){BDashboard.loadWidget($("#widget_analytics_general").find(".widget-content"),route("analytics.general"),null,(function(){a.initCharts()})),$(document).on("click","#widget_analytics_general .portlet > .portlet-title .tools > a.reload",(function(t){t.preventDefault(),BDashboard.loadWidget($("#widget_analytics_general").find(".widget-content"),route("analytics.general"),null,(function(){a.initCharts()}))})),BDashboard.loadWidget($("#widget_analytics_page").find(".widget-content"),route("analytics.page")),BDashboard.loadWidget($("#widget_analytics_browser").find(".widget-content"),route("analytics.browser")),BDashboard.loadWidget($("#widget_analytics_referrer").find(".widget-content"),route("analytics.referrer"))}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************************************************!*\
+  !*** ./platform/plugins/analytics/resources/assets/js/analytics.js ***!
+  \*********************************************************************/
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var PluginAnalytics = /*#__PURE__*/function () {
+  function PluginAnalytics() {
+    _classCallCheck(this, PluginAnalytics);
+  }
+
+  _createClass(PluginAnalytics, null, [{
+    key: "initCharts",
+    value: function initCharts() {
+      var stats = $('div[data-stats]').data('stats');
+      var country_stats = $('div[data-country-stats]').data('country-stats');
+      var lang_page_views = $('div[data-lang-pageviews]').data('lang-pageviews');
+      var lang_visits = $('div[data-lang-visits]').data('lang-visits');
+      var statArray = [];
+      $.each(stats, function (index, el) {
+        statArray.push({
+          axis: el.axis,
+          visitors: el.visitors,
+          pageViews: el.pageViews
+        });
+      });
+      new Morris.Area({
+        element: 'stats-chart',
+        resize: true,
+        data: statArray,
+        xkey: 'axis',
+        ykeys: ['visitors', 'pageViews'],
+        labels: [lang_visits, lang_page_views],
+        lineColors: ['#dd4d37', '#3c8dbc'],
+        hideHover: 'auto',
+        parseTime: false
+      });
+      var visitorsData = {};
+      $.each(country_stats, function (index, el) {
+        visitorsData[el[0]] = el[1];
+      });
+      $(document).find('#world-map').vectorMap({
+        map: 'world_mill_en',
+        backgroundColor: 'transparent',
+        regionStyle: {
+          initial: {
+            fill: '#e4e4e4',
+            'fill-opacity': 1,
+            stroke: 'none',
+            'stroke-width': 0,
+            'stroke-opacity': 1
+          }
+        },
+        series: {
+          regions: [{
+            values: visitorsData,
+            scale: ['#c64333', '#dd4b39'],
+            normalizeFunction: 'polynomial'
+          }]
+        },
+        onRegionLabelShow: function onRegionLabelShow(e, el, code) {
+          if (typeof visitorsData[code] !== 'undefined') {
+            el.html(el.html() + ': ' + visitorsData[code] + ' ' + lang_visits);
+          }
+        }
+      });
+    }
+  }]);
+
+  return PluginAnalytics;
+}();
+
+$(document).ready(function () {
+  BDashboard.loadWidget($('#widget_analytics_general').find('.widget-content'), route('analytics.general'), null, function () {
+    PluginAnalytics.initCharts();
+  });
+  $(document).on('click', '#widget_analytics_general .portlet > .portlet-title .tools > a.reload', function (event) {
+    event.preventDefault();
+    BDashboard.loadWidget($('#widget_analytics_general').find('.widget-content'), route('analytics.general'), null, function () {
+      PluginAnalytics.initCharts();
+    });
+  });
+  BDashboard.loadWidget($('#widget_analytics_page').find('.widget-content'), route('analytics.page'));
+  BDashboard.loadWidget($('#widget_analytics_browser').find('.widget-content'), route('analytics.browser'));
+  BDashboard.loadWidget($('#widget_analytics_referrer').find('.widget-content'), route('analytics.referrer'));
+});
+/******/ })()
+;

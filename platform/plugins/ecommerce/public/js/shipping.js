@@ -1,1 +1,359 @@
-(()=>{function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}var t=function(){function t(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t)}var n,i;return n=t,(i=[{key:"init",value:function(){$(document).on("click",".btn-trigger-show-shipping-detail",(function(e){e.preventDefault(),$(e.currentTarget).closest(".table").find(".shipping-detail-information").find(".panel").toggleClass("hidden")})),$(document).on("click",".click-cancel",(function(e){e.preventDefault(),$(e.currentTarget).closest(".table").find(".shipping-detail-information").find(".panel").toggleClass("hidden")})),$(document).on("click",".btn-confirm-delete-region-item-modal-trigger",(function(e){e.preventDefault();var t=$("#confirm-delete-region-item-modal");t.find(".region-item-label").text($(e.currentTarget).data("name")),t.find("#confirm-delete-region-item-button").data("id",$(e.currentTarget).data("id")),t.modal("show")})),$(document).on("click","#confirm-delete-region-item-button",(function(e){e.preventDefault();var t=$(e.currentTarget);t.addClass("button-loading"),$.ajax({type:"DELETE",url:$("div[data-delete-region-item-url]").data("delete-region-item-url"),data:{id:t.data("id")},success:function(e){e.error?Botble.showError(e.message):($(".wrap-table-shipping-"+t.data("id")).remove(),Botble.showSuccess(e.message)),t.removeClass("button-loading"),$("#confirm-delete-region-item-modal").modal("hide")},error:function(e){Botble.handleError(e),t.removeClass("button-loading")}})})),$(document).on("click",".btn-confirm-delete-price-item-modal-trigger",(function(e){e.preventDefault();var t=$("#confirm-delete-price-item-modal");t.find(".region-price-item-label").text($(e.currentTarget).data("name")),t.find("#confirm-delete-price-item-button").data("id",$(e.currentTarget).data("id")),t.modal("show")})),$(document).on("click","#confirm-delete-price-item-button",(function(e){e.preventDefault();var t=$(e.currentTarget);t.addClass("button-loading"),$.ajax({type:"DELETE",url:$("div[data-delete-rule-item-url]").data("delete-rule-item-url"),data:{id:t.data("id")},success:function(e){e.error?Botble.showError(e.message):($(".box-table-shipping-item-"+t.data("id")).remove(),0===e.data.count&&$(".wrap-table-shipping-"+e.data.shipping_id).remove(),Botble.showSuccess(e.message)),t.removeClass("button-loading"),$("#confirm-delete-price-item-modal").modal("hide")},error:function(e){Botble.handleError(e),t.removeClass("button-loading")}})}));var e=function(e,t,n,i){$(document).find(".field-has-error").removeClass("field-has-error");var r=e;r.addClass("button-loading");var a=[];$.each(t.serializeArray(),(function(e,t){"from"!==t.name&&"to"!==t.name&&"price"!==t.name||t.value&&(t.value=parseFloat(t.value.replace(",","")).toFixed(2)),a[t.name]=t.value})),i&&(a.shipping_id=i),a=$.extend({},a),$.ajax({type:n,url:t.prop("action"),data:a,success:function(e){e.error?Botble.showError(e.message):(Botble.showSuccess(e.message),i&&e.data&&($(".wrap-table-shipping-"+i+" .pd-all-20.border-bottom").append(e.data),Botble.initResources())),i&&r.closest(".modal").modal("hide"),r.removeClass("button-loading")},error:function(e){Botble.handleError(e),r.removeClass("button-loading")}})};$(document).on("click",".btn-save-rule",(function(t){t.preventDefault(),e($(t.currentTarget),$(t.currentTarget).closest("form"),"PUT",null)})),$(document).on("change",".select-rule-type",(function(e){e.preventDefault();var t=$(e.currentTarget);t.closest(".box-table-shipping").find(".unit-item-price-label").toggleClass("hidden"),t.closest(".box-table-shipping").find(".unit-item-label").text($(e.currentTarget).find("option:selected").data("unit")),t.closest(".box-table-shipping").find(".rule-from-to-label").text($(e.currentTarget).find("option:selected").data("text"))})),$(document).on("click",".btn-connect-shipping-provider",(function(e){e.preventDefault(),$(e.currentTarget).closest(".wrapper-content").find(".sub-card").removeClass("hidden"),$(e.currentTarget).addClass("hidden")})),$(document).on("click",".btn-close-shipping-detail",(function(e){e.preventDefault(),$(e.currentTarget).closest(".sub-card").addClass("hidden"),$(".carrier-info .btn-connect-shipping-provider").removeClass("hidden")})),$(".save-shipping-item").off("click").on("click",(function(e){e.preventDefault();var t=$(e.currentTarget);t.addClass("button-loading"),$.ajax({type:"POST",cache:!1,url:t.closest("form").prop("action"),data:t.closest("form").serialize(),success:function(e){e.error?Botble.showError(e.message):($(".btn-secondary.btn-connect-shipping-provider").addClass("hidden"),$(".btn-trigger-delete-shipping-method-item-modal").removeClass("hidden"),Botble.showSuccess(e.message)),t.removeClass("button-loading")},error:function(e){Botble.handleError(e),t.removeClass("button-loading")}})})),$(document).on("click",".btn-trigger-delete-shipping-method-item-modal",(function(e){e.preventDefault(),$("#confirm-delete-shipping-method-item-button").data("type",$(e.currentTarget).data("type")),$(".shipping-method-item-label").text($(e.currentTarget).data("text")),$("#confirm-delete-shipping-method-item-modal").modal("show")})),$(document).on("click","#confirm-delete-shipping-method-item-button",(function(e){e.preventDefault();var t=$(e.currentTarget);t.addClass("button-loading"),$.ajax({type:"DELETE",url:$("div[data-delete-shipping-method-item-url]").data("delete-shipping-method-item-url"),data:{type:t.data("type")},success:function(e){if(e.error)Botble.showError(e.message);else{var n=$("#block-"+t.data("type"));n.find(".btn-connect-shipping-provider").addClass("hidden"),n.find(".btn-secondary.btn-connect-shipping-provider").removeClass("hidden"),n.find(".btn-trigger-delete-shipping-method-item-modal").addClass("hidden"),n.find(".sub-card").addClass("hidden"),Botble.showSuccess(e.message)}t.removeClass("button-loading"),$("#confirm-delete-shipping-method-item-modal").modal("hide")},error:function(e){Botble.handleError(e),t.removeClass("button-loading")}})})),$(document).on("keyup",".input-sync-item",(function(e){var t=$(e.currentTarget).val();t&&!isNaN(t)||(t=0),$(e.currentTarget).closest(".input-shipping-sync-wrapper").find($(e.currentTarget).data("target")).text(Botble.numberFormat(parseFloat(t),2))})),$(document).on("keyup",".input-sync-text-item",(function(e){$(e.currentTarget).closest(".input-shipping-sync-wrapper").find($(e.currentTarget).data("target")).text($(e.currentTarget).val())})),$(document).on("keyup",".input-to-value-field",(function(e){$(e.currentTarget).val()?($(".rule-to-value-wrap").removeClass("hidden"),$(".rule-to-value-missing").addClass("hidden")):($(".rule-to-value-wrap").addClass("hidden"),$(".rule-to-value-missing").removeClass("hidden"))})),$(document).on("click",".btn-add-shipping-rule-trigger",(function(e){e.preventDefault(),$("#add-shipping-rule-item-button").data("shipping-id",$(e.currentTarget).data("shipping-id")),$("#add-shipping-rule-item-modal input[name=name]").val(""),$("#add-shipping-rule-item-modal select").val("base_on_price"),$("#add-shipping-rule-item-modal input[name=from]").val("0"),$("#add-shipping-rule-item-modal input[name=to]").val(""),$("#add-shipping-rule-item-modal input[name=price]").val("0"),$("#add-shipping-rule-item-modal").modal("show")})),$(document).on("click","#add-shipping-rule-item-button",(function(t){t.preventDefault(),e($(t.currentTarget),$(t.currentTarget).closest(".modal-content").find("form"),"POST",$(t.currentTarget).data("shipping-id"))})),$(document).on("change",".shipping-rule-item-enable",(function(e){var t=$(e.currentTarget);t.prop("checked")?(t.closest("tr").find(".support-shipping").removeClass("hidden"),t.closest("tr").find(".no-support-shipping").addClass("hidden"),t.closest("tr").find(".adjustment-price-wrapper").removeClass("hidden")):(t.closest("tr").find(".support-shipping").addClass("hidden"),t.closest("tr").find(".no-support-shipping").removeClass("hidden"),t.closest("tr").find(".adjustment-price-wrapper").addClass("hidden"))})),$(document).on("keyup",".shipping-price-district",(function(e){var t=$(e.currentTarget),n=t.closest(".shipping-detail-information").find(".base-price-rule-item").val();n&&!isNaN(n)||(n=0);var i=t.val();i&&!isNaN(i)||(i=0),t.closest("tr").find(".support-shipping .rule-adjustment-price-item").text(Botble.numberFormat(parseFloat(n)+parseFloat(i),2))})),$(document).on("keyup",".base-price-rule-item",(function(e){var t=$(e.currentTarget).val();t&&!isNaN(t)||(t=0),$.each($(document).find(".support-shipping .rule-adjustment-price-item"),(function(e,n){var i=$(n).closest("tr").find(".shipping-price-district").val();i&&!isNaN(i)||(i=0),$(n).text(Botble.numberFormat(parseFloat(t)+parseFloat(i)),2)}))}))}}])&&e(n.prototype,i),t}();$(document).ready((function(){(new t).init()}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!********************************************************************!*\
+  !*** ./platform/plugins/ecommerce/resources/assets/js/shipping.js ***!
+  \********************************************************************/
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ShippingManagement = /*#__PURE__*/function () {
+  function ShippingManagement() {
+    _classCallCheck(this, ShippingManagement);
+  }
+
+  _createClass(ShippingManagement, [{
+    key: "init",
+    value: function init() {
+      $(document).on('click', '.btn-trigger-show-shipping-detail', function (event) {
+        event.preventDefault();
+        $(event.currentTarget).closest('.table').find('.shipping-detail-information').find('.panel').toggleClass('hidden');
+      });
+      $(document).on('click', '.click-cancel', function (event) {
+        event.preventDefault();
+        $(event.currentTarget).closest('.table').find('.shipping-detail-information').find('.panel').toggleClass('hidden');
+      });
+      $(document).on('click', '.btn-confirm-delete-region-item-modal-trigger', function (event) {
+        event.preventDefault();
+        var $modal = $('#confirm-delete-region-item-modal');
+        $modal.find('.region-item-label').text($(event.currentTarget).data('name'));
+        $modal.find('#confirm-delete-region-item-button').data('id', $(event.currentTarget).data('id'));
+        $modal.modal('show');
+      });
+      $(document).on('click', '#confirm-delete-region-item-button', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        _self.addClass('button-loading');
+
+        $.ajax({
+          type: 'DELETE',
+          url: $('div[data-delete-region-item-url]').data('delete-region-item-url'),
+          data: {
+            id: _self.data('id')
+          },
+          success: function success(res) {
+            if (!res.error) {
+              $('.wrap-table-shipping-' + _self.data('id')).remove();
+              Botble.showSuccess(res.message);
+            } else {
+              Botble.showError(res.message);
+            }
+
+            _self.removeClass('button-loading');
+
+            $('#confirm-delete-region-item-modal').modal('hide');
+          },
+          error: function error(_error) {
+            Botble.handleError(_error);
+
+            _self.removeClass('button-loading');
+          }
+        });
+      });
+      $(document).on('click', '.btn-confirm-delete-price-item-modal-trigger', function (event) {
+        event.preventDefault();
+        var $modal = $('#confirm-delete-price-item-modal');
+        $modal.find('.region-price-item-label').text($(event.currentTarget).data('name'));
+        $modal.find('#confirm-delete-price-item-button').data('id', $(event.currentTarget).data('id'));
+        $modal.modal('show');
+      });
+      $(document).on('click', '#confirm-delete-price-item-button', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        _self.addClass('button-loading');
+
+        $.ajax({
+          type: 'DELETE',
+          url: $('div[data-delete-rule-item-url]').data('delete-rule-item-url'),
+          data: {
+            id: _self.data('id')
+          },
+          success: function success(res) {
+            if (!res.error) {
+              $('.box-table-shipping-item-' + _self.data('id')).remove();
+
+              if (res.data.count === 0) {
+                $('.wrap-table-shipping-' + res.data.shipping_id).remove();
+              }
+
+              Botble.showSuccess(res.message);
+            } else {
+              Botble.showError(res.message);
+            }
+
+            _self.removeClass('button-loading');
+
+            $('#confirm-delete-price-item-modal').modal('hide');
+          },
+          error: function error(_error2) {
+            Botble.handleError(_error2);
+
+            _self.removeClass('button-loading');
+          }
+        });
+      });
+
+      var saveRuleItem = function saveRuleItem($this, $form, method, shippingId) {
+        $(document).find('.field-has-error').removeClass('field-has-error');
+        var _self = $this;
+
+        _self.addClass('button-loading');
+
+        var formData = [];
+        $.each($form.serializeArray(), function (index, el) {
+          if (el.name === 'from' || el.name === 'to' || el.name === 'price') {
+            if (el.value) {
+              el.value = parseFloat(el.value.replace(',', '')).toFixed(2);
+            }
+          }
+
+          formData[el.name] = el.value;
+        });
+
+        if (shippingId) {
+          formData['shipping_id'] = shippingId;
+        }
+
+        formData = $.extend({}, formData);
+        $.ajax({
+          type: method,
+          url: $form.prop('action'),
+          data: formData,
+          success: function success(res) {
+            if (!res.error) {
+              Botble.showSuccess(res.message);
+
+              if (shippingId && res.data) {
+                $('.wrap-table-shipping-' + shippingId + ' .pd-all-20.border-bottom').append(res.data);
+                Botble.initResources();
+              }
+            } else {
+              Botble.showError(res.message);
+            }
+
+            if (shippingId) {
+              _self.closest('.modal').modal('hide');
+            }
+
+            _self.removeClass('button-loading');
+          },
+          error: function error(_error3) {
+            Botble.handleError(_error3);
+
+            _self.removeClass('button-loading');
+          }
+        });
+      };
+
+      $(document).on('click', '.btn-save-rule', function (event) {
+        event.preventDefault();
+        saveRuleItem($(event.currentTarget), $(event.currentTarget).closest('form'), 'PUT', null);
+      });
+      $(document).on('change', '.select-rule-type', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        _self.closest('.box-table-shipping').find('.unit-item-price-label').toggleClass('hidden');
+
+        _self.closest('.box-table-shipping').find('.unit-item-label').text($(event.currentTarget).find('option:selected').data('unit'));
+
+        _self.closest('.box-table-shipping').find('.rule-from-to-label').text($(event.currentTarget).find('option:selected').data('text'));
+      });
+      $(document).on('click', '.btn-connect-shipping-provider', function (event) {
+        event.preventDefault();
+        $(event.currentTarget).closest('.wrapper-content').find('.sub-card').removeClass('hidden');
+        $(event.currentTarget).addClass('hidden');
+      });
+      $(document).on('click', '.btn-close-shipping-detail', function (event) {
+        event.preventDefault();
+        $(event.currentTarget).closest('.sub-card').addClass('hidden');
+        $('.carrier-info .btn-connect-shipping-provider').removeClass('hidden');
+      });
+      $('.save-shipping-item').off('click').on('click', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        _self.addClass('button-loading');
+
+        $.ajax({
+          type: 'POST',
+          cache: false,
+          url: _self.closest('form').prop('action'),
+          data: _self.closest('form').serialize(),
+          success: function success(res) {
+            if (!res.error) {
+              $('.btn-secondary.btn-connect-shipping-provider').addClass('hidden');
+              $('.btn-trigger-delete-shipping-method-item-modal').removeClass('hidden');
+              Botble.showSuccess(res.message);
+            } else {
+              Botble.showError(res.message);
+            }
+
+            _self.removeClass('button-loading');
+          },
+          error: function error(res) {
+            Botble.handleError(res);
+
+            _self.removeClass('button-loading');
+          }
+        });
+      });
+      $(document).on('click', '.btn-trigger-delete-shipping-method-item-modal', function (event) {
+        event.preventDefault();
+        $('#confirm-delete-shipping-method-item-button').data('type', $(event.currentTarget).data('type'));
+        $('.shipping-method-item-label').text($(event.currentTarget).data('text'));
+        $('#confirm-delete-shipping-method-item-modal').modal('show');
+      });
+      $(document).on('click', '#confirm-delete-shipping-method-item-button', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        _self.addClass('button-loading');
+
+        $.ajax({
+          type: 'DELETE',
+          url: $('div[data-delete-shipping-method-item-url]').data('delete-shipping-method-item-url'),
+          data: {
+            type: _self.data('type')
+          },
+          success: function success(res) {
+            if (!res.error) {
+              var $current_block = $('#block-' + _self.data('type'));
+              $current_block.find('.btn-connect-shipping-provider').addClass('hidden');
+              $current_block.find('.btn-secondary.btn-connect-shipping-provider').removeClass('hidden');
+              $current_block.find('.btn-trigger-delete-shipping-method-item-modal').addClass('hidden');
+              $current_block.find('.sub-card').addClass('hidden');
+              Botble.showSuccess(res.message);
+            } else {
+              Botble.showError(res.message);
+            }
+
+            _self.removeClass('button-loading');
+
+            $('#confirm-delete-shipping-method-item-modal').modal('hide');
+          },
+          error: function error(_error4) {
+            Botble.handleError(_error4);
+
+            _self.removeClass('button-loading');
+          }
+        });
+      });
+      $(document).on('keyup', '.input-sync-item', function (event) {
+        var number = $(event.currentTarget).val();
+
+        if (!number || isNaN(number)) {
+          number = 0;
+        }
+
+        $(event.currentTarget).closest('.input-shipping-sync-wrapper').find($(event.currentTarget).data('target')).text(Botble.numberFormat(parseFloat(number), 2));
+      });
+      $(document).on('keyup', '.input-sync-text-item', function (event) {
+        $(event.currentTarget).closest('.input-shipping-sync-wrapper').find($(event.currentTarget).data('target')).text($(event.currentTarget).val());
+      });
+      $(document).on('keyup', '.input-to-value-field', function (event) {
+        if ($(event.currentTarget).val()) {
+          $('.rule-to-value-wrap').removeClass('hidden');
+          $('.rule-to-value-missing').addClass('hidden');
+        } else {
+          $('.rule-to-value-wrap').addClass('hidden');
+          $('.rule-to-value-missing').removeClass('hidden');
+        }
+      });
+      $(document).on('click', '.btn-add-shipping-rule-trigger', function (event) {
+        event.preventDefault();
+        $('#add-shipping-rule-item-button').data('shipping-id', $(event.currentTarget).data('shipping-id'));
+        $('#add-shipping-rule-item-modal input[name=name]').val('');
+        $('#add-shipping-rule-item-modal select').val('base_on_price');
+        $('#add-shipping-rule-item-modal input[name=from]').val('0');
+        $('#add-shipping-rule-item-modal input[name=to]').val('');
+        $('#add-shipping-rule-item-modal input[name=price]').val('0');
+        $('#add-shipping-rule-item-modal').modal('show');
+      });
+      $(document).on('click', '#add-shipping-rule-item-button', function (event) {
+        event.preventDefault();
+        saveRuleItem($(event.currentTarget), $(event.currentTarget).closest('.modal-content').find('form'), 'POST', $(event.currentTarget).data('shipping-id'));
+      });
+      $(document).on('change', '.shipping-rule-item-enable', function (event) {
+        var _self = $(event.currentTarget);
+
+        if (_self.prop('checked')) {
+          _self.closest('tr').find('.support-shipping').removeClass('hidden');
+
+          _self.closest('tr').find('.no-support-shipping').addClass('hidden');
+
+          _self.closest('tr').find('.adjustment-price-wrapper').removeClass('hidden');
+        } else {
+          _self.closest('tr').find('.support-shipping').addClass('hidden');
+
+          _self.closest('tr').find('.no-support-shipping').removeClass('hidden');
+
+          _self.closest('tr').find('.adjustment-price-wrapper').addClass('hidden');
+        }
+      });
+      $(document).on('keyup', '.shipping-price-district', function (event) {
+        var _self = $(event.currentTarget);
+
+        var basePrice = _self.closest('.shipping-detail-information').find('.base-price-rule-item').val();
+
+        if (!basePrice || isNaN(basePrice)) {
+          basePrice = 0;
+        }
+
+        var adjustmentPrice = _self.val();
+
+        if (!adjustmentPrice || isNaN(adjustmentPrice)) {
+          adjustmentPrice = 0;
+        }
+
+        _self.closest('tr').find('.support-shipping .rule-adjustment-price-item').text(Botble.numberFormat(parseFloat(basePrice) + parseFloat(adjustmentPrice), 2));
+      });
+      $(document).on('keyup', '.base-price-rule-item', function (event) {
+        var _self = $(event.currentTarget);
+
+        var basePrice = _self.val();
+
+        if (!basePrice || isNaN(basePrice)) {
+          basePrice = 0;
+        }
+
+        $.each($(document).find('.support-shipping .rule-adjustment-price-item'), function (index, item) {
+          var adjustmentPrice = $(item).closest('tr').find('.shipping-price-district').val();
+
+          if (!adjustmentPrice || isNaN(adjustmentPrice)) {
+            adjustmentPrice = 0;
+          }
+
+          $(item).text(Botble.numberFormat(parseFloat(basePrice) + parseFloat(adjustmentPrice)), 2);
+        });
+      });
+    }
+  }]);
+
+  return ShippingManagement;
+}();
+
+$(document).ready(function () {
+  new ShippingManagement().init();
+});
+/******/ })()
+;

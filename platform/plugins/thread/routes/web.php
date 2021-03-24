@@ -65,6 +65,10 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@pushToEcommerce',
                 'permission' => 'thread.create',
             ]);
+            Route::get('pushEvent', function (){
+              broadcast(new \App\Events\NotifyManager(\App\Models\User::find(1) , \Botble\Thread\Models\Thread::find(3)));
+              return 'ok';
+            });
         });
     });
 

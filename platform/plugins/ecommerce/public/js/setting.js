@@ -1,1 +1,23 @@
-$(document).ready((function(){$(document).on("keyup","#store_order_prefix",(function(e){$(e.currentTarget).val()?$(".sample-order-code-prefix").text($(e.currentTarget).val()+"-"):$(".sample-order-code-prefix").text("")})),$(document).on("keyup","#store_order_suffix",(function(e){$(e.currentTarget).val()?$(".sample-order-code-suffix").text("-"+$(e.currentTarget).val()):$(".sample-order-code-suffix").text("")}))}));
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*******************************************************************!*\
+  !*** ./platform/plugins/ecommerce/resources/assets/js/setting.js ***!
+  \*******************************************************************/
+$(document).ready(function () {
+  $(document).on('keyup', '#store_order_prefix', function (event) {
+    if ($(event.currentTarget).val()) {
+      $('.sample-order-code-prefix').text($(event.currentTarget).val() + '-');
+    } else {
+      $('.sample-order-code-prefix').text('');
+    }
+  });
+  $(document).on('keyup', '#store_order_suffix', function (event) {
+    if ($(event.currentTarget).val()) {
+      $('.sample-order-code-suffix').text('-' + $(event.currentTarget).val());
+    } else {
+      $('.sample-order-code-suffix').text('');
+    }
+  });
+});
+/******/ })()
+;

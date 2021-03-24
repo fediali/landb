@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use stdClass;
 
-class CreatedContentEvent extends Event implements ShouldBroadcastNow
+class CreatedContentEvent extends Event
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -36,21 +36,10 @@ class CreatedContentEvent extends Event implements ShouldBroadcastNow
      * @param Request $request
      * @param Eloquent|false|stdClass $data
      */
-    public function __construct($screen, $request, $data, $manager)
+    public function __construct($screen, $request, $data)
     {
         $this->screen = $screen;
         $this->request = $request;
         $this->data = $data;
-        $this->manager = $manager;
     }
-
-  /**
-   * Get the channels the event should broadcast on.
-   *
-   * @return \Illuminate\Broadcasting\Channel|array
-   */
-  public function broadcastOn()
-  {
-    return new PrivateChannel('thread-notification');
-  }
 }

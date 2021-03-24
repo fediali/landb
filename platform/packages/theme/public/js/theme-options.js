@@ -1,1 +1,66 @@
-$(document).ready((function(){$(document).find(".colorpicker-input").length>0&&$(document).find(".colorpicker-input").colorpicker(),$(document).find(".iconpicker-input").length>0&&$(document).find(".iconpicker-input").iconpicker({selected:!0,hideOnSelect:!0}),$(document).ready((function(){$(document).on("click",".button-save-theme-options",(function(e){e.preventDefault();var n=$(e.currentTarget);if(n.addClass("button-loading"),"undefined"!=typeof CKEDITOR)for(var t in CKEDITOR.instances)CKEDITOR.instances[t].updateElement();if("undefined"!=typeof tinymce)for(var o in tinymce.editors)tinymce.editors[o].getContent&&$("#"+o).html(tinymce.editors[o].getContent());var i=n.closest("form");$.ajax({url:i.prop("action"),type:"POST",data:i.serialize(),success:function(e){n.removeClass("button-loading"),e.error?Botble.showError(e.message):(Botble.showSuccess(e.message),i.removeClass("dirty"))},error:function(e){n.removeClass("button-loading"),Botble.handleError(e)}})}))}))}));
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!**********************************************************************!*\
+  !*** ./platform/packages/theme/resources/assets/js/theme-options.js ***!
+  \**********************************************************************/
+$(document).ready(function () {
+  if ($(document).find('.colorpicker-input').length > 0) {
+    $(document).find('.colorpicker-input').colorpicker();
+  }
+
+  if ($(document).find('.iconpicker-input').length > 0) {
+    $(document).find('.iconpicker-input').iconpicker({
+      selected: true,
+      hideOnSelect: true
+    });
+  }
+
+  $(document).ready(function () {
+    $(document).on('click', '.button-save-theme-options', function (event) {
+      event.preventDefault();
+
+      var _self = $(event.currentTarget);
+
+      _self.addClass('button-loading');
+
+      if (typeof CKEDITOR != 'undefined') {
+        for (var i in CKEDITOR.instances) {
+          CKEDITOR.instances[i].updateElement();
+        }
+      }
+
+      if (typeof tinymce != 'undefined') {
+        for (var instance in tinymce.editors) {
+          if (tinymce.editors[instance].getContent) {
+            $('#' + instance).html(tinymce.editors[instance].getContent());
+          }
+        }
+      }
+
+      var $form = _self.closest('form');
+
+      $.ajax({
+        url: $form.prop('action'),
+        type: 'POST',
+        data: $form.serialize(),
+        success: function success(data) {
+          _self.removeClass('button-loading');
+
+          if (data.error) {
+            Botble.showError(data.message);
+          } else {
+            Botble.showSuccess(data.message);
+            $form.removeClass('dirty');
+          }
+        },
+        error: function error(data) {
+          _self.removeClass('button-loading');
+
+          Botble.handleError(data);
+        }
+      });
+    });
+  });
+});
+/******/ })()
+;

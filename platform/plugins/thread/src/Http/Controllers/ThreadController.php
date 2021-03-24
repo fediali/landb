@@ -2,6 +2,8 @@
 
 namespace Botble\Thread\Http\Controllers;
 
+use App\Events\NotifyManager;
+use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
@@ -118,9 +120,13 @@ class ThreadController extends BaseController
             }
         }
 
-        $notifiable = get_designer_manager(Auth::user()->id);
-        event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread, $notifiable));
+        if(!empty($thread->vendor_id)){
+          $designer = User::find($thread->designer_id);
+          $vendor = User::find($thread->vendor_id);
+          broadcast(new NotifyManager($vendor, $designer, $thread));
+        }
 
+        event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
         return $response
             ->setPreviousUrl(route('thread.index'))
             ->setNextUrl(route('thread.edit', $thread->id))

@@ -1,1 +1,229 @@
-(()=>{function e(e,t){for(var i=0;i<t.length;i++){var a=t[i];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}var t=function(){function t(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t)}var i,a;return i=t,(a=[{key:"initCkEditor",value:function(e,t){var i={filebrowserWindowWidth:"1200",filebrowserWindowHeight:"750",height:90*$("#"+e).prop("rows"),allowedContent:!0};void 0!==RV_MEDIA_URL.filebrowserImageBrowseUrl&&!1===RV_MEDIA_URL.filebrowserImageBrowseUrl||(i.filebrowserImageBrowseUrl=RV_MEDIA_URL.base+"?media-action=select-files&method=ckeditor&type=image"),RV_MEDIA_URL.media_upload_from_editor&&(i.filebrowserImageUploadUrl=RV_MEDIA_URL.media_upload_from_editor+"?method=ckeditor&type=image&_token="+$('meta[name="csrf-token"]').attr("content"));var a={};$.extend(a,i,t),CKEDITOR.replace(e,a)}},{key:"initTinyMce",value:function(e){tinymce.init({menubar:!0,selector:"#"+e,skin:"voyager",min_height:75*$("#"+e).prop("rows"),resize:"vertical",plugins:"code autolink advlist visualchars link image media table charmap hr pagebreak nonbreaking anchor insertdatetime lists textcolor wordcount imagetools  contextmenu  visualblocks",extended_valid_elements:"input[id|name|value|type|class|style|required|placeholder|autocomplete|onclick]",file_browser_callback:function(e,t,i){"image"===i&&$("#upload_file").trigger("click")},toolbar:"formatselect | bold italic strikethrough forecolor backcolor | link image table | alignleft aligncenter alignright alignjustify  | numlist bullist indent  |  visualblocks code",convert_urls:!1,image_caption:!0,image_advtab:!0,image_title:!0,entity_encoding:"raw",content_style:".mce-content-body {padding: 10px}",contextmenu:"link image inserttable | cell row column deletetable"})}},{key:"initEditor",value:function(e,t,i){if(!e.length)return!1;var a=this;switch(i){case"ckeditor":$.each(e,(function(e,i){a.initCkEditor($(i).prop("id"),t)}));break;case"tinymce":$.each(e,(function(e,t){a.initTinyMce($(t).prop("id"))}))}}},{key:"init",value:function(){var e=$(".editor-ckeditor"),t=$(".editor-tinymce"),i=this;e.length>0&&i.initEditor(e,{},"ckeditor"),t.length>0&&i.initEditor(t,{},"tinymce"),$(document).on("click",".show-hide-editor-btn",(function(e){e.preventDefault();var t=$(e.currentTarget),a=$("#"+t.data("result"));a.hasClass("editor-ckeditor")?CKEDITOR.instances[t.data("result")]&&void 0!==CKEDITOR.instances[t.data("result")]?(CKEDITOR.instances[t.data("result")].updateElement(),CKEDITOR.instances[t.data("result")].destroy(),$(".editor-action-item").not(".action-show-hide-editor").hide()):(i.initCkEditor(t.data("result"),{},"ckeditor"),$(".editor-action-item").not(".action-show-hide-editor").show()):a.hasClass("editor-tinymce")&&tinymce.execCommand("mceToggleEditor",!1,t.data("result"))})),this.manageShortCode()}},{key:"manageShortCode",value:function(){$(".list-shortcode-items li a").on("click",(function(e){var t=this;e.preventDefault(),"1"==$(this).data("has-admin-config")?($(".short-code-admin-config").html(""),$(".short_code_modal").modal("show"),$(".half-circle-spinner").show(),$.ajax({type:"GET",url:$(this).prop("href"),success:function(e){if(e.error)return Botble.showError(e.message),!1;$(".short-code-data-form").trigger("reset"),$(".short_code_input_key").val($(t).data("key")),$(".half-circle-spinner").hide(),$(".short-code-admin-config").html(e.data),Botble.initResources(),Botble.initMediaIntegrate(),""!==$(t).data("description")&&null!=$(t).data("description")&&$(".short_code_modal .modal-title strong").text($(t).data("description"))},error:function(e){Botble.handleError(e)}})):$(".editor-ckeditor").length>0?CKEDITOR.instances[$(".add_shortcode_btn_trigger").data("result")].insertHtml("["+$(this).data("key")+"][/"+$(this).data("key")+"]"):tinymce.get($(".add_shortcode_btn_trigger").data("result")).execCommand("mceInsertContent",!1,"["+$(this).data("key")+"][/"+$(this).data("key")+"]")})),$.fn.serializeObject=function(){var e={},t=this.serializeArray();return $.each(t,(function(){e[this.name]?(e[this.name].push||(e[this.name]=[e[this.name]]),e[this.name].push(this.value||"")):e[this.name]=this.value||""})),e},$(".add_short_code_btn").on("click",(function(e){e.preventDefault();var t=$(".short-code-data-form"),i=t.serializeObject(),a="";$.each(i,(function(e,i){"content"!==t.find('*[name="'+e+'"]').data("shortcode-attribute")&&(e=e.replace("[]",""),a+=" "+e+'="'+i+'"')}));var o="",n=t.find("*[data-shortcode-attribute=content]");null!=n&&null!=n.val()&&""!==n.val()&&(o=n.val());var r=$(this).closest(".short_code_modal").find(".short_code_input_key").val();$(".editor-ckeditor").length>0?CKEDITOR.instances[$(".add_shortcode_btn_trigger").data("result")].insertHtml("<div>["+r+a+"]"+o+"[/"+r+"]</div>"):tinymce.get($(".add_shortcode_btn_trigger").data("result")).execCommand("mceInsertContent",!1,"<div>["+r+a+"]"+o+"[/"+r+"]</div>"),$(this).closest(".modal").modal("hide")}))}}])&&e(i.prototype,a),t}();$(document).ready((function(){(new t).init()}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!**********************************************************!*\
+  !*** ./platform/core/base/resources/assets/js/editor.js ***!
+  \**********************************************************/
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var EditorManagement = /*#__PURE__*/function () {
+  function EditorManagement() {
+    _classCallCheck(this, EditorManagement);
+  }
+
+  _createClass(EditorManagement, [{
+    key: "initCkEditor",
+    value: function initCkEditor(element, extraConfig) {
+      var config = {
+        filebrowserWindowWidth: '1200',
+        filebrowserWindowHeight: '750',
+        height: $('#' + element).prop('rows') * 90,
+        allowedContent: true
+      };
+
+      if (typeof RV_MEDIA_URL.filebrowserImageBrowseUrl === 'undefined' || RV_MEDIA_URL.filebrowserImageBrowseUrl !== false) {
+        config.filebrowserImageBrowseUrl = RV_MEDIA_URL.base + '?media-action=select-files&method=ckeditor&type=image';
+      }
+
+      if (RV_MEDIA_URL.media_upload_from_editor) {
+        config.filebrowserImageUploadUrl = RV_MEDIA_URL.media_upload_from_editor + '?method=ckeditor&type=image&_token=' + $('meta[name="csrf-token"]').attr('content');
+      }
+
+      var mergeConfig = {};
+      $.extend(mergeConfig, config, extraConfig);
+      CKEDITOR.replace(element, mergeConfig);
+    }
+  }, {
+    key: "initTinyMce",
+    value: function initTinyMce(element) {
+      tinymce.init({
+        menubar: true,
+        selector: '#' + element,
+        skin: 'voyager',
+        min_height: $('#' + element).prop('rows') * 75,
+        resize: 'vertical',
+        plugins: 'code autolink advlist visualchars link image media table charmap hr pagebreak nonbreaking anchor insertdatetime lists textcolor wordcount imagetools  contextmenu  visualblocks',
+        extended_valid_elements: 'input[id|name|value|type|class|style|required|placeholder|autocomplete|onclick]',
+        file_browser_callback: function file_browser_callback(fieldName, url, type) {
+          if (type === 'image') {
+            $('#upload_file').trigger('click');
+          }
+        },
+        toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link image table | alignleft aligncenter alignright alignjustify  | numlist bullist indent  |  visualblocks code',
+        convert_urls: false,
+        image_caption: true,
+        image_advtab: true,
+        image_title: true,
+        entity_encoding: 'raw',
+        content_style: '.mce-content-body {padding: 10px}',
+        contextmenu: 'link image inserttable | cell row column deletetable'
+      });
+    }
+  }, {
+    key: "initEditor",
+    value: function initEditor(element, extraConfig, type) {
+      if (!element.length) {
+        return false;
+      }
+
+      var current = this;
+
+      switch (type) {
+        case 'ckeditor':
+          $.each(element, function (index, item) {
+            current.initCkEditor($(item).prop('id'), extraConfig);
+          });
+          break;
+
+        case 'tinymce':
+          $.each(element, function (index, item) {
+            current.initTinyMce($(item).prop('id'));
+          });
+          break;
+      }
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      var $ckEditor = $('.editor-ckeditor');
+      var $tinyMce = $('.editor-tinymce');
+      var current = this;
+
+      if ($ckEditor.length > 0) {
+        current.initEditor($ckEditor, {}, 'ckeditor');
+      }
+
+      if ($tinyMce.length > 0) {
+        current.initEditor($tinyMce, {}, 'tinymce');
+      }
+
+      $(document).on('click', '.show-hide-editor-btn', function (event) {
+        event.preventDefault();
+
+        var _self = $(event.currentTarget);
+
+        var $result = $('#' + _self.data('result'));
+
+        if ($result.hasClass('editor-ckeditor')) {
+          if (CKEDITOR.instances[_self.data('result')] && typeof CKEDITOR.instances[_self.data('result')] !== 'undefined') {
+            CKEDITOR.instances[_self.data('result')].updateElement();
+
+            CKEDITOR.instances[_self.data('result')].destroy();
+
+            $('.editor-action-item').not('.action-show-hide-editor').hide();
+          } else {
+            current.initCkEditor(_self.data('result'), {}, 'ckeditor');
+            $('.editor-action-item').not('.action-show-hide-editor').show();
+          }
+        } else if ($result.hasClass('editor-tinymce')) {
+          tinymce.execCommand('mceToggleEditor', false, _self.data('result'));
+        }
+      });
+      this.manageShortCode();
+    }
+  }, {
+    key: "manageShortCode",
+    value: function manageShortCode() {
+      $('.list-shortcode-items li a').on('click', function (event) {
+        var _this = this;
+
+        event.preventDefault();
+
+        if ($(this).data('has-admin-config') == '1') {
+          $('.short-code-admin-config').html('');
+          $('.short_code_modal').modal('show');
+          $('.half-circle-spinner').show();
+          $.ajax({
+            type: 'GET',
+            url: $(this).prop('href'),
+            success: function success(res) {
+              if (res.error) {
+                Botble.showError(res.message);
+                return false;
+              }
+
+              $('.short-code-data-form').trigger('reset');
+              $('.short_code_input_key').val($(_this).data('key'));
+              $('.half-circle-spinner').hide();
+              $('.short-code-admin-config').html(res.data);
+              Botble.initResources();
+              Botble.initMediaIntegrate();
+
+              if ($(_this).data('description') !== '' && $(_this).data('description') != null) {
+                $('.short_code_modal .modal-title strong').text($(_this).data('description'));
+              }
+            },
+            error: function error(data) {
+              Botble.handleError(data);
+            }
+          });
+        } else {
+          if ($('.editor-ckeditor').length > 0) {
+            CKEDITOR.instances[$('.add_shortcode_btn_trigger').data('result')].insertHtml('[' + $(this).data('key') + '][/' + $(this).data('key') + ']');
+          } else {
+            tinymce.get($('.add_shortcode_btn_trigger').data('result')).execCommand('mceInsertContent', false, '[' + $(this).data('key') + '][/' + $(this).data('key') + ']');
+          }
+        }
+      });
+
+      $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+          if (o[this.name]) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+        return o;
+      };
+
+      $('.add_short_code_btn').on('click', function (event) {
+        event.preventDefault();
+        var formElement = $('.short-code-data-form');
+        var formData = formElement.serializeObject();
+        var attributes = '';
+        $.each(formData, function (name, value) {
+          var element = formElement.find('*[name="' + name + '"]');
+
+          if (element.data('shortcode-attribute') !== 'content') {
+            name = name.replace('[]', '');
+            attributes += ' ' + name + '="' + value + '"';
+          }
+        });
+        var content = '';
+        var contentElement = formElement.find('*[data-shortcode-attribute=content]');
+
+        if (contentElement != null && contentElement.val() != null && contentElement.val() !== '') {
+          content = contentElement.val();
+        }
+
+        var $shortCodeKey = $(this).closest('.short_code_modal').find('.short_code_input_key').val();
+
+        if ($('.editor-ckeditor').length > 0) {
+          CKEDITOR.instances[$('.add_shortcode_btn_trigger').data('result')].insertHtml('<div>[' + $shortCodeKey + attributes + ']' + content + '[/' + $shortCodeKey + ']</div>');
+        } else {
+          tinymce.get($('.add_shortcode_btn_trigger').data('result')).execCommand('mceInsertContent', false, '<div>[' + $shortCodeKey + attributes + ']' + content + '[/' + $shortCodeKey + ']</div>');
+        }
+
+        $(this).closest('.modal').modal('hide');
+      });
+    }
+  }]);
+
+  return EditorManagement;
+}();
+
+$(document).ready(function () {
+  new EditorManagement().init();
+});
+/******/ })()
+;

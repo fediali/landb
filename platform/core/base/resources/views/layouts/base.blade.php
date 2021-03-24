@@ -56,5 +56,21 @@
 </div>
 
 {!! apply_filters(BASE_FILTER_FOOTER_LAYOUT_TEMPLATE, null) !!}
+
+<script>
+  window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
+</script>
+<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
+{{--
+<script src="{{ url('public/vendor/core/core/base/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
+--}}
+<script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
+
+<script type="text/javascript">
+  window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
+      .listen('.ThreadEvent', (data) => {
+  toastr['success'](data.title, 'New Thread Notification');
+  });
+</script>
 </body>
 </html>
