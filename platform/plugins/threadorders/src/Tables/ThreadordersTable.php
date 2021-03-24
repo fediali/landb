@@ -66,7 +66,7 @@ class ThreadordersTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return '<a href="#" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
+                return '<a href="'.route('threadorders.threadOrderDetail', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
                 //return $this->getOperations('threadorders.edit', 'threadorders.destroy', $item);
             })
             ->escapeColumns([])

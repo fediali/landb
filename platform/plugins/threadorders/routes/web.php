@@ -26,6 +26,10 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
                 'uses'       => 'ThreadordersController@changeStatus',
                 'permission' => 'thread.create',
             ]);
+            Route::get('detail/{id}', [
+                'as'   => 'threadOrderDetail',
+                'uses' => 'ThreadordersController@showThreadOrderDetail',
+            ]);
         });
     });
 

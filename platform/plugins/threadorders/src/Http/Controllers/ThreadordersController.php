@@ -297,4 +297,14 @@ class ThreadordersController extends BaseController
 
         return $response;
     }
+
+    public function showThreadOrderDetail($id, Request $request)
+    {
+        page_title()->setTitle('Thread Order Detail');
+
+        $orderDetail = $this->threadordersRepository->findOrFail($id);
+
+        return view('plugins/threadorders::threadOrderDetail', compact('orderDetail'));
+    }
+
 }
