@@ -21,5 +21,5 @@
 </IfModule>
 
 <IfModule mime_module>
-      AddHandler application/x-httpd-ea-php70 .php .php7 .phtml
+      AddHandler application/x-httpd-ea-php74 .php .php7 .phtml
     </IfModule>
