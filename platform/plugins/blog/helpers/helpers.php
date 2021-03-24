@@ -280,6 +280,13 @@ if (!function_exists('get_thread_variations')) {
     }
 }
 
+if (!function_exists('get_thread_order_variations')) {
+    function get_thread_order_variations($id)
+    {
+        return \Illuminate\Support\Facades\DB::table('thread_order_variations')->where('thread_order_id', $id)->get();
+    }
+}
+
 if (!function_exists('get_designer_manager')) {
     function get_designer_manager($id)
     {

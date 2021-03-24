@@ -26,6 +26,11 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
                 'uses'       => 'ThreadordersController@changeStatus',
                 'permission' => 'thread.create',
             ]);
+            Route::get('orderItem/{id}', [
+              'as'         => 'orderItem',
+              'uses'       => 'ThreadordersController@pushToEcommerce',
+              'permission' => 'threadorders.create',
+            ]);
         });
     });
 

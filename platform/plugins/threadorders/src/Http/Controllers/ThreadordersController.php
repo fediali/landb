@@ -5,9 +5,11 @@ namespace Botble\Threadorders\Http\Controllers;
 use Botble\ACL\Models\UserOtherEmail;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Ecommerce\Models\Product;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
+use Botble\Threadorders\Models\Threadorders;
 use Botble\Threadorders\Repositories\Interfaces\ThreadordersInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
@@ -288,4 +290,44 @@ class ThreadordersController extends BaseController
 
         return $response;
     }
+
+    public function pushToEcommerce($id,  BaseHttpResponse $response){
+    $thread = Threadorders::find($id);
+    $success = true;
+    if($thread){
+      $variations = get_thread_order_variations($thread->id);
+      //dd($variations, $thread);
+     /* $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+      $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+      $reg_quantity = $plus_quantity = 0;*/
+      foreach($variations as $key => $variation){
+          $check = Product::where('sku', $variation->sku)->first();
+          if(!$check){
+            $product = new Product();
+            $product->name = $variation->name;
+            $product->description = $variation->name;
+            $product->status = "published";
+            $product->sku = $variation->sku;
+            $product->category_id = $variation->product_category_id;
+            $product->quantity = $variation->quantity;
+            $product->price = $variation->cost;
+            $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
+            $extras = $variation->cost * ( $percentage / 100 );
+            $product->sale_price = $variation->cost + $extras;
+            if($product->save()){
+              DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
+            }
+          }else{
+            $check->quantity = $check->quantity +  $variation->quantity;
+            // dd($check);
+            $check->save();
+          }
+      }
+    }else{$success = false;}
+
+    if($success){
+      return $response->setPreviousUrl(route('thread.index'))
+          ->setMessage('Order pushed to Ecommerce Successfully');
+    }
+  }
 }
