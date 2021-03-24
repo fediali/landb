@@ -67,13 +67,43 @@ class ThreadTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->addColumn('create_thread_order', function ($item) {
-                if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && $item->thread_has_order) {
-                    return '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
-                } elseif ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
-                    return '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i> Order</a>';
-                } else {
-                    return 'N/A';
-                }
+              if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && $item->thread_has_order) {
+                return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
+              } elseif ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
+                return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i> Order</a>';
+              } else {
+                return 'N/A';
+              }
+            })
+            ->editColumn('order', function ($item) {
+              $html = '<a href="javascript:void(0)" onclick="confirm_start()" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Order</a><script>function confirm_start(){
+                      swal({
+                          title: \'Are you sure?\',
+                          text: "Do you want to push this thread to Ecommerce!",
+                          icon: \'info\',
+                          buttons:{
+                              cancel: {
+                                text: "Cancel",
+                                value: null,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                              },
+                              confirm: {
+                                text: "Push",
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true
+                              }
+                            }
+                          }).then((result) => {
+                              if (result) {
+                                  location.replace("'.route('thread.orderItem', $item->id).'")
+                              }
+                          });
+                  }</script>';
+              return $html;
             })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();

@@ -280,6 +280,31 @@ if (!function_exists('get_thread_variations')) {
     }
 }
 
+if (!function_exists('get_designer_manager')) {
+    function get_designer_manager($id)
+    {
+        return \App\Models\User::find(1);
+    }
+}
+
+if (!function_exists('generate_unique_attr_id')) {
+    function generate_unique_attr_id()
+    {
+      $number = mt_rand(1000000000, 9999999999);
+        if(attr_id_exist($number)){
+          generate_unique_attr_id();
+        }
+        return $number;
+    }
+}
+
+if (!function_exists('attr_id_exist')) {
+    function attr_id_exist($num)
+    {
+      return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
+    }
+}
+
 if (!function_exists('get_thread_comments')) {
     function get_thread_comments($id)
     {

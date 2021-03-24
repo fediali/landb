@@ -7,6 +7,7 @@ use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
@@ -25,6 +26,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Thread\Forms\ThreadForm;
 use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -116,7 +118,8 @@ class ThreadController extends BaseController
             }
         }
 
-        event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
+        $notifiable = get_designer_manager(Auth::user()->id);
+        event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread, $notifiable));
 
         return $response
             ->setPreviousUrl(route('thread.index'))
@@ -429,5 +432,165 @@ class ThreadController extends BaseController
             return redirect()->back()->with('error', 'Server error');
         }
     }
+
+    public function pushToEcommerce($id,  BaseHttpResponse $response){
+      $thread = Thread::find($id);
+      $success = true;
+      if($thread){
+        $variations = get_thread_variations($thread->id);
+        $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+        $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+        $reg_quantity = $plus_quantity = 0;
+        foreach($variations as $key => $variation){
+          if($variation->status == 'active'){
+            $check = Product::where('sku', $variation->sku)->first();
+            if(!$check){
+              $product = new Product();
+              $product->name = $variation->name;
+              $product->description = $variation->name;
+              $product->status = "published";
+              $product->sku = $variation->sku;
+              $product->category_id = $selectedRegCat->product_category_id;
+              if($variation->is_denim == 1){
+                $product->quantity = $thread->reg_pack_qty;
+              }else {
+                $product->quantity = $variation->regular_qty;
+              }
+              $product->price = $variation->cost;
+              if($product->save()){
+                DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->id]);
+              }
+            }else{
+              $check->quantity = $check->quantity +  $variation->regular_qty;
+             // dd($check);
+              $check->save();
+            }
+            if(!empty($selectedPluCat->product_category_id)){
+              $check = Product::where('sku', $variation->plus_sku)->first();
+              if(!$check) {
+                $product = new Product();
+                $product->name = $variation->name;
+                $product->description = $variation->name;
+                $product->status = "published";
+                $product->sku = $variation->plus_sku;
+                $product->category_id = $selectedPluCat->product_category_id;
+                if($variation->is_denim == 1){
+                  $product->quantity = $thread->plus_pack_qty;
+                }else{
+                  $product->quantity = $variation->plus_qty;
+                }
+                $product->price = $variation->cost;
+                if($product->save()){
+                  DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->id]);
+                }
+              }
+            }else{
+              $check->quantity = $check->quantity +  $variation->plus_qty;
+              $check->save();
+            }
+          }
+        }
+
+      }else{$success = false;}
+
+      if($success){
+        return $response->setPreviousUrl(route('thread.index'))
+            ->setMessage('Order pushed to Ecommerce Successfully');
+      }
+    }
+
+    /*public function pushToEcommerceOld($id,  BaseHttpResponse $response){
+      $thread = Thread::find($id);
+      $success = true;
+      if($thread){
+        $variations = get_thread_variations($thread->id);
+        $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+        $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+        $reg_quantity = $plus_quantity = 0;
+        foreach($variations as $key => $variation){
+          if($variation->status == 'active'){
+            $reg_quantity = $reg_quantity + $variation->regular_qty;
+            if(!empty($selectedPluCat->product_category_id)){
+              $plus_quantity = $plus_quantity + $variation->plus_qty;
+            }
+          }
+        }
+
+        if($thread->status == 'approved' && !empty($selectedRegCat->product_category_id)){
+          $check = Product::where('sku', $selectedRegCat)->first();
+          if(!$check){
+            $product = new Product();
+            $product->name = $thread->name;
+            $product->description = $thread->name;
+            $product->status = "published";
+            $product->sku = $selectedRegCat->sku;
+            $product->category_id = $selectedRegCat->product_category_id;
+            $product->quantity = $reg_quantity;
+            if($product->save()){
+              $insert_array = array();
+              $insert_array[] = ['product_id' => $product->id, 'category_id' => $selectedRegCat->product_category_id];
+              $category = DB::table('ec_product_category_product')->insert($insert_array);
+              $variation_array = array();
+              $unique_attr_id = generate_unique_attr_id();
+              $insert_attr = DB::table('ec_product_variations')->insert(['product_id' => $product->id, 'configurable_product_id' => $unique_attr_id]);
+              if($insert_attr){
+                foreach ($variations as $variation){
+                  if($variation->status == 'active') {
+                    $variation_array[] = ['attribute_id' => $unique_attr_id, 'variation_id' => $variation->id];
+                  }
+                }
+                if(count($variation_array)){
+                  DB::table('ec_product_variation_items')->insert($variation_array);
+                }
+              }
+            }
+          }
+          else{
+            $check->quantity = $check->quantity + $reg_quantity;
+            $check->save();
+          }
+        }
+
+        if($thread->status == 'approved' && !empty($selectedPluCat->product_category_id)){
+          $check = Product::where('sku', $selectedPluCat)->first();
+          if(!$check){
+            $product = new Product();
+            $product->name = $thread->name;
+            $product->description = $thread->name;
+            $product->status = "published";
+            $product->sku = $selectedPluCat->sku;
+            $product->category_id = $selectedPluCat->product_category_id;
+            $product->quantity = $plus_quantity;
+            if($product->save()){
+              $insert_array = array();
+              $insert_array[] = ['product_id' => $product->id, 'category_id' => $selectedPluCat->product_category_id];
+              $category = DB::table('ec_product_category_product')->insert($insert_array);
+              $variation_array = array();
+              $unique_attr_id = generate_unique_attr_id();
+              $insert_attr = DB::table('ec_product_variations')->insert(['product_id' => $product->id, 'configurable_product_id' => $unique_attr_id]);
+              if($insert_attr){
+                foreach ($variations as $variation){
+                  if($variation->status == 'active') {
+                    $variation_array[] = ['attribute_id' => $unique_attr_id, 'variation_id' => $variation->id];
+                  }
+                }
+                if(count($variation_array)){
+                  DB::table('ec_product_variation_items')->insert($variation_array);
+                }
+              }
+            }
+          }
+          else{
+            $check->quantity = $check->quantity + $plus_quantity;
+            $check->save();
+          }
+        }
+      }else{$success = false;}
+
+      if($success){
+        return $response->setPreviousUrl(route('thread.index'))
+            ->setMessage('Order pushed to Ecommerce Successfully');
+      }
+    }*/
 
 }

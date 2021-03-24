@@ -59,6 +59,10 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
             Route::get('removeThreadSpecFile/{id}', [
                 'as'         => 'removeThreadSpecFile',
                 'uses'       => 'ThreadController@removeThreadSpecFile',
+            ]);
+            Route::get('orderItem/{id}', [
+                'as'         => 'orderItem',
+                'uses'       => 'ThreadController@pushToEcommerce',
                 'permission' => 'thread.create',
             ]);
         });
