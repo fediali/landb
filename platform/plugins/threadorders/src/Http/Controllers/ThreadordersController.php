@@ -199,7 +199,7 @@ class ThreadordersController extends BaseController
         $requestData = $request->input();
 
         $thread = $this->threadRepository->findOrFail($id);
-        $thread_order_status = $thread->thread_has_order ? Thread::REORDER: Thread::NEW;
+        $thread_order_status = $thread->thread_has_order ? Thread::REORDER : Thread::NEW;
 
         unset($thread->id);
         unset($thread->created_at);
@@ -208,9 +208,9 @@ class ThreadordersController extends BaseController
 
         $getTodayThreadOrderCnt = Threadorders::whereDate('created_at', date('Y-m-d'))->count();
         if ($getTodayThreadOrderCnt) {
-            $po_gen = str_replace('-','',date('d-m-Y')).($getTodayThreadOrderCnt+1);
+            $po_gen = str_replace('-', '', date('d-m-Y')) . ($getTodayThreadOrderCnt + 1);
         } else {
-            $po_gen = str_replace('-','',date('d-m-Y')).'1';
+            $po_gen = str_replace('-', '', date('d-m-Y')) . '1';
         }
 
         $threadData = $thread->toArray();
@@ -267,7 +267,7 @@ class ThreadordersController extends BaseController
         $emails_send_to = UserOtherEmail::where('user_id', $threadData['vendor_id'])->pluck('email')->all();
         $emails_send_to[] = $thread2->vendor->email;
 
-        Mail::send('emails.thread_order_created', $threadData, function($message) use($emails_send_to) {
+        Mail::send('emails.thread_order_created', $threadData, function ($message) use ($emails_send_to) {
             $message->to($emails_send_to)->subject('[L&B New Thread Order]');
         });
 
@@ -299,43 +299,54 @@ class ThreadordersController extends BaseController
         return $response;
     }
 
-    public function pushToEcommerce($id,  BaseHttpResponse $response){
-    $thread = Threadorders::find($id);
-    $success = true;
-    if($thread){
-      $variations = get_thread_order_variations($thread->id);
-      //dd($variations, $thread);
-     /* $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
-      $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
-      $reg_quantity = $plus_quantity = 0;*/
-      foreach($variations as $key => $variation){
-          $check = Product::where('sku', $variation->sku)->first();
-          if(!$check){
-            $product = new Product();
-            $product->name = $variation->name;
-            $product->description = $variation->name;
-            $product->status = "published";
-            $product->sku = $variation->sku;
-            $product->category_id = $variation->product_category_id;
-            $product->quantity = $variation->quantity;
-            $product->price = $variation->cost;
-            $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
-            $extras = $variation->cost * ( $percentage / 100 );
-            $product->sale_price = $variation->cost + $extras;
-            if($product->save()){
-              DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
+    public function pushToEcommerce($id, BaseHttpResponse $response)
+    {
+        $thread = Threadorders::find($id);
+        $success = true;
+        if ($thread) {
+            $variations = get_thread_order_variations($thread->id);
+            /* $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+             $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+             $reg_quantity = $plus_quantity = 0;*/
+            foreach ($variations as $key => $variation) {
+                $check = Product::where('sku', $variation->sku)->first();
+                if (!$check) {
+                    $product = new Product();
+                    $product->name = $variation->name;
+                    $product->description = $variation->name;
+                    $product->status = "published";
+                    $product->sku = $variation->sku;
+                    $product->category_id = $variation->product_category_id;
+                    $product->quantity = $variation->quantity;
+                    $product->price = $variation->cost;
+                    $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
+                    $extras = $variation->cost * ($percentage / 100);
+                    $product->sale_price = $variation->cost + $extras;
+                    if ($product->save()) {
+                        DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
+                    }
+                } else {
+                    $check->quantity = $check->quantity + $variation->quantity;
+                    $check->save();
+                }
             }
-          }else{
-            $check->quantity = $check->quantity +  $variation->quantity;
-            // dd($check);
-            $check->save();
-          }
-      }
-    }else{$success = false;}
+        } else {
+            $success = false;
+        }
 
-    if($success){
-      return $response->setPreviousUrl(route('thread.index'))
-          ->setMessage('Order pushed to Ecommerce Successfully');
+        if ($success) {
+            return $response->setPreviousUrl(route('thread.index'))
+                ->setMessage('Order pushed to Ecommerce Successfully');
+        }
     }
-  }
+
+    public function showThreadOrderDetail($id, Request $request)
+    {
+        page_title()->setTitle('Thread Order Detail');
+
+        $orderDetail = $this->threadordersRepository->findOrFail($id);
+
+        return view('plugins/threadorders::threadOrderDetail', compact('orderDetail'));
+    }
+
 }
