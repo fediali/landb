@@ -295,7 +295,7 @@ class ThreadController extends BaseController
 
     public function show($id, Request $request, FormBuilder $formBuilder)
     {
-        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($id);
+        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric', 'spec_files'])->find($id);
 
         event(new BeforeEditContentEvent($request, $thread));
 
