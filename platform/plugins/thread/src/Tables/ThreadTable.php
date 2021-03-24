@@ -67,7 +67,33 @@ class ThreadTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('order', function ($item) {
-              $html = '<a href="'.route('thread.orderItem', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Order</a>';
+              $html = '<a href="javascript:void(0)" onclick="confirm_start()" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Order</a><script>function confirm_start(){
+                      swal({
+                          title: \'Are you sure?\',
+                          text: "Do you want to push this thread to Ecommerce!",
+                          icon: \'info\',
+                          buttons:{
+                              cancel: {
+                                text: "Cancel",
+                                value: null,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                              },
+                              confirm: {
+                                text: "Push",
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true
+                              }
+                            }
+                          }).then((result) => {
+                              if (result) {
+                                  location.replace("'.route('thread.orderItem', $item->id).'")
+                              }
+                          });
+                  }</script>';
               return $html;
             })
             ->editColumn('status', function ($item) {
