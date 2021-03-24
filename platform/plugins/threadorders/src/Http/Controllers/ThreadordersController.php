@@ -8,6 +8,7 @@ use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
+use Botble\Threadorders\Models\Threadorders;
 use Botble\Threadorders\Repositories\Interfaces\ThreadordersInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
@@ -204,7 +205,15 @@ class ThreadordersController extends BaseController
         unset($thread->updated_at);
         unset($thread->deleted_at);
 
+        $getTodayThreadOrderCnt = Threadorders::whereDate('created_at', date('Y-m-d'))->count();
+        if ($getTodayThreadOrderCnt) {
+            $po_gen = str_replace('-','',date('d-m-Y')).($getTodayThreadOrderCnt+1);
+        } else {
+            $po_gen = str_replace('-','',date('d-m-Y')).'1';
+        }
+
         $threadData = $thread->toArray();
+        $threadData['order_no'] = $po_gen;
         $threadData['thread_id'] = $requestData['thread_id'];
         $threadData['name'] = $requestData['name'];
         $threadData['pp_sample'] = $requestData['pp_sample'];

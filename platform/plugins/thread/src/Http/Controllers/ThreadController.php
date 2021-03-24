@@ -25,6 +25,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Thread\Forms\ThreadForm;
 use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -76,14 +77,6 @@ class ThreadController extends BaseController
     {
         $requestData = $request->input();
 
-        $getTodayThreadCnt = Thread::whereDate('created_at', date('Y-m-d'))->count();
-        if ($getTodayThreadCnt) {
-            $po_gen = str_replace('-','',date('d-m-Y')).($getTodayThreadCnt+1);
-        } else {
-            $po_gen = str_replace('-','',date('d-m-Y')).'1';
-        }
-
-        $requestData['order_no'] = $po_gen;
         $requestData['status'] = BaseStatusEnum::PENDING;
         $requestData['order_status'] = Thread::NEW;
         $requestData['created_by'] = auth()->user()->id;
@@ -92,10 +85,16 @@ class ThreadController extends BaseController
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
         $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
-        $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+        $regCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['regular_category_id']])->value('count') + 1;
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . $regCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['regular_category_id']], ['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['regular_category_id'], 'count'=>$regCnt]);
 
-        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
-        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
+        if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+            $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+            $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id']])->value('count') + 1;
+            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id']], ['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id'], 'count'=>$pluCnt]);
+        }
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
             if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -158,11 +157,29 @@ class ThreadController extends BaseController
 
         $this->threadRepository->createOrUpdate($thread);
 
-        $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
-        $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+        $reg_category = $thread->regular_product_categories()->value('product_category_id');
+        $plu_category = $thread->plus_product_categories()->value('product_category_id');
 
-        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
-        $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
+        if ($reg_category) {
+            $regCnt = DB::table('category_designer_count')->where(['user_id'=>$thread->designer_id, 'product_category_id'=>$reg_category])->value('count') - 1;
+            DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$reg_category], ['user_id'=>$thread->designer_id, 'product_category_id'=>$reg_category, 'count'=>$regCnt]);
+        }
+        if ($plu_category) {
+            $regCnt = DB::table('category_designer_count')->where(['user_id'=>$thread->designer_id, 'product_category_id'=>$plu_category])->value('count') - 1;
+            DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$plu_category], ['user_id'=>$thread->designer_id, 'product_category_id'=>$plu_category, 'count'=>$regCnt]);
+        }
+
+        $reg = ProductCategory::where('id', $requestData['regular_category_id'])->value('name');
+        $regCnt = DB::table('category_designer_count')->where(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['regular_category_id']])->value('count') + 1;
+        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($reg, 0, 2) . $regCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['regular_category_id']], ['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['regular_category_id'], 'count'=>$regCnt]);
+
+        if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+            $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
+            $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id']])->value('count') + 1;
+            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id']], ['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id'], 'count'=>$pluCnt]);
+        }
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
             if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -250,17 +267,21 @@ class ThreadController extends BaseController
         $plu_category = $requestData->plus_product_categories()->value('product_category_id');
 
         $reg = ProductCategory::where('id', $reg_category)->value('name');
-        $plu = ProductCategory::where('id', $plu_category)->value('name');
+        $regCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData->designer_id, 'product_category_id'=>$reg_category])->value('count') + 1;
+        $reg_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($reg, 0, 2) . $regCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData->designer_id, 'product_category_id'=>$reg_category], ['user_id'=>$requestData->designer_id, 'product_category_id'=>$reg_category, 'count'=>$regCnt]);
 
-        $reg_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($reg, 0, 2) . Str::random(4));
-        $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . Str::random(4));
+        if ($plu_category > 0) {
+            $plu = ProductCategory::where('id', $plu_category)->value('name');
+            $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category])->value('count') + 1;
+            $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category], ['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category, 'count'=>$pluCnt]);
+        }
 
         unset($requestData->id);
         unset($requestData->created_at);
         unset($requestData->updated_at);
         unset($requestData->deleted_at);
-
-        $requestData->order_no = strtoupper(Str::random(8));
 
         $thread = $this->threadRepository->createOrUpdate($requestData->toArray());
 
