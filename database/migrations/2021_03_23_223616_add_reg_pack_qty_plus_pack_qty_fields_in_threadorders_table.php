@@ -14,8 +14,8 @@ class AddRegPackQtyPlusPackQtyFieldsInThreadordersTable extends Migration
     public function up()
     {
         Schema::table('threadorders', function (Blueprint $table) {
-            $table->tinyInteger('reg_pack_qty')->after('fabric_print_direction')->default(0);
-            $table->tinyInteger('plus_pack_qty')->after('fabric_print_direction')->default(0);
+            $table->tinyInteger('reg_pack_qty')->after('fabric_print_direction')->nullable()->default(0);
+            $table->tinyInteger('plus_pack_qty')->after('fabric_print_direction')->nullable()->default(0);
         });
     }
 
