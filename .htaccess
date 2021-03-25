@@ -17,17 +17,20 @@
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+
+    RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
+    RewriteRule (.+) /public/$1 [L]
+
+    RewriteRule ^ /public/index.php [L]
 </IfModule>
 
 RewriteEngine on
 
 # serve existing files in the /public folder as if they were in /
-RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
-RewriteRule (.+) /public/$1 [L]
+
 
 # route everything else to /public/index.php
-RewriteRule ^ /public/index.php [L]
+
 
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php72” package as the default “PHP” programming language.
