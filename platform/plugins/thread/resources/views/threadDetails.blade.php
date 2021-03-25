@@ -547,6 +547,11 @@
 
 <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 <style>
+
+    .col-md-3.right-sidebar {
+        display: none;
+    }
+
     .details-table td {
         border: 1px solid black;
     }

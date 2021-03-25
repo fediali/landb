@@ -15,6 +15,7 @@ use Botble\Thread\Models\Thread;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Threadorders extends BaseModel
 {
@@ -163,4 +164,10 @@ class Threadorders extends BaseModel
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
+
+    public function getThreadOrderVariationsAttribute()
+    {
+        return DB::table('thread_order_variations')->where('thread_order_id', $this->id)->get();
+    }
+
 }

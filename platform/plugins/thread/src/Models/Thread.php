@@ -52,7 +52,7 @@ class Thread extends BaseModel
         'designer_id',
         'vendor_id',
         'season_id',
-        'order_no',
+        //'order_no',
         'order_status',
         'pp_sample',
         'pp_sample_size',
@@ -136,6 +136,8 @@ class Thread extends BaseModel
             if (isset(auth()->user()->roles[0])) {
                 if (auth()->user()->roles[0]->slug == 'designer') {
                     $query->where('designer_id', auth()->user()->id);
+                } else if (auth()->user()->roles[0]->slug == 'vendor') {
+                    $query->where('vendor_id', auth()->user()->id);
                 }
             }
         });
