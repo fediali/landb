@@ -4,23 +4,19 @@
     </IfModule>
 
     RewriteEngine On
-
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
-
 </IfModule>
 
 # serve existing files in the /public folder as if they were in /
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
