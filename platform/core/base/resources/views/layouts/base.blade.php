@@ -58,29 +58,29 @@
 
 {!! apply_filters(BASE_FILTER_FOOTER_LAYOUT_TEMPLATE, null) !!}
 
-<script>
-  window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
-</script>
-<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
-{{--
-<script src="{{ url('public/vendor/core/core/base/js/laravel-echo-setup.js') }}" type="text/javascript"></script>
---}}
-<script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
+{{--<script>--}}
+{{--  window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';--}}
+{{--</script>--}}
+{{--<script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>--}}
+{{----}}
+{{--<script src="{{ url('public/vendor/core/core/base/js/laravel-echo-setup.js') }}" type="text/javascript"></script>--}}
+{{----}}
+{{--<script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>--}}
 
-<script type="text/javascript">
-  window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
-      .listen('.ThreadEvent', (data) => {
-  toastr['success'](data.title, 'New Thread Notification');
-  });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
-<script>
-    $('.carousel').owlCarousel({
-      center: false,
-      nav: true,
-      items: 1,
-      margin: 1
-    });
-</script>
+{{--<script type="text/javascript">--}}
+{{--  window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')--}}
+{{--      .listen('.ThreadEvent', (data) => {--}}
+{{--  toastr['success'](data.title, 'New Thread Notification');--}}
+{{--  });--}}
+{{--</script>--}}
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>--}}
+{{--<script>--}}
+{{--    $('.carousel').owlCarousel({--}}
+{{--      center: false,--}}
+{{--      nav: true,--}}
+{{--      items: 1,--}}
+{{--      margin: 1--}}
+{{--    });--}}
+{{--</script>--}}
 </body>
 </html>
