@@ -3,11 +3,8 @@
         Options -MultiViews -Indexes
     </IfModule>
 
-    <IfModule mod_headers.c>
-    	Header set Access-Control-Allow-Origin "*"
-    </IfModule>
-
     RewriteEngine On
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -23,14 +20,6 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# Disable index view
-Options -Indexes
-
-# Hide a specific file
-<Files .env>
-    Order allow,deny
-    Deny from all
-</Files>
 
 
 # php -- BEGIN cPanel-generated handler, do not edit
