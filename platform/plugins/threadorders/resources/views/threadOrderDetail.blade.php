@@ -1,14 +1,7 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <div class="page-content " style="min-height: 1111px;">
-
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{url('/admin')}}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Threads</li>
-            <li class="breadcrumb-item active">View Order</li>
-        </ol>
-
+    <div class="p-3 bg-white" >   
         <div class="clearfix"></div>
 
         <div id="main">
@@ -61,14 +54,16 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-12 mb-3">
+                <div class="col-lg-12 ">
                     <h5 class="mb-0"> THREAD VARIATIONS </h5>
                 </div>
             </div>
 
             @foreach($orderDetail->thread_order_variations as $variation)
                 <div class="row">
+                <div class="col-lg-12 mb-3">
                     <h5 class="variation-text"> {{$variation->name}} </h5>
+                </div> 
                     <div class="col-lg-3">
                         <p class="m-0 heading">Regular Qty</p>
                         <p>{{$variation->name}}</p>
@@ -103,8 +98,8 @@
         color: #696969;
     }
     .btn-red {
-        background-color: #d64635;
-        border-color: #d64635;
-        color: #fff;
+        background-color: #d64635 !important;
+        border-color: #d64635 !important;
+        color: #fff !important;
     }
 </style>
