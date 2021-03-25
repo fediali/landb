@@ -18,16 +18,18 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
 
-    RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
-    RewriteRule (.+) /public/$1 [L]
+
 
     RewriteRule ^ /public/index.php [L]
 </IfModule>
 
-RewriteEngine on
-
 # serve existing files in the /public folder as if they were in /
 
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
 
 # route everything else to /public/index.php
 
