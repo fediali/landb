@@ -60,6 +60,17 @@
 
 <script>
   window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
+  function pushNotification(data){
+    var html = '<div class="dropdown-divider"></div>\n' +
+        '    <a href="'+data.url+'" class="dropdown-item" style="white-space: normal">\n' +
+        '         <i class="fas fa-volume-up mr-2"></i>'+data.message+' \n' +
+        '         <span class="float-right text-muted text-sm">'+data.created_at+'</span>\n' +
+        '    </a>';
+    $('.notifications-dropdown').prepend(html);
+    var $span = $('.notification-count');
+    $span.text(Number($('#notification-count').text()) + 1);
+    $span.show();
+  }
 </script>
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 {{--
@@ -70,7 +81,15 @@
 <script type="text/javascript">
   window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
       .listen('.ThreadEvent', (data) => {
+  toastr['success'](data.message, 'New Thread Notification');
+  pushNotification(data);
+  });
+  window.Echo.channel('thread_approved')
+      .listen('.ThreadApprovalEvent', (data) => {
   toastr['success'](data.title, 'New Thread Notification');
+  var $span = $('.notification-count');
+  $span.text(Number($('#notification-count').text()) + 1);
+  $span.show();
   });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>

@@ -8,11 +8,13 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
-class NotifyManager implements ShouldBroadcast
+class NotifyManager implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,11 +26,18 @@ class NotifyManager implements ShouldBroadcast
     protected $vendor;
     protected $thread;
     protected $designer;
+    protected $message;
+    protected $url;
     public function __construct($vendor, $designer, $thread)
     {
         $this->thread = $thread;
         $this->vendor = $vendor;
         $this->designer = $designer;
+
+        $this->message = 'A new thread has been created by the Designer ( '.$this->designer->first_name.' '.$this->designer->last_name.' )';
+        $this->url = route('thread.details', $this->thread->id);
+
+        generate_notification($this->message, $this->designer->id, $this->vendor->id, $this->url);
     }
 
     /**
@@ -48,6 +57,6 @@ class NotifyManager implements ShouldBroadcast
 
     public function broadcastWith()
     {
-      return ['title'=>'A thread has been added by Designer ( '.$this->designer->first_name.' '.$this->designer->last_name.' )', 'thread' => $this->thread];
+      return ['message'=>$this->message, 'thread' => $this->thread,'url' => $this->url, 'created_at' => $this->thread->created_at->diffForHumans(), ''];
     }
 }

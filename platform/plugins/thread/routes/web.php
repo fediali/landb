@@ -66,7 +66,7 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'permission' => 'thread.create',
             ]);
             Route::get('pushEvent', function (){
-              broadcast(new \App\Events\NotifyManager(\App\Models\User::find(1) , \Botble\Thread\Models\Thread::find(3)));
+              event(new \App\Events\ThreadApproval());
               return 'ok';
             });
         });

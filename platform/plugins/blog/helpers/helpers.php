@@ -439,3 +439,22 @@ if (!function_exists('parse_date')) {
         return date('d F, Y', strtotime($date));
     }
 }
+
+if (!function_exists('generate_notification')) {
+    function generate_notification($message, $from, $to, $url)
+    {
+        $notify = new \App\Models\Notification();
+        $notify->message = $message;
+        $notify->from = $from;
+        $notify->to = $to;
+        $notify->url = $url;
+        return $notify->save();
+    }
+}
+
+if (!function_exists('get_user_notifications')) {
+    function get_user_notifications()
+    {
+        return \App\Models\Notification::where('to', \Illuminate\Support\Facades\Auth::user()->id)->latest()->limit(10)->get();
+    }
+}
