@@ -45,15 +45,6 @@ class ThreadordersForm extends FormAbstract
                 ],
                 'choices'    => $vendors,
             ])
-            ->add('order_no', 'text', [
-                'label'      => 'Order No.',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Order No.',
-                    'data-counter' => 120,
-                    'readonly'
-                ],
-            ])
             ->add('regular_category_id', 'customSelect', [
                 'label'      => 'Select Regular Category',
                 'label_attr' => ['class' => 'control-label required'],

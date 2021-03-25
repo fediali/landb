@@ -30,17 +30,29 @@
                 </li>
             @endif
 
-            <li class="dropdown dropdown-user">
-                <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{--<img alt="{{ Auth::user()->getFullName() }}" class="rounded-circle" src="{{ Auth::user()->avatar_url }}" />--}}
-                    <span class="username"> Notifications </span>
-                    <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ route('users.profile.view', Auth::user()->getKey()) }}"><i class="icon-user"></i> {{ trans('core/base::layouts.profile') }}</a></li>
-                    <li><a href="{{ route('access.logout') }}" class="btn-logout"><i class="icon-key"></i> {{ trans('core/base::layouts.logout') }}</a></li>
-                </ul>
-            </li>
+
+                <li class=" dropdown dropdown-user">
+                    @php
+                        $notifications = get_user_notifications();
+                    @endphp
+                    <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{--<img alt="{{ Auth::user()->getFullName() }}" class="rounded-circle" src="{{ Auth::user()->avatar_url }}" />--}}
+                        <span class="username"><span class="badge badge-primary notification-count" @if(!count($notifications)) hidden @endif>{{count($notifications)}}</span> Notifications </span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right notifications-dropdown" style="left: inherit; right: 0px; width:500px">
+                        <span class="dropdown-item dropdown-header"><span id="notification-count" class="notification-count">{{count($notifications)}}</span> Notification(s)</span>
+                        @if(count($notifications))
+                            @foreach($notifications as $notification)
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ $notification->url }}" class="dropdown-item" style="white-space: normal">
+                                    <i class="fas fa-volume-up mr-2"></i> {{ $notification->message }}
+                                    <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                                </a>
+                            @endforeach
+                        @endif
+                    </div>
+                </li>
 
             <li class="dropdown dropdown-user">
                 <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
