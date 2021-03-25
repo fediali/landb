@@ -3,3 +3,14 @@
 </IfModule>
 
 
+<IfModule mod_rewrite.c>
+   <IfModule mod_negotiation.c>
+       Options -MultiViews -Indexes
+   </IfModule>
+ RewriteEngine on
+ # serve existing files in the /public folder as if they were in /
+ RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
+ RewriteRule (.+) /public/$1 [L]
+ # route everything else to /public/index.php
+ RewriteRule ^ /public/index.php [L]
+ </IfModule>
