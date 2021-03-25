@@ -4,13 +4,24 @@
 
 
 <IfModule mod_rewrite.c>
-   <IfModule mod_negotiation.c>
-       Options -MultiViews -Indexes
-   </IfModule>
- RewriteEngine on
- # serve existing files in the /public folder as if they were in /
- RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
- RewriteRule (.+) /public/$1 [L]
- # route everything else to /public/index.php
- RewriteRule ^ /public/index.php [L]
- </IfModule>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
