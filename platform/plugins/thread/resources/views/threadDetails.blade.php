@@ -47,7 +47,7 @@
                     <!-- /.col -->
                     <div class="col-sm-4 border-right">
                         <div class="description-block">
-                            <h5 class="description-header">{{ get_total_designs() }}</h5>
+                            <h5 class="description-header">{{ get_total_designs($thread->designer_id) }}</h5>
                             <span class="description-text font-bold font-12">Total Design</span>
                         </div>
                         <!-- /.description-block -->
@@ -55,7 +55,7 @@
                     <!-- /.col -->
                     <div class="col-sm-4">
                         <div class="description-block">
-                            <h5 class="description-header">{{ get_approved_designs() }}</h5>
+                            <h5 class="description-header">{{ get_approved_designs($thread->designer_id) }}</h5>
                             <span class="description-text font-bold font-12">Approved Design</span>
                         </div>
                         <!-- /.description-block -->

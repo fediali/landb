@@ -2,6 +2,7 @@
 
 namespace Botble\Threadorders\Http\Controllers;
 
+use App\Models\InventoryHistory;
 use Botble\ACL\Models\UserOtherEmail;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
@@ -21,6 +22,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Threadorders\Forms\ThreadordersForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -303,11 +305,16 @@ class ThreadordersController extends BaseController
     {
         $thread = Threadorders::find($id);
         $success = true;
+        $exist = false;
         if ($thread) {
             $variations = get_thread_order_variations($thread->id);
             /* $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
              $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
              $reg_quantity = $plus_quantity = 0;*/
+            if(!count($variations)){
+              return $response->setPreviousUrl(route('thread.index'))
+                  ->setError('No variations exists against this order!');
+            }
             foreach ($variations as $key => $variation) {
                 $check = Product::where('sku', $variation->sku)->first();
                 if (!$check) {
@@ -317,24 +324,35 @@ class ThreadordersController extends BaseController
                     $product->status = "published";
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
-                    $product->quantity = $variation->quantity;
+                    $product->quantity = 0;
                     $product->price = $variation->cost;
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
                     $extras = $variation->cost * ($percentage / 100);
                     $product->sale_price = $variation->cost + $extras;
                     if ($product->save()) {
                         DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
+                        InventoryHistory::create([
+                                'product_id' => $product->id,
+                                'quantity' => $variation->quantity,
+                                'new_stock' => $variation->quantity,
+                                'old_stock' => 0,
+                                'created_by' => Auth::user()->id,
+                                'order_id' => $thread->id,
+                                'reference' => 'threadorders.push_to_ecommerce'
+                        ]);
                     }
                 } else {
-                    $check->quantity = $check->quantity + $variation->quantity;
-                    $check->save();
+                  $exist = true;
                 }
             }
         } else {
             $success = false;
         }
 
-        if ($success) {
+        if ($exist) {
+            return $response->setPreviousUrl(route('thread.index'))
+                ->setMessage('One or more variations already exists in Ecommerce');
+        }if ($success) {
             return $response->setPreviousUrl(route('thread.index'))
                 ->setMessage('Order pushed to Ecommerce Successfully');
         }

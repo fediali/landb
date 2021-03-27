@@ -101,7 +101,8 @@ class ProductTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('products.edit', 'products.destroy', $item);
+              $html= '<a href="'.route('products.inventory_history', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
+                return $this->getOperations('products.edit', 'products.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
