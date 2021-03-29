@@ -59,6 +59,36 @@ class InventoryTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
+            ->editColumn('ecommerce', function ($item) {
+              $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('inventory.pushToEcommerce', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
+                      swal({
+                          title: \'Are you sure?\',
+                          text: "Do you want to push this Order to Ecommerce!",
+                          icon: \'info\',
+                          buttons:{
+                              cancel: {
+                                text: "Cancel",
+                                value: null,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                              },
+                              confirm: {
+                                text: "Push",
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true
+                              }
+                            }
+                          }).then((result) => {
+                              if (result) {
+                                  location.replace(url)
+                              }
+                          });
+                  }</script>';
+              return $html;
+            })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -116,6 +146,11 @@ class InventoryTable extends TableAbstract
             'status' => [
                 'name'  => 'inventories.status',
                 'title' => trans('core/base::tables.status'),
+                'width' => '100px',
+            ],
+            'ecommerce' => [
+                'name'  => 'Ecommerce',
+                'title' => 'Ecommerce',
                 'width' => '100px',
             ],
         ];

@@ -29,8 +29,9 @@
                 @if(!empty($history->order_id))
                     <a href="{{ route('threadorders.threadOrderDetail', ['id' => $history->order->id]) }}" target="_blank">Order #{{ $history->order->order_no }}</a>
                     <p class="muted"><small>Status: ThreadOrder &gt; {{ $history->order->status }}</small></p>
-                @elseif(!empty($history->order_id))
-                    <a href="" target="_blank">Inventory Id:{{ $history->inventory->id }}</a>
+                @elseif(!empty($history->inventory_id))
+                    <a href="{{ route('inventory.edit', ['inventory' => $history->inventory->id]) }}" target="_blank">Inventory ID: {{ $history->inventory->id }}</a>
+                    <p class="muted"><small>Status: Inventory &gt; {{ $history->inventory->status }}</small></p>
                 @endif
 
             </td>
