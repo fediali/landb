@@ -95,7 +95,7 @@ class ThreadController extends BaseController
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
             $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
             $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id']])->value('count') + 1;
-            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt.'-X');
             DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id']], ['user_id'=>$requestData['designer_id'], 'product_category_id'=>$requestData['plus_category_id'], 'count'=>$pluCnt]);
         }
 
@@ -185,7 +185,7 @@ class ThreadController extends BaseController
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
             $plu = ProductCategory::where('id', $requestData['plus_category_id'])->value('name');
             $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id']])->value('count') + 1;
-            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            $plu_sku = strtoupper(substr($thread->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt.'-X');
             DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id']], ['user_id'=>$thread->designer_id, 'product_category_id'=>$requestData['plus_category_id'], 'count'=>$pluCnt]);
         }
 
@@ -282,7 +282,7 @@ class ThreadController extends BaseController
         if ($plu_category > 0) {
             $plu = ProductCategory::where('id', $plu_category)->value('name');
             $pluCnt = DB::table('category_designer_count')->where(['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category])->value('count') + 1;
-            $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt);
+            $plu_sku = strtoupper(substr($requestData->designer->first_name, 0, 2) . substr($plu, 0, 2) . $pluCnt.'-X');
             DB::table('category_designer_count')->updateOrInsert(['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category], ['user_id'=>$requestData->designer_id, 'product_category_id'=>$plu_category, 'count'=>$pluCnt]);
         }
 
