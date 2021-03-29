@@ -276,36 +276,43 @@ $variations = $options['data']['variations'];
 </div>
 
 
-<div class="modal fade in" id="modal-default" style="display: none; padding-right: 17px;">
+<div class="modal modal-thread fade in" id="modal-default" style="display: none; padding-right: 17px;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header">                
+                    <div class="d-flex w-100">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Add More Fabric to <span class="variation-name"></span></h4>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span class="variation-name"></span></h4>
+
+                    <div>
+                        
+                    </div>
+                        
+                    </div>
             </div>
                 <div class="modal-body">
-                    <p>
-                        <label for="name">Variation Name:</label>
+                    <div>
+                        <label class="font-bold" for="name">Variation Name:</label>
                         <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
-                        <label for="print_id">Print / Solid:</label>
+                        <label class="mt-4 font-bold" for="print_id">Print / Solid:</label>
                         <input type="hidden" class="print_id" id="variation_print_id" name="print_id">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown dropdown-thread">
+                        <button class="btn btn-secondary dropdown-toggle text-left w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Select Print
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             @foreach($options['data']['printdesigns'] as $key => $print)
-                                <a class="dropdown-item print_id_droper" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
+                                <a class="dropdown-item print_id_droper" href="javascript:void(0)" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                             @endforeach
                         </div>
                     </div>
                         <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
-                    </p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input class="btn btn-primary" value="Save" id="submitVariationFabric">
+                    <input class="btn btn-primary save-thread" value="Save" id="submitVariationFabric">
                 </div>
         </div>
         <!-- /.modal-content -->
