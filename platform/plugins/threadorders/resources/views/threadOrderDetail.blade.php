@@ -1,8 +1,10 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <div class="p-3 bg-white" >   
+    <div class="p-3 bg-white" >
         <div class="clearfix"></div>
+
+        
 
         <div id="main">
             <div class="row">
@@ -63,7 +65,7 @@
                 <div class="row">
                 <div class="col-lg-12 mb-3">
                     <h5 class="variation-text"> {{$variation->name}} </h5>
-                </div> 
+                </div>
                     <div class="col-lg-3">
                         <p class="m-0 heading">Regular Qty</p>
                         <p>{{$variation->name}}</p>
@@ -81,7 +83,7 @@
 
             <div class="row">
                 <div class="col-lg-12 text-right">
-                    <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" class="btn btn-icon btn-sm btn-red pl-4 pr-4">Tech Pack</a>
+                    <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
                 </div>
             </div>
         </div>
