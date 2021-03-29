@@ -153,6 +153,15 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => Thread::$order_statuses,
             ])*/
+            ->add('thread_status', 'customSelect', [
+                'label'      => 'Select Thread Status',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => 'Select Thread Status',
+                    'class' => 'select-search-full',
+                ],
+                'choices'    => Thread::$thread_statuses,
+            ])
             ->add('shipping_method', 'customSelect', [
                 'label'      => 'Select Shipping Method',
                 'label_attr' => ['class' => 'control-label required'],
@@ -185,7 +194,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('label', 'text', [
                 'label'      => 'Label',
-                'label_attr' => ['class' => 'control-label'],
+                'label_attr' => ['class' => 'control-label label-ip'],
                 'attr'       => [
                     'placeholder'  => 'Label',
                     'data-counter' => 120,
@@ -225,6 +234,6 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Tech Spec File',
                 'label_attr' => ['class' => 'control-label'],
             ])*/
-            ->setBreakFieldPoint('shipping_method');
+            ->setBreakFieldPoint('thread_status');
     }
 }

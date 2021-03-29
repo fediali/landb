@@ -85,9 +85,11 @@
           if (this.checked) {
               $('div#denim-fields').removeClass('hidden');
               $('label.material-ip').parent().parent().parent().hide();
+              $('label.label-ip').parent().parent().parent().show();
           } else {
               $('div#denim-fields').addClass('hidden');
               $('label.material-ip').parent().parent().parent().show();
+              $('label.label-ip').parent().parent().parent().hide();
           }
       });
 
@@ -95,10 +97,10 @@
           var pp_sample_date = new Date($('#order_date').val());
           pp_sample_date.setDate(pp_sample_date.getDate() + 50);
           if ($(this).val() == 'yes') {
-              $('#pp_sample_date').val(pp_sample_date).trigger('change');
+              // $('#pp_sample_date').val(pp_sample_date).trigger('change');
               // $('#pp_sample_date').datepicker('setDate', pp_sample_date);
           } else {
-              $('#pp_sample_date').val('');
+              // $('#pp_sample_date').val('');
           }
       });
 

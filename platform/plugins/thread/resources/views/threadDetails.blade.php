@@ -2,9 +2,10 @@
 <?php $variations = $options['data']['variations']; ?>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                role="tab" aria-controls="home" aria-selected="true">Details
-        </button>
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Details</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{{route('thread.edit', $thread->id)}}">Edit</a>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -323,7 +324,7 @@
                     <div class="style_specification">
                         <div class="row ">
                             <div class="col-md-4 ">
-                                <h4>Style</h4>  
+                                <h4>Style</h4>
                                 <div class="slideshow-container mt-4">
 
                                 <div class="mySlides fade">
@@ -348,9 +349,9 @@
                                 <br>
 
                                 <div style="text-align:center">
-                                <span class="dot"></span> 
-                                <span class="dot"></span> 
-                                <span class="dot"></span> 
+                                <span class="dot"></span>
+                                <span class="dot"></span>
+                                <span class="dot"></span>
                                 </div>
                              </div>
                             <div class="col-md-8">
@@ -562,7 +563,7 @@
 
     .main-form {
         width: 125% !important;
-    } 
+    }
 
 
     .mySlides {display: none;}
@@ -619,12 +620,12 @@ img {vertical-align: middle;}
 }
 
 @-webkit-keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .4}
   to {opacity: 1}
 }
 
 @keyframes fade {
-  from {opacity: .4} 
+  from {opacity: .4}
   to {opacity: 1}
 }
 
@@ -644,14 +645,14 @@ function showSlides() {
   var slides = document.getElementsByClassName("mySlides");
   var dots = document.getElementsByClassName("dot");
   for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
+    slides[i].style.display = "none";
   }
   slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
+  if (slideIndex > slides.length) {slideIndex = 1}
   for (i = 0; i < dots.length; i++) {
     dots[i].className = dots[i].className.replace(" active-slider", "");
   }
-  slides[slideIndex-1].style.display = "block";  
+  slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active-slider";
   setTimeout(showSlides, 2000); // Change image every 2 seconds
 }

@@ -4,8 +4,6 @@
     <div class="p-3 bg-white" >
         <div class="clearfix"></div>
 
-        
-
         <div id="main">
             <div class="row">
                 <div class="col-lg-12 mb-3">
@@ -23,12 +21,12 @@
                 </div>
                 <div class="col-lg-3">
                     <p class="m-0 heading"> Regular Category</p>
-                    <p>{{$orderDetail->thread->regular_product_categories[0]->name}}</p>
+                    <p>{{@$orderDetail->threadOrderVariations(\Botble\Thread\Models\Thread::REGULAR)[0]->cat_name}}</p>
                 </div>
-                @if(isset($orderDetail->thread->plus_product_categories[0]->name))
+                @if(isset($orderDetail->threadOrderVariations(\Botble\Thread\Models\Thread::PLUS)[0]->cat_name))
                     <div class="col-lg-3">
                         <p class="m-0 heading"> Plus Category</p>
-                        <p>{{@$orderDetail->thread->plus_product_categories[0]->name}}</p>
+                        <p>{{@$orderDetail->threadOrderVariations(\Botble\Thread\Models\Thread::PLUS)[0]->cat_name}}</p>
                     </div>
                 @endif
                 <div class="col-lg-3">
@@ -37,7 +35,11 @@
                 </div>
                 <div class="col-lg-3">
                     <p class="m-0 heading">PP Sample Date</p>
-                    <p>{{date('d F, Y', strtotime($orderDetail->pp_sample_date))}}</p>
+                    @if($orderDetail->pp_sample == \Botble\Thread\Models\Thread::YES)
+                        <p>{{date('d F, Y', strtotime($orderDetail->pp_sample_date))}}</p>
+                    @else
+                        <p>N/A</p>
+                    @endif
                 </div>
                 <div class="col-lg-3">
                     <p class="m-0 heading"> PP Sample</p>
@@ -54,26 +56,30 @@
                     <p>{{$orderDetail->shipping_method}}</p>
                 </div>
             </div>
-            
-            <div class="p-3 mb-3 thread-area"> 
+
+            <div class="p-3 mb-3 thread-area">
             <div class="row">
                 <div class="col-lg-12 ">
                     <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
                 </div>
             </div>
-
-            @foreach($orderDetail->thread_order_variations as $variation)
+            <br>
+            @foreach($orderDetail->threadOrderVariations() as $variation)
                 <div class="row">
-                <div class="col-lg-12 mb-3">
-                    <h5 class="variation-text"> {{$variation->name}} </h5>
-                </div>
-                    <div class="col-lg-3">
-                        <p class="m-0 heading">Regular Qty</p>
-                        <p>{{$variation->name}}</p>
+                    <div class="col-lg-12 mb-3">
+                        <h5 class="variation-text">{{$loop->iteration}}. {{$variation->name}} </h5>
                     </div>
                     <div class="col-lg-3">
-                        <p class="m-0 heading">Plus Qty</p>
-                        <p>{{$variation->name}}</p>
+                        <p class="m-0 heading">SKU</p>
+                        <p>{{$variation->sku}}</p>
+                    </div>
+                    <div class="col-lg-3">
+                        <p class="m-0 heading">Type</p>
+                        <p>{{$variation->category_type}}</p>
+                    </div>
+                    <div class="col-lg-3">
+                        <p class="m-0 heading">Qty</p>
+                        <p>{{$variation->quantity}}</p>
                     </div>
                     <div class="col-lg-3">
                         <p class="m-0 heading">Cost</p>
@@ -81,7 +87,7 @@
                     </div>
                 </div>
             @endforeach
-            </div>    
+            </div>
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
@@ -116,6 +122,6 @@
         font-size:16px !important;
     }
     .order-detail {
-        font-size:20px !important;        
+        font-size:20px !important;
     }
 </style>

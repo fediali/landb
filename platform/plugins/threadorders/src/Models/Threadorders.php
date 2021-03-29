@@ -53,6 +53,7 @@ class Threadorders extends BaseModel
         'season_id',
         'order_no',
         'order_status',
+        'thread_status',
         'pp_sample',
         'pp_sample_size',
         'pp_sample_date',
@@ -165,9 +166,16 @@ class Threadorders extends BaseModel
         return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
 
-    public function getThreadOrderVariationsAttribute()
+    public function threadOrderVariations($type=false)
     {
-        return DB::table('thread_order_variations')->where('thread_order_id', $this->id)->get();
+        return DB::table('thread_order_variations')->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name')
+            ->join('ec_product_categories', 'ec_product_categories.id', 'thread_order_variations.product_category_id')
+            ->where('thread_order_id', $this->id)
+            ->when($type, function($q) use($type) {
+                $q->where('category_type', $type);
+            })
+            ->orderBy('category_type')
+            ->get();
     }
 
 }

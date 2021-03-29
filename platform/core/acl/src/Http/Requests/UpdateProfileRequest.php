@@ -14,12 +14,14 @@ class UpdateProfileRequest extends Request
      */
     public function rules()
     {
+        $id = Request::segment(5);
         return [
-            'username'   => 'required|max:30|min:4',
+            'username'   => "required|max:30|min:4|unique:users,username,{$id}",
             'first_name' => 'required|max:60|min:2',
             'last_name'  => 'required|max:60|min:2',
-            'email'      => 'required|max:60|min:6|email',
-            'other_emails.*' => 'email'
+            'email'      => "required|max:60|min:6|email|unique:users,email,{$id}",
+            'other_emails.*' => 'email',
+            'name_initials' => "unique:users,name_initials,{$id}",
         ];
     }
 

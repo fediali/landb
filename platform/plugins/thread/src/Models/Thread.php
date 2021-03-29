@@ -54,6 +54,7 @@ class Thread extends BaseModel
         'season_id',
         //'order_no',
         'order_status',
+        'thread_status',
         'pp_sample',
         'pp_sample_size',
         'pp_sample_date',
@@ -101,6 +102,16 @@ class Thread extends BaseModel
         self::NEW => self::NEW,
         self::REORDER => self::REORDER,
         self::CANCEL => self::CANCEL,
+    ];
+
+    public const SPECIAL = 'special';
+    public const PRIVATE = 'private';
+
+    public static $thread_statuses = [
+        self::NEW => self::NEW,
+        self::REORDER => self::REORDER,
+        self::SPECIAL => self::SPECIAL,
+        self::PRIVATE => self::PRIVATE,
     ];
 
     public const YES = 'yes';

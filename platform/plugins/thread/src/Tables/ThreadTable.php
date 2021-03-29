@@ -67,13 +67,15 @@ class ThreadTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->addColumn('create_thread_order', function ($item) {
-              if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && $item->thread_has_order) {
-                return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
-              } elseif ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
-                return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i> Order</a>';
-              } else {
-                return 'N/A';
-              }
+                if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && count($item->thread_variations)) {
+                    if ($item->thread_has_order) {
+                        return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
+                    } else {
+                        return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i> Order</a>';
+                    }
+                } else {
+                    return 'N/A';
+                }
             })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();
