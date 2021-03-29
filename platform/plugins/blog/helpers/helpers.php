@@ -376,17 +376,17 @@ if (!function_exists('get_plu_product_categories_custom')) {
 }
 
 if (!function_exists('get_total_designs')) {
-    function get_total_designs()
+    function get_total_designs($id)
     {
-        return \Botble\Thread\Models\Thread::where('created_by', \Illuminate\Support\Facades\Auth::user()->id)->count();
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->count();
     }
 }
 
 
 if (!function_exists('get_approved_designs')) {
-    function get_approved_designs()
+    function get_approved_designs($id)
     {
-        return \Botble\Thread\Models\Thread::where('created_by', \Illuminate\Support\Facades\Auth::user()->id)->where('status', 'approved')->count();
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->where('status', 'approved')->count();
     }
 }
 

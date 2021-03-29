@@ -142,6 +142,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'products.index',
             ]);
 
+            Route::get('inventory_history/{id}', [
+                'as'         => 'inventory_history',
+                'uses'       => 'ProductController@inventory_history',
+                'permission' => 'products.index',
+            ]);
+
             Route::post('update-order-by', [
                 'as'         => 'update-order-by',
                 'uses'       => 'ProductController@postUpdateOrderby',

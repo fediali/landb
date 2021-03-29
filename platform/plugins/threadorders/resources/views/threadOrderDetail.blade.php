@@ -9,7 +9,7 @@
         <div id="main">
             <div class="row">
                 <div class="col-lg-12 mb-3">
-                    <h5>ORDER DETAIL </h5>
+                    <h5 class="order-detail">ORDER DETAIL </h5>
                 </div>
             </div>
             <div class="row">
@@ -54,10 +54,11 @@
                     <p>{{$orderDetail->shipping_method}}</p>
                 </div>
             </div>
-
+            
+            <div class="p-3 mb-3 thread-area"> 
             <div class="row">
                 <div class="col-lg-12 ">
-                    <h5 class="mb-0"> THREAD VARIATIONS </h5>
+                    <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
                 </div>
             </div>
 
@@ -80,7 +81,7 @@
                     </div>
                 </div>
             @endforeach
-
+            </div>    
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
@@ -103,5 +104,18 @@
         background-color: #d64635 !important;
         border-color: #d64635 !important;
         color: #fff !important;
+    }
+    .thread-area {
+        background: #f3f3f3;
+        border-radius: 10px;
+        -moz-box-shadow: 0 0 5px #999;
+        -webkit-box-shadow: 0 0 5px #999;
+        box-shadow: 0 0 5px #999;
+    }
+    .thread-head {
+        font-size:16px !important;
+    }
+    .order-detail {
+        font-size:20px !important;        
     }
 </style>

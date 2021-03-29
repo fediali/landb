@@ -105,7 +105,7 @@ class InventoryController extends BaseController
     public function edit($id, FormBuilder $formBuilder, Request $request)
     {
         $inventory = Inventory::with(['products' => function($query){
-          $query->leftJoin('ec_products as p', 'p.barcode','inventory_products_pivot.barcode')->select(
+          $query->leftJoin('ec_products as p', 'p.sku','inventory_products_pivot.sku')->select(
               'inventory_products_pivot.*',
               'p.id as pid',
               'p.name as pname',

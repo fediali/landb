@@ -7,6 +7,7 @@ use Botble\Base\Forms\Fields\MultiCheckListField;
 use Botble\Base\Forms\Fields\TagField;
 use Botble\Base\Forms\FormAbstract;
 use Botble\Ecommerce\Forms\Fields\CategoryMultiField;
+use Botble\Ecommerce\Forms\Fields\InventoryHistoryDetail;
 use Botble\Ecommerce\Http\Requests\ProductRequest;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\BrandInterface;
@@ -27,6 +28,7 @@ class ProductForm extends FormAbstract
      */
     public function buildForm()
     {
+      $this->formHelper->addCustomField('inventory_history', InventoryHistoryDetail::class);
         $selectedCategories = [];
         if ($this->getModel()) {
             $selectedCategories = $this->getModel()->categories()->pluck('category_id')->all();
@@ -116,6 +118,12 @@ class ProductForm extends FormAbstract
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
                 'choices'    => BaseStatusEnum::labels(),
+            ])
+            ->add('inventory_history', 'inventory_history', [
+                'label'         => 'Inventory History',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+                'id'            => $productId ? $productId : 0
             ])
             ->add('is_featured', 'onOff', [
                 'label'         => trans('core/base::forms.is_featured'),

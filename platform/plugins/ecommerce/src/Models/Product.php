@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\InventoryHistory;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
@@ -562,5 +563,9 @@ class Product extends BaseModel
             ->withPivot(['price', 'quantity', 'sold'])
             ->where('status', BaseStatusEnum::PUBLISHED)
             ->notExpired();
+    }
+
+    public function inventory_history(){
+      return $this->hasMany(InventoryHistory::class, 'product_id');
     }
 }

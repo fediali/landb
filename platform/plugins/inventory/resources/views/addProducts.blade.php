@@ -22,7 +22,7 @@
             <tr data-id="{{ $product->pid }}">
                 <td class=" text-center column-key-image">
                     <a href="" title="">
-                        <img src="{{ URL::to('storage') }}/{{json_decode($product->pimages)[0]}}" width="50">
+                        <img src="{{ URL::to('storage') }}/{{@json_decode($product->pimages)[0]}}" onerror="this.src='{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}'" width="50">
                     </a>
                 </td>
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"></td>

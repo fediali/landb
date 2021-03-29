@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
+use App\Models\InventoryHistory;
 use Assets;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\CreatedContentEvent;
@@ -939,5 +940,12 @@ class ProductController extends BaseController
         $this->productRepository->createOrUpdate($product);
 
         return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function inventory_history($id){
+
+      $data = Product::with(['inventory_history'])->where('id', $id)->first();
+      return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data'));
+
     }
 }

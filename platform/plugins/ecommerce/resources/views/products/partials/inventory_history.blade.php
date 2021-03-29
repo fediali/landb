@@ -1,0 +1,1 @@
+<a target="_blank" href="{{ route('products.inventory_history', ['id' => $options['id']]) }}" class="btn btn-primary"> Inventory History </a>
