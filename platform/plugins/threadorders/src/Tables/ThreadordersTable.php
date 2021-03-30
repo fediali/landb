@@ -167,7 +167,6 @@ class ThreadordersTable extends TableAbstract
     public function buttons()
     {
         $buttons = []; //$this->addCreateButton(route('threadorders.create'), 'threadorders.create');
-
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Threadorders::class);
     }
 
@@ -193,7 +192,7 @@ class ThreadordersTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            /*'threadorders.name' => [
+            'threadorders.name' => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
@@ -207,7 +206,7 @@ class ThreadordersTable extends TableAbstract
             'threadorders.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],*/
+            ],
         ];
     }
 

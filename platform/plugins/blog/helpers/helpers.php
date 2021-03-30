@@ -446,6 +446,18 @@ if (!function_exists('get_vendor_products')) {
     }
 }
 
+if (!function_exists('get_vendor_order_statuses')) {
+    function get_vendor_order_statuses()
+    {
+        $statuses = \Botble\Vendororderstatuses\Models\Vendororderstatuses::where('status', 'published')->pluck('name')->all();
+        $arr = [];
+        foreach ($statuses  as $status) {
+            $arr[] = ['value' => strtolower($status), 'text' => ucwords($status)];
+        }
+        return $arr;
+    }
+}
+
 if (!function_exists('parse_date')) {
     function parse_date($date)
     {
