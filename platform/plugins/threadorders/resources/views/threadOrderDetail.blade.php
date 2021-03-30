@@ -34,16 +34,16 @@
                     <p>{{$orderDetail->name}}</p>
                 </div>
                 <div class="col-lg-3">
+                    <p class="m-0 heading"> PP Sample</p>
+                    <p>{{$orderDetail->pp_sample}}</p>
+                </div>
+                <div class="col-lg-3">
                     <p class="m-0 heading">PP Sample Date</p>
                     @if($orderDetail->pp_sample == \Botble\Thread\Models\Thread::YES)
                         <p>{{date('d F, Y', strtotime($orderDetail->pp_sample_date))}}</p>
                     @else
                         <p>N/A</p>
                     @endif
-                </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading"> PP Sample</p>
-                    <p>{{$orderDetail->pp_sample}}</p>
                 </div>
                 @if($orderDetail->material)
                     <div class="col-lg-3">
@@ -55,6 +55,12 @@
                     <p class="m-0 heading">Select Shipping Method</p>
                     <p>{{$orderDetail->shipping_method}}</p>
                 </div>
+                @if($orderDetail->vendor_product)
+                    <div class="col-lg-3">
+                        <p class="m-0 heading">Vendor Product</p>
+                        <p>{{$orderDetail->vendor_product->name}}</p>
+                    </div>
+                @endif
             </div>
 
             <div class="p-3 mb-3 thread-area">
@@ -69,21 +75,29 @@
                     <div class="col-lg-12 mb-3">
                         <h5 class="variation-text">{{$loop->iteration}}. {{$variation->name}} </h5>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <p class="m-0 heading">SKU</p>
                         <p>{{$variation->sku}}</p>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <p class="m-0 heading">Type</p>
                         <p>{{$variation->category_type}}</p>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <p class="m-0 heading">Qty</p>
                         <p>{{$variation->quantity}}</p>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <p class="m-0 heading">Cost</p>
                         <p>{{$variation->cost}}</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <p class="m-0 heading">Product Unit</p>
+                        <p>{{$variation->unit_name}}</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <p class="m-0 heading">Per Piece Qty</p>
+                        <p>{{$variation->per_piece_qty}}</p>
                     </div>
                 </div>
             @endforeach

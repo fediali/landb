@@ -17,6 +17,8 @@ class ProductCategoryRequest extends Request
         return [
             'name'  => 'required',
             'order' => 'required|integer|min:0',
+            'per_piece_qty' => 'required|min:0',
+            'product_unit_id'   => 'required|exists:vendorproductunits,id',
         ];
     }
 }

@@ -25,6 +25,8 @@ class ProductCategoryForm extends FormAbstract
         $categories[0] = trans('plugins/ecommerce::product-categories.none');
         $categories = Arr::sortRecursive($categories);
 
+        $product_units = get_product_units();
+
         $category_sizes = get_category_sizes();
         $selectedCatSizes = [];
         if ($this->getModel()) {
@@ -96,6 +98,33 @@ class ProductCategoryForm extends FormAbstract
                 ],
                 'choices'    => $category_sizes,
                 'default_value'      => old('category_size_id', $selectedCatSizes),
+            ])
+            ->add('impact_price', 'number', [
+                'label'      => 'Impact Price',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Product Quantity',
+                    'steps' => 0.1,
+                ],
+                'default_value' => 0,
+            ])
+            ->add('product_unit_id', 'customSelect', [
+                'label'      => 'Select Product Unit',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => 'Select Product Unit',
+                    'class' => 'select-search-full',
+                ],
+                'choices'    => $product_units,
+            ])
+            ->add('per_piece_qty', 'number', [
+                'label'      => 'Per Piece Qty',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => 'Per Piece Qty',
+                    'steps' => 0.1,
+                ],
+                'default_value' => 0,
             ])
             ->setBreakFieldPoint('status');
     }

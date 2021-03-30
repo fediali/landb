@@ -12,6 +12,7 @@ use Botble\Fits\Models\Fits;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Botble\Thread\Models\Thread;
+use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -65,6 +66,7 @@ class Threadorders extends BaseModel
         'ship_date',
         'cancel_date',
         'elastic_waste_pant',
+        'vendor_product_id',
         'is_denim',
         'inseam',
         'fit_id',
@@ -101,6 +103,11 @@ class Threadorders extends BaseModel
                 }
             }
         });
+    }
+
+    public function vendor_product()
+    {
+        return $this->belongsTo(Vendorproducts::class, 'vendor_product_id', 'id');
     }
 
     /**
@@ -168,8 +175,10 @@ class Threadorders extends BaseModel
 
     public function threadOrderVariations($type=false)
     {
-        return DB::table('thread_order_variations')->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name')
+        return DB::table('thread_order_variations')
+            ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name')
             ->join('ec_product_categories', 'ec_product_categories.id', 'thread_order_variations.product_category_id')
+            ->leftJoin('vendorproductunits','vendorproductunits.id','thread_order_variations.product_unit_id')
             ->where('thread_order_id', $this->id)
             ->when($type, function($q) use($type) {
                 $q->where('category_type', $type);

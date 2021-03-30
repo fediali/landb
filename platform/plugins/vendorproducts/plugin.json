@@ -1,0 +1,9 @@
+{
+    "name": "Vendorproducts",
+    "namespace": "Botble\\Vendorproducts\\",
+    "provider": "Botble\\Vendorproducts\\Providers\\VendorproductsServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module vendorproducts"
+}
