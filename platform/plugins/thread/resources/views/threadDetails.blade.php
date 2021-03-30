@@ -330,7 +330,7 @@
                                         <div class="slideshow-container mt-4">
                                         @foreach($thread->spec_files as $file)
                                             <div class="mySlides fade">
-                                            <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_file) }}</div>
+                                            <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_files) }}</div>
                                             <img src="{{ asset($file->spec_file) }}" style="width:100%">
                                             {{--<div class="text">Caption Text</div>--}}
                                             </div>
