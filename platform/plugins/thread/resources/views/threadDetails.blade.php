@@ -325,23 +325,25 @@
                         <div class="row ">
                             <div class="col-md-4 ">
                                 <h4>Style</h4>
-                            @if(count($thread->spec_files))
-                                    <div class="slideshow-container mt-4">
-                                    @foreach($thread->spec_files as $file)
-                                        <div class="mySlides fade">
-                                        <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_file) }}</div>
-                                        <img src="{{ asset($file->spec_file) }}" style="width:100%">
-                                        {{--<div class="text">Caption Text</div>--}}
+                            @if(!is_null($thread->spec_files))
+                                @if(count($thread->spec_files))
+                                        <div class="slideshow-container mt-4">
+                                        @foreach($thread->spec_files as $file)
+                                            <div class="mySlides fade">
+                                            <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_file) }}</div>
+                                            <img src="{{ asset($file->spec_file) }}" style="width:100%">
+                                            {{--<div class="text">Caption Text</div>--}}
+                                            </div>
+                                        @endforeach
                                         </div>
+
+                                    <br>
+                                    <div style="text-align:center">
+                                    @foreach($thread->spec_files as $file)
+                                        <span class="dot"></span>
                                     @endforeach
                                     </div>
-
-                                <br>
-                                <div style="text-align:center">
-                                @foreach($thread->spec_files as $file)
-                                    <span class="dot"></span>
-                                @endforeach
-                                </div>
+                                @endif
                             @endif
                              </div>
                             <div class="col-md-8">
