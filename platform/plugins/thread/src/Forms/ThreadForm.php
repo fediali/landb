@@ -174,7 +174,7 @@ class ThreadForm extends FormAbstract
             ])
             ->add('vendor_product_id', 'customSelect', [
                 'label'      => 'Select Vendor Product',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Vendor Product',
                     'class' => 'select-search-full',
