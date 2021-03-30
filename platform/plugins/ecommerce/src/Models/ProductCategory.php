@@ -6,6 +6,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Categorysizes\Models\Categorysizes;
+use Botble\Vendorproductunits\Models\Vendorproductunits;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,6 +34,9 @@ class ProductCategory extends BaseModel
         'image',
         'is_featured',
         'is_plus_cat',
+        'impact_price',
+        'per_piece_qty',
+        'product_unit_id',
     ];
 
     /**
@@ -41,6 +45,11 @@ class ProductCategory extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    public function product_unit()
+    {
+        return $this->belongsTo(Vendorproductunits::class, 'product_unit_id', 'id');
+    }
 
     /**
      * @return BelongsToMany

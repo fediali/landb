@@ -15,6 +15,7 @@ use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Botble\Threadorders\Models\Threadorders;
+use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -66,6 +67,7 @@ class Thread extends BaseModel
         'ship_date',
         'cancel_date',
         'elastic_waste_pant',
+        'vendor_product_id',
         'is_denim',
         'inseam',
         'fit_id',
@@ -154,6 +156,11 @@ class Thread extends BaseModel
         });
     }
 
+    public function vendor_product()
+    {
+        return $this->belongsTo(Vendorproducts::class, 'vendor_product_id', 'id');
+    }
+
     /**
      * @deprecated
      * @return BelongsTo
@@ -185,14 +192,18 @@ class Thread extends BaseModel
      * @return BelongsToMany
      */
     public function regular_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::REGULAR)->withPivot('sku');
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')
+            ->where('category_type', self::REGULAR)
+            ->withPivot('sku','category_type','product_unit_id','per_piece_qty');
     }
 
     /**
      * @return BelongsToMany
      */
     public function plus_product_categories() {
-        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')->where('category_type', self::PLUS)->withPivot('sku');
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')
+            ->where('category_type', self::PLUS)
+            ->withPivot('sku','category_type','product_unit_id','per_piece_qty');
     }
 
     /**

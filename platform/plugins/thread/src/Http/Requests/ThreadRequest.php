@@ -24,11 +24,16 @@ class ThreadRequest extends Request
             //'order_no'   => 'required',
             //'order_status'   => 'required',
             'regular_category_id' => 'required|exists:ec_product_categories,id',
+            'regular_product_unit_id' => 'required|exists:vendorproductunits,id',
+            'regular_per_piece_qty' => 'required|min:0',
             'plus_category_id'    => 'nullable|exists:ec_product_categories,id',
+            'plus_product_unit_id' => 'nullable|exists:vendorproductunits,id',
+            'plus_per_piece_qty' => 'min:0',
             //'design_id'   => 'required|exists:printdesigns,id',
             //'pp_request'   => 'required',
             //'pp_sample'   => 'required',
             'shipping_method'   => 'required',
+            'vendor_product_id' => 'required|exists:vendorproducts,id',
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
     }

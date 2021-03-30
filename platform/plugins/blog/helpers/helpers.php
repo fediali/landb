@@ -432,6 +432,19 @@ if (!function_exists('get_category_sizes')) {
     }
 }
 
+if (!function_exists('get_product_units')) {
+    function get_product_units()
+    {
+        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name','id')->all();
+    }
+}
+
+if (!function_exists('get_vendor_products')) {
+    function get_vendor_products()
+    {
+        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name','id')->all();
+    }
+}
 
 if (!function_exists('parse_date')) {
     function parse_date($date)

@@ -222,6 +222,7 @@ class ThreadordersController extends BaseController
         $threadData['pp_sample'] = $requestData['pp_sample'];
         $threadData['material'] = $requestData['material'];
         $threadData['shipping_method'] = $requestData['shipping_method'];
+        $threadData['vendor_product_id'] = $requestData['vendor_product_id'];
         $threadData['order_date'] = $requestData['order_date'];
         $threadData['ship_date'] = $requestData['ship_date'];
         $threadData['cancel_date'] = $requestData['cancel_date'];
@@ -240,6 +241,8 @@ class ThreadordersController extends BaseController
                 'thread_order_id' => $threadorders->id,
                 'category_type' => 'regular',
                 'product_category_id' => $thread2->regular_product_categories[0]->pivot->product_category_id,
+                'product_unit_id' => $requestData['regular_product_unit_id'],
+                'per_piece_qty' => $requestData['regular_per_piece_qty'],
                 'thread_variation_id' => $thread_variation->id,
                 'print_design_id' => $thread_variation->print_id,
                 'name' => $thread_variation->name,
@@ -254,6 +257,8 @@ class ThreadordersController extends BaseController
                     'thread_order_id' => $threadorders->id,
                     'category_type' => 'plus',
                     'product_category_id' => $thread2->plus_product_categories[0]->pivot->product_category_id,
+                    'product_unit_id' => $requestData['plus_product_unit_id'],
+                    'per_piece_qty' => $requestData['plus_per_piece_qty'],
                     'thread_variation_id' => $thread_variation->id,
                     'print_design_id' => $thread_variation->print_id,
                     'name' => $thread_variation->name,
