@@ -277,7 +277,7 @@
                                             class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                                     </p></td>
                                 <td colspan="1"><p class="font-bold font-12">Status: <br> <span
-                                            class="widget-title-color-red text-uppercase">{{ $thread->status }}</span>
+                                            class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
                                     </p></td>
 
 
