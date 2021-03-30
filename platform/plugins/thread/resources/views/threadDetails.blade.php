@@ -2,7 +2,9 @@
 <?php $variations = $options['data']['variations']; ?>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Details</button>
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Details
+        </button>
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link" href="{{route('thread.edit', $thread->id)}}">Edit</a>
@@ -325,25 +327,26 @@
                         <div class="row ">
                             <div class="col-md-4 ">
                                 <h4>Style</h4>
-                            @if(count($thread->spec_files))
+                                @if(count($thread->spec_files))
                                     <div class="slideshow-container mt-4">
-                                    @foreach($thread->spec_files as $file)
-                                        <div class="mySlides fade">
-                                        <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_file) }}</div>
-                                        <img src="{{ asset($file->spec_file) }}" style="width:100%">
-                                        {{--<div class="text">Caption Text</div>--}}
-                                        </div>
-                                    @endforeach
+                                        @foreach($thread->spec_files as $file)
+                                            <div class="mySlides fade">
+                                                <div class="numbertext">{{ $loop->iteration }}
+                                                    / {{ count($thread->spec_file) }}</div>
+                                                <img src="{{ asset($file->spec_file) }}" style="width:100%">
+                                                {{--<div class="text">Caption Text</div>--}}
+                                            </div>
+                                        @endforeach
                                     </div>
 
-                                <br>
-                                <div style="text-align:center">
-                                @foreach($thread->spec_files as $file)
-                                    <span class="dot"></span>
-                                @endforeach
-                                </div>
-                            @endif
-                             </div>
+                                    <br>
+                                    <div style="text-align:center">
+                                        @foreach($thread->spec_files as $file)
+                                            <span class="dot"></span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
                             <div class="col-md-8">
                                 @if($thread->is_denim == 1)
                                     <div class="specificationwrap">
@@ -472,51 +475,72 @@
                                                 <tr>
                                                     <td colspan="12">
                                                         <div class="order-box mb-2 mt-2">
-                                                    @foreach($variations as $variation)
-                                                        @if($variation->status == 'active' && $variation->is_denim == 0)
-                                                            <div class="box w-100">
-                                                                 <h6>{{ $variation->name }}
-                                                                    <button type="button" class="btn btn-warning add_print" data-toggle="modal" data-target="#modal-default" data-id="{{ $variation->id }}" data-name="{{ $variation->name }}">
-                                                                         <i class="fa fa-plus"></i>
-                                                                     </button>
-                                                                 </h6>
-                                                             </div>
+                                                            @foreach($variations as $variation)
+                                                                @if($variation->status == 'active' && $variation->is_denim == 0)
+                                                                    <div class="box w-100">
+                                                                        <h6>{{ $variation->name }}
+                                                                            <button type="button"
+                                                                                    class="btn btn-warning add_print"
+                                                                                    data-toggle="modal"
+                                                                                    data-target="#modal-default"
+                                                                                    data-id="{{ $variation->id }}"
+                                                                                    data-name="{{ $variation->name }}">
+                                                                                <i class="fa fa-plus"></i>
+                                                                            </button>
+                                                                        </h6>
+                                                                    </div>
 
-                                                             <div class="box row d-mt-block">
-                                                                 <div class="col-lg-12">
-                                                                     <div class="variationdiv variation-div pl-3 pr-3 mb-3">
-                                                                         <h5 class=" mt-2">
-                                                                             Variation: {{ $variation->name }}</h5>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-6">
-                                                                                <p class="mb-0 mt-2"><label for="">Fabric:</label>{{ $variation->printdesign->name }}
-                                                                                </p>
-                                                                                <img class="w-100" src="{{ asset('storage/'.$variation->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
-                                                                            </div>
-                                                                            @foreach($variation->fabrics as $fabric)
-                                                                                <div class="col-lg-6">
-                                                                                    <p class="mb-0 mt-2"><label for="">Fabric:</label>{{ $fabric->printdesign->name }}
-                                                                                    </p>
-                                                                                    <img class="w-100" src="{{ asset('storage/'.$fabric->printdesign->file) }}" height="120" width="120" style="object-fit: cover">
+                                                                    <div class="box row d-mt-block">
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                                <h5 class=" mt-2">
+                                                                                    Variation: {{ $variation->name }}</h5>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6">
+                                                                                        <p class="mb-0 mt-2"><label
+                                                                                                for="">Fabric:</label>{{ $variation->printdesign->name }}
+                                                                                        </p>
+                                                                                        <img class="w-100"
+                                                                                             src="{{ asset('storage/'.$variation->printdesign->file) }}"
+                                                                                             height="120" width="120"
+                                                                                             style="object-fit: cover">
+                                                                                    </div>
+                                                                                    @foreach($variation->fabrics as $fabric)
+                                                                                        <div class="col-lg-6">
+                                                                                            <p class="mb-0 mt-2"><label
+                                                                                                    for="">Fabric:</label>{{ $fabric->printdesign->name }}
+                                                                                            </p>
+                                                                                            <img class="w-100"
+                                                                                                 src="{{ asset('storage/'.$fabric->printdesign->file) }}"
+                                                                                                 height="120"
+                                                                                                 width="120"
+                                                                                                 style="object-fit: cover">
+                                                                                        </div>
+                                                                                    @endforeach
                                                                                 </div>
-                                                                            @endforeach
-                                                                        </div>
 
-                                                                         <div class="mt-3 mb-2">
-                                                                            <p class="text-black font-12 text-uppercase m-0"><span for="">REG. Packs:</span> {{ $variation->regular_qty }}
-                                                                                 | <span class="widget-title-color-red ">Sku: {{ $variation->sku }} </span>
-                                                                             </p>
-                                                                             <p class="text-black font-12 text-uppercase m-0"><span for="">PLUS Packs:</span> {{ $variation->plus_qty }}
-                                                                                 | <span class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
-                                                                             </p>
+                                                                                <div class="mt-3 mb-2">
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span
+                                                                                            for="">REG. Packs:</span> {{ $variation->regular_qty }}
+                                                                                        | <span
+                                                                                            class="widget-title-color-red ">Sku: {{ $variation->sku }} </span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span
+                                                                                            for="">PLUS Packs:</span> {{ $variation->plus_qty }}
+                                                                                        | <span
+                                                                                            class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                     </div>
-                                                                 </div>
-                                                             </div>
-                                                            @endif
-                                                        @endforeach
-                                                </div>
-                                                     </td>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    </td>
 
                                                 </tr>
 
@@ -556,95 +580,114 @@
     }
 
 
-    .mySlides {display: none;}
-img {vertical-align: middle;}
+    .mySlides {
+        display: none;
+    }
 
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
+    img {
+        vertical-align: middle;
+    }
 
-/* Caption text */
-.text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
-}
+    /* Slideshow container */
+    .slideshow-container {
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
+    }
 
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
+    /* Caption text */
+    .text {
+        color: #f2f2f2;
+        font-size: 15px;
+        padding: 8px 12px;
+        position: absolute;
+        bottom: 8px;
+        width: 100%;
+        text-align: center;
+    }
 
-/* The dots/bullets/indicators */
-.dot {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-}
+    /* Number text (1/3 etc) */
+    .numbertext {
+        color: #f2f2f2;
+        font-size: 12px;
+        padding: 8px 12px;
+        position: absolute;
+        top: 0;
+    }
 
-.active-slider {
-  background-color: #717171;
-}
+    /* The dots/bullets/indicators */
+    .dot {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
 
-/* Fading animation */
-.fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
-  animation-name: fade;
-  animation-duration: 1.5s;
-}
+    .active-slider {
+        background-color: #717171;
+    }
 
-@-webkit-keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
-}
+    /* Fading animation */
+    .fade {
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.5s;
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
 
-@keyframes fade {
-  from {opacity: .4}
-  to {opacity: 1}
-}
+    @-webkit-keyframes fade {
+        from {
+            opacity: .4
+        }
+        to {
+            opacity: 1
+        }
+    }
 
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .text {font-size: 11px}
-}
+    @keyframes fade {
+        from {
+            opacity: .4
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+        .text {
+            font-size: 11px
+        }
+    }
 </style>
 
 
 <script>
-var slideIndex = 0;
-showSlides();
+    var slideIndex = 0;
+    showSlides();
 
-function showSlides() {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active-slider", "");
-  }
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active-slider";
-  setTimeout(showSlides, 2000); // Change image every 2 seconds
-}
+    function showSlides() {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            slideIndex = 1
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active-slider", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active-slider";
+        // Change image every 2 seconds
+    }
+
+    setTimeout(showSlides, 50000);
 </script>
 
