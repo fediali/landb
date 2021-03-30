@@ -14,7 +14,7 @@ class AddVendorProductFieldsInThreadsTable extends Migration
     public function up()
     {
         Schema::table('threads', function (Blueprint $table) {
-            $table->integer('vendor_product_id')->default(0)->index('th_vendor_product_id_fk')->after('elastic_waste_pant');
+            $table->integer('vendor_product_id')->nullable()->default(0)->index('th_vendor_product_id_fk')->after('elastic_waste_pant');
         });
         Schema::table('categories_threads', function (Blueprint $table) {
             $table->float('per_piece_qty')->default(0)->after('product_category_id');
