@@ -31,7 +31,7 @@
 
                         <div class="form-group">
                             <label class="text-title-field"
-                                   for="sales_percentage">Sales Percentage</label>
+                                   for="sales_percentage">Selling Price Percentage</label>
                             <input type="number" class="next-input" name="sales_percentage" id="sales_percentage"
                                    value="{{ setting('sales_percentage') }}">
                         </div>
