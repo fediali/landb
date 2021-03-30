@@ -27,8 +27,9 @@ class VendorproductsCreateVendorproductsTable extends Migration
 
         Schema::create('vendorproducts_history', function (Blueprint $table) {
             $table->id();
-            $table->integer('vendor_product_id')->index('vph_product_id_fk');
             $table->integer('thread_order_id')->index('vph_order_id_fk');
+            $table->integer('vendor_product_id')->index('vph_product_id_fk');
+            $table->integer('product_unit_id')->index('vph_unit_id_fk');
             $table->float('quantity')->default(0);
             $table->timestamps();
         });

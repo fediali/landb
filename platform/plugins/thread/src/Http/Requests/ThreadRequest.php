@@ -33,7 +33,7 @@ class ThreadRequest extends Request
             //'pp_request'   => 'required',
             //'pp_sample'   => 'required',
             'shipping_method'   => 'required',
-            'vendor_product_id' => 'required|exists:vendorproducts,id',
+            'vendor_product_id' => 'nullable|exists:vendorproducts,id',
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
     }
