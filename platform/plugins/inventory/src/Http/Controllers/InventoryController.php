@@ -2,6 +2,7 @@
 
 namespace Botble\Inventory\Http\Controllers;
 
+use App\Models\InventoryHistory;
 use App\Models\InventoryProducts;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\Product;
@@ -217,6 +218,50 @@ class InventoryController extends BaseController
         return response()->json(['product' => $product, 'status' => 'success'], 200);
       }else{
         return response()->json(['product' => [], 'status' => 'error'], 404);
+      }
+    }
+
+    public function pushToEcommerce($id, BaseHttpResponse $response){
+      $error = null;
+      $inventory = Inventory::with('products')->where('id',$id)->first();
+      if($inventory && $inventory->status == 'published'){
+        if(count($inventory->products)){
+          foreach ($inventory->products as $inv_product){
+            $product = Product::where('sku', $inv_product->sku)->first();
+            if($product){
+              $old_stock = $product->quantity;
+              $product->quantity =  $product->quantity + $inv_product->quantity;
+              if($product->save()){
+
+                InventoryHistory::create([
+                    'product_id' => $product->id,
+                    'quantity' => $inv_product->quantity,
+                    'new_stock' => $product->quantity,
+                    'old_stock' => $old_stock,
+                    'created_by' => Auth::user()->id,
+                    'inventory_id' => $inventory->id,
+                    'reference' => 'inventory.push_to_ecommerce'
+                ]);
+
+              }
+            }else{
+              $error = 'Some of the inventory products does not exists';
+            }
+
+          }
+        }else{
+          $error = 'Inventory have no products';
+        }
+      }else{
+        $error = 'Invalid inventory or Inventory is not published';
+      }
+
+      if (!is_null($error)) {
+        return $response->setPreviousUrl(route('inventory.index'))
+            ->setError($error);
+      }else{
+        return $response->setPreviousUrl(route('inventory.index'))
+            ->setMessage('Inventory has been pushed into ecommerce successfully');
       }
     }
 }

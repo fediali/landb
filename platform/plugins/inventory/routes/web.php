@@ -7,6 +7,11 @@ Route::group(['namespace' => 'Botble\Inventory\Http\Controllers', 'middleware' =
         Route::group(['prefix' => 'inventories', 'as' => 'inventory.'], function () {
             Route::resource('', 'InventoryController')->parameters(['' => 'inventory']);
             Route::get('/get/barcode/product', 'InventoryController@getProductByBarcode')->name('getProductByBarcode');
+            Route::get('/pushToEcommerce/{id}', [
+                'as'         => 'pushToEcommerce',
+                'uses'       => 'InventoryController@pushToEcommerce',
+                'permission' => 'inventory.create',
+            ]);
             Route::delete('items/destroy', [
                 'as'         => 'deletes',
                 'uses'       => 'InventoryController@deletes',
