@@ -72,7 +72,7 @@ class ThreadordersForm extends FormAbstract
             ])
             ->add('regular_product_unit_id', 'customSelect', [
                 'label'      => 'Select Product Unit (Reg)',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Product Unit (Reg)',
                     'class' => 'select-search-full',
@@ -82,7 +82,7 @@ class ThreadordersForm extends FormAbstract
             ])
             ->add('regular_per_piece_qty', 'number', [
                 'label'      => 'Per Piece Qty (Reg)',
-                'label_attr' => ['class' => 'control-label required'],
+                'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Per Piece Qty (Reg)',
                     'steps' => 0.1,
