@@ -11,8 +11,10 @@
         <th scope="col">SKU</th>
         <th scope="col">Barcode</th>
         <th scope="col">Name</th>
-        <th scope="col">Actual Quantity</th>
-        <th scope="col">Quantity</th>
+        <th scope="col">E-commerce Pack Qty</th>
+        <th scope="col">Ordered Pack Qty</th>
+        <th scope="col">Received Pack Qty</th>
+        <th scope="col">Loose Qty</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -28,6 +30,8 @@
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"></td>
                 <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
                <td>{{ $product->pname }}</td>
+                <td>{{ $product->pquantity }}</td>
+                <td>{{ $product->pquantity }}</td>
                 <td>{{ $product->pquantity }}</td>
                 <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->quantity }}"></td>
                 <td>
