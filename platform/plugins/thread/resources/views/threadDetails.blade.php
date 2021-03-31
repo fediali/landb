@@ -328,13 +328,13 @@
                                 <div class="mySlides1">
                                     <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%; height:170px;">
                                 </div>
-
+<!-- 
                                 <div class="mySlides1">
                                     <img src="https://www.w3schools.com/howto/img_snow_wide.jpg" style="width:100%; height:170px;">
                                 </div>
 
                                 <div class="mySlides1">
-                                    <img src="https://www.w3schools.com/howto/img_mountains_wide.jpg" style="width:100%; height:170px;">
+                                    <img src="https://www.w3schools.com/howto/img_mountains_wide.jpg" style="width:100%; height:170px;"> -->
                                 </div>
 
                                 <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
