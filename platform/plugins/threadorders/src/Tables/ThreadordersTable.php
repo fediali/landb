@@ -180,7 +180,11 @@ class ThreadordersTable extends TableAbstract
      */
     public function htmlDrawCallbackFunction(): ?string
     {
-        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
+        $return = parent::htmlDrawCallbackFunction();
+        if (Threadorders::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**

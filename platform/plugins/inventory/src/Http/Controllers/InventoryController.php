@@ -105,6 +105,7 @@ class InventoryController extends BaseController
      */
     public function edit($id, FormBuilder $formBuilder, Request $request)
     {
+        //TODO::Need Refactoring
         $inventory = Inventory::with(['products' => function($query){
           $query->leftJoin('ec_products as p', 'p.id','inventory_products_pivot.product_id')->select(
               'inventory_products_pivot.*',
@@ -212,7 +213,8 @@ class InventoryController extends BaseController
 
 
     public function getProductByBarcode(Request $request){
-      $product = Product::where('barcode',$request->get('barcode'))->orWhere('sku', $request->get('barcode'))/*->where('status', 'published')*/->first();
+      $product = Product::where('barcode',$request->get('barcode'))
+          ->orWhere('sku', $request->get('barcode'))/*->where('status', 'published')*/->first();
       if($product){
         return response()->json(['product' => $product, 'status' => 'success'], 200);
       }else{

@@ -176,7 +176,11 @@ class ThreadTable extends TableAbstract
      */
     public function htmlDrawCallbackFunction(): ?string
     {
-        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
+        $return = parent::htmlDrawCallbackFunction();
+        if (Thread::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**

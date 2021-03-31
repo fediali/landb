@@ -14,7 +14,7 @@
         <th scope="col">E-commerce Pack Qty</th>
         <th scope="col">Ordered Pack Qty</th>
         <th scope="col">Received Pack Qty</th>
-        <th scope="col">Loose Qty</th>
+        <th scope="col">Single Qty</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -32,16 +32,16 @@
                <td>{{ $product->pname }}</td>
                 <td>{{ $product->quantity }}</td>
                 <td>{{ $product->ordered_pack_qty }}</td>
-                <td>{{ $product->received_pack_qty }}</td>
+                <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_pack_qty }}"></td>
                 <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
                 <td>
                      <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>
                         <div class="dropdown-menu">
                              <a class="dropdown-item" onclick="deleteProduct({{ $product->pid }})" href="javascript:void(0)">Delete</a>
-                            </div>
                         </div>
-                    </td>
+                    </div>
+                </td>
                 </tr>
             @endforeach
         @endif
@@ -119,6 +119,8 @@
                 '        <td>'+product.barcode+'<input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
                 '        <td>'+product.name+'</td>\n' +
                 '        <td>'+product.quantity+'</td>\n' +
+                '        <td>'+product.quantity+'</td>\n' +
+                '        <td><input style="width: 60px; text-align:center" name="quantity_'+pcount+'" id="quantity_'+product.id+'" class="input-micro input-both-amount input_main" value="1"></td>\n' +
                 '        <td><input style="width: 60px; text-align:center" name="quantity_'+pcount+'" id="quantity_'+product.id+'" class="input-micro input-both-amount input_main" value="1"></td>\n' +
                 '        <td>\n' +
                 '            <div class="btn-group">\n' +
