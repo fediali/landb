@@ -496,14 +496,14 @@
                                                                     </div>
 
                                                                     <div class="box row d-mt-block">
-                                                                        <div class="col-lg-12">
+                                                                        <div class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
                                                                             <div class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                                 <h5 class=" mt-2">
                                                                                     Variation: {{ $variation->name }}</h5>
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6">
                                                                                         <p class="mb-0 mt-2"><label
-                                                                                                    for="">Fabric:</label>{{ @$variation->printdesign->name }}
+                                                                                                    for="">Print/Color:</label>{{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100"
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
@@ -513,7 +513,8 @@
                                                                                     @foreach($variation->fabrics as $fabric)
                                                                                         <div class="col-lg-6">
                                                                                             <p class="mb-0 mt-2"><label
-                                                                                                        for="">Fabric:</label>{{ @$fabric->printdesign->name }}
+                                                                                                        for="">Print/Color:</label>{{ @$fabric->printdesign->name }}
+                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}"><strong class="float-right"><i class="fa fa-times"></i></strong></a>
                                                                                             </p>
                                                                                             <img class="w-100"
                                                                                                  src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
@@ -534,6 +535,9 @@
                                                                                         <span for="">PLUS Packs:</span> {{ $variation->plus_qty }}
                                                                                         |
                                                                                         <span class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             </div>

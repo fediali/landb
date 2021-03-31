@@ -56,7 +56,7 @@ $variations = $options['data']['variations'];
                         <div class="modal-header">
                                 <div class="d-flex w-100">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span></button>
+                                {{--<span aria-hidden="true">×</span>--}}</button>
                                 <h4 class="modal-title text-center w-100 thread-pop-head">  Adding Variations  <span class="variation-name"></span></h4>
 
                                 <div>
@@ -144,7 +144,7 @@ $variations = $options['data']['variations'];
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <input class="btn btn-primary save-thread" id="submit_denim_variation" value="Save">
+                                <input type="button" class="btn btn-primary save-thread" id="submit_denim_variation" value="Save">
                             </div>
                         {{--</form>--}}
                     </div>
@@ -211,7 +211,7 @@ $variations = $options['data']['variations'];
                     <div class="modal-header">
                                 <div class="d-flex w-100">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span></button>
+                                {{--<span aria-hidden="true">×</span>--}}</button>
                                 <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span class="variation-name"></span></h4>
 
                                 <div>
@@ -316,7 +316,7 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                     <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
+                    {{--<span aria-hidden="true">×</span>--}}</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span class="variation-name"></span></h4>
 
                     <div>
@@ -357,7 +357,7 @@ $variations = $options['data']['variations'];
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input class="btn btn-primary save-thread" value="Save" id="submitVariationFabric">
+                    <input type="button" class="btn btn-primary save-thread" value="Save" id="submitVariationFabric">
                 </div>
         </div>
         <!-- /.modal-content -->
@@ -388,6 +388,9 @@ $variations = $options['data']['variations'];
         $('select.print_design_var').select2({
             templateResult: formatState
         });
+      $('body').on('DOMNodeInserted', 'select', function () {
+        $(this).select2();
+      });
 
       $(document).on('click', '.remove_row', function (e) {
         var count = $('.duplicate').length;
@@ -399,8 +402,12 @@ $variations = $options['data']['variations'];
       });
 
       $("#add-new").on("click", function () {
+        $('select.print_design').select2('destroy');
         $tr = $(this).closest("tr").next().clone();
         $tr.insertAfter($(this).closest("tr"));
+        $('select.print_design').select2({
+          templateResult: formatState
+        });
       });
 
       $('.print_id_drop').on('click', function () {
@@ -420,6 +427,10 @@ $variations = $options['data']['variations'];
       $(document).on('click', '#submitVariationFabric', function () {
        $.ajax({
 
+            beforeSend : function(){
+                if(!validateField('#variation_fabic_name', 'Variation name')) return false ;
+                if(!validateField('select.print_design_var', 'Print')) return false;
+            },
             url : '{{ route('thread.addVariationPrints') }}',
             type : 'post',
             data : {
@@ -438,10 +449,22 @@ $variations = $options['data']['variations'];
         });
       });
 
-
       $(document).on('click', '#submit_variation', function () {
+        var error = false;
         $.ajax({
+          beforeSend : function(){
+             $('input:text.variation_name').each(function () {
+                if(!validateField(this, 'Variation name')){error = true; return false}
+             });
 
+             $('select.print_design').each(function () {
+                if(!validateField(this, 'Print')){error = true; return false}
+             });
+
+             if(error){
+               return false;
+             }
+          },
           url : '{{ route('thread.addVariation') }}',
           type : 'post',
           data : {
@@ -478,8 +501,21 @@ $variations = $options['data']['variations'];
       });
 
       $(document).on('click', '#submit_denim_variation', function () {
+        var error=false;
         $.ajax({
+          beforeSend : function(){
+            $('input:text.variation_name').each(function () {
+              if(!validateField(this, 'Variation name')){error = true; return false}
+            });
 
+            $('select.print_design').each(function () {
+              if(!validateField(this, 'Print')){error = true; return false}
+            });
+
+            if(error){
+              return false;
+            }
+          },
           url : '{{ route('thread.addVariation') }}',
           type : 'post',
           data : {
@@ -511,6 +547,16 @@ $variations = $options['data']['variations'];
           }
         });
       });
+
+      function validateField(id , name){
+        var val = $(id).val();
+        if(!val){
+          toastr['error'](name + ' field cannot be empty', 'Validation Error');
+          return false;
+        }else{
+          return true;
+        }
+      }
 
     });
 </script>
