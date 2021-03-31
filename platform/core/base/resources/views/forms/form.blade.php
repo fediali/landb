@@ -8,7 +8,7 @@
         do_action(BASE_ACTION_TOP_FORM_CONTENT_NOTIFICATION, request(), $form->getModel())
     @endphp
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
             @if ($showFields && $form->hasMainFields())
                 <div class="main-form">
                     <div class="{{ $form->getWrapperClass() }}">
