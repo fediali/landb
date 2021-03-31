@@ -82,7 +82,7 @@ $variations = $options['data']['variations'];
                                             <select class="form-control print_design" name="print_id[]">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
-                                                    <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                                    <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
                                                         {{ $print->name }}
                                                     </option>
                                                 @endforeach
@@ -228,7 +228,7 @@ $variations = $options['data']['variations'];
                                             <select class="form-control print_design" name="print_id[]">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
-                                                    <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                                    <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
                                                         {{ $print->name }}
                                                     </option>
                                                 @endforeach
@@ -317,7 +317,7 @@ $variations = $options['data']['variations'];
                         <select class="form-control print_design" name="print_id[]">
                             <option selected="selected" value="">Select Print</option>
                             @foreach($options['data']['printdesigns'] as $key => $print)
-                                <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
                                     {{ $print->name }}
                                 </option>
                             @endforeach
