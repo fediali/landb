@@ -360,7 +360,7 @@ $variations = $options['data']['variations'];
                 return state.text;
             }
             var $state = $(
-                '<span><img src="{{asset('storage')}}/'+$(state.element).data('file')+'" alt="no img" class="img-flag"/> ' + state.text + '</span>'
+                '<span><img src="{{asset('storage')}}/'+$(state.element).data('file')+'" height="40" width="40" alt="no img" class="img-flag"/> ' + state.text + '</span>'
             );
             return $state;
         }
