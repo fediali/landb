@@ -6,7 +6,9 @@ use Botble\Blog\Repositories\Interfaces\CategoryInterface;
 use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
+use Botble\Ecommerce\Models\ProductCategory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('get_featured_posts')) {
     /**
@@ -256,6 +258,8 @@ if (!function_exists('get_post_formats')) {
     }
 }
 
+
+//Get User By Roles
 if (!function_exists('get_designers')) {
     function get_designers()
     {
@@ -264,77 +268,6 @@ if (!function_exists('get_designers')) {
             ->where('roles.slug', 'designer')
             ->pluck('users.username','users.id')->all();
     }
-}
-
-if (!function_exists('get_print_designs')) {
-    function get_print_designs()
-    {
-        return \Botble\Printdesigns\Models\Printdesigns::all();
-    }
-}
-
-if (!function_exists('get_thread_variations')) {
-    function get_thread_variations($id)
-    {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash'])->get();
-    }
-}
-
-if (!function_exists('get_designer_manager')) {
-    function get_designer_manager($id)
-    {
-        return \App\Models\User::find(1);
-    }
-}
-
-if (!function_exists('generate_unique_attr_id')) {
-    function generate_unique_attr_id()
-    {
-      $number = mt_rand(1000000000, 9999999999);
-        if(attr_id_exist($number)){
-          generate_unique_attr_id();
-        }
-        return $number;
-    }
-}
-
-if (!function_exists('attr_id_exist')) {
-    function attr_id_exist($num)
-    {
-      return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
-    }
-}
-
-if (!function_exists('get_thread_comments')) {
-    function get_thread_comments($id)
-    {
-        return \App\Models\ThreadComment::where('thread_id', $id)->with(['user'])->get();
-    }
-}
-
-if (!function_exists('generate_sku_by_thread_variation')) {
-    function generate_sku_by_thread_variation($thread, $print_id)
-    {
-      $reg_sku = $reg_cat = $plus_sku = $plus_cat = null;
-      $print = \Botble\Printdesigns\Models\Printdesigns::find($print_id)->pluck('name')->first();
-      $selectedRegCat = $selectedPluCat = null;
-      if($thread){
-        $selectedRegCat = $thread->regular_product_categories()->pluck('product_category_id')->first();
-        $selectedPluCat = $thread->plus_product_categories()->pluck('product_category_id')->first();
-      }
-
-      if(!empty($selectedRegCat)){
-        $reg_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedRegCat)->pluck('name')->first();
-        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($reg_cat, 0, 2) . rand(10,999) . substr($print, 0, 3));
-      }
-      if(!empty($selectedPluCat)){
-        $plus_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedPluCat)->pluck('name')->first();
-        $plus_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($plus_cat, 0, 2) . rand(10,999) . substr($print, 0, 3). '-X');
-      }
-
-      return ['reg' => $reg_sku , 'plus' => $plus_sku];
-    }
-
 }
 
 if (!function_exists('get_vendors')) {
@@ -346,40 +279,21 @@ if (!function_exists('get_vendors')) {
             ->pluck('users.username','users.id')->all();
     }
 }
+//Get User By Roles
+
+
+//Get General Data
+if (!function_exists('get_print_designs')) {
+    function get_print_designs()
+    {
+        return \Botble\Printdesigns\Models\Printdesigns::all();
+    }
+}
 
 if (!function_exists('get_seasons')) {
     function get_seasons()
     {
         return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_reg_product_categories_custom')) {
-    function get_reg_product_categories_custom()
-    {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_plu_product_categories_custom')) {
-    function get_plu_product_categories_custom()
-    {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_total_designs')) {
-    function get_total_designs($id)
-    {
-        return \Botble\Thread\Models\Thread::where('designer_id', $id)->count();
-    }
-}
-
-
-if (!function_exists('get_approved_designs')) {
-    function get_approved_designs($id)
-    {
-        return \Botble\Thread\Models\Thread::where('designer_id', $id)->where('status', 'approved')->count();
     }
 }
 
@@ -451,13 +365,88 @@ if (!function_exists('get_vendor_order_statuses')) {
     }
 }
 
-if (!function_exists('parse_date')) {
-    function parse_date($date)
+if (!function_exists('get_reg_product_categories_custom')) {
+    function get_reg_product_categories_custom()
     {
-        return date('d F, Y', strtotime($date));
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
     }
 }
 
+if (!function_exists('get_plu_product_categories_custom')) {
+    function get_plu_product_categories_custom()
+    {
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
+    }
+}
+//Get General Data
+
+
+//Thread Related Functions
+if (!function_exists('get_thread_comments')) {
+    function get_thread_comments($id)
+    {
+        return \App\Models\ThreadComment::where('thread_id', $id)->with(['user'])->get();
+    }
+}
+
+if (!function_exists('get_thread_variations')) {
+    function get_thread_variations($id)
+    {
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash'])->get();
+    }
+}
+
+if (!function_exists('generate_unique_attr_id')) {
+    function generate_unique_attr_id()
+    {
+      $number = mt_rand(1000000000, 9999999999);
+        if(attr_id_exist($number)){
+          generate_unique_attr_id();
+        }
+        return $number;
+    }
+}
+
+if (!function_exists('attr_id_exist')) {
+    function attr_id_exist($num)
+    {
+      return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
+    }
+}
+
+if (!function_exists('get_total_designs')) {
+    function get_total_designs($id)
+    {
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->count();
+    }
+}
+
+if (!function_exists('get_approved_designs')) {
+    function get_approved_designs($id)
+    {
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->where('status', 'approved')->count();
+    }
+}
+
+if (!function_exists('generate_thread_sku')) {
+    function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
+    {
+        $category = ProductCategory::where('id', $catId)->value('name');
+        $categoryCnt = DB::table('category_designer_count')->where(['user_id'=>$designerId, 'product_category_id'=>$catId])->value('count') + 1;
+        $category_sku = strtoupper(substr($designerInitial, 0, 3) . substr($category, 0, 2) . $categoryCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$designerId, 'product_category_id'=>$catId], ['user_id'=>$designerId, 'product_category_id'=>$catId, 'count'=>$categoryCnt]);
+
+        if ($isPlus) {
+            $category_sku .= '-X';
+        }
+
+        return $category_sku;
+    }
+}
+//Thread Related Functions
+
+
+//Notifications
 if (!function_exists('generate_notification')) {
     function generate_notification($message, $from, $to, $url)
     {
@@ -476,3 +465,14 @@ if (!function_exists('get_user_notifications')) {
         return \App\Models\Notification::where('to', \Illuminate\Support\Facades\Auth::user()->id)->latest()->limit(10)->get();
     }
 }
+//Notifications
+
+
+//Utils
+if (!function_exists('parse_date')) {
+    function parse_date($date)
+    {
+        return date('d F, Y', strtotime($date));
+    }
+}
+//Utils
