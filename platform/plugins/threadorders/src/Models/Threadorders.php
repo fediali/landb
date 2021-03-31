@@ -2,6 +2,7 @@
 
 namespace Botble\Threadorders\Models;
 
+use App\Models\InventoryHistory;
 use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -93,6 +94,8 @@ class Threadorders extends BaseModel
 
     protected $with = [];
 
+    protected $appends = ['thread_order_has_pushed'];
+
     protected static function boot()
     {
         parent::boot();
@@ -176,15 +179,25 @@ class Threadorders extends BaseModel
     public function threadOrderVariations($type=false)
     {
         return DB::table('thread_order_variations')
-            ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name')
+            ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name', 'printdesigns.file AS design_file')
             ->join('ec_product_categories', 'ec_product_categories.id', 'thread_order_variations.product_category_id')
             ->leftJoin('vendorproductunits','vendorproductunits.id','thread_order_variations.product_unit_id')
+            ->leftJoin('printdesigns','printdesigns.id','thread_order_variations.print_design_id')
             ->where('thread_order_id', $this->id)
             ->when($type, function($q) use($type) {
                 $q->where('category_type', $type);
             })
             ->orderBy('category_type')
             ->get();
+    }
+
+    public function getThreadOrderHasPushedAttribute()
+    {
+        $check = InventoryHistory::where('order_id', $this->id)->value('id');
+        if ($check) {
+            return true;
+        }
+        return false;
     }
 
 }

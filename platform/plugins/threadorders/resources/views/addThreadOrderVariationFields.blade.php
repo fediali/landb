@@ -1,6 +1,7 @@
 <h3>Thread Variations</h3>
 @foreach($options['data']->thread_variations as $variation)
     <h5>{{$variation->name}}</h5>
+    <img class="w-100" src="{{ asset('storage/'.$variation->printDesign->file) }}" height="120" width="120" style="object-fit: cover">
     <div class="col-md-4">
         <div class="form-group">
             <label for="regular_qty" class="control-label">Regular Qty</label>
