@@ -314,7 +314,7 @@ $variations = $options['data']['variations'];
                         <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
 
                         <label class="mt-4 font-bold" for="print_id">Print / Solid:</label><br>
-                        <select class="form-control print_design" name="print_id[]" style="width: 100%">
+                        <select class="form-control print_design_var" name="print_id" style="width: 100%">
                             <option selected="selected" value="">Select Print</option>
                             @foreach($options['data']['printdesigns'] as $key => $print)
                                 <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
@@ -406,7 +406,7 @@ $variations = $options['data']['variations'];
                 'thread_variation_id' : $('#thread_variation_id').val(),
                 '_token' : '{{ csrf_token() }}',
                 'name' : $('#variation_fabic_name').val(),
-                'print_id' : $('#variation_print_id').val(),
+                'print_id' : $('select.print_design_var').val(),
             },
             success : function(data) {
               location.reload();
