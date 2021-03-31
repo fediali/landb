@@ -335,7 +335,7 @@
                                         <div class="slideshow-container mt-4">
                                             @foreach($thread->spec_files as $file)
                                                 <div class="mySlides1"> 
-                                                    <img src="{{ asset($file->spec_file) }}" style="width:100%; height:170px;">
+                                                    <img src="{{ asset($file->spec_file) }}" style="width:100%; height:669px;">
                                                     {{--<div class="text">Caption Text</div>--}}
                                                 </div>
                                             @endforeach

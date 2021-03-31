@@ -52,16 +52,24 @@ $variations = $options['data']['variations'];
         </div>
         <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+                    <div class="modal-content"> 
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <div class="d-flex w-100">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title">Adding Variations<span class="variation-name"></span></h4>
+                                <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span class="variation-name"></span></h4>
+
+                                <div>
+
+                                </div>
+
+                                </div>
                         </div>
                         {{--<form method="POST" action="{{ URL::to('/admin/threads/add-variations') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             @csrf--}}
                             <input name="variation_thread_id" type="hidden" value="{{ $thread->id }}">
                             <div class="modal-body">
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered">
 
                                     <tbody id="multi-variations">
@@ -132,10 +140,11 @@ $variations = $options['data']['variations'];
 
 
                                     </tbody></table>
+                                    </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <input class="btn btn-primary" id="submit_denim_variation" value="Save">
+                                <input class="btn btn-primary save-thread" id="submit_denim_variation" value="Save">
                             </div>
                         {{--</form>--}}
                     </div>
@@ -199,15 +208,23 @@ $variations = $options['data']['variations'];
         <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <div class="modal-header">
+                                <div class="d-flex w-100">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title">Adding Variations<span class="variation-name"></span></h4>
+                                <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span class="variation-name"></span></h4>
+
+                                <div>
+
+                                </div>
+
+                                </div>
                         </div>
                         {{--<form method="POST" action="{{ URL::to('/admin/threads/add-variations') }}" accept-charset="UTF-8" enctype="multipart/form-data">
                             @csrf--}}
                             <input name="variation_thread_id" type="hidden" value="{{ $thread->id }}">
                             <div class="modal-body">
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered">
 
                                     <tbody id="multi-variations">
@@ -276,11 +293,11 @@ $variations = $options['data']['variations'];
                                     </tr>
 
 
-                                    </tbody></table>
+                                    </tbody></table></div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <input class="btn btn-primary" type="button" id="submit_variation" value="Save">
+                                <input class="btn btn-primary save-thread" type="button" id="submit_variation" value="Save">
                             </div>
                         {{--</form>--}}
                     </div>
