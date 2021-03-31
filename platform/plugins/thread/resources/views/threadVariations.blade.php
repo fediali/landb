@@ -78,13 +78,23 @@ $variations = $options['data']['variations'];
 
                                         <td width="15%">
                                             <label for="print_id">Print / Solid:</label>
+
+                                            <select class="form-control print_design" name="print_id[]">
+                                                <option selected="selected" value="">Select Print</option>
+                                                @foreach($options['data']['printdesigns'] as $key => $print)
+                                                    <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                                        {{ $print->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
                                             {{--<select hidden class="form-control select variation_print" name="print_id[]">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}">{{ $print->name }}</option>
                                                 @endforeach
                                             </select>--}}
-                                            <input type="hidden" class="print_id" name="print_id[]">
+                                            {{--<input type="hidden" class="print_id" name="print_id[]">
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Print
@@ -93,9 +103,8 @@ $variations = $options['data']['variations'];
                                                     @foreach($options['data']['printdesigns'] as $key => $print)
                                                         <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                                                     @endforeach
-
                                                 </div>
-                                            </div>
+                                            </div>--}}
                                         </td>
                                         <td width="15%">
                                             <label for="wash_id" class="control-label">Select Wash</label>
@@ -213,15 +222,25 @@ $variations = $options['data']['variations'];
                                             <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
 
-                                        <td width="15%">
+                                        <td width="25%">
                                             <label for="print_id">Print / Solid:</label>
+
+                                            <select class="form-control print_design" name="print_id[]">
+                                                <option selected="selected" value="">Select Print</option>
+                                                @foreach($options['data']['printdesigns'] as $key => $print)
+                                                    <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                                        {{ $print->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
                                             {{--<select hidden class="form-control select variation_print" name="print_id[]">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}">{{ $print->name }}</option>
                                                 @endforeach
                                             </select>--}}
-                                            <input type="hidden" class="print_id" name="print_id[]">
+                                            {{--<input type="hidden" class="print_id" name="print_id[]">
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Select Print
@@ -231,9 +250,9 @@ $variations = $options['data']['variations'];
                                                         <a class="dropdown-item print_id_drop" href="#" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
                                                     @endforeach
                                                 </div>
-                                            </div>
+                                            </div>--}}
                                         </td>
-                                        <td width="15%">
+                                        <td width="10%">
                                             <label for="pack_id">Regular:</label>
                                             <input required class="form-control variation_qty" placeholder="Add Regular Quantity" name="regular_qty[]" type="text">
                                         </td>
@@ -241,7 +260,7 @@ $variations = $options['data']['variations'];
                                             <label for="pack_id">Plus:</label>
                                             <input required class="form-control variation_plus_qty" placeholder="Add Plus Quantity" name="plus_qty[]" type="text">
                                         </td>
-                                        <td width="15%">
+                                        <td width="10%">
                                             <label for="cost">Cost:</label>
                                             <input required class="form-control variation_cost" placeholder="Add Cost" name="cost[]" type="text">
                                         </td>
@@ -249,12 +268,10 @@ $variations = $options['data']['variations'];
                                             <label for="Notes">Notes:</label>
                                             <textarea class="form-control variation_notes" placeholder="Add Notes" name="notes[]" cols="50" rows="2"></textarea>
                                         </td>
-                                        <td width="10%">
+                                        <td width="5%">
 
                                             <label for="row">Remove</label>
                                             <button type="button" class="remove_row form-control btn btn-info"><i class="fa fa-trash"></i></button>
-                                        </td>
-                                        <td>
                                         </td>
                                     </tr>
 
@@ -279,16 +296,16 @@ $variations = $options['data']['variations'];
 <div class="modal modal-thread fade in" id="modal-default" style="display: none; padding-right: 17px;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">                
+            <div class="modal-header">
                     <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span class="variation-name"></span></h4>
 
                     <div>
-                        
+
                     </div>
-                        
+
                     </div>
             </div>
                 <div class="modal-body">
@@ -296,17 +313,28 @@ $variations = $options['data']['variations'];
                         <label class="font-bold" for="name">Variation Name:</label>
                         <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
                         <label class="mt-4 font-bold" for="print_id">Print / Solid:</label>
-                        <input type="hidden" class="print_id" id="variation_print_id" name="print_id">
-                    <div class="dropdown dropdown-thread">
-                        <button class="btn btn-secondary dropdown-toggle text-left w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Select Print
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                        <select class="form-control print_design" name="print_id[]">
+                            <option selected="selected" value="">Select Print</option>
                             @foreach($options['data']['printdesigns'] as $key => $print)
-                                <a class="dropdown-item print_id_droper" href="javascript:void(0)" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
+                                <option value="{{ $print->id }}" data-file="{{$print->file}}">
+                                    {{ $print->name }}
+                                </option>
                             @endforeach
-                        </div>
-                    </div>
+                        </select>
+
+                        {{--<input type="hidden" class="print_id" id="variation_print_id" name="print_id">
+                        <div class="dropdown dropdown-thread">
+                            <button class="btn btn-secondary dropdown-toggle text-left w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select Print
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                @foreach($options['data']['printdesigns'] as $key => $print)
+                                    <a class="dropdown-item print_id_droper" href="javascript:void(0)" data-id="{{ $print->id }}" data-name="{{ $print->name }}"><img class="" src="{{ asset('storage/'.$print->file) }}" height="40" width="40" alt="Image" title="Image Not Available"  /> {{ $print->name }}</a>
+                                @endforeach
+                            </div>
+                        </div>--}}
+
                         <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
                     </div>
                 </div>
@@ -320,11 +348,29 @@ $variations = $options['data']['variations'];
     <!-- /.modal-dialog -->
 </div>
 
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
     $(document).ready(function () {
+
+        function formatState (state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var $state = $(
+                '<span><img src="{{asset('storage')}}/'+$(state.element).data('file')+'" alt="no img" class="img-flag"/> ' + state.text + '</span>'
+            );
+            return $state;
+        }
+
+        $('select.print_design').select2({
+            templateResult: formatState
+        });
+
       $(document).on('click', '.remove_row', function (e) {
         var count = $('.duplicate').length;
-        console.log(count);
         if (count !== 1) {
           $tr = $(this).closest("tr");
           $tr.remove();
