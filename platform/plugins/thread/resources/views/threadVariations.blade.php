@@ -368,6 +368,9 @@ $variations = $options['data']['variations'];
         $('select.print_design').select2({
             templateResult: formatState
         });
+        $('select.print_design_var').select2({
+            templateResult: formatState
+        });
 
       $(document).on('click', '.remove_row', function (e) {
         var count = $('.duplicate').length;
