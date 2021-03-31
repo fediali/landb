@@ -30,10 +30,10 @@
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"></td>
                 <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
                <td>{{ $product->pname }}</td>
-                <td>{{ $product->pquantity }}</td>
-                <td>{{ $product->pquantity }}</td>
-                <td>{{ $product->pquantity }}</td>
-                <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->quantity }}"></td>
+                <td>{{ $product->quantity }}</td>
+                <td>{{ $product->ordered_pack_qty }}</td>
+                <td>{{ $product->received_pack_qty }}</td>
+                <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
                 <td>
                      <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>

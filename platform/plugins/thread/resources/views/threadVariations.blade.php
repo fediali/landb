@@ -431,7 +431,7 @@ $variations = $options['data']['variations'];
             'name[]' : $('input:text.variation_name').map(function(){
               return this.value;
             }).get(),
-            'print_id[]' :$('input.print_id').map(function(){
+            'print_id[]' :$('select.print_design').map(function(){
               return this.value;
             }).get(),
             'regular_qty[]' :$('input:text.variation_qty').map(function(){
@@ -469,7 +469,7 @@ $variations = $options['data']['variations'];
             'name[]' : $('input:text.variation_name').map(function(){
               return this.value;
             }).get(),
-            'print_id[]' :$('input.print_id').map(function(){
+            'print_id[]' :$('select.print_design').map(function(){
               return this.value;
             }).get(),
             'wash_id[]' :$('.variation_wash').map(function(){
