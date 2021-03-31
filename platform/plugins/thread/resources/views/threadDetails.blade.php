@@ -324,34 +324,22 @@
                         <div class="row ">
                             <div class="col-md-4 ">
                                 <h4>Style</h4>  
-                                <div class="slideshow-container mt-4">
-
-                                <div class="mySlides fade">
-                                <div class="numbertext">1 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Text</div>
+                                <div class="slideshow-container">
+                                <div class="mySlides1">
+                                    <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%; height:170px;">
                                 </div>
 
-                                <div class="mySlides fade">
-                                <div class="numbertext">2 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Two</div>
+                                <div class="mySlides1">
+                                    <img src="https://www.w3schools.com/howto/img_snow_wide.jpg" style="width:100%; height:170px;">
                                 </div>
 
-                                <div class="mySlides fade">
-                                <div class="numbertext">3 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Three</div>
+                                <div class="mySlides1">
+                                    <img src="https://www.w3schools.com/howto/img_mountains_wide.jpg" style="width:100%; height:170px;">
                                 </div>
 
-                                </div>
-                                <br>
-
-                                <div style="text-align:center">
-                                <span class="dot"></span> 
-                                <span class="dot"></span> 
-                                <span class="dot"></span> 
-                                </div>
+                                <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
+                                <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
+                                </div> 
                              </div>
                             <div class="col-md-8">
                                 @if($thread->is_denim == 1)
@@ -565,8 +553,8 @@
     } 
 
 
-    .mySlides {display: none;}
-img {vertical-align: middle;}
+    .mySlides1, .mySlides2 {display: none}
+.slideshow-container img {vertical-align: middle;}
 
 /* Slideshow container */
 .slideshow-container {
@@ -575,85 +563,56 @@ img {vertical-align: middle;}
   margin: auto;
 }
 
-/* Caption text */
-.text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
   position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
 }
 
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
 }
 
-/* The dots/bullets/indicators */
-.dot {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-}
-
-.active-slider {
-  background-color: #717171;
-}
-
-/* Fading animation */
-.fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
-  animation-name: fade;
-  animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .text {font-size: 11px}
+/* On hover, add a grey background color */
+.prev:hover, .next:hover {
+  background-color: #f1f1f1;
+  color: black;
 }
 </style>
 
 
 <script>
-var slideIndex = 0;
-showSlides();
+var slideIndex = [1,1];
+var slideId = ["mySlides1", "mySlides2"]
+showSlides(1, 0);
+showSlides(1, 1);
 
-function showSlides() {
+function plusSlides(n, no) {
+  showSlides(slideIndex[no] += n, no);
+}
+
+function showSlides(n, no) {
   var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
+  var x = document.getElementsByClassName(slideId[no]);
+  if (n > x.length) {slideIndex[no] = 1}    
+  if (n < 1) {slideIndex[no] = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
   }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active-slider", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active-slider";
-  setTimeout(showSlides, 2000); // Change image every 2 seconds
+  x[slideIndex[no]-1].style.display = "block";  
 }
 </script>
+
 
