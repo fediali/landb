@@ -233,7 +233,7 @@
             </div>--}}
 
             <section class="denim_table new_clothing">
-                <div class="container">
+                <div class="">
                     <div class="table-responsive">
                         <table>
 
@@ -582,7 +582,7 @@
     }
 
     .main-form {
-        width: 125% !important;
+        width: 100% !important;
     }
 
 
