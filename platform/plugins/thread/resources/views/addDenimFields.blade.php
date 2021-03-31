@@ -60,7 +60,7 @@
 </div>
 
 <div class="form-group">
-    <label for="spec_file" class="control-label">Tech Spec Files</label>
+    <label for="spec_file" class="control-label">Tech Spec Files <span class="image-sugg">Image Size (270px by 170px)</span></label>
     <div class="image-box">
         <input type="file" name="spec_files[]" class="image-data" multiple>
         <br><br>

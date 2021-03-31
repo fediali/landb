@@ -382,6 +382,11 @@ body {
     margin: 4px 20px !important;
 }
 
+.image-sugg {
+    font-size: 11px;
+    color: #ff0707;
+}
+
 
 /* mediaqueries */
 
