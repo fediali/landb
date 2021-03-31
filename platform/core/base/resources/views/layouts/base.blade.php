@@ -80,7 +80,7 @@
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
 <link
-    href="{{ asset('css/style.css') }}"
+    href="{{ asset('css/custom.css') }}"
     rel="stylesheet">
 
 
