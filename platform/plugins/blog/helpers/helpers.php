@@ -269,7 +269,7 @@ if (!function_exists('get_designers')) {
 if (!function_exists('get_print_designs')) {
     function get_print_designs()
     {
-        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->all();
+        return \Botble\Printdesigns\Models\Printdesigns::all();
     }
 }
 
