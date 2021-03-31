@@ -60,10 +60,10 @@ class InventoryTable extends TableAbstract
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('ecommerce', function ($item) {
-              $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('inventory.pushToEcommerce', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
+              $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('inventory.pushToEcommerce', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Release inventory to Ecommerce">Release</a><script>function confirm_start(url){
                       swal({
                           title: \'Are you sure?\',
-                          text: "Do you want to push this Order to Ecommerce!",
+                          text: "Do you want to release this Inventory to Ecommerce!",
                           icon: \'info\',
                           buttons:{
                               cancel: {

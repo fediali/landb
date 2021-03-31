@@ -277,7 +277,7 @@
                                             class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                                     </p></td>
                                 <td colspan="1"><p class="font-bold font-12">Status: <br> <span
-                                            class="widget-title-color-red text-uppercase">{{ $thread->status }}</span>
+                                            class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
                                     </p></td>
 
 
@@ -325,34 +325,26 @@
                         <div class="row ">
                             <div class="col-md-4 ">
                                 <h4>Style</h4>
-                                <div class="slideshow-container mt-4">
+                            @if(!is_null($thread->spec_files))
+                                @if(count($thread->spec_files))
+                                        <div class="slideshow-container mt-4">
+                                        @foreach($thread->spec_files as $file)
+                                            <div class="mySlides fade">
+                                            <div class="numbertext">{{ $loop->iteration }} / {{ count($thread->spec_files) }}</div>
+                                            <img src="{{ asset($file->spec_file) }}" style="width:100%">
+                                            {{--<div class="text">Caption Text</div>--}}
+                                            </div>
+                                        @endforeach
+                                        </div>
 
-                                <div class="mySlides fade">
-                                <div class="numbertext">1 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Text</div>
-                                </div>
-
-                                <div class="mySlides fade">
-                                <div class="numbertext">2 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Two</div>
-                                </div>
-
-                                <div class="mySlides fade">
-                                <div class="numbertext">3 / 3</div>
-                                <img src="https://www.w3schools.com/howto/img_nature_wide.jpg" style="width:100%">
-                                <div class="text">Caption Three</div>
-                                </div>
-
-                                </div>
-                                <br>
-
-                                <div style="text-align:center">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                </div>
+                                    <br>
+                                    <div style="text-align:center">
+                                    @foreach($thread->spec_files as $file)
+                                        <span class="dot"></span>
+                                    @endforeach
+                                    </div>
+                                @endif
+                            @endif
                              </div>
                             <div class="col-md-8">
                                 @if($thread->is_denim == 1)
