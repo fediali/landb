@@ -582,7 +582,7 @@
     }
 
     .main-form {
-        width: 100% !important;
+        width: 135% !important;
     }
 
 
