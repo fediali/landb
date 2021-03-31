@@ -77,9 +77,9 @@ $variations = $options['data']['variations'];
                                         </td>
 
                                         <td width="25%">
-                                            <label for="print_id">Print / Solid:</label>
+                                            <label for="print_id">Print / Solid:</label><br>
 
-                                            <select class="form-control print_design" name="print_id[]">
+                                            <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
@@ -123,7 +123,7 @@ $variations = $options['data']['variations'];
                                             <label for="Notes">Notes:</label>
                                             <textarea class="form-control variation_notes" placeholder="Add Notes" name="notes[]" cols="50" rows="2"></textarea>
                                         </td>
-                                        <td width="10%">
+                                        <td width="5%">
 
                                             <label for="row">Remove</label>
                                             <button type="button" class="remove_row form-control btn btn-info"><i class="fa fa-trash"></i></button>
@@ -223,9 +223,9 @@ $variations = $options['data']['variations'];
                                         </td>
 
                                         <td width="25%">
-                                            <label for="print_id">Print / Solid:</label>
+                                            <label for="print_id">Print / Solid:</label><br>
 
-                                            <select class="form-control print_design" name="print_id[]">
+                                            <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
@@ -312,9 +312,9 @@ $variations = $options['data']['variations'];
                     <div>
                         <label class="font-bold" for="name">Variation Name:</label>
                         <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
-                        <label class="mt-4 font-bold" for="print_id">Print / Solid:</label>
 
-                        <select class="form-control print_design" name="print_id[]">
+                        <label class="mt-4 font-bold" for="print_id">Print / Solid:</label><br>
+                        <select class="form-control print_design" name="print_id[]" style="width: 100%">
                             <option selected="selected" value="">Select Print</option>
                             @foreach($options['data']['printdesigns'] as $key => $print)
                                 <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
