@@ -106,15 +106,14 @@ class InventoryController extends BaseController
     public function edit($id, FormBuilder $formBuilder, Request $request)
     {
         $inventory = Inventory::with(['products' => function($query){
-          $query->leftJoin('ec_products as p', 'p.sku','inventory_products_pivot.sku')->select(
+          $query->leftJoin('ec_products as p', 'p.id','inventory_products_pivot.product_id')->select(
               'inventory_products_pivot.*',
               'p.id as pid',
               'p.name as pname',
-              'p.images as pimages',
-              'p.quantity as pquantity'
+              'p.images as pimages'
           );
         }])->findOrFail($id);
-//dd($inventory);
+
         event(new BeforeEditContentEvent($request, $inventory));
 
         page_title()->setTitle(trans('plugins/inventory::inventory.edit') . ' "' . $inventory->name . '"');
@@ -213,7 +212,7 @@ class InventoryController extends BaseController
 
 
     public function getProductByBarcode(Request $request){
-      $product = Product::where('barcode',$request->get('barcode'))->orWhere('sku', $request->get('barcode'))->where('status', 'published')->first();
+      $product = Product::where('barcode',$request->get('barcode'))->orWhere('sku', $request->get('barcode'))/*->where('status', 'published')*/->first();
       if($product){
         return response()->json(['product' => $product, 'status' => 'success'], 200);
       }else{

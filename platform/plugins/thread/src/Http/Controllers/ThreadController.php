@@ -328,7 +328,7 @@ class ThreadController extends BaseController
     public function addVariation(Request $request)
     {
         $data = $request->all();
-        //dd($data);
+
         $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
         for ($i = 0; $i <= count($data['name']) - 1; $i++) {
             $variation = new ThreadVariation();
