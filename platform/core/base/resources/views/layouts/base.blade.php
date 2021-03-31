@@ -34,8 +34,12 @@
         rel="stylesheet">
 
     {!! Assets::renderHeader(['core']) !!}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+            integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous"/>
     @yield('head')
 
     @stack('header')
@@ -59,37 +63,44 @@
 {!! apply_filters(BASE_FILTER_FOOTER_LAYOUT_TEMPLATE, null) !!}
 
 <script>
-  window.laravel_echo_port='{{env("LARAVEL_ECHO_PORT")}}';
-  function pushNotification(data){
-    var html = '<div class="dropdown-divider"></div>\n' +
-        '    <a href="'+data.url+'" class="dropdown-item" style="white-space: normal">\n' +
-        '         <i class="fas fa-volume-up mr-2"></i>'+data.message+' \n' +
-        '         <span class="float-right text-muted text-sm">'+data.created_at+'</span>\n' +
-        '    </a>';
-    $('.notifications-dropdown').prepend(html);
-    var $span = $('.notification-count');
-    $span.text(Number($('#notification-count').text()) + 1);
-    $span.show();
-  }
+    window.laravel_echo_port = '{{env("LARAVEL_ECHO_PORT")}}';
+
+    function pushNotification(data) {
+        var html = '<div class="dropdown-divider"></div>\n' +
+            '    <a href="' + data.url + '" class="dropdown-item" style="white-space: normal">\n' +
+            '         <i class="fas fa-volume-up mr-2"></i>' + data.message + ' \n' +
+            '         <span class="float-right text-muted text-sm">' + data.created_at + '</span>\n' +
+            '    </a>';
+        $('.notifications-dropdown').prepend(html);
+        var $span = $('.notification-count');
+        $span.text(Number($('#notification-count').text()) + 1);
+        $span.show();
+    }
 </script>
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
+<link
+    href="{{ asset('css/style.css') }}"
+    rel="stylesheet">
+
 
 <script type="text/javascript">
-  window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
-      .listen('.ThreadEvent', (data) => {
-  toastr['success'](data.message, 'New Thread Notification');
-  pushNotification(data);
-  });
-  window.Echo.channel('thread_approved')
-      .listen('.ThreadApprovalEvent', (data) => {
-  toastr['success'](data.title, 'New Thread Notification');
-  var $span = $('.notification-count');
-  $span.text(Number($('#notification-count').text()) + 1);
-  $span.show();
-  });
+    window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
+        .listen('.ThreadEvent', (data) => {
+            toastr['success'](data.message, 'New Thread Notification');
+            pushNotification(data);
+        });
+    window.Echo.channel('thread_approved')
+        .listen('.ThreadApprovalEvent', (data) => {
+            toastr['success'](data.title, 'New Thread Notification');
+            var $span = $('.notification-count');
+            $span.text(Number($('#notification-count').text()) + 1);
+            $span.show();
+        });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous"></script>
 
 </body>
 </html>
