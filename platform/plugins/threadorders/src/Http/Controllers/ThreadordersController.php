@@ -325,10 +325,10 @@ class ThreadordersController extends BaseController
                     $product->name = $variation->name;
                     $product->description = $variation->name;
                     $product->content = $variation->name;
-                    $product->status = BaseStatusEnum::PENDING;
+                    $product->status = BaseStatusEnum::PUBLISHED;
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
-                    $product->quantity = $variation->quantity;
+                    $product->quantity = 0;
                     $product->price = $variation->cost;
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
                     $extras = 0;
@@ -343,14 +343,13 @@ class ThreadordersController extends BaseController
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);
 
-                        DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
                         InventoryHistory::create([
                                 'product_id' => $product->id,
-                                'quantity' => $variation->quantity,
-                                'new_stock' => $variation->quantity,
-                                'old_stock' => 0,
-                                'created_by' => Auth::user()->id,
                                 'order_id' => $threadorder->id,
+                                'quantity' => $variation->quantity, // transaction qty
+                                'new_stock' => $variation->quantity, // new stock qty
+                                'old_stock' => 0, // 0 when new prod add
+                                'created_by' => Auth::user()->id,
                                 'reference' => 'threadorders.push_to_ecommerce'
                         ]);
                     }

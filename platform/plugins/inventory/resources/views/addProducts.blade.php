@@ -27,13 +27,13 @@
                         <img src="{{ URL::to('storage') }}/{{@json_decode($product->pimages)[0]}}" onerror="this.src='{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}'" width="50">
                     </a>
                 </td>
-                <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"></td>
-                <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
+                <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
+                <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td></td>
                <td>{{ $product->pname }}</td>
-                <td>{{ $product->quantity }}</td>
-                <td>{{ $product->ordered_pack_qty }}</td>
-                <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_pack_qty }}"></td>
-                <td><input style="width: 60px; text-align:center" name="quantity_{{ $loop->iteration-1 }}" id="quantity_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
+                <td>{{ $product->pquantity }}<input type="hidden" name="quantity_{{ $loop->iteration-1 }}" value="{{ $product->pquantity }}"></td>
+                <td>{{ $product->ordered_pack_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_pack_qty }}"></td>
+                <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}" id="received_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_pack_qty }}"></td>
+                <td><input style="width: 60px; text-align:center" name="loose_qty_{{ $loop->iteration-1 }}" id="loose_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
                 <td>
                      <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>
@@ -106,8 +106,10 @@
             }
           });
           if(exist){
-            var current = $('#quantity_'+product.id).val();
-            $('#quantity_'+product.id).val(++current);
+            var current = $('#received_qty_'+product.id).val();
+            $('#received_qty_'+product.id).val(++current);
+              var current2 = $('#loose_qty_'+product.id).val();
+              $('#loose_qty_'+product.id).val(++current2);
           }else{
             $('#tableBody').append(
                 '<tr data-id="'+product.id+'">\n' +
@@ -115,13 +117,13 @@
                 '         <img src="{{ URL::to('storage') }}/'+ product.images[0] +'" width="50">\n' +
                 '         </a>\n' +
                 '        </td>\n' +
-                '        <td>'+product.sku+'<input type="hidden" name="sku_'+pcount+'" value="'+product.sku+'"></td>\n' +
+                '        <td>'+product.sku+'<input type="hidden" name="sku_'+pcount+'" value="'+product.sku+'"><input type="hidden" name="product_id_'+pcount+'" value="'+product.id+'"></td>\n' +
                 '        <td>'+product.barcode+'<input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
                 '        <td>'+product.name+'</td>\n' +
-                '        <td>'+product.quantity+'</td>\n' +
-                '        <td>'+product.quantity+'</td>\n' +
-                '        <td><input style="width: 60px; text-align:center" name="quantity_'+pcount+'" id="quantity_'+product.id+'" class="input-micro input-both-amount input_main" value="1"></td>\n' +
-                '        <td><input style="width: 60px; text-align:center" name="quantity_'+pcount+'" id="quantity_'+product.id+'" class="input-micro input-both-amount input_main" value="1"></td>\n' +
+                '        <td>'+product.quantity+'<input type="hidden" name="quantity_'+pcount+'" value="'+product.quantity+'"></td>\n' +
+                '        <td>'+product.ordered_qty+'<input type="hidden" name="ordered_qty_'+pcount+'" value="'+product.ordered_qty+'"></td>\n' +
+                '        <td><input style="width: 60px; text-align:center" name="received_qty_'+pcount+'" id="received_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
+                '        <td><input style="width: 60px; text-align:center" name="loose_qty_'+pcount+'" id="loose_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
                 '        <td>\n' +
                 '            <div class="btn-group">\n' +
                 '                <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>\n' +

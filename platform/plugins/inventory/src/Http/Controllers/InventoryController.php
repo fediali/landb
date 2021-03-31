@@ -68,25 +68,27 @@ class InventoryController extends BaseController
      */
     public function store(InventoryRequest $request, BaseHttpResponse $response)
     {
-        $data = $request->all();
+        $data = $request->input();
         $data['created_by'] = Auth::user()->id;
-        $data['date'] = Carbon::parse($data['date']);
         $inventory = $this->inventoryRepository->createOrUpdate($data);
 
-        if($inventory){
-          for ($i=0; $i<=count($data) ; $i++ ) {
-            if(isset($data['sku_'.$i])){
-              $product = array();
-              $product['inventory_id'] = $inventory->id;
-              $product['sku'] = $data['sku_'.$i];
-              $product['barcode'] = $data['barcode_'.$i];
-              $product['quantity'] = $data['quantity_'.$i];
-
-              InventoryProducts::create($product);
-            }else{
-              break;
+        if ($inventory) {
+            for ($i = 0; $i <= count($data); $i++) {
+                if (isset($data['sku_' . $i])) {
+                    $product = array();
+                    $product['inventory_id'] = $inventory->id;
+                    $product['product_id'] = $data['product_id_' . $i];
+                    $product['sku'] = $data['sku_' . $i];
+                    $product['barcode'] = $data['barcode_' . $i];
+                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
+                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
+                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['loose_qty'] = $data['loose_qty_' . $i];
+                    InventoryProducts::create($product);
+                } else {
+                    break;
+                }
             }
-          }
         }
 
         event(new CreatedContentEvent(INVENTORY_MODULE_SCREEN_NAME, $request, $inventory));
@@ -106,13 +108,14 @@ class InventoryController extends BaseController
     public function edit($id, FormBuilder $formBuilder, Request $request)
     {
         //TODO::Need Refactoring
-        $inventory = Inventory::with(['products' => function($query){
-          $query->leftJoin('ec_products as p', 'p.id','inventory_products_pivot.product_id')->select(
-              'inventory_products_pivot.*',
-              'p.id as pid',
-              'p.name as pname',
-              'p.images as pimages'
-          );
+        $inventory = Inventory::with(['products' => function ($query) {
+            $query->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')->select(
+                'inventory_products_pivot.*',
+                'p.id as pid',
+                'p.name as pname',
+                'p.images as pimages',
+                'p.quantity as pquantity'
+            );
         }])->findOrFail($id);
 
         event(new BeforeEditContentEvent($request, $inventory));
@@ -130,31 +133,33 @@ class InventoryController extends BaseController
      */
     public function update($id, InventoryRequest $request, BaseHttpResponse $response)
     {
-        $data = $request->all();
+        $data = $request->input();
         $data['updated_by'] = Auth::user()->id;
-        $data['date'] = Carbon::parse($data['date']);
         $inventory = $this->inventoryRepository->findOrFail($id);
 
-        $inventory->fill($request->input());
+        $inventory->fill($data);
 
         $update = $this->inventoryRepository->createOrUpdate($inventory);
 
-        InventoryProducts::where('inventory_id' , $inventory->id)->delete();
+        InventoryProducts::where('inventory_id', $inventory->id)->delete();
 
-        if($update){
-          for ($i=0; $i<=count($data) ; $i++ ) {
-            if(isset($data['sku_'.$i])){
-              $product = array();
-              $product['inventory_id'] = $update->id;
-              $product['sku'] = $data['sku_'.$i];
-              $product['barcode'] = $data['barcode_'.$i];
-              $product['quantity'] = $data['quantity_'.$i];
-
-              InventoryProducts::create($product);
-            }else{
-              break;
+        if ($update) {
+            for ($i = 0; $i <= count($data); $i++) {
+                if (isset($data['sku_' . $i])) {
+                    $product = array();
+                    $product['inventory_id'] = $inventory->id;
+                    $product['product_id'] = $data['product_id_' . $i];
+                    $product['sku'] = $data['sku_' . $i];
+                    $product['barcode'] = $data['barcode_' . $i];
+                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
+                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
+                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['loose_qty'] = $data['loose_qty_' . $i];
+                    InventoryProducts::create($product);
+                } else {
+                    break;
+                }
             }
-          }
         }
 
         event(new UpdatedContentEvent(INVENTORY_MODULE_SCREEN_NAME, $request, $inventory));
@@ -212,57 +217,65 @@ class InventoryController extends BaseController
     }
 
 
-    public function getProductByBarcode(Request $request){
-      $product = Product::where('barcode',$request->get('barcode'))
-          ->orWhere('sku', $request->get('barcode'))/*->where('status', 'published')*/->first();
-      if($product){
-        return response()->json(['product' => $product, 'status' => 'success'], 200);
-      }else{
-        return response()->json(['product' => [], 'status' => 'error'], 404);
-      }
+    public function getProductByBarcode(Request $request)
+    {
+        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.name',
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty')
+            ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
+            ->where('barcode', $request->get('barcode'))
+            ->orWhere('ec_products.sku', $request->get('barcode'))
+            ->orWhere('parent_sku', $request->get('barcode'))
+            /*->where('status', 'published')*/
+            ->first();
+        if ($product) {
+            return response()->json(['product' => $product, 'status' => 'success'], 200);
+        } else {
+            return response()->json(['product' => [], 'status' => 'error'], 404);
+        }
     }
 
-    public function pushToEcommerce($id, BaseHttpResponse $response){
-      $error = null;
-      $inventory = Inventory::with('products')->where('id',$id)->first();
-      if($inventory && $inventory->status == 'published'){
-        if(count($inventory->products)){
-          foreach ($inventory->products as $inv_product){
-            $product = Product::where('sku', $inv_product->sku)->first();
-            if($product){
-              $old_stock = $product->quantity;
-              $product->quantity =  $product->quantity + $inv_product->quantity;
-              if($product->save()){
+    public function pushToEcommerce($id, BaseHttpResponse $response)
+    {
+        $error = null;
+        $inventory = Inventory::with('products')->where('id', $id)->first();
+        if ($inventory && $inventory->status == 'published') {
+            if (count($inventory->products)) {
+                foreach ($inventory->products as $inv_product) {
+                    $product = Product::where('sku', $inv_product->sku)->first();
+                    if ($product) {
+                        $old_stock = $product->quantity;
+                        $product->quantity = $product->quantity + $inv_product->quantity;
+                        if ($product->save()) {
 
-                InventoryHistory::create([
-                    'product_id' => $product->id,
-                    'quantity' => $inv_product->quantity,
-                    'new_stock' => $product->quantity,
-                    'old_stock' => $old_stock,
-                    'created_by' => Auth::user()->id,
-                    'inventory_id' => $inventory->id,
-                    'reference' => 'inventory.push_to_ecommerce'
-                ]);
+                            InventoryHistory::create([
+                                'product_id' => $product->id,
+                                'quantity' => $inv_product->quantity,
+                                'new_stock' => $product->quantity,
+                                'old_stock' => $old_stock,
+                                'created_by' => Auth::user()->id,
+                                'inventory_id' => $inventory->id,
+                                'reference' => 'inventory.push_to_ecommerce'
+                            ]);
 
-              }
-            }else{
-              $error = 'Some of the inventory products does not exists';
+                        }
+                    } else {
+                        $error = 'Some of the inventory products does not exists';
+                    }
+
+                }
+            } else {
+                $error = 'Inventory have no products';
             }
-
-          }
-        }else{
-          $error = 'Inventory have no products';
+        } else {
+            $error = 'Invalid inventory or Inventory is not published';
         }
-      }else{
-        $error = 'Invalid inventory or Inventory is not published';
-      }
 
-      if (!is_null($error)) {
-        return $response->setPreviousUrl(route('inventory.index'))
-            ->setError($error);
-      }else{
-        return $response->setPreviousUrl(route('inventory.index'))
-            ->setMessage('Inventory has been pushed into ecommerce successfully');
-      }
+        if (!is_null($error)) {
+            return $response->setPreviousUrl(route('inventory.index'))
+                ->setError($error);
+        } else {
+            return $response->setPreviousUrl(route('inventory.index'))
+                ->setMessage('Inventory has been pushed into ecommerce successfully');
+        }
     }
 }
