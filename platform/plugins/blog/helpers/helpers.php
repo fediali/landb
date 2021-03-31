@@ -269,21 +269,14 @@ if (!function_exists('get_designers')) {
 if (!function_exists('get_print_designs')) {
     function get_print_designs()
     {
-        return \Botble\Printdesigns\Models\Printdesigns::all();
+        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->all();
     }
 }
 
 if (!function_exists('get_thread_variations')) {
     function get_thread_variations($id)
     {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign','fabrics', 'wash'])->get();
-    }
-}
-
-if (!function_exists('get_thread_order_variations')) {
-    function get_thread_order_variations($id)
-    {
-        return \Illuminate\Support\Facades\DB::table('thread_order_variations')->where('thread_order_id', $id)->get();
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash'])->get();
     }
 }
 

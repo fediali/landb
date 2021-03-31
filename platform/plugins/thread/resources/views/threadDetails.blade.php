@@ -249,7 +249,7 @@
                                     </p></td>
                                 <td colspan="1" rowspan="2" class="p-0">
                                     <div class="regpack">
-                                        <h6>Reg Size Run</h6>
+                                        <h6>Reg Pack Size Run</h6>
                                         @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                             <div class="sizediv">
                                                 {{ $reg_cat->name }}
@@ -260,7 +260,7 @@
                                 @if(!empty($options['data']['plus_cat']))
                                     <td colspan="1" rowspan="4" class="p-0">
                                         <div class="regpack">
-                                            <h6>Plus Size Run</h6>
+                                            <h6>Plus Pack Size Run</h6>
 
                                             @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                                 <div class="sizediv">
@@ -287,14 +287,14 @@
                                             class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
                                     </p></td>
                                 <td><p class="font-bold font-12">Style # <br><span
-                                            class="widget-title-color-red text-uppercase"> Reg:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
-                                                Plus:  {{ $options['data']['plus_sku'] }} @endif</span></p></td>
+                                            class="widget-title-color-red text-uppercase"> Reg Pack:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
+                                                Plus Pack:  {{ $options['data']['plus_sku'] }} @endif</span></p></td>
                                 <td><p class="font-bold font-12">Category <br><span
                                             class="widget-title-color-red text-uppercase">
-                                    Reg: {{ $options['data']['reg_cat']->name }}<br><span
+                                    Reg Pack: {{ $options['data']['reg_cat']->name }}<br><span
                                                 class="widget-title-color-red text-uppercase">
                                   @if(!empty($options['data']['plus_cat']))
-                                                    Plus: {{ $options['data']['plus_cat']->name }} @endif</span></p>
+                                                    Plus Pack: {{ $options['data']['plus_cat']->name }} @endif</span></p>
                                 </td>
                                 <td><p class="font-bold font-12">Season: <br><span
                                             class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>

@@ -64,33 +64,38 @@ class ThreadordersTable extends TableAbstract
                 return view('plugins/threadorders::threadOrderStatus', ['item' => $item])->render();
             })
             ->editColumn('ecommerce', function ($item) {
-              $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('threadorders.orderItem', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
-                      swal({
-                          title: \'Are you sure?\',
-                          text: "Do you want to push this Order to Ecommerce!",
-                          icon: \'info\',
-                          buttons:{
-                              cancel: {
-                                text: "Cancel",
-                                value: null,
-                                visible: true,
-                                className: "",
-                                closeModal: true,
-                              },
-                              confirm: {
-                                text: "Push",
-                                value: true,
-                                visible: true,
-                                className: "",
-                                closeModal: true
-                              }
-                            }
-                          }).then((result) => {
-                              if (result) {
-                                  location.replace(url)
-                              }
-                          });
-                  }</script>';
+                if ($item->thread_order_has_pushed) {
+                    $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>';
+                } else {
+                    $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('threadorders.orderItem', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
+                          swal({
+                              title: \'Are you sure?\',
+                              text: "Do you want to push this Order to Ecommerce!",
+                              icon: \'info\',
+                              buttons:{
+                                  cancel: {
+                                    text: "Cancel",
+                                    value: null,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                  },
+                                  confirm: {
+                                    text: "Push",
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true
+                                  }
+                                }
+                              }).then((result) => {
+                                  if (result) {
+                                      location.replace(url)
+                                  }
+                              });
+                      }</script>';
+                }
+
               return $html;
             });
 

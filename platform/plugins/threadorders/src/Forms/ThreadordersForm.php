@@ -60,7 +60,7 @@ class ThreadordersForm extends FormAbstract
             ])
 
             ->add('regular_category_id', 'customSelect', [
-                'label'      => 'Select Regular Category',
+                'label'      => 'Select Regular Pack Category',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => 'Select Regular Category',
@@ -71,7 +71,7 @@ class ThreadordersForm extends FormAbstract
                 'default_value'      => old('regular_category_id', $selectedRegCat),
             ])
             ->add('regular_product_unit_id', 'customSelect', [
-                'label'      => 'Select Product Unit (Reg)',
+                'label'      => 'Select Per Piece Making Product Unit (Reg)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Product Unit (Reg)',
@@ -81,7 +81,7 @@ class ThreadordersForm extends FormAbstract
                 'default_value' => old('regular_product_unit_id', $selRegProdUnit)
             ])
             ->add('regular_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Qty (Reg)',
+                'label'      => 'Per Piece Making Qty (Reg)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Per Piece Qty (Reg)',
@@ -91,7 +91,7 @@ class ThreadordersForm extends FormAbstract
             ])
 
             ->add('plus_category_id', 'customSelect', [
-                'label'      => 'Select Plus Category',
+                'label'      => 'Select Plus Pack Category',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Plus Category',
@@ -102,7 +102,7 @@ class ThreadordersForm extends FormAbstract
                 'default_value'      => old('plus_category_id', $selectedPluCat),
             ])
             ->add('plus_product_unit_id', 'customSelect', [
-                'label'      => 'Select Product Unit (Plus)',
+                'label'      => 'Select Per Piece Making Product Unit (Plus)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Product Unit (Plus)',
@@ -112,7 +112,7 @@ class ThreadordersForm extends FormAbstract
                 'default_value' => old('regular_product_unit_id', $selPluProdUnit)
             ])
             ->add('plus_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Qty (Plus)',
+                'label'      => 'Per Piece Making Qty (Plus)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Per Piece Qty (Plus)',
@@ -171,7 +171,7 @@ class ThreadordersForm extends FormAbstract
             ])
 
             ->add('vendor_product_id', 'customSelect', [
-                'label'      => 'Select Vendor Product',
+                'label'      => 'Select Vendor Making Product',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Vendor Product',

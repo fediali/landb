@@ -274,9 +274,9 @@ class ThreadordersController extends BaseController
         $emails_send_to = UserOtherEmail::where('user_id', $threadData['vendor_id'])->pluck('email')->all();
         $emails_send_to[] = $thread2->vendor->email;
 
-        Mail::send('emails.thread_order_created', $threadData, function ($message) use ($emails_send_to) {
+        /*Mail::send('emails.thread_order_created', $threadData, function ($message) use ($emails_send_to) {
             $message->to($emails_send_to)->subject('[L&B New Thread Order]');
-        });
+        });*/
 
         event(new CreatedContentEvent(THREADORDERS_MODULE_SCREEN_NAME, $request, $threadorders));
 
@@ -308,17 +308,13 @@ class ThreadordersController extends BaseController
 
     public function pushToEcommerce($id, BaseHttpResponse $response)
     {
-        $thread = Threadorders::find($id);
+        $threadorder = $this->threadordersRepository->findOrFail($id);
         $success = true;
         $exist = false;
-        if ($thread) {
-            $variations = get_thread_order_variations($thread->id);
-            /* $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
-             $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
-             $reg_quantity = $plus_quantity = 0;*/
+        if ($threadorder) {
+            $variations = $threadorder->threadOrderVariations();
             if(!count($variations)){
-              return $response->setPreviousUrl(route('thread.index'))
-                  ->setError('No variations exists against this order!');
+              return $response->setPreviousUrl(route('thread.index'))->setError('No variations exists against this order!');
             }
             foreach ($variations as $key => $variation) {
                 $check = Product::where('sku', $variation->sku)->first();
@@ -326,15 +322,25 @@ class ThreadordersController extends BaseController
                     $product = new Product();
                     $product->name = $variation->name;
                     $product->description = $variation->name;
-                    $product->status = "published";
+                    $product->content = $variation->name;
+                    $product->status = BaseStatusEnum::PENDING;
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
-                    $product->quantity = 0;
+                    $product->quantity = $variation->quantity;
                     $product->price = $variation->cost;
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
-                    $extras = $variation->cost * ($percentage / 100);
+                    $extras = 0;
+                    if ($percentage) {
+                        $extras = $variation->cost * ($percentage / 100);
+                    }
                     $product->sale_price = $variation->cost + $extras;
+                    $product->images = json_encode([$variation->design_file]);
+                    $product->tax_id = 1;
                     if ($product->save()) {
+                        $product->categories()->sync([$variation->product_category_id]);
+                        $product->productCollections()->detach();
+                        $product->productCollections()->attach([1]);
+
                         DB::table('product_variation')->insert(['product_id' => $product->id, 'variation_id' => $variation->thread_variation_id]);
                         InventoryHistory::create([
                                 'product_id' => $product->id,
@@ -342,7 +348,7 @@ class ThreadordersController extends BaseController
                                 'new_stock' => $variation->quantity,
                                 'old_stock' => 0,
                                 'created_by' => Auth::user()->id,
-                                'order_id' => $thread->id,
+                                'order_id' => $threadorder->id,
                                 'reference' => 'threadorders.push_to_ecommerce'
                         ]);
                     }
@@ -355,11 +361,9 @@ class ThreadordersController extends BaseController
         }
 
         if ($exist) {
-            return $response->setPreviousUrl(route('thread.index'))
-                ->setMessage('One or more variations already exists in Ecommerce');
+            return $response->setPreviousUrl(route('thread.index'))->setMessage('One or more variations already exists in Ecommerce');
         }if ($success) {
-            return $response->setPreviousUrl(route('thread.index'))
-                ->setMessage('Order pushed to Ecommerce Successfully');
+            return $response->setPreviousUrl(route('thread.index'))->setMessage('Order pushed to Ecommerce Successfully');
         }
     }
 

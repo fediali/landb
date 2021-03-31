@@ -87,7 +87,7 @@ class ThreadForm extends FormAbstract
                 'choices'    => $seasons,
             ])
             ->add('regular_category_id', 'customSelect', [
-                'label'      => 'Select Regular Category',
+                'label'      => 'Select Regular Pack Category',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => 'Select Regular Category',
@@ -98,7 +98,7 @@ class ThreadForm extends FormAbstract
                 'default_value'      => old('regular_category_id', $selectedRegCat),
             ])
             ->add('regular_product_unit_id', 'customSelect', [
-                'label'      => 'Select Product Unit (Reg)',
+                'label'      => 'Select Per Piece Making Product Unit (Reg)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Product Unit (Reg)',
@@ -108,7 +108,7 @@ class ThreadForm extends FormAbstract
                 'default_value' => old('regular_product_unit_id', $selRegProdUnit)
             ])
             ->add('regular_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Qty (Reg)',
+                'label'      => 'Per Piece Making Qty (Reg)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Per Piece Qty (Reg)',
@@ -117,7 +117,7 @@ class ThreadForm extends FormAbstract
                 'default_value' => old('regular_per_piece_qty', $selRegPPQty)
             ])
             ->add('plus_category_id', 'customSelect', [
-                'label'      => 'Select Plus Category',
+                'label'      => 'Select Plus Pack Category',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Plus Category',
@@ -127,7 +127,7 @@ class ThreadForm extends FormAbstract
                 'default_value'      => old('plus_category_id', $selectedPluCat),
             ])
             ->add('plus_product_unit_id', 'customSelect', [
-                'label'      => 'Select Product Unit (Plus)',
+                'label'      => 'Select Per Piece Making Product Unit (Plus)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Product Unit (Plus)',
@@ -137,7 +137,7 @@ class ThreadForm extends FormAbstract
                 'default_value' => old('regular_product_unit_id', $selPluProdUnit)
             ])
             ->add('plus_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Qty (Plus)',
+                'label'      => 'Per Piece Making Qty (Plus)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Per Piece Qty (Plus)',
@@ -173,7 +173,7 @@ class ThreadForm extends FormAbstract
                 'value' => $this->model->pp_sample_date ? date('d M, Y', strtotime($this->model->pp_sample_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('vendor_product_id', 'customSelect', [
-                'label'      => 'Select Vendor Product',
+                'label'      => 'Select Vendor Making Product',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Select Vendor Product',
