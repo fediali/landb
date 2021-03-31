@@ -76,7 +76,7 @@ $variations = $options['data']['variations'];
                                             <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
 
-                                        <td width="15%">
+                                        <td width="25%">
                                             <label for="print_id">Print / Solid:</label>
 
                                             <select class="form-control print_design" name="print_id[]">
