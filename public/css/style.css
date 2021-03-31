@@ -402,6 +402,12 @@ body {
 
 /* mediaqueries */
 
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 1024px;
+    }
+}
+
 @media screen and (min-width: 320px) and (max-device-width: 991px) {
     .d-mt-block {
         display: block !important;

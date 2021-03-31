@@ -38,11 +38,14 @@ class InventoryForm extends FormAbstract
                 ],
             ])
             ->add('date', 'date', [
-                'label'      => 'Date',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr'       => [
-                    'placeholder'  => 'Date',
+                'label'         => 'Select Date',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'            => 'form-control datepicker',
+                    'data-date-format' => 'd M, yyyy',
                 ],
+                'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value' => $this->model->date ? date('d M, Y', strtotime($this->model->date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('comments', 'textarea', [
                 'label'      => 'Comments',

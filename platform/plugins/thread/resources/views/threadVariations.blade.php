@@ -9,7 +9,7 @@ $variations = $options['data']['variations'];
         <hr>
         @if($thread->is_denim == 1)
         <div class="box-body">
-            <a href="javascript:void(0)" class="btn btn-secondary float-right" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
+            <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
             <table class="table" id="thread-variations">
                 <thead>
                 <tr>
@@ -154,7 +154,7 @@ $variations = $options['data']['variations'];
             </div>
         @else
         <div class="box-body">
-                <a href="javascript:void(0)" class="btn btn-secondary float-right" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
+                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
