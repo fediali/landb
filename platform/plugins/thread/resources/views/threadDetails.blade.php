@@ -442,7 +442,7 @@
                                                             @foreach($variations as $variation)
                                                                 @if($variation->status == 'active' && $variation->is_denim == 1)
                                                                     <img style="height: 400px; width: 400px;"
-                                                                         src="{{ asset('storage/'.$variation->printdesign->file) }}"/>
+                                                                         src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
                                                                 @endif
                                                             @endforeach
                                                         </div>
@@ -502,20 +502,20 @@
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6">
                                                                                         <p class="mb-0 mt-2"><label
-                                                                                                    for="">Fabric:</label>{{ $variation->printdesign->name }}
+                                                                                                    for="">Fabric:</label>{{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100"
-                                                                                             src="{{ asset('storage/'.$variation->printdesign->file) }}"
+                                                                                             src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                              height="120" width="120"
                                                                                              style="object-fit: cover">
                                                                                     </div>
                                                                                     @foreach($variation->fabrics as $fabric)
                                                                                         <div class="col-lg-6">
                                                                                             <p class="mb-0 mt-2"><label
-                                                                                                        for="">Fabric:</label>{{ $fabric->printdesign->name }}
+                                                                                                        for="">Fabric:</label>{{ @$fabric->printdesign->name }}
                                                                                             </p>
                                                                                             <img class="w-100"
-                                                                                                 src="{{ asset('storage/'.$fabric->printdesign->file) }}"
+                                                                                                 src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
                                                                                                  height="120"
                                                                                                  width="120"
                                                                                                  style="object-fit: cover">
