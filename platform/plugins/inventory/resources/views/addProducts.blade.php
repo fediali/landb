@@ -30,8 +30,8 @@
                     </a>
                 </td>
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
-                <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td></td>
-               <td>{{ $product->pname }}</td>
+                <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
+                <td>{{ $product->pname }}</td>
                 <td>{{ $product->pquantity }}<input type="hidden" name="quantity_{{ $loop->iteration-1 }}" value="{{ $product->pquantity }}"></td>
                 <td>{{ $product->ordered_pack_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_pack_qty }}"></td>
                 <td>{{ $product->price }}</td>

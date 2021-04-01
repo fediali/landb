@@ -69,6 +69,7 @@ class InventoryController extends BaseController
     public function store(InventoryRequest $request, BaseHttpResponse $response)
     {
         $data = $request->input();
+        $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['created_by'] = Auth::user()->id;
         $inventory = $this->inventoryRepository->createOrUpdate($data);
 
@@ -131,6 +132,7 @@ class InventoryController extends BaseController
     public function update($id, InventoryRequest $request, BaseHttpResponse $response)
     {
         $data = $request->input();
+        $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['updated_by'] = Auth::user()->id;
         $inventory = $this->inventoryRepository->findOrFail($id);
 
