@@ -233,7 +233,7 @@
             </div>--}}
 
             <section class="denim_table new_clothing">
-                <div class="container">
+                <div class="">
                     <div class="table-responsive">
                         <table>
 
@@ -334,13 +334,17 @@
                                    
                                         <div class="slideshow-container mt-4">
                                             @foreach($thread->spec_files as $file)
-                                                <div class="mySlides1"> 
+                                                <div class="mySlides1 images"> 
                                                     <img src="{{ asset($file->spec_file) }}" style="width:100%; height:669px;">
                                                     {{--<div class="text">Caption Text</div>--}}
                                                 </div>
                                             @endforeach
                                             <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
                                             <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
+                                        </div>
+                                        <div id="image-viewer">
+                                        <span class="close">X</span>
+                                        <img class="viewer-modal-content" id="full-image">
                                         </div>
 
                                         <br>
@@ -496,14 +500,14 @@
                                                                     </div>
 
                                                                     <div class="box row d-mt-block">
-                                                                        <div class="col-lg-12">
+                                                                        <div class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
                                                                             <div class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                                 <h5 class=" mt-2">
                                                                                     Variation: {{ $variation->name }}</h5>
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6">
                                                                                         <p class="mb-0 mt-2"><label
-                                                                                                    for="">Fabric:</label>{{ @$variation->printdesign->name }}
+                                                                                                    for="">Print/Color:</label>{{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100"
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
@@ -513,7 +517,8 @@
                                                                                     @foreach($variation->fabrics as $fabric)
                                                                                         <div class="col-lg-6">
                                                                                             <p class="mb-0 mt-2"><label
-                                                                                                        for="">Fabric:</label>{{ @$fabric->printdesign->name }}
+                                                                                                        for="">Print/Color:</label>{{ @$fabric->printdesign->name }}
+                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}"><strong class="float-right"><i class="fa fa-times"></i></strong></a>
                                                                                             </p>
                                                                                             <img class="w-100"
                                                                                                  src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
@@ -534,6 +539,9 @@
                                                                                         <span for="">PLUS Packs:</span> {{ $variation->plus_qty }}
                                                                                         |
                                                                                         <span class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
@@ -578,7 +586,7 @@
     }
 
     .main-form {
-        width: 125% !important;
+        width: 135% !important;
     }
 
 
@@ -598,7 +606,7 @@
   position: absolute;
   top: 50%;
   width: auto;
-  padding: 16px;
+  padding: 0px 7px;
   margin-top: -22px;
   color: white;
   font-weight: bold;
@@ -612,6 +620,15 @@
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
+  border: 1px solid #fff;
+    box-shadow: 0px 0px 10px 5px #4c4c4c;
+    margin-right: 4px; 
+}
+
+.prev {
+    border: 1px solid #fff;
+    box-shadow: 0px 0px 10px 5px #4c4c4c;
+    margin-left: 4px; 
 }
 
 /* On hover, add a grey background color */
@@ -619,6 +636,66 @@
   background-color: #f1f1f1;
   color: black;
 }
+
+/* IMAGE SLIDER VIEWER CSS */
+#image-viewer {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
+}
+.viewer-modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+.viewer-modal-content { 
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+@keyframes zoom {
+    from {transform:scale(0)} 
+    to {transform:scale(1)}
+}
+#image-viewer .close { 
+    position: absolute;
+    top: 74px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 25px; 
+    font-weight: bold;
+    transition: 0.3s;
+    width: 25px;
+    text-indent: inherit;
+    height: 25px;
+}
+#image-viewer .close:hover,
+#image-viewer .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.images img {
+    cursor: -moz-zoom-in; 
+    cursor: -webkit-zoom-in; 
+    cursor: zoom-in;
+}
+
+@media only screen and (max-width: 700px){
+    .viewer-modal-content {
+        width: 100%;
+    }
+}
+/* IMAGE SLIDER VIEWER CSS */
 </style>
 
 
@@ -642,5 +719,19 @@ function showSlides(n, no) {
   }
   x[slideIndex[no]-1].style.display = "block";  
 }
+</script>
+
+<script>
+    $( document ).ready(function() {
+        $(".images img").click(function(){
+  $("#full-image").attr("src", $(this).attr("src"));
+  $('#image-viewer').show();
+});
+
+$("#image-viewer .close").click(function(){
+  $('#image-viewer').hide();
+});
+});
+  
 </script>
 
