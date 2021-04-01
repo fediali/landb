@@ -94,25 +94,29 @@
                             <p class="m-0 heading">SKU</p>
                             <p>{{$variation->sku}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Type</p>
                             <p>{{$variation->category_type}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Qty</p>
                             <p>{{$variation->quantity}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Cost</p>
                             <p>{{$variation->cost}}</p>
                         </div>
                         <div class="col-lg-2">
-                            <p class="m-0 heading">Product Unit</p>
-                            <p>{{$variation->unit_name}}</p>
+                            <p class="m-0 heading">Per Piece Qty</p>
+                            <p>{{$variation->per_piece_qty}} {{$variation->unit_name}}</p>
                         </div>
                         <div class="col-lg-2">
-                            <p class="m-0 heading">Per Piece Qty</p>
-                            <p>{{$variation->per_piece_qty}}</p>
+                            <p class="m-0 heading">UPC</p>
+                            <p>{{$variation->upc}}</p>
+                        </div>
+                        <div class="col-lg-2">
+                            <p class="m-0 heading">Barcode</p>
+                            <p><img src="{{asset('storage/'.$variation->barcode)}}" width="100%" height="30px"></p>
                         </div>
                     </div>
                 @endforeach

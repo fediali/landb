@@ -479,13 +479,14 @@ if (!function_exists('parse_date')) {
 }
 
 if (!function_exists('get_barcode')) {
-    function barcode()
+    function get_barcode()
     {
         $code = '00' . rand(00000000000,99999999999);
-        $image = DNS1D::getBarcodePNG($code, 'C39', 2, 33);
-        $name = $code . '.' . 'jpg';
+        $aa = new DNS1D();
+        $image = $aa->getBarcodePNG($code, 'C39', 2, 33);
+        $name = 'products_barcode/'.$code . '.' . 'jpg';
         Storage::put($name, base64_decode($image));
-        return $code;
+        return ['upc' => $code, 'barcode' => $name];
     }
 }
 //Utils

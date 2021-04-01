@@ -30,7 +30,7 @@
                     </a>
                 </td>
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
-                <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td></td>
+                <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td></td>
                <td>{{ $product->pname }}</td>
                 <td>{{ $product->pquantity }}<input type="hidden" name="quantity_{{ $loop->iteration-1 }}" value="{{ $product->pquantity }}"></td>
                 <td>{{ $product->ordered_pack_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_pack_qty }}"></td>
@@ -122,7 +122,7 @@
                 '         </a>\n' +
                 '        </td>\n' +
                 '        <td>'+product.sku+'<input type="hidden" name="sku_'+pcount+'" value="'+product.sku+'"><input type="hidden" name="product_id_'+pcount+'" value="'+product.id+'"></td>\n' +
-                '        <td>'+product.barcode+'<input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
+                '        <td><img src="{{asset('storage')}}/'+ product.barcode +'" width="100%" height="30px"><input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
                 '        <td>'+product.name+'</td>\n' +
                 '        <td>'+product.quantity+'<input type="hidden" name="quantity_'+pcount+'" value="'+product.quantity+'"></td>\n' +
                 '        <td>'+product.ordered_qty+'<input type="hidden" name="ordered_qty_'+pcount+'" value="'+product.ordered_qty+'"></td>\n' +

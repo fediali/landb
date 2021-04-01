@@ -112,7 +112,7 @@ class InventoryController extends BaseController
             $query
                 ->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')
                 //->leftJoin('thread_order_variations as tov', 'tov.sku', 'inventory_products_pivot.sku')
-                ->select('inventory_products_pivot.*', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
+                ->select('inventory_products_pivot.*', 'p.barcode', 'p.upc', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
         }])->findOrFail($id);
 
         event(new BeforeEditContentEvent($request, $inventory));
@@ -215,10 +215,10 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.name',
+        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
             'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
-            ->where('barcode', $request->get('barcode'))
+            ->where('ec_products.barcode', $request->get('barcode'))
             ->orWhere('ec_products.sku', $request->get('barcode'))
             ->orWhere('parent_sku', $request->get('barcode'))
             /*->where('status', 'published')*/

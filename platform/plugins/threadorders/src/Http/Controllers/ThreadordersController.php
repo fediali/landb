@@ -237,6 +237,7 @@ class ThreadordersController extends BaseController
         $thread2 = $this->threadRepository->findOrFail($id);
 
         foreach ($thread2->thread_variations as $thread_variation) {
+
             $threadOrderVar = [
                 'thread_order_id' => $threadorders->id,
                 'category_type' => 'regular',
@@ -251,6 +252,8 @@ class ThreadordersController extends BaseController
                 'quantity' => $requestData['regular_qty'][$thread_variation->id],
                 'cost' => $requestData['cost'][$thread_variation->id],
                 'notes' => $thread_variation->notes,
+                'upc' => get_barcode()['upc'],
+                'barcode' => get_barcode()['barcode'],
             ];
             DB::table('thread_order_variations')->insert($threadOrderVar);
             if (isset($thread2->plus_product_categories[0])) {
@@ -268,6 +271,8 @@ class ThreadordersController extends BaseController
                     'quantity' => $requestData['plus_qty'][$thread_variation->id],
                     'cost' => $requestData['cost'][$thread_variation->id],
                     'notes' => $thread_variation->notes,
+                    'upc' => get_barcode()['upc'],
+                    'barcode' => get_barcode()['barcode'],
                 ];
                 DB::table('thread_order_variations')->insert($threadOrderVar);
             }
@@ -338,6 +343,8 @@ class ThreadordersController extends BaseController
                     $product->sale_price = $variation->cost + $extras;
                     $product->images = json_encode([$variation->design_file]);
                     $product->tax_id = 1;
+                    $product->upc = $variation->upc;
+                    $product->barcode = $variation->barcode;
                     if ($product->save()) {
                         $product->categories()->sync([$variation->product_category_id]);
                         $product->productCollections()->detach();
