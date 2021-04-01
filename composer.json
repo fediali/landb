@@ -26,6 +26,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "milon/barcode": "^8.0",
         "predis/predis": "^1.1",
         "wikimedia/composer-merge-plugin": "dev-feature/composer-v2 as 1.5.0"
     },

@@ -9,6 +9,8 @@ use Botble\Blog\Supports\PostFormat;
 use Botble\Ecommerce\Models\ProductCategory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\DNS1D;
 
 if (!function_exists('get_featured_posts')) {
     /**
@@ -473,6 +475,17 @@ if (!function_exists('parse_date')) {
     function parse_date($date)
     {
         return date('d F, Y', strtotime($date));
+    }
+}
+
+if (!function_exists('get_barcode')) {
+    function barcode()
+    {
+        $code = '00' . rand(00000000000,99999999999);
+        $image = DNS1D::getBarcodePNG($code, 'C39', 2, 33);
+        $name = $code . '.' . 'jpg';
+        Storage::put($name, base64_decode($image));
+        return $code;
     }
 }
 //Utils

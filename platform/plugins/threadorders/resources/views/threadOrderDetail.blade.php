@@ -8,10 +8,12 @@
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
-                    @if($orderDetail->thread_order_has_pushed)
-                        <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>
-                    @else
-                        <a href="javascript:void(0)" class="pushToEcommerce btn btn-sm btn-info">Push</a>
+                    @if($orderDetail->status == 'completed')
+                        @if($orderDetail->thread_order_has_pushed)
+                            <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>
+                        @else
+                            <a href="javascript:void(0)" class="pushToEcommerce btn btn-sm btn-info">Push</a>
+                        @endif
                     @endif
                 </div>
             </div>

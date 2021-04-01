@@ -109,13 +109,10 @@ class InventoryController extends BaseController
     {
         //TODO::Need Refactoring
         $inventory = Inventory::with(['products' => function ($query) {
-            $query->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')->select(
-                'inventory_products_pivot.*',
-                'p.id as pid',
-                'p.name as pname',
-                'p.images as pimages',
-                'p.quantity as pquantity'
-            );
+            $query
+                ->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')
+                //->leftJoin('thread_order_variations as tov', 'tov.sku', 'inventory_products_pivot.sku')
+                ->select('inventory_products_pivot.*', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
         }])->findOrFail($id);
 
         event(new BeforeEditContentEvent($request, $inventory));
@@ -216,11 +213,10 @@ class InventoryController extends BaseController
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
 
-
     public function getProductByBarcode(Request $request)
     {
         $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.name',
-            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty')
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
             ->where('barcode', $request->get('barcode'))
             ->orWhere('ec_products.sku', $request->get('barcode'))
