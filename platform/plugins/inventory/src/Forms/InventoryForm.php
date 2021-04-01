@@ -53,6 +53,14 @@ class InventoryForm extends FormAbstract
                     'placeholder' => 'Comments',
                 ],
             ])
+            ->add('Products', 'addProducts', [
+                'label' => 'Comments',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr' => [
+                    'placeholder' => 'Comments',
+                ],
+                'data' => $this->model
+            ])
             ->add('status', 'customSelect', [
                 'label' => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
@@ -61,13 +69,6 @@ class InventoryForm extends FormAbstract
                 ],
                 'choices' => BaseStatusEnum::labels(),
             ])
-            ->add('Products', 'addProducts', [
-                'label' => 'Comments',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr' => [
-                    'placeholder' => 'Comments',
-                ],
-                'data' => $this->model
-            ]);//->setBreakFieldPoint('status');
+            ->setBreakFieldPoint('status');
     }
 }
