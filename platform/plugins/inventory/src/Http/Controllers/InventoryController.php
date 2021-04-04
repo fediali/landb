@@ -84,7 +84,6 @@ class InventoryController extends BaseController
                     $product['ecom_pack_qty'] = $data['quantity_' . $i];
                     $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
                     $product['received_pack_qty'] = $data['received_qty_' . $i];
-                    $product['loose_qty'] = $data['loose_qty_' . $i];
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -111,9 +110,9 @@ class InventoryController extends BaseController
         //TODO::Need Refactoring
         $inventory = Inventory::with(['products' => function ($query) {
             $query
-                ->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')
-                //->leftJoin('thread_order_variations as tov', 'tov.sku', 'inventory_products_pivot.sku')
-                ->select('inventory_products_pivot.*', 'p.barcode', 'p.upc', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
+                ->leftJoin('ec_products as p', 'p.id', 'inventory_products.product_id')
+                //->leftJoin('thread_order_variations as tov', 'tov.sku', 'inventory_products.sku')
+                ->select('inventory_products.*', 'p.barcode', 'p.upc', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
         }])->findOrFail($id);
 
         event(new BeforeEditContentEvent($request, $inventory));
@@ -153,7 +152,6 @@ class InventoryController extends BaseController
                     $product['ecom_pack_qty'] = $data['quantity_' . $i];
                     $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
                     $product['received_pack_qty'] = $data['received_qty_' . $i];
-                    $product['loose_qty'] = $data['loose_qty_' . $i];
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -242,12 +240,12 @@ class InventoryController extends BaseController
                     $product = Product::where('sku', $inv_product->sku)->first();
                     if ($product) {
                         $old_stock = $product->quantity;
-                        $product->quantity = $product->quantity + $inv_product->quantity;
+                        $product->quantity = $product->quantity + $inv_product->received_pack_qty;
                         if ($product->save()) {
 
                             InventoryHistory::create([
                                 'product_id' => $product->id,
-                                'quantity' => $inv_product->quantity,
+                                'quantity' => $inv_product->received_pack_qty,
                                 'new_stock' => $product->quantity,
                                 'old_stock' => $old_stock,
                                 'created_by' => Auth::user()->id,

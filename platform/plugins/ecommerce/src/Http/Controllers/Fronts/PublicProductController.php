@@ -420,7 +420,7 @@ class PublicProductController
                 'display_sale_price'         => format_price($product->front_sale_price),
                 'sale_percentage'            => get_sale_percentage($product->price, $product->front_sale_price),
             ])
-            ->setMessage(__(':number product(s) available', ['number' => ($product->with_storehouse_management && $product->quantity) ? $product->quantity : '> 10']));
+            ->setMessage(__(':number product(s) available', ['number' => ($product->with_storehouse_management && $product->quantity) ? $product->quantity : 0]));
     }
 
     /**
