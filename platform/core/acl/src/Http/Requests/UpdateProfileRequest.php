@@ -21,7 +21,7 @@ class UpdateProfileRequest extends Request
             'last_name'  => 'required|max:60|min:2',
             'email'      => "required|max:60|min:6|email|unique:users,email,{$id}",
             'other_emails.*' => 'email',
-            'name_initials' => "required|min:2|max:3|unique:users,name_initials,{$id}",
+            'name_initials' => "required|min:1|max:3|unique:users,name_initials,{$id}",
         ];
     }
 

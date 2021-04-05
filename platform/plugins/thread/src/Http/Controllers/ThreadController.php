@@ -88,7 +88,7 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
-        $designerName = strlen($thread->designer->name_initials) > 1 ? $thread->designer->name_initials : $thread->designer->first_name;
+        $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
         $reg_sku = generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -173,7 +173,7 @@ class ThreadController extends BaseController
             DB::table('category_designer_count')->updateOrInsert(['user_id'=>$thread->designer_id, 'product_category_id'=>$plu_category], ['user_id'=>$thread->designer_id, 'product_category_id'=>$plu_category, 'count'=>$regCnt]);
         }
 
-        $designerName = strlen($thread->designer->name_initials) > 1 ? $thread->designer->name_initials : $thread->designer->first_name;
+        $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
         $reg_sku = generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -266,7 +266,7 @@ class ThreadController extends BaseController
         $reg_category = @$requestData->regular_product_categories[0];//->value('product_category_id');
         $plu_category = @$requestData->plus_product_categories[0];//->value('product_category_id');
 
-        $designerName = strlen($requestData->designer->name_initials) > 1 ? $requestData->designer->name_initials : $requestData->designer->first_name;
+        $designerName = strlen($requestData->designer->name_initials) > 0 ? $requestData->designer->name_initials : $requestData->designer->first_name;
         $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $requestData->designer_id, $designerName);
 
         if ($plu_category->pivot->product_category_id > 0) {
