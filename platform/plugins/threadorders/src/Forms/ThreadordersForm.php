@@ -129,7 +129,7 @@ class ThreadordersForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])
-            ->add('pp_sample_date', 'text', [
+            /*->add('pp_sample_date', 'text', [
                 'label'         => 'PP Sample Date',
                 'label_attr'    => ['class' => 'control-label'],
                 'attr'          => [
@@ -147,7 +147,7 @@ class ThreadordersForm extends FormAbstract
                     'class' => 'select-search-full',
                 ],
                 'choices'    => Thread::$statuses,
-            ])
+            ])*/
             ->add('material', 'text', [
                 'label'      => 'Fabric',
                 'label_attr' => ['class' => 'control-label'],

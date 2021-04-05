@@ -21,7 +21,7 @@ class ThreadordersRequest extends Request
             //'vendor_id'   => 'required|exists:users,id',
             //'regular_category_id' => 'required|exists:ec_product_categories,id',
             //'plus_category_id'    => 'nullable|exists:ec_product_categories,id',
-            'pp_sample'   => 'required',
+            //'pp_sample'   => 'required',
             'shipping_method'   => 'required',
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
