@@ -4,7 +4,7 @@
     <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
     <span id="product-error" class="invalid-feedback"></span>
 </div>
-<table class="table">
+<table class="table inventory-add">
     <thead>
     <tr>
         <th scope="col">Image</th>
@@ -17,6 +17,7 @@
         <th scope="col">Sale Price</th>
         <th scope="col">Received Pack Qty</th>
         <th scope="col">Single Qty</th>
+        <th scope="col">Action</th>
         <th scope="col"></th>
     </tr>
     </thead>
@@ -37,15 +38,7 @@
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->sale_price }}</td>
                 <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}" id="received_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_pack_qty }}"></td>
-                <td><input style="width: 60px; text-align:center" name="loose_qty_{{ $loop->iteration-1 }}" id="loose_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
-                <td>
-                     <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>
-                        <div class="dropdown-menu">
-                             <a class="dropdown-item" onclick="deleteProduct({{ $product->pid }})" href="javascript:void(0)">Delete</a>
-                        </div>
-                    </div>
-                </td>
+                <td><input style="width: 60px; text-align:center" name="loose_qty_{{ $loop->iteration-1 }}" id="loose_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td> 
                 </tr>
             @endforeach
         @endif
@@ -130,6 +123,15 @@
                 '        <td>'+product.sale_price+'</td>\n' +
                 '        <td><input style="width: 60px; text-align:center" name="received_qty_'+pcount+'" id="received_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
                 '        <td><input style="width: 60px; text-align:center" name="loose_qty_'+pcount+'" id="loose_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
+                '        <td>\n' + 
+                '                <a class="btn btn-info" data-toggle="collapse" data-target="#demo">Click</a>\n' +   
+                '<div id="demo" class="collapse">\n'+
+                '<div class="form-group d-flex"> \n'+   
+                '<label class="control-label mt-2 mr-1">Name</label>\n'+
+                '<input class="form-control" placeholder="Name" name="name" type="text"  > \n'+
+                '</div>\n'+
+                '</div>\n' +  
+                '        </td>\n' +
                 '        <td>\n' +
                 '            <div class="btn-group">\n' +
                 '                <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>\n' +
@@ -137,8 +139,10 @@
                 '                    <a class="dropdown-item" onclick="deleteProduct('+product.id+')" href="javascript:void(0)">Delete</a>\n' +
                 '                </div>\n' +
                 '            </div>\n' +
-                '        </td>\n' +
-                '</tr>'
+                '        </td>\n' +               
+                '</tr>\n' + 
+                '<tr>\n' +
+                '</tr>' 
             );
           }
           loader.removeClass('loading');
