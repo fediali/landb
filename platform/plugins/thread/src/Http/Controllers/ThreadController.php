@@ -269,7 +269,7 @@ class ThreadController extends BaseController
         $designerName = strlen($requestData->designer->name_initials) > 0 ? $requestData->designer->name_initials : $requestData->designer->first_name;
         $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $requestData->designer_id, $designerName);
 
-        if ($plu_category->pivot->product_category_id > 0) {
+        if ($plu_category && $plu_category->pivot->product_category_id > 0) {
             $plu_sku = generate_thread_sku($plu_category->pivot->product_category_id, $requestData->designer_id, $designerName, true);
         }
 
@@ -280,8 +280,8 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData->toArray());
 
-        if ($reg_category->pivot->product_category_id > 0) {
-            if ($plu_category->pivot->product_category_id > 0) {
+        if ($reg_category && $reg_category->pivot->product_category_id > 0) {
+            if ($plu_category && $plu_category->pivot->product_category_id > 0) {
                 $thread->regular_product_categories()->sync([
                     $reg_category->pivot->product_category_id => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $reg_category->pivot->product_unit_id, 'per_piece_qty' => $reg_category->pivot->per_piece_qty],
                     $plu_category->pivot->product_category_id => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $plu_category->pivot->product_unit_id, 'per_piece_qty' => $plu_category->pivot->per_piece_qty]
