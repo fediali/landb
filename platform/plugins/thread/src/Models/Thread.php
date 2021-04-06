@@ -150,6 +150,7 @@ class Thread extends BaseModel
                 if (auth()->user()->roles[0]->slug == 'designer') {
                     $query->where('designer_id', auth()->user()->id);
                 } else if (auth()->user()->roles[0]->slug == 'vendor') {
+                    dd('ss');
                     $query->where(['vendor_id' => auth()->user()->id, 'status' => 'published']);
                 }
             }
