@@ -13,6 +13,8 @@
         <th scope="col">Name</th>
         <th scope="col">E-commerce Pack Qty</th>
         <th scope="col">Ordered Pack Qty</th>
+        <th scope="col">Cost Price</th>
+        <th scope="col">Sale Price</th>
         <th scope="col">Received Pack Qty</th>
         <th scope="col">Single Qty</th>
         <th scope="col"></th>
@@ -28,10 +30,12 @@
                     </a>
                 </td>
                 <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
-                <td>{{ $product->barcode }}<input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td></td>
-               <td>{{ $product->pname }}</td>
+                <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
+                <td>{{ $product->pname }}</td>
                 <td>{{ $product->pquantity }}<input type="hidden" name="quantity_{{ $loop->iteration-1 }}" value="{{ $product->pquantity }}"></td>
                 <td>{{ $product->ordered_pack_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_pack_qty }}"></td>
+                <td>{{ $product->price }}</td>
+                <td>{{ $product->sale_price }}</td>
                 <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}" id="received_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_pack_qty }}"></td>
                 <td><input style="width: 60px; text-align:center" name="loose_qty_{{ $loop->iteration-1 }}" id="loose_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>
                 <td>
@@ -118,10 +122,12 @@
                 '         </a>\n' +
                 '        </td>\n' +
                 '        <td>'+product.sku+'<input type="hidden" name="sku_'+pcount+'" value="'+product.sku+'"><input type="hidden" name="product_id_'+pcount+'" value="'+product.id+'"></td>\n' +
-                '        <td>'+product.barcode+'<input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
+                '        <td><img src="{{asset('storage')}}/'+ product.barcode +'" width="100%" height="30px"><input type="hidden" name="barcode_'+pcount+'" value="'+product.barcode+'"></td>\n' +
                 '        <td>'+product.name+'</td>\n' +
                 '        <td>'+product.quantity+'<input type="hidden" name="quantity_'+pcount+'" value="'+product.quantity+'"></td>\n' +
                 '        <td>'+product.ordered_qty+'<input type="hidden" name="ordered_qty_'+pcount+'" value="'+product.ordered_qty+'"></td>\n' +
+                '        <td>'+product.price+'</td>\n' +
+                '        <td>'+product.sale_price+'</td>\n' +
                 '        <td><input style="width: 60px; text-align:center" name="received_qty_'+pcount+'" id="received_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
                 '        <td><input style="width: 60px; text-align:center" name="loose_qty_'+pcount+'" id="loose_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0"></td>\n' +
                 '        <td>\n' +

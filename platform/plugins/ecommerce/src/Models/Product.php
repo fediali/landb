@@ -58,6 +58,7 @@ class Product extends BaseModel
         'height',
         'weight',
         'barcode',
+        'upc',
         'length_unit',
         'wide_unit',
         'height_unit',

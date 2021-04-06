@@ -64,10 +64,11 @@ class ThreadordersTable extends TableAbstract
                 return view('plugins/threadorders::threadOrderStatus', ['item' => $item])->render();
             })
             ->editColumn('ecommerce', function ($item) {
-                if ($item->thread_order_has_pushed) {
-                    $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>';
-                } else {
-                    $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('threadorders.orderItem', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
+                if ($item->status == 'completed') {
+                    if ($item->thread_order_has_pushed) {
+                        $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>';
+                    } else {
+                        $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('threadorders.orderItem', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
                           swal({
                               title: \'Are you sure?\',
                               text: "Do you want to push this Order to Ecommerce!",
@@ -94,8 +95,10 @@ class ThreadordersTable extends TableAbstract
                                   }
                               });
                       }</script>';
+                    }
+                } else {
+                    $html = 'N/A';
                 }
-
               return $html;
             });
 

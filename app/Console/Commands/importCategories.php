@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Imports\DesignerCatCount;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class importCategories extends Command
 {
@@ -95,6 +97,9 @@ class importCategories extends Command
             ];
             DB::table('printdesigns')->insert($data);
         }*/
+
+        /*$file = public_path('designer_cat_count.xlsx');
+        Excel::import(new DesignerCatCount(), $file);*/
 
     }
 }

@@ -8,10 +8,12 @@
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
-                    @if($orderDetail->thread_order_has_pushed)
-                        <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>
-                    @else
-                        <a href="javascript:void(0)" class="pushToEcommerce btn btn-sm btn-info">Push</a>
+                    @if($orderDetail->status == 'completed')
+                        @if($orderDetail->thread_order_has_pushed)
+                            <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>
+                        @else
+                            <a href="javascript:void(0)" class="pushToEcommerce btn btn-sm btn-info">Push</a>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -92,25 +94,29 @@
                             <p class="m-0 heading">SKU</p>
                             <p>{{$variation->sku}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Type</p>
                             <p>{{$variation->category_type}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Qty</p>
                             <p>{{$variation->quantity}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <p class="m-0 heading">Cost</p>
                             <p>{{$variation->cost}}</p>
                         </div>
                         <div class="col-lg-2">
-                            <p class="m-0 heading">Product Unit</p>
-                            <p>{{$variation->unit_name}}</p>
+                            <p class="m-0 heading">Per Piece Qty</p>
+                            <p>{{$variation->per_piece_qty}} {{$variation->unit_name}}</p>
                         </div>
                         <div class="col-lg-2">
-                            <p class="m-0 heading">Per Piece Qty</p>
-                            <p>{{$variation->per_piece_qty}}</p>
+                            <p class="m-0 heading">UPC</p>
+                            <p>{{$variation->upc}}</p>
+                        </div>
+                        <div class="col-lg-2">
+                            <p class="m-0 heading">Barcode</p>
+                            <p><img src="{{asset('storage/'.$variation->barcode)}}" width="100%" height="30px"></p>
                         </div>
                     </div>
                 @endforeach

@@ -69,6 +69,7 @@ class InventoryController extends BaseController
     public function store(InventoryRequest $request, BaseHttpResponse $response)
     {
         $data = $request->input();
+        $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['created_by'] = Auth::user()->id;
         $inventory = $this->inventoryRepository->createOrUpdate($data);
 
@@ -83,7 +84,6 @@ class InventoryController extends BaseController
                     $product['ecom_pack_qty'] = $data['quantity_' . $i];
                     $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
                     $product['received_pack_qty'] = $data['received_qty_' . $i];
-                    $product['loose_qty'] = $data['loose_qty_' . $i];
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -109,13 +109,10 @@ class InventoryController extends BaseController
     {
         //TODO::Need Refactoring
         $inventory = Inventory::with(['products' => function ($query) {
-            $query->leftJoin('ec_products as p', 'p.id', 'inventory_products_pivot.product_id')->select(
-                'inventory_products_pivot.*',
-                'p.id as pid',
-                'p.name as pname',
-                'p.images as pimages',
-                'p.quantity as pquantity'
-            );
+            $query
+                ->leftJoin('ec_products as p', 'p.id', 'inventory_products.product_id')
+                //->leftJoin('thread_order_variations as tov', 'tov.sku', 'inventory_products.sku')
+                ->select('inventory_products.*', 'p.barcode', 'p.upc', 'p.id as pid', 'p.name as pname', 'p.images as pimages', 'p.quantity as pquantity', 'p.price', 'p.sale_price');
         }])->findOrFail($id);
 
         event(new BeforeEditContentEvent($request, $inventory));
@@ -134,6 +131,7 @@ class InventoryController extends BaseController
     public function update($id, InventoryRequest $request, BaseHttpResponse $response)
     {
         $data = $request->input();
+        $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['updated_by'] = Auth::user()->id;
         $inventory = $this->inventoryRepository->findOrFail($id);
 
@@ -154,7 +152,6 @@ class InventoryController extends BaseController
                     $product['ecom_pack_qty'] = $data['quantity_' . $i];
                     $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
                     $product['received_pack_qty'] = $data['received_qty_' . $i];
-                    $product['loose_qty'] = $data['loose_qty_' . $i];
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -216,13 +213,12 @@ class InventoryController extends BaseController
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
 
-
     public function getProductByBarcode(Request $request)
     {
-        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.name',
-            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty')
+        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
-            ->where('barcode', $request->get('barcode'))
+            ->where('ec_products.barcode', $request->get('barcode'))
             ->orWhere('ec_products.sku', $request->get('barcode'))
             ->orWhere('parent_sku', $request->get('barcode'))
             /*->where('status', 'published')*/
@@ -244,12 +240,12 @@ class InventoryController extends BaseController
                     $product = Product::where('sku', $inv_product->sku)->first();
                     if ($product) {
                         $old_stock = $product->quantity;
-                        $product->quantity = $product->quantity + $inv_product->quantity;
+                        $product->quantity = $product->quantity + $inv_product->received_pack_qty;
                         if ($product->save()) {
 
                             InventoryHistory::create([
                                 'product_id' => $product->id,
-                                'quantity' => $inv_product->quantity,
+                                'quantity' => $inv_product->received_pack_qty,
                                 'new_stock' => $product->quantity,
                                 'old_stock' => $old_stock,
                                 'created_by' => Auth::user()->id,
