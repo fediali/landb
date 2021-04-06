@@ -101,16 +101,16 @@ class Thread extends BaseModel
     public const CANCEL = 'cancel';
 
     public static $order_statuses = [
-        self::NEW => self::NEW,
+        self::NEW     => self::NEW,
         self::REORDER => self::REORDER,
-        self::CANCEL => self::CANCEL,
+        self::CANCEL  => self::CANCEL,
     ];
 
     public const SPECIAL = 'special';
     public const PRIVATE = 'private';
 
     public static $thread_statuses = [
-        self::NEW => self::NEW,
+        self::NEW     => self::NEW,
         self::REORDER => self::REORDER,
         self::SPECIAL => self::SPECIAL,
         self::PRIVATE => self::PRIVATE,
@@ -121,7 +121,7 @@ class Thread extends BaseModel
 
     public static $statuses = [
         self::YES => self::YES,
-        self::NO => self::NO,
+        self::NO  => self::NO,
     ];
 
     public const AIR = 'air';
@@ -139,7 +139,7 @@ class Thread extends BaseModel
 
     public static $category_types = [
         self::REGULAR => self::REGULAR,
-        self::PLUS => self::PLUS,
+        self::PLUS    => self::PLUS,
     ];
 
     protected static function boot()
@@ -150,7 +150,7 @@ class Thread extends BaseModel
                 if (auth()->user()->roles[0]->slug == 'designer') {
                     $query->where('designer_id', auth()->user()->id);
                 } else if (auth()->user()->roles[0]->slug == 'vendor') {
-                    $query->where('vendor_id', auth()->user()->id);
+                    $query->where('vendor_id', auth()->user()->id, 'published');
                 }
             }
         });
@@ -162,8 +162,8 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function designer(): BelongsTo
     {
@@ -171,8 +171,8 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function vendor(): BelongsTo
     {
@@ -180,8 +180,8 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function season(): BelongsTo
     {
@@ -191,24 +191,26 @@ class Thread extends BaseModel
     /**
      * @return BelongsToMany
      */
-    public function regular_product_categories() {
+    public function regular_product_categories()
+    {
         return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')
             ->where('category_type', self::REGULAR)
-            ->withPivot('sku','category_type','product_unit_id','per_piece_qty');
+            ->withPivot('sku', 'category_type', 'product_unit_id', 'per_piece_qty');
     }
 
     /**
      * @return BelongsToMany
      */
-    public function plus_product_categories() {
+    public function plus_product_categories()
+    {
         return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')
             ->where('category_type', self::PLUS)
-            ->withPivot('sku','category_type','product_unit_id','per_piece_qty');
+            ->withPivot('sku', 'category_type', 'product_unit_id', 'per_piece_qty');
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fit(): BelongsTo
     {
@@ -216,8 +218,8 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function rise(): BelongsTo
     {
@@ -225,8 +227,8 @@ class Thread extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fabric(): BelongsTo
     {
