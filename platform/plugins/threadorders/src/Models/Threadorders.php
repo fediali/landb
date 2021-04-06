@@ -36,7 +36,7 @@ class Threadorders extends BaseModel
      * @var array
      */
     protected $dates = [
-        'pp_sample_date',
+        //'pp_sample_date',
         'order_date',
         'ship_date',
         'cancel_date',
@@ -56,9 +56,9 @@ class Threadorders extends BaseModel
         'order_no',
         'order_status',
         'thread_status',
-        'pp_sample',
-        'pp_sample_size',
-        'pp_sample_date',
+        //'pp_sample',
+        //'pp_sample_size',
+        //'pp_sample_date',
         'material',
         'sleeve',
         'label',
