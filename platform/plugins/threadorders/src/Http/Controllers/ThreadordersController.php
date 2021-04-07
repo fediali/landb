@@ -233,7 +233,7 @@ class ThreadordersController extends BaseController
         $threadData['order_no'] = $po_gen;
         $threadData['thread_id'] = $requestData['thread_id'];
         $threadData['name'] = $requestData['name'];
-        $threadData['pp_sample'] = $requestData['pp_sample'];
+        //$threadData['pp_sample'] = $requestData['pp_sample'];
         $threadData['material'] = $requestData['material'];
         $threadData['shipping_method'] = $requestData['shipping_method'];
         $threadData['vendor_product_id'] = $requestData['vendor_product_id'];
