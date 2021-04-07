@@ -10,6 +10,7 @@ use Botble\Categorysizes\Models\Categorysizes;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductAttribute;
 use Botble\Ecommerce\Models\ProductAttributeSet;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Slug\Models\Slug;
 use Botble\Thread\Models\Thread;
@@ -407,6 +408,7 @@ class ThreadordersController extends BaseController
                                     $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                     if ($result['created']) {
                                         app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets'=>$addedAttributes]], $this->productVariation, $product->id, $response);
+                                        ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
                                     }
 
 
@@ -437,10 +439,10 @@ class ThreadordersController extends BaseController
                         InventoryHistory::create([
                                 'product_id' => $product->id,
                                 'order_id' => $threadorder->id,
-                                'quantity' => $variation->quantity, // transaction qty
-                                'new_stock' => $variation->quantity, // new stock qty
-                                'old_stock' => 0, // 0 when new prod add
-                                'created_by' => Auth::user()->id,
+                                //'quantity' => $variation->quantity, // transaction qty
+                                //'new_stock' => $variation->quantity, // new stock qty
+                                //'old_stock' => 0, // 0 when new prod add
+                                'created_by' => auth()->user()->id,
                                 'reference' => 'threadorders.push_to_ecommerce'
                         ]);
                     }
