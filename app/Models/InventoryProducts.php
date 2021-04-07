@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class InventoryProducts extends Model
 {
-    protected $fillable = ['inventory_id', 'product_id', 'sku', 'upc', 'barcode', 'ecom_pack_qty', 'ordered_pack_qty', 'received_pack_qty'];
+    protected $fillable = ['inventory_id', 'product_id', 'sku', 'upc', 'barcode', 'is_variation', 'ecom_qty', 'ordered_qty', 'received_qty'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

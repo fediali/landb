@@ -20,17 +20,18 @@ class CreateInventoryProductsTable extends Migration
             $table->string('sku')->index('ipp_sku_fk');
             $table->string('upc')->index('ipp_upc_fk')->nullable();
             $table->string('barcode')->nullable();
-            $table->integer('ecom_pack_qty')->default(0)->nullable();
-            $table->integer('ordered_pack_qty')->default(0)->nullable();
-            $table->integer('received_pack_qty')->default(0)->nullable();
+            $table->string('is_variation')->nullable();
+            $table->integer('ecom_qty')->default(0)->nullable();
+            $table->integer('ordered_qty')->default(0)->nullable();
+            $table->integer('received_qty')->default(0)->nullable();
             $table->timestamps();
         });
 
-        Schema::create('inventory_product_cat_qty', function (Blueprint $table) {
+        /*Schema::create('inventory_product_cat_qty', function (Blueprint $table) {
             $table->integer('inventory_product_id')->index('ipcq_inventory_prod_id_fk');
             $table->integer('product_category_id')->index('ipcq_prod_cat_id_fk');
             $table->integer('loose_qty')->default(0)->nullable();
-        });
+        });*/
 
     }
 
@@ -42,6 +43,6 @@ class CreateInventoryProductsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('inventory_products');
-        Schema::dropIfExists('inventory_product_cat_qty');
+        //Schema::dropIfExists('inventory_product_cat_qty');
     }
 }
