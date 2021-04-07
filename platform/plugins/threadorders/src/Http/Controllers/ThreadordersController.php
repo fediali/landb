@@ -11,6 +11,7 @@ use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductAttribute;
 use Botble\Ecommerce\Models\ProductAttributeSet;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
+use Botble\Slug\Models\Slug;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
@@ -29,6 +30,8 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use SlugHelper;
 
 class ThreadordersController extends BaseController
 {
@@ -359,6 +362,13 @@ class ThreadordersController extends BaseController
                         $product->categories()->sync([$variation->product_category_id]);
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
+
+                        Slug::create([
+                            'reference_type' => Product::class,
+                            'reference_id'   => $product->id,
+                            'key'            => Str::slug($product->name),
+                            'prefix'         => SlugHelper::getPrefix(Product::class),
+                        ]);
 
                         $getTypeAttrSet = ProductAttributeSet::where('slug', 'type')->value('id');
                         if ($getTypeAttrSet) {
