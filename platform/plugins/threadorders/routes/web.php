@@ -24,7 +24,7 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
             Route::post('change-status', [
                 'as'         => 'changeStatus',
                 'uses'       => 'ThreadordersController@changeStatus',
-                'permission' => 'thread.status',
+                'permission' => 'threadorder.status',
             ]);
             Route::get('orderItem/{id}', [
                 'as'         => 'orderItem',

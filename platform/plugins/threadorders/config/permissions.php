@@ -27,7 +27,7 @@ return [
     ],
     [
         'name'        => 'Status',
-        'flag'        => 'threadorders.status',
+        'flag'        => 'threadorder.status',
         'parent_flag' => 'threadorders.index',
     ],
     [

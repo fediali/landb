@@ -156,9 +156,10 @@ class ThreadTable extends TableAbstract
                 'width' => '100px',
             ],
             'status'              => [
-                'name'  => 'threads.status',
-                'title' => trans('core/base::tables.status'),
-                'width' => '100px',
+                'name'    => 'threads.status',
+                'title'   => trans('core/base::tables.status'),
+                'width'   => '100px',
+              //  'visible' => (Auth::user()->hasPermission('thread.create')) ? true : false,
             ]
         ];
     }

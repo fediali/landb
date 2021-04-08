@@ -164,9 +164,10 @@ class ThreadordersTable extends TableAbstract
                 'width' => '100px',
             ],
             'ecommerce'    => [
-                'name'  => 'Ecommerce',
-                'title' => 'Ecommerce',
-                'width' => '100px',
+                'name'    => 'Ecommerce',
+                'title'   => 'Ecommerce',
+                'width'   => '100px',
+                'visible' => (Auth::user()->hasPermission('threadorders.pushEcommerce')) ? true : false,
             ]
         ];
     }
