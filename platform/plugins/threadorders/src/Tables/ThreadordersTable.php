@@ -37,7 +37,7 @@ class ThreadordersTable extends TableAbstract
         $this->setOption('id', 'plugins-threadorders-table');
         parent::__construct($table, $urlGenerator);
 
-        if (!Auth::user()->hasAnyPermission(['threadorders.edit', 'threadorders.destroy'])) {
+        if (!Auth::user()->hasAnyPermission(['threadorders.edit', 'threadorders.destroy', 'threadorders.status', 'threadorders.pushEcommerce', 'threadorders.details', 'threadorders.order'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -135,11 +135,13 @@ class ThreadordersTable extends TableAbstract
      */
     public function columns()
     {
+
         return [
             'id'           => [
                 'name'  => 'threadorders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
+
             ],
             'name'         => [
                 'name'  => 'threadorders.name',
@@ -165,7 +167,7 @@ class ThreadordersTable extends TableAbstract
                 'name'  => 'Ecommerce',
                 'title' => 'Ecommerce',
                 'width' => '100px',
-            ],
+            ]
         ];
     }
 

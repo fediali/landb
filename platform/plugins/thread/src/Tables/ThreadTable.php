@@ -38,7 +38,7 @@ class ThreadTable extends TableAbstract
         $this->setOption('id', 'plugins-thread-table');
         parent::__construct($table, $urlGenerator);
 
-        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy','thread.cloneItem','thread.details'])) {
+        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy', 'thread.cloneItem', 'thread.details'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -51,12 +51,12 @@ class ThreadTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-       /*  ->editColumn('name', function ($item) {
-                if (!Auth::user()->hasPermission('thread.edit')) {
-                    return $item->name;
-                }
-                return Html::link(route('thread.edit', $item->id), $item->name);
-            })*/
+            /*  ->editColumn('name', function ($item) {
+                     if (!Auth::user()->hasPermission('thread.edit')) {
+                         return $item->name;
+                     }
+                     return Html::link(route('thread.edit', $item->id), $item->name);
+                 })*/
             ->editColumn('designer_id', function ($item) {
                 return $item->designer ? $item->designer->getFullName() : null;
             })
@@ -84,11 +84,11 @@ class ThreadTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                $html = '<a href="'.route('thread.cloneItem', $item->id).'" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
+                $html = '<a href="' . route('thread.cloneItem', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Clone"><i class="fa fa-copy"></i></a>';
                 /*if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED) {
                     $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
                 }*/
-                $html .= '<a href="'.route('thread.details', $item->id).'" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
+                $html .= '<a href="' . route('thread.details', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
                 return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
             })
             ->escapeColumns([])
@@ -126,34 +126,40 @@ class ThreadTable extends TableAbstract
      */
     public function columns()
     {
+        if (Auth::user()->hasAnyPermission(['threadorders.order'])) {
+            $permission = true;
+        } else {
+            $permission = false;
+        }
         return [
-            'id' => [
+            'id'                  => [
                 'name'  => 'threads.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'name' => [
+            'name'                => [
                 'name'  => 'threads.name',
                 'title' => 'Description',
                 'class' => 'text-left',
             ],
-            'designer_id'  => [
+            'designer_id'         => [
                 'name'      => 'threads.designer_id',
                 'title'     => 'Designer',
                 'class'     => 'no-sort text-left',
                 'orderable' => false,
             ],
             'create_thread_order' => [
-                'name'  => 'thread_order',
-                'title' => 'Create Order',
-                'width' => '100px',
+                'name'    => 'thread_order',
+                'title'   => 'Create Order',
+                'width'   => '100px',
+                'visible' => $permission
             ],
-            'created_at' => [
+            'created_at'          => [
                 'name'  => 'threads.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status' => [
+            'status'              => [
                 'name'  => 'threads.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
@@ -197,12 +203,12 @@ class ThreadTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'threads.name' => [
+            'threads.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'threads.status' => [
+            'threads.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),

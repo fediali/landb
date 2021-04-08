@@ -20,4 +20,23 @@ return [
         'flag'        => 'threadorders.destroy',
         'parent_flag' => 'threadorders.index',
     ],
+    [
+        'name'        => 'Detail',
+        'flag'        => 'threadorders.details',
+        'parent_flag' => 'threadorders.index',
+    ],
+    [
+        'name'        => 'Status',
+        'flag'        => 'threadorders.status',
+        'parent_flag' => 'threadorders.index',
+    ],
+    [
+        'name'        => 'Push to Ecommerce',
+        'flag'        => 'threadorders.pushEcommerce',
+        'parent_flag' => 'threadorders.index',
+    ], [
+        'name'        => 'Thread Order',
+        'flag'        => 'threadorders.order',
+        'parent_flag' => 'threadorders.index',
+    ],
 ];
