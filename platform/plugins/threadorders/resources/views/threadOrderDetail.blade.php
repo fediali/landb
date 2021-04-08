@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col-lg-12 mb-3">
                             <h5 class="variation-text">{{$loop->iteration}}. {{$variation->name}} </h5>
-                            <img class="w-100" src="{{ asset('storage/'.$variation->design_file) }}" height="120" width="120" style="object-fit: cover">
+                            <img class="w-100" src="{{ asset('storage/'.strtolower(@$variation->design_file)) }}" height="120" width="120" style="object-fit: cover">
                         </div>
                         <div class="col-lg-2">
                             <p class="m-0 heading">SKU</p>
