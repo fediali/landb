@@ -14,12 +14,12 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
             Route::get('clone-item/{id}', [
                 'as'         => 'cloneItem',
                 'uses'       => 'ThreadController@cloneItem',
-                'permission' => 'thread.create',
+                'permission' => 'thread.cloneItem',
             ]);
             Route::get('details/{id}', [
                 'as'         => 'details',
                 'uses'       => 'ThreadController@show',
-                'permission' => 'thread.create',
+                'permission' => 'thread.details',
             ]);
             Route::post('add-variations', [
                 'as'         => 'addVariation',
@@ -66,9 +66,9 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@pushToEcommerce',
                 'permission' => 'thread.create',
             ]);
-            Route::get('pushEvent', function (){
-              event(new \App\Events\ThreadApproval());
-              return 'ok';
+            Route::get('pushEvent', function () {
+                event(new \App\Events\ThreadApproval());
+                return 'ok';
             });
         });
     });

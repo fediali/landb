@@ -38,7 +38,7 @@ class ThreadTable extends TableAbstract
         $this->setOption('id', 'plugins-thread-table');
         parent::__construct($table, $urlGenerator);
 
-        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy'])) {
+        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy','thread.cloneItem','thread.details'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -51,7 +51,7 @@ class ThreadTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            /*->editColumn('name', function ($item) {
+       /*  ->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('thread.edit')) {
                     return $item->name;
                 }
