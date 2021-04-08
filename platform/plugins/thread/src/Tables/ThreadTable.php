@@ -38,7 +38,7 @@ class ThreadTable extends TableAbstract
         $this->setOption('id', 'plugins-thread-table');
         parent::__construct($table, $urlGenerator);
 
-        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy', 'thread.cloneItem', 'thread.details'])) {
+        if (!Auth::user()->hasAnyPermission(['thread.edit', 'thread.destroy', 'thread.cloneItem', 'thread.details', 'threadorders.create'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -126,11 +126,7 @@ class ThreadTable extends TableAbstract
      */
     public function columns()
     {
-        if (Auth::user()->hasAnyPermission(['threadorders.order'])) {
-            $permission = true;
-        } else {
-            $permission = false;
-        }
+
         return [
             'id'                  => [
                 'name'  => 'threads.id',
@@ -152,7 +148,7 @@ class ThreadTable extends TableAbstract
                 'name'    => 'thread_order',
                 'title'   => 'Create Order',
                 'width'   => '100px',
-                'visible' => $permission
+                'visible' => (Auth::user()->hasPermission(['threadorders.order'])) ? true : false,
             ],
             'created_at'          => [
                 'name'  => 'threads.created_at',
