@@ -17,6 +17,7 @@ $variations = $options['data']['variations'];
                         <th scope="col">Thread</th>
                         <th scope="col">Fabric or Print</th>
                         <th scope="col">Wash</th>
+                        <th scope="col">Cost</th>
                         <th scope="col">Status</th>
                         <th scope="col">Notes</th>
                         <th scope="col">Action</th>
@@ -29,6 +30,7 @@ $variations = $options['data']['variations'];
                                 <td>{{ $thread->name }}</td>
                                 <td>{{ @$variation->printdesign->name }}</td>
                                 <td>{{ @$variation->wash->name  }}</td>
+                                <td>{{ $variation->cost }}</td>
                                 <td>
                                     @if($variation->status == 'active')
                                         <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}"
@@ -80,23 +82,18 @@ $variations = $options['data']['variations'];
                                     <tbody id="multi-variations">
                                     <tr>
                                         <td style="width: 13%;">
-                                            <button type="button" class="add_row form-control btn btn-secondary"
-                                                    id="add-new"><i class="fa fa-plus"></i> Add:
-                                            </button>
+                                            <button type="button" class="add_row form-control btn btn-secondary" id="add-new"><i class="fa fa-plus"></i> Add:</button>
                                         </td>
                                     </tr>
                                     <tr class="duplicate">
                                         <td width="10%">
                                             <label for="name">Name:</label>
-                                            <input required class="form-control variation_name" placeholder="Add Name"
-                                                   name="name[]" type="text">
+                                            <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
 
                                         <td width="25%">
                                             <label for="print_id">Print / Solid:</label><br>
-
-                                            <select class="form-control print_design" name="print_id[]"
-                                                    style="width: 100%">
+                                            <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}"
@@ -126,13 +123,16 @@ $variations = $options['data']['variations'];
                                         </td>
                                         <td width="15%">
                                             <label for="wash_id" class="control-label">Select Wash</label>
-                                            <select class="select-search-full variation_wash" id="wash_id"
-                                                    name="wash_id[]">
+                                            <select class="select-search-full variation_wash" id="wash_id" name="wash_id[]">
                                                 <option selected="selected" disabled value="">Select Wash</option>
                                                 @foreach($options['data']['washes'] as $key => $wash)
                                                     <option value="{{$key}}">{{$wash}}</option>
                                                 @endforeach
                                             </select>
+                                        </td>
+                                        <td width="10%">
+                                            <label for="cost">Cost:</label>
+                                            <input required class="form-control variation_cost" placeholder="Add Cost" name="cost[]" type="text">
                                         </td>
                                         {{--<td width="10%">
                                             <label for="pack_id">File:</label>
@@ -140,14 +140,11 @@ $variations = $options['data']['variations'];
                                         </td>--}}
                                         <td width="15%">
                                             <label for="Notes">Notes:</label>
-                                            <textarea class="form-control variation_notes" placeholder="Add Notes"
-                                                      name="notes[]" cols="50" rows="2"></textarea>
+                                            <textarea class="form-control variation_notes" placeholder="Add Notes" name="notes[]" cols="50" rows="2"></textarea>
                                         </td>
                                         <td width="5%">
-
                                             <label for="row">Remove</label>
-                                            <button type="button" class="remove_row form-control btn btn-info"><i
-                                                    class="fa fa-trash"></i></button>
+                                            <button type="button" class="remove_row form-control btn btn-info"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
 
@@ -550,8 +547,9 @@ $variations = $options['data']['variations'];
                 success: function (data) {
                     location.reload();
                 },
-                error: function (request, error) {
+                error: function (request, status, error) {
                     location.reload();
+                    toastr['warning']('Duplicate Variation', 'Validation Error');
                 }
             });
         });
@@ -592,10 +590,13 @@ $variations = $options['data']['variations'];
                     }).get(),
                     'wash_id[]': $('.variation_wash').map(function () {
                         return this.value;
-                    }).get(),/*
-            'file[]' :$('input:file.variation_file').map(function(){
-              return this.value;
-            }).get(),*/
+                    }).get(),
+                    'cost[]': $('input:text.variation_cost').map(function () {
+                        return this.value;
+                    }).get(),
+                    /*'file[]' :$('input:file.variation_file').map(function(){
+                      return this.value;
+                    }).get(),*/
                     'notes[]': $('textarea.variation_notes').map(function () {
                         return this.value;
                     }).get(),
@@ -603,8 +604,9 @@ $variations = $options['data']['variations'];
                 success: function (data) {
                     location.reload();
                 },
-                error: function (request, error) {
+                error: function (request, status, error) {
                     location.reload();
+                    toastr['warning']('Duplicate Variation', 'Validation Error');
                 }
             });
         });
