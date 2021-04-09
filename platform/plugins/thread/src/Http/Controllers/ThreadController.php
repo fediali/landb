@@ -31,6 +31,7 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -322,36 +323,49 @@ class ThreadController extends BaseController
 
         $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
 
+        $exist = false;
         for ($i = 0; $i <= count($data['name']) - 1; $i++) {
-            $variation = new ThreadVariation();
-            $input = array();
-            $input['thread_id'] = @$data['thread_id'];
-            $input['is_denim'] = @$data['is_denim'];
-            $input['name'] = @$data['name'][$i];
-            $input['print_id'] = @$data['print_id'][$i];
-            $input['wash_id'] = @$data['wash_id'][$i];
-            $input['regular_qty'] = @$data['regular_qty'][$i];
-            $input['plus_qty'] = @$data['plus_qty'][$i];
-            $input['cost'] = @$data['cost'][$i];
-            $input['notes'] = @$data['notes'][$i];
-            $input['notes'] = @$data['notes'][$i];
-            $input['status'] = 'active';
+            $checkDupli = ThreadVariation::where(['thread_id'=>$data['thread_id'], 'print_id'=>$data['print_id']])->first();
+            if (!$checkDupli) {
+                $variation = new ThreadVariation();
+                $input = array();
+                $input['thread_id'] = @$data['thread_id'];
+                $input['is_denim'] = @$data['is_denim'];
+                $input['name'] = @$data['name'][$i];
+                $input['print_id'] = @$data['print_id'][$i];
+                $input['wash_id'] = @$data['wash_id'][$i];
+                $input['cost'] = @$data['cost'][$i];
+                $input['notes'] = @$data['notes'][$i];
+                $input['status'] = 'active';
 
-            $input['reg_sku'] = isset($data['reg_sku'][$i]) ? @$data['reg_sku'][$i] : null;
-            $input['plus_sku'] = isset($data['plus_sku'][$i]) ? @$data['plus_sku'][$i] : null;
+                $input['reg_sku'] = isset($data['reg_sku'][$i]) ? @$data['reg_sku'][$i] : null;
+                $input['plus_sku'] = isset($data['plus_sku'][$i]) ? @$data['plus_sku'][$i] : null;
 
-            $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
-            $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
-            $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
+                $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
 
-            $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999));
-            $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999)) . '-X';
+                $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
+                if ($selRegCat) {
+                    $input['regular_qty'] = @$data['regular_qty'][$i];
+                    $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
+                }
+                $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
+                if ($selPluCat) {
+                    $input['plus_qty'] = @$data['plus_qty'][$i];
+                    $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/) . '-X';
+                }
 
-            $input['created_by'] = Auth::user()->id;
-            $create = $variation->create($input);
-            if (!$create) {
-                return response()->json(['status' => 'error'], 500);
+                $input['created_by'] = Auth::user()->id;
+                $create = $variation->create($input);
+                if (!$create) {
+                    return response()->json(['status' => 'error'], 500);
+                }
+            } else {
+                $exist = true;
             }
+        }
+
+        if ($exist) {
+            return response()->json(['status' => 'warning'], 500);
         }
 
         return response()->json(['status' => 'success'], 200);
