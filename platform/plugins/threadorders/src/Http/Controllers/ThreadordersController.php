@@ -369,10 +369,12 @@ class ThreadordersController extends BaseController
                     $extras = 0;
                     if ($percentage) {
                         $extras = ($variation->cost * $packQuantity) * $percentage / 100;
-                        $selling_price = $variation->cost * $packQuantity + $extras;
+                        $packPrice = $variation->cost * $packQuantity + $extras;
+                        $single = $variation->cost * $percentage / 100;
+                        $singlePrice = $variation->cost + $single;
                     }
-                    $product->price = $selling_price;
-                   // $product->sale_price = $variation->cost + $extras;
+                    $product->price = $packPrice;
+                    // $product->sale_price = $variation->cost + $extras;
                     $product->images = json_encode([$variation->design_file]);
                     $product->tax_id = 1;
                     $product->upc = $variation->upc;
@@ -426,8 +428,6 @@ class ThreadordersController extends BaseController
                                         app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
                                     }
-
-
                                     if (count($getSizeAttrs)) {
                                         $product->productAttributeSets()->attach([$getSizeAttrSet]);
                                         $product->productAttributes()->attach($getSizeAttrs);
@@ -439,13 +439,11 @@ class ThreadordersController extends BaseController
                                             $addedAttributes[$getTypeAttrSet] = $getTypeSingleAttr;
                                             $addedAttributes[$getSizeAttrSet] = $getSizeAttr;
                                             $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
-
-                                            $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
-                                            Product::where('id', $prodId)->update([]);
-
                                             if ($result['created']) {
                                                 app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                             }
+                                            $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                            Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                         }
 
 
