@@ -189,7 +189,6 @@ class ThreadController extends BaseController
                 $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
             }
         }
-
         if ($request->hasfile('spec_files')) {
             foreach ($request->file('spec_files') as $spec_file) {
                 $spec_file_name = time() . rand(1, 100) . '.' . $spec_file->extension();
@@ -335,14 +334,18 @@ class ThreadController extends BaseController
             $input['plus_qty'] = @$data['plus_qty'][$i];
             $input['cost'] = @$data['cost'][$i];
             $input['notes'] = @$data['notes'][$i];
+            $input['notes'] = @$data['notes'][$i];
             $input['status'] = 'active';
+
+            $input['reg_sku'] = isset($data['reg_sku'][$i]) ? @$data['reg_sku'][$i] : null;
+            $input['plus_sku'] = isset($data['plus_sku'][$i]) ? @$data['plus_sku'][$i] : null;
 
             $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
             $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
             $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
 
-            $input['sku'] = $selRegCat . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999));
-            $input['plus_sku'] = str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999)) . '-X';
+            $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999));
+            $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) . rand(10, 999)) . '-X';
 
             $input['created_by'] = Auth::user()->id;
             $create = $variation->create($input);
