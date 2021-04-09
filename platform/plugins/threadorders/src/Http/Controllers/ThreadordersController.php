@@ -11,6 +11,7 @@ use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductAttribute;
 use Botble\Ecommerce\Models\ProductAttributeSet;
 use Botble\Ecommerce\Models\ProductVariation;
+use Botble\Ecommerce\Repositories\Interfaces\ProductCategoryInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Slug\Models\Slug;
 use Botble\Thread\Models\Thread;
@@ -51,14 +52,17 @@ class ThreadordersController extends BaseController
      */
     protected $productVariation;
 
+    protected $productCategoryRepository;
+
     /**
      * @param ThreadordersInterface $threadordersRepository
      * @param ThreadInterface $threadRepository
      */
-    public function __construct(ThreadordersInterface $threadordersRepository, ThreadInterface $threadRepository, ProductVariationInterface $productVariation)
+    public function __construct(ThreadordersInterface $threadordersRepository, ThreadInterface $threadRepository, ProductVariationInterface $productVariation, ProductCategoryInterface $productCategoryRepository)
     {
         $this->threadordersRepository = $threadordersRepository;
         $this->threadRepository = $threadRepository;
+        $this->productCategoryRepository = $productCategoryRepository;
         $this->productVariation = $productVariation;
     }
 
@@ -253,40 +257,40 @@ class ThreadordersController extends BaseController
         foreach ($thread2->thread_variations as $thread_variation) {
 
             $threadOrderVar = [
-                'thread_order_id' => $threadorders->id,
-                'category_type' => 'regular',
+                'thread_order_id'     => $threadorders->id,
+                'category_type'       => 'regular',
                 'product_category_id' => $thread2->regular_product_categories[0]->pivot->product_category_id,
-                'product_unit_id' => $requestData['regular_product_unit_id'],
-                'per_piece_qty' => $requestData['regular_per_piece_qty'],
+                'product_unit_id'     => $requestData['regular_product_unit_id'],
+                'per_piece_qty'       => $requestData['regular_per_piece_qty'],
                 'thread_variation_id' => $thread_variation->id,
-                'print_design_id' => $thread_variation->print_id,
-                'name' => $thread_variation->name,
-                'parent_sku' => $thread2->regular_product_categories[0]->pivot->sku,
-                'sku' => $thread_variation->sku,
-                'quantity' => $requestData['regular_qty'][$thread_variation->id],
-                'cost' => $requestData['cost'][$thread_variation->id],
-                'notes' => $thread_variation->notes,
-                'upc' => get_barcode()['upc'],
-                'barcode' => get_barcode()['barcode'],
+                'print_design_id'     => $thread_variation->print_id,
+                'name'                => $thread_variation->name,
+                'parent_sku'          => $thread2->regular_product_categories[0]->pivot->sku,
+                'sku'                 => $thread_variation->sku,
+                'quantity'            => $requestData['regular_qty'][$thread_variation->id],
+                'cost'                => $requestData['cost'][$thread_variation->id],
+                'notes'               => $thread_variation->notes,
+                'upc'                 => get_barcode()['upc'],
+                'barcode'             => get_barcode()['barcode'],
             ];
             DB::table('thread_order_variations')->insert($threadOrderVar);
             if (isset($thread2->plus_product_categories[0])) {
                 $threadOrderVar = [
-                    'thread_order_id' => $threadorders->id,
-                    'category_type' => 'plus',
+                    'thread_order_id'     => $threadorders->id,
+                    'category_type'       => 'plus',
                     'product_category_id' => $thread2->plus_product_categories[0]->pivot->product_category_id,
-                    'product_unit_id' => $requestData['plus_product_unit_id'],
-                    'per_piece_qty' => $requestData['plus_per_piece_qty'],
+                    'product_unit_id'     => $requestData['plus_product_unit_id'],
+                    'per_piece_qty'       => $requestData['plus_per_piece_qty'],
                     'thread_variation_id' => $thread_variation->id,
-                    'print_design_id' => $thread_variation->print_id,
-                    'name' => $thread_variation->name,
-                    'parent_sku' => $thread2->plus_product_categories[0]->pivot->sku,
-                    'sku' => $thread_variation->plus_sku,
-                    'quantity' => $requestData['plus_qty'][$thread_variation->id],
-                    'cost' => $requestData['cost'][$thread_variation->id],
-                    'notes' => $thread_variation->notes,
-                    'upc' => get_barcode()['upc'],
-                    'barcode' => get_barcode()['barcode'],
+                    'print_design_id'     => $thread_variation->print_id,
+                    'name'                => $thread_variation->name,
+                    'parent_sku'          => $thread2->plus_product_categories[0]->pivot->sku,
+                    'sku'                 => $thread_variation->plus_sku,
+                    'quantity'            => $requestData['plus_qty'][$thread_variation->id],
+                    'cost'                => $requestData['cost'][$thread_variation->id],
+                    'notes'               => $thread_variation->notes,
+                    'upc'                 => get_barcode()['upc'],
+                    'barcode'             => get_barcode()['barcode'],
                 ];
                 DB::table('thread_order_variations')->insert($threadOrderVar);
             }
@@ -327,6 +331,17 @@ class ThreadordersController extends BaseController
         return $response;
     }
 
+    public function quantityCalculate($id)
+    {
+        $category = $this->productCategoryRepository->findOrFail($id);
+        $totalQuantity = 0;
+        foreach ($category->category_sizes as $cat) {
+            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
+            $totalQuantity += $quan;
+        }
+        return $totalQuantity;
+    }
+
     public function pushToEcommerce($id, BaseHttpResponse $response)
     {
         $threadorder = $this->threadordersRepository->findOrFail($id);
@@ -334,12 +349,13 @@ class ThreadordersController extends BaseController
         $exist = false;
         if ($threadorder) {
             $variations = $threadorder->threadOrderVariations();
-            if(!count($variations)){
-              return $response->setPreviousUrl(route('thread.index'))->setError('No variations exists against this order!');
+            if (!count($variations)) {
+                return $response->setPreviousUrl(route('thread.index'))->setError('No variations exists against this order!');
             }
             foreach ($variations as $key => $variation) {
                 $check = Product::where('sku', $variation->sku)->first();
                 if (!$check) {
+                    $packQuantity = $this->quantityCalculate($variation->product_category_id);
                     $product = new Product();
                     $product->name = $variation->name;
                     $product->description = $variation->name;
@@ -348,13 +364,15 @@ class ThreadordersController extends BaseController
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
                     $product->quantity = 0;
-                    $product->price = $variation->cost;
+
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
                     $extras = 0;
                     if ($percentage) {
-                        $extras = $variation->cost * ($percentage / 100);
+                        $extras = ($variation->cost * $packQuantity) * $percentage / 100;
+                        $selling_price = $variation->cost * $packQuantity + $extras;
                     }
-                    $product->sale_price = $variation->cost + $extras;
+                    $product->price = $selling_price;
+                   // $product->sale_price = $variation->cost + $extras;
                     $product->images = json_encode([$variation->design_file]);
                     $product->tax_id = 1;
                     $product->upc = $variation->upc;
@@ -363,7 +381,6 @@ class ThreadordersController extends BaseController
                         $product->categories()->sync([$variation->product_category_id]);
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
-
                         Slug::create([
                             'reference_type' => Product::class,
                             'reference_id'   => $product->id,
@@ -377,7 +394,6 @@ class ThreadordersController extends BaseController
                             if ($getTypeAttrs) {
                                 $product->productAttributeSets()->attach([$getTypeAttrSet]);
                                 $product->productAttributes()->attach($getTypeAttrs);
-
                                 $getSizeAttrSet = ProductAttributeSet::where('slug', 'size')->value('id');
                                 if ($getSizeAttrSet) {
                                     $getCatSizes = Categorysizes::join('product_categories_sizes', 'categorysizes.id', 'product_categories_sizes.category_size_id')
@@ -385,12 +401,12 @@ class ThreadordersController extends BaseController
                                         ->pluck('categorysizes.name')
                                         ->all();
                                     $getSizeAttrs = [];
-                                    foreach($getCatSizes as $getCatSize) {
+                                    foreach ($getCatSizes as $getCatSize) {
                                         $sizeExist = ProductAttribute::where('slug', strtolower($getCatSize))->where('attribute_set_id', $getSizeAttrSet)->value('id');
                                         if ($sizeExist) {
                                             $getSizeAttrs[] = $sizeExist;
                                         } else {
-                                            $sizeAttrData = ['attribute_set_id'=>$getSizeAttrSet,'title'=>$getCatSize,'slug'=>strtolower($getCatSize)];
+                                            $sizeAttrData = ['attribute_set_id' => $getSizeAttrSet, 'title' => $getCatSize, 'slug' => strtolower($getCatSize)];
                                             $sizeAttr = ProductAttribute::create($sizeAttrData);
                                             if ($sizeAttr) {
                                                 $getSizeAttrs[] = $sizeAttr->id;
@@ -407,7 +423,7 @@ class ThreadordersController extends BaseController
 
                                     $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                     if ($result['created']) {
-                                        app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets'=>$addedAttributes]], $this->productVariation, $product->id, $response);
+                                        app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
                                     }
 
@@ -421,12 +437,10 @@ class ThreadordersController extends BaseController
                                             $addedAttributes = [];
                                             $getTypeSingleAttr = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->where('slug', 'single')->value('id');
                                             $addedAttributes[$getTypeAttrSet] = $getTypeSingleAttr;
-
                                             $addedAttributes[$getSizeAttrSet] = $getSizeAttr;
-
                                             $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                             if ($result['created']) {
-                                                app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets'=>$addedAttributes]], $this->productVariation, $product->id, $response);
+                                                app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                             }
                                         }
 
@@ -437,17 +451,17 @@ class ThreadordersController extends BaseController
                         }
 
                         InventoryHistory::create([
-                                'product_id' => $product->id,
-                                'order_id' => $threadorder->id,
-                                //'quantity' => $variation->quantity, // transaction qty
-                                //'new_stock' => $variation->quantity, // new stock qty
-                                //'old_stock' => 0, // 0 when new prod add
-                                'created_by' => auth()->user()->id,
-                                'reference' => 'threadorders.push_to_ecommerce'
+                            'product_id' => $product->id,
+                            'order_id'   => $threadorder->id,
+                            //'quantity' => $variation->quantity, // transaction qty
+                            //'new_stock' => $variation->quantity, // new stock qty
+                            //'old_stock' => 0, // 0 when new prod add
+                            'created_by' => auth()->user()->id,
+                            'reference'  => 'threadorders.push_to_ecommerce'
                         ]);
                     }
                 } else {
-                  $exist = true;
+                    $exist = true;
                 }
             }
         } else {
@@ -456,10 +470,12 @@ class ThreadordersController extends BaseController
 
         if ($exist) {
             return $response->setPreviousUrl(route('thread.index'))->setMessage('One or more variations already exists in E-commerce');
-        }if ($success) {
+        }
+        if ($success) {
             return $response->setPreviousUrl(route('thread.index'))->setMessage('Order pushed to E-commerce Successfully');
         }
     }
+
 
     public function showThreadOrderDetail($id, Request $request)
     {
