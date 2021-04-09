@@ -226,10 +226,11 @@ $variations = $options['data']['variations'];
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="d-flex w-100">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    {{--<span aria-hidden="true">×</span>--}}</button>
+                               
                                 <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span
                                         class="variation-name"></span></h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                     <span aria-hidden="true">x</span> </button>
 
                                 <div>
 
@@ -259,7 +260,7 @@ $variations = $options['data']['variations'];
                                                    name="name[]" type="text">
                                         </td>
 
-                                        <td width="25%">
+                                        <td width="20%">
                                             <label for="print_id">Print / Solid:</label><br>
 
                                             <select class="form-control print_design" name="print_id[]"
@@ -306,12 +307,12 @@ $variations = $options['data']['variations'];
                                             <input required class="form-control variation_cost" placeholder="Add Cost"
                                                    name="cost[]" type="text">
                                         </td>
-                                        <td width="15%">
+                                        <td width="12%">
                                             <label for="reg_sku">Reg Sku:</label>
                                             <input required class="form-control reg_sku" placeholder="Reg SKU"
                                                    name="req_sku[]" type="text">
                                         </td>
-                                        <td width="15%">
+                                        <td width="10%">
                                             <label for="plus_sku">Plus Sku:</label>
                                             <input required class="form-control plus_sku" placeholder="Plus Cost"
                                                    name="plus_sku[]" type="text">

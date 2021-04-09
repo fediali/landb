@@ -4,7 +4,7 @@
     <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
     <span id="product-error" class="invalid-feedback"></span>
 </div>
-<table class="table">
+<table class="table inventory-add">
     <thead>
     <tr>
         <th scope="col">Image</th>
