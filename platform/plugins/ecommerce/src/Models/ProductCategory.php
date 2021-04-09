@@ -36,6 +36,7 @@ class ProductCategory extends BaseModel
         'is_plus_cat',
         'impact_price',
         'per_piece_qty',
+        'sku_initial',
         'product_unit_id',
     ];
 
