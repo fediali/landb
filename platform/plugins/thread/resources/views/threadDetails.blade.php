@@ -286,13 +286,13 @@
 
                             </tr>
                             <tr>
-                                <td colspan="1" rowspan="1"><p class="font-bold font-12">Order Date: <span
+                                <td style="width: 12%;" colspan="1" rowspan="1"><p class="font-bold font-12">Order Date:<br> <span
                                                 class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">Style # <br><span
+                                <td style="width: 14%;"><p class="font-bold font-12">Style # <br><span
                                                 class="widget-title-color-red text-uppercase"> Reg Pack:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
                                                 Plus Pack:  {{ $options['data']['plus_sku'] }} @endif</span></p></td>
-                                <td><p class="font-bold font-12">Category <br><span
+                                <td style="width: 14%;"><p class="font-bold font-12">Category <br><span
                                                 class="widget-title-color-red text-uppercase">
                                     Reg Pack: {{ $options['data']['reg_cat']->name }}<br><span
                                                     class="widget-title-color-red text-uppercase">
@@ -300,7 +300,7 @@
                                                     Plus Pack: {{ $options['data']['plus_cat']->name }} @endif</span>
                                     </p>
                                 </td>
-                                <td><p class="font-bold font-12">Season: <br><span
+                                <td style="width: 8%;"><p class="font-bold font-12">Season: <br><span
                                                 class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
                                     </p></td>
                                 <td><p class="font-bold font-12">Request PP Sample: <br> <span
