@@ -439,6 +439,10 @@ class ThreadordersController extends BaseController
                                             $addedAttributes[$getTypeAttrSet] = $getTypeSingleAttr;
                                             $addedAttributes[$getSizeAttrSet] = $getSizeAttr;
                                             $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
+
+                                            $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                            Product::where('id', $prodId)->update([]);
+
                                             if ($result['created']) {
                                                 app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                             }
