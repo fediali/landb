@@ -17,10 +17,12 @@ use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Threadorders extends BaseModel
 {
+    use SoftDeletes;
     use EnumCastable;
 
     /**
@@ -114,8 +116,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function thread(): BelongsTo
     {
@@ -123,8 +125,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function designer(): BelongsTo
     {
@@ -132,8 +134,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function vendor(): BelongsTo
     {
@@ -141,8 +143,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function season(): BelongsTo
     {
@@ -150,8 +152,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fit(): BelongsTo
     {
@@ -159,8 +161,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function rise(): BelongsTo
     {
@@ -168,23 +170,23 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
 
-    public function threadOrderVariations($type=false)
+    public function threadOrderVariations($type = false)
     {
         return DB::table('thread_order_variations')
             ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name', 'printdesigns.file AS design_file')
             ->join('ec_product_categories', 'ec_product_categories.id', 'thread_order_variations.product_category_id')
-            ->leftJoin('vendorproductunits','vendorproductunits.id','thread_order_variations.product_unit_id')
-            ->leftJoin('printdesigns','printdesigns.id','thread_order_variations.print_design_id')
+            ->leftJoin('vendorproductunits', 'vendorproductunits.id', 'thread_order_variations.product_unit_id')
+            ->leftJoin('printdesigns', 'printdesigns.id', 'thread_order_variations.print_design_id')
             ->where('thread_order_id', $this->id)
-            ->when($type, function($q) use($type) {
+            ->when($type, function ($q) use ($type) {
                 $q->where('category_type', $type);
             })
             ->orderBy('category_type')

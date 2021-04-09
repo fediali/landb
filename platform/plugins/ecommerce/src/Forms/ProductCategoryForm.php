@@ -24,15 +24,12 @@ class ProductCategoryForm extends FormAbstract
         }
         $categories[0] = trans('plugins/ecommerce::product-categories.none');
         $categories = Arr::sortRecursive($categories);
-
         $product_units = get_product_units();
-
         $category_sizes = get_category_sizes();
         $selectedCatSizes = [];
         if ($this->getModel()) {
             $selectedCatSizes = $this->getModel()->category_sizes()->pluck('category_size_id')->all();
         }
-
         $this
             ->setupModel(new ProductCategory)
             ->setValidatorClass(ProductCategoryRequest::class)
@@ -90,21 +87,21 @@ class ProductCategoryForm extends FormAbstract
                 'default_value' => false,
             ])
             ->add('category_size_id', 'customSelect', [
-                'label'      => 'Select Category Sizes',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'class' => 'select-search-full',
+                'label'         => 'Select Category Sizes',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'    => 'select-search-full',
                     'multiple' => 'multiple'
                 ],
-                'choices'    => $category_sizes,
-                'default_value'      => old('category_size_id', $selectedCatSizes),
+                'choices'       => $category_sizes,
+                'default_value' => old('category_size_id', $selectedCatSizes),
             ])
             ->add('impact_price', 'number', [
-                'label'      => 'Impact Price',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Product Quantity',
-                    'steps' => 0.1,
+                'label'         => 'Impact Price',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Product Quantity',
+                    'steps'       => 0.1,
                 ],
                 'default_value' => 0,
             ])
@@ -112,19 +109,26 @@ class ProductCategoryForm extends FormAbstract
                 'label'      => 'Select Product Unit',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Product Unit',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Product Unit',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => $product_units,
             ])
             ->add('per_piece_qty', 'number', [
-                'label'      => 'Per Piece Qty',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr'       => [
-                    'placeholder'  => 'Per Piece Qty',
-                    'steps' => 0.1,
+                'label'         => 'Per Piece Qty',
+                'label_attr'    => ['class' => 'control-label required'],
+                'attr'          => [
+                    'placeholder' => 'Per Piece Qty',
+                    'steps'       => 0.1,
                 ],
                 'default_value' => 0,
+            ])->add('sku_initial', 'text', [
+                'label'      => 'SKU Initial',
+                'label_attr' => ['class' => 'control-label required', 'readonly'],
+                'attr'       => [
+                    'placeholder' => 'SKU Initial',
+                    ($this->getModel()->sku_initial != null) ? 'readonly' : '',
+                ],
             ])
             ->setBreakFieldPoint('status');
     }

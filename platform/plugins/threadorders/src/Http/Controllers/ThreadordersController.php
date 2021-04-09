@@ -10,7 +10,9 @@ use Botble\Categorysizes\Models\Categorysizes;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductAttribute;
 use Botble\Ecommerce\Models\ProductAttributeSet;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
+use Botble\Slug\Models\Slug;
 use Botble\Thread\Models\Thread;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadorders\Http\Requests\ThreadordersRequest;
@@ -29,6 +31,8 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use SlugHelper;
 
 class ThreadordersController extends BaseController
 {
@@ -229,7 +233,7 @@ class ThreadordersController extends BaseController
         $threadData['order_no'] = $po_gen;
         $threadData['thread_id'] = $requestData['thread_id'];
         $threadData['name'] = $requestData['name'];
-        $threadData['pp_sample'] = $requestData['pp_sample'];
+        //$threadData['pp_sample'] = $requestData['pp_sample'];
         $threadData['material'] = $requestData['material'];
         $threadData['shipping_method'] = $requestData['shipping_method'];
         $threadData['vendor_product_id'] = $requestData['vendor_product_id'];
@@ -360,6 +364,13 @@ class ThreadordersController extends BaseController
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
 
+                        Slug::create([
+                            'reference_type' => Product::class,
+                            'reference_id'   => $product->id,
+                            'key'            => Str::slug($product->name),
+                            'prefix'         => SlugHelper::getPrefix(Product::class),
+                        ]);
+
                         $getTypeAttrSet = ProductAttributeSet::where('slug', 'type')->value('id');
                         if ($getTypeAttrSet) {
                             $getTypeAttrs = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->pluck('id')->all();
@@ -397,6 +408,7 @@ class ThreadordersController extends BaseController
                                     $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                     if ($result['created']) {
                                         app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets'=>$addedAttributes]], $this->productVariation, $product->id, $response);
+                                        ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
                                     }
 
 
@@ -427,10 +439,10 @@ class ThreadordersController extends BaseController
                         InventoryHistory::create([
                                 'product_id' => $product->id,
                                 'order_id' => $threadorder->id,
-                                'quantity' => $variation->quantity, // transaction qty
-                                'new_stock' => $variation->quantity, // new stock qty
-                                'old_stock' => 0, // 0 when new prod add
-                                'created_by' => Auth::user()->id,
+                                //'quantity' => $variation->quantity, // transaction qty
+                                //'new_stock' => $variation->quantity, // new stock qty
+                                //'old_stock' => 0, // 0 when new prod add
+                                'created_by' => auth()->user()->id,
                                 'reference' => 'threadorders.push_to_ecommerce'
                         ]);
                     }

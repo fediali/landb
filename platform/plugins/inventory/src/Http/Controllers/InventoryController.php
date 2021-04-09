@@ -78,12 +78,16 @@ class InventoryController extends BaseController
                 if (isset($data['sku_' . $i])) {
                     $product = array();
                     $product['inventory_id'] = $inventory->id;
-                    $product['product_id'] = $data['product_id_' . $i];
-                    $product['sku'] = $data['sku_' . $i];
-                    $product['barcode'] = $data['barcode_' . $i];
-                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
-                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
-                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['product_id'] = @$data['product_id_' . $i];
+                    $product['sku'] = @$data['sku_' . $i];
+                    $product['barcode'] = @$data['barcode_' . $i];
+                    //$product['is_variation'] = @$data['is_variation_' . $i];
+                    $product['ecom_qty'] = @$data['quantity_' . $i];
+                    $product['ordered_qty'] = @$data['ordered_qty_' . $i];
+                    $product['received_qty'] = @$data['received_qty_' . $i];
+                    if (isset($data['received_qty_' . $i])) {
+                        $product['is_variation'] = 1;
+                    }
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -146,12 +150,15 @@ class InventoryController extends BaseController
                 if (isset($data['sku_' . $i])) {
                     $product = array();
                     $product['inventory_id'] = $inventory->id;
-                    $product['product_id'] = $data['product_id_' . $i];
-                    $product['sku'] = $data['sku_' . $i];
-                    $product['barcode'] = $data['barcode_' . $i];
-                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
-                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
-                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['product_id'] = @$data['product_id_' . $i];
+                    $product['sku'] = @$data['sku_' . $i];
+                    $product['barcode'] = @$data['barcode_' . $i];
+                    $product['ecom_qty'] = @$data['quantity_' . $i];
+                    $product['ordered_qty'] = @$data['ordered_qty_' . $i];
+                    $product['received_qty'] = @$data['received_qty_' . $i];
+                    if (isset($data['received_qty_' . $i])) {
+                        $product['is_variation'] = 1;
+                    }
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -215,16 +222,16 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
-            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price')
+        $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
-            ->where('ec_products.barcode', $request->get('barcode'))
-            ->orWhere('ec_products.sku', $request->get('barcode'))
-            ->orWhere('parent_sku', $request->get('barcode'))
-            /*->where('status', 'published')*/
-            ->first();
-        if ($product) {
-            return response()->json(['product' => $product, 'status' => 'success'], 200);
+            //->where('ec_products.barcode', $request->get('barcode'))
+            ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
+            //->orWhere('parent_sku', $request->get('barcode'))
+            //->where('status', 'published')
+            ->get();
+        if ($products) {
+            return response()->json(['products' => $products, 'status' => 'success'], 200);
         } else {
             return response()->json(['product' => [], 'status' => 'error'], 404);
         }
@@ -237,15 +244,16 @@ class InventoryController extends BaseController
         if ($inventory && $inventory->status == 'published') {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
-                    $product = Product::where('sku', $inv_product->sku)->first();
+                    $product = Product::where('sku', $inv_product->sku)->where('is_variation', 1)->first();
                     if ($product) {
                         $old_stock = $product->quantity;
-                        $product->quantity = $product->quantity + $inv_product->received_pack_qty;
+                        $product->quantity = $product->quantity + $inv_product->received_qty;
+                        $product->with_storehouse_management = 1;
                         if ($product->save()) {
 
                             InventoryHistory::create([
                                 'product_id' => $product->id,
-                                'quantity' => $inv_product->received_pack_qty,
+                                'quantity' => $inv_product->received_qty,
                                 'new_stock' => $product->quantity,
                                 'old_stock' => $old_stock,
                                 'created_by' => Auth::user()->id,
@@ -257,7 +265,6 @@ class InventoryController extends BaseController
                     } else {
                         $error = 'Some of the inventory products does not exists';
                     }
-
                 }
             } else {
                 $error = 'Inventory have no products';
