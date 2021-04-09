@@ -127,7 +127,7 @@ class ProductCategoryForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label required', 'readonly'],
                 'attr'       => [
                     'placeholder' => 'SKU Initial',
-                    'readonly'    => 'true',
+                    //'readonly'    => 'true',
                 ],
             ])
             ->setBreakFieldPoint('status');
