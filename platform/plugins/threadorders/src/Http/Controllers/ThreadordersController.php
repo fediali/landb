@@ -432,7 +432,6 @@ class ThreadordersController extends BaseController
                                         $product->productAttributeSets()->attach([$getSizeAttrSet]);
                                         $product->productAttributes()->attach($getSizeAttrs);
 
-
                                         foreach ($getSizeAttrs as $getSizeAttr) {
                                             $addedAttributes = [];
                                             $getTypeSingleAttr = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->where('slug', 'single')->value('id');
@@ -441,12 +440,10 @@ class ThreadordersController extends BaseController
                                             $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                             if ($result['created']) {
                                                 app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
+                                                $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                                Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                             }
-                                            $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
-                                            Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                         }
-
-
                                     }
                                 }
                             }
