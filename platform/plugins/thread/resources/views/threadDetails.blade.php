@@ -417,7 +417,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
-                                                        <div class="tabrow">
+                                                        <div style="display: flow-root;" class="tabrow">
                                                             <b>Fabric:</b>
                                                             @foreach(array_chunk($options['data']['fabrics'], 1, true) as $fabrics)
                                                                 <div class="item">
@@ -449,12 +449,43 @@
                                                             <b>Additional Notes: </b>{{ $thread->description }}
                                                         </div>
                                                         <div class="d-flex">
-                                                            @foreach($variations as $variation)
+                                                           
+                                                            <div class="row">
+                                                            <div class="col-lg-6">
+                                                                            <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                                <h5 class=" mt-2">
+                                                                                    Variation: Osama Ali</h5>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6">
+                                                                                        <p class="mb-0 mt-2"><label for="">Print/Color:</label>asd
+                                                                                        </p>
+                                                                                        @foreach($variations as $variation)
                                                                 @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                    <img style="height: 400px; width: 400px;"
+                                                                    <img class="w-100" height="120" width="120" style="object-fit: cover"
                                                                          src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
                                                                 @endif
                                                             @endforeach
+                                                                                    </div>
+                                                                                                                                                                    </div>
+
+                                                                                <div class="mt-3 mb-2">
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">REG. Packs:</span> 2
+                                                                                        |
+                                                                                        <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">PLUS Packs:</span> 2
+                                                                                        |
+                                                                                        <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">Notes:</span> oo
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                            </div>
                                                         </div>
 
                                                     </td>
