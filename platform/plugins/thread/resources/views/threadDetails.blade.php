@@ -519,7 +519,14 @@
                                                                                     data-target="#modal-default"
                                                                                     data-id="{{ $variation->id }}"
                                                                                     data-name="{{ $variation->name }}">
-                                                                                <i class="fa fa-plus"></i>
+                                                                                Add Fabric
+                                                                            </button>
+                                                                            <button type="button"
+                                                                                    class="btn btn-primary add_trim"
+                                                                                    data-toggle="modal"
+                                                                                    data-target="#modal-var-trim"
+                                                                                    data-id="{{ $variation->id }}">
+                                                                                Add Trim
                                                                             </button>
                                                                         </h6>
                                                                     </div>
