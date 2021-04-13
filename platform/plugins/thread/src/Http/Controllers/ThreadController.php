@@ -372,6 +372,49 @@ class ThreadController extends BaseController
         return response()->json(['status' => 'success'], 200);
     }
 
+    public function editVariation(Request $request)
+    {
+        $data = $request->all();
+        $id = $data['var_id'];
+
+        $checkDupli = ThreadVariation::where(['thread_id'=>$data['thread_id'], 'print_id'=>$data['print_id']])->where('id','!=',$id)->first();
+        if (!$checkDupli) {
+            $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
+            $variation = ThreadVariation::find($id);
+            $input = array();
+            $input['thread_id'] = @$data['thread_id'];
+            $input['is_denim'] = @$data['is_denim'];
+            $input['name'] = @$data['name'];
+            $input['print_id'] = @$data['print_id'];
+            $input['wash_id'] = @$data['wash_id'];
+            $input['cost'] = @$data['cost'];
+            $input['notes'] = @$data['notes'];
+
+            $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
+
+            $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
+            if ($selRegCat) {
+                $input['regular_qty'] = @$data['regular_qty'];
+                $input['sku'] = $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
+            }
+            $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
+            if ($selPluCat) {
+                $input['plus_qty'] = @$data['plus_qty'];
+                $input['plus_sku'] = str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/) . '-X';
+            }
+
+            $input['updated_by'] = auth()->user()->id;
+            $update = $variation->update($input);
+            if (!$update) {
+                return response()->json(['status' => 'error'], 500);
+            }
+        } else {
+            return response()->json(['status' => 'warning'], 500);
+        }
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
     public function updateVariationStatus($id, $status)
     {
         $update = ThreadVariation::find($id)->update(['status' => $status]);

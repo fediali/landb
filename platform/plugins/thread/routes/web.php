@@ -26,6 +26,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@addVariation',
                 'permission' => 'thread.create',
             ]);
+            Route::post('edit-variations', [
+                'as'         => 'editVariation',
+                'uses'       => 'ThreadController@editVariation',
+                'permission' => 'thread.edit',
+            ]);
             Route::post('postComment', [
                 'as'         => 'postComment',
                 'uses'       => 'ThreadController@postComment',

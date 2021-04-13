@@ -334,7 +334,7 @@ $variations = $options['data']['variations'];
                     </div>
                     <input name="is_denim" type="hidden" value="{{$thread->is_denim}}" id="ed-is-denim">
                     <input name="variation_id" type="hidden" value="0" id="ed-var-id">
-                    <input name="variation_thread_id" type="hidden" value="{{ $thread->id }}">
+                    <input name="variation_thread_id" type="hidden" value="{{ $thread->id }}" id="ed-var-th-id">
                     <div class="modal-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered">
@@ -719,6 +719,33 @@ $variations = $options['data']['variations'];
             }
 
             $('#edit_variation').modal();
+        });
+
+        $(document).on('click', '#submit_edit_variation', function () {
+            $.ajax({
+                url: '{{ route('thread.editVariation') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'thread_id': $('#ed-var-th-id').val(),
+                    'var_id': $('#ed-var-id').val(),
+                    'is_denim': $('#ed-is-denim').val(),
+                    'name': $('#ed-var-name').val(),
+                    'print_id': $('#ed-print-id').val(),
+                    'wash_id': $('#ed-wash-id').val(),
+                    'regular_qty': $('#ed-reg-qty').val(),
+                    'plus_qty': $('#ed-plu-qty').val(),
+                    'cost': $('#ed-cost').val(),
+                    'notes': $('#ed-notes').val(),
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    location.reload();
+                    toastr['warning']('Duplicate Variation', 'Validation Error');
+                }
+            });
         });
 
     });
