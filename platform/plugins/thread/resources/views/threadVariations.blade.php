@@ -44,8 +44,13 @@ $variations = $options['data']['variations'];
                                     <div class="table-actions" style="display: inline-block; font-size: 5px">
                                         {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
-                                           class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        <a class="btn btn-info btn-sm edit-variation"
+                                           data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
+                                           data-wash-id="{{$variation->wash_id}}" data-var-cost="{{$variation->cost}}"
+                                           data-var-notes="{{$variation->notes}}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -153,8 +158,7 @@ $variations = $options['data']['variations'];
             </div>
         @else
             <div class="box-body">
-                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
-                   data-target="#add_variation"> Add Variation</a><br>
+                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
@@ -197,7 +201,13 @@ $variations = $options['data']['variations'];
                                     <div class="table-actions" style="display: inline-block; font-size: 5px">
                                         {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a data-var-id="{{$variation->id}}" class="btn btn-info btn-sm edit-variation"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-info btn-sm edit-variation"
+                                           data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}"
+                                           data-print-id="{{$variation->print_id}}" data-var-cost="{{$variation->cost}}"
+                                           data-reg-qty="{{$variation->regular_qty}}" data-plu-qty="{{$variation->plus_qty}}"
+                                           data-var-notes="{{$variation->notes}}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
@@ -322,7 +332,7 @@ $variations = $options['data']['variations'];
                             <div></div>
                         </div>
                     </div>
-                    <input name="is_denim" type="hidden" value="{{$thread->is_denim}}">
+                    <input name="is_denim" type="hidden" value="{{$thread->is_denim}}" id="ed-is-denim">
                     <input name="variation_id" type="hidden" value="0" id="ed-var-id">
                     <input name="variation_thread_id" type="hidden" value="{{ $thread->id }}">
                     <div class="modal-body">
@@ -330,13 +340,13 @@ $variations = $options['data']['variations'];
                             <table class="table table-striped table-bordered">
                                 <tbody id="multi-variations">
                                     <tr>
-                                        <td width="10%">
-                                            <label for="name">Name:</label>
-                                            <input required class="form-control variation_name" placeholder="Add Name" name="name" type="text">
+                                        <td width="10%" class="no-denim-field">
+                                            <label for="var_name">Name:</label>
+                                            <input class="form-control" placeholder="Add Name" name="var_name" id="ed-var-name" type="text">
                                         </td>
                                         <td width="25%">
-                                            <label for="print_id">Print / Solid:</label><br>
-                                            <select class="form-control print_design" name="print_id" style="width: 100%">
+                                            <label for="var_print_id">Print / Solid:</label><br>
+                                            <select class="form-control" name="var_print_id" id="ed-print-id" required style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
@@ -346,8 +356,8 @@ $variations = $options['data']['variations'];
                                             </select>
                                         </td>
                                         <td width="15%" class="denim-field">
-                                            <label for="wash_id" class="control-label">Select Wash</label>
-                                            <select class="select-search-full variation_wash" id="wash_id" name="wash_id">
+                                            <label for="var_wash_id" class="control-label">Select Wash</label>
+                                            <select class="select-search-full" id="ed-wash-id" name="var_wash_id">
                                                 <option selected="selected" disabled value="">Select Wash</option>
                                                 @foreach($options['data']['washes'] as $key => $wash)
                                                     <option value="{{$key}}">{{$wash}}</option>
@@ -355,28 +365,28 @@ $variations = $options['data']['variations'];
                                             </select>
                                         </td>
                                         <td width="10%" class="no-denim-field">
-                                            <label for="pack_id">Regular:</label>
-                                            <input required class="form-control variation_qty" placeholder="Add Regular Quantity" name="regular_qty" type="text">
+                                            <label>Regular:</label>
+                                            <input class="form-control" placeholder="Add Regular Quantity" name="regular_qty" id="ed-reg-qty" type="text">
                                         </td>
                                         <td width="10%" class="no-denim-field">
-                                            <label for="pack_id">Plus:</label>
-                                            <input required class="form-control variation_plus_qty" placeholder="Add Plus Quantity" name="plus_qty" type="text">
+                                            <label>Plus:</label>
+                                            <input class="form-control" placeholder="Add Plus Quantity" name="plus_qty" id="ed-plu-qty" type="text">
                                         </td>
                                         <td width="10%">
                                             <label for="cost">Cost:</label>
-                                            <input required class="form-control variation_cost" placeholder="Add Cost" name="cost" type="text">
+                                            <input class="form-control" placeholder="Add Cost" name="cost" type="text" id="ed-cost">
                                         </td>
-                                        <td width="15%" class="no-denim-field">
+                                        {{--<td width="15%" class="no-denim-field">
                                             <label for="reg_sku">Reg Sku:</label>
-                                            <input required class="form-control reg_sku" placeholder="Reg SKU" name="req_sku" type="text">
+                                            <input class="form-control reg_sku" placeholder="Reg SKU" name="req_sku" type="text">
                                         </td>
                                         <td width="15%" class="no-denim-field">
                                             <label for="plus_sku">Plus Sku:</label>
-                                            <input required class="form-control plus_sku" placeholder="Plus Cost" name="plus_sku" type="text">
-                                        </td>
+                                            <input class="form-control plus_sku" placeholder="Plus Cost" name="plus_sku" type="text">
+                                        </td>--}}
                                         <td width="15%">
                                             <label for="Notes">Notes:</label>
-                                            <textarea class="form-control variation_notes" placeholder="Add Notes" name="notes" cols="50" rows="2"></textarea>
+                                            <textarea class="form-control" placeholder="Add Notes" name="notes" cols="50" rows="2" id="ed-notes"></textarea>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -671,7 +681,44 @@ $variations = $options['data']['variations'];
         $(document).on('click', 'a.edit-variation', function(e) {
             let varId = $(this).data('var-id');
             $('#ed-var-id').val(varId);
-            $('#edit_variation').show('modal');
+            let varName = $(this).data('var-name');
+            $('#ed-var-name').val(varName);
+            let printId = $(this).data('print-id');
+            $('#ed-print-id').val(printId);
+            let washId = $(this).data('wash-id');
+            $('#ed-wash-id').val(washId);
+            let regQty = $(this).data('reg-qty');
+            $('#ed-reg-qty').val(regQty);
+            let pluQty = $(this).data('plu-qty');
+            $('#ed-plu-qty').val(pluQty);
+            let cost = $(this).data('var-cost');
+            $('#ed-cost').val(cost);
+            let notes = $(this).data('var-notes');
+            $('#ed-notes').val(notes);
+
+            $('select#ed-print-id').select2({
+                templateResult: formatState
+            });
+            $('select#ed-wash-id').select2({
+                templateResult: formatState
+            });
+
+            let denim = $('#ed-is-denim').val();
+            if (denim == 1) {
+                $('td.denim-field').show();
+                $('td.no-denim-field').hide();
+                $('#ed-regular_qty').removeAttr('required');
+                $('#ed-plus_qty').removeAttr('required');
+                $('#ed-var-name').removeAttr('required');
+            } else {
+                $('td.no-denim-field').show();
+                $('td.denim-field').hide();
+                $('#ed-regular_qty').attr('required', true);
+                $('#ed-plus_qty').attr('required', true);
+                $('#ed-var-name').attr('required', true);
+            }
+
+            $('#edit_variation').modal();
         });
 
     });
