@@ -65,9 +65,7 @@ class ProductCategoryController extends BaseController
     public function store(ProductCategoryRequest $request, BaseHttpResponse $response)
     {
         $productCategory = $this->productCategoryRepository->createOrUpdate($request->input());
-
         $productCategory->category_sizes()->sync($request['category_size_id']);
-
         event(new CreatedContentEvent(PRODUCT_CATEGORY_MODULE_SCREEN_NAME, $request, $productCategory));
 
         return $response

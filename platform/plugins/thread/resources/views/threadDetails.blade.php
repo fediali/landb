@@ -239,18 +239,21 @@
 
                             <tbody>
                             <tr>
-                                <td colspan="1" rowspan="2" class="tablelogo"><img
+
+                                <td colspan="1" rowspan="3" class="tablelogo"><img
                                             src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
-                                <td colspan="1" rowspan="1"><p class="font-bold font-12">Order#:<br> <span
-                                                class="widget-title-color-red"> {{ $thread->order_no }}</span></p></td>
-                                <td rowspan="1" colspan="3"><p class="font-bold font-12">Description <br> <span
+                                            <td style="width: 12%;" colspan="1" rowspan="1"><p class="font-bold font-12">Order Date:<br> <span
+                                                class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
+                                    </p></td>
+                                <td rowspan="1" colspan="1"><p class="font-bold font-12">Description <br> <span
                                                 class="widget-title-color-red text-uppercase">{{ $thread->name }}</span>
                                     </p>
                                 </td>
-                                <td rowspan="1" colspan="2"><p class="font-bold font-12">PP Sample Due Date <br><span
-                                                class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
+                                <td colspan="1"><p class="font-bold font-12">Designer: <br><span
+                                                class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
                                     </p></td>
-                                <td colspan="1" rowspan="2" class="p-0">
+
+                                <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
                                     <div class="regpack">
                                         <h6>Reg Pack Size Run</h6>
                                         @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
@@ -261,7 +264,7 @@
                                     </div>
                                 </td>
                                 @if(!empty($options['data']['plus_cat']))
-                                    <td colspan="1" rowspan="4" class="p-0">
+                                    <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
                                         <div class="regpack">
                                             <h6>Plus Pack Size Run</h6>
 
@@ -273,26 +276,25 @@
                                         </div>
                                     </td>
                                 @endif
-                                <td colspan="1"><p class="font-bold font-12">Designer: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
+                                <td style="width: 13%;" rowspan="1" colspan="2"><p class="font-bold font-12">PP Sample Due Date <br><span
+                                                class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
                                     </p></td>
-                                <td colspan="1"><p class="font-bold font-12">Vendor: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
+                                    <td colspan="2"><p class="font-bold font-12">Request PP Sample: <br> <span
+                                                class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
                                     </p></td>
-                                <td colspan="1"><p class="font-bold font-12">Status: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
+                                <td><p class="font-bold font-12">PP Sample Size: <br><span
+                                                class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
                                     </p></td>
+
 
 
                             </tr>
                             <tr>
-                                <td colspan="1" rowspan="1"><p class="font-bold font-12">Order Date: <span
-                                                class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
-                                    </p></td>
-                                <td><p class="font-bold font-12">Style # <br><span
+
+                                <td style="width: 14%;"><p class="font-bold font-12">Style # <br><span
                                                 class="widget-title-color-red text-uppercase"> Reg Pack:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
                                                 Plus Pack:  {{ $options['data']['plus_sku'] }} @endif</span></p></td>
-                                <td><p class="font-bold font-12">Category <br><span
+                                <td colspan="2" style="width: 14%;"><p class="font-bold font-12">Category <br><span
                                                 class="widget-title-color-red text-uppercase">
                                     Reg Pack: {{ $options['data']['reg_cat']->name }}<br><span
                                                     class="widget-title-color-red text-uppercase">
@@ -300,27 +302,30 @@
                                                     Plus Pack: {{ $options['data']['plus_cat']->name }} @endif</span>
                                     </p>
                                 </td>
-                                <td><p class="font-bold font-12">Season: <br><span
+                                <td colspan="2" ><p class="font-bold font-12">Season: <br><span
                                                 class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">Request PP Sample: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
+                                    <td colspan="2"><p class="font-bold font-12">Vendor: <br> <span
+                                                class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">PP Sample Size: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
+                                <td colspan="1"><p class="font-bold font-12">Status: <br> <span
+                                                class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">Shipping Method: <br><span
+
+                            </tr>
+                            <tr>
+
+                            <td colspan="3"><p class="font-bold font-12">Shipping Method: <br><span
                                                 class="widget-title-color-red text-uppercase"> {{ $thread->shipping_method }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">Ship Date: <br><span
+                                    <td colspan="3"><p class="font-bold font-12">Ship Date: <br><span
                                                 class="widget-title-color-red text-uppercase"> {{ parse_date($thread->ship_date) }}</span>
                                     </p></td>
-                                <td><p class="font-bold font-12">No Later Than <br><span
+                                <td colspan="4"><p class="font-bold font-12">No Later Than <br><span
                                                 class="widget-title-color-red text-uppercase"> {{ parse_date($thread->cancel_date) }}</span>
                                     </p></td>
 
                             </tr>
-
 
                             </tbody>
                         </table>
@@ -401,7 +406,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
-                                                        <div class="tabrow">
+                                                        <div style="display: flow-root;" class="tabrow">
                                                             <b>Fabric:</b>
                                                             @foreach(array_chunk($options['data']['fabrics'], 1, true) as $fabrics)
                                                                 <div class="item">
@@ -442,11 +447,43 @@
                                                             <b>Additional Notes: </b>{{ $thread->description }}
                                                         </div>
                                                         <div class="d-flex">
-                                                            @foreach($variations as $variation)
+
+                                                            <div class="row">
+                                                            <div class="col-lg-6">
+                                                                            <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                                <h5 class=" mt-2">
+                                                                                    Variation: Osama Ali</h5>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6">
+                                                                                        <p class="mb-0 mt-2"><label for="">Print/Color:</label>asd
+                                                                                        </p>
+                                                                                        @foreach($variations as $variation)
                                                                 @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                    <img style="height: 400px; width: 400px;" src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
+                                                                    <img class="w-100" height="120" width="120" style="object-fit: cover"
+                                                                         src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
                                                                 @endif
                                                             @endforeach
+                                                                                    </div>
+                                                                                                                                                                    </div>
+
+                                                                                <div class="mt-3 mb-2">
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">REG. Packs:</span> 2
+                                                                                        |
+                                                                                        <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">PLUS Packs:</span> 2
+                                                                                        |
+                                                                                        <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                                    </p>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">Notes:</span> oo
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
