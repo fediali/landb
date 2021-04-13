@@ -11,6 +11,7 @@ use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Forms\CustomerForm;
 use Botble\Ecommerce\Http\Requests\AddCustomerWhenCreateOrderRequest;
+use Botble\Ecommerce\Http\Requests\AddressRequest;
 use Botble\Ecommerce\Http\Requests\CustomerCreateRequest;
 use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
@@ -227,7 +228,6 @@ class CustomerController extends BaseController
     public function getCustomerAddresses($id, BaseHttpResponse $response)
     {
         $addresses = $this->addressRepository->allBy(['customer_id' => $id]);
-
         return $response->setData($addresses);
     }
 
@@ -254,7 +254,8 @@ class CustomerController extends BaseController
     public function postCreateCustomerWhenCreatingOrder(
         AddCustomerWhenCreateOrderRequest $request,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $request->merge(['password' => bcrypt(time())]);
         $customer = $this->customerRepository->createOrUpdate($request->input());
         $customer->avatar = (string)$customer->avatar_url;
@@ -271,5 +272,32 @@ class CustomerController extends BaseController
         return $response
             ->setData(compact('address', 'customer'))
             ->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    public function addAddress($id)
+    {
+        $user = $id;
+        return view('plugins/ecommerce::customers.address', [$id], compact('user'));
+    }
+
+    public function postCustomerAddress(AddressRequest $request, BaseHttpResponse $response)
+    {
+        if ($request->input('is_default') == 1) {
+            $this->addressRepository->update([
+                'is_default'  => 1,
+                'customer_id' => $request->input('customer_id'),
+            ], ['is_default' => 0]);
+        }
+        $request->merge([
+            'customer_id' => $request->input('customer_id'),
+            'is_default'  => $request->input('is_default', 0),
+        ]);
+
+        $address = $this->addressRepository->createOrUpdate($request->input());
+
+        return $response
+            ->setNextUrl(route('customer.edit', [$request->customer_id]))
+            ->setMessage(trans('core/base::notices.create_success_message'));
+
     }
 }

@@ -169,11 +169,9 @@ class OrderHelper
             File::makeDirectory($folderPath);
         }
         $invoice = $folderPath . '/invoice-order-' . get_order_code($order->id) . '.pdf';
-
         if (File::exists($invoice)) {
             return $invoice;
         }
-
         PDF::loadView('plugins/ecommerce::invoices.template', compact('order'))
             ->setPaper('a4')
             ->setWarnings(false)
@@ -286,7 +284,6 @@ class OrderHelper
         if (session()->has($sessionKey)) {
             $sessionData = session($sessionKey);
         }
-
         return $sessionData;
     }
 

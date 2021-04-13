@@ -478,6 +478,7 @@ class ThreadordersController extends BaseController
 
     public function showThreadOrderDetail($id, Request $request)
     {
+
         page_title()->setTitle('Thread Order Detail');
 
         $orderDetail = $this->threadordersRepository->findOrFail($id);
