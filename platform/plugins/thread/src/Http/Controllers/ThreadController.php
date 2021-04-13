@@ -467,10 +467,30 @@ class ThreadController extends BaseController
 
     public function removeFabric($id)
     {
-
         $remove = VariationFabric::find($id)->delete();
         if ($remove) {
             return redirect()->back()->with('success', 'Fabric deleted');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
+
+    public function addVariationTrim(Request $request)
+    {
+        $data = $request->only(['thread_variation_id','trim_note']);
+        $input = DB::table('thread_variation_trims')->insertGetId($data);
+        if ($input) {
+            return response()->json(['status' => 'success'], 200);
+        } else {
+            return response()->json(['status' => 'error'], 500);
+        }
+    }
+
+    public function removeVariationTrim($id)
+    {
+        $remove = DB::table('thread_variation_trims')->find($id)->delete();
+        if ($remove) {
+            return redirect()->back()->with('success', 'Trim deleted');
         } else {
             return redirect()->back()->with('error', 'Server error');
         }

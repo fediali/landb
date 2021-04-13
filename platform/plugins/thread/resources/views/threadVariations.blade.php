@@ -413,21 +413,14 @@ $variations = $options['data']['variations'];
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         {{--<span aria-hidden="true">×</span>--}}</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span
-                            class="variation-name"></span></h4>
-
-                    <div>
-
-                    </div>
-
+                    <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span class="variation-name"></span></h4>
+                    <div></div>
                 </div>
             </div>
             <div class="modal-body">
                 <div>
                     <label class="font-bold" for="name">Variation Name:</label>
-                    <input class="form-control" placeholder="Enter Variation Name" name="name" type="text"
-                           id="variation_fabic_name">
-
+                    <input class="form-control" placeholder="Enter Variation Name" name="name" type="text" id="variation_fabic_name">
                     <label class="mt-4 font-bold" for="print_id">Print / Solid:</label><br>
                     <select class="form-control print_design_var" name="print_id" style="width: 100%">
                         <option selected="selected" value="">Select Print</option>
@@ -437,7 +430,6 @@ $variations = $options['data']['variations'];
                             </option>
                         @endforeach
                     </select>
-
                     {{--<input type="hidden" class="print_id" id="variation_print_id" name="print_id">
                     <div class="dropdown dropdown-thread">
                         <button class="btn btn-secondary dropdown-toggle text-left w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -449,9 +441,7 @@ $variations = $options['data']['variations'];
                             @endforeach
                         </div>
                     </div>--}}
-
-                    <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id"
-                           type="hidden">
+                    <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
                 </div>
             </div>
             <div class="modal-footer">
@@ -464,6 +454,32 @@ $variations = $options['data']['variations'];
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade in" id="modal-var-trim" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex w-100">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">Add Variation Trim <span class="variation-name"></span></h4>
+                    <div></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
+                    <label class="font-bold">Trim Note:</label>
+                    <input class="form-control" placeholder="Enter Trim Note" name="trim_note" type="text" id="variation_trim_note">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <input type="button" class="btn btn-primary save-thread" value="Save" id="submitVariationTrim">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -744,6 +760,32 @@ $variations = $options['data']['variations'];
                 error: function (request, status, error) {
                     location.reload();
                     toastr['warning']('Duplicate Variation', 'Validation Error');
+                }
+            });
+        });
+
+        $(document).on('click', '.add_trim', function () {
+            var variation_id = $(this).data('id');
+            $('.thread_variation_id').val(variation_id);
+        });
+
+        $(document).on('click', '#submitVariationTrim', function () {
+            $.ajax({
+                beforeSend: function () {
+                    if (!validateField('#variation_trim_note', 'Variation Trim Note')) return false;
+                },
+                url: '{{ route('thread.addVariationTrim') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'thread_variation_id': $('#thread_variation_id').val(),
+                    'trim_note': $('#variation_trim_note').val()
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (request, error) {
+                    location.reload();
                 }
             });
         });

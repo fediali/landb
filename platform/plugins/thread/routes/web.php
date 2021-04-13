@@ -61,6 +61,16 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeVariation',
                 'permission' => 'thread.create',
             ]);
+            Route::post('addVariationTrim', [
+                'as'         => 'addVariationTrim',
+                'uses'       => 'ThreadController@addVariationTrim',
+                'permission' => 'thread.create',
+            ]);
+            Route::get('removeVariationTrim/{id}', [
+                'as'         => 'removeVariationTrim',
+                'uses'       => 'ThreadController@removeVariationTrim',
+                'permission' => 'thread.create',
+            ]);
             Route::get('removeThreadSpecFile/{id}', [
                 'as'         => 'removeThreadSpecFile',
                 'uses'       => 'ThreadController@removeThreadSpecFile',
