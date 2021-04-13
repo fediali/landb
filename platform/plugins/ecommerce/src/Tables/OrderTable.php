@@ -121,18 +121,18 @@ class OrderTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'              => [
+            'id'      => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'user_id'         => [
+            'user_id' => [
                 'name'  => 'ec_orders.user_id',
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
             ],
-            'amount'          => [
+            'amount'  => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
                 'class' => 'text-center',
