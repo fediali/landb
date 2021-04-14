@@ -6,6 +6,7 @@ use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Exports\ProductExport;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use Html;
@@ -97,6 +98,16 @@ class ProductTable extends TableAbstract
             })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
+            })
+            ->editColumn('quantity', function ($item) {
+                $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
+                $packQty = Product::where('id', $getPackId)->value('quantity');
+                return $packQty;
+            })
+            ->editColumn('single_qty', function ($item) {
+                $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
+                $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
+                return $singleQty;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -121,6 +132,8 @@ class ProductTable extends TableAbstract
             'ec_products.created_at',
             'ec_products.status',
             'ec_products.sku',
+            'ec_products.quantity',
+            'ec_products.quantity AS single_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
@@ -176,12 +189,22 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
-            'order'      => [
+            'quantity'        => [
+                'name'  => 'ec_products.quantity',
+                'title' => 'Pack Qty',
+                'class' => 'text-left',
+            ],
+            'single_qty'        => [
+                'name'  => 'ec_products.single_qty',
+                'title' => 'Single Qty',
+                'class' => 'text-left',
+            ],
+            /*'order'      => [
                 'name'  => 'ec_products.order',
                 'title' => trans('core/base::tables.order'),
                 'width' => '50px',
                 'class' => 'text-center',
-            ],
+            ],*/
             'created_at' => [
                 'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
