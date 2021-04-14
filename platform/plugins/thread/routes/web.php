@@ -51,6 +51,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeFabric',
                 'permission' => 'thread.create',
             ]);
+            Route::get('removeTrim/{id}', [
+                'as'         => 'removeTrim',
+                'uses'       => 'ThreadController@removeTrim',
+                'permission' => 'thread.create',
+            ]);
             Route::post('change-status', [
                 'as'         => 'changeStatus',
                 'uses'       => 'ThreadController@changeStatus',

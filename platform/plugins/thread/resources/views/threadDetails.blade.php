@@ -241,16 +241,17 @@
                             <tr>
 
                                 <td colspan="1" rowspan="3" class="tablelogo"><img
-                                            src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
-                                            <td style="width: 12%;" colspan="1" rowspan="1"><p class="font-bold font-12">Order Date:<br> <span
-                                                class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
+                                        src="{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}" alt=""></td>
+                                <td style="width: 12%;" colspan="1" rowspan="1"><p class="font-bold font-12">Order Date:<br>
+                                        <span
+                                            class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
                                     </p></td>
                                 <td rowspan="1" colspan="1"><p class="font-bold font-12">Description <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ $thread->name }}</span>
+                                            class="widget-title-color-red text-uppercase">{{ $thread->name }}</span>
                                     </p>
                                 </td>
                                 <td colspan="1"><p class="font-bold font-12">Designer: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
+                                            class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
                                     </p></td>
 
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
@@ -276,53 +277,53 @@
                                         </div>
                                     </td>
                                 @endif
-                                <td style="width: 13%;" rowspan="1" colspan="2"><p class="font-bold font-12">PP Sample Due Date <br><span
-                                                class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
+                                <td style="width: 13%;" rowspan="1" colspan="2"><p class="font-bold font-12">PP Sample
+                                        Due Date <br><span
+                                            class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
                                     </p></td>
-                                    <td colspan="2"><p class="font-bold font-12">Request PP Sample: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
+                                <td colspan="2"><p class="font-bold font-12">Request PP Sample: <br> <span
+                                            class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
                                     </p></td>
                                 <td><p class="font-bold font-12">PP Sample Size: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
+                                            class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
                                     </p></td>
-
 
 
                             </tr>
                             <tr>
 
                                 <td style="width: 14%;"><p class="font-bold font-12">Style # <br><span
-                                                class="widget-title-color-red text-uppercase"> Reg Pack:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
+                                            class="widget-title-color-red text-uppercase"> Reg Pack:  {{ $options['data']['reg_sku'] }} <br>@if(!empty($options['data']['plus_sku']))
                                                 Plus Pack:  {{ $options['data']['plus_sku'] }} @endif</span></p></td>
                                 <td colspan="2" style="width: 14%;"><p class="font-bold font-12">Category <br><span
-                                                class="widget-title-color-red text-uppercase">
+                                            class="widget-title-color-red text-uppercase">
                                     Reg Pack: {{ $options['data']['reg_cat']->name }}<br><span
-                                                    class="widget-title-color-red text-uppercase">
+                                                class="widget-title-color-red text-uppercase">
                                   @if(!empty($options['data']['plus_cat']))
                                                     Plus Pack: {{ $options['data']['plus_cat']->name }} @endif</span>
                                     </p>
                                 </td>
-                                <td colspan="2" ><p class="font-bold font-12">Season: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
+                                <td colspan="2"><p class="font-bold font-12">Season: <br><span
+                                            class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
                                     </p></td>
-                                    <td colspan="2"><p class="font-bold font-12">Vendor: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
+                                <td colspan="2"><p class="font-bold font-12">Vendor: <br> <span
+                                            class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                                     </p></td>
                                 <td colspan="1"><p class="font-bold font-12">Status: <br> <span
-                                                class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
+                                            class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
                                     </p></td>
 
                             </tr>
                             <tr>
 
-                            <td colspan="3"><p class="font-bold font-12">Shipping Method: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ $thread->shipping_method }}</span>
+                                <td colspan="3"><p class="font-bold font-12">Shipping Method: <br><span
+                                            class="widget-title-color-red text-uppercase"> {{ $thread->shipping_method }}</span>
                                     </p></td>
-                                    <td colspan="3"><p class="font-bold font-12">Ship Date: <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ parse_date($thread->ship_date) }}</span>
+                                <td colspan="3"><p class="font-bold font-12">Ship Date: <br><span
+                                            class="widget-title-color-red text-uppercase"> {{ parse_date($thread->ship_date) }}</span>
                                     </p></td>
                                 <td colspan="4"><p class="font-bold font-12">No Later Than <br><span
-                                                class="widget-title-color-red text-uppercase"> {{ parse_date($thread->cancel_date) }}</span>
+                                            class="widget-title-color-red text-uppercase"> {{ parse_date($thread->cancel_date) }}</span>
                                     </p></td>
 
                             </tr>
@@ -339,7 +340,8 @@
                                         <div class="slideshow-container mt-4">
                                             @foreach($thread->spec_files as $file)
                                                 <div class="mySlides1 images">
-                                                    <img src="{{ asset($file->spec_file) }}" style="width:100%; height:669px;">
+                                                    <img src="{{ asset($file->spec_file) }}"
+                                                         style="width:100%; height:669px;">
                                                     {{--<div class="text">Caption Text</div>--}}
                                                 </div>
                                             @endforeach
@@ -347,8 +349,8 @@
                                             <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
                                         </div>
                                         <div id="image-viewer">
-                                        <span class="close">X</span>
-                                        <img class="viewer-modal-content" id="full-image">
+                                            <span class="close">X</span>
+                                            <img class="viewer-modal-content" id="full-image">
                                         </div>
                                         <br>
                                         <div style="text-align:center">
@@ -380,7 +382,9 @@
                                                                 <div class="item">
                                                                     @foreach($fits as $key => $fit)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $fit }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $fit }}</label> <input
+                                                                                type="checkbox"
+                                                                                disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -396,7 +400,9 @@
                                                                 <div class="item">
                                                                     @foreach($rises as $key => $rise)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $rise }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $rise }}</label> <input
+                                                                                type="checkbox"
+                                                                                disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -412,7 +418,9 @@
                                                                 <div class="item">
                                                                     @foreach($fabrics as $key => $fabric)
                                                                         <div class="checkbox">
-                                                                            <label for=""> {{ $fabric }}</label> <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <label for=""> {{ $fabric }}</label> <input
+                                                                                type="checkbox"
+                                                                                disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -437,7 +445,8 @@
                                                 <tr>
                                                     <td colspan="12">
                                                         <div class="tabrow">
-                                                            <b>Fabric Print Direction: </b>{{ $thread->fabric_print_direction }}
+                                                            <b>Fabric Print
+                                                                Direction: </b>{{ $thread->fabric_print_direction }}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -449,40 +458,43 @@
                                                         <div class="d-flex">
 
                                                             <div class="row">
-                                                            <div class="col-lg-6">
-                                                                            <div class="variationdiv variation-div pl-3 pr-3 mb-3">
-                                                                                <h5 class=" mt-2">
-                                                                                    Variation: Osama Ali</h5>
-                                                                                <div class="row">
-                                                                                    <div class="col-lg-6">
-                                                                                        <p class="mb-0 mt-2"><label for="">Print/Color:</label>asd
-                                                                                        </p>
-                                                                                        @foreach($variations as $variation)
-                                                                @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                    <img class="w-100" height="120" width="120" style="object-fit: cover"
-                                                                         src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
-                                                                @endif
-                                                            @endforeach
-                                                                                    </div>
-                                                                                                                                                                    </div>
-
-                                                                                <div class="mt-3 mb-2">
-                                                                                    <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">REG. Packs:</span> 2
-                                                                                        |
-                                                                                        <span class="widget-title-color-red ">Sku: OHO914ASD </span>
-                                                                                    </p>
-                                                                                    <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">PLUS Packs:</span> 2
-                                                                                        |
-                                                                                        <span class="widget-title-color-red"> Plus Sku: </span>
-                                                                                    </p>
-                                                                                    <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">Notes:</span> oo
-                                                                                    </p>
-                                                                                </div>
+                                                                <div class="col-lg-6">
+                                                                    <div
+                                                                        class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                        <h5 class=" mt-2">
+                                                                            Variation: Osama Ali</h5>
+                                                                        <div class="row">
+                                                                            <div class="col-lg-6">
+                                                                                <p class="mb-0 mt-2"><label for="">Print/Color:</label>asd
+                                                                                </p>
+                                                                                @foreach($variations as $variation)
+                                                                                    @if($variation->status == 'active' && $variation->is_denim == 1)
+                                                                                        <img class="w-100" height="120"
+                                                                                             width="120"
+                                                                                             style="object-fit: cover"
+                                                                                             src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
+
+                                                                        <div class="mt-3 mb-2">
+                                                                            <p class="text-black font-12 text-uppercase m-0">
+                                                                                <span for="">REG. Packs:</span> 2
+                                                                                |
+                                                                                <span class="widget-title-color-red ">Sku: OHO914ASD </span>
+                                                                            </p>
+                                                                            <p class="text-black font-12 text-uppercase m-0">
+                                                                                <span for="">PLUS Packs:</span> 2
+                                                                                |
+                                                                                <span class="widget-title-color-red"> Plus Sku: </span>
+                                                                            </p>
+                                                                            <p class="text-black font-12 text-uppercase m-0">
+                                                                                <span for="">Notes:</span> oo
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -499,12 +511,18 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <p class="font-bold font-12"> Material: <span class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span></p>
+                                                        <p class="font-bold font-12"> Material: <span
+                                                                class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span>
+                                                        </p>
                                                     </td>
-                                                    <td rowspan="2"><p class="font-bold font-12">Label:<span class="widget-title-color-red text-uppercase"> {{ @$thread->label }}</span></p></td>
+                                                    <td rowspan="2"><p class="font-bold font-12">Label:<span
+                                                                class="widget-title-color-red text-uppercase"> {{ @$thread->label }}</span>
+                                                        </p></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><p class="font-bold font-12">Sleeve Length: <span class="widget-title-color-red text-uppercase">{{ @$thread->sleeve }}</span></p></td>
+                                                    <td><p class="font-bold font-12">Sleeve Length: <span
+                                                                class="widget-title-color-red text-uppercase">{{ @$thread->sleeve }}</span>
+                                                        </p></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="12">
@@ -532,14 +550,17 @@
                                                                     </div>
 
                                                                     <div class="box row d-mt-block">
-                                                                        <div class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
-                                                                            <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                        <div
+                                                                            class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
+                                                                            <div
+                                                                                class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                                 <h5 class=" mt-2">
-                                                                                    {{$loop->iteration}}. Variation: {{ $variation->name }}</h5>
+                                                                                    {{$loop->iteration}}.
+                                                                                    Variation: {{ $variation->name }}</h5>
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6">
                                                                                         <p class="mb-0 mt-2"><label
-                                                                                                    for="">Print/Color:</label>{{ @$variation->printdesign->name }}
+                                                                                                for="">Print/Color:</label>{{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100"
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
@@ -549,8 +570,10 @@
                                                                                     @foreach($variation->fabrics as $fabric)
                                                                                         <div class="col-lg-6">
                                                                                             <p class="mb-0 mt-2"><label
-                                                                                                        for="">Print/Color:</label>{{ @$fabric->printdesign->name }}
-                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}"><strong class="float-right"><i class="fa fa-times"></i></strong></a>
+                                                                                                    for="">Print/Color:</label>{{ @$fabric->printdesign->name }}
+                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}"><strong
+                                                                                                        class="float-right"><i
+                                                                                                            class="fa fa-times"></i></strong></a>
                                                                                             </p>
                                                                                             <img class="w-100"
                                                                                                  src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
@@ -559,23 +582,55 @@
                                                                                                  style="object-fit: cover">
                                                                                         </div>
                                                                                     @endforeach
+                                                                                    @if($variation->trim->count() > 0)
+                                                                                        @foreach($variation->trim as $trim)
+                                                                                            <div class="col-lg-6">
+                                                                                                <p class="mb-0 mt-2">
+                                                                                                    <label
+                                                                                                        for="">Trim:</label>
+                                                                                                </p>
+                                                                                                <a href="{{ route('thread.removeTrim',$trim->id) }}"><strong
+                                                                                                        class="float-right"><i
+                                                                                                            class="fa fa-times"></i></strong></a>
+                                                                                                <img class="w-100"
+                                                                                                     src="{{ asset(strtolower(@$trim->trim_image)) }}"
+                                                                                                     height="120"
+                                                                                                     width="120"
+                                                                                                     style="object-fit: cover">
+
+                                                                                                <p class="mb-0 mt-2">
+                                                                                                    <label
+                                                                                                        for="">Note:
+                                                                                                        {{@$trim->trim_note}} </label>
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        @endforeach
+                                                                                    @endif()
+
+
                                                                                 </div>
+
 
                                                                                 <div class="mt-3 mb-2">
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">REG. Packs:</span> {{ $variation->regular_qty }}
+                                                                                        <span
+                                                                                            for="">REG. Packs:</span> {{ $variation->regular_qty }}
                                                                                         |
-                                                                                        <span class="widget-title-color-red ">Sku: {{ $variation->sku }} </span>
+                                                                                        <span
+                                                                                            class="widget-title-color-red ">Sku: {{ $variation->sku }} </span>
                                                                                     </p>
                                                                                     @if($variation->plus_sku)
                                                                                         <p class="text-black font-12 text-uppercase m-0">
-                                                                                            <span for="">PLUS Packs:</span> {{ $variation->plus_qty }}
+                                                                                            <span
+                                                                                                for="">PLUS Packs:</span> {{ $variation->plus_qty }}
                                                                                             |
-                                                                                            <span class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
+                                                                                            <span
+                                                                                                class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
                                                                                         </p>
                                                                                     @endif
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                        <span
+                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
@@ -624,148 +679,167 @@
     }
 
 
-    .mySlides1, .mySlides2 {display: none}
-.slideshow-container img {vertical-align: middle;}
-
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-}
-
-/* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  padding: 0px 7px;
-  margin-top: -22px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-}
-
-/* Position the "next button" to the right */
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-  border: 1px solid #fff;
-    box-shadow: 0px 0px 10px 5px #4c4c4c;
-    margin-right: 4px;
-}
-
-.prev {
-    border: 1px solid #fff;
-    box-shadow: 0px 0px 10px 5px #4c4c4c;
-    margin-left: 4px;
-}
-
-/* On hover, add a grey background color */
-.prev:hover, .next:hover {
-  background-color: #f1f1f1;
-  color: black;
-}
-
-/* IMAGE SLIDER VIEWER CSS */
-#image-viewer {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    padding-top: 100px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.9);
-}
-.viewer-modal-content {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-}
-.viewer-modal-content {
-    animation-name: zoom;
-    animation-duration: 0.6s;
-}
-@keyframes zoom {
-    from {transform:scale(0)}
-    to {transform:scale(1)}
-}
-#image-viewer .close {
-    position: absolute;
-    top: 74px;
-    right: 40px;
-    color: #ffffff;
-    font-size: 25px;
-    font-weight: bold;
-    transition: 0.3s;
-    width: 25px;
-    text-indent: inherit;
-    height: 25px;
-}
-#image-viewer .close:hover,
-#image-viewer .close:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.images img {
-    cursor: -moz-zoom-in;
-    cursor: -webkit-zoom-in;
-    cursor: zoom-in;
-}
-
-@media only screen and (max-width: 700px){
-    .viewer-modal-content {
-        width: 100%;
+    .mySlides1, .mySlides2 {
+        display: none
     }
-}
-/* IMAGE SLIDER VIEWER CSS */
+
+    .slideshow-container img {
+        vertical-align: middle;
+    }
+
+    /* Slideshow container */
+    .slideshow-container {
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
+    }
+
+    /* Next & previous buttons */
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 0px 7px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+        border: 1px solid #fff;
+        box-shadow: 0px 0px 10px 5px #4c4c4c;
+        margin-right: 4px;
+    }
+
+    .prev {
+        border: 1px solid #fff;
+        box-shadow: 0px 0px 10px 5px #4c4c4c;
+        margin-left: 4px;
+    }
+
+    /* On hover, add a grey background color */
+    .prev:hover, .next:hover {
+        background-color: #f1f1f1;
+        color: black;
+    }
+
+    /* IMAGE SLIDER VIEWER CSS */
+    #image-viewer {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .viewer-modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    .viewer-modal-content {
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @keyframes zoom {
+        from {
+            transform: scale(0)
+        }
+        to {
+            transform: scale(1)
+        }
+    }
+
+    #image-viewer .close {
+        position: absolute;
+        top: 74px;
+        right: 40px;
+        color: #ffffff;
+        font-size: 25px;
+        font-weight: bold;
+        transition: 0.3s;
+        width: 25px;
+        text-indent: inherit;
+        height: 25px;
+    }
+
+    #image-viewer .close:hover,
+    #image-viewer .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .images img {
+        cursor: -moz-zoom-in;
+        cursor: -webkit-zoom-in;
+        cursor: zoom-in;
+    }
+
+    @media only screen and (max-width: 700px) {
+        .viewer-modal-content {
+            width: 100%;
+        }
+    }
+
+    /* IMAGE SLIDER VIEWER CSS */
 </style>
 
 
 <script>
-var slideIndex = [1,1];
-var slideId = ["mySlides1", "mySlides2"]
-showSlides(1, 0);
-showSlides(1, 1);
+    var slideIndex = [1, 1];
+    var slideId = ["mySlides1", "mySlides2"]
+    showSlides(1, 0);
+    showSlides(1, 1);
 
-function plusSlides(n, no) {
-  showSlides(slideIndex[no] += n, no);
-}
+    function plusSlides(n, no) {
+        showSlides(slideIndex[no] += n, no);
+    }
 
-function showSlides(n, no) {
-  var i;
-  var x = document.getElementsByClassName(slideId[no]);
-  if (n > x.length) {slideIndex[no] = 1}
-  if (n < 1) {slideIndex[no] = x.length}
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";
-  }
-  x[slideIndex[no]-1].style.display = "block";
-}
+    function showSlides(n, no) {
+        var i;
+        var x = document.getElementsByClassName(slideId[no]);
+        if (n > x.length) {
+            slideIndex[no] = 1
+        }
+        if (n < 1) {
+            slideIndex[no] = x.length
+        }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        x[slideIndex[no] - 1].style.display = "block";
+    }
 </script>
 
 <script>
-    $( document ).ready(function() {
-        $(".images img").click(function(){
-  $("#full-image").attr("src", $(this).attr("src"));
-  $('#image-viewer').show();
-});
+    $(document).ready(function () {
+        $(".images img").click(function () {
+            $("#full-image").attr("src", $(this).attr("src"));
+            $('#image-viewer').show();
+        });
 
-$("#image-viewer .close").click(function(){
-  $('#image-viewer').hide();
-});
-});
+        $("#image-viewer .close").click(function () {
+            $('#image-viewer').hide();
+        });
+    });
 
 </script>
 

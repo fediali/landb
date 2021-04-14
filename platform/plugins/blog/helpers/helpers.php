@@ -268,7 +268,7 @@ if (!function_exists('get_designers')) {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
             ->where('roles.slug', 'designer')
-            ->pluck('users.username','users.id')->all();
+            ->pluck('users.username', 'users.id')->all();
     }
 }
 
@@ -278,7 +278,7 @@ if (!function_exists('get_vendors')) {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
             ->where('roles.slug', 'vendor')
-            ->pluck('users.username','users.id')->all();
+            ->pluck('users.username', 'users.id')->all();
     }
 }
 //Get User By Roles
@@ -295,63 +295,63 @@ if (!function_exists('get_print_designs')) {
 if (!function_exists('get_seasons')) {
     function get_seasons()
     {
-        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_designs')) {
     function get_designs()
     {
-        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_fits')) {
     function get_fits()
     {
-        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_rises')) {
     function get_rises()
     {
-        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_fabrics')) {
     function get_fabrics()
     {
-        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_washes')) {
     function get_washes()
     {
-        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_category_sizes')) {
     function get_category_sizes()
     {
-        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name','id')->all();
+        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_product_units')) {
     function get_product_units()
     {
-        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_vendor_products')) {
     function get_vendor_products()
     {
-        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
@@ -360,7 +360,7 @@ if (!function_exists('get_vendor_order_statuses')) {
     {
         $statuses = \Botble\Vendororderstatuses\Models\Vendororderstatuses::where('status', 'published')->pluck('name')->all();
         $arr = [];
-        foreach ($statuses  as $status) {
+        foreach ($statuses as $status) {
             $arr[] = ['value' => strtolower($status), 'text' => ucwords($status)];
         }
         return $arr;
@@ -370,14 +370,14 @@ if (!function_exists('get_vendor_order_statuses')) {
 if (!function_exists('get_reg_product_categories_custom')) {
     function get_reg_product_categories_custom()
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_plu_product_categories_custom')) {
     function get_plu_product_categories_custom()
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name', 'id')->all();
     }
 }
 //Get General Data
@@ -394,16 +394,16 @@ if (!function_exists('get_thread_comments')) {
 if (!function_exists('get_thread_variations')) {
     function get_thread_variations($id)
     {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash'])->get();
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash', 'trim'])->get();
     }
 }
 
 if (!function_exists('generate_unique_attr_id')) {
     function generate_unique_attr_id()
     {
-      $number = mt_rand(1000000000, 9999999999);
-        if(attr_id_exist($number)){
-          generate_unique_attr_id();
+        $number = mt_rand(1000000000, 9999999999);
+        if (attr_id_exist($number)) {
+            generate_unique_attr_id();
         }
         return $number;
     }
@@ -412,7 +412,7 @@ if (!function_exists('generate_unique_attr_id')) {
 if (!function_exists('attr_id_exist')) {
     function attr_id_exist($num)
     {
-      return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
+        return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
     }
 }
 
@@ -434,9 +434,9 @@ if (!function_exists('generate_thread_sku')) {
     function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
         $category = ProductCategory::where('id', $catId)->value('name');
-        $categoryCnt = DB::table('category_designer_count')->where(['user_id'=>$designerId, 'product_category_id'=>$catId])->value('count') + 1;
+        $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
         $category_sku = strtoupper(substr($designerInitial, 0, 3) . substr($category, 0, 2) . $categoryCnt);
-        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$designerId, 'product_category_id'=>$catId], ['user_id'=>$designerId, 'product_category_id'=>$catId, 'count'=>$categoryCnt]);
+        DB::table('category_designer_count')->updateOrInsert(['user_id' => $designerId, 'product_category_id' => $catId], ['user_id' => $designerId, 'product_category_id' => $catId, 'count' => $categoryCnt]);
 
         if ($isPlus) {
             $category_sku .= '-X';
@@ -481,10 +481,10 @@ if (!function_exists('parse_date')) {
 if (!function_exists('get_barcode')) {
     function get_barcode()
     {
-        $code = '00' . rand(00000000000,99999999999);
+        $code = '00' . rand(00000000000, 99999999999);
         $aa = new DNS1D();
         $image = $aa->getBarcodePNG($code, 'C39', 2, 33);
-        $name = 'products_barcode/'.$code . '.' . 'jpg';
+        $name = 'products_barcode/' . $code . '.' . 'jpg';
         Storage::put($name, base64_decode($image));
         return ['upc' => $code, 'barcode' => $name];
     }

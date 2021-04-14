@@ -3,6 +3,7 @@
 namespace Botble\Thread\Http\Controllers;
 
 use App\Events\NotifyManager;
+use App\Models\ThreadVariationTrim;
 use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use App\Models\ThreadComment;
@@ -309,7 +310,6 @@ class ThreadController extends BaseController
     {
 
         $thread = Thread::with(['designer', 'season', 'vendor', 'fabric', 'spec_files'])->find($id);
-
         event(new BeforeEditContentEvent($request, $thread));
 
         page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
@@ -326,7 +326,7 @@ class ThreadController extends BaseController
 
         $exist = false;
         for ($i = 0; $i <= count($data['name']) - 1; $i++) {
-            $checkDupli = ThreadVariation::where(['thread_id'=>$data['thread_id'], 'print_id'=>$data['print_id']])->first();
+            $checkDupli = ThreadVariation::where(['thread_id' => $data['thread_id'], 'print_id' => $data['print_id']])->first();
             if (!$checkDupli) {
                 $variation = new ThreadVariation();
                 $input = array();
@@ -377,7 +377,7 @@ class ThreadController extends BaseController
         $data = $request->all();
         $id = $data['var_id'];
 
-        $checkDupli = ThreadVariation::where(['thread_id'=>$data['thread_id'], 'print_id'=>$data['print_id']])->where('id','!=',$id)->first();
+        $checkDupli = ThreadVariation::where(['thread_id' => $data['thread_id'], 'print_id' => $data['print_id']])->where('id', '!=', $id)->first();
         if (!$checkDupli) {
             $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
             $variation = ThreadVariation::find($id);
@@ -475,9 +475,28 @@ class ThreadController extends BaseController
         }
     }
 
+    public function removeTrim($id)
+    {
+        $remove = ThreadVariationTrim::find($id)->delete();
+        if ($remove) {
+            return redirect()->back()->with('success', 'Fabric deleted');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
+
     public function addVariationTrim(Request $request)
     {
-        $data = $request->only(['thread_variation_id','trim_note']);
+        if ($request->hasfile('file')) {
+            $type = strtolower($request['file']->getClientOriginalExtension());
+            $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
+            $spec_file_name = time() . rand(1, 100) . '.' . $type;
+            $move = $request->file('file')->move(public_path('storage/spec_files'), $spec_file_name);
+            if ($move) {
+                $request['trim_image'] = 'storage/spec_files/' . $spec_file_name;
+            }
+        }
+        $data = $request->only(['thread_variation_id', 'trim_note', 'trim_image']);
         $input = DB::table('thread_variation_trims')->insertGetId($data);
         if ($input) {
             return response()->json(['status' => 'success'], 200);
