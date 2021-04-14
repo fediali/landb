@@ -566,6 +566,12 @@
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                              height="120" width="120"
                                                                                              style="object-fit: cover">
+
+                                                                                        <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span
+                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                        </p>
+
                                                                                     </div>
                                                                                     @foreach($variation->fabrics as $fabric)
                                                                                         <div class="col-lg-6">
@@ -588,10 +594,11 @@
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label
                                                                                                         for="">Trim:</label>
+                                                                                                    <a href="{{ route('thread.removeTrim',$trim->id) }}"><strong
+                                                                                                            class="float-right"><i
+                                                                                                                class="fa fa-times"></i></strong></a>
                                                                                                 </p>
-                                                                                                <a href="{{ route('thread.removeTrim',$trim->id) }}"><strong
-                                                                                                        class="float-right"><i
-                                                                                                            class="fa fa-times"></i></strong></a>
+
                                                                                                 <img class="w-100"
                                                                                                      src="{{ asset(strtolower(@$trim->trim_image)) }}"
                                                                                                      height="120"
@@ -600,7 +607,7 @@
 
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label
-                                                                                                        for="">Note:
+                                                                                                        for="">NOTES:
                                                                                                         {{@$trim->trim_note}} </label>
                                                                                                 </p>
                                                                                             </div>
@@ -628,10 +635,7 @@
                                                                                                 class="widget-title-color-red"> Plus Sku: {{ $variation->plus_sku }}</span>
                                                                                         </p>
                                                                                     @endif
-                                                                                    <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span
-                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
-                                                                                    </p>
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
