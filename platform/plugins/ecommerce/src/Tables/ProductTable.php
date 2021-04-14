@@ -131,6 +131,7 @@ class ProductTable extends TableAbstract
             'ec_products.order',
             'ec_products.created_at',
             'ec_products.status',
+            'ec_products.product_type',
             'ec_products.sku',
             'ec_products.quantity',
             'ec_products.quantity AS single_qty',
@@ -189,14 +190,19 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
-            'quantity'        => [
+            'quantity'    => [
                 'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'single_qty'        => [
+            'single_qty'  => [
                 'name'  => 'ec_products.single_qty',
                 'title' => 'Single Qty',
+                'class' => 'text-left',
+            ],
+            'product_type' => [
+                'name'  => 'ec_products.product_type',
+                'title' => 'Type',
                 'class' => 'text-left',
             ],
             /*'order'      => [
