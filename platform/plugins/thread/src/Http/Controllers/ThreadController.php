@@ -272,7 +272,8 @@ class ThreadController extends BaseController
         $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $requestData->designer_id, $designerName);
 
         if ($plu_category && $plu_category->pivot->product_category_id > 0) {
-            $plu_sku = generate_thread_sku($plu_category->pivot->product_category_id, $requestData->designer_id, $designerName, true);
+//            $plu_sku = generate_thread_sku($plu_category->pivot->product_category_id, $requestData->designer_id, $designerName, true);
+            $plu_sku = $reg_sku . '-X';
         }
 
         unset($requestData->id);
