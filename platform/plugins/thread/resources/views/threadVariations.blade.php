@@ -765,9 +765,9 @@ $variations = $options['data']['variations'];
             $('select#ed-print-id').select2({
                 templateResult: formatState
             });
-            $('select#ed-wash-id').select2({
+            /*$('select#ed-wash-id').select2({
                 templateResult: formatState
-            });
+            });*/
 
             let denim = $('#ed-is-denim').val();
             if (denim == 1) {

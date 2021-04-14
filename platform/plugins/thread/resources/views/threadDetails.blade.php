@@ -459,40 +459,36 @@
 
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <div
-                                                                        class="variationdiv variation-div pl-3 pr-3 mb-3">
-                                                                        <h5 class=" mt-2">
-                                                                            Variation: Osama Ali</h5>
-                                                                        <div class="row">
-                                                                            <div class="col-lg-6">
-                                                                                <p class="mb-0 mt-2"><label for="">Print/Color:</label>asd
-                                                                                </p>
-                                                                                @foreach($variations as $variation)
-                                                                                    @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                                        <img class="w-100" height="120"
-                                                                                             width="120"
-                                                                                             style="object-fit: cover"
-                                                                                             src="{{ asset('storage/'.strtolower($variation->printdesign->file)) }}"/>
+                                                                    <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                        @foreach($variations as $variation)
+                                                                            @if($variation->status == 'active' && $variation->is_denim == 1)
+                                                                                <h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>
+                                                                                <div class="row">
+                                                                                    <div class="col-lg-6">
+                                                                                        <p class="mb-0 mt-2"><label for="">Print/Color:</label>{{ @$variation->printdesign->name }}</p>
+                                                                                            <img class="w-100" height="120"
+                                                                                                 width="120"
+                                                                                                 style="object-fit: cover"
+                                                                                                 src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="mt-3 mb-2">
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">REG. Sku: </span>
+                                                                                        <span class="widget-title-color-red ">{{ $variation->sku }} </span>
+                                                                                    </p>
+                                                                                    @if($variation->plus_sku)
+                                                                                        <p class="text-black font-12 text-uppercase m-0">
+                                                                                            <span for="">PLUS Sku: </span>
+                                                                                            <span class="widget-title-color-red">{{ $variation->plus_sku }}</span>
+                                                                                        </p>
                                                                                     @endif
-                                                                                @endforeach
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="mt-3 mb-2">
-                                                                            <p class="text-black font-12 text-uppercase m-0">
-                                                                                <span for="">REG. Packs:</span> 2
-                                                                                |
-                                                                                <span class="widget-title-color-red ">Sku: OHO914ASD </span>
-                                                                            </p>
-                                                                            <p class="text-black font-12 text-uppercase m-0">
-                                                                                <span for="">PLUS Packs:</span> 2
-                                                                                |
-                                                                                <span class="widget-title-color-red"> Plus Sku: </span>
-                                                                            </p>
-                                                                            <p class="text-black font-12 text-uppercase m-0">
-                                                                                <span for="">Notes:</span> oo
-                                                                            </p>
-                                                                        </div>
+                                                                                    <p class="text-black font-12 text-uppercase m-0">
+                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                    </p>
+                                                                                </div>
+                                                                            @endif
+                                                                        @endforeach
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -594,7 +590,7 @@
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label
                                                                                                         for="">Trim:</label>
-                                                                                                    <a href="{{ route('thread.removeTrim',$trim->id) }}"><strong
+                                                                                                    <a href="{{ route('thread.removeVariationTrim',$trim->id) }}"><strong
                                                                                                             class="float-right"><i
                                                                                                                 class="fa fa-times"></i></strong></a>
                                                                                                 </p>
