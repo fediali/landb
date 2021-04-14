@@ -93,7 +93,8 @@ class ThreadController extends BaseController
         $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+//            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+            $plu_sku = $reg_sku . '-X';
         }
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
@@ -178,7 +179,8 @@ class ThreadController extends BaseController
         $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+//            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+            $plu_sku = $reg_sku . '-X';
         }
 
         if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
@@ -352,7 +354,7 @@ class ThreadController extends BaseController
                 $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
                 if ($selPluCat) {
                     $input['plus_qty'] = @$data['plus_qty'][$i];
-                    $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . '-' . $pdSKU. '-X';
+                    $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . '-' . $pdSKU . '-X';
                 }
 
                 $input['created_by'] = Auth::user()->id;
