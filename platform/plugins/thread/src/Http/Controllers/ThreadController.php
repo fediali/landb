@@ -89,7 +89,7 @@ class ThreadController extends BaseController
 
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
-        $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
+        $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : substr($thread->designer->first_name, 0, 3);
         $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
@@ -347,12 +347,12 @@ class ThreadController extends BaseController
                 $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
                 if ($selRegCat) {
                     $input['regular_qty'] = @$data['regular_qty'][$i];
-                    $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
+                    $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . '-' . strtoupper($pdSKU);
                 }
                 $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
                 if ($selPluCat) {
                     $input['plus_qty'] = @$data['plus_qty'][$i];
-                    $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/) . '-X';
+                    $input['plus_sku'] = ($input['plus_sku'] != null) ? $input['plus_sku'] : str_replace('-X', '', $selPluCat) . '-' . $pdSKU. '-X';
                 }
 
                 $input['created_by'] = Auth::user()->id;

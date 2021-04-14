@@ -433,9 +433,10 @@ if (!function_exists('get_approved_designs')) {
 if (!function_exists('generate_thread_sku')) {
     function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
-        $category = ProductCategory::where('id', $catId)->value('name');
+
+        $category = ProductCategory::where('id', $catId)->value('sku_initial');
         $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
-        $category_sku = strtoupper(substr($designerInitial, 0, 3) . substr($category, 0, 2) . $categoryCnt);
+        $category_sku = strtoupper($designerInitial . $category . $categoryCnt);
         DB::table('category_designer_count')->updateOrInsert(['user_id' => $designerId, 'product_category_id' => $catId], ['user_id' => $designerId, 'product_category_id' => $catId, 'count' => $categoryCnt]);
 
         if ($isPlus) {
