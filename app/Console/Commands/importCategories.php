@@ -100,6 +100,7 @@ class importCategories extends Command
 
         $file = public_path('designer_cat_count.xlsx');
         Excel::import(new DesignerCatCount(), $file);
+        echo 'success';
 
     }
 }
