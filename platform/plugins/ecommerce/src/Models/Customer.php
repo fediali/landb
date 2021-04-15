@@ -108,4 +108,9 @@ class Customer extends Authenticatable
             Wishlist::where('customer_id', $customer->id)->delete();
         });
     }
+
+    public function detail()
+    {
+        return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
 }
