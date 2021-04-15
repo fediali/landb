@@ -352,7 +352,7 @@ class ThreadController extends BaseController
                     $input['regular_qty'] = @$data['regular_qty'][$i];
                     $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . '-' . strtoupper($pdSKU);
                 }
-                dd($pdSKU, $input['sku']);
+
                 $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
                 if ($selPluCat) {
                     $input['plus_qty'] = @$data['plus_qty'][$i];
