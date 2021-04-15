@@ -394,7 +394,7 @@ class ThreadController extends BaseController
             $input['cost'] = @$data['cost'];
             $input['notes'] = @$data['notes'];
 
-            $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
+            $pdSKU = Printdesigns::where('id', $input['print_id'])->value('sku');
 
             $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
             if ($selRegCat) {
