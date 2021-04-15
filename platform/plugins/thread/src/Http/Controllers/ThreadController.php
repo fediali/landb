@@ -347,7 +347,7 @@ class ThreadController extends BaseController
 
                 $pdSKU = Printdesigns::where('id', $input['print_id'])->value('sku');
                 $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
-                dd($selRegCat);
+
                 if ($selRegCat) {
                     $input['regular_qty'] = @$data['regular_qty'][$i];
                     $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . '-' . strtoupper($pdSKU);
