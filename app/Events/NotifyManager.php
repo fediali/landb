@@ -23,21 +23,14 @@ class NotifyManager implements ShouldBroadcastNow
      *
      * @return void
      */
-    protected $vendor;
+    protected $user_id;
+    protected $data;
     protected $thread;
-    protected $designer;
-    protected $message;
-    protected $url;
-    public function __construct($vendor, $designer, $thread)
+    public function __construct($user_id, $data, $thread)
     {
+        $this->user_id = $user_id;
+        $this->data = $data;
         $this->thread = $thread;
-        $this->vendor = $vendor;
-        $this->designer = $designer;
-
-        $this->message = 'A new thread has been created by the Designer ( '.$this->designer->first_name.' '.$this->designer->last_name.' )';
-        $this->url = route('thread.details', $this->thread->id);
-
-        generate_notification($this->message, $this->designer->id, $this->vendor->id, $this->url);
     }
 
     /**
@@ -47,7 +40,7 @@ class NotifyManager implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('push_thread_notification_'.$this->vendor->id);
+        return new Channel('push_thread_notification_'.$this->user_id);
     }
 
     public function broadcastAs()
@@ -57,6 +50,6 @@ class NotifyManager implements ShouldBroadcastNow
 
     public function broadcastWith()
     {
-      return ['message'=>$this->message, 'thread' => $this->thread,'url' => $this->url, 'created_at' => $this->thread->created_at->diffForHumans(), ''];
+      return ['message'=>$this->data->message, 'thread' => $this->thread,'url' => $this->data->url, 'created_at' => $this->thread->created_at->diffForHumans(), ''];
     }
 }
