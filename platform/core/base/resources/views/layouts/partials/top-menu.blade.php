@@ -45,8 +45,8 @@
                         @if(count($notifications))
                             @foreach($notifications as $notification)
                                 <div class="dropdown-divider"></div>
-                                <a href="{{ $notification->url }}" class="dropdown-item" style="white-space: normal">
-                                    <i class="fas fa-volume-up mr-2"></i> {{ $notification->message }}
+                                <a href="{{ $notification->notification->url }}" class="dropdown-item" style="white-space: normal">
+                                    <i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}
                                     <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
                                 </a>
                             @endforeach
