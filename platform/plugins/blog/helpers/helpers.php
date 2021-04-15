@@ -448,6 +448,19 @@ if (!function_exists('generate_thread_sku')) {
 }
 //Thread Related Functions
 
+//Product Pack Count
+if (!function_exists('quantity_calculate')) {
+    function quantityCalculate($id)
+    {
+        $category = ProductCategory::where('id', $id)->first();
+        $totalQuantity = 0;
+        foreach ($category->category_sizes as $cat) {
+            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
+            $totalQuantity += $quan;
+        }
+        return $totalQuantity;
+    }
+}
 
 //Notifications
 if (!function_exists('generate_notification')) {

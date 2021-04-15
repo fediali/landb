@@ -3,6 +3,8 @@
 namespace App\Imports;
 
 use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Eloquent\CustomerRepository;
 use Laravel\Passport\Bridge\UserRepository;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -25,19 +27,30 @@ class orderImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-
+//checking customer
         $user = Customer::where(['phone' => $row['phone_number']])->first();
         if ($user == null) {
+            //creating Customer
             $data = [];
             $data['name'] = $row['business_contact_name'];
             $data['email'] = $row['phone_number'];
-            $data['password'] = $row['business_contact_name'];
+            $data['password'] = bcrypt(rand(0, 15));
             $customer = Customer::create($data);
-
-
-            $data[''] = $row['business_contact_name'];
-            $data[''] = $row['business_contact_name'];
+            $detail['customer_id'] = $customer->id;
+            $detail['company'] = $row['business_company_name'];
+            CustomerDetail::create($detail);
         }
-        dd($user);
+        //Finding Product For Order
+
+        $product = Product::where('sku', $row['style_no'])->first();
+        //count pack quantity for product
+        $pack = quantityCalculate($product->category_id);
+
+
+        //creating Order
+
+        dd($pack);
+
+
     }
 }

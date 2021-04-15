@@ -345,13 +345,14 @@ class ThreadController extends BaseController
                 $input['reg_sku'] = isset($data['reg_sku'][$i]) ? @$data['reg_sku'][$i] : null;
                 $input['plus_sku'] = isset($data['plus_sku'][$i]) ? @$data['plus_sku'][$i] : null;
 
-                $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
-
+                $pdSKU = Printdesigns::where('id', $input['print_id'])->value('sku');
                 $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
+                dd($selRegCat);
                 if ($selRegCat) {
                     $input['regular_qty'] = @$data['regular_qty'][$i];
                     $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . '-' . strtoupper($pdSKU);
                 }
+                dd($pdSKU, $input['sku']);
                 $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
                 if ($selPluCat) {
                     $input['plus_qty'] = @$data['plus_qty'][$i];
