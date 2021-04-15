@@ -446,7 +446,7 @@ class EcommerceServiceProvider extends ServiceProvider
                     'parent_id'   => 'cms-plugins-ecommerce',
                     'name'        => 'Order Import',
                     'icon'        => 'fa fa-file-import',
-                   // 'url'         => route('orders-import.index'),
+                    'url'         => route('orders.import'),
                     'permissions' => ['orders.import'],
                 ])
                 ->registerItem([

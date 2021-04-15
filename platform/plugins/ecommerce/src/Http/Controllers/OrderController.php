@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
+use App\Imports\orderImport;
 use Assets;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
@@ -42,6 +43,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 use OrderHelper;
 use RvMedia;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -122,7 +124,8 @@ class OrderController extends BaseController
         StoreLocatorInterface $storeLocatorRepository,
         OrderProductInterface $orderProductRepository,
         AddressInterface $addressRepository
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
@@ -470,7 +473,8 @@ class OrderController extends BaseController
         HandleShippingFeeService $shippingFeeService,
         Request $request,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $order = $this->orderRepository->findOrFail($orderId);
 
         $weight = 0;
@@ -522,7 +526,8 @@ class OrderController extends BaseController
         CreateShipmentRequest $request,
         BaseHttpResponse $response,
         ShipmentHistoryInterface $shipmentHistoryRepository
-    ) {
+    )
+    {
         $order = $this->orderRepository->findOrFail($id);
         $result = $response;
         $products = [];
@@ -821,7 +826,8 @@ class OrderController extends BaseController
         Request $request,
         BaseHttpResponse $response,
         HandleShippingFeeService $shippingFeeService
-    ) {
+    )
+    {
         $weight = 0;
         $orderAmount = 0;
 
@@ -870,7 +876,8 @@ class OrderController extends BaseController
         ApplyCouponRequest $request,
         HandleApplyCouponService $handleApplyCouponService,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $result = $handleApplyCouponService->applyCouponWhenCreatingOrderFromAdmin($request);
 
         if ($result['error']) {
@@ -1032,5 +1039,25 @@ class OrderController extends BaseController
                 ->setError()
                 ->setMessage(trans('plugins/ecommerce::order.error_when_sending_email'));
         }
+    }
+
+    public function import()
+    {
+        return view('plugins/ecommerce::order-import.create');
+    }
+
+    public function importOrder(Request $request)
+    {
+        if ($request->hasfile('file')) {
+            $type = strtolower($request['file']->getClientOriginalExtension());
+            $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
+            $spec_file_name = time() . rand(1, 100) . '.' . $type;
+            $fileName = $request->file('file')->move(public_path('storage/importOrders'), $spec_file_name);
+            $order = Excel::import(new orderImport, $fileName);
+            dd('ss', $order);
+        }
+
+
+        return back();
     }
 }

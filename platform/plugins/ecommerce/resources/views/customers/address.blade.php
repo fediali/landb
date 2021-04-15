@@ -2,9 +2,7 @@
 @section('content')
 <div class="p-3 bg-white" >
     {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
-    <div class="ps-form__header">
-        <h3>{{ SeoHelper::getTitle() }}</h3>
-    </div>
+
     <div class="row">
         <div class="col-lg-6 mt-2">
             <label for="name">{{ __('Full Name') }}:</label>
@@ -109,7 +107,7 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td> 
+        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
       <tr>
         <td>John Doe</td>
@@ -119,7 +117,7 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td> 
+        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
       <tr>
         <td>John Doe</td>
@@ -129,14 +127,14 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td> 
+        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
     </tbody>
   </table></div>
-                
+
                 </div>
-            </div> 
-           
+            </div>
+
     </div>
 
     <div class="p-3 bg-white mt-3" >
@@ -166,7 +164,7 @@
                     <div class="col-lg-3">
                         <p class="m-0 heading"> Country</p>
                         <p>Plus Pack Category</p>
-                    </div> 
+                    </div>
                 <div class="col-lg-3">
                     <p class="m-0 heading">State</p>
                     <p>Description</p>
@@ -176,12 +174,12 @@
                     <p>PP Sample</p>
                 </div>
                 <div class="col-lg-3">
-                    <p class="m-0 heading">Address</p> 
-                        <p>PP Sample Date</p>  
-                </div>    
+                    <p class="m-0 heading">Address</p>
+                        <p>PP Sample Date</p>
+                </div>
             </div></div>
             </div>
-           
+
     </div>
 
 @stop
@@ -190,7 +188,7 @@
     .heading{
         color: #d64635;
         font-weight: 600;
-    } 
+    }
     .order-detail {
         font-size:20px !important;
     }
