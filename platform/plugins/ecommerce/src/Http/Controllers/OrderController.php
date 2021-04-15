@@ -1052,8 +1052,10 @@ class OrderController extends BaseController
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
-            $fileName = $request->file('file')->move(public_path('storage/importOrders'), $spec_file_name);
-            $order = Excel::import(new orderImport, $fileName);
+//            $move = $request->file('file')->move(public_path('storage/importOrders'), $spec_file_name);
+            $file = public_path('16185173136.csv');
+
+            $order = Excel::import(new orderImport, $file);
             dd('ss', $order);
         }
 
