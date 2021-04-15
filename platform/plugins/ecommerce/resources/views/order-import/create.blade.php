@@ -2,25 +2,92 @@
 @section('content')
     <div class="p-3 bg-white">
         {!! Form::open(['route' => 'orders.import-order', 'class' => 'ps-form--account-setting', 'method' => 'POST','enctype'=>'multipart/form-data']) !!}
-
         <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+            <div class="row">
             <div class="col-lg-12 mt-2">
                 <label for="name">Market Place:</label>
                 {!! Form::select('market_place',\Botble\Ecommerce\Models\Order::$MARKETPLACE, null, ['class' => 'form-control','required']) !!}
+                <select class="selectpicker w-100 select-order" data-live-search="true">
+                <option>Mustard</option>
+                <option>Ketchup</option>
+                <option>Relish</option>
+                </select>
             </div>
             {!! Form::error('market_place', $errors) !!}
 
             <div class="col-lg-12 mt-2">
-                <label for="name">Market Place:</label>
+                <label for="name">Market Place:</label><br>
                 {!! Form::file('file',null, ['class' => 'form-control btn_gallery','required']) !!}
             </div>
             {!! Form::error('market_place', $errors) !!}
-
-            <div class="form-group col-lg-3">
-                <button class="btn btn-primary btn-lg" type="submit">Upload</button>
+            
+            <div class="form-group col-lg-12 mt-3">
+                <button class="btn btn-primary btn-lg w-100" type="submit">Upload</button>
+               
             </div>
         </div>
+            </div>
+            <div class="col-lg-4"></div>
+        </div>
+       
         {!! Form::close() !!}
+    </div>
+    <div class="p-3 bg-white mt-4">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+            <table class="table table-striped w-100">
+            <thead>
+                <tr>
+                    <th> <input type="checkbox" /> </th>
+                    <th> Heading  </th>
+                    <th> Heading </th>
+                    <th> Date </th>
+                    <th> UserID</th>
+                    <th>OrderID </th>
+                    <th>Total </th>
+                </tr>
+            </thead>
+            <tbody> 
+                    <tr>
+                        <td> <input type="checkbox" /> </td>
+                        <td><p class="m-0">Boutique </p>
+                        <p style="font-size:12px" class="m-0">
+                        Street, Rochester, IN, 40975, US 
+                        </p></td>
+                        <td>
+                        <p class="m-0">Boutique </p>
+                        <p style="font-size:12px" class="m-0">
+                        Street, Rochester, IN, 40975, US 
+                        </p>
+                        </td>
+                        <td>04/13/2021, 11 25 AM</td>
+                        <td>15116</td>
+                        <td>103383</td>
+                        <td>$66.00</td>
+                    </tr> 
+                    <tr>
+                        <td> <input type="checkbox" /> </td>
+                        <td><p class="m-0">Boutique </p>
+                        <p style="font-size:12px" class="m-0">
+                        Street, Rochester, IN, 40975, US 
+                        </p></td>
+                        <td>
+                        <p class="m-0">Boutique </p>
+                        <p style="font-size:12px" class="m-0">
+                        Street, Rochester, IN, 40975, US 
+                        </p>
+                        </td>
+                        <td>04/13/2021, 11 25 AM</td>
+                        <td>15116</td>
+                        <td>103383</td>
+                        <td>$66.00</td>
+                    </tr> 
+            </tbody>
+        </table>
+            </div>
+        </div>
     </div>
 @stop
 
@@ -43,4 +110,11 @@
         padding: 10px 5px !important;
         font-size: 14px;
     }
+    .select-order button {
+        height:40px;
+    }
 </style>
+
+<script>
+$('select').selectpicker();
+</script>
