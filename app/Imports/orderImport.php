@@ -34,6 +34,7 @@ class orderImport implements ToModel, WithHeadingRow
             $data['password'] = $row['business_contact_name'];
             $customer = Customer::create($data);
 
+
             $data[''] = $row['business_contact_name'];
             $data[''] = $row['business_contact_name'];
         }

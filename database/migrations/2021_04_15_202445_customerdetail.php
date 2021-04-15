@@ -25,7 +25,7 @@ class Customerdetail extends Migration
             $table->string('store_facebook')->nullable();
             $table->string('store_instagram')->nullable();
             $table->string('mortar_address')->nullable();
-            $table->tinyInteger('Newsletter')->default(0)->nullable();
+            $table->tinyInteger('newsletter')->default(0)->nullable();
             $table->integer('hear_us')->nullable();
             $table->string('comments')->nullable();
             $table->timestamps();
