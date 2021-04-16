@@ -35,15 +35,17 @@ class orderImport implements ToModel, WithHeadingRow
         $customer = Customer::where(['phone' => $row['phone_number']])->first();
         if ($customer == null) {
             //creating Customer
-            $data = [];
             $data['name'] = $row['business_contact_name'];
-            $data['email'] = $row['phone_number'];
+            $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
+            $data['phone'] = $row['phone_number'];
             $data['password'] = bcrypt(rand(0, 15));
             $customer = Customer::create($data);
+
             $detail['customer_id'] = $customer->id;
             $detail['company'] = $row['business_company_name'];
             $detail['type'] = Order::LASHOWROOM;
             CustomerDetail::create($detail);
+
             //creating address
             $baddress['address'] = $row['billing_address'];
             $baddress['city'] = $row['billing_city'];
@@ -55,7 +57,7 @@ class orderImport implements ToModel, WithHeadingRow
             $baddress['name'] = $row['business_contact_name'];
 
             $billing = Address::create($baddress);
-
+            dd($billing->id);
             $saddress['address'] = $row['shipping_address'];
             $saddress['city'] = $row['shipping_city'];
             $saddress['state'] = $row['shipping_state'];
@@ -68,6 +70,7 @@ class orderImport implements ToModel, WithHeadingRow
             $shipping = Address::create($saddress);
 
         }
+        dd($customer->id);
         //Finding Product For Order
 
         $product = Product::where('sku', $row['style_no'])->first();
