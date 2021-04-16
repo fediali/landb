@@ -34,7 +34,7 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
             Route::post('postComment', [
                 'as'         => 'postComment',
                 'uses'       => 'ThreadController@postComment',
-                'permission' => 'thread.create',
+                'permission' => 'thread.details',
             ]);
             Route::post('addVariationPrints', [
                 'as'         => 'addVariationPrints',
