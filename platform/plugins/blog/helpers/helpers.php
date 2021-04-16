@@ -466,10 +466,13 @@ if (!function_exists('quantity_calculate')) {
 if (!function_exists('generate_notification')) {
     function generate_notification($type, $data)
     {
+
         try {
+
             $notification = array();
             $notifiable = array();
             if ($type == 'thread_created') {
+
                 $creator = \Botble\ACL\Models\User::find($data->designer_id);
                 $notification = array();
                 $notification['sender_id'] = $data->designer_id;
@@ -588,31 +591,34 @@ if (!function_exists('get_design_manager')) {
 //        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
 //            ->join('roles', 'role_users.role_id', 'roles.id')
 //            ->where('roles.slug', 'design-manager')
-//            ->pluck('users.id')->all();
+//            ->pluck('users.id');
 
-        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->first();
-        if($manager){
-          return $manager->id;
-        }else{
-          return null;
-        }
+        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->pluck('user_id');
+        return $manager;
+//        if ($manager) {
+//            return $manager->id;
+//        } else {
+//            return null;
+//        }
     }
 }
 
 if (!function_exists('notify_users')) {
     function notify_users($notifiables, $notification, $resource_data)
     {
-
         if (count($notifiables)) {
             foreach ($notifiables as $notifiable) {
                 if (!is_null($notifiable)) {
-
-                    $user_notification['notification_id'] = $notification->id;
-                    $user_notification['user_id'] = $notifiable;
-                    $noti = \App\Models\UserNotifications::create($user_notification);
-                    if ($noti) {
-                        broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
+                    foreach ($notifiable as $key => $value) {
+                        $user_notification['notification_id'] = $notification->id;
+                        $user_notification['user_id'] = $value;
+                        $noti = \App\Models\UserNotifications::create($user_notification);
+                        if ($noti) {
+                            broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
+                        }
                     }
+
+
 
                 }
             }

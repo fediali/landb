@@ -121,8 +121,8 @@ class ThreadController extends BaseController
           $vendor = User::find($thread->vendor_id);
           broadcast(new NotifyManager($vendor, $designer, $thread));
         }*/
-        generate_notification('thread_created',$thread);
 
+        generate_notification('thread_created', $thread);
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
         return $response
             ->setPreviousUrl(route('thread.index'))
@@ -202,7 +202,7 @@ class ThreadController extends BaseController
             }
         }
 
-        generate_notification('thread_updated',$thread);
+        generate_notification('thread_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response
@@ -449,7 +449,7 @@ class ThreadController extends BaseController
 
         if ($input) {
             $thread = $this->threadRepository->findOrFail($data['thread_id']);
-            generate_notification('thread_discussion',$thread);
+            generate_notification('thread_discussion', $thread);
             $time = $input->created_at->diffForHumans();
             $input->time = $time;
             return response()->json(['comment' => $input], 200);
@@ -526,7 +526,7 @@ class ThreadController extends BaseController
         $thread->fill($requestData);
 
         $this->threadRepository->createOrUpdate($thread);
-        generate_notification('thread_status_updated',$thread);
+        generate_notification('thread_status_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response;
