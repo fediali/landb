@@ -60,7 +60,10 @@ class InventoryTable extends TableAbstract
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('ecommerce', function ($item) {
-              $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('inventory.pushToEcommerce', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Release inventory to Ecommerce">Release</a><script>function confirm_start(url){
+                if ($item->is_full_released) {
+                    $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Released</a>';
+                } else {
+                    $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('inventory.pushToEcommerce', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Release inventory to Ecommerce">Release</a><script>function confirm_start(url){
                       swal({
                           title: \'Are you sure?\',
                           text: "Do you want to release this Inventory to Ecommerce!",
@@ -87,7 +90,8 @@ class InventoryTable extends TableAbstract
                               }
                           });
                   }</script>';
-              return $html;
+                }
+                return $html;
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -129,27 +133,27 @@ class InventoryTable extends TableAbstract
     {
         return [
             'id' => [
-                'name'  => 'inventories.id',
+                'name' => 'inventories.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
             'name' => [
-                'name'  => 'inventories.name',
+                'name' => 'inventories.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
             'created_at' => [
-                'name'  => 'inventories.created_at',
+                'name' => 'inventories.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
             'status' => [
-                'name'  => 'inventories.status',
+                'name' => 'inventories.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
             ],
             'ecommerce' => [
-                'name'  => 'Ecommerce',
+                'name' => 'Ecommerce',
                 'title' => 'Ecommerce',
                 'width' => '100px',
             ],
@@ -181,19 +185,19 @@ class InventoryTable extends TableAbstract
     {
         return [
             'inventories.name' => [
-                'title'    => trans('core/base::tables.name'),
-                'type'     => 'text',
+                'title' => trans('core/base::tables.name'),
+                'type' => 'text',
                 'validate' => 'required|max:120',
             ],
             'inventories.status' => [
-                'title'    => trans('core/base::tables.status'),
-                'type'     => 'select',
-                'choices'  => BaseStatusEnum::labels(),
+                'title' => trans('core/base::tables.status'),
+                'type' => 'select',
+                'choices' => BaseStatusEnum::labels(),
                 'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
             ],
             'inventories.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
-                'type'  => 'date',
+                'type' => 'date',
             ],
         ];
     }

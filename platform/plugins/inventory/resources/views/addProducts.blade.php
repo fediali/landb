@@ -17,7 +17,7 @@
         <th scope="col">Sale Price</th>
         <th scope="col">Received Qty</th>
         {{--<th scope="col">Single Qty</th>--}}
-        <th scope="col"></th>
+        <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody id="tableBody">
@@ -67,10 +67,14 @@
                     {{--<td><input style="width: 60px; text-align:center" name="loose_qty_{{ $loop->iteration-1 }}" id="loose_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->loose_qty }}"></td>--}}
                     <td>
                         <div class="btn-group">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" onclick="deleteProduct({{ $product->pid }})" href="javascript:void(0)">Delete</a>
-                            </div>
+                            @if(!$product->is_variation)
+                                @if($product->is_released)
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Released</a>
+                                @else
+                                    <a href="javascript:void(0)" onclick='confirm_start("{{route('inventory.releaseProduct', [$options['data']->id, $product->pid])}}")' class="btn btn-sm btn-info">Release</a>
+                                @endif
+                            @endif
+                            <a href="javascript:void(0)" onclick="deleteProduct({{ $product->pid }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -213,6 +217,35 @@
       }
     });
   }
+
+  function confirm_start(url){
+      swal({
+          title: 'Are you sure?',
+          text: "Do you want to release this Product to E-commerce!",
+          icon: 'info',
+          buttons:{
+              cancel: {
+                  text: "Cancel",
+                  value: null,
+                  visible: true,
+                  className: "",
+                  closeModal: true,
+              },
+              confirm: {
+                  text: "Push",
+                  value: true,
+                  visible: true,
+                  className: "",
+                  closeModal: true
+              }
+          }
+      }).then((result) => {
+          if (result) {
+              location.replace(url)
+          }
+      });
+  }
+
 </script>
 
 <style>
