@@ -466,84 +466,89 @@ if (!function_exists('quantity_calculate')) {
 if (!function_exists('generate_notification')) {
     function generate_notification($type, $data)
     {
-      try {
-        $notification = array();
-        $notifiable = array();
-        if($type == 'thread_created'){
-          $creator = \Botble\ACL\Models\User::find($data->designer_id);
-          $notification = array();
-          $notification['sender_id'] = $data->designer_id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = 'A new thread has been created by '.$creator->first_name;
-          $notification['url'] = route('thread.details', $data->id);
+        try {
+            $notification = array();
+            $notifiable = array();
+            if ($type == 'thread_created') {
+                $creator = \Botble\ACL\Models\User::find($data->designer_id);
+                $notification = array();
+                $notification['sender_id'] = $data->designer_id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A new thread has been created by ' . $creator->first_name;
+                $notification['url'] = route('thread.details', $data->id);
 
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }
-          $notifiable[] = get_design_manager();
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                $notifiable[] = get_design_manager();
+
+
+            } elseif ($type == 'thread_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A thread has been updated by ' . \Illuminate\Support\Facades\Auth::user()->first_name;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            } elseif ($type == 'thread_status_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' has updated the thread status to ' . $data->status;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            } elseif ($type == 'thread_discussion') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' added a comment to the discussion in "' . $data->name . '" thread';
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            }
+            $notify = new \App\Models\Notification();
+            $notification_data = $notify->create($notification);
+
+            if ($notification_data) {
+                notify_users($notifiable, $notification_data, $data);
+            }
+        } catch (Exception $e) {
 
         }
-        elseif($type == 'thread_updated'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = 'A thread has been updated by '.\Illuminate\Support\Facades\Auth::user()->first_name;
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        elseif($type == 'thread_status_updated'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name.' has updated the thread status to '. $data->status;
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        elseif($type == 'thread_discussion'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name.' added a comment to the discussion in "'. $data->name. '" thread';
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        $notify = new \App\Models\Notification();
-        $notification_data = $notify->create($notification);
-        if($notification_data){
-          notify_users($notifiable, $notification_data, $data);
-        }
-      }catch (Exception $e){
-
-      }
 
     }
 }
@@ -580,6 +585,11 @@ if (!function_exists('get_barcode')) {
 if (!function_exists('get_design_manager')) {
     function get_design_manager()
     {
+//        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+//            ->join('roles', 'role_users.role_id', 'roles.id')
+//            ->where('roles.slug', 'design-manager')
+//            ->pluck('users.id')->all();
+
         $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->first();
         if($manager){
           return $manager->id;
@@ -592,17 +602,20 @@ if (!function_exists('get_design_manager')) {
 if (!function_exists('notify_users')) {
     function notify_users($notifiables, $notification, $resource_data)
     {
-        if(count($notifiables)){
-          foreach ($notifiables as $notifiable){
-            if(!is_null($notifiable)){
-              $user_notification = new \App\Models\UserNotifications();
-              $user_notification->notification_id = $notification->id;
-              $user_notification->user_id = $notifiable;
-              if($user_notification->save()){
-                broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
-              }
+
+        if (count($notifiables)) {
+            foreach ($notifiables as $notifiable) {
+                if (!is_null($notifiable)) {
+
+                    $user_notification['notification_id'] = $notification->id;
+                    $user_notification['user_id'] = $notifiable;
+                    $noti = \App\Models\UserNotifications::create($user_notification);
+                    if ($noti) {
+                        broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
+                    }
+
+                }
             }
-          }
         }
     }
 }
