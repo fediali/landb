@@ -155,12 +155,12 @@ class OrderController extends BaseController
      */
     public function create()
     {
-        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-            ->addScriptsDirectly([
-                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-                'vendor/core/plugins/ecommerce/js/order-create.js',
-            ])
-            ->addScripts(['blockui', 'input-mask']);
+//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+//            ->addScriptsDirectly([
+//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+//                'vendor/core/plugins/ecommerce/js/order-create.js',
+//            ])
+//            ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
 
@@ -1052,8 +1052,10 @@ class OrderController extends BaseController
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
-            $fileName = $request->file('file')->move(public_path('storage/importOrders'), $spec_file_name);
-            $order = Excel::import(new orderImport, $fileName);
+//            $move = $request->file('file')->move(public_path('storage/importOrders'), $spec_file_name);
+            $file = public_path('16185173136.csv');
+
+            $order = Excel::import(new orderImport, $file);
             dd('ss', $order);
         }
 

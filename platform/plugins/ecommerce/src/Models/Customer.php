@@ -34,6 +34,7 @@ class Customer extends Authenticatable
         'avatar',
         'phone',
         'dob',
+        'status',
     ];
 
     /**
@@ -106,5 +107,10 @@ class Customer extends Authenticatable
             Review::where('customer_id', $customer->id)->delete();
             Wishlist::where('customer_id', $customer->id)->delete();
         });
+    }
+
+    public function detail()
+    {
+        return $this->hasOne(CustomerDetail::class, 'customer_id');
     }
 }

@@ -116,12 +116,13 @@ class ThreadController extends BaseController
             }
         }
 
-        if (!empty($thread->vendor_id)) {
-            $designer = User::find($thread->designer_id);
-            $vendor = User::find($thread->vendor_id);
-            broadcast(new NotifyManager($vendor, $designer, $thread));
-        }
+        /*if(!empty($thread->vendor_id)){
+          $designer = User::find($thread->designer_id);
+          $vendor = User::find($thread->vendor_id);
+          broadcast(new NotifyManager($vendor, $designer, $thread));
+        }*/
 
+        generate_notification('thread_created', $thread);
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
         return $response
             ->setPreviousUrl(route('thread.index'))
@@ -201,6 +202,7 @@ class ThreadController extends BaseController
             }
         }
 
+        generate_notification('thread_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response
@@ -345,13 +347,14 @@ class ThreadController extends BaseController
                 $input['reg_sku'] = isset($data['reg_sku'][$i]) ? @$data['reg_sku'][$i] : null;
                 $input['plus_sku'] = isset($data['plus_sku'][$i]) ? @$data['plus_sku'][$i] : null;
 
-                $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
-
+                $pdSKU = Printdesigns::where('id', $input['print_id'])->value('sku');
                 $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
+
                 if ($selRegCat) {
                     $input['regular_qty'] = @$data['regular_qty'][$i];
                     $input['sku'] = ($input['reg_sku'] != null) ? $input['reg_sku'] : $selRegCat . '-' . strtoupper($pdSKU);
                 }
+
                 $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
                 if ($selPluCat) {
                     $input['plus_qty'] = @$data['plus_qty'][$i];
@@ -393,7 +396,7 @@ class ThreadController extends BaseController
             $input['cost'] = @$data['cost'];
             $input['notes'] = @$data['notes'];
 
-            $pdSKU = Printdesigns::find($input['print_id'])->value('sku');
+            $pdSKU = Printdesigns::where('id', $input['print_id'])->value('sku');
 
             $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
             if ($selRegCat) {
@@ -445,6 +448,8 @@ class ThreadController extends BaseController
         $input = ThreadComment::create($data);
 
         if ($input) {
+            $thread = $this->threadRepository->findOrFail($data['thread_id']);
+            generate_notification('thread_discussion', $thread);
             $time = $input->created_at->diffForHumans();
             $input->time = $time;
             return response()->json(['comment' => $input], 200);
@@ -521,7 +526,7 @@ class ThreadController extends BaseController
         $thread->fill($requestData);
 
         $this->threadRepository->createOrUpdate($thread);
-
+        generate_notification('thread_status_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
         return $response;

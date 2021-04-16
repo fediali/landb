@@ -27,9 +27,9 @@ class Order extends BaseModel
      * @var array
      */
 
-    const LASHOWROOM = 0;
-    const FASHIONGO = 1;
-    const ORANGESHINE = 2;
+    const LASHOWROOM = 1;
+    const FASHIONGO = 2;
+    const ORANGESHINE = 3;
 
     public static $MARKETPLACE = [
         self::LASHOWROOM  => 'LA SHOWROOM',
