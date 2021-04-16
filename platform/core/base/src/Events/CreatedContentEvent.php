@@ -38,6 +38,7 @@ class CreatedContentEvent extends Event
      */
     public function __construct($screen, $request, $data)
     {
+
         $this->screen = $screen;
         $this->request = $request;
         $this->data = $data;

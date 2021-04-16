@@ -455,9 +455,11 @@ if (!function_exists('quantity_calculate')) {
         $category = ProductCategory::where('id', $id)->first();
         $totalQuantity = 0;
         foreach ($category->category_sizes as $cat) {
+
             $quan = substr($cat->name, strpos($cat->name, "-") + 1);
             $totalQuantity += $quan;
         }
+
         return $totalQuantity;
     }
 }
@@ -619,10 +621,17 @@ if (!function_exists('notify_users')) {
                     }
 
 
-
                 }
             }
         }
+    }
+}
+
+if (!function_exists('create_customer')) {
+    function create_customer($data)
+    {
+        $customer = \Botble\Ecommerce\Models\Customer::create($data);
+        return $customer;
     }
 }
 //Utils

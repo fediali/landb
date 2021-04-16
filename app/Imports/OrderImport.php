@@ -9,23 +9,24 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Eloquent\CustomerRepository;
+use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Laravel\Passport\Bridge\UserRepository;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class orderImport implements ToModel, WithHeadingRow
+class OrderImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    protected $customerRepository;
+
 
     public function __construct()
     {
-        // $this->customerRepository = $customerRepo;
+
     }
 
     public function model(array $row)
@@ -36,14 +37,15 @@ class orderImport implements ToModel, WithHeadingRow
         if ($customer == null) {
             //creating Customer
             $data['name'] = $row['business_contact_name'];
-            $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
-            $data['phone'] = $row['phone_number'];
+            $data['email'] = rand(1, 5) . '@lashowroomcustomer.com';
+            $data['phone'] = '+56806593174691';
             $data['password'] = bcrypt(rand(0, 15));
-            $customer = Customer::create($data);
 
-            $detail['customer_id'] = $customer->id;
+            create_customer($data);
+            $detail['customer_id'] = $customer['id'];
             $detail['company'] = $row['business_company_name'];
             $detail['type'] = Order::LASHOWROOM;
+
             CustomerDetail::create($detail);
 
             //creating address
@@ -51,34 +53,36 @@ class orderImport implements ToModel, WithHeadingRow
             $baddress['city'] = $row['billing_city'];
             $baddress['state'] = $row['billing_state'];
             $baddress['zip_code'] = $row['billing_zip_code'];
-            $baddress['customer_id'] = $customer->id;
+            $baddress['customer_id'] = $customer['id'];
             $baddress['phone'] = $row['phone_number'];
             $baddress['country'] = $row['billing_county'];
             $baddress['name'] = $row['business_contact_name'];
 
             $billing = Address::create($baddress);
-            dd($billing->id);
+
             $saddress['address'] = $row['shipping_address'];
             $saddress['city'] = $row['shipping_city'];
             $saddress['state'] = $row['shipping_state'];
             $saddress['zip_code'] = $row['shipping_zip_code'];
             $saddress['country'] = $row['shipping_country'];
-            $saddress['customer_id'] = $customer->id;
+            $saddress['customer_id'] = $customer['id'];
             $saddress['phone'] = $row['phone_number'];
             $baddress['name'] = $row['shipping_contact_name'];
 
             $shipping = Address::create($saddress);
 
         }
-        dd($customer->id);
+
         //Finding Product For Order
 
         $product = Product::where('sku', $row['style_no'])->first();
-        //count pack quantity for product
-        $pack = quantityCalculate($product->category_id);
-        $orderQuantity = $row['original_qty'] / $pack;
 
+        //count pack quantity for product
+        $pack = quantityCalculate($product['category_id']);
+
+        $orderQuantity = $row['original_qty'] / $pack;
         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->get();
+
         if ($orderPo->count() > 0) {
             $detail['order_id'] = $orderPo->order_id;
             $detail['qty'] = $pack;
@@ -88,6 +92,7 @@ class orderImport implements ToModel, WithHeadingRow
             OrderProduct::create($detail);
             //import record
         } else {
+
             $order['customer_id'] = $customer->id;
             $order['amount'] = $row['original_amount'];
             $order['currency_id'] = $customer->id;
@@ -109,6 +114,6 @@ class orderImport implements ToModel, WithHeadingRow
         }
         //creating Order
 
-
+        dd('ss');
     }
 }
