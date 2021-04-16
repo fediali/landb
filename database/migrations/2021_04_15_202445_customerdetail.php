@@ -28,6 +28,7 @@ class Customerdetail extends Migration
             $table->tinyInteger('newsletter')->default(0)->nullable();
             $table->integer('hear_us')->nullable();
             $table->string('comments')->nullable();
+            $table->string('type')->default(0)->nullable();
             $table->timestamps();
         });
     }

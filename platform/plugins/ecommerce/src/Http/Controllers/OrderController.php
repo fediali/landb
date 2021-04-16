@@ -155,12 +155,12 @@ class OrderController extends BaseController
      */
     public function create()
     {
-        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-            ->addScriptsDirectly([
-                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-                'vendor/core/plugins/ecommerce/js/order-create.js',
-            ])
-            ->addScripts(['blockui', 'input-mask']);
+//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+//            ->addScriptsDirectly([
+//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+//                'vendor/core/plugins/ecommerce/js/order-create.js',
+//            ])
+//            ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
 
