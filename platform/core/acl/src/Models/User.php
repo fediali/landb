@@ -42,6 +42,8 @@ class User extends Authenticatable
         'avatar_id',
         'permissions',
         'name_initials',
+        'commission_percentage',
+        'is_allow_qty_share',
     ];
 
     /**
