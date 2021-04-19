@@ -45,3 +45,47 @@ if (!function_exists('generate_shortcode')) {
         return shortcode()->generateShortcode($name, $attributes);
     }
 }
+if (!function_exists('image_html_generator')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = null)
+  {
+
+        $html = '<img 
+            ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . ' 
+            ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . ' 
+            ' . (!is_null($class) ? 'class="' . $class . '"' : '') . ' 
+            src="' . asset('storage/'.$img). '" 
+            alt="' . (!is_null($alt) ? $alt : 'Education image') . '" 
+            loading="lazy"
+            onerror = "this.src=\''. asset('images/lucky&blessed_logo_sign_Black 1.png') .'\'">'
+            ;
+
+    return $html;
+  }
+}
+if (!function_exists('generate_product_url')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function generate_product_url($type, $id)
+  {
+    if($type == 'save'){
+      return URL::to('/product/save/'.$id);
+    }elseif ($type == 'detail'){
+      return URL::to('/product/detail/'.$id);
+    }elseif ($type == 'cart'){
+      return URL::to('/product/add/cart/'.$id);
+    }elseif ($type == 'wishlist'){
+      return route('public.add_to_wishlist', ['id' => $id]);
+    }else{
+      return URL::to('/products');
+    }
+    
+  }
+}

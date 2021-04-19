@@ -156,6 +156,7 @@ class InventoryTable extends TableAbstract
                 'name' => 'Ecommerce',
                 'title' => 'Ecommerce',
                 'width' => '100px',
+                'visible' => false
             ],
         ];
     }

@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <!-- <link rel="icon" href="img/SwingsationsFavicon.png" sizes="36x36" type="image/png"> -->
@@ -17,6 +18,32 @@
     <!-- Custom Style Sheet -->
     <link rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <title>LandBAppreal</title>
+    <style>
+        .loading-overlay {
+            display: none;
+            background: rgba(255, 255, 255, 0.7);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.is-active {
+            display: flex;
+        }
+
+        .code {
+            font-family: monospace;
+            /*   font-size: .9em; */
+            color: #dd4a68;
+            background-color: rgb(238, 238, 238);
+            padding: 0 3px;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,342 +63,48 @@
                     <a href="#"><i class="fal fa-search"></i></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fal fa-shopping-cart"></i></a>
+                    <a href="{{ route('public.cart_index') }}"><i class="fal fa-shopping-cart"></i></a>
                 </li>
                 <li>
                     <a href="#"><i class="fal fa-user"></i></a>
                 </li>
                 <li>
-                    <a href="#">Sign In</a>
+                    @auth
+                        <a>{{ Auth::user()->first_name }}</a> | <a href="{{ route('public.logout') }}"><i class="fa fa-sign-out"></i></a>
+                    @else
+                        <a href="{{ route('public.login') }}">Sign In</a>
+                    @endauth
+
                 </li>
             </ul>
         </div>
         <nav class="navbar ">
-            <a class="navbar-brand" href="#"> <img src="img/Logo.png" alt=""> </a>
+            <a class="navbar-brand" href="#"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
             <div class=" navbar-parent d-flex">
-                <ul class="ml-auto ">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Women </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Man</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Footwear</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Accesories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Lookbook</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Stores</a>
-                    </li>
-                </ul>
+                {!!
+                    Menu::renderMenuLocation('main-menu', [
+                        'options' => [],
+                        'theme' => true,
+                        'view' => 'main-menu',
+                    ])
+                !!}
                 <button class="toggle-menu">
                     <span></span>
                 </button>
                 <div id="menu" class="">
-                    <div class="container">
-                        <a href="#"> <img src="img/Logo.png" alt=""></a>
-
-                        <nav class="main-nav">
-                            <div class="nav-col">
-                                <h5>All</h5>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            New Arrivals
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Best Sellers
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            Pre-Order
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Women</h5>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            Jeans
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Top
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            Dresses
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Pants
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Skirts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Shorts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Kinonos
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Plus</h5>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            Plus Jackets & Quterwear
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Plus Jeans
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">
-                                            Plus Dresses
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Plus Skirts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Plus Jackets & Outwear
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Plus Shorts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Kinonos
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Men's</h5>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            Belts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Shirts
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Men's Plus</h5>
-                                <ul>
-
-                                    <li>
-                                        <a href="#">
-                                            Shirts
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Footwear</h5>
-                                <ul>
-
-                                    <li>
-                                        <a href="#">
-                                            Booties
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Boots
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Hells
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Rain Boots
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Accessories</h5>
-                                <ul>
-
-                                    <li>
-                                        <a href="#">
-                                            Jewellary
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Headwear
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Keychain
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Bags
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Blankets
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Scarves
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Cups/Bottles
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Tech Accessories
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                            <div class="nav-col">
-                                <h5>Kids</h5>
-                                <ul>
-
-                                    <li>
-                                        <a href="#">
-                                            Tops
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Jeans
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Pants
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Jumpsuit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Kimono
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Shorts
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Cups/Bottles
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Baby Accessories
-                                        </a>
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                        </nav>
-
-                        <footer class="menu-footer">
-                            <nav class="footer-nav">
-
-                                <ul>
-                                    <li><span>Social Media</span></li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fab fa-instagram"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fab fa-youtube"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fab fa-facebook"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul>
-                                    <li><a href="#">Women</a></li>
-                                    <li><a href="#">Man</a></li>
-                                    <li><a href="#">Footwear</a></li>
-                                    <li><a href="#">Accesories</a></li>
-                                    <li><a href="#">Lookbook</a></li>
-                                    <li><a href="#">Stores</a></li>
-                                </ul>
-                            </nav>
-                        </footer>
-                    </div>
-
+                    {!!
+                        Menu::renderMenuLocation('categories-menu', [
+                            'options' => [],
+                            'theme' => true,
+                            'view' => 'categories-menu',
+                        ])
+                    !!}
                 </div>
             </div>
         </nav>
     </div>
 </header>
+<div class="loading-overlay">
+    <span class="fas fa-spinner fa-3x fa-spin"></span>
+</div>
