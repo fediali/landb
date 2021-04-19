@@ -19,5 +19,14 @@ return [
         'name'        => 'Delete',
         'flag'        => 'thread.destroy',
         'parent_flag' => 'thread.index',
+    ], [
+        'name'        => 'View',
+        'flag'        => 'thread.details',
+        'parent_flag' => 'thread.index',
+    ],
+    [
+        'name'        => 'Clone',
+        'flag'        => 'thread.cloneItem',
+        'parent_flag' => 'thread.index',
     ],
 ];

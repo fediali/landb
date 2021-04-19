@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class InventoryProducts extends Model
 {
-    protected $fillable = ['inventory_id', 'product_id', 'sku', 'upc', 'barcode', 'ecom_pack_qty', 'ordered_pack_qty', 'received_pack_qty'];
+    protected $fillable = ['inventory_id', 'product_id', 'sku', 'upc', 'barcode', 'is_variation', 'ecom_qty', 'ordered_qty', 'received_qty'];
+
+    protected $appends = ['is_released'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -33,6 +35,15 @@ class InventoryProducts extends Model
     public function product_categories()
     {
         return $this->belongsToMany(ProductCategory::class,'inventory_product_cat_qty', 'inventory_product_id', 'product_category_id')->withPivot('loose_qty');
+    }
+
+    public function getIsReleasedAttribute()
+    {
+        $chkInv = InventoryHistory::where(['product_id' => $this->product_id, 'inventory_id' => $this->inventory_id])->first();
+        if ($chkInv) {
+            return true;
+        }
+        return false;
     }
 
 }

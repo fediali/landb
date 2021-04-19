@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserNotifications extends Model
 {
+
     use HasFactory;
-    protected $fillable = ['notification_id', 'user_id'];
+
+    protected $fillable = ['notification_id', 'user_id', 'seen', 'status'];
     protected $with = ['notification'];
-    public function notification(){
-      return $this->belongsTo(Notification::class, 'notification_id');
+
+    public function notification()
+    {
+        return $this->belongsTo(Notification::class, 'notification_id');
     }
 }

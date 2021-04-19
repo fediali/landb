@@ -111,11 +111,11 @@ class Product extends BaseModel
             Review::where('product_id', $product->id)->delete();
         });
 
-        self::updated(function (Product $product) {
+        /*self::updated(function (Product $product) {
             if ($product->is_variation && $product->original_product->defaultVariation->product_id == $product->id) {
                 app(UpdateDefaultProductService::class)->execute($product);
             }
-        });
+        });*/
     }
 
     /**

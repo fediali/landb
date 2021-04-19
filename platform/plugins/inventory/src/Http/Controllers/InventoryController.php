@@ -6,6 +6,7 @@ use App\Models\InventoryHistory;
 use App\Models\InventoryProducts;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Inventory\Http\Requests\InventoryRequest;
 use Botble\Inventory\Models\Inventory;
 use Botble\Inventory\Repositories\Interfaces\InventoryInterface;
@@ -78,12 +79,16 @@ class InventoryController extends BaseController
                 if (isset($data['sku_' . $i])) {
                     $product = array();
                     $product['inventory_id'] = $inventory->id;
-                    $product['product_id'] = $data['product_id_' . $i];
-                    $product['sku'] = $data['sku_' . $i];
-                    $product['barcode'] = $data['barcode_' . $i];
-                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
-                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
-                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['product_id'] = @$data['product_id_' . $i];
+                    $product['sku'] = @$data['sku_' . $i];
+                    $product['barcode'] = @$data['barcode_' . $i];
+                    //$product['is_variation'] = @$data['is_variation_' . $i];
+                    $product['ecom_qty'] = @$data['quantity_' . $i];
+                    $product['ordered_qty'] = @$data['ordered_qty_' . $i];
+                    $product['received_qty'] = @$data['received_qty_' . $i];
+                    if (isset($data['received_qty_' . $i])) {
+                        $product['is_variation'] = 1;
+                    }
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -146,12 +151,15 @@ class InventoryController extends BaseController
                 if (isset($data['sku_' . $i])) {
                     $product = array();
                     $product['inventory_id'] = $inventory->id;
-                    $product['product_id'] = $data['product_id_' . $i];
-                    $product['sku'] = $data['sku_' . $i];
-                    $product['barcode'] = $data['barcode_' . $i];
-                    $product['ecom_pack_qty'] = $data['quantity_' . $i];
-                    $product['ordered_pack_qty'] = $data['ordered_qty_' . $i];
-                    $product['received_pack_qty'] = $data['received_qty_' . $i];
+                    $product['product_id'] = @$data['product_id_' . $i];
+                    $product['sku'] = @$data['sku_' . $i];
+                    $product['barcode'] = @$data['barcode_' . $i];
+                    $product['ecom_qty'] = @$data['quantity_' . $i];
+                    $product['ordered_qty'] = @$data['ordered_qty_' . $i];
+                    $product['received_qty'] = @$data['received_qty_' . $i];
+                    if (isset($data['received_qty_' . $i])) {
+                        $product['is_variation'] = 1;
+                    }
                     InventoryProducts::create($product);
                 } else {
                     break;
@@ -215,16 +223,16 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $product = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
-            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price')
+        $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
-            ->where('ec_products.barcode', $request->get('barcode'))
-            ->orWhere('ec_products.sku', $request->get('barcode'))
-            ->orWhere('parent_sku', $request->get('barcode'))
-            /*->where('status', 'published')*/
-            ->first();
-        if ($product) {
-            return response()->json(['product' => $product, 'status' => 'success'], 200);
+            //->where('ec_products.barcode', $request->get('barcode'))
+            ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
+            //->orWhere('parent_sku', $request->get('barcode'))
+            //->where('status', 'published')
+            ->get();
+        if ($products) {
+            return response()->json(['products' => $products, 'status' => 'success'], 200);
         } else {
             return response()->json(['product' => [], 'status' => 'error'], 404);
         }
@@ -234,36 +242,40 @@ class InventoryController extends BaseController
     {
         $error = null;
         $inventory = Inventory::with('products')->where('id', $id)->first();
-        if ($inventory && $inventory->status == 'published') {
+        if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
-                    $product = Product::where('sku', $inv_product->sku)->first();
+                    $product = Product::where('sku', $inv_product->sku)->where('is_variation', 1)->first();
                     if ($product) {
-                        $old_stock = $product->quantity;
-                        $product->quantity = $product->quantity + $inv_product->received_pack_qty;
-                        if ($product->save()) {
+                        if ($inv_product->is_released) {
+                            $error = 'some products already released in this inventory!';
+                        } else {
+                            $old_stock = $product->quantity;
+                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->with_storehouse_management = 1;
+                            if ($product->save()) {
 
-                            InventoryHistory::create([
-                                'product_id' => $product->id,
-                                'quantity' => $inv_product->received_pack_qty,
-                                'new_stock' => $product->quantity,
-                                'old_stock' => $old_stock,
-                                'created_by' => Auth::user()->id,
-                                'inventory_id' => $inventory->id,
-                                'reference' => 'inventory.push_to_ecommerce'
-                            ]);
+                                InventoryHistory::create([
+                                    'product_id' => $product->id,
+                                    'quantity' => $inv_product->received_qty,
+                                    'new_stock' => $product->quantity,
+                                    'old_stock' => $old_stock,
+                                    'created_by' => Auth::user()->id,
+                                    'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
 
+                            }
                         }
                     } else {
                         $error = 'Some of the inventory products does not exists';
                     }
-
                 }
             } else {
                 $error = 'Inventory have no products';
             }
         } else {
-            $error = 'Invalid inventory or Inventory is not published';
+            $error = 'Invalid inventory or Inventory is not published or Already Released';
         }
 
         if (!is_null($error)) {
@@ -272,6 +284,64 @@ class InventoryController extends BaseController
         } else {
             return $response->setPreviousUrl(route('inventory.index'))
                 ->setMessage('Inventory has been pushed into ecommerce successfully');
+        }
+    }
+
+    public function releaseProduct($inv_id, $prod_id, BaseHttpResponse $response)
+    {
+        $error = null;
+
+        $getProdIds = ProductVariation::where('configurable_product_id', $prod_id)->pluck('product_id')->all();
+        $getProdIds[] = (int) $prod_id;
+
+        $inventory = Inventory::with([
+            'products' => function($q) use($getProdIds) {
+                $q->whereIn('product_id', $getProdIds);
+            }
+            ])
+            ->where('id', $inv_id)
+            ->first();
+
+        if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
+            if (count($inventory->products)) {
+                foreach ($inventory->products as $inv_product) {
+                    $product = Product::where('sku', $inv_product->sku)/*->where('is_variation', 1)*/->first();
+                    if ($product) {
+                        if ($inv_product->is_released) {
+                            $error = 'some products already released in this inventory!';
+                        } else {
+                            $old_stock = $product->quantity;
+                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->with_storehouse_management = 1;
+                            if ($product->save()) {
+
+                                InventoryHistory::create([
+                                    'product_id' => $product->id,
+                                    'quantity' => $inv_product->received_qty,
+                                    'new_stock' => $product->quantity,
+                                    'old_stock' => $old_stock,
+                                    'created_by' => Auth::user()->id,
+                                    'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                            }
+                        }
+                    } else {
+                        $error = 'product does not exists';
+                    }
+                }
+            } else {
+                $error = 'Inventory have no products';
+            }
+        } else {
+            $error = 'Invalid inventory or Inventory is not published or Already Released';
+        }
+
+        if (!is_null($error)) {
+            return $response->setPreviousUrl(back())->setError($error);
+        } else {
+            return $response->setPreviousUrl(back())->setMessage('Inventory has been pushed into e-commerce successfully');
         }
     }
 }

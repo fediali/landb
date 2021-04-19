@@ -37,7 +37,7 @@ class ThreadordersTable extends TableAbstract
         $this->setOption('id', 'plugins-threadorders-table');
         parent::__construct($table, $urlGenerator);
 
-        if (!Auth::user()->hasAnyPermission(['threadorders.edit', 'threadorders.destroy'])) {
+        if (!Auth::user()->hasAnyPermission(['threadorders.edit', 'threadorders.destroy', 'threadorders.status', 'threadorders.pushEcommerce', 'threadorders.details', 'threadorders.order'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -68,7 +68,7 @@ class ThreadordersTable extends TableAbstract
                     if ($item->thread_order_has_pushed) {
                         $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>';
                     } else {
-                        $html = '<a href="javascript:void(0)" onclick="confirm_start('. '\''.route('threadorders.orderItem', $item->id). '\''.')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
+                        $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('threadorders.orderItem', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Push</a><script>function confirm_start(url){
                           swal({
                               title: \'Are you sure?\',
                               text: "Do you want to push this Order to Ecommerce!",
@@ -99,13 +99,13 @@ class ThreadordersTable extends TableAbstract
                 } else {
                     $html = 'N/A';
                 }
-              return $html;
+                return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return '<a href="'.route('threadorders.threadOrderDetail', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
-                //return $this->getOperations('threadorders.edit', 'threadorders.destroy', $item);
+                $html = '<a href="' . route('threadorders.threadOrderDetail', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
+                return $this->getOperations('', 'threadorders.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -135,13 +135,15 @@ class ThreadordersTable extends TableAbstract
      */
     public function columns()
     {
+
         return [
-            'id' => [
+            'id'           => [
                 'name'  => 'threadorders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
+
             ],
-            'name' => [
+            'name'         => [
                 'name'  => 'threadorders.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
@@ -151,21 +153,22 @@ class ThreadordersTable extends TableAbstract
                 'title' => 'Order Status',
                 'class' => 'text-left',
             ],
-            'created_at' => [
+            'created_at'   => [
                 'name'  => 'threadorders.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status' => [
+            'status'       => [
                 'name'  => 'threadorders.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
             ],
-            'ecommerce' => [
-                'name'  => 'Ecommerce',
-                'title' => 'Ecommerce',
-                'width' => '100px',
-            ],
+            'ecommerce'    => [
+                'name'    => 'Ecommerce',
+                'title'   => 'Ecommerce',
+                'width'   => '100px',
+                'visible' => (Auth::user()->hasPermission('threadorders.pushEcommerce')) ? true : false,
+            ]
         ];
     }
 
@@ -195,7 +198,7 @@ class ThreadordersTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return []; // $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
+        return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
     }
 
     /**
@@ -204,12 +207,12 @@ class ThreadordersTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'threadorders.name' => [
+            'threadorders.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'threadorders.status' => [
+            'threadorders.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),

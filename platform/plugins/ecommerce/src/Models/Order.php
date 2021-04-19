@@ -26,7 +26,20 @@ class Order extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = [
+
+    const LASHOWROOM = 1;
+    const FASHIONGO = 2;
+    const ORANGESHINE = 3;
+
+    public static $MARKETPLACE = [
+        self::LASHOWROOM  => 'LA SHOWROOM',
+        self::FASHIONGO   => 'FASHIONGO',
+        self::ORANGESHINE => 'ORANGE SHINE'
+    ];
+
+
+    protected
+        $fillable = [
         'status',
         'user_id',
         'amount',
@@ -48,7 +61,8 @@ class Order extends BaseModel
     /**
      * @var string[]
      */
-    protected $casts = [
+    protected
+        $casts = [
         'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
@@ -56,12 +70,14 @@ class Order extends BaseModel
     /**
      * @var array
      */
-    protected $dates = [
+    protected
+        $dates = [
         'created_at',
         'updated_at',
     ];
 
-    protected static function boot()
+    protected
+    static function boot()
     {
         parent::boot();
 
@@ -78,7 +94,8 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public function user()
+    public
+    function user()
     {
         return $this->belongsTo(Customer::class, 'user_id', 'id')->withDefault();
     }
@@ -86,7 +103,8 @@ class Order extends BaseModel
     /**
      * @return mixed
      */
-    public function getUserNameAttribute()
+    public
+    function getUserNameAttribute()
     {
         return $this->user->name;
     }
@@ -94,7 +112,8 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public function address()
+    public
+    function address()
     {
         return $this->hasOne(OrderAddress::class, 'order_id')->withDefault();
     }
@@ -102,7 +121,8 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public function products()
+    public
+    function products()
     {
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
     }
@@ -110,7 +130,8 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public function histories()
+    public
+    function histories()
     {
         return $this->hasMany(OrderHistory::class, 'order_id')->with(['user', 'order']);
     }
@@ -118,7 +139,8 @@ class Order extends BaseModel
     /**
      * @return array|null|string
      */
-    public function getShippingMethodNameAttribute()
+    public
+    function getShippingMethodNameAttribute()
     {
         return OrderHelper::getShippingMethod(
             $this->attributes['shipping_method'],
@@ -129,7 +151,8 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public function shipment()
+    public
+    function shipment()
     {
         return $this->hasOne(Shipment::class)->withDefault();
     }
@@ -137,7 +160,8 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public function payment()
+    public
+    function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
     }
@@ -145,7 +169,8 @@ class Order extends BaseModel
     /**
      * @return bool
      */
-    public function canBeCanceled()
+    public
+    function canBeCanceled()
     {
         return in_array($this->status, [OrderStatusEnum::PENDING, OrderStatusEnum::PROCESSING]);
     }

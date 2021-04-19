@@ -268,7 +268,7 @@ if (!function_exists('get_designers')) {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
             ->where('roles.slug', 'designer')
-            ->pluck('users.username','users.id')->all();
+            ->pluck('users.username', 'users.id')->all();
     }
 }
 
@@ -278,7 +278,7 @@ if (!function_exists('get_vendors')) {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
             ->where('roles.slug', 'vendor')
-            ->pluck('users.username','users.id')->all();
+            ->pluck('users.username', 'users.id')->all();
     }
 }
 //Get User By Roles
@@ -295,49 +295,49 @@ if (!function_exists('get_print_designs')) {
 if (!function_exists('get_seasons')) {
     function get_seasons()
     {
-        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_designs')) {
     function get_designs()
     {
-        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_fits')) {
     function get_fits()
     {
-        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_rises')) {
     function get_rises()
     {
-        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_fabrics')) {
     function get_fabrics()
     {
-        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_washes')) {
     function get_washes()
     {
-        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_category_sizes')) {
     function get_category_sizes()
     {
-        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name','id')->all();
+        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
@@ -357,14 +357,14 @@ if (!function_exists('get_category_sizes_by_id')) {
 if (!function_exists('get_product_units')) {
     function get_product_units()
     {
-        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_vendor_products')) {
     function get_vendor_products()
     {
-        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name','id')->all();
+        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
@@ -373,7 +373,7 @@ if (!function_exists('get_vendor_order_statuses')) {
     {
         $statuses = \Botble\Vendororderstatuses\Models\Vendororderstatuses::where('status', 'published')->pluck('name')->all();
         $arr = [];
-        foreach ($statuses  as $status) {
+        foreach ($statuses as $status) {
             $arr[] = ['value' => strtolower($status), 'text' => ucwords($status)];
         }
         return $arr;
@@ -383,14 +383,14 @@ if (!function_exists('get_vendor_order_statuses')) {
 if (!function_exists('get_reg_product_categories_custom')) {
     function get_reg_product_categories_custom()
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name', 'id')->all();
     }
 }
 
 if (!function_exists('get_plu_product_categories_custom')) {
     function get_plu_product_categories_custom()
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name', 'id')->all();
     }
 }
 //Get General Data
@@ -407,16 +407,16 @@ if (!function_exists('get_thread_comments')) {
 if (!function_exists('get_thread_variations')) {
     function get_thread_variations($id)
     {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash'])->get();
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash', 'trim'])->get();
     }
 }
 
 if (!function_exists('generate_unique_attr_id')) {
     function generate_unique_attr_id()
     {
-      $number = mt_rand(1000000000, 9999999999);
-        if(attr_id_exist($number)){
-          generate_unique_attr_id();
+        $number = mt_rand(1000000000, 9999999999);
+        if (attr_id_exist($number)) {
+            generate_unique_attr_id();
         }
         return $number;
     }
@@ -425,7 +425,7 @@ if (!function_exists('generate_unique_attr_id')) {
 if (!function_exists('attr_id_exist')) {
     function attr_id_exist($num)
     {
-      return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
+        return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
     }
 }
 
@@ -446,10 +446,11 @@ if (!function_exists('get_approved_designs')) {
 if (!function_exists('generate_thread_sku')) {
     function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
-        $category = ProductCategory::where('id', $catId)->value('name');
-        $categoryCnt = DB::table('category_designer_count')->where(['user_id'=>$designerId, 'product_category_id'=>$catId])->value('count') + 1;
-        $category_sku = strtoupper(substr($designerInitial, 0, 3) . substr($category, 0, 2) . $categoryCnt);
-        DB::table('category_designer_count')->updateOrInsert(['user_id'=>$designerId, 'product_category_id'=>$catId], ['user_id'=>$designerId, 'product_category_id'=>$catId, 'count'=>$categoryCnt]);
+
+        $category = ProductCategory::where('id', $catId)->value('sku_initial');
+        $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
+        $category_sku = strtoupper($designerInitial . $category . $categoryCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id' => $designerId, 'product_category_id' => $catId], ['user_id' => $designerId, 'product_category_id' => $catId, 'count' => $categoryCnt]);
 
         if ($isPlus) {
             $category_sku .= '-X';
@@ -460,89 +461,112 @@ if (!function_exists('generate_thread_sku')) {
 }
 //Thread Related Functions
 
+//Product Pack Count
+if (!function_exists('quantity_calculate')) {
+    function quantityCalculate($id)
+    {
+        $category = ProductCategory::where('id', $id)->first();
+        $totalQuantity = 0;
+        foreach ($category->category_sizes as $cat) {
+
+            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
+            $totalQuantity += $quan;
+        }
+
+        return $totalQuantity;
+    }
+}
 
 //Notifications
 if (!function_exists('generate_notification')) {
     function generate_notification($type, $data)
     {
-      try {
-        $notification = array();
-        $notifiable = array();
-        if($type == 'thread_created'){
-          $creator = \Botble\ACL\Models\User::find($data->designer_id);
-          $notification = array();
-          $notification['sender_id'] = $data->designer_id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = 'A new thread has been created by '.$creator->first_name;
-          $notification['url'] = route('thread.details', $data->id);
 
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }
-          $notifiable[] = get_design_manager();
+        try {
+
+            $notification = array();
+            $notifiable = array();
+            if ($type == 'thread_created') {
+
+                $creator = \Botble\ACL\Models\User::find($data->designer_id);
+                $notification = array();
+                $notification['sender_id'] = $data->designer_id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A new thread has been created by ' . $creator->first_name;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                $notifiable[] = get_design_manager();
+
+
+            } elseif ($type == 'thread_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A thread has been updated by ' . \Illuminate\Support\Facades\Auth::user()->first_name;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            } elseif ($type == 'thread_status_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' has updated the thread status to ' . $data->status;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            } elseif ($type == 'thread_discussion') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' added a comment to the discussion in "' . $data->name . '" thread';
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $notifiable[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $notifiable[] = $data->designer_id;
+                }
+                if ($notification['sender_id'] != get_design_manager()) {
+                    $notifiable[] = get_design_manager();
+                }
+            }
+            $notify = new \App\Models\Notification();
+            $notification_data = $notify->create($notification);
+
+            if ($notification_data) {
+                notify_users($notifiable, $notification_data, $data);
+            }
+        } catch (Exception $e) {
 
         }
-        elseif($type == 'thread_updated'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = 'A thread has been updated by '.\Illuminate\Support\Facades\Auth::user()->first_name;
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        elseif($type == 'thread_status_updated'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name.' has updated the thread status to '. $data->status;
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        elseif($type == 'thread_discussion'){
-          $notification = array();
-          $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
-          $notification['url'] = route('thread.details', $data->id);
-          $notification['action'] = $type;
-          $notification['ref_id'] = $data->id;
-          $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name.' added a comment to the discussion in "'. $data->name. '" thread';
-          $notification['url'] = route('thread.details', $data->id);
-
-          if(!empty($data->vendor_id)){
-            $notifiable[] = $data->vendor_id;
-          }if($notification['sender_id'] != $data->designer_id){
-            $notifiable[] = $data->designer_id;
-          }if($notification['sender_id'] != get_design_manager()){
-            $notifiable[] = get_design_manager();
-          }
-        }
-        $notify = new \App\Models\Notification();
-        $notification_data = $notify->create($notification);
-        if($notification_data){
-          notify_users($notifiable, $notification_data, $data);
-        }
-      }catch (Exception $e){
-
-      }
 
     }
 }
@@ -567,10 +591,10 @@ if (!function_exists('parse_date')) {
 if (!function_exists('get_barcode')) {
     function get_barcode()
     {
-        $code = '00' . rand(00000000000,99999999999);
+        $code = '00' . rand(00000000000, 99999999999);
         $aa = new DNS1D();
         $image = $aa->getBarcodePNG($code, 'C39', 2, 33);
-        $name = 'products_barcode/'.$code . '.' . 'jpg';
+        $name = 'products_barcode/' . $code . '.' . 'jpg';
         Storage::put($name, base64_decode($image));
         return ['upc' => $code, 'barcode' => $name];
     }
@@ -579,30 +603,48 @@ if (!function_exists('get_barcode')) {
 if (!function_exists('get_design_manager')) {
     function get_design_manager()
     {
-        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->first();
-        if($manager){
-          return $manager->id;
-        }else{
-          return null;
-        }
+//        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+//            ->join('roles', 'role_users.role_id', 'roles.id')
+//            ->where('roles.slug', 'design-manager')
+//            ->pluck('users.id');
+
+        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->pluck('user_id');
+        return $manager;
+//        if ($manager) {
+//            return $manager->id;
+//        } else {
+//            return null;
+//        }
     }
 }
 
 if (!function_exists('notify_users')) {
     function notify_users($notifiables, $notification, $resource_data)
     {
-        if(count($notifiables)){
-          foreach ($notifiables as $notifiable){
-            if(!is_null($notifiable)){
-              $user_notification = new \App\Models\UserNotifications();
-              $user_notification->notification_id = $notification->id;
-              $user_notification->user_id = $notifiable;
-              if($user_notification->save()){
-                broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
-              }
+        if (count($notifiables)) {
+            foreach ($notifiables as $notifiable) {
+                if (!is_null($notifiable)) {
+                    foreach ($notifiable as $key => $value) {
+                        $user_notification['notification_id'] = $notification->id;
+                        $user_notification['user_id'] = $value;
+                        $noti = \App\Models\UserNotifications::create($user_notification);
+                        if ($noti) {
+                            broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
+                        }
+                    }
+
+
+                }
             }
-          }
         }
+    }
+}
+
+if (!function_exists('create_customer')) {
+    function create_customer($data)
+    {
+        $customer = \Botble\Ecommerce\Models\Customer::create($data);
+        return $customer;
     }
 }
 //Utils

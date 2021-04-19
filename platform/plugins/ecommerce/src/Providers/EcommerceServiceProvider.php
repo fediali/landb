@@ -47,6 +47,7 @@ use Botble\Ecommerce\Repositories\Caches\GroupedProductCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\OrderAddressCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\OrderCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\OrderHistoryCacheDecorator;
+use Botble\Ecommerce\Repositories\Caches\OrderImportCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\OrderProductCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\ProductAttributeCacheDecorator;
 use Botble\Ecommerce\Repositories\Caches\ProductAttributeSetCacheDecorator;
@@ -74,6 +75,7 @@ use Botble\Ecommerce\Repositories\Eloquent\FlashSaleRepository;
 use Botble\Ecommerce\Repositories\Eloquent\GroupedProductRepository;
 use Botble\Ecommerce\Repositories\Eloquent\OrderAddressRepository;
 use Botble\Ecommerce\Repositories\Eloquent\OrderHistoryRepository;
+use Botble\Ecommerce\Repositories\Eloquent\OrderImportRepository;
 use Botble\Ecommerce\Repositories\Eloquent\OrderProductRepository;
 use Botble\Ecommerce\Repositories\Eloquent\OrderRepository;
 use Botble\Ecommerce\Repositories\Eloquent\ProductAttributeRepository;
@@ -102,6 +104,7 @@ use Botble\Ecommerce\Repositories\Interfaces\FlashSaleInterface;
 use Botble\Ecommerce\Repositories\Interfaces\GroupedProductInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderAddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderHistoryInterface;
+use Botble\Ecommerce\Repositories\Interfaces\OrderImport;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderProductInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductAttributeInterface;
@@ -280,6 +283,12 @@ class EcommerceServiceProvider extends ServiceProvider
             );
         });
 
+        $this->app->bind(OrderImport::class, function () {
+            return new OrderImportCacheDecorator(
+                new OrderImportRepository(new Order)
+            );
+        });
+
         $this->app->bind(OrderHistoryInterface::class, function () {
             return new OrderHistoryCacheDecorator(
                 new OrderHistoryRepository(new OrderHistory)
@@ -406,12 +415,12 @@ class EcommerceServiceProvider extends ServiceProvider
                     'permissions' => ['plugins.ecommerce'],
                 ])
                 ->registerItem([
-                    'id'        => 'cms-plugins-ecommerce-report',
-                    'priority'  => 0,
-                    'parent_id' => 'cms-plugins-ecommerce',
-                    'name'      => 'plugins/ecommerce::reports.name',
-                    'icon'      => 'far fa-chart-bar',
-                    'url'       => route('ecommerce.report.index'),
+                    'id'          => 'cms-plugins-ecommerce-report',
+                    'priority'    => 0,
+                    'parent_id'   => 'cms-plugins-ecommerce',
+                    'name'        => 'plugins/ecommerce::reports.name',
+                    'icon'        => 'far fa-chart-bar',
+                    'url'         => route('ecommerce.report.index'),
                     'permissions' => ['ecommerce.report.index'],
                 ])
                 ->registerItem([
@@ -431,6 +440,14 @@ class EcommerceServiceProvider extends ServiceProvider
                     'icon'        => 'fa fa-shopping-bag',
                     'url'         => route('orders.index'),
                     'permissions' => ['orders.index'],
+                ])->registerItem([
+                    'id'          => 'cms-plugins-ecommerce-order-import',
+                    'priority'    => 1,
+                    'parent_id'   => 'cms-plugins-ecommerce',
+                    'name'        => 'Order Import',
+                    'icon'        => 'fa fa-file-import',
+                    'url'         => route('orders.import'),
+                    'permissions' => ['orders.import'],
                 ])
                 ->registerItem([
                     'id'          => 'cms-plugins-ecommerce-incomplete-order',

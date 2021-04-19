@@ -98,8 +98,9 @@ class importCategories extends Command
             DB::table('printdesigns')->insert($data);
         }*/
 
-        /*$file = public_path('designer_cat_count.xlsx');
-        Excel::import(new DesignerCatCount(), $file);*/
+        $file = public_path('designer_cat_count.xlsx');
+        Excel::import(new DesignerCatCount(), $file);
+        echo 'success';
 
     }
 }

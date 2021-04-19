@@ -20,7 +20,7 @@ class CategorysizesForm extends FormAbstract
             ->setValidatorClass(CategorysizesRequest::class)
             ->withCustomFields()
             ->add('name', 'text', [
-                'label'      => trans('core/base::forms.name'),
+                'label'      => trans('core/base::forms.name') . 'Formatting {Text - Number (Test - 2))}',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => trans('core/base::forms.name_placeholder'),

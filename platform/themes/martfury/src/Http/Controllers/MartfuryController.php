@@ -235,7 +235,6 @@ class MartfuryController extends PublicController
         if (!$request->ajax()) {
             abort(404);
         }
-
         $product = get_products([
             'condition' => [
                 'ec_products.id'     => $id,
@@ -249,11 +248,9 @@ class MartfuryController extends PublicController
                 'tags.slugable',
             ],
         ]);
-
         if (!$product) {
             abort(404);
         }
-
         return $response->setData(Theme::partial('quick-view', compact('product')));
     }
 

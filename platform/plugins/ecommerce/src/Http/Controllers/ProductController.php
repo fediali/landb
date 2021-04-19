@@ -914,7 +914,6 @@ class ProductController extends BaseController
                 false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
-
             foreach ($availableProduct->variations as &$variation) {
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
@@ -924,7 +923,6 @@ class ProductController extends BaseController
                 }
             }
         }
-
         return $response->setData($availableProducts);
     }
 

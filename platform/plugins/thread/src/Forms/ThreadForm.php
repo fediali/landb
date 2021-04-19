@@ -50,7 +50,7 @@ class ThreadForm extends FormAbstract
             ->setupModel(new Thread)
             ->setValidatorClass(ThreadRequest::class)
             ->withCustomFields()
-            ->setFormOption('enctype','multipart/form-data')
+            ->setFormOption('enctype', 'multipart/form-data')
             ->add('name', 'text', [
                 'label'      => 'Description',
                 'label_attr' => ['class' => 'control-label required'],
@@ -63,8 +63,8 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Designer',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Designer',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Designer',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => $designers,
             ])
@@ -72,8 +72,8 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Vendor',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Select Vendor',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Vendor',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => $vendors,
             ])
@@ -81,67 +81,67 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Season',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Season',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Season',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => $seasons,
             ])
             ->add('regular_category_id', 'customSelect', [
-                'label'      => 'Select Regular Pack Category',
-                'label_attr' => ['class' => 'control-label required'],
-                'attr'       => [
-                    'placeholder'  => 'Select Regular Category',
-                    'class' => 'select-search-full',
+                'label'         => 'Select Regular Pack Category',
+                'label_attr'    => ['class' => 'control-label required'],
+                'attr'          => [
+                    'placeholder' => 'Select Regular Category',
+                    'class'       => 'select-search-full',
                     //'multiple' => 'multiple'
                 ],
-                'choices'    => $regular_categories,
-                'default_value'      => old('regular_category_id', $selectedRegCat),
+                'choices'       => $regular_categories,
+                'default_value' => old('regular_category_id', $selectedRegCat),
             ])
             ->add('regular_product_unit_id', 'customSelect', [
-                'label'      => 'Select Per Piece Making Product Unit (Reg)',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Select Product Unit (Reg)',
-                    'class' => 'select-search-full',
+                'label'         => 'Select Per Piece Making Product Unit (Reg)',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Select Product Unit (Reg)',
+                    'class'       => 'select-search-full',
                 ],
-                'choices'    => $product_units,
+                'choices'       => $product_units,
                 'default_value' => old('regular_product_unit_id', $selRegProdUnit)
             ])
             ->add('regular_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Making Qty (Reg)',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Per Piece Qty (Reg)',
-                    'steps' => 0.1,
+                'label'         => 'Per Piece Making Qty (Reg)',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Per Piece Qty (Reg)',
+                    'steps'       => 0.1,
                 ],
                 'default_value' => old('regular_per_piece_qty', $selRegPPQty)
             ])
             ->add('plus_category_id', 'customSelect', [
-                'label'      => 'Select Plus Pack Category',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Select Plus Category',
-                    'class' => 'select-search-full',
+                'label'         => 'Select Plus Pack Category',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Select Plus Category',
+                    'class'       => 'select-search-full',
                 ],
-                'choices'    => $plus_categories,
-                'default_value'      => old('plus_category_id', $selectedPluCat),
+                'choices'       => $plus_categories,
+                'default_value' => old('plus_category_id', $selectedPluCat),
             ])
             ->add('plus_product_unit_id', 'customSelect', [
-                'label'      => 'Select Per Piece Making Product Unit (Plus)',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Select Product Unit (Plus)',
-                    'class' => 'select-search-full',
+                'label'         => 'Select Per Piece Making Product Unit (Plus)',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Select Product Unit (Plus)',
+                    'class'       => 'select-search-full',
                 ],
-                'choices'    => $product_units,
+                'choices'       => $product_units,
                 'default_value' => old('regular_product_unit_id', $selPluProdUnit)
             ])
             ->add('plus_per_piece_qty', 'number', [
-                'label'      => 'Per Piece Making Qty (Plus)',
-                'label_attr' => ['class' => 'control-label'],
-                'attr'       => [
-                    'placeholder'  => 'Per Piece Qty (Plus)',
-                    'steps' => 0.1,
+                'label'         => 'Per Piece Making Qty (Plus)',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'placeholder' => 'Per Piece Qty (Plus)',
+                    'steps'       => 0.1,
                 ],
                 'default_value' => old('regular_per_piece_qty', $selPluPPQty)
             ])
@@ -149,8 +149,8 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select PP Sample',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Select PP Sample',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select PP Sample',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => Thread::$statuses,
             ])
@@ -170,14 +170,14 @@ class ThreadForm extends FormAbstract
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
-                'value' => $this->model->pp_sample_date ? date('d M, Y', strtotime($this->model->pp_sample_date)) : now(config('app.timezone'))->format('d M, Y')
+                'value'         => $this->model->pp_sample_date ? date('d M, Y', strtotime($this->model->pp_sample_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('vendor_product_id', 'customSelect', [
                 'label'      => 'Select Vendor Making Product',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Select Vendor Product',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Vendor Product',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => $vendor_products,
             ])
@@ -190,11 +190,10 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Denim Fields',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Denim Fields',
+                    'placeholder' => 'Denim Fields',
                 ],
-                'data' => ['fits'=>$fits,'rises'=>$rises,'fabrics'=>$fabrics,'model'=>$this->model, 'wash' => $wash]
+                'data'       => ['fits' => $fits, 'rises' => $rises, 'fabrics' => $fabrics, 'model' => $this->model, 'wash' => $wash]
             ])
-
             /*->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
@@ -216,8 +215,8 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Thread Status',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Thread Status',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Thread Status',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => Thread::$thread_statuses,
             ])
@@ -225,8 +224,8 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Select Shipping Method',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => 'Select Shipping Method',
-                    'class' => 'select-search-full',
+                    'placeholder' => 'Select Shipping Method',
+                    'class'       => 'select-search-full',
                 ],
                 'choices'    => Thread::$shipping_methods,
             ])
@@ -260,34 +259,49 @@ class ThreadForm extends FormAbstract
                 ],
             ])
             ->add('order_date', 'text', [
-                'label'      => 'Order Date',
-                'label_attr' => ['class' => 'control-label required'],
+                'label'         => 'Order Date',
+                'label_attr'    => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
-                'value' => $this->model->order_date ? date('d M, Y', strtotime($this->model->order_date)) : now(config('app.timezone'))->format('d M, Y')
+                'value'         => $this->model->order_date ? date('d M, Y', strtotime($this->model->order_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('ship_date', 'text', [
-                'label'      => 'Ship Date',
-                'label_attr' => ['class' => 'control-label required'],
+                'label'         => 'Ship Date',
+                'label_attr'    => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
-                'value' => $this->model->ship_date ? date('d M, Y', strtotime($this->model->ship_date)) : now(config('app.timezone'))->format('d M, Y')
+                'value'         => $this->model->ship_date ? date('d M, Y', strtotime($this->model->ship_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('cancel_date', 'text', [
-                'label'      => 'No later than',
-                'label_attr' => ['class' => 'control-label required'],
+                'label'         => 'No later than',
+                'label_attr'    => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
                     'data-date-format' => 'd M, yyyy',
                 ],
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
-                'value' => $this->model->cancel_date ? date('d M, Y', strtotime($this->model->cancel_date)) : now(config('app.timezone'))->format('d M, Y')
+                'value'         => $this->model->cancel_date ? date('d M, Y', strtotime($this->model->cancel_date)) : now(config('app.timezone'))->format('d M, Y')
+            ])
+            ->add('reg_sku', 'text', [
+                'label'      => 'Regular SKU (For Previous Tech Pack)',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'form-control',
+                    'id'    => 'sku-alert',
+                ]
+            ])->add('plus_sku', 'text', [
+                'label'      => 'Plus SKU (For Previous Tech Pack)',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'form-control',
+                    'id'    => 'sku-alert',
+                ]
             ])
             /*->add('spec_file', 'mediaImage', [
                 'label'      => 'Tech Spec File',

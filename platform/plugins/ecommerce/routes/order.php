@@ -11,6 +11,17 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.destroy',
             ]);
 
+            Route::get('import', [
+                'as'         => 'import',
+                'uses'       => 'OrderController@import',
+                'permission' => 'orders.import',
+            ]);
+            Route::post('import-order', [
+                'as'         => 'import-order',
+                'uses'       => 'OrderController@importOrder',
+                'permission' => 'orders.import',
+            ]);
+
             Route::get('reorder', [
                 'as'         => 'reorder',
                 'uses'       => 'OrderController@getReorder',
