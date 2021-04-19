@@ -104,7 +104,7 @@ class ProductTable extends TableAbstract
                 $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                     $packQty = Product::where('id', $getPackId)->value('online_sales_qty');
-                } elseif(@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                     $packQty = Product::where('id', $getPackId)->value('in_person_sales_qty');
                 } else {
                     $packQty = Product::where('id', $getPackId)->value('quantity');
@@ -115,7 +115,7 @@ class ProductTable extends TableAbstract
                 $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('online_sales_qty');
-                } elseif(@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('in_person_sales_qty');
                 } else {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
@@ -125,7 +125,9 @@ class ProductTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-              $html= '<a href="'.route('products.inventory_history', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
+                $html = '<a href="' . route('products.inventory_history', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
+                $html .= '<a href="#" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Quantity Allotment"><i class="fa fa-list-alt"></i></a>';
+
                 return $this->getOperations('products.edit', 'products.destroy', $item, $html);
             })
             ->escapeColumns([])
@@ -177,18 +179,18 @@ class ProductTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'         => [
+            'id'           => [
                 'name'  => 'ec_products.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'image'      => [
+            'image'        => [
                 'name'  => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'name'       => [
+            'name'         => [
                 'name'  => 'ec_products.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
@@ -198,17 +200,17 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
-            'sku'        => [
+            'sku'          => [
                 'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
-            'quantity'    => [
+            'quantity'     => [
                 'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'single_qty'  => [
+            'single_qty'   => [
                 'name'  => 'ec_products.single_qty',
                 'title' => 'Single Qty',
                 'class' => 'text-left',
@@ -224,13 +226,13 @@ class ProductTable extends TableAbstract
                 'width' => '50px',
                 'class' => 'text-center',
             ],*/
-            'created_at' => [
+            'created_at'   => [
                 'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'status'     => [
+            'status'       => [
                 'name'  => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
