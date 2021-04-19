@@ -40,6 +40,8 @@ class Product extends BaseModel
         'sku',
         'order',
         'quantity',
+        'in_person_sales_qty',
+        'online_sales_qty',
         'allow_checkout_when_out_of_stock',
         'with_storehouse_management',
         'is_featured',
@@ -127,6 +129,16 @@ class Product extends BaseModel
             ProductCategory::class,
             'ec_product_category_product',
             'product_id',
+            'category_id'
+        );
+    }
+    /**
+     * @return BelongsToMany
+     */
+    public function category()
+    {
+        return $this->belongsTo(
+            ProductCategory::class,
             'category_id'
         );
     }

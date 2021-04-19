@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Raleway", sans-serif;
+    overflow-x: hidden;
 }
 
 h1,
@@ -853,6 +854,15 @@ a.lookbook_btn:hover:after {
     height: 116px;
 }
 
+
+/* .imgsize5 {
+    width: 408px;
+    height: 417px;
+    transform: translate(0px, 340px) scale(3.5);
+    transition: all 1s;
+    z-index: 10000;
+} */
+
 .imgsize5 {
     width: 408px;
     height: 417px;
@@ -1599,7 +1609,7 @@ section.parallax_video video {
 }
 
 .qty {
-    width: 110px;
+    width: 50%;
     height: 45px;
     text-align: center;
     border: none;
@@ -1630,10 +1640,37 @@ input.qtyminus {
     font-size: 16px;
     border: none;
     padding: 12px;
+    border-radius: 0px !important;
     line-height: 19px;
     text-align: center;
     color: #FFFFFF;
     background-color: #000000;
+}
+
+.cart-btn:hover {
+    color: #000000;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+.border-btn {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    border: none;
+    padding: 12px;
+    border-radius: 0px !important;
+    line-height: 19px;
+    text-align: center;
+    color: #000000;
+    border: 1px solid #000;
+}
+
+.border-btn:hover {
+    color: #fff;
+    border: 1px solid #000;
+    background: #000;
 }
 
 .front-img {
@@ -1826,12 +1863,68 @@ input.qtyminus {
     transform: rotate(45deg);
 }
 
+@media screen and (min-width: 992px) and (max-width: 2200px) {
+    .mt-w {
+        margin-top: 45px;
+    }
+    .modal-quickview {
+        max-width: 1024px !important;
+    }
+    .quick-full,
+    .quick-full img {
+        width: 80% !important;
+    }
+}
+
 @media screen and (min-width: 320px) and (max-width: 991px) {
     .review-img {
         border-radius: 30px;
         width: 40%;
         margin: auto;
         display: block;
+    }
+    .gallery .full,
+    .gallery .full img {
+        width: 70% !important;
+    }
+    .mbtb-pl-1 {
+        padding-left: .25rem!important;
+    }
+    .mbtb-pr-1 {
+        padding-right: .25rem!important;
+    }
+    .mbtb-pl-2 {
+        padding-left: 1.35rem!important;
+    }
+    .mbtb-pr-2 {
+        padding-right: 1.35rem!important;
+    }
+    .d-mbtb-none {
+        display: none !important;
+    }
+    .m-w-100 {
+        width: 100% !important;
+    }
+    .banner-lbbg1 {
+        height: auto !important;
+    }
+    .m-p-0 {
+        padding: 0px !important;
+    }
+    .circular1 {
+        right: 170px !important;
+        top: 0px !important;
+    }
+    .circular2 {
+        right: 170px !important;
+        top: 0px !important;
+    }
+    .mb-txt-center {
+        text-align: center !important;
+    }
+    .gallery .quick-full,
+    .gallery .quick-full img {
+        width: 60% !important;
     }
 }
 
@@ -1840,3 +1933,805 @@ input.qtyminus {
 
 
 /*# sourceMappingURL=style.css.map */
+
+
+/* FANCYBOX */
+
+.gallery {}
+
+.gallery .previews,
+.gallery .full,
+.gallery .desc {
+    float: left;
+    margin-right: 10px;
+}
+
+.gallery .desc,
+.gallery .full {
+    width: 400px;
+    font-size: 12px;
+}
+
+.gallery .desc h2 {
+    margin-top: 0;
+}
+
+.gallery .previews a {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.gallery .full,
+.gallery .full img {
+    width: 85%;
+}
+
+.gallery .previews a,
+.gallery .full {
+    border: 2px solid #eee;
+}
+
+.gallery .previews a:hover,
+.gallery .previews a.selected {
+    border: 2px solid #777;
+}
+
+.gallery .full img:hover {
+    cursor: pointer;
+}
+
+.clearfix:after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+
+/* FANCYBOX */
+
+
+/* CART CSS */
+
+.cart-coupon-input {
+    background: #FFFFFF;
+    border: 1.19979px solid #B4B4B4;
+    box-sizing: border-box;
+    padding: 8.5px;
+    width: 100%;
+}
+
+.coupon-txt {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+}
+
+.total-area {
+    background: #F3F2F5;
+    padding: 30px;
+}
+
+.total-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15.5973px;
+    line-height: 18px;
+    color: #000000;
+}
+
+.total-para {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16.7971px;
+    line-height: 20px;
+    color: #000000;
+}
+
+.final-total-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+    color: #000000;
+}
+
+.final-total-para {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 26px;
+    color: #000000;
+}
+
+.cart-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19.1966px;
+    line-height: 23px;
+    color: #000000;
+}
+
+.cart-product-name {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.cart-product-code {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    color: #333333;
+}
+
+.cart-product-size {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    color: #4F4F4F;
+}
+
+
+/* CART CSS */
+
+
+/* PROFILE CSS */
+
+.profile-light-txt {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #909DA8;
+}
+
+.textbox-label {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13.8584px;
+    line-height: 16px;
+    color: #000000;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.input-textbox {
+    background: #F9F9F9;
+    border: 1.47215px solid #EBEBEB;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 7px;
+}
+
+.refer-area {
+    background: #F9F9F9;
+    padding: 30px;
+    margin-top: 115px;
+}
+
+.refer-link-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+    color: #909DA8;
+}
+
+.refer-link-para {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 136.4%;
+    color: #000000;
+}
+
+.textbox-refer {
+    background-color: #fff;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.label-setdefault {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #909DA8;
+}
+
+.shipping-checkbox-area {
+    border: 2px solid #D9D9D9;
+    padding: 15px;
+}
+
+.refer-icon {
+    width: 20px;
+}
+
+
+/* .Resources {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #909DA8;
+} */
+
+input[type="radio"] {
+    /* remove standard background appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* create custom radiobutton appearance */
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    padding: 2px;
+    margin-top: 4px;
+    margin-right: 4px;
+    /* background-color only for content */
+    background-clip: content-box;
+    border: 2px solid #bbbbbb;
+    background-color: #e7e6e7;
+    border-radius: 50%;
+}
+
+.texas-heading {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+    color: #000000;
+}
+
+.bg-white {
+    background-color: #fff !important;
+}
+
+.tax-address {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16.4889px;
+    line-height: 18px;
+    color: #000000;
+}
+
+.tax-label {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13.8584px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.tax-checkbox-label {
+    color: #909DA8 !important;
+}
+
+.cert-label {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+}
+
+
+/* appearance for checked radiobutton */
+
+input[type="radio"]:checked {
+    background-color: #000;
+}
+
+:focus {
+    outline: none !important;
+}
+
+
+/* PROFILE CSS */
+
+
+/* CHECKOUT CSS */
+
+.cout-note {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.cout-note-para {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    color: #000000;
+}
+
+.note-product {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16.7708px;
+    line-height: 20px;
+    color: #000000;
+}
+
+.note-product-name {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19px;
+    color: #363636;
+}
+
+.note-product-price {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14.8542px;
+    line-height: 19px;
+    color: #727272;
+}
+
+.note-product-size {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11.6128px;
+    line-height: 18px;
+    color: #AEAEAE;
+}
+
+
+/* CHECKOUT CSS */
+
+
+/* STORE LOCATOR CSS */
+
+.store-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 38px;
+    color: #000000;
+}
+
+form.example input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid #CDCDCD;
+    border-right: none;
+    float: left;
+    width: 80%;
+    background: #fff;
+}
+
+form.example button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    color: #CDCDCD;
+    font-size: 17px;
+    border-left: none !important;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #CDCDCD;
+}
+
+.search-store {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13.8584px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.result-area {
+    height: 400px;
+    overflow-y: scroll;
+}
+
+
+/* STORE LOCATOR CSS */
+
+
+/* LOOKBOOK CSS */
+
+.banner-lbbg1 {
+    background-image: url(../img/lb-bg1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 750px;
+}
+
+.mt-100 {
+    margin-top: 100px !important;
+}
+
+.mb-50 {
+    margin-bottom: 50px !important;
+}
+
+.vector2 {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+}
+
+.vector1 {
+    position: absolute;
+    left: 0;
+    bottom: 400px;
+}
+
+.collection_effort_img {
+    margin-left: 0px !important;
+}
+
+.collection_effort_img .overlap {
+    top: 245px !important;
+    right: -165px !important;
+}
+
+.banner-lbbg2 {
+    background-image: url(../img/lb-bg1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 1700px;
+}
+
+.circcontainer {
+    /*centers in the container*/
+    text-align: center;
+}
+
+div.circTxt {
+    /*allows for centering*/
+    display: inline-block;
+    /*adjust as needed*/
+    margin-bottom: 128px;
+    color: black;
+}
+
+div.circTxt p {
+    font-size: 3.5rem;
+    font-family: Saol Display;
+    font-weight: normal;
+}
+
+div.circTxt2 p {
+    font-size: 3.5rem;
+    font-family: Saol Display;
+    font-weight: normal;
+}
+
+.circular1 {
+    position: absolute;
+    right: 400px;
+    top: 200px;
+}
+
+.circular2 {
+    position: absolute;
+    right: 400px;
+    top: 200px;
+}
+
+.zoomout {
+    transform: none;
+    transition: all 1s;
+}
+
+
+/* LOOKBOOK CSS */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #EDEDED;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #CDCDCD;
+    border-radius: 20px;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+/* Animation Scroll Start */
+
+HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
+    opacity: 0;
+}
+
+
+/* Grid almost fully pulled from https://www.rino-pelle.com/ */
+
+.grid-container {
+    width: 100vw;
+    height: 190vh;
+    MARGIN-TOP: 200PX;
+    position: relative;
+}
+
+.grid {
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 70vw;
+    height: 60vw;
+    margin: 0 calc(100vw / 20 * 3);
+    position: absolute;
+}
+
+@media only screen and (max-width: 580px) {
+    .grid {
+        margin: 0;
+        width: 100vw;
+        height: 89.444vw;
+    }
+}
+
+.gridBlock {
+    background-size: cover;
+    background-color: darkgray;
+}
+
+.gridLayer {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    will-change: transform;
+    transform-origin: 44.951% 50%;
+}
+
+.gridLayer:nth-child(1) .gridBlock {
+    top: 5vw;
+    left: 20vw;
+    width: 10vw;
+    height: 10vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(1) .gridBlock {
+        top: 11.111vw;
+        left: 23.889vw;
+        width: 15vw;
+        height: 15vw;
+    }
+}
+
+.gridLayer:nth-child(2) .gridBlock {
+    top: 0;
+    left: 32.5vw;
+    width: 15vw;
+    height: 15vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(2) .gridBlock {
+        top: 0;
+        left: 43.333vw;
+        width: 26.389vw;
+        height: 26.389vw;
+    }
+}
+
+.gridLayer:nth-child(3) .gridBlock {
+    left: 0;
+    top: 25vw;
+    width: 15vw;
+    height: 15vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(3) .gridBlock {
+        top: 30.278vw;
+        left: 0;
+        width: 26.389vw;
+        height: 26.389vw;
+    }
+}
+
+.gridLayer:nth-child(4) .gridBlock {
+    top: 17.5vw;
+    left: 17.5vw;
+    width: 30vw;
+    height: 30vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(4) .gridBlock {
+        top: 30.278vw;
+        left: 30.278vw;
+        width: 39.444vw;
+        height: 39.444vw;
+    }
+}
+
+.gridLayer:nth-child(5) {
+    z-index: 1;
+}
+
+.gridLayer:nth-child(5) .gridBlock {
+    top: 20vw;
+    left: 50vw;
+    width: 5vw;
+    height: 5vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(5) .gridBlock {
+        top: 23.889vw;
+        left: 73.889vw;
+        width: 15.278vw;
+        height: 15.278vw;
+    }
+}
+
+.gridLayer:nth-child(5) a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gridLayer:nth-child(5) svg {
+    width: 1.75vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(5) svg {
+        width: 4.722vw;
+    }
+}
+
+.gridLayer:nth-child(6) .gridBlock {
+    left: 50vw;
+    top: 27.5vw;
+    width: 20vw;
+    height: 20vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(6) .gridBlock {
+        top: 43.889vw;
+        left: 73.889vw;
+        width: 26.389vw;
+        height: 26.389vw;
+    }
+}
+
+.gridLayer:nth-child(7) .gridBlock {
+    left: 10vw;
+    top: 42.5vw;
+    width: 5vw;
+    height: 5vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(7) .gridBlock {
+        display: none;
+    }
+}
+
+.gridLayer:nth-child(8) .gridBlock {
+    bottom: 5vw;
+    left: 42.5vw;
+    width: 5vw;
+    height: 5vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(8) .gridBlock {
+        display: none;
+    }
+}
+
+.gridLayer:nth-child(9) .gridBlock {
+    bottom: 0;
+    left: 50vw;
+    width: 10vw;
+    height: 10vw;
+}
+
+@media only screen and (max-width: 580px) {
+    .gridLayer:nth-child(9) .gridBlock {
+        top: 73.889vw;
+        left: 58.889vw;
+        width: 15.278vw;
+        height: 15.278vw;
+    }
+}
+
+.gridBlock {
+    display: block;
+    position: absolute;
+}
+
+
+/* Animation Scroll End */
+
+
+/* LOGIN CSS START */
+
+.signin-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 21px;
+    color: #000000;
+}
+
+.color-black {
+    color: #000000 !important;
+}
+
+.fa-trash {
+    font-size: 26px;
+    margin-top: 6px;
+    color: #000;
+}
+
+
+/* LOGIN CSS END */

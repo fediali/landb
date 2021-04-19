@@ -40,6 +40,7 @@ class Role extends BaseModel
         'is_default',
         'created_by',
         'updated_by',
+        'qty_allotment_percentage'
     ];
 
     /**
@@ -48,6 +49,9 @@ class Role extends BaseModel
     protected $casts = [
         'permissions' => 'json',
     ];
+
+    const ONLINE_SALES = 'online-sales';
+    const IN_PERSON_SALES = 'inperson-sales';
 
     /**
      * @param string $value

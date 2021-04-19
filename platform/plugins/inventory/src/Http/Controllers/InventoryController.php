@@ -4,8 +4,11 @@ namespace Botble\Inventory\Http\Controllers;
 
 use App\Models\InventoryHistory;
 use App\Models\InventoryProducts;
+use App\Models\QtyAllotmentHistory;
+use Botble\ACL\Models\Role;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Inventory\Http\Requests\InventoryRequest;
 use Botble\Inventory\Models\Inventory;
 use Botble\Inventory\Repositories\Interfaces\InventoryInterface;
@@ -241,26 +244,55 @@ class InventoryController extends BaseController
     {
         $error = null;
         $inventory = Inventory::with('products')->where('id', $id)->first();
-        if ($inventory && $inventory->status == 'published') {
+        if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
                     $product = Product::where('sku', $inv_product->sku)->where('is_variation', 1)->first();
                     if ($product) {
-                        $old_stock = $product->quantity;
-                        $product->quantity = $product->quantity + $inv_product->received_qty;
-                        $product->with_storehouse_management = 1;
-                        if ($product->save()) {
+                        if ($inv_product->is_released) {
+                            $error = 'some products already released in this inventory!';
+                        } else {
 
-                            InventoryHistory::create([
-                                'product_id' => $product->id,
-                                'quantity' => $inv_product->received_qty,
-                                'new_stock' => $product->quantity,
-                                'old_stock' => $old_stock,
-                                'created_by' => Auth::user()->id,
-                                'inventory_id' => $inventory->id,
-                                'reference' => 'inventory.push_to_ecommerce'
-                            ]);
+                            $old_stock = $product->quantity;
+                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->with_storehouse_management = 1;
 
+                            $qtyOS = 0;
+                            $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
+                            if ($getOSPercentage) {
+                                $getOSPercentage = $getOSPercentage/100;
+                                $qtyOS = round($getOSPercentage * $inv_product->received_qty);
+                                $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
+                            }
+
+                            $qtyIS = 0;
+                            $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
+                            if ($getISPercentage) {
+                                $getISPercentage = $getISPercentage/100;
+                                $qtyIS = round($getISPercentage * $inv_product->received_qty);
+                                $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
+                            }
+
+                            if ($product->save()) {
+
+                                InventoryHistory::create([
+                                    'product_id' => $product->id,
+                                    'quantity' => $inv_product->received_qty,
+                                    'new_stock' => $product->quantity,
+                                    'old_stock' => $old_stock,
+                                    'created_by' => Auth::user()->id,
+                                    'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                                QtyAllotmentHistory::create([
+                                    'product_id' => $product->id,
+                                    'online_sales_qty' => $qtyOS,
+                                    'in_person_sales_qty' => $qtyIS,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                            }
                         }
                     } else {
                         $error = 'Some of the inventory products does not exists';
@@ -270,7 +302,7 @@ class InventoryController extends BaseController
                 $error = 'Inventory have no products';
             }
         } else {
-            $error = 'Invalid inventory or Inventory is not published';
+            $error = 'Invalid inventory or Inventory is not published or Already Released';
         }
 
         if (!is_null($error)) {
@@ -279,6 +311,89 @@ class InventoryController extends BaseController
         } else {
             return $response->setPreviousUrl(route('inventory.index'))
                 ->setMessage('Inventory has been pushed into ecommerce successfully');
+        }
+    }
+
+    public function releaseProduct($inv_id, $prod_id, BaseHttpResponse $response)
+    {
+        $error = null;
+
+        $getProdIds = ProductVariation::where('configurable_product_id', $prod_id)->pluck('product_id')->all();
+        $getProdIds[] = (int) $prod_id;
+
+        $inventory = Inventory::with([
+            'products' => function($q) use($getProdIds) {
+                $q->whereIn('product_id', $getProdIds);
+            }
+            ])
+            ->where('id', $inv_id)
+            ->first();
+
+        if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
+            if (count($inventory->products)) {
+                foreach ($inventory->products as $inv_product) {
+                    $product = Product::where('sku', $inv_product->sku)/*->where('is_variation', 1)*/->first();
+                    if ($product) {
+                        if ($inv_product->is_released) {
+                            $error = 'some products already released in this inventory!';
+                        } else {
+
+                            $old_stock = $product->quantity;
+                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->with_storehouse_management = 1;
+
+                            $qtyOS = 0;
+                            $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
+                            if ($getOSPercentage) {
+                                $getOSPercentage = $getOSPercentage/100;
+                                $qtyOS = round($getOSPercentage * $inv_product->received_qty);
+                                $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
+                            }
+
+                            $qtyIS = 0;
+                            $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
+                            if ($getISPercentage) {
+                                $getISPercentage = $getISPercentage/100;
+                                $qtyIS = round($getISPercentage * $inv_product->received_qty);
+                                $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
+                            }
+
+                            if ($product->save()) {
+
+                                InventoryHistory::create([
+                                    'product_id' => $product->id,
+                                    'quantity' => $inv_product->received_qty,
+                                    'new_stock' => $product->quantity,
+                                    'old_stock' => $old_stock,
+                                    'created_by' => Auth::user()->id,
+                                    'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                                QtyAllotmentHistory::create([
+                                    'product_id' => $product->id,
+                                    'online_sales_qty' => $qtyOS,
+                                    'in_person_sales_qty' => $qtyIS,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                            }
+                        }
+                    } else {
+                        $error = 'product does not exists';
+                    }
+                }
+            } else {
+                $error = 'Inventory have no products';
+            }
+        } else {
+            $error = 'Invalid inventory or Inventory is not published or Already Released';
+        }
+
+        if (!is_null($error)) {
+            return $response->setPreviousUrl(back())->setError($error);
+        } else {
+            return $response->setPreviousUrl(back())->setMessage('Inventory has been pushed into e-commerce successfully');
         }
     }
 }

@@ -107,3 +107,72 @@ gsap.utils.toArray("section").forEach((elem) => {
         })
         .from(elem, { y: 50, duration: 1, ease: 'none' })
 });
+
+
+$(document).ready(function () {
+  $(document).on('submit', 'form.add_to_cart_form', function (e) {
+    e.preventDefault();
+    var formData = {
+        '_token': $('meta[name="csrf-token"]').attr('content'),
+        'product_id': $(this).data('id'),
+        'quantity': $(this).find('input[name="quantity"]').val(),
+    };
+    console.log(formData);
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('action'),
+      data: formData,
+      beforeSend: function () {
+        toggle_loader(true);
+      },
+      success: function (result) {
+        toggle_loader(false);
+      },
+      error: function (result) {
+        toggle_loader(false);
+      }
+    })
+  });
+  $(document).on('click', 'a.add-to-wishlist', function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'GET',
+      url: $(this).attr('href'),
+      beforeSend: function () {
+        toggle_loader(true);
+      },
+      success: function (result) {
+        toggle_loader(false);
+      },
+      error: function (result) {
+        toggle_loader(false);
+      }
+    })
+  });
+});
+
+function update_cart_item(id, val, url) {
+  var formData = {
+    '_token': $('meta[name="csrf-token"]').attr('content'),
+    'id': id,
+    'quantity': val,
+  };
+  console.log(formData)
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data: formData,
+    beforeSend: function () {
+      toggle_loader(true);
+    },
+    success: function (result) {
+      if(val == 0){
+        $('.cartitem-'+id).remove();
+      }
+      toggle_loader(false);
+    },
+    error: function (result) {
+      toggle_loader(false);
+    }
+  })
+}

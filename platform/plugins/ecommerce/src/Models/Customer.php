@@ -6,6 +6,7 @@ use Botble\Base\Supports\Avatar;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use RvMedia;
@@ -16,6 +17,7 @@ use RvMedia;
 class Customer extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * @var string

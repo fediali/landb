@@ -341,6 +341,19 @@ if (!function_exists('get_category_sizes')) {
     }
 }
 
+if (!function_exists('get_category_sizes_by_id')) {
+    function get_category_sizes_by_id($id = null)
+    {
+      if(!is_null($id)){
+        $get = ProductCategory::with('category_sizes')->find($id);
+        return $get;
+      }else{
+        return null;
+      }
+
+    }
+}
+
 if (!function_exists('get_product_units')) {
     function get_product_units()
     {
@@ -455,9 +468,11 @@ if (!function_exists('quantity_calculate')) {
         $category = ProductCategory::where('id', $id)->first();
         $totalQuantity = 0;
         foreach ($category->category_sizes as $cat) {
+
             $quan = substr($cat->name, strpos($cat->name, "-") + 1);
             $totalQuantity += $quan;
         }
+
         return $totalQuantity;
     }
 }
@@ -619,10 +634,19 @@ if (!function_exists('notify_users')) {
                     }
 
 
-
                 }
             }
         }
+    }
+}
+
+if (!function_exists('create_customer')) {
+    function create_customer($data)
+    {
+
+        $customer = DB::table('ec_customers')->insert($data);
+        dd('s', $customer);
+        return $customer;
     }
 }
 //Utils

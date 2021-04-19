@@ -72,6 +72,16 @@ class ProfileForm extends FormAbstract
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
                 ],
             ])
+            ->add('commission_percentage', 'number', [
+                'label'      => 'Commission(%)',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Commission(%)'
+                ],
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
+            ])
             ->add('other_emails', 'textarea', [
                 'label'      => 'Other Emails (separated by coma(,) )',
                 'label_attr' => ['class' => 'control-label'],
@@ -83,6 +93,14 @@ class ProfileForm extends FormAbstract
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
                 ],
                 'default_value' => implode(',', $other_emails)
+            ])
+            ->add('is_allow_qty_share', 'onOff', [
+                'label'         => 'Allow Qty Share ?',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
             ])
             ->setActionButtons(view('core/acl::users.profile.actions')->render());
     }

@@ -34,6 +34,8 @@ class Inventory extends BaseModel
         'released_by'
     ];
 
+    protected $appends = ['is_full_released'];
+
     /**
      * @var array
      */
@@ -41,7 +43,19 @@ class Inventory extends BaseModel
         'status' => BaseStatusEnum::class,
     ];
 
-    public function products(){
-      return $this->hasMany(InventoryProducts::class, 'inventory_id');
+    public function products()
+    {
+        return $this->hasMany(InventoryProducts::class, 'inventory_id');
     }
+
+    public function getIsFullReleasedAttribute()
+    {
+        foreach ($this->products as $product) {
+            if (!$product->is_released) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
