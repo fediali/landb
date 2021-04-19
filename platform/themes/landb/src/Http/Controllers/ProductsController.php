@@ -12,6 +12,7 @@ use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Theme\Landb\Repositories\ProductsRepository;
 use Response;
 use SeoHelper;
@@ -20,7 +21,7 @@ use SlugHelper;
 use Theme;
 /*use Botble\Theme\Http\Controllers\PublicController;*/
 
-class LandbController extends Controller
+class ProductsController extends Controller
 {
   private $productRepo;
 
@@ -30,10 +31,17 @@ class LandbController extends Controller
 
   public function getIndex(){
     $data = [
-        'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 20, 'array' => true]),
-        'latest_collection'=> $this->productRepo->getProductsByParams(['latest' => true, 'limit' => 20, 'array' => true]),
+        'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true])
     ];
-    //dd($data['latest_collection']);
-   return Theme::scope('index', $data)->render();
+    //dd($data['products']);
+    return Theme::scope('products', $data)->render();
+  }
+
+  public  function getDetails($id){
+    $data = [
+        'product' => $this->productRepo->getProductsByParams(['first' => true, 'id' => $id, 'category' => true])
+    ];
+    //dd($data['product']);
+    return Theme::scope('product', $data)->render();
   }
 }
