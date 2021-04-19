@@ -6,12 +6,14 @@ use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Enums\ShippingMethodEnum;
+use Botble\Ecommerce\Repositories\Interfaces\OrderImport;
 use Botble\Ecommerce\Repositories\Interfaces\ShipmentInterface;
 use Botble\Payment\Models\Payment;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use OrderHelper;
 
 class Order extends BaseModel
@@ -173,5 +175,10 @@ class Order extends BaseModel
     function canBeCanceled()
     {
         return in_array($this->status, [OrderStatusEnum::PENDING, OrderStatusEnum::PROCESSING]);
+    }
+
+    public function import()
+    {
+        return $this->hasMany(\App\Models\OrderImport::class, 'order_id');
     }
 }

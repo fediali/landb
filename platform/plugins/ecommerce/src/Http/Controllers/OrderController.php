@@ -17,6 +17,12 @@ use Botble\Ecommerce\Http\Requests\CreateOrderRequest;
 use Botble\Ecommerce\Http\Requests\CreateShipmentRequest;
 use Botble\Ecommerce\Http\Requests\RefundRequest;
 use Botble\Ecommerce\Http\Requests\UpdateOrderRequest;
+use Botble\Ecommerce\Models\Address;
+use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderAddressInterface;
@@ -38,9 +44,11 @@ use EmailHandler;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1048,19 +1056,114 @@ class OrderController extends BaseController
 
     public function importOrder(Request $request)
     {
+
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
+            $order = Excel::toCollection(new orderImport, $move);
+            if ($request->market_place == Order::LASHOWROOM) {
+                foreach ($order as $od) {
+                    foreach ($od as $row) {
+                        $customer = Customer::where(['phone' => $row['phone_number']])->first();
+                        if ($customer == null) {
+                            //creating Customer
+                            $email =
+                            $data['name'] = $row['business_contact_name'];
+                            $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
+                            $data['phone'] = $row['phone_number'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
 
-//            $file = public_path('16185173136.csv');
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['business_company_name'];
+                            $detail['type'] = Order::LASHOWROOM;
 
-            $order = Excel::import(new orderImport, $move);
-            dd('ss', $order);
+                            CustomerDetail::create($detail);
+
+                            //creating address
+                            $baddress['address'] = $row['billing_address'];
+                            $baddress['city'] = $row['billing_city'];
+                            $baddress['state'] = $row['billing_state'];
+                            $baddress['zip_code'] = $row['billing_zip_code'];
+                            $baddress['customer_id'] = $customer['id'];
+                            $baddress['phone'] = $row['phone_number'];
+                            $baddress['country'] = $row['billing_county'];
+                            $baddress['name'] = $row['business_contact_name'];
+
+                            $billing = Address::create($baddress);
+
+                            $saddress['address'] = $row['shipping_address'];
+                            $saddress['city'] = $row['shipping_city'];
+                            $saddress['state'] = $row['shipping_state'];
+                            $saddress['zip_code'] = $row['shipping_zip_code'];
+                            $saddress['country'] = $row['shipping_country'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['phone_number'];
+                            $saddress['name'] = $row['shipping_contact_name'];
+
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        //Finding Product For Order
+
+                        $product = Product::where('sku', $row['style_no'])->first();
+                        if ($product != null) {
+                        }
+
+                        //count pack quantity for product
+                        $pack = quantityCalculate($product['category_id']);
+
+                        $orderQuantity = $row['original_qty'] / $pack;
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
+
+                        if ($orderPo != null) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = str_replace('$', '', $row['sub_total']);
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['original_amount']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = str_replace('$', '', $row['sub_total']);
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['po'];
+                                    $orderInfo['order_date'] = $row['order_date'];
+                                    $orderInfo['type'] = Order::LASHOWROOM;
+                                    \App\Models\OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        } else {
+            return 'not supported';
         }
 
 
-        return back();
+        return back()->with([
+            'importOrder' => $importOrder
+        ]);
     }
+
+
 }

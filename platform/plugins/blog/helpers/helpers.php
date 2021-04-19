@@ -630,7 +630,9 @@ if (!function_exists('notify_users')) {
 if (!function_exists('create_customer')) {
     function create_customer($data)
     {
-        $customer = \Botble\Ecommerce\Models\Customer::create($data);
+
+        $customer = DB::table('ec_customers')->insert($data);
+        dd('s', $customer);
         return $customer;
     }
 }
