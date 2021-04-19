@@ -1,5 +1,49 @@
 @extends('core/base::layouts.master')
 @section('content')
+<div class="p-3 bg-white mb-3" >
+    <div class="row">
+                <div class="col-lg-12 mb-3">
+                    <h5 class="order-detail">PROFILE DETAIL </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                <img class="img-circle" src="http://laravel.landbw.co/api/resize/users/user.png?w=100&amp;h=100" alt="User Avatar">
+                </div>
+                <div class="col-lg-10">
+                <div class="row">
+                <div class="col-lg-3">
+                    <p class="m-0 heading">Full Name</p>
+                    <p>Vendor</p>
+                </div>
+                <div class="col-lg-3">
+                    <p class="m-0 heading">Email</p>
+                    <p>Order No.</p>
+                </div>
+                <div class="col-lg-3">
+                    <p class="m-0 heading"> Phone</p>
+                    <p>Regular Pack Category</p>
+                </div>
+                    <div class="col-lg-3">
+                        <p class="m-0 heading"> Country</p>
+                        <p>Plus Pack Category</p>
+                    </div>
+                <div class="col-lg-3">
+                    <p class="m-0 heading">State</p>
+                    <p>Description</p>
+                </div>
+                <div class="col-lg-3">
+                    <p class="m-0 heading"> City</p>
+                    <p>PP Sample</p>
+                </div>
+                <div class="col-lg-3">
+                    <p class="m-0 heading">Address</p>
+                        <p>PP Sample Date</p>
+                </div>
+            </div></div>
+            </div>
+
+    </div>
 <div class="p-3 bg-white" >
     {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
 
@@ -26,7 +70,7 @@
 
         <div class="col-lg-6 mt-2 @if ($errors->has('country')) has-error @endif">
             <label for="country">{{ __('Country') }}:</label>
-            <select name="country" class="form-control" id="country">
+            <select name="country" class="form-control selectpicker select-country" data-live-search="true" id="country">
                 @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
                     <option value="{{ $countryCode }}"
                             @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
@@ -107,7 +151,7 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
+        <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
       <tr>
         <td>John Doe</td>
@@ -117,7 +161,7 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
+        <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
       <tr>
         <td>John Doe</td>
@@ -127,7 +171,7 @@
         <td>Ontario</td>
         <td>Toronto</td>
         <td>Abcd Street</td>
-        <td><a><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
+        <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a> &nbsp; &nbsp;<a><i class="fa fa-trash"></i></a></td>
       </tr>
     </tbody>
   </table></div>
@@ -137,50 +181,86 @@
 
     </div>
 
-    <div class="p-3 bg-white mt-3" >
-    <div class="row">
-                <div class="col-lg-12 mb-3">
-                    <h5 class="order-detail">PROFILE DETAIL </h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-2">
-                <img class="img-circle" src="http://laravel.landbw.co/api/resize/users/user.png?w=100&amp;h=100" alt="User Avatar">
-                </div>
-                <div class="col-lg-10">
-                <div class="row">
-                <div class="col-lg-3">
-                    <p class="m-0 heading">Full Name</p>
-                    <p>Vendor</p>
-                </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading">Email</p>
-                    <p>Order No.</p>
-                </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading"> Phone</p>
-                    <p>Regular Pack Category</p>
-                </div>
-                    <div class="col-lg-3">
-                        <p class="m-0 heading"> Country</p>
-                        <p>Plus Pack Category</p>
-                    </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading">State</p>
-                    <p>Description</p>
-                </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading"> City</p>
-                    <p>PP Sample</p>
-                </div>
-                <div class="col-lg-3">
-                    <p class="m-0 heading">Address</p>
-                        <p>PP Sample Date</p>
-                </div>
-            </div></div>
-            </div>
+    
 
+    <!-- Modal -->
+<div class="modal fade" id="edit_address" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->  
+        <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="d-flex w-100">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Address <span class="variation-name"></span></h4>
+                            <div></div>
+                        </div>
+                    </div> 
+                    <div class="modal-body"> 
+                    <div class="row">
+                        <div class="col-lg-6">
+                        <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">Full Name</label>
+</label>
+                            <input class="form-control is-valid" placeholder="Full Name" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">Email</label>
+</label>
+                            <input class="form-control is-valid" placeholder="Email" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">Phone</label>
+</label>
+                            <input class="form-control is-valid" placeholder="Phone" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">Country</label>
+</label>
+                            <input class="form-control is-valid" placeholder="Country" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">State</label>
+</label>
+                            <input class="form-control is-valid" placeholder="State" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-6">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">City</label>
+</label>
+                            <input class="form-control is-valid" placeholder="City" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-12">
+                                <div class="form-group">    
+                            <label for="name" class="control-label required" aria-required="true">                            <label for="name" class="control-label" aria-required="true">Address</label>
+</label>
+                            <input class="form-control is-valid" placeholder="Address" data-counter="120" name="name" type="text" value="asdas" id="name" aria-invalid="false" aria-describedby="name-error"> 
+                                </div>
+                                </div>
+                                <div class="col-lg-12">
+                                <button type="submit" name="submit" value="save" class="btn btn-info w-100 mb-4">
+                            <i class="fa fa-save"></i> Save
+                        </button>
+                        </div>
+                        
+                       
+                    </div>
+                    </div> 
+                </div>
+         
+      
     </div>
+  </div>
 
 @stop
 
