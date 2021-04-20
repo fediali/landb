@@ -1051,6 +1051,7 @@ class OrderController extends BaseController
 
     public function import()
     {
+
         return view('plugins/ecommerce::order-import.create');
     }
 
@@ -1063,6 +1064,9 @@ class OrderController extends BaseController
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
             $order = Excel::toCollection(new orderImport, $move);
+            $upload = DB::table('ec_order_import_upload')->insert([
+                'file' => $move
+            ]);
             if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
@@ -1146,7 +1150,9 @@ class OrderController extends BaseController
                                     $orderInfo['po_number'] = $row['po'];
                                     $orderInfo['order_date'] = $row['order_date'];
                                     $orderInfo['type'] = Order::LASHOWROOM;
-                                    \App\Models\OrderImport::create($orderInfo);
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
+
+                                    $upload_id = \App\Models\OrderImport::create($orderInfo);
                                 }
                             }
 
@@ -1159,10 +1165,7 @@ class OrderController extends BaseController
             return 'not supported';
         }
 
-
-        return back()->with([
-            'importOrder' => $importOrder
-        ]);
+        return redirect(route('orders.import', ['import' => $upload_id->order_id]));
     }
 
 

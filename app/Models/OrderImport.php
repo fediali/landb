@@ -13,6 +13,6 @@ class OrderImport extends Model
     use SoftDeletes;
 
     protected $table = 'ec_order_import';
-    protected $fillable = ['order_id', 'po_number', 'order_date'];
+    protected $fillable = ['order_id', 'po_number', 'order_date', 'order_import_upload_id'];
 
 }
