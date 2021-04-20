@@ -189,6 +189,7 @@ class RoleController extends BaseController
 
         $role = $this->roleRepository->createOrUpdate([
             'name'        => $request->input('name'),
+            'qty_allotment_percentage' => $request->input('qty_allotment_percentage'),
             'slug'        => $this->roleRepository->createSlug($request->input('name'), 0),
             'permissions' => $this->cleanPermission($request->input('flags')),
             'description' => $request->input('description'),
