@@ -446,7 +446,6 @@ if (!function_exists('get_approved_designs')) {
 if (!function_exists('generate_thread_sku')) {
     function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
-
         $category = ProductCategory::where('id', $catId)->value('sku_initial');
         $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
         $category_sku = strtoupper($designerInitial . $category . $categoryCnt);
