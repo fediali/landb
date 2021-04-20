@@ -41,6 +41,7 @@ class CustomerDetail extends Authenticatable
         'newsletter',
         'hear_us',
         'comments',
+        'type',
     ];
 
     /**

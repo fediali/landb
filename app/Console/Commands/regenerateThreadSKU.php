@@ -90,5 +90,6 @@ class regenerateThreadSKU extends Command
 
             }
         }
+        echo 'success';
     }
 }

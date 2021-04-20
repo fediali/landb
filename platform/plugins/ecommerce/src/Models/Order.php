@@ -6,7 +6,6 @@ use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Enums\ShippingMethodEnum;
-use Botble\Ecommerce\Repositories\Interfaces\OrderImport;
 use Botble\Ecommerce\Repositories\Interfaces\ShipmentInterface;
 use Botble\Payment\Models\Payment;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use OrderHelper;
+use App\Models\OrderImport;
 
 class Order extends BaseModel
 {
@@ -179,6 +179,6 @@ class Order extends BaseModel
 
     public function import()
     {
-        return $this->hasMany(\App\Models\OrderImport::class, 'order_id');
+        return $this->hasOne(OrderImport::class, 'order_id');
     }
 }

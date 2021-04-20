@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class OrderImport implements ToModel, WithHeadingRow
+class OrderImportFile implements ToModel, WithHeadingRow
 {
     public function __construct()
     {

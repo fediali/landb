@@ -29,7 +29,7 @@
 
         {!! Form::close() !!}
     </div>
-    @isset($orderImport)
+    @if($import != null)
         <div class="p-3 bg-white mt-4">
             <div class="row">
                 <div class="col-lg-12 table-responsive">
@@ -46,23 +46,28 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($orderImport as $order)
+                        @foreach($import as $order)
                             <tr>
                                 <td><input type="checkbox"/></td>
-                                <td><p class="m-0">{{$order->id}} </p>
-                                    <p style="font-size:12px" class="m-0">
-                                        Street, Rochester, IN, 40975, US
+                                <td><p class="m-0"><a target="_blank"
+                                                      href="{{route('orders.edit',[$order->id])}}">{{$order->id}}</a>
                                     </p>
+                                    {{--                                    <p style="font-size:12px" class="m-0">--}}
+                                    {{--                                        Street, Rochester, IN, 40975, US--}}
+                                    {{--                                    </p>--}}
                                 </td>
                                 <td>
                                     <p class="m-0">{{$order->user->name}} </p>
-                                    <p style="font-size:12px" class="m-0">
-                                        Street, Rochester, IN, 40975, US
-                                    </p>
                                 </td>
                                 <td>{{$order->amount}}</td>
                                 <td>{{$order->import->order_date}}</td>
-                                <td>{{$order->import->type}}</td>
+                                <td>@if($order->import->type == \Botble\Ecommerce\Models\Order::LASHOWROOM) LA
+                                    Showroom
+                                    @elseif($order->import->type == \Botble\Ecommerce\Models\Order::FASHIONGO)
+                                        Fashion Go
+                                    @else
+                                        Orange Shine
+                                    @endif()</td>
 
                             </tr>
                         @endforeach
@@ -71,7 +76,7 @@
                 </div>
             </div>
         </div>
-    @endisset
+    @endif
 @stop
 
 <style>

@@ -2,7 +2,9 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
-use App\Imports\orderImport;
+use App\Imports\OrderImportFile;
+use App\Models\OrderImport;
+use App\Models\OrderImportUpload;
 use Assets;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
@@ -1049,10 +1051,14 @@ class OrderController extends BaseController
         }
     }
 
-    public function import()
+    public function import(Request $request)
     {
-
-        return view('plugins/ecommerce::order-import.create');
+        $import = null;
+        if ($request->import) {
+            $importOrder = OrderImport::where('order_import_upload_id', $request->import)->pluck('order_id');
+            $import = Order::whereIN('id', $importOrder)->get();
+        }
+        return view('plugins/ecommerce::order-import.create', compact('import'));
     }
 
     public function importOrder(Request $request)
@@ -1063,23 +1069,21 @@ class OrderController extends BaseController
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
-            $order = Excel::toCollection(new orderImport, $move);
-            $upload = DB::table('ec_order_import_upload')->insert([
-                'file' => $move
-            ]);
+            $order = Excel::toCollection(new OrderImportFile(), $move);
+            $upload = OrderImportUpload::create(['file' => $move]);
+
             if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         $customer = Customer::where(['phone' => $row['phone_number']])->first();
                         if ($customer == null) {
                             //creating Customer
-                            $email =
+
                             $data['name'] = $row['business_contact_name'];
                             $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
                             $data['phone'] = $row['phone_number'];
                             $data['password'] = bcrypt(rand(00000000, 99999999));
                             $customer = Customer::create($data);
-
                             $detail['customer_id'] = $customer['id'];
                             $detail['company'] = $row['business_company_name'];
                             $detail['type'] = Order::LASHOWROOM;
@@ -1114,8 +1118,8 @@ class OrderController extends BaseController
                         //Finding Product For Order
 
                         $product = Product::where('sku', $row['style_no'])->first();
-                        if ($product != null) {
-                        }
+//                        if ($product != null) {
+//                        }
 
                         //count pack quantity for product
                         $pack = quantityCalculate($product['category_id']);
@@ -1152,7 +1156,7 @@ class OrderController extends BaseController
                                     $orderInfo['type'] = Order::LASHOWROOM;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
 
-                                    $upload_id = \App\Models\OrderImport::create($orderInfo);
+                                    $upload_id = OrderImport::create($orderInfo);
                                 }
                             }
 
@@ -1165,7 +1169,7 @@ class OrderController extends BaseController
             return 'not supported';
         }
 
-        return redirect(route('orders.import', ['import' => $upload_id->order_id]));
+        return redirect(route('orders.import', ['import' => $upload->id]));
     }
 
 
