@@ -45,7 +45,9 @@ class User extends Authenticatable
         'permissions',
         'name_initials',
         'commission_percentage',
+        'ecom_commission_percent',
         'is_allow_qty_share',
+        'salesperson_id',
     ];
 
     /**
@@ -263,6 +265,14 @@ class User extends Authenticatable
     public function user_other_emails()
     {
         return $this->hasMany(UserOtherEmail::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesperson()
+    {
+        return $this->belongsTo(User::class, 'salesperson_id');
     }
 
     public function cart(){
