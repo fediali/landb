@@ -13,7 +13,9 @@ class ProfileForm extends FormAbstract
      */
     public function buildForm()
     {
+        $salesperson = get_salesperson();
         $other_emails = $this->model->user_other_emails()->pluck('email')->all();
+
         $this
             ->setupModel(new User)
             ->setFormOption('template', 'core/base::forms.form-no-wrap')
@@ -72,11 +74,33 @@ class ProfileForm extends FormAbstract
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
                 ],
             ])
+            ->add('salesperson_id', 'customSelect', [
+                'label'      => 'Select Salesperson',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder' => 'Select Salesperson',
+                    'class'       => 'select-search-full',
+                ],
+                'choices'    => $salesperson,
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
+            ])
             ->add('commission_percentage', 'number', [
                 'label'      => 'Commission(%)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder'  => 'Commission(%)'
+                ],
+                'wrapper'    => [
+                    'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',
+                ],
+            ])
+            ->add('ecom_commission_percent', 'number', [
+                'label'      => 'E-com Commission(%)',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'E-com Commission(%)'
                 ],
                 'wrapper'    => [
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ' col-md-6',

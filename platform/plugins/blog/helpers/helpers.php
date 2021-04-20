@@ -281,6 +281,16 @@ if (!function_exists('get_vendors')) {
             ->pluck('users.username', 'users.id')->all();
     }
 }
+
+if (!function_exists('get_salesperson')) {
+    function get_salesperson()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES])
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
 //Get User By Roles
 
 
