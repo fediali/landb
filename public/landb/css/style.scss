@@ -278,8 +278,7 @@ button.toggle-menu.active {
     .owl-item>div {
         cursor: pointer;
         margin: 6%;
-        transition: margin 0.4s ease;
-        height: 300px;
+        transition: margin 0.4s ease; 
         overflow: hidden;
         img {
             display: block;
