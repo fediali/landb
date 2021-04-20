@@ -12,7 +12,7 @@
         <!-- The slideshow -->
         <div class="carousel-inner">
             <a href="#" class="carousel-item active">
-            <img src="landb/img/Banner.png" alt="Los Angeles" width="100%" height="500">
+            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="500">
             </a>
             <a href="#" class="carousel-item">
             <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="500">
