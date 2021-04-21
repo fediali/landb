@@ -2,6 +2,8 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\UserCart;
+use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,7 +19,7 @@ use RvMedia;
 class Customer extends Authenticatable
 {
     use Notifiable;
-    use SoftDeletes;
+    /*use SoftDeletes;*/
 
     /**
      * @var string
@@ -95,10 +97,10 @@ class Customer extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    public function wishlist(): HasMany
+   /* public function wishlist(): HasMany
     {
         return $this->hasMany(Wishlist::class, 'customer_id');
-    }
+    }*/
 
     protected static function boot()
     {
@@ -114,5 +116,27 @@ class Customer extends Authenticatable
     public function detail()
     {
         return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function cart(){
+      return $this->hasOne(UserCart::class, 'user_id');
+    }
+
+    public function UserCartId(){
+      $cart = $this->cart();
+      if($cart){
+        return $this->cart()->pluck('id')->first();
+      }else{
+        return null;
+      }
+
+    }
+
+    public function wishlist(){
+      return $this->hasOne(UserWishlist::class, 'user_id');
+    }
+
+    public function UserWishlistId(){
+      return $this->wishlist()->pluck('id')->first();
     }
 }

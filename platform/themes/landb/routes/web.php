@@ -7,12 +7,14 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
     });
 });
-Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['auth']],function () {
-  Route::get('/logout', [
-      'as'         => 'public.logout',
-        'uses'       => 'AuthController@logout',
-      'permission' => false,
-  ]);
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']],function () {
+  Route::get('logout', 'AuthController@logout')->name('public.logout');
+
+  Route::get('/cart', 'CartController@getIndex')
+      ->name('public.cart_index');
+
+  Route::get('/wishlist', 'WishlistController@getIndex')
+      ->name('public.wishlist_index');
 });
 Theme::routes();
 
@@ -25,17 +27,14 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/login', 'AuthController@showLoginForm')
             ->name('public.login');
 
+        Route::get('/register', 'RegisterController@showRegisterForm')
+            ->name('public.register');
+
         Route::get('/products', 'ProductsController@getIndex')
             ->name('public.index');
 
         Route::get('/product/detail/{id}', 'ProductsController@getDetails')
             ->name('public.index');
-
-        Route::get('/cart', 'CartController@getIndex')
-            ->name('public.cart_index');
-
-        Route::get('/wishlist', 'WishlistController@getIndex')
-            ->name('public.wishlist_index');
 
         Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
             ->name('public.add_to_wishlist');
@@ -49,6 +48,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     /*POST ROUTES*/
         Route::post('/login', 'AuthController@login')
             ->name('public.login.post');
+
+        Route::post('/register', 'RegisterController@register')
+            ->name('public.register.post');
 
         Route::post('/add_to_cart', 'CartController@createCart')
             ->name('public.cart.add_to_cart');

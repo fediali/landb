@@ -42,12 +42,12 @@ class WishlistController extends Controller
   }
 
   public function getUserWishlist(){
-    $check = Auth::user()->UserWishlistId();
+    $check = auth('customer')->user()->UserWishlistId();
     if(!$check){
-      $cart = UserWishlist::create(['user_id' => Auth::user()->id]);
+      $cart = UserWishlist::create(['user_id' => auth('customer')->user()->id]);
       return $cart->id;
     }else{
-      return Auth::user()->UserWishlistId();
+      return auth('customer')->user()->UserWishlistId();
     }
   }
 

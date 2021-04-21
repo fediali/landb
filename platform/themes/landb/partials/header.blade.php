@@ -69,8 +69,8 @@
                     <a href="#"><i class="fal fa-user"></i></a>
                 </li>
                 <li>
-                    @auth
-                        <a>{{ Auth::user()->first_name }}</a> | <a href="{{ route('public.logout') }}"><i class="fa fa-sign-out"></i></a>
+                    @if(auth('customer')->user())
+                        <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('public.login') }}">Sign In</a>
                     @endauth

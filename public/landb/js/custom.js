@@ -176,3 +176,11 @@ function update_cart_item(id, val, url) {
     }
   })
 }
+
+/*
+$(document).ready(function () {
+  $(".customer_type").change(function() {
+    $(".customer_type").prop('checked', false);
+    $(this).prop('checked', true);
+  });
+})*/

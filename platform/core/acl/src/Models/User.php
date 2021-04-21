@@ -263,21 +263,5 @@ class User extends Authenticatable
         return $this->hasMany(UserOtherEmail::class, 'user_id');
     }
 
-    public function cart(){
-      return $this->hasOne(UserCart::class, 'user_id');
-    }
-
-    public function UserCartId(){
-      return $this->cart()->pluck('id')->first();
-    }
-
-    public function wishlist(){
-      return $this->hasOne(UserWishlist::class, 'user_id');
-    }
-
-    public function UserWishlistId(){
-      return $this->wishlist()->pluck('id')->first();
-    }
-
 
 }

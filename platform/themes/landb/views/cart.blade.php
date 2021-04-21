@@ -28,6 +28,7 @@
 
         </div>
     </div>
+    @php $grand_total = 0; @endphp
     @foreach($cart->cartItems as $cartItem)
         <div class="row mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
@@ -54,7 +55,8 @@
                 </form>
             </div>
             <div class="col-lg-2 mt-2">
-                <p class="mt-2">$ {{ $cartItem->quantity * $cartItem->price }}</p>
+                @php $total = $cartItem->quantity * $cartItem->price; $grand_total = $grand_total + $total; @endphp
+                <p class="mt-2">$ {{ $total }}</p>
             </div>
         </div>
         <hr>
@@ -111,7 +113,7 @@
                         <p class="total-head">Subtotal</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="total-para">$ 150.00</p>
+                        <p class="total-para">$ <span class="total-cart-price">{{ $grand_total }}</span></p>
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -128,7 +130,7 @@
                         <p class="final-total-head">Total</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="final-total-para">$150.00</p>
+                        <p class="final-total-para">$0.00</p>
                     </div>
                 </div>
             </div>

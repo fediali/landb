@@ -14,7 +14,7 @@
         <div class="col-lg-6">
             <h2 class="mt-5 mb-4 text-center signin-head">SIGN IN</h2>
 
-            <form class="" method="POST" action="{{ route('public.login.post') }}">
+            <form class="" id="login-form" method="POST" action="{{ route('public.login.post') }}">
                 @csrf
             <div class="row">
                 <div class="col-lg-12">
@@ -37,10 +37,10 @@
                     <a href="#" class="color-black"> Forgot Password?</a>
                 </div>
                 <div class="col-lg-12 mt-5">
-                    <a href="#" class=" btn cart-btn w-100"><button type="submit">Sign In</button></a>
+                    <input type="submit" form="login-form" class=" btn cart-btn w-100" value="Sign In">{{--<a href="#" class=" btn cart-btn w-100">Sign In</a>--}}
                 </div>
                 <div class="col-lg-12 mt-3 mb-5">
-                    <a href="./register.html" class=" btn border-btn w-100">Register</a>
+                    <a href="{{ route('public.register') }}" class=" btn border-btn w-100">Register</a>
                 </div>
             </div>
             </form>
