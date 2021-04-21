@@ -199,43 +199,43 @@
                 <div class="row">
 
 
-{{--                    <div class="col-lg-6 mt-2">--}}
-{{--                        <label for="name">Card Number:</label>--}}
-{{--                        <div id="fattjs-number" class="form-control"--}}
-{{--                             style="width:180px; height:35px; display: inline-block; margin:3px"></div>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="col-lg-6 mt-2">--}}
+                    {{--                        <label for="name">Card Number:</label>--}}
+                    {{--                        <div id="fattjs-number" class="form-control"--}}
+                    {{--                             style="width:180px; height:35px; display: inline-block; margin:3px"></div>--}}
+                    {{--                    </div>--}}
 
 
-{{--                    <div class="col-lg-6 mt-2">--}}
-{{--                        <label for="phone">CVV:</label>--}}
-{{--                        <div id="fattjs-cvv" class="form-control"--}}
-{{--                             style="width:50px; height:35px; display: inline-block; margin:3px"></div>--}}
+                    {{--                    <div class="col-lg-6 mt-2">--}}
+                    {{--                        <label for="phone">CVV:</label>--}}
+                    {{--                        <div id="fattjs-cvv" class="form-control"--}}
+                    {{--                             style="width:50px; height:35px; display: inline-block; margin:3px"></div>--}}
 
-{{--                    </div>--}}
+                    {{--                    </div>--}}
 
-{{--                    <div class="col-lg-6 mt-2">--}}
-{{--                        <label for="email">Expires:</label>--}}
-{{--                        <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">--}}
-{{--                    </div>--}}
+                    {{--                    <div class="col-lg-6 mt-2">--}}
+                    {{--                        <label for="email">Expires:</label>--}}
+                    {{--                        <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">--}}
+                    {{--                    </div>--}}
 
 
-{{--                    <div class="col-lg-6 mt-2">--}}
-{{--                        <label for="phone">First Name:</label>--}}
-{{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
-{{--                               name="cardholder-first-name"--}}
-{{--                               value="">--}}
+                    {{--                    <div class="col-lg-6 mt-2">--}}
+                    {{--                        <label for="phone">First Name:</label>--}}
+                    {{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
+                    {{--                               name="cardholder-first-name"--}}
+                    {{--                               value="">--}}
 
-{{--                    </div>--}}
-{{--                    <div class="col-lg-6 mt-2">--}}
-{{--                        <label for="phone">Last Name:</label>--}}
-{{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
-{{--                               name="cardholder-last-name"--}}
-{{--                               value="">--}}
+                    {{--                    </div>--}}
+                    {{--                    <div class="col-lg-6 mt-2">--}}
+                    {{--                        <label for="phone">Last Name:</label>--}}
+                    {{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
+                    {{--                               name="cardholder-last-name"--}}
+                    {{--                               value="">--}}
 
-{{--                    </div>--}}
-{{--                    <div class="form-group col-lg-6 mt-4">--}}
-{{--                        --}}{{--                        <button id="tokenizebutton" class="btn btn-primary btn-lg" type="submit">Add Card</button>--}}
-{{--                    </div>--}}
+                    {{--                    </div>--}}
+                    {{--                    <div class="form-group col-lg-6 mt-4">--}}
+                    {{--                        --}}{{--                        <button id="tokenizebutton" class="btn btn-primary btn-lg" type="submit">Add Card</button>--}}
+                    {{--                    </div>--}}
                 </div>
 
                 <form onsubmit="return false;">
@@ -250,10 +250,6 @@
                             <span>Last Name</span>
                             <input name="cardholder-last-name" class="form-control field input-box" placeholder="Doe"/>
                         </label>
-{{--                        <label>--}}
-{{--                            <span>Phone</span>--}}
-{{--                            <input name="phone" class="form-control field input-box" placeholder="+1000000000000"/>--}}
-{{--                        </label>--}}
                     </div>
                     <div class="group">
                         <label>
