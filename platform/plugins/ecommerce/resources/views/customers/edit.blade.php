@@ -107,8 +107,9 @@
 
     </form>
 
-
-    <div class="p-3 bg-white">
+    <div class="row">
+        <div class="col-lg-6">
+        <div class="p-3 bg-white">
         {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
 
         <div class="row">
@@ -182,17 +183,58 @@
                 {!! Form::error('is_default', $errors) !!}
             </div>
 
-            <div class="form-group col-lg-3">
+            <div class="form-group col-lg-6">
                 <button class="btn btn-primary btn-lg" type="submit">{{ __('Add a new address') }}</button>
             </div>
         </div>
         {!! Form::close() !!}
     </div>
+        </div>
+        <div class="col-lg-6">
+        <div class="p-3 bg-white">
+        <form method="POST" action="" accept-charset="UTF-8" class="ps-form--account-setting"> 
+
+        <div class="row">
+            <div class="col-lg-12 mt-2">
+                <label for="name">Card Number:</label>
+                <input id="name" type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" name="" value=""> 
+            </div>
+            
+
+            <div class="col-lg-6 mt-2">
+                <label for="email">Expires:</label>
+                <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">
+            </div>
+            
+
+            <div class="col-lg-6 mt-2">
+                <label for="phone">CVV:</label>
+                <input id="phone" type="text" class="form-control" placeholder="123" name="" value="">
+
+            </div>
+            
+            <div class="col-lg-12 mt-2">
+                <label for="phone">Name on Card:</label>
+                <input id="phone" type="text" class="form-control" placeholder="Name on Card" name="" value="">
+
+            </div>  
+            <div class="form-group col-lg-6 mt-4">
+                <button class="btn btn-primary btn-lg" type="submit">Add Card</button>
+            </div>
+        </div>
+        </form>
+    </div>
+        </div>
+    </div>
+  
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
+        <div class="col-lg-12 mb-3">
+             <h5>Address Details</h5>
+        </div>
             <div class="col-lg-12 mb-3">
-                <div class="table-responsive">
+                <div class="table-responsive table-height">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -219,6 +261,46 @@
                                 <td>{{$row->state}}</td>
                                 <td>{{$row->zip_code}}</td>
                                 <td>{{$row->country}}</td>
+                                <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
+{{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+
+{{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="p-3 bg-white mt-3">
+        <div class="row">
+        <div class="col-lg-12 mb-3">
+             <h5>Card Details</h5>
+        </div>
+            <div class="col-lg-12 mb-3">
+                <div class="table-responsive table-height">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Card Number</th>
+                            <th>Expires</th>
+                            <th>CVV</th>
+                            <th>Name on Card</th> 
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($customer->addresses as $row)
+                            <tr>
+                                <td>{{$row->name}}</td>
+                                <td>{{$row->email}}</td>
+                                <td>{{$row->phone}}</td>
+                                <td>{{$row->address}}</td> 
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
 {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 

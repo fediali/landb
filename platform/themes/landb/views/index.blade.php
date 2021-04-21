@@ -12,13 +12,13 @@
         <!-- The slideshow -->
         <div class="carousel-inner">
             <a href="#" class="carousel-item active">
-            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="500">
+            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="600px">
             </a>
             <a href="#" class="carousel-item">
-            <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="500">
+            <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="600px">
             </a>
             <a href="#" class="carousel-item">
-            <img src="landb/img/Banner.png" alt="New York" width="100%" height="500">
+            <img src="landb/img/Banner.png" alt="New York" width="100%" height="600px">
             </a>
         </div>
         
@@ -140,42 +140,4 @@
         </div>
     </div>
 </section>
-
-<section class="needhelp">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="help_heading">
-                    <h3>Need <br> <em>Help?</em></h3>
-                </div>
-            </div>
-            <div class="col-md-8">
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="helpbox">
-                            <h5>Where to buy?</h5>
-                            <p>Interested? Find the nearest store to me</p>
-                            <strong>Product Locator</strong>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="helpbox">
-                            <h5>Wholesale</h5>
-                            <p>Already a member? Login to discover our collections.</p>
-                            <strong>Login</strong>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="helpbox">
-                            <h5>Need Help?</h5>
-                            <p>Haven't found what you're looking for? Contact us.</p>
-                            <strong>Customer support</strong>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+ 
