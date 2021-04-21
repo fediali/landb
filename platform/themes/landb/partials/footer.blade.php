@@ -93,14 +93,14 @@
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
-<script>
+{{--<script>
   $(document).ready(function() {
     $("#filtertoggle").click(function() {
       $(this).toggleClass("on");
       $("#filtermenu").slideToggle();
     });
   });
-</script>
+</script>--}}
 <script>
   jQuery(document).ready(function() {
     // This button will increment the value

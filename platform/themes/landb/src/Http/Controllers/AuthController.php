@@ -46,6 +46,15 @@ class AuthController extends Controller
     return Theme::scope('auth.login', [], 'plugins/ecommerce::themes.customers.login')->render();
   }
 
+  public function showRegisterForm()
+  {
+    SeoHelper::setTitle(__('Register'));
+
+    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('public.login'));
+
+    return Theme::scope('auth.register', [], 'plugins/ecommerce::themes.customers.register')->render();
+  }
+
   /**
    * Get the guard to be used during authentication.
    *
@@ -113,5 +122,24 @@ class AuthController extends Controller
     }
 
     return $this->loggedOut($request) ?: redirect('/');
+  }
+
+  public function process_signup(Request $request)
+  {
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required',
+        'password' => 'required'
+    ]);
+
+    $user = User::create([
+        'name' => trim($request->input('name')),
+        'email' => strtolower($request->input('email')),
+        'password' => bcrypt($request->input('password')),
+    ]);
+
+    session()->flash('message', 'Your account is created');
+
+    return redirect()->route('login');
   }
 }

@@ -32,6 +32,10 @@ use Cart;
 
 class CartController extends Controller
 {
+  private $user;
+  public function __construct() {
+    $this->user = auth('customer')->user();
+  }
 
   public function getIndex(){
     $cart = UserCart::where('id', $this->getUserCart())->with(['cartItems' => function($query){
@@ -56,12 +60,12 @@ class CartController extends Controller
   }
 
   public function getUserCart(){
-    $check = Auth::user()->UserCartId();
+    $check = auth('customer')->user()->UserCartId();
     if(!$check){
-      $cart = UserCart::create(['user_id' => Auth::user()->id]);
+      $cart = UserCart::create(['user_id' => auth('customer')->user()->id]);
       return $cart->id;
     }else{
-      return Auth::user()->UserCartId();
+      return auth('customer')->user()->UserCartId();
     }
   }
 
