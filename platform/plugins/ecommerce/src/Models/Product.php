@@ -40,6 +40,8 @@ class Product extends BaseModel
         'sku',
         'order',
         'quantity',
+        'in_person_sales_qty',
+        'online_sales_qty',
         'allow_checkout_when_out_of_stock',
         'with_storehouse_management',
         'is_featured',

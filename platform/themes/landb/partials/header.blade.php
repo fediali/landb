@@ -55,7 +55,7 @@
         <div class="topnav d-flex">
             <ul>
                 <li>
-                    <i class="fal fa-phone-alt"></i> <span>(123) 456-7890</span>
+                   <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>(123) 456-7890</span></a> 
                 </li>
             </ul>
             <ul class="d-flex">

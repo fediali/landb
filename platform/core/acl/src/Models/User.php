@@ -44,6 +44,10 @@ class User extends Authenticatable
         'avatar_id',
         'permissions',
         'name_initials',
+        'commission_percentage',
+        'ecom_commission_percent',
+        'is_allow_qty_share',
+        'salesperson_id',
     ];
 
     /**
@@ -261,6 +265,30 @@ class User extends Authenticatable
     public function user_other_emails()
     {
         return $this->hasMany(UserOtherEmail::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesperson()
+    {
+        return $this->belongsTo(User::class, 'salesperson_id');
+    }
+
+    public function cart(){
+      return $this->hasOne(UserCart::class, 'user_id');
+    }
+
+    public function UserCartId(){
+      return $this->cart()->pluck('id')->first();
+    }
+
+    public function wishlist(){
+      return $this->hasOne(UserWishlist::class, 'user_id');
+    }
+
+    public function UserWishlistId(){
+      return $this->wishlist()->pluck('id')->first();
     }
 
 

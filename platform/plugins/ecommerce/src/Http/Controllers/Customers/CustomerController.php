@@ -103,7 +103,35 @@ class CustomerController extends BaseController
 
         $customer->password = null;
 
-        return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
+        return view('plugins/ecommerce::customers.edit', compact('customer'));
+        //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
+    }
+
+    public function addAddress($id)
+    {
+        $user = $id;
+        return view('plugins/ecommerce::customers.address', [$id], compact('user'));
+    }
+
+    public function postCustomerAddress(AddressRequest $request, BaseHttpResponse $response)
+    {
+        if ($request->input('is_default') == 1) {
+            $this->addressRepository->update([
+                'is_default'  => 1,
+                'customer_id' => $request->input('customer_id'),
+            ], ['is_default' => 0]);
+        }
+        $request->merge([
+            'customer_id' => $request->input('customer_id'),
+            'is_default'  => $request->input('is_default', 0),
+        ]);
+
+        $address = $this->addressRepository->createOrUpdate($request->input());
+
+        return $response
+            ->setNextUrl(route('customer.edit', [$request->customer_id]))
+            ->setMessage(trans('core/base::notices.create_success_message'));
+
     }
 
     /**
@@ -274,30 +302,5 @@ class CustomerController extends BaseController
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
-    public function addAddress($id)
-    {
-        $user = $id;
-        return view('plugins/ecommerce::customers.address', [$id], compact('user'));
-    }
 
-    public function postCustomerAddress(AddressRequest $request, BaseHttpResponse $response)
-    {
-        if ($request->input('is_default') == 1) {
-            $this->addressRepository->update([
-                'is_default'  => 1,
-                'customer_id' => $request->input('customer_id'),
-            ], ['is_default' => 0]);
-        }
-        $request->merge([
-            'customer_id' => $request->input('customer_id'),
-            'is_default'  => $request->input('is_default', 0),
-        ]);
-
-        $address = $this->addressRepository->createOrUpdate($request->input());
-
-        return $response
-            ->setNextUrl(route('customer.edit', [$request->customer_id]))
-            ->setMessage(trans('core/base::notices.create_success_message'));
-
-    }
 }

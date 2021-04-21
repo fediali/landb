@@ -4,6 +4,8 @@ namespace Botble\Inventory\Http\Controllers;
 
 use App\Models\InventoryHistory;
 use App\Models\InventoryProducts;
+use App\Models\QtyAllotmentHistory;
+use Botble\ACL\Models\Role;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
@@ -250,9 +252,27 @@ class InventoryController extends BaseController
                         if ($inv_product->is_released) {
                             $error = 'some products already released in this inventory!';
                         } else {
+
                             $old_stock = $product->quantity;
                             $product->quantity = $product->quantity + $inv_product->received_qty;
                             $product->with_storehouse_management = 1;
+
+                            $qtyOS = 0;
+                            $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
+                            if ($getOSPercentage) {
+                                $getOSPercentage = $getOSPercentage/100;
+                                $qtyOS = round($getOSPercentage * $inv_product->received_qty);
+                                $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
+                            }
+
+                            $qtyIS = 0;
+                            $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
+                            if ($getISPercentage) {
+                                $getISPercentage = $getISPercentage/100;
+                                $qtyIS = round($getISPercentage * $inv_product->received_qty);
+                                $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
+                            }
+
                             if ($product->save()) {
 
                                 InventoryHistory::create([
@@ -262,6 +282,13 @@ class InventoryController extends BaseController
                                     'old_stock' => $old_stock,
                                     'created_by' => Auth::user()->id,
                                     'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                                QtyAllotmentHistory::create([
+                                    'product_id' => $product->id,
+                                    'online_sales_qty' => $qtyOS,
+                                    'in_person_sales_qty' => $qtyIS,
                                     'reference' => 'inventory.push_to_ecommerce'
                                 ]);
 
@@ -310,9 +337,27 @@ class InventoryController extends BaseController
                         if ($inv_product->is_released) {
                             $error = 'some products already released in this inventory!';
                         } else {
+
                             $old_stock = $product->quantity;
                             $product->quantity = $product->quantity + $inv_product->received_qty;
                             $product->with_storehouse_management = 1;
+
+                            $qtyOS = 0;
+                            $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
+                            if ($getOSPercentage) {
+                                $getOSPercentage = $getOSPercentage/100;
+                                $qtyOS = round($getOSPercentage * $inv_product->received_qty);
+                                $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
+                            }
+
+                            $qtyIS = 0;
+                            $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
+                            if ($getISPercentage) {
+                                $getISPercentage = $getISPercentage/100;
+                                $qtyIS = round($getISPercentage * $inv_product->received_qty);
+                                $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
+                            }
+
                             if ($product->save()) {
 
                                 InventoryHistory::create([
@@ -322,6 +367,13 @@ class InventoryController extends BaseController
                                     'old_stock' => $old_stock,
                                     'created_by' => Auth::user()->id,
                                     'inventory_id' => $inventory->id,
+                                    'reference' => 'inventory.push_to_ecommerce'
+                                ]);
+
+                                QtyAllotmentHistory::create([
+                                    'product_id' => $product->id,
+                                    'online_sales_qty' => $qtyOS,
+                                    'in_person_sales_qty' => $qtyIS,
                                     'reference' => 'inventory.push_to_ecommerce'
                                 ]);
 

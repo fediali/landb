@@ -281,6 +281,16 @@ if (!function_exists('get_vendors')) {
             ->pluck('users.username', 'users.id')->all();
     }
 }
+
+if (!function_exists('get_salesperson')) {
+    function get_salesperson()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES])
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
 //Get User By Roles
 
 
@@ -446,7 +456,6 @@ if (!function_exists('get_approved_designs')) {
 if (!function_exists('generate_thread_sku')) {
     function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
-
         $category = ProductCategory::where('id', $catId)->value('sku_initial');
         $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
         $category_sku = strtoupper($designerInitial . $category . $categoryCnt);
@@ -643,7 +652,9 @@ if (!function_exists('notify_users')) {
 if (!function_exists('create_customer')) {
     function create_customer($data)
     {
-        $customer = \Botble\Ecommerce\Models\Customer::create($data);
+
+        $customer = DB::table('ec_customers')->insert($data);
+        dd('s', $customer);
         return $customer;
     }
 }

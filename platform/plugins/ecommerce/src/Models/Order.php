@@ -12,7 +12,9 @@ use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use OrderHelper;
+use App\Models\OrderImport;
 
 class Order extends BaseModel
 {
@@ -173,5 +175,10 @@ class Order extends BaseModel
     function canBeCanceled()
     {
         return in_array($this->status, [OrderStatusEnum::PENDING, OrderStatusEnum::PROCESSING]);
+    }
+
+    public function import()
+    {
+        return $this->hasOne(OrderImport::class, 'order_id');
     }
 }

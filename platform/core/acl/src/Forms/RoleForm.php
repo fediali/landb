@@ -40,6 +40,13 @@ class RoleForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])
+            ->add('qty_allotment_percentage', 'number', [
+                'label'      => 'Qty allotment(%)',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Qty allotment(%)'
+                ],
+            ])
             ->add('description', 'textarea', [
                 'label'      => trans('core/base::forms.description'),
                 'label_attr' => ['class' => 'control-label required'],

@@ -18,6 +18,7 @@ class ImportOrderData extends Migration
             $table->integer('order_id')->index('order_import_fk');
             $table->string('po_number')->nullable();
             $table->string('order_date')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

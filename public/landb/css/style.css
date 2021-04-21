@@ -606,6 +606,9 @@ a.lookbook_btn:hover:after {
     background-repeat: no-repeat;
     background-size: cover;
     padding: 20px 15px 10px;
+    height: 150px;
+    padding-top: 90px;
+    margin-top: -70px;
 }
 
 .caro_text h5 {
@@ -613,11 +616,14 @@ a.lookbook_btn:hover:after {
     font-weight: 600;
     font-size: 10px;
     text-transform: uppercase;
+    color: #000;
 }
 
 .caro_text p {
     font-family: "Saol Display Regular";
     font-size: 16px;
+    color: #000;
+
 }
 
 .gallerywrap {
@@ -1926,6 +1932,11 @@ input.qtyminus {
     .gallery .quick-full img {
         width: 60% !important;
     }
+    .helpbox strong::after {
+        display: block;
+        margin: auto;
+        position: inherit;
+    }
 }
 
 
@@ -2735,3 +2746,40 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 /* LOGIN CSS END */
+
+
+.mainslide .carousel-indicators li { 
+    background-color: #000000 !important; }
+
+.mainslide .carousel-control-prev-icon {
+    background-image: url('../img/left-arrow.png');
+    height: 40px;
+    width: 40px;
+}
+
+.mainslide .carousel-control-next-icon {
+    background-image: url('../img/right-arrow.png');
+    height: 40px;
+    width: 40px;
+}
+
+.center img {
+    width: 90% !important; 
+    margin: auto !important; 
+    transition: 2s !important;
+
+} 
+
+.explore_seasonal .owl-item>div {
+    height: auto !important;
+}
+
+.explore_seasonal .owl-item>div img {
+    width: 70% ; 
+    margin: auto !important; 
+
+    transition: 2s !important;
+
+}
+
+
