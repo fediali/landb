@@ -220,9 +220,9 @@
                                 <td>{{$row->zip_code}}</td>
                                 <td>{{$row->country}}</td>
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
-                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>
+{{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
-                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>
+{{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                             </tr>
                         @endforeach
 
