@@ -49,14 +49,14 @@
             </div>
             <div class="col-lg-2 mt-2">
                 <form id='myform' method='POST' action='#'>
-                    <input style="height: 35px;" type='button' data-update="1" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
+                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
                     <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->quantity }}' class='qty' />
-                    <input style="height: 35px;" type='button' data-update="1" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
+                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
                 </form>
             </div>
             <div class="col-lg-2 mt-2">
                 @php $total = $cartItem->quantity * $cartItem->price; $grand_total = $grand_total + $total; @endphp
-                <p class="mt-2">$ {{ $total }}</p>
+                <p class="mt-2">$ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
             </div>
         </div>
         <hr>
@@ -113,7 +113,7 @@
                         <p class="total-head">Subtotal</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="total-para">$ <span class="total-cart-price">{{ $grand_total }}</span></p>
+                        <p class="total-para">$ <span id="total-cart-price">{{ $grand_total }}</span></p>
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -121,7 +121,7 @@
                         <p class="total-head">Shipping Cost</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="total-para">+ Calculate</p>
+                        <p class="total-para">$ 0.00</p>
                     </div>
                 </div>
                 <hr>
@@ -130,13 +130,13 @@
                         <p class="final-total-head">Total</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="final-total-para">$0.00</p>
+                        <p class="final-total-para">$ <span id="grand-total-cart-price">{{ $grand_total }}</span></p>
                     </div>
                 </div>
             </div>
             <div class="row ">
                 <div class="col-lg-6 mt-3">
-                    <a href="#" class=" btn cart-btn w-100">Continue Shopping</a>
+                    <a href="{{ route('public.products') }}" class=" btn cart-btn w-100">Continue Shopping</a>
 
                 </div>
                 <div class="col-lg-6 mt-3">

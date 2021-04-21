@@ -31,10 +31,10 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             ->name('public.register');
 
         Route::get('/products', 'ProductsController@getIndex')
-            ->name('public.index');
+            ->name('public.products');
 
         Route::get('/product/detail/{id}', 'ProductsController@getDetails')
-            ->name('public.index');
+            ->name('public.singleProduct');
 
         Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
             ->name('public.add_to_wishlist');
