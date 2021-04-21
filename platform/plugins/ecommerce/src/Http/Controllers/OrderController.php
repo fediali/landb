@@ -1061,9 +1061,10 @@ class OrderController extends BaseController
         return view('plugins/ecommerce::order-import.create', compact('import'));
     }
 
-    public function importOrder(Request $request)
+    public function importOrder(Request $request, BaseHttpResponse $response)
     {
 
+        //TODO Refactor the code
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
@@ -1073,12 +1074,17 @@ class OrderController extends BaseController
             $upload = OrderImportUpload::create(['file' => $move]);
 
             if ($request->market_place == Order::LASHOWROOM) {
+
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+                        if (!isset($row['po'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
                         $customer = Customer::where(['phone' => $row['phone_number']])->first();
                         if ($customer == null) {
                             //creating Customer
-
                             $data['name'] = $row['business_contact_name'];
                             $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
                             $data['phone'] = $row['phone_number'];
@@ -1130,7 +1136,7 @@ class OrderController extends BaseController
                         if ($orderPo != null) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
-                            $detail['price'] = str_replace('$', '', $row['sub_total']);
+                            $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
                             $importOrder = OrderProduct::create($detail);
@@ -1145,7 +1151,7 @@ class OrderController extends BaseController
                             if ($importOrder) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
-                                $detail['price'] = str_replace('$', '', $row['sub_total']);
+                                $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
@@ -1156,6 +1162,202 @@ class OrderController extends BaseController
                                     $orderInfo['type'] = Order::LASHOWROOM;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
 
+                                    $upload_id = OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            } elseif ($request->market_place == Order::ORANGESHINE) {
+
+                foreach ($order as $od) {
+                    foreach ($od as $row) {
+                        if (!isset($row['invoice'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
+                        if ($row['payment'] == 'PayPal') {
+                            $customer = Customer::where(['phone' => $row['shipping_phone']])->first();
+                        } else {
+                            $customer = Customer::where(['phone' => $row['billing_phone']])->first();
+                        }
+                        if ($customer == null) {
+                            //creating Customer
+                            $data['name'] = $row['company'];
+                            $data['email'] = str_replace(' ', '', $row['company']) . '@orangeshine.com';
+                            $data['phone'] = ($row['payment'] == 'PayPal') ? $row['shipping_phone'] : $row['billing_phone'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['company'];
+                            $detail['type'] = Order::ORANGESHINE;
+
+                            CustomerDetail::create($detail);
+                            if ($row['payment'] != 'PayPal') {
+                                $baddress['address'] = $row['billing_address'];
+                                $baddress['city'] = $row['billing_city'];
+                                $baddress['state'] = $row['billing_state'];
+                                $baddress['zip_code'] = $row['billing_zip'];
+                                $baddress['customer_id'] = $customer['id'];
+                                $baddress['phone'] = $row['billing_phone'];
+                                $baddress['country'] = $row['billing_country'];
+                                $baddress['name'] = $row['company'];
+                                $baddress['type'] = 'billing';
+                                $billing = Address::create($baddress);
+                            }
+                            //creating address
+
+                            $saddress['address'] = $row['shipping_address'];
+                            $saddress['city'] = $row['shipping_city'];
+                            $saddress['state'] = $row['shipping_state'];
+                            $saddress['zip_code'] = $row['shipping_zip'];
+                            $saddress['country'] = $row['shipping_country'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['shipping_phone'];
+                            $saddress['name'] = $row['shipping_company_name'];
+                            $baddress['type'] = 'shipping';
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        //Finding Product For Order
+
+                        $product = Product::where('sku', $row['style'])->first();
+//                        if ($product != null) {
+//                        }
+
+                        //count pack quantity for product
+                        $pack = quantityCalculate($product['category_id']);
+
+                        $orderQuantity = $row['total_qty'] / $pack;
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
+                        if ($orderPo != null) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['order_amt']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['invoice'];
+                                    $orderInfo['order_date'] = $row['order_date'];
+                                    $orderInfo['type'] = Order::ORANGESHINE;
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
+
+                                    $upload_id = OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            } else {
+                foreach ($order as $od) {
+
+                    foreach ($od as $row) {
+                        if (!isset($row['ponumber'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
+                        $customer = Customer::where(['phone' => $row['phonenumber']])->first();
+                        if ($customer == null) {
+                            //creating Customer
+                            $data['name'] = $row['companyname'];
+                            $data['email'] = str_replace(' ', '', $row['companyname']) . '@fashiongo.com';
+                            $data['phone'] = $row['phonenumber'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['companyname'];
+                            $detail['type'] = Order::FASHIONGO;
+
+                            CustomerDetail::create($detail);
+
+                            $baddress['address'] = $row['billingstreet'];
+                            $baddress['city'] = $row['billingcity'];
+                            $baddress['state'] = $row['billingstate'];
+                            $baddress['zip_code'] = $row['billingzipcode'];
+                            $baddress['customer_id'] = $customer['id'];
+                            $baddress['phone'] = $row['phonenumber'];
+                            $baddress['country'] = $row['billingcountry'];
+                            $baddress['name'] = $row['companyname'];
+                            $baddress['type'] = 'billing';
+                            $billing = Address::create($baddress);
+
+                            //creating address
+
+                            $saddress['address'] = $row['shippingstreet'];
+                            $saddress['city'] = $row['shippingcity'];
+                            $saddress['state'] = $row['shippingstate'];
+                            $saddress['zip_code'] = $row['shippingzipcode'];
+                            $saddress['country'] = $row['shippingcountry'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['phonenumber'];
+                            $saddress['name'] = $row['companyname'];
+                            $baddress['type'] = 'shipping';
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        //Finding Product For Order
+
+                        $product = Product::where('sku', $row['styleno'])->first();
+//                        if ($product != null) {
+//                        }
+
+                        //count pack quantity for product
+                        $pack = quantityCalculate($product['category_id']);
+
+                        $orderQuantity = $row['totalqty'] / $pack;
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
+                        if ($orderPo != null) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['totalamount']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['ponumber'];
+                                    $orderInfo['order_date'] = $row['orderdate'];
+                                    $orderInfo['type'] = Order::FASHIONGO;
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
                                     $upload_id = OrderImport::create($orderInfo);
                                 }
                             }
