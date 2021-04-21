@@ -109,130 +109,191 @@
 
     <div class="row">
         <div class="col-lg-6">
-        <div class="p-3 bg-white">
-        {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
+            <div class="p-3 bg-white">
+                {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
 
-        <div class="row">
-            <div class="col-lg-6 mt-2">
-                <label for="name">{{ __('Full Name') }}:</label>
-                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
-                <input type="hidden" class="form-control" name="customer_id" value="{{$customer->id}}">
-            </div>
-            {!! Form::error('name', $errors) !!}
+                <div class="row">
+                    <div class="col-lg-6 mt-2">
+                        <label for="name">{{ __('Full Name') }}:</label>
+                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
+                        <input type="hidden" class="form-control" name="customer_id" value="{{$customer->id}}">
+                    </div>
+                    {!! Form::error('name', $errors) !!}
 
-            <div class="col-lg-6 mt-2">
-                <label for="email">{{ __('Email') }}:</label>
-                <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
-            </div>
-            {!! Form::error('email', $errors) !!}
+                    <div class="col-lg-6 mt-2">
+                        <label for="email">{{ __('Email') }}:</label>
+                        <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
+                    </div>
+                    {!! Form::error('email', $errors) !!}
 
-            <div class="col-lg-6 mt-2">
-                <label for="phone">{{ __('Phone') }}:</label>
-                <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+                    <div class="col-lg-6 mt-2">
+                        <label for="phone">{{ __('Phone') }}:</label>
+                        <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}">
 
-            </div>
-            {!! Form::error('phone', $errors) !!}
+                    </div>
+                    {!! Form::error('phone', $errors) !!}
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('country')) has-error @endif">
-                <label for="country">{{ __('Country') }}:</label>
-                <select name="country" class="form-control selectpicker select-country" data-live-search="true"
-                        id="country">
-                    @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
-                        <option value="{{ $countryCode }}"
-                                @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
-                    @endforeach
-                </select>
-            </div>
-            {!! Form::error('country', $errors) !!}
+                    <div class="col-lg-6 mt-2 @if ($errors->has('country')) has-error @endif">
+                        <label for="country">{{ __('Country') }}:</label>
+                        <select name="country" class="form-control selectpicker select-country" data-live-search="true"
+                                id="country">
+                            @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
+                                <option value="{{ $countryCode }}"
+                                        @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {!! Form::error('country', $errors) !!}
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('state')) has-error @endif">
-                <label for="state">{{ __('State') }}:</label>
-                <input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">
+                    <div class="col-lg-6 mt-2 @if ($errors->has('state')) has-error @endif">
+                        <label for="state">{{ __('State') }}:</label>
+                        <input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">
 
-            </div>
-            {!! Form::error('state', $errors) !!}
+                    </div>
+                    {!! Form::error('state', $errors) !!}
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('city')) has-error @endif">
-                <label for="city">{{ __('City') }}:</label>
-                <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}">
+                    <div class="col-lg-6 mt-2 @if ($errors->has('city')) has-error @endif">
+                        <label for="city">{{ __('City') }}:</label>
+                        <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}">
 
-            </div>
-            {!! Form::error('city', $errors) !!}
+                    </div>
+                    {!! Form::error('city', $errors) !!}
 
-            <div class="col-lg-12 mt-2">
-                <label for="address">{{ __('Address') }}:</label>
-                <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}">
-            </div>
-            {!! Form::error('address', $errors) !!}
+                    <div class="col-lg-12 mt-2">
+                        <label for="address">{{ __('Address') }}:</label>
+                        <input id="address" type="text" class="form-control" name="address"
+                               value="{{ old('address') }}">
+                    </div>
+                    {!! Form::error('address', $errors) !!}
 
-            @if (EcommerceHelper::isZipCodeEnabled())
-                <div class="form-group">
-                    <label>{{ __('Zip code') }}:</label>
-                    <input id="zip_code" type="text" class="form-control" name="zip_code" value="{{ old('zip_code') }}">
-                    {!! Form::error('zip_code', $errors) !!}
-                </div>
-            @endif
+                    @if (EcommerceHelper::isZipCodeEnabled())
+                        <div class="form-group">
+                            <label>{{ __('Zip code') }}:</label>
+                            <input id="zip_code" type="text" class="form-control" name="zip_code"
+                                   value="{{ old('zip_code') }}">
+                            {!! Form::error('zip_code', $errors) !!}
+                        </div>
+                    @endif
 
-            <div class="form-group col-lg-12">
-                <div class="ps-checkbox mt-3">
-                    <input class="ml-2" type="checkbox" value="1" name="is_default" id="is-default">
-                    <label class="mr-2" for="is-default"> {{ __('Use this address as default') }}</label>
-                <!-- <input class="form-control" type="checkbox" value="1" name="is_default" id="is-default">
+                    <div class="form-group col-lg-12">
+                        <div class="ps-checkbox mt-3">
+                            <input class="ml-2" type="checkbox" value="1" name="is_default" id="is-default">
+                            <label class="mr-2" for="is-default"> {{ __('Use this address as default') }}</label>
+                        <!-- <input class="form-control" type="checkbox" value="1" name="is_default" id="is-default">
                 <label for="is-default">{{ __('Use this address as default') }}</label> -->
-                </div>
-                {!! Form::error('is_default', $errors) !!}
-            </div>
+                        </div>
+                        {!! Form::error('is_default', $errors) !!}
+                    </div>
 
-            <div class="form-group col-lg-6">
-                <button class="btn btn-primary btn-lg" type="submit">{{ __('Add a new address') }}</button>
+                    <div class="form-group col-lg-6">
+                        <button class="btn btn-primary btn-lg" type="submit">{{ __('Add a new address') }}</button>
+                    </div>
+                </div>
+                {!! Form::close() !!}
             </div>
-        </div>
-        {!! Form::close() !!}
-    </div>
         </div>
         <div class="col-lg-6">
-        <div class="p-3 bg-white">
-        <form method="POST" action="" accept-charset="UTF-8" class="ps-form--account-setting"> 
+            <div class="p-3 bg-white">
 
-        <div class="row">
-            <div class="col-lg-12 mt-2">
-                <label for="name">Card Number:</label>
-                <input id="name" type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" name="" value=""> 
-            </div>
-            
 
-            <div class="col-lg-6 mt-2">
-                <label for="email">Expires:</label>
-                <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">
-            </div>
-            
+                <div class="row">
 
-            <div class="col-lg-6 mt-2">
-                <label for="phone">CVV:</label>
-                <input id="phone" type="text" class="form-control" placeholder="123" name="" value="">
 
-            </div>
-            
-            <div class="col-lg-12 mt-2">
-                <label for="phone">Name on Card:</label>
-                <input id="phone" type="text" class="form-control" placeholder="Name on Card" name="" value="">
+{{--                    <div class="col-lg-6 mt-2">--}}
+{{--                        <label for="name">Card Number:</label>--}}
+{{--                        <div id="fattjs-number" class="form-control"--}}
+{{--                             style="width:180px; height:35px; display: inline-block; margin:3px"></div>--}}
+{{--                    </div>--}}
 
-            </div>  
-            <div class="form-group col-lg-6 mt-4">
-                <button class="btn btn-primary btn-lg" type="submit">Add Card</button>
+
+{{--                    <div class="col-lg-6 mt-2">--}}
+{{--                        <label for="phone">CVV:</label>--}}
+{{--                        <div id="fattjs-cvv" class="form-control"--}}
+{{--                             style="width:50px; height:35px; display: inline-block; margin:3px"></div>--}}
+
+{{--                    </div>--}}
+
+{{--                    <div class="col-lg-6 mt-2">--}}
+{{--                        <label for="email">Expires:</label>--}}
+{{--                        <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">--}}
+{{--                    </div>--}}
+
+
+{{--                    <div class="col-lg-6 mt-2">--}}
+{{--                        <label for="phone">First Name:</label>--}}
+{{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
+{{--                               name="cardholder-first-name"--}}
+{{--                               value="">--}}
+
+{{--                    </div>--}}
+{{--                    <div class="col-lg-6 mt-2">--}}
+{{--                        <label for="phone">Last Name:</label>--}}
+{{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
+{{--                               name="cardholder-last-name"--}}
+{{--                               value="">--}}
+
+{{--                    </div>--}}
+{{--                    <div class="form-group col-lg-6 mt-4">--}}
+{{--                        --}}{{--                        <button id="tokenizebutton" class="btn btn-primary btn-lg" type="submit">Add Card</button>--}}
+{{--                    </div>--}}
+                </div>
+
+                <form onsubmit="return false;">
+                    <!--      Make your own form or copy this one -->
+                    <div class="group">
+                        <label>
+                            <span>First Name</span>
+                            <input
+                                name="cardholder-first-name" class="form-control field input-box" placeholder="Jane"/>
+                        </label>
+                        <label>
+                            <span>Last Name</span>
+                            <input name="cardholder-last-name" class="form-control field input-box" placeholder="Doe"/>
+                        </label>
+{{--                        <label>--}}
+{{--                            <span>Phone</span>--}}
+{{--                            <input name="phone" class="form-control field input-box" placeholder="+1000000000000"/>--}}
+{{--                        </label>--}}
+                    </div>
+                    <div class="group">
+                        <label>
+                            <span>Card</span>
+                            <div id="card-element" class="field">
+                                <div id="fattjs-number" class="form-control"></div>
+                                <div id="fattjs-cvv" class="form-control"></div>
+                            </div>
+                            <div style="width:40px; height:35px; display: inline-block;">
+                                <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control">
+                            </div>
+                            /
+                            <div style="width:55px; height:35px; display: inline-block;padding: 0 8px 0 0">
+                                <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control">
+                            </div>
+                        </label>
+                    </div>
+                    <button id="paybutton">Pay $1</button>
+                    <button id="tokenizebutton">Tokenize Card</button>
+                    <!-- <button id="verifybutton">verify $1</button> -->
+                    <div class="outcome">
+                        <div class="error"></div>
+                        <div class="success">
+                            Successful! The ID is
+                            <span class="token"></span>
+                        </div>
+                        <div class="loader" style="margin: auto">
+                        </div>
+                </form>
+
             </div>
         </div>
-        </form>
     </div>
-        </div>
-    </div>
-  
+
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
-        <div class="col-lg-12 mb-3">
-             <h5>Address Details</h5>
-        </div>
+            <div class="col-lg-12 mb-3">
+                <h5>Address Details</h5>
+            </div>
             <div class="col-lg-12 mb-3">
                 <div class="table-responsive table-height">
                     <table class="table table-striped">
@@ -262,9 +323,9 @@
                                 <td>{{$row->zip_code}}</td>
                                 <td>{{$row->country}}</td>
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
-{{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
-{{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                             </tr>
                         @endforeach
 
@@ -279,9 +340,9 @@
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
-        <div class="col-lg-12 mb-3">
-             <h5>Card Details</h5>
-        </div>
+            <div class="col-lg-12 mb-3">
+                <h5>Card Details</h5>
+            </div>
             <div class="col-lg-12 mb-3">
                 <div class="table-responsive table-height">
                     <table class="table table-striped">
@@ -290,7 +351,7 @@
                             <th>Card Number</th>
                             <th>Expires</th>
                             <th>CVV</th>
-                            <th>Name on Card</th> 
+                            <th>Name on Card</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -300,11 +361,11 @@
                                 <td>{{$row->name}}</td>
                                 <td>{{$row->email}}</td>
                                 <td>{{$row->phone}}</td>
-                                <td>{{$row->address}}</td> 
+                                <td>{{$row->address}}</td>
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
-{{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
-{{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                             </tr>
                         @endforeach
 
@@ -450,3 +511,6 @@
         font-size: 14px;
     }
 </style>
+
+
+
