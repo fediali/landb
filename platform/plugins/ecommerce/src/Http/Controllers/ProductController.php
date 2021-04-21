@@ -4,6 +4,7 @@ namespace Botble\Ecommerce\Http\Controllers;
 
 use App\Models\InventoryHistory;
 use Assets;
+use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
@@ -896,7 +897,10 @@ class ProductController extends BaseController
             ->getModel()
             ->where('status', BaseStatusEnum::PUBLISHED)
             ->where('is_variation', '<>', 1)
-            ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
+            ->where(function($q) use($request) {
+                $q->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
+                $q->orWhere('sku', 'LIKE', '%' . $request->input('keyword') . '%');
+            })
             ->select([
                 'ec_products.*',
             ])
@@ -917,7 +921,15 @@ class ProductController extends BaseController
             foreach ($availableProduct->variations as &$variation) {
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
-                $variation->quantity = $variation->product->quantity;
+
+                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                    $variation->quantity = $variation->product->online_sales_qty;
+                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                    $variation->quantity = $variation->product->in_person_sales_qty;
+                } else {
+                    $variation->quantity = $variation->product->quantity;
+                }
+
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = $variationItem->attribute->title;
                 }

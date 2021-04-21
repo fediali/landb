@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\InventoryHistory;
+use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
@@ -461,7 +462,15 @@ class Product extends BaseModel
             return false;
         }
 
-        return $this->quantity <= 0 && !$this->allow_checkout_when_out_of_stock;
+        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+            $checkQty = $this->online_sales_qty <= 0 ? true : false;
+        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
+        } else {
+            $checkQty = $this->quantity <= 0 ? true : false;
+        }
+
+        return $checkQty && !$this->allow_checkout_when_out_of_stock;
     }
 
     /**
