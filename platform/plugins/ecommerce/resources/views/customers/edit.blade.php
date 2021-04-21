@@ -240,35 +240,39 @@
 
                 <form onsubmit="return false;">
                     <!--      Make your own form or copy this one -->
-                    <div class="group">
-                        <label>
+                    <div class="row group">
+                        <label class="col-lg-6">
                             <span>First Name</span>
                             <input
                                 name="cardholder-first-name" class="form-control field input-box" placeholder="Jane"/>
                         </label>
-                        <label>
+                        <label class="col-lg-6">
                             <span>Last Name</span>
                             <input name="cardholder-last-name" class="form-control field input-box" placeholder="Doe"/>
                         </label>
                     </div>
-                    <div class="group">
-                        <label>
-                            <span>Card</span>
+                    <div class="group row">
+                        <label class="col-lg-12"> 
+                            
                             <div id="card-element" class="field">
+                            <span>Card</span>
                                 <div id="fattjs-number" class="form-control"></div>
+                                <span class="mt-2">CVV</span>
                                 <div id="fattjs-cvv" class="form-control"></div>
                             </div>
-                            <div style="width:40px; height:35px; display: inline-block;">
+                            </label> 
+                    </div>
+                    <div class="row">
+                            <div class="col-lg-3" >
                                 <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control">
                             </div>
-                            /
-                            <div style="width:55px; height:35px; display: inline-block;padding: 0 8px 0 0">
+                          <p class="mt-2">  / </p>
+                            <div class="col-lg-3" >
                                 <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control">
                             </div>
-                        </label>
-                    </div>
-                    <button id="paybutton">Pay $1</button>
-                    <button id="tokenizebutton">Tokenize Card</button>
+                            </div>
+                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>
+                    <button class="btn btn-success mt-3" id="tokenizebutton">Tokenize Card</button>
                     <!-- <button id="verifybutton">verify $1</button> -->
                     <div class="outcome">
                         <div class="error"></div>
@@ -505,8 +509,7 @@
     .table td {
         padding: 10px 5px !important;
         font-size: 14px;
-    }
+    } 
 </style>
 
-
-
+ 
