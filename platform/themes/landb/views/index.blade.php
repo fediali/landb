@@ -1,5 +1,35 @@
 <div class="banner">
-    <img src="landb/img/Banner.png" alt="">
+    <!-- <img src="landb/img/Banner.png" alt=""> -->
+    <div id="demo" class="carousel slide mainslide" data-ride="carousel">
+
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+        
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <a href="#" class="carousel-item active">
+            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="500">
+            </a>
+            <a href="#" class="carousel-item">
+            <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="500">
+            </a>
+            <a href="#" class="carousel-item">
+            <img src="landb/img/Banner.png" alt="New York" width="100%" height="500">
+            </a>
+        </div>
+        
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+        </div>
 </div>
 
 <div class="logocenter text-center">
