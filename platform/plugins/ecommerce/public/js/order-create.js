@@ -1132,7 +1132,12 @@ __webpack_require__.r(__webpack_exports__);
           }, 1000);
         }
       })["catch"](function (res) {
-        Botble.handleError(res.response.data);
+        if (res.response.data.error) {
+          Botble.showError(Botble.showError(res.response.data.message));
+        } else {
+          Botble.handleError(res.response.data);
+        }
+
         $($event.target).find('.btn-primary').removeClass('button-loading');
       });
     },
@@ -7851,8 +7856,11 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        _vm._s(product_item.name) +
-                                          "\n                                                "
+                                        "\n                                                " +
+                                          _vm._s(product_item.name) +
+                                          " (" +
+                                          _vm._s(product_item.sku) +
+                                          ")\n                                                "
                                       ),
                                       !product_item.variations.length
                                         ? _c("span", [
@@ -7965,6 +7973,17 @@ var render = function() {
                                                         ),
                                                         0
                                                       ),
+                                                      _vm._v(" "),
+                                                      _c("span", [
+                                                        _vm._v(
+                                                          " (" +
+                                                            _vm._s(
+                                                              variation.product
+                                                                .sku
+                                                            ) +
+                                                            ")"
+                                                        )
+                                                      ]),
                                                       _vm._v(" "),
                                                       variation.is_out_of_stock
                                                         ? _c(

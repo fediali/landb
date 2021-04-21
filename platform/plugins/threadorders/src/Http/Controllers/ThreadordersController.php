@@ -366,13 +366,12 @@ class ThreadordersController extends BaseController
                     $product->quantity = 0;
 
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
-                    $extras = 0;
-                    if ($percentage) {
-                        $extras = ($variation->cost * $packQuantity) * $percentage / 100;
-                        $packPrice = $variation->cost * $packQuantity + $extras;
-                        $single = $variation->cost * $percentage / 100;
-                        $singlePrice = $variation->cost + $single;
-                    }
+
+                    $extras = ($variation->cost * $packQuantity) * $percentage / 100;
+                    $packPrice = $variation->cost * $packQuantity + $extras;
+                    $single = $variation->cost * $percentage / 100;
+                    $singlePrice = $variation->cost + $single;
+
                     $product->price = $packPrice;
                     // $product->sale_price = $variation->cost + $extras;
                     $product->images = json_encode([$variation->design_file]);

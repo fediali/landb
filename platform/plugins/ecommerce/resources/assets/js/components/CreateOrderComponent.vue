@@ -84,9 +84,8 @@
                                                          :src="product_item.image_url"
                                                          :title="product_item.name" :alt="product_item.name">
                                                 </div>
-                                                <label class="inline_block ml10 mt10 ws-nm"
-                                                       style="width:calc(100% - 50px);">{{
-                                                    product_item.name }}
+                                                <label class="inline_block ml10 mt10 ws-nm" style="width:calc(100% - 50px);">
+                                                    {{ product_item.name }} ({{product_item.sku}})
                                                     <span v-if="!product_item.variations.length">
                                                         <span v-if="product_item.is_out_of_stock" class="text-danger"><small>&nbsp;({{ __('Out of stock') }})</small></span>
                                                         <span v-if="!product_item.is_out_of_stock && product_item.quantity > 0"><small>&nbsp;({{ product_item.quantity }} {{ __('product(s) available') }})</small></span>
@@ -105,6 +104,7 @@
                                                                         <span v-if="index !== variation.variation_items.length - 1">/</span>
                                                                     </span>
                                                             </a>
+                                                            <span>&nbsp;({{ variation.product.sku }})</span>
                                                             <span v-if="variation.is_out_of_stock" class="text-danger"><small>&nbsp;({{ __('Out of stock') }})</small></span>
                                                             <span v-if="!variation.is_out_of_stock && variation.quantity > 0"><small>&nbsp;({{ variation.quantity }} {{ __('product(s) available') }})</small></span>
                                                         </li>
@@ -1085,7 +1085,11 @@
                         }
                     })
                     .catch(res => {
-                        Botble.handleError(res.response.data);
+                        if (res.response.data.error) {
+                            Botble.showError(Botble.showError(res.response.data.message))
+                        } else {
+                            Botble.handleError(res.response.data);
+                        }
                         $($event.target).find('.btn-primary').removeClass('button-loading');
                     });
             },

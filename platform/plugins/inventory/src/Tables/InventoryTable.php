@@ -50,12 +50,12 @@ class InventoryTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('inventory.edit')) {
                     return $item->name;
                 }
                 return Html::link(route('inventory.edit', $item->id), $item->name);
-            })
+            })*/
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
@@ -117,6 +117,7 @@ class InventoryTable extends TableAbstract
         $select = [
             'inventories.id',
             'inventories.name',
+            'inventories.id AS ecommerce',
             'inventories.created_at',
             'inventories.status',
         ];
@@ -142,6 +143,12 @@ class InventoryTable extends TableAbstract
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
+            'ecommerce' => [
+                'name' => 'ecommerce',
+                'title' => 'Ecommerce',
+                'width' => '100px',
+                //'visible' => false
+            ],
             'created_at' => [
                 'name' => 'inventories.created_at',
                 'title' => trans('core/base::tables.created_at'),
@@ -151,12 +158,6 @@ class InventoryTable extends TableAbstract
                 'name' => 'inventories.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
-            ],
-            'ecommerce' => [
-                'name' => 'Ecommerce',
-                'title' => 'Ecommerce',
-                'width' => '100px',
-                'visible' => false
             ],
         ];
     }

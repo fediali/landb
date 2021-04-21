@@ -6,6 +6,7 @@ use App\Imports\OrderImportFile;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
+use Botble\ACL\Models\Role;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
@@ -165,16 +166,17 @@ class OrderController extends BaseController
      */
     public function create()
     {
-//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-//            ->addScriptsDirectly([
-//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-//                'vendor/core/plugins/ecommerce/js/order-create.js',
-//            ])
-//            ->addScripts(['blockui', 'input-mask']);
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/order-create.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
 
-        return view('plugins/ecommerce::orders.create');
+        // return view('plugins/ecommerce::orders.create');
+        return view('plugins/ecommerce::orders.create-back');
     }
 
     /**
@@ -183,6 +185,27 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
+
+        foreach ($request->input('products', []) as $productItem) {
+            $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
+            if (!$product) {
+                continue;
+            }
+            $demandQty = Arr::get($productItem, 'quantity', 1);
+
+            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                $stockQty = $product->online_sales_qty;
+            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                $stockQty = $product->in_person_sales_qty;
+            } else {
+                $stockQty = $product->quantity;
+            }
+
+            if ($stockQty < $demandQty) {
+                return $response->setCode(406)->setError()->setMessage($product->sku.' is not available in this Qty!');
+            }
+        }
+
         $request->merge([
             'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
             'currency_id'          => get_application_currency_id(),
@@ -294,6 +317,23 @@ class OrderController extends BaseController
                     ->where('with_storehouse_management', 1)
                     ->where('quantity', '>', 0)
                     ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+
+                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $product->id)
+                        ->where('with_storehouse_management', 1)
+                        ->where('online_sales_qty', '>', 0)
+                        ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
+                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $product->id)
+                        ->where('with_storehouse_management', 1)
+                        ->where('in_person_sales_qty', '>', 0)
+                        ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
+                }
+
             }
         }
 
