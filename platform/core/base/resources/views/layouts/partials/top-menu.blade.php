@@ -55,7 +55,7 @@
                     @if(count($notifications))
                         @foreach($notifications as $notification)
                             <div class="dropdown-divider"></div>
-                            <a href="{{ $notification->notification->url }}" class="dropdown-item notification_read"
+                            <a href="{{ $notification->notification->url }}" class="dropdown-item notification_read new-notification"
                                style="white-space: normal" data-id="{{$notification->id}}">
                                 <i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}
                                 <span
