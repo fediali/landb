@@ -51,7 +51,7 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right notifications-dropdown"
                      style="left: inherit; right: 0px; width:500px">
                     <span class="dropdown-item dropdown-header"><span id="notification-count"
-                                                                      class="notification-count">{{count($notifications)}}</span> Notification(s)</span>
+                                                                          class="notification-count">{{count($notifications)}}</span> Notification(s)</span>
                     @if(count($notifications))
                         @foreach($notifications as $notification)
                             <div class="dropdown-divider"></div>
