@@ -654,7 +654,7 @@ if (!function_exists('create_customer')) {
     {
 
         $customer = DB::table('ec_customers')->insert($data);
-        dd('s', $customer);
+      //  dd('s', $customer);
         return $customer;
     }
 }

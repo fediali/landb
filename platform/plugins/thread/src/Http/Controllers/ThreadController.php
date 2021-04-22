@@ -554,4 +554,9 @@ class ThreadController extends BaseController
         }
     }
 
+    public function readNotification(Request $request)
+    {
+        $notification = DB::table('user_notifications')->where('id', $request->notification_id)->update(['seen' => 1]);
+    }
+
 }

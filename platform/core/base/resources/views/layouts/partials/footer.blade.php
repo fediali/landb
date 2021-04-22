@@ -57,6 +57,28 @@
 
 
 <script>
+
+    $(document).ready(function () {
+        $('.notification_read').on('click', function () {
+            console.log('working');
+            var not_id = $(this).data('id');
+            $.ajax({
+                url: '{{ route('thread.readNotification') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'notification_id': not_id,
+                },
+                success: function (data) {
+
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('Notification Unreadable', 'Reading Error');
+                }
+            });
+            console.log(not_id);
+        })
+    })
     var payButton = document.querySelector('#paybutton');
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
@@ -79,8 +101,8 @@
         console.log('form loaded');
 
         // for testing!
-        handler.setTestPan('4111111111111111');
-        handler.setTestCvv('123');
+        //handler.setTestPan('4111111111111111');
+        //handler.setTestCvv('123');
         var form = document.querySelector('form');
         form.querySelector('input[name=month]').value = 11;
         form.querySelector('input[name=year]').value = 2025;

@@ -40,11 +40,12 @@
                 @php
                     $notifications = get_user_notifications();
                 @endphp
-                <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name" data-toggle="dropdown"
+                <a href="javascript:void(0)" class="dropdown-toggle dropdown-header-name read_notification"
+                   data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     {{--<img alt="{{ Auth::user()->getFullName() }}" class="rounded-circle" src="{{ Auth::user()->avatar_url }}" />--}}
-                    <span class="username"><span class="badge badge-primary notification-count"
-                                                 @if(!count($notifications)) hidden @endif>{{count($notifications)}}</span> Notifications </span>
+                    <span class="username"><span class="badge badge-primary "
+                                                 @if(!count($notifications)) hidden @endif>{{count($notifications->where('seen',0))}}</span> Notifications </span>
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right notifications-dropdown"
@@ -54,8 +55,8 @@
                     @if(count($notifications))
                         @foreach($notifications as $notification)
                             <div class="dropdown-divider"></div>
-                            <a href="{{ $notification->notification->url }}" class="dropdown-item"
-                               style="white-space: normal">
+                            <a href="{{ $notification->notification->url }}" class="dropdown-item notification_read"
+                               style="white-space: normal" data-id="{{$notification->id}}">
                                 <i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}
                                 <span
                                     class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
