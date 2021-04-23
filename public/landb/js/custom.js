@@ -174,10 +174,9 @@ function update_cart_item(input, val, url, action) {
       var newTotal = val * price;
       var subTotal = parseFloat($('#total-cart-price').text());
       var grandTotal = parseFloat($('#grand-total-cart-price').text());
-      $('#cart-item-total-'+id).html(newTotal);
-      console.log($('#total-cart-price').text())
-      $('#total-cart-price').html((action === 'inc') ? subTotal+price : subTotal-price);
-      $('#grand-total-cart-price').html((action === 'inc') ? grandTotal+price : grandTotal-price);
+      $('#cart-item-total-'+id).html(parseFloat(newTotal).toFixed(1));
+      $('#total-cart-price').html((action === 'inc') ? parseFloat(subTotal)+parseFloat(price) : subTotal-price);
+      $('#grand-total-cart-price').html((action === 'inc') ? parseFloat(grandTotal)+parseFloat(price) : grandTotal-price);
       toggle_loader(false);
     },
     error: function (result) {

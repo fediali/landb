@@ -15,6 +15,23 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
   Route::get('/wishlist', 'WishlistController@getIndex')
       ->name('public.wishlist_index');
+
+  Route::get('/checkout/{token}', 'CheckoutController@getCheckoutIndex')
+      ->name('public.checkout_index');
+
+  Route::get('/checkout/success', 'CheckoutController@getCheckoutSuccess')
+      ->name('public.checkout_success');
+
+  Route::get('/payment/status', 'CheckoutController@getPayPalStatus')->name('public.paypal_status');
+
+  Route::post('/add_to_cart', 'CartController@createCart')
+      ->name('public.cart.add_to_cart');
+
+  Route::post('/update_cart_quantity', 'CartController@updateCartQuanity')
+      ->name('public.cart.update_cart');
+
+  Route::post('/checkout', 'CheckoutController@proceedPayment')
+      ->name('public.cart.order_checkout');
 });
 Theme::routes();
 
@@ -25,7 +42,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             ->name('public.index');
 
         Route::get('/login', 'AuthController@showLoginForm')
-            ->name('public.login');
+            ->name('customer.login');
 
         Route::get('/register', 'RegisterController@showRegisterForm')
             ->name('public.register');
@@ -51,12 +68,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
         Route::post('/register', 'RegisterController@register')
             ->name('public.register.post');
-
-        Route::post('/add_to_cart', 'CartController@createCart')
-            ->name('public.cart.add_to_cart');
-
-        Route::post('/update_cart_quantity', 'CartController@updateCartQuanity')
-            ->name('public.cart.update_cart');
 
     });
 });
