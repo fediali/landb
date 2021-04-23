@@ -98,7 +98,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $customer = $this->customerRepository->create([
-            'name'        => $data['first_name'].' '.$data['first_name'],
+            'name'        => $data['first_name'].' '.$data['last_name'],
             'email'       => $data['email'],
             'password'    => bcrypt($data['password']),
             'first_name'  => $data['first_name'],
@@ -119,14 +119,14 @@ class RegisterController extends Controller
               'newsletter'              => $data['newsletter'],
               'hear_us'                 => $data['hear_us'],
               'comments'                => $data['comments'],
-              'phone'                   => $data['business_phone'],
+              'phone'                   => $data['mobile'],
               'preferred_communication' => $data['preferred_communication'],
               'events_attended'         => $data['events_attended']
           ]);
 
           $shipping_address = CustomerAddress::create([
               'customer_id' => $customer->id,
-              'name'  => $data['shipping_first_name'].' '.$data['shipping_first_name'],
+              'name'  => $data['shipping_first_name'].' '.$data['shipping_last_name'],
               'email' => $data['email'],
               'phone' => $data['shipping_mobile'],
               'country' => $data['shipping_country'],
@@ -144,7 +144,7 @@ class RegisterController extends Controller
           if($data['billing'] == 0){
             $billing_address = CustomerAddress::create([
                 'customer_id' => $customer->id,
-                'name'  => $data['billing_first_name'].' '.$data['billing_first_name'],
+                'name'  => $data['billing_first_name'].' '.$data['billing_last_name'],
                 'email' => $data['email'],
                 'phone' => $data['billing_mobile'],
                 'country' => $data['billing_country'],
@@ -158,6 +158,11 @@ class RegisterController extends Controller
                 'company' => $data['billing_company'],
                 'status' => 'active',
             ]);
+          }else{
+            $shipping_address->type = 'billing';
+            $shipping_address = $shipping_address->toArray();
+            unset($shipping_address['id']);
+            $billing_address = CustomerAddress::insert($shipping_address);
           }
           return $customer;
         }

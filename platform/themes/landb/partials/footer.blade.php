@@ -122,7 +122,7 @@
         $(this).prev('input[name=' + fieldName + ']').val(0);
       }
       if($(this).data('update') == '1') {
-        update_cart_item($(this).data('id'), newVal, '{{ route('public.cart.update_cart') }}');
+        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
       }
     });
     // This button will decrement the value till 0
@@ -144,7 +144,7 @@
         $(this).next('input[name=' + fieldName + ']').val(0);
       }
       if($(this).data('update') == '1'){
-        update_cart_item($(this).data('id'), newVal, '{{ route('public.cart.update_cart') }}');
+        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
       }
 
     });

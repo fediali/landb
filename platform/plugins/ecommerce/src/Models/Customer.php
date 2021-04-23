@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\CustomerAddress;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
@@ -132,11 +133,37 @@ class Customer extends Authenticatable
 
     }
 
+    public function details(){
+      return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function shippingAddress(){
+      return $this->addresses()->where('type', 'shipping');
+    }
+
+    public function billingAddress(){
+      return $this->addresses()->where('type', 'billing');
+    }
+
     public function wishlist(){
       return $this->hasOne(UserWishlist::class, 'user_id');
     }
 
     public function UserWishlistId(){
       return $this->wishlist()->pluck('id')->first();
+    }
+
+    public function pendingOrder(){
+      return $this->orders()->where('user_id', $this->id)->where('status', 'pending')->first();
+    }
+
+    public function pendingOrderId(){
+      $cart = $this->pendingOrder();
+      if($cart){
+        return $cart->id;
+      }else{
+        return null;
+      }
+
     }
 }

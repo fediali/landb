@@ -151,7 +151,9 @@ $(document).ready(function () {
   });
 });
 
-function update_cart_item(id, val, url) {
+function update_cart_item(input, val, url, action) {
+  var id = input.data('id');
+  var price = input.data('price');
   var formData = {
     '_token': $('meta[name="csrf-token"]').attr('content'),
     'id': id,
@@ -169,6 +171,12 @@ function update_cart_item(id, val, url) {
       if(val == 0){
         $('.cartitem-'+id).remove();
       }
+      var newTotal = val * price;
+      var subTotal = parseFloat($('#total-cart-price').text());
+      var grandTotal = parseFloat($('#grand-total-cart-price').text());
+      $('#cart-item-total-'+id).html(parseFloat(newTotal).toFixed(1));
+      $('#total-cart-price').html((action === 'inc') ? parseFloat(subTotal)+parseFloat(price) : subTotal-price);
+      $('#grand-total-cart-price').html((action === 'inc') ? parseFloat(grandTotal)+parseFloat(price) : grandTotal-price);
       toggle_loader(false);
     },
     error: function (result) {
