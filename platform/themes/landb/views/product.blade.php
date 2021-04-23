@@ -56,18 +56,18 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <div class="row mt-4">
-                <form id='myform' class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
-                <div class="col-lg-4">
+                <form class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+               <div class="row mt-4"> 
+                <div id="myform" class="col-lg-4">
                     <input type='button' value='-' class='qtyminus' data-update="0" field='quantity' />
                     <input type='text' name='quantity' value='1' class='qty' />
                     <input type='button' value='+' class='qtyplus' data-update="0" field='quantity' />
-                </div>
+                </div> 
                 <div class="col-lg-4">
                     <button class="cart-btn w-100 add-to-cart-button" data-id="{{ $product->id }}">Add to cart</button>
                 </div>
+               </div>
                 </form>
-            </div>
             <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p">{{ $product->sku }}</span> </p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span class="detail-category-p mt-2">{{ @$product->category->name }}</span> </p>
             {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p">Pottery</span> </p>--}}

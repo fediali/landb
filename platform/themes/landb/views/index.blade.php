@@ -12,13 +12,13 @@
         <!-- The slideshow -->
         <div class="carousel-inner">
             <a href="#" class="carousel-item active">
-            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="600px">
+            <img src="landb/img/Banner.png" alt="Los Angeles asds" width="100%" height="750px">
             </a>
             <a href="#" class="carousel-item">
-            <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="600px">
+            <img src="landb/img/Banner.png" alt="Chicago" width="100%" height="750px">
             </a>
             <a href="#" class="carousel-item">
-            <img src="landb/img/Banner.png" alt="New York" width="100%" height="600px">
+            <img src="landb/img/Banner.png" alt="New York" width="100%" height="750px">
             </a>
         </div>
         
@@ -95,7 +95,7 @@
     {!! Theme::partial('index/latest_collection_carousel', compact('latest_collection')) !!}
 @endif
 
-<section class="gallerysection" id="gallery">
+<!-- <section class="gallerysection" id="gallery">
     <div class="container">
         <div class="gallerywrap">
             <div class="gdiv">
@@ -122,7 +122,40 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
+<div class="grid-container">
+      <div class="grid">
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer centerPiece">
+          <div class="gridBlock centerBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock">
+            <a href="https://greensock.com" target="_blank"></a>
+          </div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+        <div class="gridLayer">
+          <div class="gridBlock"></div>
+        </div>
+      </div>
+    </div>
 <div id="night"></div>
 <section class="newsletter">
     <div class="container">
@@ -140,4 +173,47 @@
         </div>
     </div>
 </section>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
+
+<script>
+        console.log(innerHeight,'innerHeight');
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".grid-container",
+            start: "top top",
+            end: () => innerHeight * 9,
+            scrub: true,
+            pin: ".grid",
+            anticipatePin: 1,
+          },
+          
+        })
+        .set(".gridBlock:not(.centerBlock)", { autoAlpha: 0 })
+        .to(
+          ".gridBlock:not(.centerBlock)",
+          { duration: 0.1, autoAlpha: 1 },
+          0.001
+        )
+        .from(".gridLayer", { scale: 3.3333, ease: "none" });
+
+      // Images to make it look better, not related to the effect
+      const size = Math.max(innerWidth, innerHeight);
+      gsap.set(".gridBlock", {
+        backgroundImage: (i) =>
+          `url(https://picsum.photos/${size}/${size}?random=${i})`,
+      });
+
+      const bigImg = new Image();
+      bigImg.addEventListener("load", function () {
+        gsap.to(".centerPiece .gridBlock", {
+          autoAlpha: 1,
+          duration: 0.5,
+        });
+      });
+
+      bigImg.src = `https://picsum.photos/${size}/${size}?random=50`;
+    </script>
  
