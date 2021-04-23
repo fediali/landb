@@ -72,7 +72,7 @@
                     @if(auth('customer')->user())
                         <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i class="fa fa-sign-out"></i></a>
                     @else
-                        <a href="{{ route('public.login') }}">Sign In</a>
+                        <a href="{{ route('customer.login') }}">Sign In</a>
                     @endauth
 
                 </li>

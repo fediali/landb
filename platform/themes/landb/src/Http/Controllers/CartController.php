@@ -11,6 +11,9 @@ use App\Models\UserWishlist;
 use App\Models\UserWishlistItems;
 use BaseHelper;
 use Botble\Ecommerce\Cart\CartItem;
+use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
@@ -28,6 +31,7 @@ use SiteMapManager;
 use SlugHelper;
 use Theme;
 use Cart;
+use OrderHelper;
 /*use Botble\Theme\Http\Controllers\PublicController;*/
 
 class CartController extends Controller
@@ -38,9 +42,10 @@ class CartController extends Controller
   }
 
   public function getIndex(){
-    $cart = UserCart::where('id', $this->getUserCart())->with(['cartItems' => function($query){
+    $cart = Order::where('id', $this->getUserCart())->with(['products' => function($query){
       $query->with(['product']);
     }])->first();
+    $token = OrderHelper::getOrderSessionToken();
     return Theme::scope('cart', ['cart' => $cart])->render();
   }
 
@@ -60,29 +65,32 @@ class CartController extends Controller
   }
 
   public function getUserCart(){
-    $check = auth('customer')->user()->UserCartId();
+    $check = auth('customer')->user()->pendingOrder();
+    $token = OrderHelper::getOrderSessionToken();
     if(!$check){
-      $cart = UserCart::create(['user_id' => auth('customer')->user()->id]);
+      $cart = Order::create(['user_id' => auth('customer')->user()->id, 'amount' => 0, 'sub_total' => 0, 'is_finished' => 0, 'token' => $token]);
       return $cart->id;
     }else{
-      return auth('customer')->user()->UserCartId();
+      return auth('customer')->user()->pendingOrderId();
     }
   }
 
   public function createCartItem($data, $product){
     $cartId = $this->getUserCart();
-    $checkCart = UserCartItem::where('cart_id', $cartId)->where('product_id', $product->id)->first();
+    $checkCart = OrderProduct::where('order_id', $cartId)->where('product_id', $product->id)->first();
     if($checkCart){
-     $update =  $checkCart->update(['quantity' => $checkCart->quantity+$data['quantity'] , 'status' => 'active']);
+     $update =  $checkCart->update(['qty' => $checkCart->qty+$data['quantity']]);
      if($update){
        return true;
      }
     }else{
-      $create = UserCartItem::create([
-          'cart_id' => $cartId,
+      $create = OrderProduct::create([
+          'order_id' => $cartId,
           'product_id' => $product->id,
-          'quantity' => $data['quantity'],
-          'price' => $product->price
+          'qty' => $data['quantity'],
+          'price' => $product->sale_price,
+          'tax_amount' => 0,
+          'product_name' => $product->name,
       ]);
       if($create){
         return true;
@@ -95,9 +103,9 @@ class CartController extends Controller
     $data = $request->all();
     if(!empty($data['id'])){
       if($data['quantity'] == 0){
-        $update = UserCartItem::where('id', $data['id'])->delete();
+        $update = OrderProduct::where('id', $data['id'])->delete();
       }else{
-        $update = UserCartItem::where('id', $data['id'])->update(['quantity' => $data['quantity']]);
+        $update = OrderProduct::where('id', $data['id'])->update(['qty' => $data['quantity']]);
       }
       if($update){
         return response()->json(['message' => 'Cart Updated'], 200);
@@ -110,5 +118,22 @@ class CartController extends Controller
 
   }
 
+  public function getCheckoutIndex($token){
+    $cart = $cart = Order::where('id', $this->getUserCart())->with(['products' => function($query){
+              $query->with(['product']);
+            }])->first();
+
+    $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress'])->first();
+
+    return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();
+  }
+
+  public function orderCheckout(Request $request){
+    $payment_type = $request->payment_type;
+    dd($payment_type);
+    if($payment_type == 3){
+
+    }
+  }
 
 }

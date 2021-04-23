@@ -42,6 +42,9 @@ class CustomerDetail extends Authenticatable
         'hear_us',
         'comments',
         'type',
+        'phone',
+        'preferred_communication',
+        'events_attended',
     ];
 
     /**

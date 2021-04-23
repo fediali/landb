@@ -41,7 +41,7 @@ class AuthController extends Controller
   {
     SeoHelper::setTitle(__('Login'));
 
-    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('public.login'));
+    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
 
     return Theme::scope('auth.login', [], 'plugins/ecommerce::themes.customers.login')->render();
   }
@@ -50,7 +50,7 @@ class AuthController extends Controller
   {
     SeoHelper::setTitle(__('Register'));
 
-    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('public.login'));
+    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
 
     return Theme::scope('auth.register', [], 'plugins/ecommerce::themes.customers.register')->render();
   }
