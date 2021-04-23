@@ -1200,7 +1200,6 @@ class OrderController extends BaseController
 
     public function importOrder(Request $request, BaseHttpResponse $response)
     {
-
         //TODO Refactor the code
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
@@ -1258,19 +1257,18 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['style_no'])->first();
-//                        if ($product != null) {
-//                        }
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['original_qty'] / $pack;
+                        }
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
-
-                        $orderQuantity = $row['original_qty'] / $pack;
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
 
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1285,7 +1283,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1360,18 +1358,17 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['style'])->first();
-//                        if ($product != null) {
-//                        }
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['total_qty'] / $pack;
+                        }
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
-
-                        $orderQuantity = $row['total_qty'] / $pack;
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1386,7 +1383,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1456,18 +1453,17 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['styleno'])->first();
-//                        if ($product != null) {
-//                        }
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['totalqty'] / $pack;
+                        }
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
-
-                        $orderQuantity = $row['totalqty'] / $pack;
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
@@ -1482,7 +1478,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
