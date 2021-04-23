@@ -104,6 +104,7 @@ class ThreadTable extends TableAbstract
         $select = [
             'threads.id',
             'threads.name',
+            'categories_threads.sku AS reg_sku',
             'threads.designer_id',
             'threads.vendor_id',
             'threads.created_at',
@@ -116,6 +117,8 @@ class ThreadTable extends TableAbstract
                     $query->select(['id', 'first_name', 'last_name']);
                 },
             ])
+            ->join('categories_threads', 'categories_threads.thread_id', '=', 'threads.id')
+            ->where('categories_threads.category_type', Thread::REGULAR)
             ->select($select);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
@@ -126,36 +129,41 @@ class ThreadTable extends TableAbstract
      */
     public function columns()
     {
-
         return [
-            'id'                  => [
+            'id'        => [
                 'name'  => 'threads.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'name'                => [
+            'name'      => [
                 'name'  => 'threads.name',
                 'title' => 'Description',
                 'class' => 'text-left',
             ],
-            'designer_id'         => [
+            'reg_sku'      => [
+                'name'  => 'categories_threads.sku',
+                'title' => 'Reg SKU',
+                'class' => 'text-left'
+            ],
+            'designer_id'   => [
                 'name'      => 'threads.designer_id',
                 'title'     => 'Designer',
                 'class'     => 'no-sort text-left',
-                'orderable' => false,
+                //'orderable' => false,
             ],
             'create_thread_order' => [
                 'name'    => 'thread_order',
                 'title'   => 'Create Order',
                 'width'   => '100px',
+                'searchable' => false,
                 'visible' => (Auth::user()->hasPermission(['threadorders.order'])) ? true : false,
             ],
-            'created_at'          => [
+            'created_at'   => [
                 'name'  => 'threads.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status'              => [
+            'status'      => [
                 'name'    => 'threads.status',
                 'title'   => trans('core/base::tables.status'),
                 'width'   => '100px',
@@ -200,21 +208,21 @@ class ThreadTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'threads.name'       => [
+            /*'threads.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
-            ],
+            ],*/
             'threads.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),
                 'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
             ],
-            'threads.created_at' => [
+            /*'threads.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 
