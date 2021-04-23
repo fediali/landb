@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <!-- <link rel="icon" href="img/SwingsationsFavicon.png" sizes="36x36" type="image/png"> -->
     <!--    Font Awesome 5.9-->
     <script src="https://kit.fontawesome.com/9c7309bfe2.js"></script>
@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <!--    Bootstrap 4.3.1-->
-    <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
     <!-- Custom Style Sheet -->
-    <link rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('landb/css/style.css') }}"/>
     <title>LandBAppreal</title>
     <style>
         .loading-overlay {
@@ -55,7 +55,7 @@
         <div class="topnav d-flex">
             <ul>
                 <li>
-                   <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>(123) 456-7890</span></a> 
+                    <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>(123) 456-7890</span></a>
                 </li>
             </ul>
             <ul class="d-flex">
@@ -70,7 +70,8 @@
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i class="fa fa-sign-out"></i></a>
+                        <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                                class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
                     @endauth
@@ -79,7 +80,7 @@
             </ul>
         </div>
         <nav class="navbar ">
-            <a class="navbar-brand" href="#"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
+            <a class="navbar-brand" href="{{url('/')}}"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
             <div class=" navbar-parent d-flex">
                 {!!

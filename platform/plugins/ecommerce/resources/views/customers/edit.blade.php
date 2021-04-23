@@ -252,28 +252,27 @@
                         </label>
                     </div>
                     <div class="group row">
-                        <label class="col-lg-12"> 
-                            
+                        <label class="col-lg-12">
+
                             <div id="card-element" class="field">
-                            <span>Card</span>
+                                <span>Card</span>
                                 <div id="fattjs-number" class="form-control"></div>
                                 <span class="mt-2">CVV</span>
                                 <div id="fattjs-cvv" class="form-control"></div>
                             </div>
-                            </label> 
+                        </label>
                     </div>
                     <div class="row">
-                            <div class="col-lg-3" >
-                                <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control">
-                            </div>
-                          <p class="mt-2">  / </p>
-                            <div class="col-lg-3" >
-                                <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control">
-                            </div>
-                            </div>
+                        <div class="col-lg-3">
+                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control">
+                        </div>
+                        <p class="mt-2"> / </p>
+                        <div class="col-lg-3">
+                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control">
+                        </div>
+                    </div>
                     <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>
                     <button class="btn btn-success mt-3" id="tokenizebutton">Tokenize Card</button>
-                    <!-- <button id="verifybutton">verify $1</button> -->
                     <div class="outcome">
                         <div class="error"></div>
                         <div class="success">
@@ -283,7 +282,7 @@
                         <div class="loader" style="margin: auto">
                         </div>
                 </form>
-
+                <button class="btn btn-info mt-3 paynow">Pay $1</button>
             </div>
         </div>
     </div>
@@ -509,7 +508,6 @@
     .table td {
         padding: 10px 5px !important;
         font-size: 14px;
-    } 
+    }
 </style>
 
- 
