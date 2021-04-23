@@ -7,6 +7,7 @@
                 @if ($customer)
                     :customer="{{ $customer }}"
                 @endif
+                :order_id="{{ $order->id }}"
                 :customer_id="{{ $order->user_id }}"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
                 :customer_address="{{ $customerAddress }}"

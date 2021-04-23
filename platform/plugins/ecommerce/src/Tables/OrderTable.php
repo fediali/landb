@@ -83,7 +83,10 @@ class OrderTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('orders.edit', 'orders.destroy', $item);
+                if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
+                    $html = '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
+                }
+                return $this->getOperations('orders.edit', 'orders.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);

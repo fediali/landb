@@ -22,6 +22,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.import',
             ]);
 
+            Route::get('edit-order/{id}', [
+                'as'         => 'editOrder',
+                'uses'       => 'OrderController@editOrder',
+                'permission' => 'orders.edit',
+            ]);
+
             Route::get('reorder', [
                 'as'         => 'reorder',
                 'uses'       => 'OrderController@getReorder',

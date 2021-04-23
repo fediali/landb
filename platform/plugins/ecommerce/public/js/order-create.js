@@ -786,6 +786,12 @@ __webpack_require__.r(__webpack_exports__);
         return null;
       }
     },
+    order_id: {
+      type: Number,
+      "default": function _default() {
+        return null;
+      }
+    },
     customer: {
       type: Object,
       "default": function _default() {
@@ -1110,6 +1116,7 @@ __webpack_require__.r(__webpack_exports__);
         discount_description: this.child_discount_description,
         coupon_code: this.coupon_code,
         customer_id: this.child_customer_id,
+        order_id: this.order_id,
         note: this.note,
         amount: this.child_sub_amount,
         customer_address: this.child_customer_address

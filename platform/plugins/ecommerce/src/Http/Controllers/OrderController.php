@@ -185,6 +185,22 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
+        $condition = [];
+        $meta_condition = [];
+        if ($request->input('order_id') && $request->input('order_id') > 0) {
+            $condition = ['id' => $request->input('order_id')];
+            $meta_condition = ['order_id' => $request->input('order_id')];
+
+            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+            foreach ($order_products as $order_product) {
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+            OrderProduct::where('order_id', $request->input('order_id'))->delete();
+        }
 
         foreach ($request->input('products', []) as $productItem) {
             $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
@@ -223,28 +239,29 @@ class OrderController extends BaseController
             'status'               => OrderStatusEnum::PROCESSING,
         ]);
 
-        $order = $this->orderRepository->createOrUpdate($request->input());
+        $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
 
         if ($order) {
+
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order_from_payment_page',
                 'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order',
                 'description' => trans('plugins/ecommerce::order.new_order',
                     ['order_id' => get_order_code($order->id)]),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'confirm_order',
                 'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
                 'order_id'    => $order->id,
                 'user_id'     => Auth::user()->getKey(),
-            ]);
+            ], $meta_condition);
 
             $payment = $this->paymentRepository->createOrUpdate([
                 'amount'          => $order->amount,
@@ -254,7 +271,7 @@ class OrderController extends BaseController
                 'payment_type'    => 'confirm',
                 'order_id'        => $order->id,
                 'charge_id'       => Str::upper(Str::random(10)),
-            ]);
+            ], $meta_condition);
 
             $order->payment_id = $payment->id;
             $order->save();
@@ -267,11 +284,11 @@ class OrderController extends BaseController
                     ]),
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ]);
+                ], $meta_condition);
             }
 
             if ($request->input('customer_address.name')) {
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $request->input('customer_address.name'),
                     'phone'    => $request->input('customer_address.phone'),
                     'email'    => $request->input('customer_address.email'),
@@ -281,15 +298,15 @@ class OrderController extends BaseController
                     'country'  => $request->input('customer_address.country'),
                     'address'  => $request->input('customer_address.address'),
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $customer->name,
                     'phone'    => $customer->phone,
                     'email'    => $customer->email,
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             }
 
             foreach ($request->input('products', []) as $productItem) {
@@ -948,6 +965,86 @@ class OrderController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse|Factory|View
      */
+    public function editOrder($id, Request $request, BaseHttpResponse $response)
+    {
+        if (!$id) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        page_title()->setTitle(trans('plugins/ecommerce::order.reorder'));
+
+        $order = $this->orderRepository->findById($id);
+
+        if (!$order) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        $productIds = $order->products->pluck('product_id')->all();
+
+        $products = $this->productRepository
+            ->getModel()
+            ->whereIn('id', $productIds)
+            ->get();
+
+        foreach ($products as &$availableProduct) {
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+                false, RvMedia::getDefaultImage());
+            $availableProduct->price = $availableProduct->front_sale_price;
+            $availableProduct->product_name = $availableProduct->name;
+            $availableProduct->product_link = route('products.edit', $availableProduct->id);
+            $availableProduct->select_qty = 1;
+            $availableProduct->product_id = $availableProduct->id;
+            $orderProduct = $order->products->where('product_id', $availableProduct->id)->first();
+            if ($orderProduct) {
+                $availableProduct->select_qty = $orderProduct->qty;
+            }
+            foreach ($availableProduct->variations as &$variation) {
+                $variation->price = $variation->product->front_sale_price;
+                foreach ($variation->variationItems as &$variationItem) {
+                    $variationItem->attribute_title = $variationItem->attribute->title;
+                }
+            }
+        }
+
+        $customer = null;
+        $customerAddresses = [];
+        $customerOrderNumbers = 0;
+        if ($order->user_id) {
+            $customer = $this->customerRepository->findById($order->user_id);
+            $customer->avatar = (string)$customer->avatar_url;
+
+            if ($customer) {
+                $customerOrderNumbers = $customer->orders()->count();
+            }
+
+            $customerAddresses = $customer->addresses->toArray();
+        }
+        $customerAddress = $order->address;
+
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/order-create.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
+
+        return view('plugins/ecommerce::orders.reorder', compact(
+            'order',
+            'products',
+            'productIds',
+            'customer',
+            'customerAddresses',
+            'customerAddress',
+            'customerOrderNumbers'
+        ));
+    }
+
     public function getReorder(Request $request, BaseHttpResponse $response)
     {
         if (!$request->input('order_id')) {
