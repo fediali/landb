@@ -1258,17 +1258,33 @@ class OrderController extends BaseController
                         }
 
                         $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
                         $product = Product::where('sku', $row['style_no'])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
                             $orderQuantity = $row['original_qty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                }
+                            }
+
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
 
-                        if ($orderPo != null && $product) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1283,7 +1299,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder && $product) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1359,16 +1375,32 @@ class OrderController extends BaseController
                         }
 
                         $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
                         $product = Product::where('sku', $row['style'])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
                             $orderQuantity = $row['total_qty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                }
+                            }
+
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
-                        if ($orderPo != null && $product) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1383,7 +1415,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder && $product) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1454,16 +1486,32 @@ class OrderController extends BaseController
                         }
 
                         $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
                         $product = Product::where('sku', $row['styleno'])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
                             $orderQuantity = $row['totalqty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                }
+                            }
+
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
-                        if ($orderPo != null && $product) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
@@ -1478,7 +1526,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder && $product) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
