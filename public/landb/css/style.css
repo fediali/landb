@@ -3000,7 +3000,8 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 /****** GALLERY ANIMATION CSS END *******/
  
-
-.dummy {
-    height: 100%;
+@media screen and (min-width: 1400px) and (max-width: 2200px) {
+    .grid-container {
+        height: 380vh !important;
+    }
 }
