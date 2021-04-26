@@ -112,9 +112,10 @@ gsap.utils.toArray("section").forEach((elem) => {
 $(document).ready(function () {
   $(document).on('submit', 'form.add_to_cart_form', function (e) {
     e.preventDefault();
+    var id = $(this).data('id');
     var formData = {
         '_token': $('meta[name="csrf-token"]').attr('content'),
-        'product_id': $(this).data('id'),
+        'product_id': id,
         'quantity': $(this).find('input[name="quantity"]').val(),
     };
     console.log(formData);
@@ -127,14 +128,18 @@ $(document).ready(function () {
       },
       success: function (result) {
         toggle_loader(false);
+        toastr['success'](result.message, 'Success');
+        $('#cart-icon-'+id).css('color','green');
       },
       error: function (result) {
         toggle_loader(false);
+        toastr['error'](result.message , 'Error');
       }
     })
   });
   $(document).on('click', 'a.add-to-wishlist', function (e) {
     e.preventDefault();
+    var id = $(this).data('id');
     $.ajax({
       type: 'GET',
       url: $(this).attr('href'),
@@ -143,9 +148,12 @@ $(document).ready(function () {
       },
       success: function (result) {
         toggle_loader(false);
+        toastr['success'](result.message, 'Success');
+        $('#wishlist-icon-'+id).css('color','red');
       },
       error: function (result) {
         toggle_loader(false);
+        toastr['error'](result.message , 'Error');
       }
     })
   });
@@ -171,6 +179,7 @@ function update_cart_item(input, val, url, action) {
       if(val == 0){
         $('.cartitem-'+id).remove();
       }
+      toastr['success'](result.message, 'Success');
       var newTotal = val * price;
       var subTotal = parseFloat($('#total-cart-price').text());
       var grandTotal = parseFloat($('#grand-total-cart-price').text());
@@ -181,6 +190,7 @@ function update_cart_item(input, val, url, action) {
     },
     error: function (result) {
       toggle_loader(false);
+      toastr['error'](result.message , 'Error');
     }
   })
 }
