@@ -58,6 +58,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@postCustomerAddress',
                 'permission' => 'customer.address',
             ]);
+            Route::post('create-customer-payment', [
+                'as'         => 'create-customer-payment',
+                'uses'       => 'CustomerController@postCustomerCard',
+                'permission' => 'customer.address',
+            ]);
         });
     });
 });

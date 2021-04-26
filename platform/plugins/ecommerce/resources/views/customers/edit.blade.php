@@ -196,83 +196,41 @@
             <div class="p-3 bg-white">
 
 
-                <div class="row">
-
-
-                    {{--                    <div class="col-lg-6 mt-2">--}}
-                    {{--                        <label for="name">Card Number:</label>--}}
-                    {{--                        <div id="fattjs-number" class="form-control"--}}
-                    {{--                             style="width:180px; height:35px; display: inline-block; margin:3px"></div>--}}
-                    {{--                    </div>--}}
-
-
-                    {{--                    <div class="col-lg-6 mt-2">--}}
-                    {{--                        <label for="phone">CVV:</label>--}}
-                    {{--                        <div id="fattjs-cvv" class="form-control"--}}
-                    {{--                             style="width:50px; height:35px; display: inline-block; margin:3px"></div>--}}
-
-                    {{--                    </div>--}}
-
-                    {{--                    <div class="col-lg-6 mt-2">--}}
-                    {{--                        <label for="email">Expires:</label>--}}
-                    {{--                        <input id="email" type="text" class="form-control" placeholder="MM/YY" name="" value="">--}}
-                    {{--                    </div>--}}
-
-
-                    {{--                    <div class="col-lg-6 mt-2">--}}
-                    {{--                        <label for="phone">First Name:</label>--}}
-                    {{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
-                    {{--                               name="cardholder-first-name"--}}
-                    {{--                               value="">--}}
-
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-lg-6 mt-2">--}}
-                    {{--                        <label for="phone">Last Name:</label>--}}
-                    {{--                        <input id="phone" type="text" class="form-control" placeholder="Name on Card"--}}
-                    {{--                               name="cardholder-last-name"--}}
-                    {{--                               value="">--}}
-
-                    {{--                    </div>--}}
-                    {{--                    <div class="form-group col-lg-6 mt-4">--}}
-                    {{--                        --}}{{--                        <button id="tokenizebutton" class="btn btn-primary btn-lg" type="submit">Add Card</button>--}}
-                    {{--                    </div>--}}
-                </div>
-
                 <form onsubmit="return false;">
                     <!--      Make your own form or copy this one -->
                     <div class="row group">
-                        <label class="col-lg-6">
-                            <span>First Name</span>
-                            <input
-                                name="cardholder-first-name" class="form-control field input-box" placeholder="Jane"/>
-                        </label>
-                        <label class="col-lg-6">
-                            <span>Last Name</span>
-                            <input name="cardholder-last-name" class="form-control field input-box" placeholder="Doe"/>
-                        </label>
+                        @isset($customer->billingAddress)
+                            <label class="col-lg-12">
+                                <span>Billing Address</span>
+                                {!!
+                        Form::select('billing_address', $customer->billingAddress->pluck('address'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                        ])
+                    !!}
+                            </label>
+                        @endisset
                     </div>
                     <div class="group row">
                         <label class="col-lg-12">
 
                             <div id="card-element" class="field">
                                 <span>Card</span>
-                                <div id="fattjs-number" class="form-control"></div>
+                                <div id="fattjs-number" style="height: 35px"></div>
                                 <span class="mt-2">CVV</span>
-                                <div id="fattjs-cvv" class="form-control"></div>
+                                <div id="fattjs-cvv" style="height: 35px"></div>
                             </div>
                         </label>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control">
+                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
                         </div>
                         <p class="mt-2"> / </p>
                         <div class="col-lg-3">
-                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control">
+                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
                         </div>
                     </div>
-                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>
-                    <button class="btn btn-success mt-3" id="tokenizebutton">Tokenize Card</button>
+                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
                     <div class="outcome">
                         <div class="error"></div>
                         <div class="success">
@@ -281,8 +239,13 @@
                         </div>
                         <div class="loader" style="margin: auto">
                         </div>
+                    </div>
                 </form>
                 <button class="btn btn-info mt-3 paynow">Pay $1</button>
+                <form method="POST" action="{{route('thread.testingPayment')}}">
+                    @csrf
+                    <button class="btn btn-info mt-3 ">Pay $1</button>
+                </form>
             </div>
         </div>
     </div>

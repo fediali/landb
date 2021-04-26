@@ -302,5 +302,10 @@ class CustomerController extends BaseController
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
+    public function postCustomerCard(Request $request)
+    {
+        dd($request);
+    }
+
 
 }

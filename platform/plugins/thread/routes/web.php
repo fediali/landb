@@ -91,6 +91,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 event(new \App\Events\ThreadApproval());
                 return 'ok';
             });
+            Route::post('testingPayment', [
+                'as'         => 'testingPayment',
+                'uses'       => 'ThreadController@charge',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

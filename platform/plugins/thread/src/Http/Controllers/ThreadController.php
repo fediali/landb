@@ -560,4 +560,46 @@ class ThreadController extends BaseController
         $notification = DB::table('user_notifications')->where('id', $request->notification_id)->update(['seen' => 1]);
     }
 
+    public function charge()
+    {
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://apiprod.fattlabs.com/charge");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "{
+  \"payment_method_id\": \"7c86860a-b44e-4d41-a1e0-3a267d098e7e\",
+  \"meta\": {
+    \"tax\": 2,
+    \"subtotal\": 10,
+    \"lineItems\": [
+      {
+        \"id\": \"optional-fm-catalog-item-id\",
+        \"item\": \"Demo Item\",
+        \"details\": \"this is a regular demo item\",
+        \"quantity\": 10,
+        \"price\": 1
+      }
+    ]
+  },
+  \"total\": 12,
+  \"pre_auth\": 0
+}");
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Content-Type: application/json",
+            "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU4ODYxNDg5LTQyNTEtNDJkNS05YTgyLTQ0MmNlOWY3MzAyNyIsImdvZFVzZXIiOmZhbHNlLCJhc3N1bWluZyI6ZmFsc2UsImJyYW5kIjoiZmF0dG1lcmNoYW50LXNhbmRib3giLCJzdWIiOiJhMWY5YjFmMi0xYTg5LTQyYmItOTA2YS1jM2UzYmZjYTEzZDgiLCJpc3MiOiJodHRwOi8vYXBpcHJvZC5mYXR0bGFicy5jb20vc2FuZGJveCIsImlhdCI6MTYxODI1Nzc5NSwiZXhwIjo0NzcxODU3Nzk1LCJuYmYiOjE2MTgyNTc3OTUsImp0aSI6IndyVXhhMXRoM09KdWw2TmYifQ.qgBPNQo7GXWpbqJXD0iko1T2PlTXNf26t1Fse_b4qTs",
+            "Accept: application/json"
+        ));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        var_dump($response);
+
+    }
 }

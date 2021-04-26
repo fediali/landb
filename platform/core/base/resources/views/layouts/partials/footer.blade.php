@@ -99,16 +99,12 @@
     // tell fattJs to load in the card fields
     fattJs.showCardForm().then(handler => {
         console.log('form loaded');
-
-        // for testing!
-        //handler.setTestPan('4111111111111111');
-        //handler.setTestCvv('123');
-        var form = document.querySelector('form');
-        form.querySelector('input[name=month]').value = 11;
-        form.querySelector('input[name=year]').value = 2025;
-        form.querySelector('input[name=cardholder-first-name]').value = 'Jon';
-        form.querySelector('input[name=cardholder-last-name]').value = 'Doe';
-        form.querySelector('input[name=phone]').value = '+1111111111111111';
+        // var form = document.querySelector('form');
+        // form.querySelector('input[name=month]').value = 11;
+        // form.querySelector('input[name=year]').value = 2025;
+        // form.querySelector('input[name=cardholder-first-name]').value = 'Jon';
+        // form.querySelector('input[name=cardholder-last-name]').value = 'Doe';
+        // form.querySelector('input[name=phone]').value = '+1111111111111111';
     })
         .catch(err => {
             console.log('error init form ' + err);
@@ -117,115 +113,99 @@
 
     fattJs.on('card_form_complete', (message) => {
         // activate pay button
-        payButton.disabled = false;
+        //payButton.disabled = false;
         tokenizeButton.disabled = false;
         console.log(message);
     });
 
-    fattJs.on('card_form_uncomplete', (message) => {
+    fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button
-        payButton.disabled = true;
+        //payButton.disabled = true;
         tokenizeButton.disabled = true;
         console.log(message);
     });
 
-
     document.querySelector('#tokenizebutton').onclick = () => {
         console.log('working')
-        var successElement = document.querySelector('.success');
+        var month = $('.month').val();
+        var year = $('.year').val();
+        var address = '';
+        successElement = document.querySelector('.success');
         var errorElement = document.querySelector('.error');
         var loaderElement = document.querySelector('.loader');
 
         successElement.classList.remove('visible');
         errorElement.classList.remove('visible');
         loaderElement.classList.add('visible');
-
+        @isset($customer)
+        $.ajax({
+            url: '{{ route('customers.get-customer-addresses',[$customer->id]) }}',
+            type: 'get',
+            success: function (data) {
+                address = data;
+                return address;
+            },
+            error: function (request, status, error) {
+                toastr['warning']('Notification Unreadable', 'Reading Error');
+            }
+        });
+        @endisset()
         var form = document.querySelector('form');
+        console.log('getting address', address)
         var extraDetails = {
-            total: 1, // 1$
-            firstname: "John",
-            lastname: "Doe",
+            firstname: "{{isset($customer) ? $customer->detail->first_name : 'john'}}",
+            lastname: "{{isset ($customer) ?$customer->detail->last_name : 'doe'}}",
             method: "card",
-            month: "10",
-            year: "2022",
-            phone: "5555555555",
-            address_1: "100 S Orange Ave",
-            address_2: "Suite 400",
-            address_city: "Orlando",
-            address_state: "FL",
-            address_zip: "32811",
-            address_country: "USA",
+            month: month,
+            year: year,
+            phone: "{{isset($customer) ? $customer->phone : null}}",
+            address_1: address.address,
+            address_city: address.city,
+            address_state: address.state,
+            address_zip: address.zip_code,
+            address_country: address.country,
             url: "https://omni.fattmerchant.com/#/bill/",
-
-            // validate is optional and can be true or false.
-            // determines whether or not fattmerchant.js does client-side validation.
-            // the validation follows the sames rules as the api.
-            // check the api documentation for more info:
-            // https://fattmerchant.com/api-documentation/
             validate: false,
         };
         console.log(extraDetails)
         // call tokenize api
-        fattJs.tokenize(extraDetails).then((result) => {
-            console.log('tokenize:');
-            console.log(result);
-            if (result) {
-                successElement.querySelector('.token').textContent = result.id;
-                successElement.classList.add('visible');
-            }
-            loaderElement.classList.remove('visible');
-        })
-            .catch(err => {
-                console.log(err)
-                errorElement.textContent = err.message;
-                errorElement.classList.add('visible');
-                loaderElement.classList.remove('visible');
-            });
+        // fattJs.tokenize(extraDetails).then((result) => {
+        //     console.log(result);
+        //     if (result) {
+        //         successElement.querySelector('.token').textContent = result.id;
+        //         successElement.classList.add('visible');
+        //         functionAddCard(result);
+        //
+        //     }
+        //     loaderElement.classList.remove('visible');
+        // })
+        //     .catch(err => {
+        //         console.log(err)
+        //         errorElement.textContent = err.message;
+        //         errorElement.classList.add('visible');
+        //         loaderElement.classList.remove('visible');
+        //     });
     }
 
 
-
-    $(document).ready(function () {
-        console.log('test')
-        $('.paynow').on('click', function () {
-            var request = new XMLHttpRequest();
-
-            request.open('POST', 'https://private-anon-81b439375b-fattmerchant.apiary-proxy.com/charge');
-
-            request.setRequestHeader('Content-Type', 'application/json');
-            request.setRequestHeader('Authorization', 'Bearer LandB-Apparel-c03e1af6c561');
-            request.setRequestHeader('Accept', 'application/json');
-
-            request.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    console.log('Status:', this.status);
-                    console.log('Headers:', this.getAllResponseHeaders());
-                    console.log('Body:', this.responseText);
-                }
-            };
-
-            var body = {
-                'payment_method_id': 'e9f01cfc-01ec-4ca5-aab4-062b9582bc9c',
-                'meta': {
-                    'tax': 2,
-                    'subtotal': 10,
-                    'lineItems': [
-                        {
-                            'id': 'optional-fm-catalog-item-id',
-                            'item': 'Demo Item',
-                            'details': 'this is a regular demo item',
-                            'quantity': 10,
-                            'price': 1
-                        }
-                    ]
-                },
-                'total': 12,
-                'pre_auth': 0
-            };
-
-            request.send(JSON.stringify(body));
-        })
-    })
+    function functionAddCard(result) {
+        console.log('addingCard', result);
+        $.ajax({
+            url: '{{ route('customers.create-customer-payment') }}',
+            type: 'post',
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'data': result,
+            },
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (request, status, error) {
+                toastr['warning']('Notification Unreadable', 'Reading Error');
+            }
+        });
+        console.log(not_id);
+    }
 
 
 </script>
