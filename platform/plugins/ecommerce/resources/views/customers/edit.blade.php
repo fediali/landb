@@ -197,7 +197,7 @@
 
 
                 <form onsubmit="return false;">
-                    <!--      Make your own form or copy this one -->
+                     <!--      Make your own form or copy this one -->
                     <div class="row group">
                         @isset($customer->billingAddress)
                             <label class="col-lg-12">
