@@ -766,6 +766,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -804,6 +812,18 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": function _default() {
         return [];
+      }
+    },
+    order_types: {
+      type: Object,
+      "default": function _default() {
+        return [];
+      }
+    },
+    sel_order_type: {
+      type: String,
+      "default": function _default() {
+        return 'normal';
       }
     },
     customer_address: {
@@ -910,6 +930,7 @@ __webpack_require__.r(__webpack_exports__);
       hidden_product_search_panel: true,
       loading: false,
       note: null,
+      order_type: 'normal',
       customers: {
         data: []
       },
@@ -1118,6 +1139,7 @@ __webpack_require__.r(__webpack_exports__);
         customer_id: this.child_customer_id,
         order_id: this.order_id,
         note: this.note,
+        order_type: this.order_type,
         amount: this.child_sub_amount,
         customer_address: this.child_customer_address
       }).then(function (res) {
@@ -7525,10 +7547,7 @@ var render = function() {
                                     "a",
                                     {
                                       staticClass: "hover-underline pre-line",
-                                      attrs: {
-                                        href: variant.product_link,
-                                        target: "_blank"
-                                      }
+                                      attrs: { href: "#" }
                                     },
                                     [_vm._v(_vm._s(variant.product_name))]
                                   ),
@@ -8203,6 +8222,73 @@ var render = function() {
                       }
                     }
                   })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "text-title-field" }, [
+                    _vm._v("Select Order Type")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.order_type,
+                          expression: "order_type"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "order-type" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.order_type = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          attrs: { value: "", disabled: true },
+                          domProps: { selected: true }
+                        },
+                        [_vm._v("Select Order Type")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.order_types, function(value, index) {
+                        return _c(
+                          "option",
+                          {
+                            domProps: {
+                              value: index,
+                              selected: index === _vm.sel_order_type
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(value) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -8384,49 +8470,43 @@ var render = function() {
                   staticClass: "col-12 col-sm-6 col-md-12 col-lg-6 text-right"
                 },
                 [
-                  _c(
-                    "button",
-                    {
-                      directives: [
-                        {
-                          name: "b-modal",
-                          rawName: "v-b-modal.make-paid",
-                          modifiers: { "make-paid": true }
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.child_payment_method,
+                        expression: "child_payment_method"
+                      }
+                    ],
+                    attrs: { type: "hidden", value: "cod" },
+                    domProps: { value: _vm.child_payment_method },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
                         }
-                      ],
-                      staticClass: "btn btn-primary",
-                      attrs: { disabled: !_vm.child_product_ids.length }
-                    },
-                    [
-                      _vm._v(
-                        _vm._s(_vm.__("Paid")) + "\n                        "
-                      )
-                    ]
-                  ),
+                        _vm.child_payment_method = $event.target.value
+                      }
+                    }
+                  }),
                   _vm._v(" "),
                   _c(
                     "button",
                     {
-                      directives: [
-                        {
-                          name: "b-modal",
-                          rawName: "v-b-modal.make-pending",
-                          modifiers: { "make-pending": true }
-                        }
-                      ],
                       staticClass: "btn btn-primary ml15",
                       attrs: {
                         disabled:
                           !_vm.child_product_ids.length ||
                           _vm.child_total_amount === 0
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.createOrder($event)
+                        }
                       }
                     },
-                    [
-                      _vm._v(
-                        _vm._s(_vm.__("Pay later")) +
-                          "\n                        "
-                      )
-                    ]
+                    [_vm._v(_vm._s(_vm.__("Pay later")))]
                   )
                 ]
               )
