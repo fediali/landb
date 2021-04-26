@@ -1194,11 +1194,13 @@ class OrderController extends BaseController
     public function import(Request $request)
     {
         $import = null;
+        $import_errors = $request->import_errors;
+
         if ($request->import) {
             $importOrder = OrderImport::where('order_import_upload_id', $request->import)->pluck('order_id');
             $import = Order::whereIN('id', $importOrder)->get();
         }
-        return view('plugins/ecommerce::order-import.create', compact('import'));
+        return view('plugins/ecommerce::order-import.create', compact('import','import_errors'));
     }
 
     public function importOrder(Request $request, BaseHttpResponse $response)
@@ -1210,10 +1212,12 @@ class OrderController extends BaseController
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
             $order = Excel::toCollection(new OrderImportFile(), $move);
+
             $upload = OrderImportUpload::create(['file' => $move]);
 
-            if ($request->market_place == Order::LASHOWROOM) {
+            $errors = [];
 
+            if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         if (!isset($row['po'])) {
@@ -1221,6 +1225,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         $customer = Customer::where(['phone' => $row['phone_number']])->first();
                         if ($customer == null) {
                             //creating Customer
@@ -1264,6 +1269,7 @@ class OrderController extends BaseController
                         $checkProdQty = false;
                         //Finding Product For Order
                         $product = Product::where('sku', $row['style_no'])->first();
+
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1272,17 +1278,35 @@ class OrderController extends BaseController
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                                 if ($orderQuantity <= $product->online_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
                                 }
                             } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                                 if ($orderQuantity <= $product->in_person_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
                                 }
                             } else {
                                 if ($orderQuantity <= $product->quantity) {
                                     $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
                                 }
                             }
 
+                        } else {
+                            $errors[] = $row['style_no'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style_no'].' product is out of stock.';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
@@ -1323,9 +1347,7 @@ class OrderController extends BaseController
                         }
                     }
                 }
-
             } elseif ($request->market_place == Order::ORANGESHINE) {
-
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         if (!isset($row['invoice'])) {
@@ -1333,6 +1355,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         if ($row['payment'] == 'PayPal') {
                             $customer = Customer::where(['phone' => $row['shipping_phone']])->first();
                         } else {
@@ -1389,17 +1412,35 @@ class OrderController extends BaseController
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                                 if ($orderQuantity <= $product->online_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
                                 }
                             } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                                 if ($orderQuantity <= $product->in_person_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
                                 }
                             } else {
                                 if ($orderQuantity <= $product->quantity) {
                                     $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
                                 }
                             }
 
+                        } else {
+                            $errors[] = $row['style'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style'].' product is out of stock.';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
@@ -1448,6 +1489,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         $customer = Customer::where(['phone' => $row['phonenumber']])->first();
                         if ($customer == null) {
                             //creating Customer
@@ -1500,17 +1542,35 @@ class OrderController extends BaseController
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                                 if ($orderQuantity <= $product->online_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
                                 }
                             } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                                 if ($orderQuantity <= $product->in_person_sales_qty) {
                                     $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
                                 }
                             } else {
                                 if ($orderQuantity <= $product->quantity) {
                                     $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
                                 }
                             }
 
+                        } else {
+                            $errors[] = $row['styleno'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['styleno'].' product is out of stock.';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
@@ -1549,13 +1609,13 @@ class OrderController extends BaseController
                         }
                     }
                 }
-
             }
+
         } else {
             return 'not supported';
         }
 
-        return redirect(route('orders.import', ['import' => $upload->id]));
+        return redirect(route('orders.import', ['import' => $upload->id, 'import_errors' => $errors]));
     }
 
 
