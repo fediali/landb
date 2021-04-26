@@ -25,7 +25,7 @@
         </div>
         <div class="col-lg-6">
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$ {{ $product->price }}</p>
+            <p class="detail-price mb-2">$ {{ $product->sale_price }}</p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <p class="detail-size-p mb-2"><span class="detail-size">Size</span>@foreach($product->category->category_sizes as $cat_size) {{ $cat_size->name }} {!! ($loop->last) ? '':',' !!} @endforeach </p>
             <select class="detail-size-select">
@@ -60,11 +60,11 @@
                <div class="row mt-4"> 
                 <div id="myform" class="col-lg-4">
                     <input type='button' value='-' class='qtyminus' data-update="0" field='quantity' />
-                    <input type='text' name='quantity' value='1' class='qty' />
+                    <input type='text' name='quantity' value='1' class='qty' readonly />
                     <input type='button' value='+' class='qtyplus' data-update="0" field='quantity' />
                 </div> 
                 <div class="col-lg-4">
-                    <button class="cart-btn w-100 add-to-cart-button" data-id="{{ $product->id }}">Add to cart</button>
+                    <button class="cart-btn w-100 add-to-cart-button cart-submit" data-id="{{ $product->id }}">Add to cart</button>
                 </div>
                </div>
                 </form>

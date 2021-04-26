@@ -55,8 +55,10 @@ class WishlistController extends Controller
     $product = Product::find($id);
     if($product){
       $wishlistItem = $this->createWishlistItem($id);
-      if($wishlistItem){
-        return response()->json(['message' => 'Item added to wishlist'], 200);
+      if($wishlistItem == 0){
+        return response()->json(['message' => 'Product is already added to wishlist'], 200);
+      }elseif($wishlistItem == 1){
+        return response()->json(['message' => 'Product added to wishlist'], 200);
       }else{
         return response()->json(['message' => 'Server Error'], 500);
       }
@@ -69,10 +71,7 @@ class WishlistController extends Controller
     $wishlistId = $this->getUserWishlist();
     $checkWishlist = UserWishlistItems::where('wishlist_id', $wishlistId)->where('product_id', $id)->first();
     if($checkWishlist){
-      $update =  $checkWishlist->update(['quantity' => $checkWishlist->quantity+1 , 'status' => 'active']);
-      if($update){
-        return true;
-      }
+      return 0;
     }else{
       $create = UserWishlistItems::create([
           'wishlist_id' => $wishlistId,
@@ -80,10 +79,10 @@ class WishlistController extends Controller
           'quantity' => 1
       ]);
       if($create){
-        return true;
+        return 1;
       }
     }
-    return false;
+    return 2;
   }
 
 }

@@ -231,8 +231,13 @@
                     <span>Restock</span>
                     <div class="imgoverlay">
                         <a href="{!! generate_product_url('detail', $product->id) !!}"><i class="far fa-eye"></i></a>
-                        <a class="add-to-wishlist" href="{!! generate_product_url('wishlist', $product->id) !!}"><i class="far fa-heart"></i></a>
-                        <a href="{!! generate_product_url('cart', $product->id) !!}"><i class="far fa-shopping-bag"></i></a>
+                        <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
+                        <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                            <div class="col-lg-4">
+                                <input type='hidden' name='quantity' value='1' class='qty' />
+                            </div>
+                        <a class="cart-submit" id="cart-icon-{{$product->id}}" onclick="$('#myform-{{$product->id}}').trigger('submit');" href="javascript:void(0);"><i class="far fa-shopping-bag"></i></a>
+                        </form>
                     </div>
                 </div>
                 <div class="caption">

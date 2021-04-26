@@ -41,7 +41,14 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col-4">
+                    {!!
+                        Menu::renderMenuLocation('footer-menu', [
+                            'options' => [],
+                            'theme' => true,
+                            'view' => 'footer-menu',
+                        ])
+                    !!}
+                    {{--<div class="col-4">
                         <h6>Navigate</h6>
                         <ul>
                             <li><a href="#">Home</a></li>
@@ -68,7 +75,7 @@
                             <li><a href="#">Snapchat</a></li>
 
                         </ul>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
             <div class="col-md-4">
@@ -93,6 +100,7 @@
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
 {{--<script>
   $(document).ready(function() {
     $("#filtertoggle").click(function() {

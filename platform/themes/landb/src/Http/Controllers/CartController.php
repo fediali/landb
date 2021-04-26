@@ -55,7 +55,7 @@ class CartController extends Controller
     if($product){
       $cartItem = $this->createCartItem($data, $product);
       if($cartItem){
-        return response()->json(['message' => 'Item added to cart'], 200);
+        return response()->json(['message' => 'Product added to cart successfully'], 200);
       }else{
         return response()->json(['message' => 'Server Error'], 500);
       }
@@ -108,7 +108,7 @@ class CartController extends Controller
         $update = OrderProduct::where('id', $data['id'])->update(['qty' => $data['quantity']]);
       }
       if($update){
-        return response()->json(['message' => 'Cart Updated'], 200);
+        return response()->json(['message' => 'Cart Updated successfully'], 200);
       }else{
         return response()->json(['message' => 'Server Error'], 500);
       }
