@@ -34,11 +34,18 @@ class Order extends BaseModel
     const ORANGESHINE = 3;
 
     public static $MARKETPLACE = [
-        self::LASHOWROOM  => 'LA SHOWROOM',
-        self::FASHIONGO   => 'FASHIONGO',
+        self::LASHOWROOM => 'LA SHOWROOM',
+        self::FASHIONGO => 'FASHIONGO',
         self::ORANGESHINE => 'ORANGE SHINE'
     ];
 
+    const NORMAL = 'normal';
+    const PRE_ORDER = 'pre_order';
+
+    public static $ORDER_TYPES = [
+        self::NORMAL => 'Normal',
+        self::PRE_ORDER => 'Pre Order',
+    ];
 
     protected
         $fillable = [
@@ -65,7 +72,7 @@ class Order extends BaseModel
      */
     protected
         $casts = [
-        'status'          => OrderStatusEnum::class,
+        'status' => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
 
@@ -181,4 +188,14 @@ class Order extends BaseModel
     {
         return $this->hasOne(OrderImport::class, 'order_id');
     }
+
+    public function getOrderTypeHtmlAttribute()
+    {
+        if ($this->order_type == self::PRE_ORDER) {
+            return '<span class="label-warning status-label">Pre Order</span>';
+        } else {
+            return '<span class="label-primary status-label">Normal</span>';
+        }
+    }
+
 }

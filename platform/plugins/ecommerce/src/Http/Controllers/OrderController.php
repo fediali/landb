@@ -237,6 +237,7 @@ class OrderController extends BaseController
             'description'          => $request->input('note'),
             'is_confirmed'         => 1,
             'status'               => OrderStatusEnum::PROCESSING,
+            'order_type'           => $request->input('order_type'),
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
@@ -328,27 +329,29 @@ class OrderController extends BaseController
 
                 $this->orderProductRepository->create($data);
 
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $product->id)
-                    ->where('with_storehouse_management', 1)
-                    ->where('quantity', '>', 0)
-                    ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+                if ($order->order_type == Order::NORMAL) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $product->id)
+                        ->where('with_storehouse_management', 1)
+                        ->where('quantity', '>', 0)
+                        ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
 
-                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                    $this->productRepository
-                        ->getModel()
-                        ->where('id', $product->id)
-                        ->where('with_storehouse_management', 1)
-                        ->where('online_sales_qty', '>', 0)
-                        ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
-                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                    $this->productRepository
-                        ->getModel()
-                        ->where('id', $product->id)
-                        ->where('with_storehouse_management', 1)
-                        ->where('in_person_sales_qty', '>', 0)
-                        ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('online_sales_qty', '>', 0)
+                            ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('in_person_sales_qty', '>', 0)
+                            ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    }
                 }
 
             }

@@ -18,8 +18,8 @@
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 min-width-200-px">
-                                        <a class="hover-underline pre-line" :href="variant.product_link"
-                                           target="_blank">{{ variant.product_name }}</a>
+                                        <!--<a class="hover-underline pre-line" :href="variant.product_link" target="_blank">{{ variant.product_name }}</a>-->
+                                        <a class="hover-underline pre-line" href="#">{{ variant.product_name }}</a>
                                         <p class="type-subdued"
                                            v-if="variant.variation_items && variant.variation_items.length">
                                             <span v-for="(productItem, index) in variant.variation_items">
@@ -153,8 +153,18 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="text-title-field" for="txt-note">{{ __('Note') }}</label>
-                                <textarea class="ui-text-area textarea-auto-height" id="txt-note" rows="2"
-                                          placeholder="Note for order..." v-model="note"></textarea>
+                                <textarea class="ui-text-area textarea-auto-height" id="txt-note" rows="2" placeholder="Note for order..." v-model="note"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-title-field">Select Order Type</label>
+                                <select class="form-control" id="order-type" v-model="order_type">
+                                    <option value="" :disabled="true" :selected="true">Select Order Type</option>
+                                    <option v-for="(value, index) in order_types"
+                                            :value="index"
+                                            :selected="index === sel_order_type">
+                                        {{ value }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -212,12 +222,10 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-12 col-lg-6 text-right">
-                            <button class="btn btn-primary" v-b-modal.make-paid
-                                    :disabled="!child_product_ids.length">{{ __('Paid') }}
-                            </button>
-                            <button class="btn btn-primary ml15" v-b-modal.make-pending
-                                    :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}
-                            </button>
+                            <!--<button class="btn btn-primary" v-b-modal.make-paid :disabled="!child_product_ids.length">{{ __('Paid') }}</button>-->
+                            <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
+                            <input type="hidden" v-model="child_payment_method" value="cod">
+                            <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>
                         </div>
                     </div>
                 </div>
@@ -783,6 +791,14 @@
                 type: Array,
                 default: () => [],
             },
+            order_types: {
+                type: Object,
+                default: () => [],
+            },
+            sel_order_type: {
+                type: String,
+                default: () => 'normal',
+            },
             customer_address: {
                 type: Object,
                 default: () => ({
@@ -859,6 +875,7 @@
                 hidden_product_search_panel: true,
                 loading: false,
                 note: null,
+                order_type: 'normal',
                 customers: {
                     data: [],
                 },
@@ -1069,6 +1086,7 @@
                         customer_id: this.child_customer_id,
                         order_id: this.order_id,
                         note: this.note,
+                        order_type: this.order_type,
                         amount: this.child_sub_amount,
                         customer_address: this.child_customer_address,
                     })

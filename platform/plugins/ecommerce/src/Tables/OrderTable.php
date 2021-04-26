@@ -53,6 +53,9 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
+            ->editColumn('order_type', function ($item) {
+                return $item->order_type_html;
+            })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
             })
@@ -106,6 +109,7 @@ class OrderTable extends TableAbstract
         $select = [
             'ec_orders.id',
             'ec_orders.status',
+            'ec_orders.order_type',
             'ec_orders.user_id',
             'ec_orders.created_at',
             'ec_orders.amount',
@@ -174,6 +178,11 @@ class OrderTable extends TableAbstract
             'status'          => [
                 'name'  => 'ec_orders.status',
                 'title' => trans('core/base::tables.status'),
+                'class' => 'text-center',
+            ],
+            'order_type'    => [
+                'name'  => 'ec_orders.order_type',
+                'title' => 'Order Type',
                 'class' => 'text-center',
             ],
             'created_at'      => [

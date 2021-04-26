@@ -9,6 +9,8 @@
                 @endif
                 :order_id="{{ $order->id }}"
                 :customer_id="{{ $order->user_id }}"
+                :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
+                :sel_order_type="{{$order->order_type}}"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
                 :customer_address="{{ $customerAddress }}"
                 :sub_amount="{{ $order->amount }}"
