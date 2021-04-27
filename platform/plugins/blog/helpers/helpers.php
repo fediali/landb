@@ -675,4 +675,35 @@ if (!function_exists('create_customer')) {
         return $customer;
     }
 }
+
+if (!function_exists('omni_api')) {
+    function omni_api($url, $data = [], $type = 'GET')
+    {
+        $curl = curl_init();
+        $request = [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => $type,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_TOKEN')]
+        ];
+
+        if ($type == 'POST') {
+            $request[CURLOPT_POSTFIELDS] = json_encode($data);
+            $request[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+        }
+
+        curl_setopt_array($curl, $request);
+
+        $response = curl_exec($curl);
+
+        $info = curl_getinfo($curl);
+        curl_close($curl);
+        return $response;
+    }
+}
 //Utils

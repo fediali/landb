@@ -36,6 +36,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@getCustomerAddresses',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
+            Route::get('get-addresses/{id}', [
+                'as'         => 'get-addresses',
+                'uses'       => 'CustomerController@getAddresses',
+                'permission' => ['customers.index', 'orders.index'],
+            ]);
 
             Route::get('get-customer-order-numbers/{id}', [
                 'as'         => 'get-customer-order-numbers',

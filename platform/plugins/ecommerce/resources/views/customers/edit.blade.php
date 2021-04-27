@@ -197,13 +197,13 @@
 
 
                 <form onsubmit="return false;">
-                     <!--      Make your own form or copy this one -->
+                    <!--      Make your own form or copy this one -->
                     <div class="row group">
                         @isset($customer->billingAddress)
                             <label class="col-lg-12">
                                 <span>Billing Address</span>
                                 {!!
-                        Form::select('billing_address', $customer->billingAddress->pluck('address'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                        Form::select('billing_address', $customer->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
                         ])
                     !!}
                             </label>
@@ -241,11 +241,10 @@
                         </div>
                     </div>
                 </form>
-                <button class="btn btn-info mt-3 paynow">Pay $1</button>
-                <form method="POST" action="{{route('thread.testingPayment')}}">
-                    @csrf
-                    <button class="btn btn-info mt-3 ">Pay $1</button>
-                </form>
+                {{--                <form method="POST" action="{{route('thread.testingPayment')}}">--}}
+                {{--                    @csrf--}}
+                {{--                    <button class="btn btn-info mt-3 ">Pay $1</button>--}}
+                {{--                </form>--}}
             </div>
         </div>
     </div>
@@ -310,21 +309,18 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Card Number</th>
-                            <th>Expires</th>
-                            <th>CVV</th>
                             <th>Name on Card</th>
-                            <th>Action</th>
+                            <th>Expires</th>
+                            <th>Last 4 Digit</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($customer->addresses as $row)
+
+                        @foreach(json_decode($card) as $cards)
                             <tr>
-                                <td>{{$row->name}}</td>
-                                <td>{{$row->email}}</td>
-                                <td>{{$row->phone}}</td>
-                                <td>{{$row->address}}</td>
-                                <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
+                                <td>{{$cards->person_name}}</td>
+                                <td>{{$cards->card_exp}}</td>
+                                <td>{{$cards->card_last_four}}</td>
                                 {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
                                 {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}

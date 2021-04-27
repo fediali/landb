@@ -57,7 +57,7 @@
 
 
 <script>
-
+    var address = '';
     $(document).ready(function () {
         $('.notification_read').on('click', function () {
             console.log('working');
@@ -114,10 +114,27 @@
     fattJs.on('card_form_complete', (message) => {
         // activate pay button
         //payButton.disabled = false;
-        tokenizeButton.disabled = false;
+        var billing = $("#billing_address option:selected").text();
+
+
+        tokenizeButton.disabled = billing === 'Select Address';
         console.log(message);
     });
+    $('#billing_address').on('change', function () {
+        var billing = $("#billing_address option:selected").text();
+        tokenizeButton.disabled = billing === 'Select Address';
+        $.ajax({
+            url: "{{ route('customers.get-addresses','') }}" + "/" + $("#billing_address option:selected").val(),
+            type: 'get',
+            success: function (data) {
+                address = data;
+            },
+            error: function (request, status, error) {
+                toastr['warning']('Notification Unreadable', 'Reading Error');
+            }
+        });
 
+    });
     fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button
         //payButton.disabled = true;
@@ -129,7 +146,6 @@
         console.log('working')
         var month = $('.month').val();
         var year = $('.year').val();
-        var address = '';
         successElement = document.querySelector('.success');
         var errorElement = document.querySelector('.error');
         var loaderElement = document.querySelector('.loader');
@@ -137,21 +153,9 @@
         successElement.classList.remove('visible');
         errorElement.classList.remove('visible');
         loaderElement.classList.add('visible');
-        @isset($customer)
-        $.ajax({
-            url: '{{ route('customers.get-customer-addresses',[$customer->id]) }}',
-            type: 'get',
-            success: function (data) {
-                address = data;
-                return address;
-            },
-            error: function (request, status, error) {
-                toastr['warning']('Notification Unreadable', 'Reading Error');
-            }
-        });
-        @endisset()
+
         var form = document.querySelector('form');
-        console.log('getting address', address)
+        console.log('getting address', address.data)
         var extraDetails = {
             firstname: "{{isset($customer) ? $customer->detail->first_name : 'john'}}",
             lastname: "{{isset ($customer) ?$customer->detail->last_name : 'doe'}}",
@@ -159,43 +163,44 @@
             month: month,
             year: year,
             phone: "{{isset($customer) ? $customer->phone : null}}",
-            address_1: address.address,
-            address_city: address.city,
-            address_state: address.state,
-            address_zip: address.zip_code,
-            address_country: address.country,
+            address_1: address.data.address,
+            address_city: address.data.city,
+            address_state: address.data.state,
+            address_zip: address.data.zip_code,
+            address_country: address.data.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
         };
         console.log(extraDetails)
         // call tokenize api
-        // fattJs.tokenize(extraDetails).then((result) => {
-        //     console.log(result);
-        //     if (result) {
-        //         successElement.querySelector('.token').textContent = result.id;
-        //         successElement.classList.add('visible');
-        //         functionAddCard(result);
-        //
-        //     }
-        //     loaderElement.classList.remove('visible');
-        // })
-        //     .catch(err => {
-        //         console.log(err)
-        //         errorElement.textContent = err.message;
-        //         errorElement.classList.add('visible');
-        //         loaderElement.classList.remove('visible');
-        //     });
+        fattJs.tokenize(extraDetails).then((result) => {
+            console.log(result);
+            if (result) {
+                successElement.querySelector('.token').textContent = result.id;
+                successElement.classList.add('visible');
+                functionAddCard(result, {{isset($customer) ?$customer->id : null}});
+
+            }
+            loaderElement.classList.remove('visible');
+        })
+            .catch(err => {
+                console.log(err)
+                errorElement.textContent = err.message;
+                errorElement.classList.add('visible');
+                loaderElement.classList.remove('visible');
+            });
     }
 
 
-    function functionAddCard(result) {
+    function functionAddCard(result, customer_id) {
         console.log('addingCard', result);
         $.ajax({
             url: '{{ route('customers.create-customer-payment') }}',
             type: 'post',
             data: {
                 '_token': '{{ csrf_token() }}',
-                'data': result,
+                'customer_data': result,
+                'customer_id': customer_id,
             },
             success: function (data) {
                 console.log(data)

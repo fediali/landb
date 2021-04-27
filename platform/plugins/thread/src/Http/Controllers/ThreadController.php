@@ -592,8 +592,8 @@ class ThreadController extends BaseController
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             "Content-Type: application/json",
-//            "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU4ODYxNDg5LTQyNTEtNDJkNS05YTgyLTQ0MmNlOWY3MzAyNyIsImdvZFVzZXIiOmZhbHNlLCJhc3N1bWluZyI6ZmFsc2UsImJyYW5kIjoiZmF0dG1lcmNoYW50LXNhbmRib3giLCJzdWIiOiJhMWY5YjFmMi0xYTg5LTQyYmItOTA2YS1jM2UzYmZjYTEzZDgiLCJpc3MiOiJodHRwOi8vYXBpcHJvZC5mYXR0bGFicy5jb20vc2FuZGJveCIsImlhdCI6MTYxODI1Nzc5NSwiZXhwIjo0NzcxODU3Nzk1LCJuYmYiOjE2MTgyNTc3OTUsImp0aSI6IndyVXhhMXRoM09KdWw2TmYifQ.qgBPNQo7GXWpbqJXD0iko1T2PlTXNf26t1Fse_b4qTs",
-//            "Accept: application/json"
+            "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU4ODYxNDg5LTQyNTEtNDJkNS05YTgyLTQ0MmNlOWY3MzAyNyIsImdvZFVzZXIiOmZhbHNlLCJhc3N1bWluZyI6ZmFsc2UsImJyYW5kIjoiZmF0dG1lcmNoYW50LXNhbmRib3giLCJzdWIiOiJhMWY5YjFmMi0xYTg5LTQyYmItOTA2YS1jM2UzYmZjYTEzZDgiLCJpc3MiOiJodHRwOi8vYXBpcHJvZC5mYXR0bGFicy5jb20vc2FuZGJveCIsImlhdCI6MTYxODI1Nzc5NSwiZXhwIjo0NzcxODU3Nzk1LCJuYmYiOjE2MTgyNTc3OTUsImp0aSI6IndyVXhhMXRoM09KdWw2TmYifQ.qgBPNQo7GXWpbqJXD0iko1T2PlTXNf26t1Fse_b4qTs",
+            "Accept: application/json"
         ));
 
         $response = curl_exec($ch);

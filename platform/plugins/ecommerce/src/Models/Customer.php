@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\CustomerAddress;
+use App\Models\CustomerCard;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
@@ -176,5 +177,10 @@ class Customer extends Authenticatable
             return null;
         }
 
+    }
+
+    public function card()
+    {
+        return $this->hasMany(CustomerCard::class, 'customer_id');
     }
 }
