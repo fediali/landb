@@ -116,7 +116,7 @@ class RegisterController extends Controller
               'store_facebook'          => $data['store_facebook'],
               'store_instagram'         => $data['store_instagram'],
               'mortar_address'          => $data['mortar_address'],
-              'newsletter'              => $data['newsletter'],
+              'newsletter'              => isset($data['newsletter']) ? $data['newsletter'] : 0,
               'hear_us'                 => $data['hear_us'],
               'comments'                => $data['comments'],
               'phone'                   => $data['mobile'],
@@ -178,7 +178,7 @@ class RegisterController extends Controller
     {
       SeoHelper::setTitle(__('Register'));
 
-      Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('public.login'));
+      Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
 
       return Theme::scope('auth.register', [], 'plugins/ecommerce::themes.customers.register')->render();
     }
