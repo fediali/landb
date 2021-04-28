@@ -216,4 +216,14 @@
 
       bigImg.src = `https://picsum.photos/${size}/${size}?random=50`;
     </script>
+
+    <script>
+      $( document ).ready(function() {
+        $('.carousel').carousel({
+    interval: 2000,
+    cycle: true,
+    pause: "null"
+})
+});
+    </script>
  
