@@ -35,6 +35,9 @@ class ThreadRequest extends Request
             'shipping_method'   => 'required',
             'vendor_product_id' => 'nullable|exists:vendorproducts,id',
             'status' => Rule::in(BaseStatusEnum::values()),
+
+            'reg_sku'  => 'nullable|unique:categories_threads,sku',
+            'plus_sku' => 'nullable|unique:categories_threads,sku',
         ];
     }
 }
