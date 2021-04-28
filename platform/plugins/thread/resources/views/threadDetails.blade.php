@@ -464,12 +464,16 @@
                                                                             @if($variation->status == 'active' && $variation->is_denim == 1)
                                                                                 <h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>
                                                                                 <div class="row">
-                                                                                    <div class="col-lg-6">
+                                                                                    <div class="col-lg-6 images">
                                                                                         <p class="mb-0 mt-2"><label for="">Print/Color:</label>{{ @$variation->printdesign->name }}</p>
                                                                                             <img class="w-100" height="120"
                                                                                                  width="120"
                                                                                                  style="object-fit: cover"
                                                                                                  src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
+                                                                                                 <div id="image-viewer">
+                                                                                                <span class="close">X</span>
+                                                                                                <img class="viewer-modal-content" id="full-image">
+                                                                                            </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="mt-3 mb-2">
@@ -554,7 +558,7 @@
                                                                                     {{$loop->iteration}}.
                                                                                     Variation: {{ $variation->name }}</h5>
                                                                                 <div class="row">
-                                                                                    <div class="col-lg-6">
+                                                                                    <div class="col-lg-6 images">
                                                                                         <p class="mb-0 mt-2"><label
                                                                                                 for="">Print/Color:</label>{{ @$variation->printdesign->name }}
                                                                                         </p>
@@ -562,6 +566,10 @@
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                              height="120" width="120"
                                                                                              style="object-fit: cover">
+                                                                                             <div id="image-viewer">
+                                                                                                <span class="close">X</span>
+                                                                                                <img class="viewer-modal-content" id="full-image">
+                                                                                            </div>
 
                                                                                         <p class="text-black font-12 text-uppercase m-0">
                                                                                         <span

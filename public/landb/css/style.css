@@ -1699,20 +1699,26 @@ input.qtyminus {
 
 .tabs-product {
     border-bottom: none;
+    background: #f1f1f1;
+    padding: 14px 5px;
 }
 
 .tabs-product a {
     font-family: Raleway;
     font-style: normal;
     font-weight: 500;
-    font-size: 22px;
+    font-size: 18px;
     line-height: 26px;
     text-align: center;
     color: #000000;
+    margin-right: 50px;
 }
 
-.tabs-product li .active {
-    font-weight: bold !important;
+.tabs-product li .active { 
+        border: 1px solid #191919;
+        opacity: 1; 
+        background: #fdfdfd;
+        padding: 5px 5px; 
 }
 
 .description-p {
