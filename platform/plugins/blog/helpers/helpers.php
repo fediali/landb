@@ -700,10 +700,9 @@ if (!function_exists('omni_api')) {
         curl_setopt_array($curl, $request);
 
         $response = curl_exec($curl);
-
         $info = curl_getinfo($curl);
         curl_close($curl);
-        return $response;
+        return [$response, $info];
     }
 }
 //Utils
