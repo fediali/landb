@@ -193,6 +193,15 @@ class ThreadController extends BaseController
 //            } else {
 //                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
 //            }
+//        } if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+//            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+//                $thread->regular_product_categories()->sync([
+//                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
+//                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
+//                ]);
+//            } else {
+//                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
+//            }
 //        }
         if ($request->hasfile('spec_files')) {
             foreach ($request->file('spec_files') as $spec_file) {
@@ -505,7 +514,7 @@ class ThreadController extends BaseController
 
     public function removeVariationTrim($id)
     {
-        $remove = DB::table('thread_variation_trims')->find($id)->delete();
+        $remove = DB::table('thread_variation_trims')->delete($id);
         if ($remove) {
             return redirect()->back()->with('success', 'Trim deleted');
         } else {
