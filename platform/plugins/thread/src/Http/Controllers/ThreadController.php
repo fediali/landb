@@ -93,7 +93,7 @@ class ThreadController extends BaseController
         $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
 
         if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-//            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+            // $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
             $plu_sku = $reg_sku . '-X';
         }
 
@@ -165,44 +165,39 @@ class ThreadController extends BaseController
         $this->threadRepository->createOrUpdate($thread);
 
         $reg_category = $thread->regular_product_categories()->value('product_category_id');
-        $plu_category = $thread->plus_product_categories()->value('product_category_id');
+        // $plu_category = $thread->plus_product_categories()->value('product_category_id');
 
-        if ($reg_category) {
-            $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category])->value('count') - 1;
-            DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category], ['user_id' => $thread->designer_id, 'product_category_id' => $reg_category, 'count' => $regCnt]);
+        if (isset($requestData['regular_category_id']) && $reg_category && $reg_category != $requestData['regular_category_id']) {
+            if ($reg_category) {
+                $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category])->value('count') - 1;
+                $cnt = $regCnt > 0 ? $regCnt : 0;
+                DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category], ['user_id' => $thread->designer_id, 'product_category_id' => $reg_category, 'count' => $cnt]);
+            }
+            /*if ($plu_category) {
+                $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $plu_category])->value('count') - 1;
+                DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $plu_category], ['user_id' => $thread->designer_id, 'product_category_id' => $plu_category, 'count' => $regCnt]);
+            }*/
+
+            $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
+            $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
+
+            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+                // $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
+                $plu_sku = $reg_sku . '-X';
+            }
+
+            if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+                if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+                    $thread->regular_product_categories()->sync([
+                        $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
+                        $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
+                    ]);
+                } else {
+                    $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
+                }
+            }
         }
-        if ($plu_category) {
-            $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $plu_category])->value('count') - 1;
-            DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $plu_category], ['user_id' => $thread->designer_id, 'product_category_id' => $plu_category, 'count' => $regCnt]);
-        }
 
-        $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
-        $reg_sku = isset($requestData['reg_sku']) ? $requestData['reg_sku'] : generate_thread_sku($requestData['regular_category_id'], $requestData['designer_id'], $designerName);
-
-        if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-//            $plu_sku = isset($requestData['plus_sku']) ? $requestData['plus_sku'] : generate_thread_sku($requestData['plus_category_id'], $requestData['designer_id'], $designerName, true);
-            $plu_sku = $reg_sku . '-X';
-        }
-
-//        if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
-//            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-//                $thread->regular_product_categories()->sync([
-//                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
-//                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
-//                ]);
-//            } else {
-//                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
-//            }
-//        } if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
-//            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-//                $thread->regular_product_categories()->sync([
-//                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
-//                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
-//                ]);
-//            } else {
-//                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
-//            }
-//        }
         if ($request->hasfile('spec_files')) {
             foreach ($request->file('spec_files') as $spec_file) {
                 $spec_file_name = time() . rand(1, 100) . '.' . $spec_file->extension();
@@ -229,6 +224,13 @@ class ThreadController extends BaseController
     {
         try {
             $thread = $this->threadRepository->findOrFail($id);
+
+            $reg_category = $thread->regular_product_categories()->value('product_category_id');
+            if ($reg_category) {
+                $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category])->value('count') - 1;
+                $cnt = $regCnt > 0 ? $regCnt : 0;
+                DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category], ['user_id' => $thread->designer_id, 'product_category_id' => $reg_category, 'count' => $cnt]);
+            }
 
             $this->threadRepository->delete($thread);
 
@@ -259,6 +261,14 @@ class ThreadController extends BaseController
 
         foreach ($ids as $id) {
             $thread = $this->threadRepository->findOrFail($id);
+
+            $reg_category = $thread->regular_product_categories()->value('product_category_id');
+            if ($reg_category) {
+                $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category])->value('count') - 1;
+                $cnt = $regCnt > 0 ? $regCnt : 0;
+                DB::table('category_designer_count')->updateOrInsert(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category], ['user_id' => $thread->designer_id, 'product_category_id' => $reg_category, 'count' => $cnt]);
+            }
+
             $this->threadRepository->delete($thread);
             event(new DeletedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
         }
@@ -283,7 +293,7 @@ class ThreadController extends BaseController
         $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $requestData->designer_id, $designerName);
 
         if ($plu_category && $plu_category->pivot->product_category_id > 0) {
-//            $plu_sku = generate_thread_sku($plu_category->pivot->product_category_id, $requestData->designer_id, $designerName, true);
+            // $plu_sku = generate_thread_sku($plu_category->pivot->product_category_id, $requestData->designer_id, $designerName, true);
             $plu_sku = $reg_sku . '-X';
         }
 
