@@ -127,11 +127,13 @@ class Thread extends BaseModel
     public const AIR = 'air';
     public const UCL = 'ucl';
     public const SEA = 'sea';
+    public const GROUND = 'ground';
 
     public static $shipping_methods = [
         self::AIR => self::AIR,
         self::UCL => self::UCL,
         self::SEA => self::SEA,
+        self::GROUND => self::GROUND,
     ];
 
     public const REGULAR = 'regular';

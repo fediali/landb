@@ -53,6 +53,9 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
+            ->editColumn('order_type', function ($item) {
+                return $item->order_type_html;
+            })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
             })
@@ -83,7 +86,15 @@ class OrderTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('orders.edit', 'orders.destroy', $item);
+                $html = '';
+                if (Auth::user()->hasPermission('orders.edit')) {
+                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
+                        $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
+                    }
+                    $html .= '<a href="'.route('orders.edit', $item->id).'" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
+                }
+                //orders.edit
+                return $this->getOperations('', 'orders.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -98,6 +109,7 @@ class OrderTable extends TableAbstract
         $select = [
             'ec_orders.id',
             'ec_orders.status',
+            'ec_orders.order_type',
             'ec_orders.user_id',
             'ec_orders.created_at',
             'ec_orders.amount',
@@ -166,6 +178,11 @@ class OrderTable extends TableAbstract
             'status'          => [
                 'name'  => 'ec_orders.status',
                 'title' => trans('core/base::tables.status'),
+                'class' => 'text-center',
+            ],
+            'order_type'    => [
+                'name'  => 'ec_orders.order_type',
+                'title' => 'Order Type',
                 'class' => 'text-center',
             ],
             'created_at'      => [

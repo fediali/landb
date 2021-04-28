@@ -122,7 +122,7 @@ class ThreadController extends BaseController
           broadcast(new NotifyManager($vendor, $designer, $thread));
         }*/
 
-        generate_notification('thread_created', $thread);
+        $notification = generate_notification('thread_created', $thread);
         event(new CreatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
         return $response
             ->setPreviousUrl(route('thread.index'))
@@ -184,16 +184,25 @@ class ThreadController extends BaseController
             $plu_sku = $reg_sku . '-X';
         }
 
-        if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
-            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
-                $thread->regular_product_categories()->sync([
-                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
-                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
-                ]);
-            } else {
-                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
-            }
-        }
+//        if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+//            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+//                $thread->regular_product_categories()->sync([
+//                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
+//                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
+//                ]);
+//            } else {
+//                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
+//            }
+//        } if (isset($requestData['regular_category_id']) && $requestData['regular_category_id'] > 0) {
+//            if (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0) {
+//                $thread->regular_product_categories()->sync([
+//                    $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
+//                    $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
+//                ]);
+//            } else {
+//                $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
+//            }
+//        }
         if ($request->hasfile('spec_files')) {
             foreach ($request->file('spec_files') as $spec_file) {
                 $spec_file_name = time() . rand(1, 100) . '.' . $spec_file->extension();
@@ -314,7 +323,7 @@ class ThreadController extends BaseController
     public function show($id, Request $request, FormBuilder $formBuilder)
     {
 
-        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric', 'spec_files'])->find($id);
+        $thread = Thread::with(['designer', 'season', 'vendor', 'fabric', 'spec_files'])->findorFail($id);
         event(new BeforeEditContentEvent($request, $thread));
 
         page_title()->setTitle('Thread Details' . ' "' . $thread->name . '"');
@@ -449,7 +458,7 @@ class ThreadController extends BaseController
 
         if ($input) {
             $thread = $this->threadRepository->findOrFail($data['thread_id']);
-            generate_notification('thread_discussion', $thread);
+            $notification = generate_notification('thread_discussion', $thread);
             $time = $input->created_at->diffForHumans();
             $input->time = $time;
             return response()->json(['comment' => $input], 200);
@@ -505,7 +514,7 @@ class ThreadController extends BaseController
 
     public function removeVariationTrim($id)
     {
-        $remove = DB::table('thread_variation_trims')->find($id)->delete();
+        $remove = DB::table('thread_variation_trims')->delete($id);
         if ($remove) {
             return redirect()->back()->with('success', 'Trim deleted');
         } else {
@@ -519,16 +528,17 @@ class ThreadController extends BaseController
      */
     public function changeStatus(Request $request, BaseHttpResponse $response)
     {
+
         $thread = $this->threadRepository->findOrFail($request->input('pk'));
         $requestData['status'] = $request->input('value');
         $requestData['updated_by'] = auth()->user()->id;
 
         $thread->fill($requestData);
 
-        $this->threadRepository->createOrUpdate($thread);
-        generate_notification('thread_status_updated', $thread);
-        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
 
+        $notification = generate_notification('thread_status_updated', $thread);
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
+        $this->threadRepository->createOrUpdate($thread);
         return $response;
     }
 
@@ -554,4 +564,51 @@ class ThreadController extends BaseController
         }
     }
 
+    public function readNotification(Request $request)
+    {
+        $notification = DB::table('user_notifications')->where('id', $request->notification_id)->update(['seen' => 1]);
+    }
+
+    public function charge()
+    {
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://apiprod.fattlabs.com/charge");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "{
+  \"payment_method_id\": \"7c86860a-b44e-4d41-a1e0-3a267d098e7e\",
+  \"meta\": {
+    \"tax\": 2,
+    \"subtotal\": 10,
+    \"lineItems\": [
+      {
+        \"id\": \"optional-fm-catalog-item-id\",
+        \"item\": \"Demo Item\",
+        \"details\": \"this is a regular demo item\",
+        \"quantity\": 10,
+        \"price\": 1
+      }
+    ]
+  },
+  \"total\": 12,
+  \"pre_auth\": 0
+}");
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Content-Type: application/json",
+            "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtZXJjaGFudCI6ImU4ODYxNDg5LTQyNTEtNDJkNS05YTgyLTQ0MmNlOWY3MzAyNyIsImdvZFVzZXIiOmZhbHNlLCJhc3N1bWluZyI6ZmFsc2UsImJyYW5kIjoiZmF0dG1lcmNoYW50LXNhbmRib3giLCJzdWIiOiJhMWY5YjFmMi0xYTg5LTQyYmItOTA2YS1jM2UzYmZjYTEzZDgiLCJpc3MiOiJodHRwOi8vYXBpcHJvZC5mYXR0bGFicy5jb20vc2FuZGJveCIsImlhdCI6MTYxODI1Nzc5NSwiZXhwIjo0NzcxODU3Nzk1LCJuYmYiOjE2MTgyNTc3OTUsImp0aSI6IndyVXhhMXRoM09KdWw2TmYifQ.qgBPNQo7GXWpbqJXD0iko1T2PlTXNf26t1Fse_b4qTs",
+            "Accept: application/json"
+        ));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        var_dump($response);
+
+    }
 }

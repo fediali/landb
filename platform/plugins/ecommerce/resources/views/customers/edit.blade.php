@@ -107,92 +107,156 @@
 
     </form>
 
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="p-3 bg-white">
+                {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
 
-    <div class="p-3 bg-white">
-        {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
+                <div class="row">
+                    <div class="col-lg-6 mt-2">
+                        <label for="name">{{ __('Full Name') }}:</label>
+                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
+                        <input type="hidden" class="form-control" name="customer_id" value="{{$customer->id}}">
+                    </div>
+                    {!! Form::error('name', $errors) !!}
 
-        <div class="row">
-            <div class="col-lg-6 mt-2">
-                <label for="name">{{ __('Full Name') }}:</label>
-                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
-                <input type="hidden" class="form-control" name="customer_id" value="{{$customer->id}}">
-            </div>
-            {!! Form::error('name', $errors) !!}
+                    <div class="col-lg-6 mt-2">
+                        <label for="email">{{ __('Email') }}:</label>
+                        <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
+                    </div>
+                    {!! Form::error('email', $errors) !!}
 
-            <div class="col-lg-6 mt-2">
-                <label for="email">{{ __('Email') }}:</label>
-                <input id="email" type="text" class="form-control" name="email" value="{{ old('email') }}">
-            </div>
-            {!! Form::error('email', $errors) !!}
+                    <div class="col-lg-6 mt-2">
+                        <label for="phone">{{ __('Phone') }}:</label>
+                        <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}">
 
-            <div class="col-lg-6 mt-2">
-                <label for="phone">{{ __('Phone') }}:</label>
-                <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+                    </div>
+                    {!! Form::error('phone', $errors) !!}
 
-            </div>
-            {!! Form::error('phone', $errors) !!}
+                    <div class="col-lg-6 mt-2 @if ($errors->has('country')) has-error @endif">
+                        <label for="country">{{ __('Country') }}:</label>
+                        <select name="country" class="form-control selectpicker select-country" data-live-search="true"
+                                id="country">
+                            @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
+                                <option value="{{ $countryCode }}"
+                                        @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    {!! Form::error('country', $errors) !!}
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('country')) has-error @endif">
-                <label for="country">{{ __('Country') }}:</label>
-                <select name="country" class="form-control selectpicker select-country" data-live-search="true"
-                        id="country">
-                    @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
-                        <option value="{{ $countryCode }}"
-                                @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
-                    @endforeach
-                </select>
-            </div>
-            {!! Form::error('country', $errors) !!}
+                    <div class="col-lg-6 mt-2 @if ($errors->has('state')) has-error @endif">
+                        <label for="state">{{ __('State') }}:</label>
+                        <input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('state')) has-error @endif">
-                <label for="state">{{ __('State') }}:</label>
-                <input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">
+                    </div>
+                    {!! Form::error('state', $errors) !!}
 
-            </div>
-            {!! Form::error('state', $errors) !!}
+                    <div class="col-lg-6 mt-2 @if ($errors->has('city')) has-error @endif">
+                        <label for="city">{{ __('City') }}:</label>
+                        <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}">
 
-            <div class="col-lg-6 mt-2 @if ($errors->has('city')) has-error @endif">
-                <label for="city">{{ __('City') }}:</label>
-                <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}">
+                    </div>
+                    {!! Form::error('city', $errors) !!}
 
-            </div>
-            {!! Form::error('city', $errors) !!}
+                    <div class="col-lg-12 mt-2">
+                        <label for="address">{{ __('Address') }}:</label>
+                        <input id="address" type="text" class="form-control" name="address"
+                               value="{{ old('address') }}">
+                    </div>
+                    {!! Form::error('address', $errors) !!}
 
-            <div class="col-lg-12 mt-2">
-                <label for="address">{{ __('Address') }}:</label>
-                <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}">
-            </div>
-            {!! Form::error('address', $errors) !!}
+                    @if (EcommerceHelper::isZipCodeEnabled())
+                        <div class="form-group">
+                            <label>{{ __('Zip code') }}:</label>
+                            <input id="zip_code" type="text" class="form-control" name="zip_code"
+                                   value="{{ old('zip_code') }}">
+                            {!! Form::error('zip_code', $errors) !!}
+                        </div>
+                    @endif
 
-            @if (EcommerceHelper::isZipCodeEnabled())
-                <div class="form-group">
-                    <label>{{ __('Zip code') }}:</label>
-                    <input id="zip_code" type="text" class="form-control" name="zip_code" value="{{ old('zip_code') }}">
-                    {!! Form::error('zip_code', $errors) !!}
-                </div>
-            @endif
-
-            <div class="form-group col-lg-12">
-                <div class="ps-checkbox mt-3">
-                    <input class="ml-2" type="checkbox" value="1" name="is_default" id="is-default">
-                    <label class="mr-2" for="is-default"> {{ __('Use this address as default') }}</label>
-                <!-- <input class="form-control" type="checkbox" value="1" name="is_default" id="is-default">
+                    <div class="form-group col-lg-12">
+                        <div class="ps-checkbox mt-3">
+                            <input class="ml-2" type="checkbox" value="1" name="is_default" id="is-default">
+                            <label class="mr-2" for="is-default"> {{ __('Use this address as default') }}</label>
+                        <!-- <input class="form-control" type="checkbox" value="1" name="is_default" id="is-default">
                 <label for="is-default">{{ __('Use this address as default') }}</label> -->
-                </div>
-                {!! Form::error('is_default', $errors) !!}
-            </div>
+                        </div>
+                        {!! Form::error('is_default', $errors) !!}
+                    </div>
 
-            <div class="form-group col-lg-3">
-                <button class="btn btn-primary btn-lg" type="submit">{{ __('Add a new address') }}</button>
+                    <div class="form-group col-lg-6">
+                        <button class="btn btn-primary btn-lg" type="submit">{{ __('Add a new address') }}</button>
+                    </div>
+                </div>
+                {!! Form::close() !!}
             </div>
         </div>
-        {!! Form::close() !!}
+        <div class="col-lg-6">
+            <div class="p-3 bg-white">
+
+
+                <form onsubmit="return false;">
+                    <!--      Make your own form or copy this one -->
+                    <div class="row group">
+                        @isset($customer->billingAddress)
+                            <label class="col-lg-12">
+                                <span>Billing Address</span>
+                                {!!
+                        Form::select('billing_address', $customer->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                        ])
+                    !!}
+                            </label>
+                        @endisset
+                    </div>
+                    <div class="group row">
+                        <label class="col-lg-12">
+
+                            <div id="card-element" class="field">
+                                <span>Card</span>
+                                <div id="fattjs-number" style="height: 35px"></div>
+                                <span class="mt-2">CVV</span>
+                                <div id="fattjs-cvv" style="height: 35px"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
+                        </div>
+                        <p class="mt-2"> / </p>
+                        <div class="col-lg-3">
+                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
+                        </div>
+                    </div>
+                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                    <div class="outcome">
+                        <div class="error"></div>
+                        <div class="success">
+                            Successful! The ID is
+                            <span class="token"></span>
+                        </div>
+                        <div class="loader" style="margin: auto">
+                        </div>
+                    </div>
+                </form>
+                {{--                <form method="POST" action="{{route('thread.testingPayment')}}">--}}
+                {{--                    @csrf--}}
+                {{--                    <button class="btn btn-info mt-3 ">Pay $1</button>--}}
+                {{--                </form>--}}
+            </div>
+        </div>
     </div>
+
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
             <div class="col-lg-12 mb-3">
-                <div class="table-responsive">
+                <h5>Address Details</h5>
+            </div>
+            <div class="col-lg-12 mb-3">
+                <div class="table-responsive table-height">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -220,9 +284,46 @@
                                 <td>{{$row->zip_code}}</td>
                                 <td>{{$row->country}}</td>
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
-{{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
-{{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                            </tr>
+                        @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="p-3 bg-white mt-3">
+        <div class="row">
+            <div class="col-lg-12 mb-3">
+                <h5>Card Details</h5>
+            </div>
+            <div class="col-lg-12 mb-3">
+                <div class="table-responsive table-height">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name on Card</th>
+                            <th>Expires</th>
+                            <th>Last 4 Digit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach(json_decode($card) as $cards)
+                            <tr>
+                                <td>{{$cards->person_name}}</td>
+                                <td>{{$cards->card_exp}}</td>
+                                <td>{{$cards->card_last_four}}</td>
+                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+
+                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                             </tr>
                         @endforeach
 
@@ -368,3 +469,4 @@
         font-size: 14px;
     }
 </style>
+

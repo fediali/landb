@@ -80,7 +80,7 @@
             </div>
             <div class="col-md-4">
                 <div class="footerlogo">
-                    <a href="#"><img class="revealUp" src="img/footer-logo.png" alt=""></a>
+                    <a href="#"><img class="revealUp" src="https://localhost/landb/public/landb/img/footer-logo.png" alt=""></a>
                 </div>
             </div>
         </div>

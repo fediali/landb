@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers\Customers;
 
+use App\Models\CustomerCard;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
@@ -102,8 +103,11 @@ class CustomerController extends BaseController
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
 
         $customer->password = null;
+        $url = ("https://apiprod.fattlabs.com/customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+        $card = omni_api($url);
 
-        return view('plugins/ecommerce::customers.edit', compact('customer'));
+
+        return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
     }
 
@@ -300,6 +304,20 @@ class CustomerController extends BaseController
         return $response
             ->setData(compact('address', 'customer'))
             ->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    public function getAddresses($id, BaseHttpResponse $response)
+    {
+        $addresses = $this->addressRepository->findOrFail($id);
+        return $response->setData($addresses);
+    }
+
+    public function postCustomerCard(Request $request)
+    {
+        $request['customer_omni_id'] = $request->customer_data['customer_id'];
+        $request['customer_data'] = json_encode($request->customer_data);
+        $card = CustomerCard::create($request->all());
+        return $card;
     }
 
 

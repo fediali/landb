@@ -36,6 +36,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@getCustomerAddresses',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
+            Route::get('get-addresses/{id}', [
+                'as'         => 'get-addresses',
+                'uses'       => 'CustomerController@getAddresses',
+                'permission' => ['customers.index', 'orders.index'],
+            ]);
 
             Route::get('get-customer-order-numbers/{id}', [
                 'as'         => 'get-customer-order-numbers',
@@ -56,6 +61,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
             Route::post('create-customer-address', [
                 'as'         => 'create-customer-address',
                 'uses'       => 'CustomerController@postCustomerAddress',
+                'permission' => 'customer.address',
+            ]);
+            Route::post('create-customer-payment', [
+                'as'         => 'create-customer-payment',
+                'uses'       => 'CustomerController@postCustomerCard',
                 'permission' => 'customer.address',
             ]);
         });

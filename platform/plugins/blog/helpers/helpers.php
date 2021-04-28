@@ -354,12 +354,12 @@ if (!function_exists('get_category_sizes')) {
 if (!function_exists('get_category_sizes_by_id')) {
     function get_category_sizes_by_id($id = null)
     {
-      if(!is_null($id)){
-        $get = ProductCategory::with('category_sizes')->find($id);
-        return $get;
-      }else{
-        return null;
-      }
+        if (!is_null($id)) {
+            $get = ProductCategory::with('category_sizes')->find($id);
+            return $get;
+        } else {
+            return null;
+        }
 
     }
 }
@@ -495,8 +495,9 @@ if (!function_exists('generate_notification')) {
 
             $notification = array();
             $notifiable = array();
+            $designer = [];
+            $vendor = [];
             if ($type == 'thread_created') {
-
                 $creator = \Botble\ACL\Models\User::find($data->designer_id);
                 $notification = array();
                 $notification['sender_id'] = $data->designer_id;
@@ -507,10 +508,10 @@ if (!function_exists('generate_notification')) {
                 $notification['url'] = route('thread.details', $data->id);
 
                 if (!empty($data->vendor_id)) {
-                    $notifiable[] = $data->vendor_id;
+                    $vendor[] = $data->vendor_id;
                 }
-                $notifiable[] = get_design_manager();
 
+                $notifiable[] = get_design_manager();
 
             } elseif ($type == 'thread_updated') {
                 $notification = array();
@@ -522,12 +523,12 @@ if (!function_exists('generate_notification')) {
                 $notification['url'] = route('thread.details', $data->id);
 
                 if (!empty($data->vendor_id)) {
-                    $notifiable[] = $data->vendor_id;
+                    $vendor[] = $data->vendor_id;
                 }
                 if ($notification['sender_id'] != $data->designer_id) {
-                    $notifiable[] = $data->designer_id;
+                    $designer[] = $data->designer_id;
                 }
-                if ($notification['sender_id'] != get_design_manager()) {
+                if (!get_design_manager()->contains($notification['sender_id'])) {
                     $notifiable[] = get_design_manager();
                 }
             } elseif ($type == 'thread_status_updated') {
@@ -540,14 +541,16 @@ if (!function_exists('generate_notification')) {
                 $notification['url'] = route('thread.details', $data->id);
 
                 if (!empty($data->vendor_id)) {
-                    $notifiable[] = $data->vendor_id;
+                    $vendor[] = $data->vendor_id;
                 }
                 if ($notification['sender_id'] != $data->designer_id) {
-                    $notifiable[] = $data->designer_id;
+                    $designer[] = $data->designer_id;
                 }
-                if ($notification['sender_id'] != get_design_manager()) {
+
+                if (!get_design_manager()->contains($notification['sender_id'])) {
                     $notifiable[] = get_design_manager();
                 }
+
             } elseif ($type == 'thread_discussion') {
                 $notification = array();
                 $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
@@ -558,23 +561,24 @@ if (!function_exists('generate_notification')) {
                 $notification['url'] = route('thread.details', $data->id);
 
                 if (!empty($data->vendor_id)) {
-                    $notifiable[] = $data->vendor_id;
+                    $vendor[] = $data->vendor_id;
                 }
                 if ($notification['sender_id'] != $data->designer_id) {
-                    $notifiable[] = $data->designer_id;
+                    $designer[] = $data->designer_id;
                 }
-                if ($notification['sender_id'] != get_design_manager()) {
+                if (!get_design_manager()->contains($notification['sender_id'])) {
                     $notifiable[] = get_design_manager();
                 }
             }
+
             $notify = new \App\Models\Notification();
             $notification_data = $notify->create($notification);
-
+            $other = array_merge($vendor, $designer);
             if ($notification_data) {
-                notify_users($notifiable, $notification_data, $data);
+                notify_users($notifiable, $notification_data, $data, $other);
             }
         } catch (Exception $e) {
-
+            return $e;
         }
 
     }
@@ -628,24 +632,37 @@ if (!function_exists('get_design_manager')) {
 }
 
 if (!function_exists('notify_users')) {
-    function notify_users($notifiables, $notification, $resource_data)
+    function notify_users($notifiables, $notification, $resource_data, $other = null)
     {
-        if (count($notifiables)) {
-            foreach ($notifiables as $notifiable) {
-                if (!is_null($notifiable)) {
-                    foreach ($notifiable as $key => $value) {
-                        $user_notification['notification_id'] = $notification->id;
-                        $user_notification['user_id'] = $value;
-                        $noti = \App\Models\UserNotifications::create($user_notification);
-                        if ($noti) {
-                            broadcast(new \App\Events\NotifyManager($notifiable, $notification, $resource_data));
-                        }
-                    }
+        //Todo Refactor
 
-
+        if ($other != null) {
+            foreach ($other as $item) {
+                $user_notification['notification_id'] = $notification->id;
+                $user_notification['user_id'] = $item;
+                $noti = \App\Models\UserNotifications::create($user_notification);
+                if ($noti) {
+                    broadcast(new \App\Events\NotifyManager($item, $notification, $resource_data));
                 }
             }
         }
+        if (count($notifiables)) {
+            foreach ($notifiables as $notifiable) {
+
+                foreach ($notifiable as $key => $value) {
+
+                    $user_notification['notification_id'] = $notification->id;
+                    $user_notification['user_id'] = $value;
+                    $noti = \App\Models\UserNotifications::create($user_notification);
+                    if ($noti) {
+                        broadcast(new \App\Events\NotifyManager($value, $notification, $resource_data));
+                    }
+                }
+
+            }
+
+        }
+
     }
 }
 
@@ -654,8 +671,39 @@ if (!function_exists('create_customer')) {
     {
 
         $customer = DB::table('ec_customers')->insert($data);
-        dd('s', $customer);
+        //  dd('s', $customer);
         return $customer;
+    }
+}
+
+if (!function_exists('omni_api')) {
+    function omni_api($url, $data = [], $type = 'GET')
+    {
+        $curl = curl_init();
+        $request = [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => $type,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_TOKEN')]
+        ];
+
+        if ($type == 'POST') {
+            $request[CURLOPT_POSTFIELDS] = json_encode($data);
+            $request[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+        }
+
+        curl_setopt_array($curl, $request);
+
+        $response = curl_exec($curl);
+
+        $info = curl_getinfo($curl);
+        curl_close($curl);
+        return $response;
     }
 }
 //Utils

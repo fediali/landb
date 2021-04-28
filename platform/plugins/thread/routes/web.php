@@ -21,6 +21,12 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@show',
                 'permission' => 'thread.details',
             ]);
+
+            Route::post('read-notification/', [
+                'as'         => 'readNotification',
+                'uses'       => 'ThreadController@readNotification',
+                'permission' => 'thread.details',
+            ]);
             Route::post('add-variations', [
                 'as'         => 'addVariation',
                 'uses'       => 'ThreadController@addVariation',
@@ -85,6 +91,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 event(new \App\Events\ThreadApproval());
                 return 'ok';
             });
+            Route::post('testingPayment', [
+                'as'         => 'testingPayment',
+                'uses'       => 'ThreadController@charge',
+                'permission' => 'thread.create',
+            ]);
         });
     });
 

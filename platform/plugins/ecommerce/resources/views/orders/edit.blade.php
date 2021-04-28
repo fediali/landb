@@ -79,8 +79,10 @@
                                                         </td>
                                                     @endif
                                                     <td class="pl5 p-r5 min-width-200-px">
-                                                        <a class="text-underline hover-underline pre-line" target="_blank" href="{{ route('products.edit', $orderProduct->product_id) }}" title="{{ $orderProduct->product_name }}">
-                                                            {{ $orderProduct->product_name }}</a>
+                                                        {{ $orderProduct->product_name }}
+                                                        {{--<a class="text-underline hover-underline pre-line" target="_blank" href="{{ route('products.edit', $orderProduct->product_id) }}" title="{{ $orderProduct->product_name }}">
+                                                            {{ $orderProduct->product_name }}
+                                                        </a>--}}
                                                         @if ($product)
                                                             &nbsp;
                                                             @if ($product->sku)

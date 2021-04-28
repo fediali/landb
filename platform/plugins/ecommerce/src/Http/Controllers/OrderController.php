@@ -6,6 +6,7 @@ use App\Imports\OrderImportFile;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
+use Botble\ACL\Models\Role;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
@@ -165,16 +166,17 @@ class OrderController extends BaseController
      */
     public function create()
     {
-//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-//            ->addScriptsDirectly([
-//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-//                'vendor/core/plugins/ecommerce/js/order-create.js',
-//            ])
-//            ->addScripts(['blockui', 'input-mask']);
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/order-create.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
 
-        return view('plugins/ecommerce::orders.create');
+        // return view('plugins/ecommerce::orders.create');
+        return view('plugins/ecommerce::orders.create-back');
     }
 
     /**
@@ -183,6 +185,43 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
+        $condition = [];
+        $meta_condition = [];
+        if ($request->input('order_id') && $request->input('order_id') > 0) {
+            $condition = ['id' => $request->input('order_id')];
+            $meta_condition = ['order_id' => $request->input('order_id')];
+
+            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+            foreach ($order_products as $order_product) {
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+            OrderProduct::where('order_id', $request->input('order_id'))->delete();
+        }
+
+        foreach ($request->input('products', []) as $productItem) {
+            $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
+            if (!$product) {
+                continue;
+            }
+            $demandQty = Arr::get($productItem, 'quantity', 1);
+
+            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                $stockQty = $product->online_sales_qty;
+            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                $stockQty = $product->in_person_sales_qty;
+            } else {
+                $stockQty = $product->quantity;
+            }
+
+            if ($stockQty < $demandQty) {
+                return $response->setCode(406)->setError()->setMessage($product->sku.' is not available in this Qty!');
+            }
+        }
+
         $request->merge([
             'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
             'currency_id'          => get_application_currency_id(),
@@ -198,30 +237,32 @@ class OrderController extends BaseController
             'description'          => $request->input('note'),
             'is_confirmed'         => 1,
             'status'               => OrderStatusEnum::PROCESSING,
+            'order_type'           => $request->input('order_type'),
         ]);
 
-        $order = $this->orderRepository->createOrUpdate($request->input());
+        $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
 
         if ($order) {
+
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order_from_payment_page',
                 'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order',
                 'description' => trans('plugins/ecommerce::order.new_order',
                     ['order_id' => get_order_code($order->id)]),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'confirm_order',
                 'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
                 'order_id'    => $order->id,
                 'user_id'     => Auth::user()->getKey(),
-            ]);
+            ], $meta_condition);
 
             $payment = $this->paymentRepository->createOrUpdate([
                 'amount'          => $order->amount,
@@ -231,7 +272,7 @@ class OrderController extends BaseController
                 'payment_type'    => 'confirm',
                 'order_id'        => $order->id,
                 'charge_id'       => Str::upper(Str::random(10)),
-            ]);
+            ], $meta_condition);
 
             $order->payment_id = $payment->id;
             $order->save();
@@ -244,11 +285,11 @@ class OrderController extends BaseController
                     ]),
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ]);
+                ], $meta_condition);
             }
 
             if ($request->input('customer_address.name')) {
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $request->input('customer_address.name'),
                     'phone'    => $request->input('customer_address.phone'),
                     'email'    => $request->input('customer_address.email'),
@@ -258,15 +299,15 @@ class OrderController extends BaseController
                     'country'  => $request->input('customer_address.country'),
                     'address'  => $request->input('customer_address.address'),
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $customer->name,
                     'phone'    => $customer->phone,
                     'email'    => $customer->email,
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             }
 
             foreach ($request->input('products', []) as $productItem) {
@@ -288,12 +329,31 @@ class OrderController extends BaseController
 
                 $this->orderProductRepository->create($data);
 
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $product->id)
-                    ->where('with_storehouse_management', 1)
-                    ->where('quantity', '>', 0)
-                    ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+                if ($order->order_type == Order::NORMAL) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $product->id)
+                        ->where('with_storehouse_management', 1)
+                        ->where('quantity', '>', 0)
+                        ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+
+                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('online_sales_qty', '>', 0)
+                            ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('in_person_sales_qty', '>', 0)
+                            ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    }
+                }
+
             }
         }
 
@@ -908,6 +968,86 @@ class OrderController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse|Factory|View
      */
+    public function editOrder($id, Request $request, BaseHttpResponse $response)
+    {
+        if (!$id) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        page_title()->setTitle(trans('plugins/ecommerce::order.reorder'));
+
+        $order = $this->orderRepository->findById($id);
+
+        if (!$order) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        $productIds = $order->products->pluck('product_id')->all();
+
+        $products = $this->productRepository
+            ->getModel()
+            ->whereIn('id', $productIds)
+            ->get();
+
+        foreach ($products as &$availableProduct) {
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+                false, RvMedia::getDefaultImage());
+            $availableProduct->price = $availableProduct->front_sale_price;
+            $availableProduct->product_name = $availableProduct->name;
+            $availableProduct->product_link = route('products.edit', $availableProduct->id);
+            $availableProduct->select_qty = 1;
+            $availableProduct->product_id = $availableProduct->id;
+            $orderProduct = $order->products->where('product_id', $availableProduct->id)->first();
+            if ($orderProduct) {
+                $availableProduct->select_qty = $orderProduct->qty;
+            }
+            foreach ($availableProduct->variations as &$variation) {
+                $variation->price = $variation->product->front_sale_price;
+                foreach ($variation->variationItems as &$variationItem) {
+                    $variationItem->attribute_title = $variationItem->attribute->title;
+                }
+            }
+        }
+
+        $customer = null;
+        $customerAddresses = [];
+        $customerOrderNumbers = 0;
+        if ($order->user_id) {
+            $customer = $this->customerRepository->findById($order->user_id);
+            $customer->avatar = (string)$customer->avatar_url;
+
+            if ($customer) {
+                $customerOrderNumbers = $customer->orders()->count();
+            }
+
+            $customerAddresses = $customer->addresses->toArray();
+        }
+        $customerAddress = $order->address;
+
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/order-create.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
+
+        return view('plugins/ecommerce::orders.reorder', compact(
+            'order',
+            'products',
+            'productIds',
+            'customer',
+            'customerAddresses',
+            'customerAddress',
+            'customerOrderNumbers'
+        ));
+    }
+
     public function getReorder(Request $request, BaseHttpResponse $response)
     {
         if (!$request->input('order_id')) {
@@ -1054,16 +1194,17 @@ class OrderController extends BaseController
     public function import(Request $request)
     {
         $import = null;
+        $import_errors = $request->import_errors;
+
         if ($request->import) {
             $importOrder = OrderImport::where('order_import_upload_id', $request->import)->pluck('order_id');
             $import = Order::whereIN('id', $importOrder)->get();
         }
-        return view('plugins/ecommerce::order-import.create', compact('import'));
+        return view('plugins/ecommerce::order-import.create', compact('import','import_errors'));
     }
 
     public function importOrder(Request $request, BaseHttpResponse $response)
     {
-
         //TODO Refactor the code
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
@@ -1071,10 +1212,12 @@ class OrderController extends BaseController
             $spec_file_name = time() . rand(1, 100) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
             $order = Excel::toCollection(new OrderImportFile(), $move);
+
             $upload = OrderImportUpload::create(['file' => $move]);
 
-            if ($request->market_place == Order::LASHOWROOM) {
+            $errors = [];
 
+            if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         if (!isset($row['po'])) {
@@ -1082,6 +1225,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         $customer = Customer::where(['phone' => $row['phone_number']])->first();
                         if ($customer == null) {
                             //creating Customer
@@ -1121,19 +1265,53 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['style_no'])->first();
-//                        if ($product != null) {
-//                        }
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['original_qty'] / $pack;
 
-                        $orderQuantity = $row['original_qty'] / $pack;
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style_no'].' product is short in '.$remQty.' quantity.';
+                                }
+                            }
+
+                        } else {
+                            $errors[] = $row['style_no'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style_no'].' product is out of stock.';
+                        }
+
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
 
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1148,7 +1326,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
@@ -1169,9 +1347,7 @@ class OrderController extends BaseController
                         }
                     }
                 }
-
             } elseif ($request->market_place == Order::ORANGESHINE) {
-
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         if (!isset($row['invoice'])) {
@@ -1179,6 +1355,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         if ($row['payment'] == 'PayPal') {
                             $customer = Customer::where(['phone' => $row['shipping_phone']])->first();
                         } else {
@@ -1223,18 +1400,51 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['style'])->first();
-//                        if ($product != null) {
-//                        }
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['total_qty'] / $pack;
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style'].' product is short in '.$remQty.' quantity.';
+                                }
+                            }
 
-                        $orderQuantity = $row['total_qty'] / $pack;
+                        } else {
+                            $errors[] = $row['style'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style'].' product is out of stock.';
+                        }
+
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1249,7 +1459,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
@@ -1279,6 +1489,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
                         $customer = Customer::where(['phone' => $row['phonenumber']])->first();
                         if ($customer == null) {
                             //creating Customer
@@ -1319,18 +1530,51 @@ class OrderController extends BaseController
 
                         }
 
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
                         //Finding Product For Order
-
                         $product = Product::where('sku', $row['styleno'])->first();
-//                        if ($product != null) {
-//                        }
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['totalqty'] / $pack;
 
-                        //count pack quantity for product
-                        $pack = quantityCalculate($product['category_id']);
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['styleno'].' product is short in '.$remQty.' quantity.';
+                                }
+                            }
 
-                        $orderQuantity = $row['totalqty'] / $pack;
+                        } else {
+                            $errors[] = $row['styleno'].' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['styleno'].' product is out of stock.';
+                        }
+
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
-                        if ($orderPo != null) {
+                        if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
@@ -1345,7 +1589,7 @@ class OrderController extends BaseController
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
                             $importOrder = Order::create($iorder);
-                            if ($importOrder) {
+                            if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
                                 $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
@@ -1365,13 +1609,13 @@ class OrderController extends BaseController
                         }
                     }
                 }
-
             }
+
         } else {
             return 'not supported';
         }
 
-        return redirect(route('orders.import', ['import' => $upload->id]));
+        return redirect(route('orders.import', ['import' => $upload->id, 'import_errors' => $errors]));
     }
 
 
