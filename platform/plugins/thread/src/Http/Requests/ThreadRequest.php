@@ -16,6 +16,7 @@ class ThreadRequest extends Request
      */
     public function rules()
     {
+        $id = Request::segment(4);
         return [
             'name'   => 'required|max:255',
             'designer_id'   => 'required|exists:users,id',
@@ -36,8 +37,8 @@ class ThreadRequest extends Request
             'vendor_product_id' => 'nullable|exists:vendorproducts,id',
             'status' => Rule::in(BaseStatusEnum::values()),
 
-            'reg_sku'  => 'nullable|unique:categories_threads,sku',
-            'plus_sku' => 'nullable|unique:categories_threads,sku',
+            'reg_sku'  => "nullable|unique:categories_threads,sku,{$id}",
+            'plus_sku' => "nullable|unique:categories_threads,sku,{$id}",
         ];
     }
 }
