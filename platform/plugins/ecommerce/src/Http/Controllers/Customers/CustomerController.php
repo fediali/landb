@@ -103,10 +103,8 @@ class CustomerController extends BaseController
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
 
         $customer->password = null;
-        $url = ("https://apiprod.fattlabs.com/customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-        $card = omni_api($url);
-
-
+        $url = (env("OMNI_URL") . "customer/". $customer->card[0]->customer_omni_id . "/payment-method");
+        list($card, $info) = omni_api($url);
         return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
     }

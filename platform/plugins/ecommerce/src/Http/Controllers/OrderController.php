@@ -1633,15 +1633,30 @@ class OrderController extends BaseController
             'pre_auth'          => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
-        $card = omni_api($url, $data, 'POST');
-        dd($card);
-//        foreach ($)
-        json_decode($card[0]);
-        $info['order_id'] = 'id';
-        $info['transaction_id'] = 'id';
-        $info['response'] = 'id';
-        $info['status'] = 0;
-        DB::table('ec_order_preauth')->insert($info);
+        list($response, $info) = omni_api($url, $data, 'POST');
+
+        $status = $info['http_code'];
+
+        if (floatval($status) == 200) {
+            $response = json_decode($response, true);
+            $info['order_id'] = 'id';
+            $info['transaction_id'] = $response['id'];
+            $info['response'] = $response;
+            $info['status'] = 0;
+            DB::table('ec_order_preauth')->insert($info);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $response
+                ->setError()
+                ->setMessage($errors);
+        }
+
+        return $response->setMessage('Payment Successfully');
     }
 
     public function capture()

@@ -155,6 +155,7 @@ class ThreadController extends BaseController
      */
     public function update($id, ThreadRequest $request, BaseHttpResponse $response)
     {
+
         $thread = $this->threadRepository->findOrFail($id);
 
         $requestData = $request->input();
@@ -196,6 +197,8 @@ class ThreadController extends BaseController
                     $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
                 }
             }
+        } elseif (isset($requestData['reg_sku'])) {
+            $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $requestData['reg_sku'], 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
         }
 
         if ($request->hasfile('spec_files')) {
