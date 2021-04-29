@@ -133,9 +133,11 @@ class CheckoutController extends Controller
     $order->update(['is_finished' => 1]);
     OrderHelper::clearSessions($token);
 
-    return $response
+    /*return $response
         ->setNextUrl(url('/'))
-        ->setMessage(__('Checkout successfully!'));
+        ->setMessage(__('Checkout successfully!'));*/
+
+    return Theme::scope('orderSuccess')->render();
   }
 
 }
