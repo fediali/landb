@@ -3,6 +3,8 @@ namespace Theme\Landb\Repositories;
 
 
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductCategory;
+use Botble\Slug\Models\Slug;
 
 class ProductsRepository{
   private $model;
@@ -21,6 +23,15 @@ class ProductsRepository{
     $first = (isset($params['first'])) ? true : false;
     $id = (isset($params['id'])) ? $params['id'] : null;
     $category = (isset($params['category'])) ? true : false;
+    $category_slug = (isset($params['category_slug'])) ? $params['category_slug'] : null;
+
+    $category_id = null;
+    if(!is_null($category_slug)){
+      $category = Slug::where('prefix', 'product-categories')->where('key', $category_slug)->first();
+      if($category){
+        $category_id = $category->reference_id;
+      }
+    }
 
 
     $data = $this->model->with(['productAttributeSets'])->where($this->model->getTable().'.quantity', '>', 0)
@@ -37,6 +48,9 @@ class ProductsRepository{
             })
             ->when(!is_null($limit) , function ($query) use ($limit){
                 $query->limit($limit);
+            })
+            ->when(!is_null($category_id) , function ($query) use ($category_id){
+                $query->where('category_id', $category_id);
             })
             ->when($latest , function ($query){
                 $query->latest();

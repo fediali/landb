@@ -37,6 +37,14 @@ class ProductsController extends Controller
     return Theme::scope('products', $data)->render();
   }
 
+  public function productsByCategory($category){
+    $data = [
+        'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
+    ];
+    //dd($data['products']);
+    return Theme::scope('products', $data)->render();
+  }
+
   public  function getDetails($id){
     $data = [
         'product' => $this->productRepo->getProductsByParams(['first' => true, 'id' => $id, 'category' => true])
