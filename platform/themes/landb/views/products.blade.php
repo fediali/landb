@@ -220,6 +220,7 @@
 
         </div>
         <div class="shoplisting">
+            @if(count($products))
             @foreach($products as $key => $product)
                 <div class="listbox">
                 <div class="img">
@@ -254,6 +255,9 @@
                 </div>
             </div>
             @endforeach
+            @else
+                <h3>No Matching Product Found!</h3>
+            @endif
         </div>
         {!! $products->links() !!}
        {{-- <div class="pagination">
