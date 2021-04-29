@@ -130,7 +130,7 @@ class CheckoutController extends Controller
     if ($token !== session('tracked_start_checkout') || !$order) {
       return $response->setNextUrl(url('/'));
     }
-    $order->update(['status' => 'processed', 'is_confirmed' => 1]);
+    $order->update(['is_finished' => 1]);
     OrderHelper::clearSessions($token);
 
     return $response
