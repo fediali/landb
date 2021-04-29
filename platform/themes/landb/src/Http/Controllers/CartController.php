@@ -68,7 +68,17 @@ class CartController extends Controller
     $check = auth('customer')->user()->pendingOrder();
     $token = OrderHelper::getOrderSessionToken();
     if(!$check){
-      $cart = Order::create(['user_id' => auth('customer')->user()->id, 'amount' => 0, 'sub_total' => 0, 'is_finished' => 0, 'token' => $token]);
+      $cart = Order::create([
+          'user_id' => auth('customer')->user()->id,
+          'amount' => 0,
+          'sub_total' => 0,
+          'is_finished' => 0,
+          'token' => $token,
+          'tax_amount' => 0,
+          'discount_amount' => 0,
+          'shipping_amount' => 0,
+          'currency_id' => 1,
+      ]);
       return $cart->id;
     }else{
       return auth('customer')->user()->pendingOrderId();
@@ -81,6 +91,7 @@ class CartController extends Controller
     if($checkCart){
      $update =  $checkCart->update(['qty' => $checkCart->qty+$data['quantity']]);
      if($update){
+       $this->getOrderAndUpdateAmount();
        return true;
      }
     }else{
@@ -88,11 +99,12 @@ class CartController extends Controller
           'order_id' => $cartId,
           'product_id' => $product->id,
           'qty' => $data['quantity'],
-          'price' => $product->sale_price,
+          'price' => $product->price,
           'tax_amount' => 0,
           'product_name' => $product->name,
       ]);
       if($create){
+        $this->getOrderAndUpdateAmount();
         return true;
       }
     }
@@ -106,6 +118,7 @@ class CartController extends Controller
         $update = OrderProduct::where('id', $data['id'])->delete();
       }else{
         $update = OrderProduct::where('id', $data['id'])->update(['qty' => $data['quantity']]);
+        $this->getOrderAndUpdateAmount();
       }
       if($update){
         return response()->json(['message' => 'Cart Updated successfully'], 200);
@@ -118,22 +131,17 @@ class CartController extends Controller
 
   }
 
-  public function getCheckoutIndex($token){
-    $cart = $cart = Order::where('id', $this->getUserCart())->with(['products' => function($query){
-              $query->with(['product']);
-            }])->first();
+  public function getOrderAndUpdateAmount(){
+    $orderId = $this->getUserCart();
+    $products = OrderProduct::where('order_id', $orderId)->get();
+    $amount = 0;
 
-    $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress'])->first();
-
-    return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();
-  }
-
-  public function orderCheckout(Request $request){
-    $payment_type = $request->payment_type;
-    dd($payment_type);
-    if($payment_type == 3){
-
+    foreach ($products as $product) {
+      $amount = $amount + ($product->qty * $product->price);
     }
+    Order::find($orderId)->update([
+        'sub_total' => $amount,
+        'amount' => $amount
+    ]);
   }
-
 }

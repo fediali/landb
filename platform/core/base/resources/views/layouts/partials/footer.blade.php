@@ -157,8 +157,8 @@
         var form = document.querySelector('form');
         console.log('getting address', address.data)
         var extraDetails = {
-            firstname: "{{isset($customer) ? $customer->detail->first_name : 'john'}}",
-            lastname: "{{isset ($customer) ?$customer->detail->last_name : 'doe'}}",
+            firstname: "{{isset($customer->detail->first_name) ? $customer->detail->first_name : 'john'}}",
+            lastname: "{{isset ($customer->detail->last_name) ?$customer->detail->last_name : 'doe'}}",
             method: "card",
             month: month,
             year: year,

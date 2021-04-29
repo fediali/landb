@@ -10,18 +10,20 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
     <div class="row">
+    <div class="col-lg-7">
+    <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class="mt-4"><a class="active" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu3">Payment</a></li>
+                <li class=""><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information</a></li>
+                <li class=""><a class="{!! (!isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address</a></li>
+                <li class=""><a class="{!! (!isset($user_info->billingAddress[0]))  ? 'active':'' !!}"  data-toggle="tab" href="#menu2">Billing Address</a></li>
+                <li class=""><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment</a></li>
             </ul>
 
             <div class="tab-content product-tab-content">
-                <div id="home" class="tab-pane fade in active show">
+                <div id="home" class="tab-pane fade {!! (empty($user_info->details)) ? 'in active show':'' !!}">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <h4 class="profile-light-txt mt-5">Contact information</h4>
 
                             <div class="row">
@@ -68,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2"></div>
+                        <!-- <div class="col-lg-2"></div>
                         <div class="col-lg-4">
                             <div style="margin-top: 40px;" class="refer-area">
                                 <p class="cout-note">Note</p>
@@ -130,18 +132,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div id="menu1" class="tab-pane fade">
+                <div id="menu1" class="tab-pane fade {!! (!isset($user_info->shippingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row">
-                        <div class="col-lg-2 mt-5">
+                        <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
                         </div>
-                        <div class="col-lg-9"></div>
+                        <div class="col-lg-8"></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <h4 class="profile-light-txt mt-5">Shipping information</h4>
                             <div class="row">
                                 <div class="col-lg-6">
@@ -203,77 +205,18 @@
                                     <a href="#" class=" btn cart-btn w-100">Continue</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2"></div>
-                        <div class="col-lg-4">
-                            <div style="margin-top: 40px;" class="refer-area">
-                                <p class="cout-note">Note</p>
-                                <p class="cout-note-para mt-3">International shipping doesn’t qualify for free shipping. Free shipping can only be shipped to the 48 contigious states. We regret it cannot be free shipped to APO/FPO, Hawaii, Alaska, or Puerto Rico.</p>
-                                <p class="cout-note  mt-5">Your Order</p>
-                                <hr>
-                                <p class="note-product mt-3">Product</p>
-                                <div class="row">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="note-product-name mt-3">Red Serape High Waist Jeggings</p>
-
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price mt-3">6 * $ 84.00</p>
-
-                                    </div>
-                                </div>
-                                <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
-                                <div class="row  mt-5">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="cout-note">Subtotal:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
-
-                                    </div>
-                                </div>
-                                <div class="row  mt-2">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="note-product-price mt-3">Shipping:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price mt-3">Add Later</p>
-
-                                    </div>
-                                </div>
-                                <p class="cout-note  mt-3">Coupon Discount</p>
-                                <div class="row mt-2">
-                                    <div class="col-lg-8 col-8 pr-0">
-                                        <input type="text" placeholder="Gift certificate or coupon code" class="cart-coupon-input" />
-                                    </div>
-                                    <div class="col-lg-4 col-4 pl-0">
-                                        <a href="#" class=" btn cart-btn w-100">Apply</a>
-                                    </div>
-                                    <div></div>
-
-                                </div>
-                                <div class="row  mt-4">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="cout-note">Total:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
-                <div id="menu2" class="tab-pane fade">
+                <div id="menu2" class="tab-pane fade {!! (!isset($user_info->billingAddress[0]))  ? 'in active show':'' !!}">
                     <div class="row">
-                        <div class="col-lg-2 mt-5">
+                        <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
                         </div>
-                        <div class="col-lg-9"></div>
+                        <div class="col-lg-8"></div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <h4 class="profile-light-txt mt-5">Shipping information</h4>
                             <div class="row">
                                 <div class="col-lg-6">
@@ -335,71 +278,12 @@
                                     <a href="#" class=" btn cart-btn w-100">Continue</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-2"></div>
-                        <div class="col-lg-4">
-                            <div style="margin-top: 40px;" class="refer-area">
-                                <p class="cout-note">Note</p>
-                                <p class="cout-note-para mt-3">International shipping doesn’t qualify for free shipping. Free shipping can only be shipped to the 48 contigious states. We regret it cannot be free shipped to APO/FPO, Hawaii, Alaska, or Puerto Rico.</p>
-                                <p class="cout-note  mt-5">Your Order</p>
-                                <hr>
-                                <p class="note-product mt-3">Product</p>
-                                <div class="row">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="note-product-name mt-3">Red Serape High Waist Jeggings</p>
-
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price mt-3">6 * $ 84.00</p>
-
-                                    </div>
-                                </div>
-                                <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
-                                <div class="row  mt-5">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="cout-note">Subtotal:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
-
-                                    </div>
-                                </div>
-                                <div class="row  mt-2">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="note-product-price mt-3">Shipping:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price mt-3">Add Later</p>
-
-                                    </div>
-                                </div>
-                                <p class="cout-note  mt-3">Coupon Discount</p>
-                                <div class="row mt-2">
-                                    <div class="col-lg-8 col-8 pr-0">
-                                        <input type="text" placeholder="Gift certificate or coupon code" class="cart-coupon-input" />
-                                    </div>
-                                    <div class="col-lg-4 col-4 pl-0">
-                                        <a href="#" class=" btn cart-btn w-100">Apply</a>
-                                    </div>
-                                    <div></div>
-
-                                </div>
-                                <div class="row  mt-4">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="cout-note">Total:</p>
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
-                <div id="menu3" class="tab-pane fade">
+                <div id="menu3" class="tab-pane fade {!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row mt-5">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <form method="POST" id="checkout-main-form" action="{{ route('public.cart.order_checkout') }}">
                                 @csrf
                                 <input type="hidden" name="amount" value="{{ $grand_total }}">
@@ -410,15 +294,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="">
-                                        <input class="" type="radio" name="payment_method" value="1">
-                                        <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>
+                                        {{--<input class="" type="radio" name="payment_method" value="1">
+                                        <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>--}}
                                         <input class="ml-2" type="radio" name="payment_method" id="payment_paypal"
                                                @if (setting('default_payment_method') == \Botble\Payment\Enums\PaymentMethodEnum::PAYPAL) checked @endif
                                                value="paypal">
                                         <label class="mr-2 mb-0" for=""> {{ setting('payment_paypal_name', trans('plugins/payment::payment.payment_via_paypal')) }}</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                               {{-- <div class="col-lg-12">
                                     <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
                                 </div>
                                 <div class="col-lg-12">
@@ -435,40 +319,51 @@
                                     <input class="input-textbox" readonly type="text" />
                                 </div>
                                 <div class="col-lg-12">
+                                <p class="textbox-label">Cardholder Name</p>
                                     <input class="input-textbox" readonly type="text" />
-                                </div>                                    <p class="textbox-label">Cardholder Name</p>
+                                </div>--}}
 
                                 <div class="col-lg-3 mt-5">
-                                    <input type="submit" form="checkout-main-form" class=" btn cart-btn w-100" value="Finish">
+                                    <input type="submit" form="checkout-main-form" class=" btn cart-btn w-100" value="Pay By Paypal">
                                 </div>
                             </div>
                         </form>
-                        </div>
-                        <div class="col-lg-2"></div>
-                        <div class="col-lg-4">
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="col-lg-1"></div>
+    <div class="col-lg-4">
                             <div style="margin-top: 40px;" class="refer-area">
                                 <p class="cout-note">Note</p>
                                 <p class="cout-note-para mt-3">International shipping doesn’t qualify for free shipping. Free shipping can only be shipped to the 48 contigious states. We regret it cannot be free shipped to APO/FPO, Hawaii, Alaska, or Puerto Rico.</p>
                                 <p class="cout-note  mt-5">Your Order</p>
                                 <hr>
                                 <p class="note-product mt-3">Product</p>
-                                <div class="row">
-                                    <div class="col-lg-8 col-6">
-                                        <p class="note-product-name mt-3">Red Serape High Waist Jeggings</p>
+                                @php $grand_total = 0; @endphp
+                                @foreach($cart->products as $cartItem)
+                                    <div class="row">
+                                        <div class="col-lg-8 col-6">
+                                            <p class="note-product-name mt-3">{{ $cartItem->product->name }}</p>
 
-                                    </div>
-                                    <div class="col-lg-4 col-6">
-                                        <p class="note-product-price mt-3">6 * $ 84.00</p>
+                                        </div>
+                                        <div class="col-lg-4 col-6">
+                                            <p class="note-product-price mt-3">{{ $cartItem->qty }} * $ {{ $cartItem->price }}</p>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
+                                    <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
+                                    @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
+                                @endforeach
                                 <div class="row  mt-5">
                                     <div class="col-lg-8 col-6">
                                         <p class="cout-note">Subtotal:</p>
                                     </div>
                                     <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
+                                        <p class="note-product-price">$ {{ $grand_total }}</p>
 
                                     </div>
                                 </div>
@@ -497,15 +392,12 @@
                                         <p class="cout-note">Total:</p>
                                     </div>
                                     <div class="col-lg-4 col-6">
-                                        <p class="note-product-price">$ 84.00</p>
+                                        <p class="note-product-price">$ {{ $grand_total }}</p>
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+    
 </section>
