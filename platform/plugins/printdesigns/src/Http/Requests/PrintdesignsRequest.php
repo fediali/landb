@@ -23,13 +23,12 @@ class PrintdesignsRequest extends Request
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
 
-        $id = Request::segment(4);
-
+        /*$id = Request::segment(4);
         if ($id > 0) {
             $rules['sku'] = "required|max:5|unique:printdesigns,sku,{$id}";
         } else {
             $rules['sku'] = 'required|max:5|unique:printdesigns,sku';
-        }
+        }*/
 
         return $rules;
     }

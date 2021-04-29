@@ -89,7 +89,14 @@ class ThreadTable extends TableAbstract
                     $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
                 }*/
                 $html .= '<a href="' . route('thread.details', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
-                return $this->getOperations('thread.edit', 'thread.destroy', $item, $html);
+
+                if (!$item->thread_has_order && auth()->user()->hasPermission('thread.destroy')) {
+                    $html .= '<a href="#" class="btn btn-icon btn-sm btn-danger deleteDialog" data-toggle="tooltip" data-section="'.route('thread.destroy', $item->id).'" role="button" data-original-title="'.trans('core/base::tables.delete_entry').'" >
+                                <i class="fa fa-trash"></i>
+                              </a>';
+                }
+                //thread.destroy
+                return $this->getOperations('thread.edit', '', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);

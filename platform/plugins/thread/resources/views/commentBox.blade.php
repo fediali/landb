@@ -24,15 +24,21 @@
                         <div class="img_cont_msg">
                             <img src="{{ asset('images/chat-bubble.png') }}" class=" user_img_msg">
                         </div>
-                        <div class="msg_cotainer">
+                        <div class="msg_cotainer images">
                             <h6>{{ $comment->user->first_name.' '.$comment->user->last_name }}</h6>
                             <p>{{ $comment->comment }}</p>
                             @if(!is_null($comment->image))
                                 <img height="300px" width="390px" src="{{ asset($comment->image) }}" style=" object-fit: cover; margin-top: 5px;">
                             @endif
                             <span class="msg_time">{{--<a href="#" class="reply">Reply</a> --}}<a href="#">{{ $comment->created_at->diffForHumans() }}</a></span>
-                        </div>
+                            <div id="image-viewer">
+                                            <span class="close">X</span>
+                                            <img class="viewer-modal-content" id="full-image">
+                                        </div>
+                          </div>
+                        
                     </div>
+                    
                 @endforeach
 
             </div>

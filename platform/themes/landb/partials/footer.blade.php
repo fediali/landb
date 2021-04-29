@@ -87,7 +87,7 @@
         <div class="copyright">
             <p>All rights reserved - 2021 © Landbappreal</p>
             <p>Terms & Conditions</p>
-            <p> Website by xyz</p>
+            <!-- <p> Website by xyz</p> -->
         </div>
     </div>
 </footer>

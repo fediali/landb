@@ -293,14 +293,14 @@ class ThreadForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'class' => 'form-control',
-                    'id'    => 'sku-alert',
+//                    'id'    => 'sku-alert',
                 ]
             ])->add('plus_sku', 'text', [
                 'label'      => 'Plus SKU (For Previous Tech Pack)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'class' => 'form-control',
-                    'id'    => 'sku-alert',
+//                    'id'    => 'sku-alert',
                 ]
             ])
             /*->add('spec_file', 'mediaImage', [
