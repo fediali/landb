@@ -65,6 +65,7 @@ class Order extends BaseModel
         'discount_description',
         'is_finished',
         'token',
+        'payment_id'
     ];
 
     /**

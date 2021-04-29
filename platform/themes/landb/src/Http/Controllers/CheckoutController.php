@@ -22,6 +22,7 @@ use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
 use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Http\Requests\PayPalPaymentCallbackRequest;
+use Botble\Payment\Models\Payment;
 use Botble\Payment\Services\Gateways\PayPalPaymentService;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
@@ -124,13 +125,15 @@ class CheckoutController extends Controller
       PayPalPaymentService $palPaymentService,
       BaseHttpResponse $response
   ) {
-    $palPaymentService->afterMakePayment($request);
-    $token = $token = OrderHelper::getOrderSessionToken();
+    $chargeId = $palPaymentService->afterMakePayment($request);
+    $token = OrderHelper::getOrderSessionToken();
     $order = $this->orderRepository->getFirstBy(compact('token'), [], ['address', 'products']);
     if ($token !== session('tracked_start_checkout') || !$order) {
       return $response->setNextUrl(url('/'));
     }
-    $order->update(['is_finished' => 1]);
+    $payment = Payment::where('charge_id' , $chargeId)->first();
+    //dd($payment);
+    $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
     OrderHelper::clearSessions($token);
 
     /*return $response
