@@ -316,7 +316,7 @@
                         </thead>
                         <tbody>
 
-                        @foreach(json_decode($card) as $cards)
+                        @foreach($card as $cards)
                             <tr>
                                 <td>{{$cards->person_name}}</td>
                                 <td>{{$cards->card_exp}}</td>

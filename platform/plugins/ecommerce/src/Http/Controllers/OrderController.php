@@ -389,10 +389,14 @@ class OrderController extends BaseController
                 $weight += $product->weight;
             }
         }
-
+        $cards = [];
         $defaultStore = get_primary_store_locator();
-
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore'));
+        if (!$order->user->card->isEmpty()) {
+            $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+        }
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
     /**
@@ -1619,12 +1623,13 @@ class OrderController extends BaseController
         return redirect(route('orders.import', ['import' => $upload->id, 'import_errors' => $errors]));
     }
 
-    public function charge()
+    public function charge(Request $request)
     {
+
         $data = [
-            'payment_method_id' => '92705976-0678-4d05-a71d-5e2233677e41',
+            'payment_method_id' => $request->payment_id,
             'meta'              => [
-                'reference' => 'Order#102',
+                'reference' => $request->order_id,
                 'tax'       => 0,
                 'subtotal'  => 500,
                 'lineItems' => []
@@ -1639,11 +1644,11 @@ class OrderController extends BaseController
 
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
-            $info['order_id'] = 'id';
-            $info['transaction_id'] = $response['id'];
-            $info['response'] = $response;
-            $info['status'] = 0;
-            DB::table('ec_order_preauth')->insert($info);
+            $order['order_id'] = $request->order_id;
+            $order['transaction_id'] = $response['id'];
+            $order['response'] = json_encode($response);
+            $order['status'] = 0;
+            DB::table('ec_order_preauth')->insert($order);
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
@@ -1656,7 +1661,8 @@ class OrderController extends BaseController
                 ->setMessage($errors);
         }
 
-        return $response->setMessage('Payment Successfully');
+        $response->setMessage('Payment Successfully');
+        return back();
     }
 
     public function capture()
