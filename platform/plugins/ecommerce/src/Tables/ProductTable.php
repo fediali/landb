@@ -5,7 +5,10 @@ namespace Botble\Ecommerce\Tables;
 use BaseHelper;
 use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Exports\ProductExport;
+use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
@@ -121,6 +124,19 @@ class ProductTable extends TableAbstract
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 }
                 return $singleQty;
+            })
+            ->editColumn('order_qty', function ($item) {
+                $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->where('order_type', Order::PRE_ORDER)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->sum('qty');
+                $orderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->where('order_type', Order::PRE_ORDER)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->groupBy('ec_orders.id')
+                    ->count('ec_orders.id');
+                $html = '<span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span>';
+                return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -150,6 +166,7 @@ class ProductTable extends TableAbstract
             'ec_products.sku',
             'ec_products.quantity',
             'ec_products.quantity AS single_qty',
+            'ec_products.quantity AS order_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
@@ -226,6 +243,12 @@ class ProductTable extends TableAbstract
                 'width' => '50px',
                 'class' => 'text-center',
             ],*/
+            'order_qty'      => [
+                'name'  => 'ec_products.order_qty',
+                'title' => 'Pre-order Qty',
+                'width' => '100px',
+                'class' => 'text-center',
+            ],
             'created_at'   => [
                 'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
