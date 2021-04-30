@@ -101,10 +101,15 @@ class CustomerController extends BaseController
 
         $customer = $this->customerRepository->findOrFail($id);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
-
+        $card = [];
         $customer->password = null;
-        $url = (env("OMNI_URL") . "customer/". $customer->card[0]->customer_omni_id . "/payment-method");
-        list($card, $info) = omni_api($url);
+        if (!$customer->card->isEmpty()) {
+            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $card = json_decode($card);
+        }
+
+
         return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
     }

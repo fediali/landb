@@ -96,7 +96,7 @@
             </ul>
         </div>
         <nav class="navbar ">
-            <a class="navbar-brand" href="#"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
+            <a class="navbar-brand" href="{{ route('public.index') }}"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
             <div class=" navbar-parent d-flex">
                 {!!

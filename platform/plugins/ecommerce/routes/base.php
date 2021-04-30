@@ -275,9 +275,9 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Fronts', 'middle
             'uses' => 'PublicProductController@getProduct',
         ]);
 
-        Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
+       /* Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
             'uses' => 'PublicProductController@getProductCategory',
-        ]);
+        ]);*/
 
         Route::get(SlugHelper::getPrefix(ProductTag::class, 'product-tags') . '/{slug}', [
             'uses' => 'PublicProductController@getProductTag',

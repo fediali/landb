@@ -57,6 +57,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/products', 'ProductsController@getIndex')
             ->name('public.products');
 
+        Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', 'ProductsController@productsByCategory')
+            ->name('public.productsByCategory');
+
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
 

@@ -133,7 +133,11 @@ $(document).ready(function () {
       },
       error: function (result) {
         toggle_loader(false);
-        toastr['error'](result.message , 'Error');
+        if(result.status == 401){
+          toastr['error']('You need to login first' , 'Unauthorized!');
+        }else{
+          toastr['error'](result.message , 'Error');
+        }
       }
     })
   });
@@ -153,7 +157,11 @@ $(document).ready(function () {
       },
       error: function (result) {
         toggle_loader(false);
-        toastr['error'](result.message , 'Error');
+        if(result.status == 401){
+          toastr['error']('You need to login first' , 'Unauthorized!');
+        }else{
+          toastr['error'](result.message , 'Error');
+        }
       }
     })
   });

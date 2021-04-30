@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Http\Controllers;
 
 use App\Imports\OrderImportFile;
+use App\Models\CardPreAuth;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
@@ -389,10 +390,14 @@ class OrderController extends BaseController
                 $weight += $product->weight;
             }
         }
-
+        $cards = [];
         $defaultStore = get_primary_store_locator();
-
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore'));
+        if (!$order->user->card->isEmpty()) {
+            $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+        }
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
     /**
@@ -1622,17 +1627,19 @@ class OrderController extends BaseController
         return redirect(route('orders.import', ['import' => $upload->id, 'import_errors' => $errors]));
     }
 
-    public function charge()
+    public function charge(Request $request)
     {
+
+
         $data = [
-            'payment_method_id' => '92705976-0678-4d05-a71d-5e2233677e41',
+            'payment_method_id' => $request->payment_id,
             'meta'              => [
-                'reference' => 'Order#102',
+                'reference' => $request->order_id,
                 'tax'       => 0,
-                'subtotal'  => 500,
+                'subtotal'  => $request->sub_total,
                 'lineItems' => []
             ],
-            'total'             => 500,
+            'total'             => $request->amount,
             'pre_auth'          => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
@@ -1642,11 +1649,11 @@ class OrderController extends BaseController
 
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
-            $info['order_id'] = 'id';
-            $info['transaction_id'] = $response['id'];
-            $info['response'] = $response;
-            $info['status'] = 0;
-            DB::table('ec_order_preauth')->insert($info);
+            $order['order_id'] = $request->order_id;
+            $order['transaction_id'] = $response['id'];
+            $order['response'] = json_encode($response);
+            $order['status'] = 0;
+            CardPreAuth::create($order);
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
@@ -1654,16 +1661,37 @@ class OrderController extends BaseController
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
-            return $response
-                ->setError()
-                ->setMessage($errors);
+            return $errors;
         }
 
-        return $response->setMessage('Payment Successfully');
+        //$response->setMessage('Payment Successfully');
+        return back();
     }
 
-    public function capture()
+    public function capture(Request $request)
     {
+        $data = [
+            'total' => $request->amount,
+        ];
+        $url = (env("OMNI_URL") . "transaction/" . $request->transaction_id . "/capture");
+        list($response, $info) = omni_api($url, $data, 'POST');
+        $status = $info['http_code'];
+
+        if (floatval($status) == 200) {
+            $order['status'] = 1;
+            CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $errors;
+        }
+
+        //$response->setMessage('Payment Successfully');
+        return back();
 
     }
 
