@@ -57,7 +57,8 @@ class OrderTable extends TableAbstract
                 return $item->order_type_html;
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                // return $item->status->toHtml();
+                return view('plugins/ecommerce::orders/orderStatus', ['item' => $item])->render();
             })
             ->editColumn('payment_status', function ($item) {
                 return $item->payment->status->label() ? $item->payment->status->toHtml() : '&mdash;';
@@ -204,6 +205,18 @@ class OrderTable extends TableAbstract
         $buttons = $this->addCreateButton(route('orders.create'), 'orders.create');
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Order::class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Order::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**

@@ -1320,12 +1320,13 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $importOrder = OrderProduct::create($detail);
                             //import record
-                        } else {
+                        } else if ($product) {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['original_amount']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1453,12 +1454,13 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $importOrder = OrderProduct::create($detail);
                             //import record
-                        } else {
+                        } else if($product) {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['order_amt']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1583,12 +1585,13 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $importOrder = OrderProduct::create($detail);
                             //import record
-                        } else {
+                        } else if ($product) {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['totalamount']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1662,5 +1665,22 @@ class OrderController extends BaseController
     public function capture()
     {
 
+    }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $order = $this->orderRepository->findOrFail($request->input('pk'));
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $order->fill($requestData);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $order));
+        $this->orderRepository->createOrUpdate($order);
+        return $response;
     }
 }

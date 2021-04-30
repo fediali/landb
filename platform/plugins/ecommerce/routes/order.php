@@ -116,6 +116,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'OrderController@changeStatus',
+                'permission' => 'orders.create',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {

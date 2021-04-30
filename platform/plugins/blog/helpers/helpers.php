@@ -7,6 +7,7 @@ use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
 use Botble\Ecommerce\Models\ProductCategory;
+use Botble\Orderstatuses\Models\Orderstatuses;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -669,9 +670,7 @@ if (!function_exists('notify_users')) {
 if (!function_exists('create_customer')) {
     function create_customer($data)
     {
-
         $customer = DB::table('ec_customers')->insert($data);
-        //  dd('s', $customer);
         return $customer;
     }
 }
@@ -705,4 +704,19 @@ if (!function_exists('omni_api')) {
         return [$response, $info];
     }
 }
+
+if (!function_exists('get_order_statuses')) {
+    function get_order_statuses() {
+        $pl = [];
+        $statuses = Orderstatuses::where('status', 'published')->get();
+        foreach ($statuses as $status) {
+            $pl[] = [
+                'value' => strtolower($status->name),
+                'text'  => strtoupper($status->name),
+            ];
+        }
+        return $pl;
+    }
+}
+
 //Utils
