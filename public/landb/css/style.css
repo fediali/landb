@@ -1699,8 +1699,6 @@ input.qtyminus {
 
 .tabs-product {
     border-bottom: none;
-    background: #f1f1f1;
-    padding: 14px 5px;
 }
 
 .tabs-product a {
@@ -1711,14 +1709,10 @@ input.qtyminus {
     line-height: 26px;
     text-align: center;
     color: #000000;
-    margin-right: 50px;
 }
 
-.tabs-product li .active { 
-        border: 1px solid #191919;
-        opacity: 1; 
-        background: #fdfdfd;
-        padding: 5px 5px; 
+.tabs-product li .active {
+    font-weight: bold !important;
 }
 
 .description-p {
