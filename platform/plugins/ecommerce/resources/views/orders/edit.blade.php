@@ -660,12 +660,12 @@
 <!-- card -->
                             @if($order->preauth == null)
                                 {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
-                                <div class="add_card">
+                                <div class="add_card bg-white">
 
-                                    <div class="row group">
+                                    <div class="row group m-0 pt-4 ">
                                         @isset($order->user->billingAddress)
-                                            <label class="col-lg-12">
-                                                <span>Billing Address</span>
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Billing Address</span>
                                                 {!!
                                         Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
                                         ])
@@ -674,7 +674,7 @@
                                         @endisset
                                     </div>
 
-                                    <div class="group row">
+                                    <div class="group row m-0">
                                         <label class="col-lg-12">
                                             <div id="card-element" class="field">
                                                 <span>Card</span>
@@ -684,7 +684,7 @@
                                             </div>
                                         </label>
                                     </div>
-                                    <div class="row">
+                                    <div class="row m-0">
                                         <div class="col-lg-3">
                                             <input name="month" size="3" maxlength="2" placeholder="MM"
                                                    class="form-control month">
@@ -696,8 +696,14 @@
                                         </div>
                                     </div>
                                     {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
-                                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
-                                    <div class="outcome">
+                                    <div class="row m-0">
+                                        <div class="col-lg-6">
+                                        <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-lg-12">
+                                        <div class="outcome">
                                         <div class="error"></div>
                                         <div class="success">
                                             Successful! The ID is
@@ -706,8 +712,11 @@
                                         <div class="loader" style="margin: auto">
                                         </div>
                                     </div>
+                                        </div> 
+                                    </div>
+                                   
                                 </div>
-                                <div class="pd-all-20">
+                                <div class="pd-all-20 bg-white">
                                     <form action="{{route('orders.charge')}}" method="POST">
                                         @csrf
                                         <input type="hidden" value="" name="payment_id" class="payment_id">

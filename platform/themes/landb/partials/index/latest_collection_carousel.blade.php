@@ -9,7 +9,7 @@
                     </div>
                     <h1 class="revealUp">Explore our<br> Seasonal <small>Highlights</small> </h1>
                 </div>
-                <div class="owl-carousel">
+                <div id="home-slider" class="owl-carousel">
                     @foreach($latest_collection as $key => $product)
                         @if($key > 3)
                             <div>
@@ -29,3 +29,44 @@
         </div>
     </div>
 </section>
+
+
+<script>
+    var ACP = {
+  init: function()
+  {
+    ACP.owl('#home-slider');
+  },
+  owl: function(owlID)
+  {
+    var owlSlider = $(owlID).owlCarousel(
+      {
+        items              : 1,
+        itemsDesktop       : false,
+        itemsDesktopSmall  : false,
+        itemsTablet        : false,
+        itemsMobile        : false,
+        loop               : false,
+        autoplay           : true,
+        autoplayTimeout    : 2000,
+        autoplayHoverPause : true,
+        nav : false,
+        dots							 : true
+
+      });
+
+    $('.play-control').on('click', '.play', function(eve)
+      {
+        owlSlider.trigger('play.owl.autoplay', 1000);
+      });
+
+    $('.play-control').on('click', '.stop', function()
+      {
+        owlSlider.trigger('stop.owl.autoplay');
+        console.log('Stop!');
+      });
+  }
+}
+ACP.init();    
+
+</script>
