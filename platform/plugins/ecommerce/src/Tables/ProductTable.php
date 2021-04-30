@@ -13,6 +13,8 @@ use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Botble\Table\Abstracts\TableAbstract;
+use Botble\Thread\Models\Thread;
+use Botble\Threadorders\Models\Threadorders;
 use Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
@@ -159,6 +161,17 @@ class ProductTable extends TableAbstract
                     ->sum('qty');
                 $html = '<span>'.$soldQty.'</span>';
                 return $html;
+            })
+            ->editColumn('reorder_qty', function ($item) {
+                $getProdSKU = Product::where('id', $item->id)->value('sku');
+                $reOrderQty = Threadorders::join('thread_order_variations', 'thread_order_variations.thread_order_id', 'threadorders.id')
+                    ->leftJoin('inventory_history', 'inventory_history.order_id', 'threadorders.id')
+                    ->where('thread_order_variations.sku', $getProdSKU)
+                    ->where('threadorders.order_status', Thread::REORDER)
+                    ->whereNull('inventory_history.order_id')
+                    ->value('thread_order_variations.quantity');
+                $html = '<span>'.$reOrderQty.'</span>';
+                return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -191,6 +204,7 @@ class ProductTable extends TableAbstract
             'ec_products.quantity AS single_qty',
             'ec_products.quantity AS order_qty',
             'ec_products.quantity AS sold_qty',
+            'ec_products.quantity AS reorder_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
@@ -279,10 +293,14 @@ class ProductTable extends TableAbstract
                 'width' => '100px',
                 'class' => 'text-center',
             ],
+            'reorder_qty'      => [
+                'name'  => 'ec_products.reorder_qty',
+                'title' => 'Re-order Qty',
+                'class' => 'text-center',
+            ],
             'sold_qty'      => [
                 'name'  => 'ec_products.sold_qty',
                 'title' => 'Sold Qty',
-                'width' => '50px',
                 'class' => 'text-center',
             ],
             'created_at'   => [
