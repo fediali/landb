@@ -89,3 +89,42 @@ if (!function_exists('generate_product_url')) {
     
   }
 }
+
+if (!function_exists('parent_categories')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function parent_categories()
+  {
+      $categories =  \Botble\Ecommerce\Models\ProductCategory::where('ec_product_categories.parent_id', 0)->where('ec_product_categories.status', 'published')->join('slugs', 'slugs.reference_id', 'ec_product_categories.id')->where('slugs.prefix', 'product-categories')->select('slugs.key', 'ec_product_categories.name', 'ec_product_categories.id')->get();
+      return $categories;
+  }
+}
+
+if (!function_exists('product_tags')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function product_tags()
+  {
+      $tags =  \Botble\Ecommerce\Models\ProductTag::where('ec_product_tags.status', 'published')->join('slugs', 'slugs.reference_id', 'ec_product_tags.id')->where('slugs.prefix', 'product-tags')->select('slugs.key', 'ec_product_tags.name', 'ec_product_tags.id')->get();
+      return $tags;
+  }
+}
+
+if (!function_exists('category_sizes')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function category_sizes()
+  {
+    $sizes = \Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->get();
+      return $sizes;
+  }
+}

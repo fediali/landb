@@ -45,7 +45,7 @@
         </div>
         <div class="" id="filtermenu">
             <nav class="main-nav filter_nav">
-                <div class="nav-col">
+                {{--<div class="nav-col">
                     <h5>Color</h5>
                     <ul class="colorbox">
                         <li>
@@ -80,139 +80,91 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div>--}}
                 <div class="nav-col">
                     <h5>Size</h5>
-                    <ul>
-                        <li>
-                            <a class="selected" href="#">
-                                Large
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Medium
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                Small
-                            </a>
-                        </li>
-
-                    </ul>
+                    @php $sizes = category_sizes() @endphp
+                    @foreach($sizes->chunk(10) as $chunk)
+                        <ul>
+                            @foreach($chunk as $size)
+                                @php
+                                    $selected = (request()->query('size') == $size->id) ? true:false;
+                                    if($selected){
+                                        $url = request()->fullUrlWithQuery(['size' => null]);
+                                    }else{
+                                        $url = request()->fullUrlWithQuery(['size' => $size->id]);
+                                    }
+                                @endphp
+                                <li>
+                                    <a class="{{ ($selected) ? 'selected':''  }}" href="{{ $url }}">
+                                        {{ $size->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endforeach
                 </div>
                 <div class="nav-col">
                     <h5>Price</h5>
+                    @php $price_ranges =[ ['0', '20'],['20', '40'],['40', '50'],['50', '60'],['60'] ];  @endphp
                     <ul>
-                        <li>
-                            <a class="selected" href="#">
-                                $0.00 - $20.00
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                $20.00 - $40.00
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                $40.00 - $50.00
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                $50.00 - $60.00
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                $60.00 +
-                            </a>
-                        </li>
-
-
-
+                        @foreach($price_ranges as $price_range)
+                            @php
+                                $selected = (request()->query('price') == $price_range[0].'-'.@$price_range[1]) ? true:false;
+                                if($selected){
+                                    $url = request()->fullUrlWithQuery(['price' => null]);
+                                }else{
+                                    $url = request()->fullUrlWithQuery(['price' => $price_range[0].'-'.@$price_range[1]]);
+                                }
+                            @endphp
+                            <li>
+                                <a class="{{ ($selected) ? 'selected':'' }}" href="{{ $url }}">
+                                    ${{ $price_range[0] }} {!! isset($price_range[1]) ? '- $'.$price_range[1] : '+' !!}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="nav-col">
                     <h5>Categories</h5>
                     <ul>
+                        @php $categories = parent_categories() @endphp
+                        @foreach($categories as $category)
+                            @php
+                                $selected = (request()->query('c_slug') == $category->key) ? true:false;
+                                if($selected){
+                                    $url = request()->fullUrlWithQuery(['c_slug' => null]);
+                                }else{
+                                    $url = request()->fullUrlWithQuery(['c_slug' => $category->key]);
+                                }
+                            @endphp
                         <li>
-                            <a href="#">
-                                ALL
+                            <a class="{{ ($selected) ? 'selected':''  }}" href="{{ $url }}">
+                                {{ $category->name }}
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                                Men
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Women
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Kids
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Accessories
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Boot
-                            </a>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="nav-col">
                     <h5>Tags</h5>
                     <ul class="tags">
                         <li>
-                            <a href="#">
-                                All Asian,
-                            </a>
-                            <a href="#">
-                                Brown,
-
-                            </a>
-                            <a href="#">
-                                euro,
-
-                            </a>
-                            <a href="#">
-                                hat,
-
-                            </a>
-                            <a href="#">
-                                T-Shirt,
-
-
-                            </a>
-                            <a href="#">
-                                Teen,
-                            </a>
-                            <a href="#">
-                                Top,
-
-                            </a>
-                            <a href="#">
-                                Pants
-                            </a>
-
-
-
+                            @php $tags_filter = product_tags() @endphp
+                            @foreach($tags_filter as $tag)
+                                @php
+                                    $selected = (request()->query('t_slug') == $tag->key)? true:false;
+                                    if($selected){
+                                        $url = request()->fullUrlWithQuery(['t_slug' => null]);
+                                    }else{
+                                        $url = request()->fullUrlWithQuery(['t_slug' => $tag->key]);
+                                    }
+                                @endphp
+                                <a class="{{ ($selected) ? 'selected':''  }}" href="{{ $url }}">
+                                    {{ $tag->name }}{{ ($loop->last) ? '': ',' }}
+                                </a>
+                            @endforeach
                         </li>
-
-
-
-
                     </ul>
                 </div>
             </nav>
@@ -259,7 +211,7 @@
                 <h3>No Matching Product Found!</h3>
             @endif
         </div>
-        {!! $products->links() !!}
+        {!! $products->appends($_GET)->links() !!}
        {{-- <div class="pagination">
 
             <ul>

@@ -101,14 +101,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
-{{--<script>
+<script>
   $(document).ready(function() {
     $("#filtertoggle").click(function() {
       $(this).toggleClass("on");
       $("#filtermenu").slideToggle();
     });
   });
-</script>--}}
+</script>
 <script>
   jQuery(document).ready(function() {
     // This button will increment the value
