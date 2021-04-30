@@ -36,13 +36,13 @@
             </ul>
             <ul class="rightbar">
                 <li class="listingicon">
-                    <a href="#"><span class="threedots"></span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['limit' => 3]) }}"><span class="threedots {{ (request()->query('limit') == 3) ? '':'active' }}"></span></a>
                 </li>
                 <li class="listingicon">
-                    <a href="#"><span class="fourdots active"></span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['limit' => 4]) }}"><span class="fourdots {{ (request()->query('limit') == 4) ? '':'active' }}"></span></a>
                 </li>
                 <li class="listingicon">
-                    <a href="#"><span class="fivedots"></span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['limit' => 5]) }}"><span class="fivedots {{ (request()->query('limit') == 5) ? '':'active' }}"></span></a>
                 </li>
                 <li class="seprator"></li>
                 <li class="filter"><a href="#" id="filtertoggle" class="filterbtn">Filter <span class="filtericon"></span></a>
@@ -186,8 +186,8 @@
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
                     <div class="caro_text">
-                        <h5>Dresses</h5>
-                        <p>Sandon vegan Leatther Dress</p>
+                        <h5>{{ @$product->category->name }}</h5>
+                        <p>{{ $product->name }}</p>
                     </div>
                     <span>Restock</span>
                     <div class="imgoverlay">
