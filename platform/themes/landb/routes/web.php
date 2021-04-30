@@ -22,7 +22,14 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
   Route::get('/checkout/success', 'CheckoutController@getCheckoutSuccess')
       ->name('public.checkout_success');
 
-  Route::get('/payment/status', 'CheckoutController@getPayPalStatus')->name('public.paypal_status');
+  Route::get('/payment/status', 'CheckoutController@getPayPalStatus')
+      ->name('public.paypal_status');
+
+  Route::get('/product/detail/{id}', 'ProductsController@getDetails')
+      ->name('public.singleProduct');
+
+  Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
+      ->name('public.add_to_wishlist');
 
   Route::post('/add_to_cart', 'CartController@createCart')
       ->name('public.cart.add_to_cart');
@@ -50,11 +57,8 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/products', 'ProductsController@getIndex')
             ->name('public.products');
 
-        Route::get('/product/detail/{id}', 'ProductsController@getDetails')
-            ->name('public.singleProduct');
-
-        Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
-            ->name('public.add_to_wishlist');
+        Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', 'ProductsController@productsByCategory')
+            ->name('public.productsByCategory');
 
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');

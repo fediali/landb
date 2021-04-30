@@ -78,6 +78,19 @@
             });
             console.log(not_id);
         })
+        var card = $("select.card_list option:selected").val();
+        console.log(card)
+        $('.payment_id').val(card);
+        $('.add_card').hide();
+        $('.card_list').on('change', function () {
+            var card = $("select.card_list option:selected").val();
+            $('.payment_id').val(card);
+            if (card == 0) {
+                $('.add_card').show();
+            } else {
+                $('.add_card').hide();
+            }
+        });
     })
     var payButton = document.querySelector('#paybutton');
     var tokenizeButton = document.querySelector('#tokenizebutton');
@@ -157,8 +170,8 @@
         var form = document.querySelector('form');
         console.log('getting address', address.data)
         var extraDetails = {
-            firstname: "{{isset($customer) ? $customer->detail->first_name : 'john'}}",
-            lastname: "{{isset ($customer) ?$customer->detail->last_name : 'doe'}}",
+            firstname: "{{isset($customer->detail->first_name) ? $customer->detail->first_name : 'john'}}",
+            lastname: "{{isset ($customer->detail->last_name) ?$customer->detail->last_name : 'doe'}}",
             method: "card",
             month: month,
             year: year,

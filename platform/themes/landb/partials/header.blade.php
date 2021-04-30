@@ -80,7 +80,7 @@
                     /* display: inherit; */
                     margin: a;
                     margin-top: -10px;
-                ">1</span>
+                ">{{ Cart::instance('cart')->count() }}</span>
                 <li>
                     <a href="#"><i class="fal fa-user"></i></a>
                 </li>
@@ -96,7 +96,7 @@
             </ul>
         </div>
         <nav class="navbar ">
-            <a class="navbar-brand" href="#"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
+            <a class="navbar-brand" href="{{ route('public.index') }}"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
             <div class=" navbar-parent d-flex">
                 {!!

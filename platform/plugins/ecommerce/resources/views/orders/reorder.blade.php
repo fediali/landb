@@ -30,7 +30,9 @@
                 :customer_order_numbers="{{ $customerOrderNumbers }}"
                 :currency="'{{ get_application_currency()->symbol }}'"
                 :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
+
         ></create-order>
+
     </div>
 @stop
 

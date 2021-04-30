@@ -14,14 +14,14 @@
     <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class="mt-4"><a class="active" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu3">Payment</a></li>
+                <li class=""><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!isset($user_info->billingAddress[0]))  ? 'active':'' !!}"  data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
             </ul>
 
             <div class="tab-content product-tab-content">
-                <div id="home" class="tab-pane fade in active show">
+                <div id="home" class="tab-pane fade {!! (empty($user_info->details)) ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-12">
                             <h4 class="profile-light-txt mt-5">Contact information</h4>
@@ -135,7 +135,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div id="menu1" class="tab-pane fade">
+                <div id="menu1" class="tab-pane fade {!! (!isset($user_info->shippingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
@@ -208,7 +208,7 @@
                         </div> 
                     </div>
                 </div>
-                <div id="menu2" class="tab-pane fade">
+                <div id="menu2" class="tab-pane fade {!! (!isset($user_info->billingAddress[0]))  ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
@@ -281,7 +281,7 @@
                         </div> 
                     </div>
                 </div>
-                <div id="menu3" class="tab-pane fade">
+                <div id="menu3" class="tab-pane fade {!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row mt-5">
                         <div class="col-lg-12">
                             <form method="POST" id="checkout-main-form" action="{{ route('public.cart.order_checkout') }}">
@@ -294,15 +294,15 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="">
-                                        <input class="" type="radio" name="payment_method" value="1">
-                                        <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>
+                                        {{--<input class="" type="radio" name="payment_method" value="1">
+                                        <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>--}}
                                         <input class="ml-2" type="radio" name="payment_method" id="payment_paypal"
                                                @if (setting('default_payment_method') == \Botble\Payment\Enums\PaymentMethodEnum::PAYPAL) checked @endif
                                                value="paypal">
                                         <label class="mr-2 mb-0" for=""> {{ setting('payment_paypal_name', trans('plugins/payment::payment.payment_via_paypal')) }}</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                               {{-- <div class="col-lg-12">
                                     <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
                                 </div>
                                 <div class="col-lg-12">
@@ -321,10 +321,10 @@
                                 <div class="col-lg-12">
                                 <p class="textbox-label">Cardholder Name</p>
                                     <input class="input-textbox" readonly type="text" />
-                                </div>                                 
+                                </div>--}}
 
                                 <div class="col-lg-3 mt-5">
-                                    <input type="submit" form="checkout-main-form" class=" btn cart-btn w-100" value="Finish">
+                                    <input type="submit" form="checkout-main-form" class=" btn cart-btn w-100" value="Pay By Paypal">
                                 </div>
                             </div>
                         </form>

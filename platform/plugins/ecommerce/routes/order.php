@@ -10,7 +10,16 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@deletes',
                 'permission' => 'orders.destroy',
             ]);
-
+            Route::post('charge', [
+                'as'         => 'charge',
+                'uses'       => 'OrderController@charge',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('capture', [
+                'as'         => 'capture',
+                'uses'       => 'OrderController@capture',
+                'permission' => 'orders.create',
+            ]);
             Route::get('import', [
                 'as'         => 'import',
                 'uses'       => 'OrderController@import',

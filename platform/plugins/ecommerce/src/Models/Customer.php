@@ -165,7 +165,7 @@ class Customer extends Authenticatable
 
     public function pendingOrder()
     {
-        return $this->orders()->where('user_id', $this->id)->where('status', 'pending')->first();
+        return $this->orders()->where('user_id', $this->id)->where('is_finished', 0)->first();
     }
 
     public function pendingOrderId()

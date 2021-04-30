@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\CardPreAuth;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
@@ -34,8 +35,8 @@ class Order extends BaseModel
     const ORANGESHINE = 3;
 
     public static $MARKETPLACE = [
-        self::LASHOWROOM => 'LA SHOWROOM',
-        self::FASHIONGO => 'FASHIONGO',
+        self::LASHOWROOM  => 'LA SHOWROOM',
+        self::FASHIONGO   => 'FASHIONGO',
         self::ORANGESHINE => 'ORANGE SHINE'
     ];
 
@@ -43,7 +44,7 @@ class Order extends BaseModel
     const PRE_ORDER = 'pre_order';
 
     public static $ORDER_TYPES = [
-        self::NORMAL => 'Normal',
+        self::NORMAL    => 'Normal',
         self::PRE_ORDER => 'Pre Order',
     ];
 
@@ -65,6 +66,7 @@ class Order extends BaseModel
         'discount_description',
         'is_finished',
         'token',
+        'payment_id'
     ];
 
     /**
@@ -72,7 +74,7 @@ class Order extends BaseModel
      */
     protected
         $casts = [
-        'status' => OrderStatusEnum::class,
+        'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
 
@@ -196,6 +198,11 @@ class Order extends BaseModel
         } else {
             return '<span class="label-primary status-label">Normal</span>';
         }
+    }
+
+    public function preauth()
+    {
+        return $this->hasOne(CardPreAuth::class, 'order_id');
     }
 
 }

@@ -689,7 +689,7 @@ if (!function_exists('omni_api')) {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST  => $type,
-            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_TOKEN')]
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_SANDBOX_TOKEN')]
         ];
 
         if ($type == 'POST') {
@@ -700,10 +700,9 @@ if (!function_exists('omni_api')) {
         curl_setopt_array($curl, $request);
 
         $response = curl_exec($curl);
-
         $info = curl_getinfo($curl);
         curl_close($curl);
-        return $response;
+        return [$response, $info];
     }
 }
 //Utils
