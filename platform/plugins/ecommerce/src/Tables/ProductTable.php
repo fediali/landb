@@ -126,16 +126,30 @@ class ProductTable extends TableAbstract
                 return $singleQty;
             })
             ->editColumn('order_qty', function ($item) {
+                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
+                $getProdIds[] = $item->id;
                 $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
                     ->where('order_type', Order::PRE_ORDER)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->sum('qty');
                 $orderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
                     ->where('order_type', Order::PRE_ORDER)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->groupBy('ec_orders.id')
                     ->count('ec_orders.id');
                 $html = '<span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span>';
+                return $html;
+            })
+            ->editColumn('sold_qty', function ($item) {
+                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
+                $getProdIds[] = $item->id;
+                $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->sum('qty');
+                $html = '<span>'.$soldQty.'</span>';
                 return $html;
             });
 
@@ -167,6 +181,7 @@ class ProductTable extends TableAbstract
             'ec_products.quantity',
             'ec_products.quantity AS single_qty',
             'ec_products.quantity AS order_qty',
+            'ec_products.quantity AS sold_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
@@ -247,6 +262,12 @@ class ProductTable extends TableAbstract
                 'name'  => 'ec_products.order_qty',
                 'title' => 'Pre-order Qty',
                 'width' => '100px',
+                'class' => 'text-center',
+            ],
+            'sold_qty'      => [
+                'name'  => 'ec_products.sold_qty',
+                'title' => 'Sold Qty',
+                'width' => '50px',
                 'class' => 'text-center',
             ],
             'created_at'   => [
