@@ -1139,6 +1139,8 @@ section.parallax_video video {
 
 .filter_nav .nav-col li a.selected {
     font-weight: 600;
+    border: 1px solid #000;
+    padding: 3px 3px 3px 3px;
 }
 
 .colorbox li a {
@@ -2520,6 +2522,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     height: 190vh;
     MARGIN-TOP: 200PX;
     position: relative;
+    z-index: -1;
 }
 
 .grid {
