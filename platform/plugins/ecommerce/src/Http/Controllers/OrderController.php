@@ -1631,10 +1631,10 @@ class OrderController extends BaseController
             'meta'              => [
                 'reference' => $request->order_id,
                 'tax'       => 0,
-                'subtotal'  => 500,
+                'subtotal'  => 1,
                 'lineItems' => []
             ],
-            'total'             => 500,
+            'total'             => 1,
             'pre_auth'          => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
