@@ -61,13 +61,13 @@ class ProductTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('products.edit')) {
                     return $item->name;
                 }
 
                 return Html::link(route('products.edit', $item->id), $item->name);
-            })
+            })*/
             ->editColumn('image', function ($item) {
                 if ($this->request()->input('action') == 'csv') {
                     return RvMedia::getImageUrl($item->image, null, false, RvMedia::getDefaultImage());
@@ -93,6 +93,14 @@ class ProductTable extends TableAbstract
             })
             ->editColumn('sku', function ($item) {
                 return $item->sku ? $item->sku : '&mdash;';
+            })
+            ->editColumn('warehouse_sec', function ($item) {
+                $html = '<form action="'.route('products.update-wh-sec', $item->id).'" method="POST">
+                            <input type="hidden" name="_token" value="'.@csrf_token().'">
+                            <input class="ui-text-area textarea-auto-height" name="warehouse_sec" value="'.$item->warehouse_sec.'" required>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
+                        </form>';
+                return $html;
             })
             ->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
@@ -178,6 +186,7 @@ class ProductTable extends TableAbstract
             'ec_products.status',
             'ec_products.product_type',
             'ec_products.sku',
+            'ec_products.warehouse_sec',
             'ec_products.quantity',
             'ec_products.quantity AS single_qty',
             'ec_products.quantity AS order_qty',
@@ -235,6 +244,12 @@ class ProductTable extends TableAbstract
             'sku'          => [
                 'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
+                'class' => 'text-left',
+            ],
+            'warehouse_sec'          => [
+                'name'  => 'ec_products.warehouse_sec',
+                'title' => 'SEC',
+                'width' => '100px',
                 'class' => 'text-left',
             ],
             'quantity'     => [
