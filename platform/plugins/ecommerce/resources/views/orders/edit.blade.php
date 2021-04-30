@@ -657,7 +657,7 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
 
-
+<!-- card -->
                             @if($order->preauth == null)
                                 {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
                                 <div class="add_card">
