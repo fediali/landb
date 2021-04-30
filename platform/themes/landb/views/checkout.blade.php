@@ -14,10 +14,10 @@
     <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class=""><a class="active" data-toggle="tab" href="#home">Information</a></li>
-                <li class=""><a data-toggle="tab" href="#menu1">Shipping Address</a></li>
-                <li class=""><a data-toggle="tab" href="#menu2">Billing Address</a></li>
-                <li class=""><a data-toggle="tab" href="#menu3">Payment</a></li>
+                <li class="mt-4"><a class="active" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a data-toggle="tab" href="#menu3">Payment</a></li>
             </ul>
 
             <div class="tab-content product-tab-content">
