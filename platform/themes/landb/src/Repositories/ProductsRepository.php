@@ -30,6 +30,7 @@ class ProductsRepository{
     $tag_slug = isset($_GET['t_slug']) ? $_GET['t_slug'] : null;
     $price_range = isset($_GET['price']) ? $_GET['price'] : null;
     $category_slug = isset($_GET['c_slug']) ? $_GET['c_slug'] : $category_slug;
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $limit;
     $size_id = isset($_GET['size']) ? $_GET['size'] : null;
     $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : null;
 
@@ -60,7 +61,7 @@ class ProductsRepository{
       $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null): null;
     }
 
-    $data = $this->model->with(['productAttributeSets'])->where($this->model->getTable().'.quantity', '>', 0)
+    $data = $this->model->with(['productAttributeSets', 'category'])->where($this->model->getTable().'.quantity', '>', 0)
             ->when($category , function ($query){
                 $query->with(['category' => function($que){
                   $que->with('category_sizes');
@@ -100,7 +101,7 @@ class ProductsRepository{
             });
 
       if($paginate){
-        $data = $data->paginate();
+        $data = $data->paginate($limit);
       }elseif($simplePaginate){
         $data = $data->simplePaginate();
       }elseif($first){
@@ -108,6 +109,7 @@ class ProductsRepository{
       }else{
         $data = $data->get();
       }
+      //dd($data);
     return $data;
   }
 
