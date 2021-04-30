@@ -958,4 +958,13 @@ class ProductController extends BaseController
       return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data'));
 
     }
+
+    public function updateProdWarehouseSection($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->warehouse_sec = $request->input('warehouse_sec', NULL);
+        $this->productRepository->createOrUpdate($product);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
 }
