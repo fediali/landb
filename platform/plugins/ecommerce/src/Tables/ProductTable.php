@@ -110,6 +110,9 @@ class ProductTable extends TableAbstract
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
+            ->editColumn('oos_date', function ($item) {
+                return BaseHelper::formatDate($item->oos_date);
+            })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
             })
@@ -211,6 +214,7 @@ class ProductTable extends TableAbstract
             'ec_products.sale_type',
             'ec_products.start_date',
             'ec_products.end_date',
+            'ec_products.oos_date',
         ];
 
         $query = $model
@@ -309,6 +313,12 @@ class ProductTable extends TableAbstract
                 'width' => '100px',
                 'class' => 'text-center',
             ],
+            'oos_date'   => [
+                'name'  => 'ec_products.oos_date',
+                'title' => 'OOS Date',
+                'width' => '100px',
+                'class' => 'text-center',
+            ],
             'status'       => [
                 'name'  => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),
@@ -347,7 +357,11 @@ class ProductTable extends TableAbstract
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'ec_products.order'      => [
+            'ec_products.oos_date' => [
+                'title' => 'OOS Date',
+                'type'  => 'date',
+            ],
+            /*'ec_products.order'      => [
                 'title'    => trans('core/base::tables.order'),
                 'type'     => 'number',
                 'validate' => 'required|min:0',
@@ -361,7 +375,7 @@ class ProductTable extends TableAbstract
             'ec_products.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 
