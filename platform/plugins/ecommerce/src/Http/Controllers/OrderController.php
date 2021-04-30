@@ -390,7 +390,9 @@ class OrderController extends BaseController
                 $weight += $product->weight;
             }
         }
-        $cards = [];
+        $cards = [
+            '0' => 'Add New Card'
+        ];
         $defaultStore = get_primary_store_locator();
         if (!$order->user->card->isEmpty()) {
             $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
@@ -1459,7 +1461,7 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $importOrder = OrderProduct::create($detail);
                             //import record
-                        } else if($product) {
+                        } else if ($product) {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['order_amt']);;
                             $iorder['currency_id'] = 1;
@@ -1629,8 +1631,6 @@ class OrderController extends BaseController
 
     public function charge(Request $request)
     {
-
-
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta'              => [

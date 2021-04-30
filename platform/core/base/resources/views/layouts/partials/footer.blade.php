@@ -81,7 +81,11 @@
         var card = $("select.card_list option:selected").val();
         console.log(card)
         $('.payment_id').val(card);
-        $('.add_card').hide();
+        if (card == 0) {
+            $('.add_card').show();
+        } else {
+            $('.add_card').hide();
+        }
         $('.card_list').on('change', function () {
             var card = $("select.card_list option:selected").val();
             $('.payment_id').val(card);
