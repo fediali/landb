@@ -25,6 +25,13 @@ class ProductsRepository{
     $category = (isset($params['category'])) ? true : false;
     $category_slug = (isset($params['category_slug'])) ? $params['category_slug'] : null;
 
+    /*FILTERS*/
+
+    $tag_slug = isset($_GET['t_slug']) ? $_GET['t_slug'] : null;
+    $price_range = isset($_GET['price']) ? $_GET['price'] : null;
+    $category_slug = isset($_GET['c_slug']) ? $_GET['c_slug'] : $category_slug;
+    $size_id = isset($_GET['size']) ? $_GET['size'] : null;
+
     $category_id = null;
     if(!is_null($category_slug)){
       $category = Slug::where('prefix', 'product-categories')->where('key', $category_slug)->first();
@@ -32,7 +39,19 @@ class ProductsRepository{
         $category_id = $category->reference_id;
       }
     }
-
+    $tag_id = null;
+    if(!is_null($tag_slug)){
+      $tag = Slug::where('prefix', 'product-tags')->where('key', $tag_slug)->first();
+      if($tag){
+        $tag_id = $tag->reference_id;
+      }
+    }
+    $min_range = $max_range = null;
+    if(!is_null($price_range)){
+      $ranges = explode('-', $price_range);
+      $min_range = isset($ranges[0]) ? ((!empty($ranges[0])) ? (int)$ranges[0] : null) : null;
+      $max_range = isset($ranges[1]) ? ((!empty($ranges[1])) ? (int)$ranges[1] : null) : null;
+    }
 
     $data = $this->model->with(['productAttributeSets'])->where($this->model->getTable().'.quantity', '>', 0)
             ->when($category , function ($query){
@@ -52,8 +71,22 @@ class ProductsRepository{
             ->when(!is_null($category_id) , function ($query) use ($category_id){
                 $query->where('category_id', $category_id);
             })
+            ->when(!is_null($tag_id) , function ($query) use ($tag_id){
+                $query->join('ec_product_tag_product as ptag', 'ptag.product_id','ec_products.id')->where('tag_id', $tag_id);
+            })
+            ->when(!is_null($price_range) , function ($query) use ($min_range,$max_range){
+                if(!is_null($min_range)){
+                  $query->where('price', '>=', $min_range);
+                }
+                if(!is_null($max_range)){
+                  $query->where('price', '<=', $max_range);
+                }
+            })
+            ->when(!is_null($size_id) , function ($query) use ($size_id){
+                $query->join('product_categories_sizes as psizes', 'psizes.product_category_id', 'ec_products.category_id')->where('category_size_id', $size_id);
+            })
             ->when($latest , function ($query){
-                $query->latest();
+                $query->orderBy($this->model->getTable().'.created_at', 'desc');
             });
 
       if($paginate){
