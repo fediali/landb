@@ -17,11 +17,19 @@
                 <li>
                     <div class="dropdown">
                         <button class="sortdropdown" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort by <i class="fal fa-angle-down"></i>
+                            @switch(request()->query('sort_by'))
+                                @case('name-asc') Name @break
+                                @case('price-asc') Price: Low to High @break
+                                @case('price-desc') Price: High to Low @break
+                                @default Sort by @break
+
+                            @endswitch
+                             <i class="fal fa-angle-down"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Type</a>
-                            <a class="dropdown-item" href="#">Name</a>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort_by' => 'name-asc']) }}">Name</a>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort_by' => 'price-asc']) }}">Price: Low to High</a>
+                            <a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort_by' => 'price-desc']) }}">Price: High to Low</a>
                         </div>
                     </div>
                 </li>
