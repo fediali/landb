@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Http\Controllers;
 
 use App\Imports\OrderImportFile;
+use App\Models\CardPreAuth;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
@@ -1626,15 +1627,16 @@ class OrderController extends BaseController
     public function charge(Request $request)
     {
 
+
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta'              => [
                 'reference' => $request->order_id,
                 'tax'       => 0,
-                'subtotal'  => 1,
+                'subtotal'  => $request->sub_total,
                 'lineItems' => []
             ],
-            'total'             => 1,
+            'total'             => $request->amount,
             'pre_auth'          => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
@@ -1648,7 +1650,7 @@ class OrderController extends BaseController
             $order['transaction_id'] = $response['id'];
             $order['response'] = json_encode($response);
             $order['status'] = 0;
-            DB::table('ec_order_preauth')->insert($order);
+            CardPreAuth::create($order);
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
@@ -1656,17 +1658,37 @@ class OrderController extends BaseController
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
-            return $response
-                ->setError()
-                ->setMessage($errors);
+            return $errors;
         }
 
-        $response->setMessage('Payment Successfully');
+        //$response->setMessage('Payment Successfully');
         return back();
     }
 
-    public function capture()
+    public function capture(Request $request)
     {
+        $data = [
+            'total' => $request->amount,
+        ];
+        $url = (env("OMNI_URL") . "transaction/" . $request->transaction_id . "/capture");
+        list($response, $info) = omni_api($url, $data, 'POST');
+        $status = $info['http_code'];
+
+        if (floatval($status) == 200) {
+            $order['status'] = 1;
+            CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $errors;
+        }
+
+        //$response->setMessage('Payment Successfully');
+        return back();
 
     }
 }
