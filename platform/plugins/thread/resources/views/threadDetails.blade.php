@@ -560,7 +560,7 @@
         width: auto;
         padding: 0px 7px;
         margin-top: -22px;
-        color: white;
+        color: black;
         font-weight: bold;
         font-size: 18px;
         transition: 0.6s ease;

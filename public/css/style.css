@@ -57,11 +57,7 @@ body {
     text-transform: uppercase;
     margin-right: 5px;
 }
-
-.tabrow .item:last-child {
-    padding-right: 0px;
-    border: 0;
-}
+ 
 
 .denim_table .checkbox {
     display: flex;
