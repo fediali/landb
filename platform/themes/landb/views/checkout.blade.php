@@ -287,6 +287,8 @@
                             <form method="POST" id="checkout-main-form" action="{{ route('public.cart.order_checkout') }}">
                                 @csrf
                                 <input type="hidden" name="amount" value="{{ $grand_total }}">
+                                <input type="hidden" name="order_id" value="{{ $cart->id }}">
+                                <input type="hidden" name="sub_total" value="{{ $cart->sub_total }}">
                                 <input type="hidden" name="currency" value="{{ strtoupper(get_application_currency()->title) }}">
                                 <input type="hidden" name="currency_id" value="{{ get_application_currency_id() }}">
                                 <input type="hidden" name="callback_url" value="{{ route('public.paypal_status') }}">
@@ -300,30 +302,50 @@
                                                @if (setting('default_payment_method') == \Botble\Payment\Enums\PaymentMethodEnum::PAYPAL) checked @endif
                                                value="paypal">
                                         <label class="mr-2 mb-0" for=""> {{ setting('payment_paypal_name', trans('plugins/payment::payment.payment_via_paypal')) }}</label>
+
+                                        <input class="ml-2" type="radio" name="payment_method" id="credit_card"
+                                               @if (setting('default_payment_method') == \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER) checked @endif
+                                               value="{{ \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER }}">
+                                        <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>
                                     </div>
                                 </div>
-                               {{-- <div class="col-lg-12">
-                                    <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
-                                </div>
-                                <div class="col-lg-12">
-                                    <p class="textbox-label">Card Number</p>
-                                    <input class="input-textbox" readonly type="text" />
-                                </div>
-                                <div class="col-lg-6">
-                                    <p class="textbox-label">Valid Thru</p>
-                                    <input style="width:46.5%;" class="input-textbox" readonly type="text" /> /
-                                    <input style="width:46.5%;" class="input-textbox" readonly type="text" />
-                                </div>
-                                <div class="col-lg-6">
-                                    <p class="textbox-label">CVV/CVC</p>
-                                    <input class="input-textbox" readonly type="text" />
-                                </div>
-                                <div class="col-lg-12">
-                                <p class="textbox-label">Cardholder Name</p>
-                                    <input class="input-textbox" readonly type="text" />
-                                </div>--}}
+                              <div class="card-payment" style="display: @if (setting('default_payment_method') != \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER) none @endif">
+                                  <div class="col-lg-12">
+                                      <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
+                                  </div>
+                                  <div class="group row m-0">
+                                      <label class="col-lg-12">
+                                          <div id="card-element" class="field">
+                                              <span>Card</span>
+                                              <div id="fattjs-number" style="height: 35px"></div>
+                                              <span class="mt-2">CVV</span>
+                                              <div id="fattjs-cvv" style="height: 35px"></div>
+                                          </div>
+                                      </label>
+                                  </div>
+                                  <div class="row m-0">
+                                      <div class="col-lg-3">
+                                          <input name="month" size="3" maxlength="2" placeholder="MM"
+                                                 class="form-control month">
+                                      </div>
+                                      <p class="mt-2"> / </p>
+                                      <div class="col-lg-3">
+                                          <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                                 class="form-control year">
+                                      </div>
+                                  </div>
+                                  <div class="col-lg-3 mt-5">
+                                      <button class=" btn cart-btn w-100" id="tokenizebutton">Pay Now</button>
+                                  </div>
+                                  {{--<div class="outcome">
+                                  <div class="error"></div>
+                                  <div class="success">
+                                      <span class="token"></span>
+                                  </div>
+                                  </div>--}}
+                              </div>
 
-                                <div class="col-lg-3 mt-5">
+                                <div class="col-lg-3 mt-5 paypal-payment" style="display: @if (setting('default_payment_method') != \Botble\Payment\Enums\PaymentMethodEnum::PAYPAL) none @endif">
                                     <input type="submit" form="checkout-main-form" class=" btn cart-btn w-100" value="Pay By Paypal">
                                 </div>
                             </div>
