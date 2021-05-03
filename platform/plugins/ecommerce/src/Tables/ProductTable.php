@@ -97,9 +97,9 @@ class ProductTable extends TableAbstract
                 return $item->sku ? $item->sku : '&mdash;';
             })
             ->editColumn('warehouse_sec', function ($item) {
-                $html = '<form action="'.route('products.update-wh-sec', $item->id).'" method="POST">
+                $html = '<form class="d-flex" action="'.route('products.update-wh-sec', $item->id).'" method="POST">
                             <input type="hidden" name="_token" value="'.@csrf_token().'">
-                            <input class="ui-text-area textarea-auto-height" name="warehouse_sec" value="'.$item->warehouse_sec.'" required>
+                            <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" name="warehouse_sec" value="'.$item->warehouse_sec.'" required>
                             <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
                         </form>';
                 return $html;
