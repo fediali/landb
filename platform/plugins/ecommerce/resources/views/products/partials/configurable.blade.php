@@ -1,9 +1,9 @@
 <div id="product-variations-wrapper">
-    <div class="variation-actions">
+    {{--<div class="variation-actions">
         <a href="#" class="btn-trigger-select-product-attributes" data-target="{{ route('products.store-related-attributes', $product->id) }}">{{ trans('plugins/ecommerce::products.edit_attribute') }}</a>
         <a href="#" class="btn-trigger-add-new-product-variation" data-target="{{ route('products.add-version', $product->id) }}">{{ trans('plugins/ecommerce::products.add_new_variation') }}</a>
         <a href="#" class="btn-trigger-generate-all-versions" data-target="{{ route('products.generate-all-versions', $product->id) }}">{{ trans('plugins/ecommerce::products.generate_all_variations') }}</a>
-    </div>
+    </div>--}}
     @if (!$productVariations->isEmpty())
         <table class="table table-hover-variants">
             <thead>

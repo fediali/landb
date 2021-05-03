@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Tables;
 use BaseHelper;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use EcommerceHelper;
@@ -23,7 +24,7 @@ class OrderTable extends TableAbstract
     /**
      * @var bool
      */
-    protected $hasFilter = true;
+    protected $hasFilter = false;
 
     /**
      * OrderTable constructor.
@@ -124,6 +125,19 @@ class OrderTable extends TableAbstract
             ->select($select)
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
+
+        $order_type = $this->request()->input('order_type',false);
+        $product_id = $this->request()->input('product_id',false);
+        if ($order_type && in_array($order_type, [Order::NORMAL, Order::PRE_ORDER])) {
+            $query->where('ec_orders.order_type', $order_type);
+        }
+        if ($product_id) {
+            $getProdIds = ProductVariation::where('configurable_product_id', $product_id)->pluck('product_id')->all();
+            $getProdIds[] = $product_id;
+            $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')
+                ->whereIn('ec_order_product.product_id', $getProdIds)
+                ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
+        }
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
@@ -233,7 +247,7 @@ class OrderTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'ec_orders.status'     => [
+            /*'ec_orders.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => OrderStatusEnum::labels(),
@@ -242,7 +256,7 @@ class OrderTable extends TableAbstract
             'ec_orders.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 

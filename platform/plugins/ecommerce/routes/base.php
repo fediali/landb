@@ -147,6 +147,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ProductController@inventory_history',
                 'permission' => 'products.index',
             ]);
+            Route::get('product_timeline/{id}', [
+                'as'         => 'product_timeline',
+                'uses'       => 'ProductController@product_timeline',
+                'permission' => 'products.index',
+            ]);
 
             Route::post('update-order-by', [
                 'as'         => 'update-order-by',
@@ -281,9 +286,9 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Fronts', 'middle
             'uses' => 'PublicProductController@getProduct',
         ]);
 
-       /* Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
-            'uses' => 'PublicProductController@getProductCategory',
-        ]);*/
+        /* Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
+             'uses' => 'PublicProductController@getProductCategory',
+         ]);*/
 
         Route::get(SlugHelper::getPrefix(ProductTag::class, 'product-tags') . '/{slug}', [
             'uses' => 'PublicProductController@getProductTag',

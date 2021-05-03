@@ -8506,7 +8506,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v(_vm._s(_vm.__("Pay later")))]
+                    [_vm._v("Create Order")]
                   )
                 ]
               )
