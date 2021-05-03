@@ -4,7 +4,8 @@
         <create-order
             :currency="'{{ get_application_currency()->symbol }}'"
             :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
-            :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}">
+            :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
+            :payment_methods="{{ json_encode(get_payment_methods()) }}">
         </create-order>
     </div>
 @stop

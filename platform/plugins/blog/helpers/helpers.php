@@ -8,6 +8,7 @@ use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Orderstatuses\Models\Orderstatuses;
+use Botble\Paymentmethods\Models\Paymentmethods;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -716,6 +717,13 @@ if (!function_exists('get_order_statuses')) {
             ];
         }
         return $pl;
+    }
+}
+
+if (!function_exists('get_payment_methods')) {
+    function get_payment_methods() {
+        $payment_methods = Paymentmethods::where('status', 'published')->get()->toArray();
+        return $payment_methods;
     }
 }
 

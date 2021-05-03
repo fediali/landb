@@ -159,10 +159,19 @@
                                 <label class="text-title-field">Select Order Type</label>
                                 <select class="form-control" id="order-type" v-model="order_type">
                                     <option value="" :disabled="true" :selected="true">Select Order Type</option>
-                                    <option v-for="(value, index) in order_types"
-                                            :value="index"
+                                    <option v-for="(value, index) in order_types" :value="index"
                                             :selected="index === sel_order_type">
                                         {{ value }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-title-field">Select Payment Method</label>
+                                <select class="form-control" v-model="payment_method">
+                                    <option value="" :disabled="true" :selected="true">Select Payment Method</option>
+                                    <option v-for="(pm) in payment_methods" :value="pm.slug"
+                                            :selected="pm.slug === sel_payment_method">
+                                        {{ pm.name }}
                                     </option>
                                 </select>
                             </div>
@@ -224,7 +233,7 @@
                         <div class="col-12 col-sm-6 col-md-12 col-lg-6 text-right">
                             <!--<button class="btn btn-primary" v-b-modal.make-paid :disabled="!child_product_ids.length">{{ __('Paid') }}</button>-->
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
-                            <input type="hidden" v-model="child_payment_method" value="cod">
+                            <!--<input type="hidden" v-model="child_payment_method" value="cod">-->
                             <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">Create Order</button>
                         </div>
                     </div>
@@ -792,6 +801,10 @@
                 default: () => [],
             },
             order_types: {
+                type: Object,
+                default: () => [],
+            },
+            payment_methods: {
                 type: Object,
                 default: () => [],
             },

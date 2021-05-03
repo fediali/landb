@@ -774,6 +774,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -815,6 +824,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     order_types: {
+      type: Object,
+      "default": function _default() {
+        return [];
+      }
+    },
+    payment_methods: {
       type: Object,
       "default": function _default() {
         return [];
@@ -8289,6 +8304,72 @@ var render = function() {
                     ],
                     2
                   )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { staticClass: "text-title-field" }, [
+                    _vm._v("Select Payment Method")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.payment_method,
+                          expression: "payment_method"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.payment_method = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          attrs: { value: "", disabled: true },
+                          domProps: { selected: true }
+                        },
+                        [_vm._v("Select Payment Method")]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.payment_methods, function(pm) {
+                        return _c(
+                          "option",
+                          {
+                            domProps: {
+                              value: pm.slug,
+                              selected: pm.slug === _vm.sel_payment_method
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(pm.name) +
+                                "\n                                "
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -8470,27 +8551,6 @@ var render = function() {
                   staticClass: "col-12 col-sm-6 col-md-12 col-lg-6 text-right"
                 },
                 [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.child_payment_method,
-                        expression: "child_payment_method"
-                      }
-                    ],
-                    attrs: { type: "hidden", value: "cod" },
-                    domProps: { value: _vm.child_payment_method },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.child_payment_method = $event.target.value
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
                   _c(
                     "button",
                     {
