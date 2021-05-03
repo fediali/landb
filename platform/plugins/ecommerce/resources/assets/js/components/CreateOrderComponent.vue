@@ -225,7 +225,7 @@
                             <!--<button class="btn btn-primary" v-b-modal.make-paid :disabled="!child_product_ids.length">{{ __('Paid') }}</button>-->
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
                             <input type="hidden" v-model="child_payment_method" value="cod">
-                            <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>
+                            <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">Create Order</button>
                         </div>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ class ProductTable extends TableAbstract
     /**
      * @var bool
      */
-    protected $hasFilter = true;
+    protected $hasFilter = false;
 
     /**
      * @var string
@@ -67,7 +67,6 @@ class ProductTable extends TableAbstract
                 if (!Auth::user()->hasPermission('products.edit')) {
                     return $item->name;
                 }
-
                 return Html::link(route('products.edit', $item->id), $item->name);
             })*/
             ->editColumn('image', function ($item) {
@@ -152,7 +151,10 @@ class ProductTable extends TableAbstract
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->groupBy('ec_orders.id')
                     ->count('ec_orders.id');
-                $html = '<span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span>';
+                $html = '&mdash;';
+                if ($orderQty) {
+                    $html = '<a href="'.route('orders.index', ['order_type'=>'pre_order','product_id'=>$item->id]).'"><span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span></a>';
+                }
                 return $html;
             })
             ->editColumn('sold_qty', function ($item) {
@@ -162,7 +164,10 @@ class ProductTable extends TableAbstract
                     ->whereIn('product_id', $getProdIds)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->sum('qty');
-                $html = '<span>'.$soldQty.'</span>';
+                $html = '&mdash;';
+                if ($soldQty) {
+                    $html = '<a href="'.route('orders.index', ['product_id'=>$item->id]).'"><span>' . $soldQty . '</span></a>';
+                }
                 return $html;
             })
             ->editColumn('reorder_qty', function ($item) {
@@ -352,7 +357,7 @@ class ProductTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'ec_products.name'       => [
+            /*'ec_products.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
@@ -360,7 +365,7 @@ class ProductTable extends TableAbstract
             'ec_products.oos_date' => [
                 'title' => 'OOS Date',
                 'type'  => 'date',
-            ],
+            ],*/
             /*'ec_products.order'      => [
                 'title'    => trans('core/base::tables.order'),
                 'type'     => 'number',
