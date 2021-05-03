@@ -305,11 +305,11 @@
 
                                         <input class="ml-2" type="radio" name="payment_method" id="credit_card"
                                                @if (setting('default_payment_method') == \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER) checked @endif
-                                               value="{{ \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER }}">
+                                               value="{{ \Botble\Payment\Enums\PaymentMethodEnum::OMNI_PAYMENT }}">
                                         <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>
                                     </div>
                                 </div>
-                              <div class="card-payment" style="display: @if (setting('default_payment_method') != \Botble\Payment\Enums\PaymentMethodEnum::BANK_TRANSFER) none @endif">
+                              <div class="card-payment" style="display: @if (setting('default_payment_method') != \Botble\Payment\Enums\PaymentMethodEnum::OMNI_PAYMENT) none @endif">
                                   <div class="col-lg-12">
                                       <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
                                   </div>
@@ -325,12 +325,12 @@
                                   </div>
                                   <div class="row m-0">
                                       <div class="col-lg-3">
-                                          <input name="month" size="3" maxlength="2" placeholder="MM"
+                                          <input name="month" type="number" size="3" maxlength="2" placeholder="MM"
                                                  class="form-control month">
                                       </div>
                                       <p class="mt-2"> / </p>
                                       <div class="col-lg-3">
-                                          <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                          <input name="year" type="number" size="5" maxlength="4" placeholder="YYYY"
                                                  class="form-control year">
                                       </div>
                                   </div>

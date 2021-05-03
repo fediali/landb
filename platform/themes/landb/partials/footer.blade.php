@@ -158,7 +158,7 @@
     });
 
     $('input[name="payment_method"]').on('click', function () {
-      if(this.value == 'bank_transfer'){
+      if(this.value == 'omni_payment'){
         $('.paypal-payment').hide();
         $('.card-payment').show();
       }else{

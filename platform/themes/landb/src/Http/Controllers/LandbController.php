@@ -37,4 +37,8 @@ class LandbController extends Controller
     //dd($data['latest_collection']);
    return Theme::scope('index', $data)->render();
   }
+
+  public function orderSuccess(){
+    return Theme::scope('orderSuccess', [])->render();
+  }
 }
