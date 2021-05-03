@@ -193,7 +193,7 @@
                     </div>
                     <span>Restock</span>
                     <div class="imgoverlay">
-                        <a href="#"  data-toggle="modal" data-target="#myModal"><i class="far fa-eye"></i></a>
+                        <a href="#" onclick="toggle_product_detail('{{ $product->id }}')"><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
                             <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
@@ -276,27 +276,22 @@
                             <!-- <img class="front-img" src="./img//product/Front.png" /> -->
                             <div class="fancy-container clearfix">
                                 <div class="gallery">
-                                    <div class="previews">
-                                        <a href="javascript:void(0)" class="selected" data-full="img/product/top1large.jpg"><img src="img/product/top1small.jpg" /></a>
-                                        <a href="javascript:void(0)" data-full="img/product/top2large.jpg"><img src="img/product/top2small.jpg" /></a>
-                                        <a href="javascript:void(0)" data-full="img/product/top3large.jpg"><img src="img/product/top3small.jpg" /></a>
-                                        <a href="javascript:void(0)" data-full="img/product/top4large.jpg"><img src="img/product/top4small.jpg" /></a>
-                                        <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a>
+                                    <div class="previews" id="product-detail-images">
+
                                     </div>
-                                    <div class="full quick-full">
+                                    <div class="full quick-full" id="product-detail-image">
                                         <!-- first image is viewable to start -->
-                                        <img src="img/product/top1large.jpg" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <h1 class="detail-h1 mb-2"> Coral Cut Out V-neck Basic Tee Plus Size </h1>
-                            <p class="detail-price mb-2">$ 25.00</p>
-                            <p class="short-description mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eu vitae eu potenti ut id ultrices rhoncus, </p>
-                            <p class="detail-size-p mb-2"><span class="detail-size">Size</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2(XL), 2(2XL), 2(3XL) </p>
-                            <select class="detail-size-select">
-                                <option>2(XL), 2(2XL), 2(3XL)</option>
+                            <h1 class="detail-h1 mb-2" id="product-detail-name"> Coral Cut Out V-neck Basic Tee Plus Size </h1>
+                            <p class="detail-price mb-2" >$ <span  id="product-detail-price">0.0</span></p>
+                            <p class="short-description mb-2" id="product-detail-desc"></p>
+                            <p class="detail-size-p mb-2"><span class="detail-size">Size</span> <span  id="product-detail-sizes"></span> </p>
+                            <select class="detail-size-select" id="product-detail-sizes-drop">
+                                <option disabled hidden selected>Select a Size</option>
                             </select>
                             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span> </p>
                             <div class="color-area mt-2">
@@ -322,27 +317,27 @@
                                 </label>
                             </div>
                             <div class="row mt-4">
-                                <div class="col-lg-6">
-                                    <form id='myform' method='POST' action='#'>
-                                        <input type='button' value='-' class='qtyminus' field='quantity' />
-                                        <input type='text' name='quantity' value='0' class='qty' />
-                                        <input type='button' value='+' class='qtyplus' field='quantity' />
-                                    </form>
-                                </div>
-                                <div class="col-lg-6">
-                                    <a href="./cart.html" class=" btn cart-btn w-100">Add to cart</a>
-                                </div>
+                                <form class="add_to_cart_form"  id="product-detail-form" data-id="" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                                    <div class="col-lg-6">
+                                        <input type='button' value='-' class='qtyminus' data-update="0" field='quantity' />
+                                        <input id="product-detail-qty" type='text' name='quantity' value='1' class='qty' readonly />
+                                        <input type='button' value='+' class='qtyplus' data-update="0" field='quantity' />
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button class="cart-btn w-100 add-to-cart-button cart-submit"  id="product-detail-button" data-id="">Add to cart</button>
+                                    </div>
+                                </form>
                             </div>
-                            <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p">502</span> </p>
-                            <p class="detail-category mt-2">Categories: &nbsp;&nbsp;&nbsp;<span class="detail-category-p mt-2">Furniture, Table</span> </p>
-                            <p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p">Pottery</span> </p>
+                            <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p"  id="product-detail-sku"></span> </p>
+                            <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span class="detail-category-p mt-2"  id="product-detail-category"></span> </p>
+                            {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p" id="product-detail-tags"></span> </p>--}}
                             <div class="d-flex mt-4">
                                 <p class="share-text pt-1 mr-2"> Share this items :
                                 </p>
-                                <a href="#"><img class="social-img ml-2" src="./img/icons/snapchat.png" /></a>
-                                <a href="#"><img class="social-img ml-2" src="./img/icons/facebook.png" /></a>
-                                <a href="#"><img class="social-img ml-2" src="./img/icons/Twitter.png" /></a>
-                                <a href="#"><img class="social-img ml-2" src="./img/icons/instagram.png" /></a>
+                                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/snapchat.png') }}" /></a>
+                                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/facebook.png') }}" /></a>
+                                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/Twitter.png') }}" /></a>
+                                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}" /></a>
                             </div>
                         </div>
                     </div>

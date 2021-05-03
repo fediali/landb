@@ -11,6 +11,7 @@ use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Theme\Landb\Repositories\ProductsRepository;
@@ -45,11 +46,15 @@ class ProductsController extends Controller
     return Theme::scope('products', $data)->render();
   }
 
-  public  function getDetails($id){
+  public  function getDetails($id, Request $request){
     $data = [
         'product' => $this->productRepo->getProductsByParams(['first' => true, 'id' => $id, 'category' => true])
     ];
     //dd($data['product']);
-    return Theme::scope('product', $data)->render();
+    if($request->ajax()){
+      return response()->json(['product' => $data['product']], 200);
+    }else{
+      return Theme::scope('product', $data)->render();
+    }
   }
 }

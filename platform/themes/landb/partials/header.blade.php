@@ -80,7 +80,7 @@
                     /* display: inherit; */
                     margin: a;
                     margin-top: -10px;
-                ">{{ Cart::instance('cart')->count() }}</span>
+                " id="user-cart-count">{{ cart_count() }}</span>
                 <li>
                     <a href="#"><i class="fal fa-user"></i></a>
                 </li>
