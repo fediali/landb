@@ -4,13 +4,12 @@
            class="detect-schedule hidden"
            name="sale_type">
 
-    <div class="col-md-4">
+    {{--<div class="col-md-4">
         <div class="form-group @if ($errors->has('sku')) has-error @endif">
-            <label
-                    class="text-title-field">{{ trans('plugins/ecommerce::products.sku') }}</label>
-            {!! Form::text('sku', old('sku', $product ? $product->sku : null), ['class' => 'next-input', 'id' => 'sku', 'data-counter' => 30]) !!}
+            <label class="text-title-field">{{ trans('plugins/ecommerce::products.sku') }}</label>
+            {!! Form::text('sku', old('sku', $product ? $product->sku : null), ['class' => 'next-input', 'id' => 'sku', 'data-counter' => 30, 'readOnly']) !!}
         </div>
-    </div>
+    </div>--}}
 
     <div class="col-md-4">
         <div class="form-group">
@@ -65,7 +64,7 @@
 
 <hr/>
 
-<div class="form-group">
+{{--<div class="form-group">
     <div class="storehouse-management">
         <div class="mt5">
             <input type="hidden" name="with_storehouse_management" value="0">
@@ -89,7 +88,7 @@
             &nbsp;{{ trans('plugins/ecommerce::products.form.stock.allow_order_when_out') }}
         </label>
     </div>
-</div>
+</div>--}}
 
 <hr/>
 
