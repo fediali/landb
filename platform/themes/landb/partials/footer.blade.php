@@ -156,6 +156,100 @@
       }
 
     });
+
+    $('input[name="payment_method"]').on('click', function () {
+      if(this.value == 'bank_transfer'){
+        $('.paypal-payment').hide();
+        $('.card-payment').show();
+      }else{
+        $('.card-payment').hide();
+        $('.paypal-payment').show();
+      }
+    });
+
+    var tokenizeButton = document.querySelector('#tokenizebutton');
+
+    // Init FattMerchant API
+    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
+      number: {
+        id: 'fattjs-number',
+        placeholder: '0000 0000 0000 0000',
+        style: 'width: 90%; height:90%; border-radius: 3px; border: 1px solid #ccc; padding: .5em .5em; font-size: 91%;'
+      },
+      cvv: {
+        id: 'fattjs-cvv',
+        placeholder: '000',
+        style: 'width: 30px; height:90%; border-radius: 3px; border: 1px solid #ccc; padding: .5em .5em; font-size: 91%;'
+      }
+    });
+
+    // tell fattJs to load in the card fields
+    fattJs.showCardForm().then(handler => {
+      console.log('form loaded');
+  })
+  .catch(err => {
+      console.log('error init form ' + err);
+    // reinit form
+  });
+
+    fattJs.on('card_form_complete', (message) => {
+        // activate pay button
+        //payButton.disabled = false;
+        var billing = $("#billing_address option:selected").text();
+
+
+        tokenizeButton.disabled = billing === 'Select Address';
+        console.log(message);
+    });
+    fattJs.on('card_form_incomplete', (message) => {
+      // deactivate pay button
+      //payButton.disabled = true;
+      tokenizeButton.disabled = true;
+        console.log(message);
+    });
+
+    document.querySelector('#tokenizebutton').onclick = (e) => {
+      e.preventDefault();
+      console.log('working')
+      var month = $('.month').val();
+      var year = $('.year').val();
+      successElement = document.querySelector('.success');
+      var errorElement = document.querySelector('.error');
+      toggle_loader(true);
+
+      var form = document.querySelector('form');
+      console.log('getting address', "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]: null }}")
+      var extraDetails = {
+        firstname: "{{auth('customer')->user() ? auth('customer')->user()->details->first_name : 'john'}}",
+        lastname: "{{auth('customer')->user() ? auth('customer')->user()->detail->last_name : 'doe'}}",
+        method: "card",
+        month: month,
+        year: year,
+        phone: "{{auth('customer')->user() ? auth('customer')->user()->phone : null}}",
+        address_1: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->address: null }}",
+        address_city: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->city: null }}",
+        address_state: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->state: null }}",
+        address_zip: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->zip_code: null }}",
+        address_country: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->country: null }}",
+        url: "https://omni.fattmerchant.com/#/bill/",
+        validate: false,
+      };
+      console.log(extraDetails)
+      // call tokenize api
+      fattJs.tokenize(extraDetails).then((result) => {
+        console.log(result);
+      if (result) {
+        toastr['success']('Card has been verified!', 'Success');
+        functionAddCard(result, {{auth('customer')->user() ?auth('customer')->user()->id : null}});
+
+      }
+      toggle_loader(false);
+    })
+    .catch(err => {
+        toastr['error'](err.message, 'Error');
+      toggle_loader(false);
+    });
+    }
   });
   
   function toggle_loader(event) {
@@ -165,6 +259,28 @@
       $('.loading-overlay').removeClass('is-active');
     }
 
+  }
+
+  function functionAddCard(result, customer_id) {
+    console.log('addingCard', result);
+    $.ajax({
+      url: '{{ route('customers.create-customer-payment') }}',
+      type: 'post',
+      data: {
+        '_token': '{{ csrf_token() }}',
+        'customer_data': result,
+        'customer_id': customer_id,
+      },
+      success: function (data) {
+        console.log(data)
+        toastr['success']('Card has been added Successfully', 'Thanks!');
+
+        $('#checkout-main-form').submit();
+      },
+      error: function (request, status, error) {
+        toastr['warning']('Notification Unreadable', 'Reading Error');
+      }
+    });
   }
 </script>
 
