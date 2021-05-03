@@ -972,12 +972,18 @@ section.parallax_video video {
 }
 
 .shoplisting {
-    display: -ms-grid;
+    /* display: -ms-grid;
     display: grid;
     -ms-grid-columns: (minmax(23%, 1fr))[auto-fill];
     grid-template-columns: repeat(auto-fill, minmax(23%, 1fr));
     grid-gap: 20px;
-    margin: 26px 0;
+    margin: 26px 0; */
+}
+
+.col-lg-5 {
+    -ms-flex: 0 0 33.333333%;
+    flex: 0 0 20%;
+    max-width: 20%;
 }
 
 .shoplisting .listbox .img {
@@ -1938,6 +1944,10 @@ input.qtyminus {
         display: block;
         margin: auto;
         position: inherit;
+    }
+    .col-lg-5 {
+        flex: 0 0 100%;
+        max-width: 100%;
     }
 }
 

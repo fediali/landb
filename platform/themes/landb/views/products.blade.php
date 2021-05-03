@@ -181,10 +181,10 @@
 
 
         </div>
-        <div class="shoplisting">
+        <div class="shoplisting row">
             @if(count($products))
             @foreach($products as $key => $product)
-                <div class="listbox">
+                <div class="listbox col-lg-5">
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
                     <div class="caro_text">
