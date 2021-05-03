@@ -25,6 +25,7 @@ use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Http\Requests\PayPalPaymentCallbackRequest;
 use Botble\Payment\Models\Payment;
 use Botble\Payment\Services\Gateways\BankTransferPaymentService;
+use Botble\Payment\Services\Gateways\OmniPaymentService;
 use Botble\Payment\Services\Gateways\PayPalPaymentService;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
@@ -47,11 +48,11 @@ class CheckoutController extends Controller
 {
   protected $payPalService;
   protected $orderRepository;
-  protected $bankTransferPaymentService;
-  public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, BankTransferPaymentService $bankTransferPaymentService) {
+  protected $omniPaymentService;
+  public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, OmniPaymentService $omniPaymentService) {
     $this->payPalService = $payPalService;
     $this->orderRepository = $orderRepository;
-    $this->bankTransferPaymentService = $bankTransferPaymentService;
+    $this->omniPaymentService = $omniPaymentService;
   }
 
   public function getCheckoutIndex($token){
@@ -98,10 +99,10 @@ class CheckoutController extends Controller
         $data['message'] = $this->payPalService->getErrorMessage();
         break;
 
-      case PaymentMethodEnum::BANK_TRANSFER:
+      case PaymentMethodEnum::OMNI_PAYMENT:
         $charge = $this->charge($request);
         if($charge){
-          $chargeId = $this->bankTransferPaymentService->execute($request);
+          $chargeId = $this->omniPaymentService->execute($request);
           $payment = Payment::where('charge_id' , $chargeId)->first();
           //dd($payment);
           $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);

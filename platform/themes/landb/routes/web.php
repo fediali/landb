@@ -3,6 +3,8 @@
 // Custom routes
 // You can delete this route group if you don't need to add your custom routes.
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
+    Route::get('/orderr', 'LandbController@orderSuccess');
+
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
