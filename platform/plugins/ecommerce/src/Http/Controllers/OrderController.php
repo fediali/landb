@@ -1676,7 +1676,6 @@ class OrderController extends BaseController
         $url = (env("OMNI_URL") . "transaction/" . $request->transaction_id . "/capture");
         list($response, $info) = omni_api($url, $data, 'POST');
         $status = $info['http_code'];
-
         if (floatval($status) == 200) {
             $order['status'] = 1;
             CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
@@ -1689,10 +1688,8 @@ class OrderController extends BaseController
             ];
             return $errors;
         }
-
         //$response->setMessage('Payment Successfully');
         return back();
-
     }
 
     /**
