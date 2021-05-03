@@ -96,9 +96,9 @@ class ProductTable extends TableAbstract
                 return $item->sku ? $item->sku : '&mdash;';
             })
             ->editColumn('warehouse_sec', function ($item) {
-                $html = '<form class="d-flex" action="'.route('products.update-wh-sec', $item->id).'" method="POST">
-                            <input type="hidden" name="_token" value="'.@csrf_token().'">
-                            <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" name="warehouse_sec" value="'.$item->warehouse_sec.'" required>
+                $html = '<form class="d-flex" action="' . route('products.update-wh-sec', $item->id) . '" method="POST">
+                            <input type="hidden" name="_token" value="' . @csrf_token() . '">
+                            <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" name="warehouse_sec" value="' . $item->warehouse_sec . '" required>
                             <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
                         </form>';
                 return $html;
@@ -153,7 +153,7 @@ class ProductTable extends TableAbstract
                     ->count('ec_orders.id');
                 $html = '&mdash;';
                 if ($orderQty) {
-                    $html = '<a href="'.route('orders.index', ['order_type'=>'pre_order','product_id'=>$item->id]).'"><span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span></a>';
+                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . $orderQty . '</em></span></a>';
                 }
                 return $html;
             })
@@ -166,7 +166,7 @@ class ProductTable extends TableAbstract
                     ->sum('qty');
                 $html = '&mdash;';
                 if ($soldQty) {
-                    $html = '<a href="'.route('orders.index', ['product_id'=>$item->id]).'"><span>' . $soldQty . '</span></a>';
+                    $html = '<a href="' . route('orders.index', ['product_id' => $item->id]) . '"><span>' . $soldQty . '</span></a>';
                 }
                 return $html;
             })
@@ -178,14 +178,14 @@ class ProductTable extends TableAbstract
                     ->where('threadorders.order_status', Thread::REORDER)
                     ->whereNull('inventory_history.order_id')
                     ->value('thread_order_variations.quantity');
-                $html = '<span>'.$reOrderQty.'</span>';
+                $html = '<span>' . $reOrderQty . '</span>';
                 return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<a href="' . route('products.inventory_history', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
-                $html = '<a href="' . route('products.inventory_history', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
+                $html .= '<a href="' . route('products.product_timeline', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Product Timeline"><i class="fa fa-list-alt"></i></a>';
                 $html .= '<a href="#" data-toggle="modal" data-target="#allotment-modal" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Quantity Allotment"><i class="fa fa-check-circle"></i></a>';
 
                 return $this->getOperations('products.edit', 'products.destroy', $item, $html);
@@ -244,49 +244,49 @@ class ProductTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'           => [
+            'id'            => [
                 'name'  => 'ec_products.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'image'        => [
+            'image'         => [
                 'name'  => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'name'         => [
+            'name'          => [
                 'name'  => 'ec_products.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
-            'price'        => [
+            'price'         => [
                 'name'  => 'ec_products.price',
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
-            'sku'          => [
+            'sku'           => [
                 'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
-            'warehouse_sec'          => [
+            'warehouse_sec' => [
                 'name'  => 'ec_products.warehouse_sec',
                 'title' => 'SEC',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'quantity'     => [
+            'quantity'      => [
                 'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'single_qty'   => [
+            'single_qty'    => [
                 'name'  => 'ec_products.single_qty',
                 'title' => 'Single Qty',
                 'class' => 'text-left',
             ],
-            'product_type' => [
+            'product_type'  => [
                 'name'  => 'ec_products.product_type',
                 'title' => 'Type',
                 'class' => 'text-left',
@@ -297,13 +297,13 @@ class ProductTable extends TableAbstract
                 'width' => '50px',
                 'class' => 'text-center',
             ],*/
-            'order_qty'      => [
+            'order_qty'     => [
                 'name'  => 'ec_products.order_qty',
                 'title' => 'Pre-order Qty',
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'reorder_qty'      => [
+            'reorder_qty'   => [
                 'name'  => 'ec_products.reorder_qty',
                 'title' => 'Re-order Qty',
                 'class' => 'text-center',
@@ -313,19 +313,19 @@ class ProductTable extends TableAbstract
                 'title' => 'Sold Qty',
                 'class' => 'text-center',
             ],
-            'created_at'   => [
+            'created_at'    => [
                 'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'oos_date'   => [
+            'oos_date'      => [
                 'name'  => 'ec_products.oos_date',
                 'title' => 'OOS Date',
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'status'       => [
+            'status'        => [
                 'name'  => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
