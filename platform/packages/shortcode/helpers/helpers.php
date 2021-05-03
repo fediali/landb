@@ -128,3 +128,26 @@ if (!function_exists('category_sizes')) {
       return $sizes;
   }
 }
+
+if (!function_exists('cart_count')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function cart_count()
+  {
+    if(auth('customer')->user()){
+      $total = 0;
+      $order = \Botble\Ecommerce\Models\Order::with('products')->where('user_id', auth('customer')->user()->id)->where('is_finished', 0)->first();
+      if($order){
+        foreach ($order->products as $product){
+          $total = $total + $product->qty;
+        }
+      }
+      return $total;
+    }else{
+      return 0;
+    }
+  }
+}

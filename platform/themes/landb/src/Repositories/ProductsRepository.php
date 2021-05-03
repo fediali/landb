@@ -30,7 +30,7 @@ class ProductsRepository{
     $tag_slug = isset($_GET['t_slug']) ? $_GET['t_slug'] : null;
     $price_range = isset($_GET['price']) ? $_GET['price'] : null;
     $category_slug = isset($_GET['c_slug']) ? $_GET['c_slug'] : $category_slug;
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $limit;
+    /*$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $limit;*/
     $size_id = isset($_GET['size']) ? $_GET['size'] : null;
     $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : null;
 
@@ -101,7 +101,7 @@ class ProductsRepository{
             });
 
       if($paginate){
-        $data = $data->paginate($limit);
+        $data = $data->paginate();
       }elseif($simplePaginate){
         $data = $data->simplePaginate();
       }elseif($first){
