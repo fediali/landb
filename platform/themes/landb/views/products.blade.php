@@ -183,8 +183,14 @@
         </div>
         <div class="shoplisting row">
             @if(count($products))
+                <?php
+                    $limit = isset($_GET['limit']) ? $_GET['limit'] : '3';
+                    $col = ($limit == '3') ? '4' : $limit;
+                    $col = ($limit == '4') ? '3' : $col;
+                    $col = ($limit == '5') ? '5' : $col;
+                ?>
             @foreach($products as $key => $product)
-                <div class="listbox col-lg-5">
+                <div class="listbox col-lg-{{$col}}">
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
                     <div class="caro_text">
