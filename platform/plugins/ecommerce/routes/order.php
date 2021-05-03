@@ -10,9 +10,14 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@deletes',
                 'permission' => 'orders.destroy',
             ]);
-            Route::get('charge', [
+            Route::post('charge', [
                 'as'         => 'charge',
                 'uses'       => 'OrderController@charge',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('capture', [
+                'as'         => 'capture',
+                'uses'       => 'OrderController@capture',
                 'permission' => 'orders.create',
             ]);
             Route::get('import', [
@@ -113,6 +118,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::post('coupon/apply', [
                 'as'         => 'apply-coupon-when-creating-order',
                 'uses'       => 'OrderController@postApplyCoupon',
+                'permission' => 'orders.create',
+            ]);
+
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'OrderController@changeStatus',
                 'permission' => 'orders.create',
             ]);
 

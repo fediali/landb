@@ -91,9 +91,10 @@
                 </div>--}}
                 <div class="nav-col">
                     <h5>Size</h5>
+                    <div class="d-flex">
                     @php $sizes = category_sizes() @endphp
                     @foreach($sizes->chunk(10) as $chunk)
-                        <ul>
+                        <ul class="ml-4">
                             @foreach($chunk as $size)
                                 @php
                                     $selected = (request()->query('size') == $size->id) ? true:false;
@@ -111,6 +112,7 @@
                             @endforeach
                         </ul>
                     @endforeach
+                    </div>
                 </div>
                 <div class="nav-col">
                     <h5>Price</h5>

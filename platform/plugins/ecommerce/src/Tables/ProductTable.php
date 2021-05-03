@@ -5,11 +5,16 @@ namespace Botble\Ecommerce\Tables;
 use BaseHelper;
 use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Exports\ProductExport;
+use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Botble\Table\Abstracts\TableAbstract;
+use Botble\Thread\Models\Thread;
+use Botble\Threadorders\Models\Threadorders;
 use Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
@@ -58,13 +63,13 @@ class ProductTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('products.edit')) {
                     return $item->name;
                 }
 
                 return Html::link(route('products.edit', $item->id), $item->name);
-            })
+            })*/
             ->editColumn('image', function ($item) {
                 if ($this->request()->input('action') == 'csv') {
                     return RvMedia::getImageUrl($item->image, null, false, RvMedia::getDefaultImage());
@@ -91,11 +96,22 @@ class ProductTable extends TableAbstract
             ->editColumn('sku', function ($item) {
                 return $item->sku ? $item->sku : '&mdash;';
             })
+            ->editColumn('warehouse_sec', function ($item) {
+                $html = '<form action="'.route('products.update-wh-sec', $item->id).'" method="POST">
+                            <input type="hidden" name="_token" value="'.@csrf_token().'">
+                            <input class="ui-text-area textarea-auto-height" name="warehouse_sec" value="'.$item->warehouse_sec.'" required>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
+                        </form>';
+                return $html;
+            })
             ->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
+            })
+            ->editColumn('oos_date', function ($item) {
+                return BaseHelper::formatDate($item->oos_date);
             })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
@@ -121,6 +137,44 @@ class ProductTable extends TableAbstract
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 }
                 return $singleQty;
+            })
+            ->editColumn('order_qty', function ($item) {
+                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
+                $getProdIds[] = $item->id;
+                $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
+                    ->where('order_type', Order::PRE_ORDER)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->sum('qty');
+                $orderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
+                    ->where('order_type', Order::PRE_ORDER)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->groupBy('ec_orders.id')
+                    ->count('ec_orders.id');
+                $html = '<span>'.$preOrderQty.'</span><br><span><em>Order : '.$orderQty.'</em></span>';
+                return $html;
+            })
+            ->editColumn('sold_qty', function ($item) {
+                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
+                $getProdIds[] = $item->id;
+                $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
+                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                    ->sum('qty');
+                $html = '<span>'.$soldQty.'</span>';
+                return $html;
+            })
+            ->editColumn('reorder_qty', function ($item) {
+                $getProdSKU = Product::where('id', $item->id)->value('sku');
+                $reOrderQty = Threadorders::join('thread_order_variations', 'thread_order_variations.thread_order_id', 'threadorders.id')
+                    ->leftJoin('inventory_history', 'inventory_history.order_id', 'threadorders.id')
+                    ->where('thread_order_variations.sku', $getProdSKU)
+                    ->where('threadorders.order_status', Thread::REORDER)
+                    ->whereNull('inventory_history.order_id')
+                    ->value('thread_order_variations.quantity');
+                $html = '<span>'.$reOrderQty.'</span>';
+                return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -148,14 +202,19 @@ class ProductTable extends TableAbstract
             'ec_products.status',
             'ec_products.product_type',
             'ec_products.sku',
+            'ec_products.warehouse_sec',
             'ec_products.quantity',
             'ec_products.quantity AS single_qty',
+            'ec_products.quantity AS order_qty',
+            'ec_products.quantity AS sold_qty',
+            'ec_products.quantity AS reorder_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
             'ec_products.sale_type',
             'ec_products.start_date',
             'ec_products.end_date',
+            'ec_products.oos_date',
         ];
 
         $query = $model
@@ -205,6 +264,12 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
+            'warehouse_sec'          => [
+                'name'  => 'ec_products.warehouse_sec',
+                'title' => 'SEC',
+                'width' => '100px',
+                'class' => 'text-left',
+            ],
             'quantity'     => [
                 'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
@@ -226,9 +291,31 @@ class ProductTable extends TableAbstract
                 'width' => '50px',
                 'class' => 'text-center',
             ],*/
+            'order_qty'      => [
+                'name'  => 'ec_products.order_qty',
+                'title' => 'Pre-order Qty',
+                'width' => '100px',
+                'class' => 'text-center',
+            ],
+            'reorder_qty'      => [
+                'name'  => 'ec_products.reorder_qty',
+                'title' => 'Re-order Qty',
+                'class' => 'text-center',
+            ],
+            'sold_qty'      => [
+                'name'  => 'ec_products.sold_qty',
+                'title' => 'Sold Qty',
+                'class' => 'text-center',
+            ],
             'created_at'   => [
                 'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
+                'width' => '100px',
+                'class' => 'text-center',
+            ],
+            'oos_date'   => [
+                'name'  => 'ec_products.oos_date',
+                'title' => 'OOS Date',
                 'width' => '100px',
                 'class' => 'text-center',
             ],
@@ -270,7 +357,11 @@ class ProductTable extends TableAbstract
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'ec_products.order'      => [
+            'ec_products.oos_date' => [
+                'title' => 'OOS Date',
+                'type'  => 'date',
+            ],
+            /*'ec_products.order'      => [
                 'title'    => trans('core/base::tables.order'),
                 'type'     => 'number',
                 'validate' => 'required|min:0',
@@ -284,7 +375,7 @@ class ProductTable extends TableAbstract
             'ec_products.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 

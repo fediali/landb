@@ -14,10 +14,10 @@
     <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class=""><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information</a></li>
-                <li class=""><a class="{!! (!isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address</a></li>
-                <li class=""><a class="{!! (!isset($user_info->billingAddress[0]))  ? 'active':'' !!}"  data-toggle="tab" href="#menu2">Billing Address</a></li>
-                <li class=""><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment</a></li>
+                <li class=""><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!isset($user_info->billingAddress[0]))  ? 'active':'' !!}"  data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment </a></li>
             </ul>
 
             <div class="tab-content product-tab-content">

@@ -22,7 +22,7 @@ class Customer extends Authenticatable
 {
     use Notifiable;
 
-    /*use SoftDeletes;*/
+    use SoftDeletes;
 
     /**
      * @var string

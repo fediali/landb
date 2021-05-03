@@ -654,11 +654,113 @@
 
                             </div>
                         </div>
-
+                                                 
                         <div class="wrapper-content bg-gray-white mb20">
-                            <div class="pd-all-20">
-                                <a href="{{route('orders.charge')}}" class="btn btn-info">Create Payment</a>
-                            </div>
+
+<!-- card -->
+                            @if($order->preauth == null)
+                            <div class="row m-0 pt-4 bg-white"> 
+                                <div class="col-lg-12 ">
+                                <span class="mb-2">Card</span>    
+                                {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!} </div>
+                                </div>
+                                
+                                <div class="add_card bg-white">
+
+                                    <div class="row group m-0 pt-4 ">
+                                        @isset($order->user->billingAddress)
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Billing Address</span>
+                                                {!!
+                                        Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                                        ])
+                                    !!}
+                                            </label>
+                                        @endisset
+                                    </div>
+
+                                    <div class="group row m-0">
+                                        <label class="col-lg-12">
+                                            <div id="card-element" class="field">
+                                                <span>Card</span>
+                                                <div id="fattjs-number" style="height: 35px"></div>
+                                                <span class="mt-2">CVV</span>
+                                                <div id="fattjs-cvv" style="height: 35px"></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-lg-3">
+                                            <input name="month" size="3" maxlength="2" placeholder="MM"
+                                                   class="form-control month">
+                                        </div>
+                                        <p class="mt-2"> / </p>
+                                        <div class="col-lg-3">
+                                            <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                                   class="form-control year">
+                                        </div>
+                                    </div>
+                                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                                    <div class="row m-0">
+                                        <div class="col-lg-6">
+                                        <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                                        </div> 
+                                    </div>
+                                    <div class="row m-0">
+                                        <div class="col-lg-12">
+                                        <div class="outcome">
+                                        <div class="error"></div>
+                                        <div class="success">
+                                            Successful! The ID is
+                                            <span class="token"></span>
+                                        </div>
+                                        <div class="loader" style="margin: auto">
+                                        </div>
+                                    </div>
+                                        </div> 
+                                    </div>
+                                   
+                                </div>
+                                <div class="pd-all-20 bg-white">
+                                    <form action="{{route('orders.charge')}}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="" name="payment_id" class="payment_id">
+                                        <input type="hidden" value="{{$order->id}}" name="order_id" class="order_id">
+                                        <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
+                                        <input type="hidden" value="{{$order->amount}}" name="amount">
+                                        <button type="submit" class="btn btn-info">Create Payment</button>
+                                    </form>
+                                </div>
+                            @elseif($order->preauth->status == 0)
+                                <div class="capture_card">
+
+                                    <div class="row group">
+
+                                    </div>
+
+                                    <div class="group row">
+
+                                    </div>
+
+
+                                </div>
+                                <div class="pd-all-20">
+                                    <form action="{{route('orders.capture')}}" method="POST">
+                                        @csrf
+
+                                        <input type="hidden" value="{{$order->preauth->transaction_id}}"
+                                               name="transaction_id">
+                                        <input type="hidden" value="{{$order->amount}}" name="amount">
+                                        <label class="col-lg-12">Transaction ID
+                                            : {{$order->preauth->transaction_id}}</label>
+                                        <button type="submit" class="btn btn-info">Capture Payment</button>
+                                    </form>
+                                </div>
+
+                            @else
+                                <button class="btn btn-info">Captured</button>
+                            @endif()
+
                         </div>
                     </div>
                 </div>
@@ -666,10 +768,12 @@
         </div>
     </div>
 
+
     {!! Form::modalAction('resend-order-confirmation-email-modal', trans('plugins/ecommerce::order.resend_order_confirmation'), 'info', trans('plugins/ecommerce::order.resend_order_confirmation_description', ['email' => $order->user->id ? $order->user->email : $order->address->email]), 'confirm-resend-confirmation-email-button', trans('plugins/ecommerce::order.send')) !!}
     {!! Form::modalAction('cancel-shipment-modal', trans('plugins/ecommerce::order.cancel_shipping_confirmation'), 'info', trans('plugins/ecommerce::order.cancel_shipping_confirmation_description'), 'confirm-cancel-shipment-button', trans('plugins/ecommerce::order.confirm')) !!}
     {!! Form::modalAction('update-shipping-address-modal', trans('plugins/ecommerce::order.update_address'), 'info', view('plugins/ecommerce::orders.shipping-address.form', ['address' => $order->address, 'orderId' => $order->id])->render(), 'confirm-update-shipping-address-button', trans('plugins/ecommerce::order.update'), 'modal-md') !!}
     {!! Form::modalAction('cancel-order-modal', trans('plugins/ecommerce::order.cancel_order_confirmation'), 'info', trans('plugins/ecommerce::order.cancel_order_confirmation_description'), 'confirm-cancel-order-button', trans('plugins/ecommerce::order.cancel_order')) !!}
     {!! Form::modalAction('confirm-payment-modal', trans('plugins/ecommerce::order.confirm_payment'), 'info', trans('plugins/ecommerce::order.confirm_payment_confirmation_description', ['method' => $order->payment->payment_channel->label()]), 'confirm-payment-order-button', trans('plugins/ecommerce::order.confirm_payment')) !!}
     {!! Form::modalAction('confirm-refund-modal', trans('plugins/ecommerce::order.refund'), 'info', view('plugins/ecommerce::orders.refund.modal', compact('order'))->render(), 'confirm-refund-payment-button', trans('plugins/ecommerce::order.refund') . ' <span class="refund-amount-text">' . format_price($order->payment->amount - $order->payment->refunded_amount, true) . '</span>') !!}
+
 @stop

@@ -153,6 +153,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ProductController@postUpdateOrderby',
                 'permission' => 'products.edit',
             ]);
+
+            Route::post('update-wh-sec/{id}', [
+                'as'         => 'update-wh-sec',
+                'uses'       => 'ProductController@updateProdWarehouseSection',
+                'permission' => 'products.edit',
+            ]);
         });
 
         Route::group(['prefix' => 'product-categories', 'as' => 'product-categories.'], function () {
