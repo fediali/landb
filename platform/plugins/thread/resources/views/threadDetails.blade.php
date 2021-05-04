@@ -8,6 +8,11 @@
         </button>
     </li>
     <li class="nav-item" role="presentation">
+        <button class="nav-link " id="ppsample" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Details
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
         <a class="nav-link" href="{{route('thread.edit', $thread->id)}}">Edit</a>
     </li>
 </ul>
@@ -515,6 +520,7 @@
         </div>
 
     </div>
+    <div class="tab-pane fade" id="ppsample" role="tabpanel" aria-labelledby="ppsample"></div>
 </div>
 
 <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
