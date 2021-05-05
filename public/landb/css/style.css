@@ -980,7 +980,7 @@ section.parallax_video video {
     margin: 26px 0; */
 }
 
-.col-lg-5 {
+.col-lg-custom-5 {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 20%;
     max-width: 20%;
@@ -1945,7 +1945,7 @@ input.qtyminus {
         margin: auto;
         position: inherit;
     }
-    .col-lg-5 {
+    .col-lg-custom-5 {
         flex: 0 0 100%;
         max-width: 100%;
     }
@@ -3037,3 +3037,8 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         height: 1350vh !important;
     }
 }
+
+.navbar-brand img {
+    height: 55px !important;
+
+  }
