@@ -166,7 +166,7 @@ class ThreadController extends BaseController
         $this->threadRepository->createOrUpdate($thread);
 
         $reg_category = $thread->regular_product_categories()->value('product_category_id');
-        // $plu_category = $thread->plus_product_categories()->value('product_category_id');
+        $plu_category = $thread->plus_product_categories()->value('product_category_id');
 
         if (isset($requestData['regular_category_id']) && $reg_category && $reg_category != $requestData['regular_category_id']) {
             if ($reg_category) {
