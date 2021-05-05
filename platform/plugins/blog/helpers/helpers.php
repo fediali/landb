@@ -622,9 +622,10 @@ if (!function_exists('get_design_manager')) {
 //            ->pluck('users.id');
 
         $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
-//            ->where('roles.slug', ['design-manager', 'product-developmentquality-control'])
-            ->where('roles.slug', 'design-manager')
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control'])
+//            ->where('roles.slug', 'design-manager')
             ->pluck('user_id');
+
         return $manager;
 //        if ($manager) {
 //            return $manager->id;
@@ -638,7 +639,6 @@ if (!function_exists('notify_users')) {
     function notify_users($notifiables, $notification, $resource_data, $other = null)
     {
         //Todo Refactor
-
         if ($other != null) {
             foreach ($other as $item) {
                 $user_notification['notification_id'] = $notification->id;
