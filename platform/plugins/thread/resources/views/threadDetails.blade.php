@@ -453,7 +453,7 @@
                                                                                     @endforeach
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
-                                                                                            <div class="col-lg-6 images">
+                                                                                            <div class="col-lg-6 imagek">
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
@@ -526,12 +526,12 @@
                         <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
                     </div>
                 </div>
-                <br> 
+                <br>
                     <div class="row">
                         <div class="col-lg-4 mb-3">
                             <h5 class="variation-text">PP Sample </h5>
                             <img class="w-100" src="./public/storage/image-1.jpg" height="250" width="120" style="object-fit: cover">
-                        </div> 
+                        </div>
                         <div class="col-lg-8 mb-3">
                                 <div class="row">
                                 <div class="col-lg-3 mt-3">
@@ -573,12 +573,12 @@
                             <div class="col-lg-3 mt-3">
                                 <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
                                 <p>Vendor</p>
-                            </div> 
+                            </div>
                              </div>
-                        </div> 
-                        
-                    </div> 
-            </div>  
+                        </div>
+
+                    </div>
+            </div>
     </div>
     </div>
 </div>
