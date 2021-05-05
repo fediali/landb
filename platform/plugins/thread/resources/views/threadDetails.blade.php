@@ -230,7 +230,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
-                                                    <th colspan="1" rowspan="1">Label: {{ @$thread->name }}</th>
+                                                    <th colspan="1" rowspan="1">Label: {{ @$thread->label }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
