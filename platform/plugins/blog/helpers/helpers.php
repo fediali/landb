@@ -621,7 +621,10 @@ if (!function_exists('get_design_manager')) {
 //            ->where('roles.slug', 'design-manager')
 //            ->pluck('users.id');
 
-        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', ['design-manager', 'product-developmentquality-control'])->pluck('user_id');
+        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
+//            ->where('roles.slug', ['design-manager', 'product-developmentquality-control'])
+            ->where('roles.slug', 'design-manager')
+            ->pluck('user_id');
         return $manager;
 //        if ($manager) {
 //            return $manager->id;
