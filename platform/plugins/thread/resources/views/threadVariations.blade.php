@@ -14,7 +14,7 @@ $variations = $options['data']['variations'];
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
-                        <th scope="col">Thread</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Fabric or Print</th>
                         <th scope="col">Wash</th>
                         <th scope="col">Cost</th>
@@ -27,7 +27,7 @@ $variations = $options['data']['variations'];
                     @foreach($variations as $key => $variation)
                         @if($variation->is_denim == 1)
                             <tr>
-                                <td>{{ $thread->name }}</td>
+                                <td>{{ $variation->name }}</td>
                                 <td>{{ @$variation->printdesign->name }}</td>
                                 <td>{{ @$variation->wash->name  }}</td>
                                 <td>{{ $variation->cost }}</td>
@@ -45,7 +45,7 @@ $variations = $options['data']['variations'];
                                     <div class="table-actions" style="display: inline-block; font-size: 5px">
                                         {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a class="btn btn-info btn-sm edit-variation"
+                                        <a class="btn btn-info btn-sm edit-variation" data-var-name="{{$variation->name}}"
                                            data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
                                            data-wash-id="{{$variation->wash_id}}" data-var-cost="{{$variation->cost}}"
                                            data-var-notes="{{$variation->notes}}">
@@ -357,8 +357,7 @@ $variations = $options['data']['variations'];
                     <div class="modal-header">
                         <div class="d-flex w-100">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span
-                                    class="variation-name"></span></h4>
+                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span class="variation-name"></span></h4>
                             <div></div>
                         </div>
                     </div>
@@ -370,7 +369,7 @@ $variations = $options['data']['variations'];
                             <table class="table table-striped table-bordered">
                                 <tbody id="multi-variations">
                                 <tr>
-                                    <td width="10%" class="no-denim-field">
+                                    <td width="10%">
                                         <label for="var_name">Name:</label>
                                         <input class="form-control" placeholder="Add Name" name="var_name"
                                                id="ed-var-name" type="text">
