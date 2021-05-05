@@ -453,7 +453,7 @@
                                                                                     @endforeach
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
-                                                                                            <div class="col-lg-6 imagek">
+                                                                                            <div class="col-lg-6 image">
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
