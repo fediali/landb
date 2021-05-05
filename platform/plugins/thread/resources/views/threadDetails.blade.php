@@ -434,7 +434,7 @@
                                                                                         </p>
                                                                                     </div>
                                                                                     @foreach($variation->fabrics as $fabric)
-                                                                                        <div class="col-lg-6">
+                                                                                        <div class="col-lg-6 images">
                                                                                             <p class="mb-0 mt-2">
                                                                                                 <label for="">Print/Color:</label>
                                                                                                 {{ @$fabric->printdesign->name }}
@@ -453,7 +453,7 @@
                                                                                     @endforeach
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
-                                                                                            <div class="col-lg-6 image">
+                                                                                            <div class="col-lg-6 images">
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
