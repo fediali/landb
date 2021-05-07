@@ -56,18 +56,20 @@ class regenerateThreadSKU extends Command
 
                 if ($reg_category && $reg_category->pivot->product_category_id > 0) {
 
-                    $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
-                    $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $thread->designer_id, $designerName);
+                    // $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : $thread->designer->first_name;
+                    // $reg_sku = generate_thread_sku($reg_category->pivot->product_category_id, $thread->designer_id, $designerName);
+                    $reg_sku = $reg_category->pivot->sku;
 
                     if ($plu_category && $plu_category->pivot->product_category_id > 0) {
-                        $plu_sku = $reg_sku . '-X';
+                        // $plu_sku = $reg_sku . '-X';
+                        $plu_sku = $plu_category->pivot->sku;
 
-                        $thread->regular_product_categories()->sync([
+                        /*$thread->regular_product_categories()->sync([
                             $reg_category->pivot->product_category_id => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $reg_category->pivot->product_unit_id, 'per_piece_qty' => $reg_category->pivot->per_piece_qty],
                             $plu_category->pivot->product_category_id => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $plu_category->pivot->product_unit_id, 'per_piece_qty' => $plu_category->pivot->per_piece_qty]
-                        ]);
+                        ]);*/
                     } else {
-                        $thread->regular_product_categories()->sync([$reg_category->pivot->product_category_id => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $reg_category->pivot->product_unit_id, 'per_piece_qty' => $reg_category->pivot->per_piece_qty]]);
+                        // $thread->regular_product_categories()->sync([$reg_category->pivot->product_category_id => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $reg_category->pivot->product_unit_id, 'per_piece_qty' => $reg_category->pivot->per_piece_qty]]);
                     }
 
                     $variations = ThreadVariation::where(['thread_id' => $thread->id])->get();
