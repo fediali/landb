@@ -56,11 +56,11 @@
                         @foreach($notifications as $notification)
                             <div class="dropdown-divider "></div>
                             <a href="{{ $notification->notification->url }}"
-                               class="dropdown-item notification_read new-notification {{($notification->seen == 0) ? 'notification-new' : ''}}"
+                               class="dropdown-item d-flex notification_read new-notification {{($notification->seen == 0) ? 'notification-new' : ''}}"
                                style="white-space: normal" data-id="{{$notification->id}}">
-                                <i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}
-                                <span
-                                    class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                                <p style="width:74%;"><i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}</p>
+                                <p style="width:26%;"
+                                    class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</p>
                             </a>
                         @endforeach
                     @endif
