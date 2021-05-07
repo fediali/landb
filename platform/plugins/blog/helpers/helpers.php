@@ -587,7 +587,7 @@ if (!function_exists('generate_notification')) {
 if (!function_exists('get_user_notifications')) {
     function get_user_notifications()
     {
-        return \App\Models\UserNotifications::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->latest()->limit(10)->get();
+        return \App\Models\UserNotifications::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->latest()->get();
     }
 }
 //Notifications
