@@ -355,7 +355,23 @@ class OrderController extends BaseController
                     }
                 }
 
+                if ($order->order_type == Order::PRE_ORDER) {
+                    $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
+                    $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                        ->where('product_id', $product->id)
+                        ->where('order_type', Order::PRE_ORDER)
+                        ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                        ->sum('qty');
+
+                    if ($preOrderQty >= $pre_order_max_qty) {
+                        generate_notification('pre_order_max_qty', $product);
+                    }
+                }
+
             }
+
+
+
         }
 
         return $response

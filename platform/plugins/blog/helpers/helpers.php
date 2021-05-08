@@ -569,6 +569,14 @@ if (!function_exists('generate_notification')) {
                 if (!get_design_manager()->contains($notification['sender_id'])) {
                     $notifiable[] = get_design_manager();
                 }
+            } elseif ($type == 'pre_order_max_qty') {
+                $notification = array();
+                $notification['sender_id'] = auth()->user()->id;
+                $notification['url'] = route('products.edit', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = $data->name.' has reached the max qty of order.';
+                $notifiable[] = get_design_manager();
             }
 
             $notify = new \App\Models\Notification();
