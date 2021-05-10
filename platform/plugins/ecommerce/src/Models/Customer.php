@@ -54,6 +54,22 @@ class Customer extends Authenticatable
         'remember_token',
     ];
 
+    public static $customerType = ['Western', 'Boho', 'Contemporary', 'Conservative', 'Other'];
+    public static $hearUs = [
+        '1' => 'Google',
+        '2' => 'Social',
+        '3' => 'LAShowroom',
+        '4' => 'Fashiongo',
+        '5' => 'Dallas Market',
+        '6' => 'Atlanta Market',
+        '7' => 'Other'
+    ];
+    public static $preferredCommunication = [
+        '1' => 'Email',
+        '2' => 'Phone',
+        '3' => 'Email & Phone'
+    ];
+
     /**
      * Send the password reset notification.
      *
