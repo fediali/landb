@@ -73,16 +73,10 @@
                 </div>
                 <div class="col-lg-12">
                     <p class="textbox-label">Customer Type</p>
-                        <input class="ml-2 customer_type" type="checkbox" name="customer_type[]" value="Western">
-                        <label class="mr-2" for="vehicle1"> Western</label>
-                        <input class="ml-2 customer_type" type="checkbox" name="customer_type[]" value="Boho">
-                        <label class="mr-2" for="vehicle2">Boho</label>
-                        <input class="ml-2 customer_type" type="checkbox" name="customer_type[]" value="Contemporary">
-                        <label class="mr-2" for="vehicle3"> Contemporary</label>
-                        <input class="ml-2 customer_type" type="checkbox" name="customer_type[]" value="Conservative">
-                        <label class="mr-2" for="vehicle3"> Conservative</label>
-                        <input class="ml-2 customer_type" type="checkbox" name="customer_type[]" value="Other">
-                        <label class="mr-2" for="vehicle3"> Other</label>
+                    @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
+                        <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}">
+                        <label class="mr-2" for="vehicle1"> {{ $type }}</label>
+                    @endforeach
                     @error('customer_type')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -108,23 +102,19 @@
                 <div class="col-lg-6">
                     <p class="textbox-label">Where did they find us from?</p>
                     <select class="input-textbox form-control" name="hear_us">
-                        <option value="">--</option>
-                        <option value="1">Google</option>
-                        <option value="2">Social</option>
-                        <option value="3">LAShowroom</option>
-                        <option value="4">Fashiongo</option>
-                        <option value="5">Dallas Market</option>
-                        <option value="6">Atlanta Market</option>
-                        <option value="7">Others</option>
+                        <option @if(is_null(old('hear_us'))) selected @endif disabled hidden>Select an Option</option>
+                        @foreach(\Botble\Ecommerce\Models\Customer::$hearUs as $key => $hearUs)
+                            <option value="{{ $key }}" @if(old('hear_us') == $key) selected @endif>{{ $hearUs }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-lg-6">
                     <p class="textbox-label">Preffered Way of Communication</p>
                     <select class="input-textbox form-control" name="preferred_communication">
-                        <option value="">--</option>
-                        <option value="1">Email</option>
-                        <option value="2">Phone</option>
-                        <option value="3">Email &amp; Phone</option>
+                        <option @if(is_null(old('preferred_communication'))) selected @endif disabled hidden>Select an Option</option>
+                        @foreach(\Botble\Ecommerce\Models\Customer::$preferredCommunication as $key => $preferred)
+                            <option value="{{ $key }}" @if(old('preferred_communication') == $key) selected @endif>{{ $preferred }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-lg-6">

@@ -151,7 +151,7 @@ class RegisterController extends Controller
                 'city' => $data['billing_city'],
                 'state' => $data['billing_state'],
                 'address' => $data['billing_address'],
-                'is_default' => 1,
+                'is_default' => 0,
                 'zip_code' => $data['billing_postal_code'],
                 'first_name' => $data['billing_first_name'],
                 'last_name' => $data['billing_last_name'],
