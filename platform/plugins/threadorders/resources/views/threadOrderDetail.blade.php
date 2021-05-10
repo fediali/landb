@@ -125,34 +125,7 @@
         </div>
     </div>
 @stop
-
-<style>
-    .heading{
-        color: #d64635;
-        font-weight: 600;
-    }
-    .variation-text {
-        color: #696969;
-    }
-    .btn-red {
-        background-color: #d64635 !important;
-        border-color: #d64635 !important;
-        color: #fff !important;
-    }
-    .thread-area {
-        background: #f3f3f3;
-        border-radius: 10px;
-        -moz-box-shadow: 0 0 5px #999;
-        -webkit-box-shadow: 0 0 5px #999;
-        box-shadow: 0 0 5px #999;
-    }
-    .thread-head {
-        font-size:16px !important;
-    }
-    .order-detail {
-        font-size:20px !important;
-    }
-</style>
+ 
 
 @section('javascript')
 <script>

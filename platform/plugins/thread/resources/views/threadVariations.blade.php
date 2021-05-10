@@ -14,7 +14,7 @@ $variations = $options['data']['variations'];
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
-                        <th scope="col">Thread</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Fabric or Print</th>
                         <th scope="col">Wash</th>
                         <th scope="col">Cost</th>
@@ -27,7 +27,7 @@ $variations = $options['data']['variations'];
                     @foreach($variations as $key => $variation)
                         @if($variation->is_denim == 1)
                             <tr>
-                                <td>{{ $thread->name }}</td>
+                                <td>{{ $variation->name }}</td>
                                 <td>{{ @$variation->printdesign->name }}</td>
                                 <td>{{ @$variation->wash->name  }}</td>
                                 <td>{{ $variation->cost }}</td>
@@ -45,12 +45,12 @@ $variations = $options['data']['variations'];
                                     <div class="table-actions" style="display: inline-block; font-size: 5px">
                                         {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a class="btn btn-info btn-sm edit-variation"
+                                        <a class="btn btn-info btn-sm edit-variation" data-var-name="{{$variation->name}}"
                                            data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
                                            data-wash-id="{{$variation->wash_id}}" data-var-cost="{{$variation->cost}}"
                                            data-var-notes="{{$variation->notes}}">
                                             <i class="fa fa-edit"></i>
-                                        </a>
+                                        </a> 
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
@@ -223,6 +223,7 @@ $variations = $options['data']['variations'];
                                            data-var-notes="{{$variation->notes}}">
                                             <i class="fa fa-edit"></i>
                                         </a>
+                                        <a data-toggle="modal" data-target="#ppModal" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i></a>
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
@@ -356,8 +357,7 @@ $variations = $options['data']['variations'];
                     <div class="modal-header">
                         <div class="d-flex w-100">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span
-                                    class="variation-name"></span></h4>
+                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span class="variation-name"></span></h4>
                             <div></div>
                         </div>
                     </div>
@@ -369,7 +369,7 @@ $variations = $options['data']['variations'];
                             <table class="table table-striped table-bordered">
                                 <tbody id="multi-variations">
                                 <tr>
-                                    <td width="10%" class="no-denim-field">
+                                    <td width="10%">
                                         <label for="var_name">Name:</label>
                                         <input class="form-control" placeholder="Add Name" name="var_name"
                                                id="ed-var-name" type="text">
@@ -518,6 +518,54 @@ $variations = $options['data']['variations'];
                         <label class="font-bold">Trim Image:</label>
                         <input class="form-control" name="trim_image" type="file"
                                id="variation_trim_image">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <input type="button" class="btn btn-primary save-thread" value="Save" id="submitVariationTrim">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade in" id="ppModal" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex w-100">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">PP SAMPLE <span
+                            class="variation-name"></span></h4>
+                    <div></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div> 
+                        <label class="font-bold">PP Sample Due Date:</label>
+                        <input class="form-control" placeholder="PP Sample Due Date" name="" type="datetime"  >
+                    </div>
+                    <div class="mt-3"> 
+                        <label class="font-bold">Strike Off Approved/Rejected Comments:</label>
+                        <input class="form-control" placeholder="Strike Off Approved/Rejected Comments" name="" type="text"  >
+                    </div>
+                    <div class="mt-3"> 
+                        <label class="font-bold">Receive Date:</label>
+                        <input class="form-control" placeholder="Receive Date" name="" type="datetime"  >
+                    </div>
+                    <div class="mt-3"> 
+                        <label class="font-bold">Comments:</label>
+                        <input class="form-control" placeholder="Comments" name="" type="text"  >
+                    </div>
+                    <div class="mt-3"> 
+                        <label class="font-bold">Status:</label>
+                        <select class="form-control">
+                            <option>Approved</option>
+                            <option>Rejected</option>
+                        </select>
                     </div>
                 </form>
             </div>

@@ -51,15 +51,16 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right notifications-dropdown"
                      style="left: inherit; right: 0px; width:500px">
                     <span class="dropdown-item dropdown-header"><span id="notification-count"
-                                                                          class="notification-count">{{count($notifications)}}</span> Notification(s)</span>
+                                                                      class="notification-count">{{count($notifications)}}</span> Notification(s)</span>
                     @if(count($notifications))
                         @foreach($notifications as $notification)
-                            <div class="dropdown-divider"></div>
-                            <a href="{{ $notification->notification->url }}" class="dropdown-item notification_read new-notification"
+                            <div class="dropdown-divider "></div>
+                            <a href="{{ $notification->notification->url }}"
+                               class="dropdown-item d-flex notification_read new-notification {{($notification->seen == 0) ? 'notification-new' : ''}}"
                                style="white-space: normal" data-id="{{$notification->id}}">
-                                <i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}
-                                <span
-                                    class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                                <p style="width:74%;"><i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}</p>
+                                <p style="width:26%;"
+                                    class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</p>
                             </a>
                         @endforeach
                     @endif

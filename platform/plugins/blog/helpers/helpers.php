@@ -492,9 +492,7 @@ if (!function_exists('quantity_calculate')) {
 if (!function_exists('generate_notification')) {
     function generate_notification($type, $data)
     {
-
         try {
-
             $notification = array();
             $notifiable = array();
             $designer = [];
@@ -589,7 +587,7 @@ if (!function_exists('generate_notification')) {
 if (!function_exists('get_user_notifications')) {
     function get_user_notifications()
     {
-        return \App\Models\UserNotifications::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->latest()->limit(10)->get();
+        return \App\Models\UserNotifications::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->latest()->get();
     }
 }
 //Notifications
@@ -623,7 +621,11 @@ if (!function_exists('get_design_manager')) {
 //            ->where('roles.slug', 'design-manager')
 //            ->pluck('users.id');
 
-        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')->where('roles.slug', 'design-manager')->pluck('user_id');
+        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control'])
+//            ->where('roles.slug', 'design-manager')
+            ->pluck('user_id');
+
         return $manager;
 //        if ($manager) {
 //            return $manager->id;
@@ -637,7 +639,6 @@ if (!function_exists('notify_users')) {
     function notify_users($notifiables, $notification, $resource_data, $other = null)
     {
         //Todo Refactor
-
         if ($other != null) {
             foreach ($other as $item) {
                 $user_notification['notification_id'] = $notification->id;
@@ -707,7 +708,8 @@ if (!function_exists('omni_api')) {
 }
 
 if (!function_exists('get_order_statuses')) {
-    function get_order_statuses() {
+    function get_order_statuses()
+    {
         $pl = [];
         $statuses = Orderstatuses::where('status', 'published')->get();
         foreach ($statuses as $status) {
@@ -721,7 +723,8 @@ if (!function_exists('get_order_statuses')) {
 }
 
 if (!function_exists('get_payment_methods')) {
-    function get_payment_methods() {
+    function get_payment_methods()
+    {
         $payment_methods = Paymentmethods::where('status', 'published')->get()->toArray();
         return $payment_methods;
     }

@@ -166,7 +166,7 @@ class ThreadController extends BaseController
         $this->threadRepository->createOrUpdate($thread);
 
         $reg_category = $thread->regular_product_categories()->value('product_category_id');
-        // $plu_category = $thread->plus_product_categories()->value('product_category_id');
+        $plu_category = $thread->plus_product_categories()->value('product_category_id');
 
         if (isset($requestData['regular_category_id']) && $reg_category && $reg_category != $requestData['regular_category_id']) {
             if ($reg_category) {
@@ -199,6 +199,13 @@ class ThreadController extends BaseController
             }
         } elseif (isset($requestData['reg_sku'])) {
             $thread->regular_product_categories()->sync([$requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $requestData['reg_sku'], 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']]]);
+
+        } elseif (isset($requestData['plus_category_id']) && $requestData['plus_category_id'] > 0 && $requestData['plus_category_id'] != $plu_category) {
+            $reg_sku = $thread->regular_product_categories()->value('sku');
+            $plu_sku = $reg_sku . '-X';
+            $thread->regular_product_categories()->attach([
+                $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => @$requestData['plus_product_unit_id'], 'per_piece_qty' => @$requestData['plus_per_piece_qty']]
+            ]);
         }
 
         if ($request->hasfile('spec_files')) {

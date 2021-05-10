@@ -362,6 +362,28 @@
                             <div style="margin-top: 40px;" class="refer-area">
                                 <p class="cout-note">Note</p>
                                 <p class="cout-note-para mt-3">International shipping doesn’t qualify for free shipping. Free shipping can only be shipped to the 48 contigious states. We regret it cannot be free shipped to APO/FPO, Hawaii, Alaska, or Puerto Rico.</p>
+                                <div class="row">
+                                    <div class="col-lg-7 col-7">
+                                <p class="cout-note  mt-5">Shipping Address</p>
+
+                                    </div>
+                                    <div class="col-lg-5 col-5 text-right mt-5">
+                                <a style="font-size:14px" href="#" class="mt-5">Change</a>
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-7 col-7">
+                                <p class="cout-note  mt-5">Billing Address</p>
+
+                                    </div>
+                                    <div class="col-lg-5 col-5 text-right mt-5">
+                                <a style="font-size:14px" href="#" class="mt-5">Change</a>
+
+                                    </div>
+                                </div>
+                                <hr>
                                 <p class="cout-note  mt-5">Your Order</p>
                                 <hr>
                                 <p class="note-product mt-3">Product</p>

@@ -3,8 +3,11 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                role="tab" aria-controls="home" aria-selected="true">Details
+        <button class="nav-link active" id="home-tab" data-toggle="tab" href="#home">Details
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" data-toggle="tab" href="#ppsample">PP Sample
         </button>
     </li>
     <li class="nav-item" role="presentation">
@@ -431,7 +434,7 @@
                                                                                         </p>
                                                                                     </div>
                                                                                     @foreach($variation->fabrics as $fabric)
-                                                                                        <div class="col-lg-6">
+                                                                                        <div class="col-lg-6 images">
                                                                                             <p class="mb-0 mt-2">
                                                                                                 <label for="">Print/Color:</label>
                                                                                                 {{ @$fabric->printdesign->name }}
@@ -450,7 +453,7 @@
                                                                                     @endforeach
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
-                                                                                            <div class="col-lg-6">
+                                                                                            <div class="col-lg-6 images">
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
@@ -514,6 +517,69 @@
             </section>
         </div>
 
+    </div>
+    <div class="tab-pane fade" id="ppsample" role="tabpanel" aria-labelledby="ppsample">
+    <div class="p-3">
+    <div class="p-3 mb-3 thread-area">
+                <div class="row">
+                    <div class="col-lg-12 ">
+                        <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
+                    </div>
+                </div>
+                <br>
+                    <div class="row">
+                        <div class="col-lg-4 mb-3">
+                            <h5 class="variation-text">PP Sample </h5>
+                            <img class="w-100" src="./public/storage/image-1.jpg" height="250" width="120" style="object-fit: cover">
+                        </div>
+                        <div class="col-lg-8 mb-3">
+                                <div class="row">
+                                <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Date</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Style #</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Description</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">PP Sample Due Date</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Strike Off Receive Date</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Sample # 1 Receive Date</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Sample # 1 Comments</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Strike Off Receive Date</p>
+                                <p>Vendor</p>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
+                                <p>Vendor</p>
+                            </div>
+                             </div>
+                        </div>
+
+                    </div>
+            </div>
+    </div>
     </div>
 </div>
 
