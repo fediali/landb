@@ -367,6 +367,8 @@
                     </div>
                 </div>
                 <div id="menu2" class="tab-pane fade">
+                    <form method="POST" action="{{ route('customer.edit-account-post', 'tax_certificate') }}">
+                        @csrf
                     <div class="row mt-4">
                         <div class="col-lg-12 text-center">
                             <h1 class="texas-heading">TEXAS SALES AND USE TAX RESALE CERTIFICATE</h1>
@@ -378,27 +380,45 @@
                                 <div class="row">
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Name of purchaser, firm or agency as shown on permit </p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('purchaser_name') is-invalid @enderror" type="text"  name="purchaser_name" value="{{ old('purchaser_name',@$user->taxCertificate->purchaser_name) }}"/>
+                                        @error('purchaser_name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-5">
                                         <p class="textbox-label">Phone (Area code and number)</p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('purchaser_phone') is-invalid @enderror" type="text"  name="purchaser_phone" value="{{ old('purchaser_phone',@$user->taxCertificate->purchaser_phone) }}"/>
+                                        @error('purchaser_phone')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-12">
                                         <p class="textbox-label">Address (Street & number, P.O. Box or Route number)</p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('purchaser_address') is-invalid @enderror" type="text"  name="purchaser_address" value="{{ old('purchaser_address',@$user->taxCertificate->purchaser_address) }}"/>
+                                        @error('purchaser_address')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-7">
                                         <p class="textbox-label">City, State, ZIP code </p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('purchaser_city') is-invalid @enderror" type="text"  name="purchaser_city" value="{{ old('purchaser_city',@$user->taxCertificate->purchaser_city) }}"/>
+                                        @error('purchaser_city')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-5">
                                         <p class="textbox-label">Texas Sales and Use Tax Permit Number (must contain 11 digits)</p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('permit_no') is-invalid @enderror" type="text"  name="permit_no" value="{{ old('permit_no',@$user->taxCertificate->permit_no) }}"/>
+                                        @error('permit_no')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-12">
                                         <p class="textbox-label">Out-of-state retailer”s registration number or Fedral Taxpayers Registry (RFC) number for retailers based in Mexico</p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('registration_no') is-invalid @enderror" type="text"  name="registration_no" value="{{ old('registration_no',@$user->taxCertificate->registration_no) }}"/>
+                                        @error('registration_no')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-12">
                                         <h4 class="profile-light-txt mt-4">(Retailers based in Mexico must also provide a copy of their Mexico registration form to the seller.)</h4>
@@ -443,11 +463,17 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <p class="textbox-label">Description of items to be purchased on the attached order or invoice.</p>
-                                        <textarea rows="4" class="input-textbox bg-white"></textarea>
+                                        <textarea rows="4" class="input-textbox bg-white form-control @error('items_description') is-invalid @enderror" name="items_description">{{ old('items_description',@$user->taxCertificate->items_description) }}</textarea>
+                                        @error('items_description')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-12">
                                         <p class="textbox-label">Description of the type of business activity generally engaged in or type of items normally sold by the purchaser.</p>
-                                        <textarea rows="4" class="input-textbox bg-white"></textarea>
+                                        <textarea rows="4" class="input-textbox bg-white form-control @error('business_description') is-invalid @enderror" name="business_description">{{ old('business_description',@$user->taxCertificate->business_description) }}</textarea>
+                                        @error('business_description')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="d-flex">
@@ -480,15 +506,24 @@
                                 <div class="row">
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Title</p>
-                                        <input class="input-textbox bg-white" type="text" />
+                                        <input class="input-textbox bg-white form-control @error('title') is-invalid @enderror" type="text"  name="title" value="{{ old('title',@$user->taxCertificate->title) }}"/>
+                                        @error('title')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-5">
                                         <p class="textbox-label">Date</p>
-                                        <input class="input-textbox bg-white" type="datetime" />
+                                        <input class="input-textbox bg-white form-control @error('date') is-invalid @enderror" type="date"  name="date" value="{{ old('date',@$user->taxCertificate->date) }}"/>
+                                        @error('date')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Purchaser Sign</p>
-                                        <textarea rows="4" class="input-textbox bg-white"></textarea>
+                                        <textarea rows="4" class="input-textbox bg-white form-control @error('purchaser_sign') is-invalid @enderror" name="purchaser_sign">{{ old('purchaser_sign',@$user->taxCertificate->purchaser_sign) }}</textarea>
+                                        @error('purchaser_sign')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -502,9 +537,10 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-lg-2">
-                            <a href="#" class=" btn cart-btn w-100">Submit</a>
+                            <input type="submit" class="btn cart-btn w-100" value="Submit">
                         </div>
                     </div>
+                    </form>
                 </div>
                 <div id="menu3" class="tab-pane fade">
                     <div class="row mt-5">

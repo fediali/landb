@@ -4,6 +4,7 @@ namespace Botble\Ecommerce\Models;
 
 use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
+use App\Models\CustomerTaxCertificate;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
@@ -156,6 +157,10 @@ class Customer extends Authenticatable
     public function details()
     {
         return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function taxCertificate(){
+      return $this->hasOne(CustomerTaxCertificate::class, 'customer_id');
     }
 
     public function shippingAddress()

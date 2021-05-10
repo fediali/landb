@@ -4,6 +4,7 @@ namespace Theme\Landb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\CustomerTaxCertificate;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
 use Botble\Ecommerce\Models\Customer;
@@ -40,6 +41,9 @@ class CustomerController extends Controller
         break;
       case 'address':
         $this->updateAddresses($request);
+        break;
+      case 'tax_certificate':
+        $this->updateTaxCertificate($request);
         break;
       default:
         return redirect()->back();
@@ -129,6 +133,29 @@ class CustomerController extends Controller
     if(isset($data['set_default']) && $data['set_default'] == 1){
       CustomerAddress::where('id', '!=', $data['shipping_id'])->where('customer_id', $user->id)->update(['is_default' => 0]);
     }
+  }
+
+  public function updateTaxCertificate($request) {
+    $user = auth('customer')->user();
+
+    $validate = $request->validate([
+        'purchaser_name' => 'required|max:255',
+        'purchaser_phone' => 'required|max:12',
+        'purchaser_address' => 'required|max:255',
+        'purchaser_city' => 'required|max:255',
+        'permit_no' => 'required|min:11|max:11',
+        'registration_no' => 'required|max:255',
+        'items_description' => 'required',
+        'business_description' => 'required',
+        'title' => 'required|max:255',
+        'date' => 'required',
+        'purchaser_sign' => 'required',
+    ]);
+    $data = $request->all();
+      unset($data['_token']);
+
+    $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
+
   }
 
   protected function accountValidator($request)
