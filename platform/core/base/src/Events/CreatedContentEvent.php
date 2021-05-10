@@ -3,13 +3,17 @@
 namespace Botble\Base\Events;
 
 use Eloquent;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 use stdClass;
 
 class CreatedContentEvent extends Event
 {
-    use SerializesModels;
+  use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * @var string
@@ -34,6 +38,7 @@ class CreatedContentEvent extends Event
      */
     public function __construct($screen, $request, $data)
     {
+
         $this->screen = $screen;
         $this->request = $request;
         $this->data = $data;

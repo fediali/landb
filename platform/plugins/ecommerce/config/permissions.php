@@ -12,6 +12,7 @@ return [
         'parent_flag' => 'plugins.ecommerce',
     ],
 
+
     /**
      * Products
      */
@@ -294,5 +295,9 @@ return [
         'flag'        => 'flash-sale.destroy',
         'parent_flag' => 'flash-sale.index',
     ],
-
+    [
+        'name'        => 'Order Import',
+        'flag'        => 'ecommerce.order-import.index',
+        'parent_flag' => 'plugins.ecommerce',
+    ],
 ];

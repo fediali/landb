@@ -14,22 +14,33 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
             Route::get('clone-item/{id}', [
                 'as'         => 'cloneItem',
                 'uses'       => 'ThreadController@cloneItem',
-                'permission' => 'thread.create',
+                'permission' => 'thread.cloneItem',
             ]);
             Route::get('details/{id}', [
                 'as'         => 'details',
                 'uses'       => 'ThreadController@show',
-                'permission' => 'thread.create',
+                'permission' => 'thread.details',
+            ]);
+
+            Route::post('read-notification/', [
+                'as'         => 'readNotification',
+                'uses'       => 'ThreadController@readNotification',
+                'permission' => 'thread.details',
             ]);
             Route::post('add-variations', [
                 'as'         => 'addVariation',
                 'uses'       => 'ThreadController@addVariation',
                 'permission' => 'thread.create',
             ]);
+            Route::post('edit-variations', [
+                'as'         => 'editVariation',
+                'uses'       => 'ThreadController@editVariation',
+                'permission' => 'thread.edit',
+            ]);
             Route::post('postComment', [
                 'as'         => 'postComment',
                 'uses'       => 'ThreadController@postComment',
-                'permission' => 'thread.create',
+                'permission' => 'thread.details',
             ]);
             Route::post('addVariationPrints', [
                 'as'         => 'addVariationPrints',
@@ -56,11 +67,31 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'uses'       => 'ThreadController@removeVariation',
                 'permission' => 'thread.create',
             ]);
-            Route::get('orderItem/{id}', [
-                'as'         => 'orderItem',
-                'uses'       => 'ThreadController@removeVariation',
+            Route::post('addVariationTrim', [
+                'as'         => 'addVariationTrim',
+                'uses'       => 'ThreadController@addVariationTrim',
                 'permission' => 'thread.create',
             ]);
+            Route::get('removeVariationTrim/{id}', [
+                'as'         => 'removeVariationTrim',
+                'uses'       => 'ThreadController@removeVariationTrim',
+                'permission' => 'thread.create',
+            ]);
+            Route::get('removeThreadSpecFile/{id}', [
+                'as'         => 'removeThreadSpecFile',
+                'uses'       => 'ThreadController@removeThreadSpecFile',
+                'permission' => 'thread.edit',
+            ]);
+            Route::get('orderItem/{id}', [
+                'as'         => 'orderItem',
+                'uses'       => 'ThreadController@pushToEcommerce',
+                'permission' => 'thread.create',
+            ]);
+            Route::get('pushEvent', function () {
+                event(new \App\Events\ThreadApproval());
+                return 'ok';
+            });
+
         });
     });
 

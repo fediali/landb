@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\CardPreAuth;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
@@ -12,11 +13,14 @@ use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use OrderHelper;
+use App\Models\OrderImport;
 
 class Order extends BaseModel
 {
-    use EnumCastable;
+    use EnumCastable, SoftDeletes;
 
     /**
      * @var string
@@ -26,7 +30,27 @@ class Order extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = [
+
+    const LASHOWROOM = 1;
+    const FASHIONGO = 2;
+    const ORANGESHINE = 3;
+
+    public static $MARKETPLACE = [
+        self::LASHOWROOM  => 'LA SHOWROOM',
+        self::FASHIONGO   => 'FASHIONGO',
+        self::ORANGESHINE => 'ORANGE SHINE'
+    ];
+
+    const NORMAL = 'normal';
+    const PRE_ORDER = 'pre_order';
+
+    public static $ORDER_TYPES = [
+        self::NORMAL    => 'Normal',
+        self::PRE_ORDER => 'Pre Order',
+    ];
+
+    protected
+        $fillable = [
         'status',
         'user_id',
         'amount',
@@ -43,12 +67,15 @@ class Order extends BaseModel
         'discount_description',
         'is_finished',
         'token',
+        'payment_id',
+        'order_type'
     ];
 
     /**
      * @var string[]
      */
-    protected $casts = [
+    protected
+        $casts = [
         'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
@@ -56,12 +83,14 @@ class Order extends BaseModel
     /**
      * @var array
      */
-    protected $dates = [
+    protected
+        $dates = [
         'created_at',
         'updated_at',
     ];
 
-    protected static function boot()
+    protected
+    static function boot()
     {
         parent::boot();
 
@@ -78,7 +107,8 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public function user()
+    public
+    function user()
     {
         return $this->belongsTo(Customer::class, 'user_id', 'id')->withDefault();
     }
@@ -86,7 +116,8 @@ class Order extends BaseModel
     /**
      * @return mixed
      */
-    public function getUserNameAttribute()
+    public
+    function getUserNameAttribute()
     {
         return $this->user->name;
     }
@@ -94,7 +125,8 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public function address()
+    public
+    function address()
     {
         return $this->hasOne(OrderAddress::class, 'order_id')->withDefault();
     }
@@ -102,7 +134,8 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public function products()
+    public
+    function products()
     {
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
     }
@@ -110,7 +143,8 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public function histories()
+    public
+    function histories()
     {
         return $this->hasMany(OrderHistory::class, 'order_id')->with(['user', 'order']);
     }
@@ -118,7 +152,8 @@ class Order extends BaseModel
     /**
      * @return array|null|string
      */
-    public function getShippingMethodNameAttribute()
+    public
+    function getShippingMethodNameAttribute()
     {
         return OrderHelper::getShippingMethod(
             $this->attributes['shipping_method'],
@@ -129,7 +164,8 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public function shipment()
+    public
+    function shipment()
     {
         return $this->hasOne(Shipment::class)->withDefault();
     }
@@ -137,7 +173,8 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public function payment()
+    public
+    function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
     }
@@ -145,8 +182,29 @@ class Order extends BaseModel
     /**
      * @return bool
      */
-    public function canBeCanceled()
+    public
+    function canBeCanceled()
     {
         return in_array($this->status, [OrderStatusEnum::PENDING, OrderStatusEnum::PROCESSING]);
     }
+
+    public function import()
+    {
+        return $this->hasOne(OrderImport::class, 'order_id');
+    }
+
+    public function getOrderTypeHtmlAttribute()
+    {
+        if ($this->order_type == self::PRE_ORDER) {
+            return '<span class="label-warning status-label">Pre Order</span>';
+        } else {
+            return '<span class="label-primary status-label">Normal</span>';
+        }
+    }
+
+    public function preauth()
+    {
+        return $this->hasOne(CardPreAuth::class, 'order_id');
+    }
+
 }

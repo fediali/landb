@@ -1,0 +1,9 @@
+{
+    "name": "Paymentmethods",
+    "namespace": "Botble\\Paymentmethods\\",
+    "provider": "Botble\\Paymentmethods\\Providers\\PaymentmethodsServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module paymentmethods"
+}

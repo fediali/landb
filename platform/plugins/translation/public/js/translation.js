@@ -1,1 +1,108 @@
-jQuery(document).ready((function(e){e(".editable").editable().on("hidden",(function(t,o){var r=e(event.currentTarget).data("locale");if("save"===o&&e(event.currentTarget).removeClass("status-0").addClass("status-1"),"save"===o||"nochange"===o){var a=e(event.currentTarget).closest("tr").next().find(".editable.locale-"+r);setTimeout((function(){a.editable("show")}),300)}})),e(".group-select").on("change",(function(t){var o=e(t.currentTarget).val();window.location.href=o?route("translations.index")+"?group="+encodeURI(e(t.currentTarget).val()):route("translations.index")})),e("a.delete-key").click((function(t){t.preventDefault();var o=e(t.currentTarget).closest("tr"),r=e(t.currentTarget).attr("href"),a=o.attr("id");e.post(r,{id:a},(function(){o.remove()}))})),e(".box-translation").on("click",".button-import-groups",(function(t){t.preventDefault();var o=e(t.currentTarget);o.addClass("button-loading");var r=o.closest("form");e.ajax({url:r.prop("action"),type:"POST",data:r.serialize(),success:function(e){o.removeClass("button-loading"),e.error?Botble.showError(e.message):(Botble.showSuccess(e.message),r.removeClass("dirty"))},error:function(e){o.removeClass("button-loading"),Botble.handleError(e)}})})),e(document).on("click",".button-publish-groups",(function(t){t.preventDefault(),e("#confirm-publish-modal").modal("show")})),e("#confirm-publish-modal").on("click","#button-confirm-publish-groups",(function(t){t.preventDefault();var o=e(t.currentTarget);o.addClass("button-loading");var r=e(".button-publish-groups").closest("form");e.ajax({url:r.prop("action"),type:"POST",data:r.serialize(),success:function(e){o.removeClass("button-loading"),e.error?Botble.showError(e.message):(Botble.showSuccess(e.message),r.removeClass("dirty")),o.closest(".modal").modal("hide")},error:function(e){o.removeClass("button-loading"),Botble.handleError(e)}})}))}));
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*************************************************************************!*\
+  !*** ./platform/plugins/translation/resources/assets/js/translation.js ***!
+  \*************************************************************************/
+jQuery(document).ready(function ($) {
+  $('.editable').editable().on('hidden', function (e, reason) {
+    var locale = $(event.currentTarget).data('locale');
+
+    if (reason === 'save') {
+      $(event.currentTarget).removeClass('status-0').addClass('status-1');
+    }
+
+    if (reason === 'save' || reason === 'nochange') {
+      var $next = $(event.currentTarget).closest('tr').next().find('.editable.locale-' + locale);
+      setTimeout(function () {
+        $next.editable('show');
+      }, 300);
+    }
+  });
+  $('.group-select').on('change', function (event) {
+    var group = $(event.currentTarget).val();
+
+    if (group) {
+      window.location.href = route('translations.index') + '?group=' + encodeURI($(event.currentTarget).val());
+    } else {
+      window.location.href = route('translations.index');
+    }
+  });
+  $('a.delete-key').click(function (event) {
+    event.preventDefault();
+    var row = $(event.currentTarget).closest('tr');
+    var url = $(event.currentTarget).attr('href');
+    var id = row.attr('id');
+    $.post(url, {
+      id: id
+    }, function () {
+      row.remove();
+    });
+  });
+  $('.box-translation').on('click', '.button-import-groups', function (event) {
+    event.preventDefault();
+
+    var _self = $(event.currentTarget);
+
+    _self.addClass('button-loading');
+
+    var $form = _self.closest('form');
+
+    $.ajax({
+      url: $form.prop('action'),
+      type: 'POST',
+      data: $form.serialize(),
+      success: function success(data) {
+        _self.removeClass('button-loading');
+
+        if (data.error) {
+          Botble.showError(data.message);
+        } else {
+          Botble.showSuccess(data.message);
+          $form.removeClass('dirty');
+        }
+      },
+      error: function error(data) {
+        _self.removeClass('button-loading');
+
+        Botble.handleError(data);
+      }
+    });
+  });
+  $(document).on('click', '.button-publish-groups', function (event) {
+    event.preventDefault();
+    $('#confirm-publish-modal').modal('show');
+  });
+  $('#confirm-publish-modal').on('click', '#button-confirm-publish-groups', function (event) {
+    event.preventDefault();
+
+    var _self = $(event.currentTarget);
+
+    _self.addClass('button-loading');
+
+    var $form = $('.button-publish-groups').closest('form');
+    $.ajax({
+      url: $form.prop('action'),
+      type: 'POST',
+      data: $form.serialize(),
+      success: function success(data) {
+        _self.removeClass('button-loading');
+
+        if (data.error) {
+          Botble.showError(data.message);
+        } else {
+          Botble.showSuccess(data.message);
+          $form.removeClass('dirty');
+        }
+
+        _self.closest('.modal').modal('hide');
+      },
+      error: function error(data) {
+        _self.removeClass('button-loading');
+
+        Botble.handleError(data);
+      }
+    });
+  });
+});
+/******/ })()
+;

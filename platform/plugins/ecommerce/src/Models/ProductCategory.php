@@ -6,6 +6,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Categorysizes\Models\Categorysizes;
+use Botble\Vendorproductunits\Models\Vendorproductunits;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,6 +34,10 @@ class ProductCategory extends BaseModel
         'image',
         'is_featured',
         'is_plus_cat',
+        'impact_price',
+        'per_piece_qty',
+        'sku_initial',
+        'product_unit_id',
     ];
 
     /**
@@ -41,6 +46,11 @@ class ProductCategory extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    public function product_unit()
+    {
+        return $this->belongsTo(Vendorproductunits::class, 'product_unit_id', 'id');
+    }
 
     /**
      * @return BelongsToMany
@@ -79,7 +89,6 @@ class ProductCategory extends BaseModel
     protected static function boot()
     {
         parent::boot();
-
         self::deleting(function (ProductCategory $productCategory) {
             $productCategory->products()->detach();
         });
@@ -87,7 +96,7 @@ class ProductCategory extends BaseModel
 
     public function getIsPlusCatHtmlAttribute()
     {
-        if($this->is_plus_cat) {
+        if ($this->is_plus_cat) {
             return '<span class="label-success status-label">Yes</span>';
         }
         return '<span class="label-warning status-label">No</span>';

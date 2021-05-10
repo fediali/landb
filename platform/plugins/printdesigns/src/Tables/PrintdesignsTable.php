@@ -61,7 +61,7 @@ class PrintdesignsTable extends TableAbstract
                 return Html::link(route('printdesigns.edit', $item->id), $item->name);
             })*/
             ->editColumn('file', function ($item) {
-                return Html::image(RvMedia::getImageUrl($item->file, 'thumb', false, RvMedia::getDefaultImage()),
+                return Html::image(RvMedia::getImageUrl(strtolower($item->file), 'thumb', false, RvMedia::getDefaultImage()),
                     $item->name, ['width' => 50]);
             })
             ->editColumn('checkbox', function ($item) {

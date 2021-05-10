@@ -19,12 +19,22 @@ Route::group(['namespace' => 'Botble\Threadorders\Http\Controllers', 'middleware
             Route::post('create-thread-order/{id}', [
                 'as'         => 'storeThreadOrder',
                 'uses'       => 'ThreadordersController@storeThreadOrder',
-                'permission' => 'threadorders.create',
+                'permission' => 'threadorders.order',
             ]);
             Route::post('change-status', [
                 'as'         => 'changeStatus',
                 'uses'       => 'ThreadordersController@changeStatus',
-                'permission' => 'thread.create',
+                'permission' => 'threadorder.status',
+            ]);
+            Route::get('orderItem/{id}', [
+                'as'         => 'orderItem',
+                'uses'       => 'ThreadordersController@pushToEcommerce',
+                'permission' => 'threadorders.pushEcommerce',
+            ]);
+            Route::get('detail/{id}', [
+                'as'         => 'threadOrderDetail',
+                'uses'       => 'ThreadordersController@showThreadOrderDetail',
+                'permission' => 'threadorders.details',
             ]);
         });
     });

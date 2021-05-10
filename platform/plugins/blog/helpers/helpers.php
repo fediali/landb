@@ -6,7 +6,13 @@ use Botble\Blog\Repositories\Interfaces\CategoryInterface;
 use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
+use Botble\Ecommerce\Models\ProductCategory;
+use Botble\Orderstatuses\Models\Orderstatuses;
+use Botble\Paymentmethods\Models\Paymentmethods;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\DNS1D;
 
 if (!function_exists('get_featured_posts')) {
     /**
@@ -256,13 +262,41 @@ if (!function_exists('get_post_formats')) {
     }
 }
 
+
+//Get User By Roles
 if (!function_exists('get_designers')) {
     function get_designers()
     {
-        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 2)->pluck('users.username','users.id')->all();
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->where('roles.slug', 'designer')
+            ->pluck('users.username', 'users.id')->all();
     }
 }
 
+if (!function_exists('get_vendors')) {
+    function get_vendors()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->where('roles.slug', 'vendor')
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
+
+if (!function_exists('get_salesperson')) {
+    function get_salesperson()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES])
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
+//Get User By Roles
+
+
+//Get General Data
 if (!function_exists('get_print_designs')) {
     function get_print_designs()
     {
@@ -270,13 +304,111 @@ if (!function_exists('get_print_designs')) {
     }
 }
 
-if (!function_exists('get_thread_variations')) {
-    function get_thread_variations($id)
+if (!function_exists('get_seasons')) {
+    function get_seasons()
     {
-        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign','fabrics', 'wash'])->get();
+        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
 
+if (!function_exists('get_designs')) {
+    function get_designs()
+    {
+        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_fits')) {
+    function get_fits()
+    {
+        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_rises')) {
+    function get_rises()
+    {
+        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_fabrics')) {
+    function get_fabrics()
+    {
+        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_washes')) {
+    function get_washes()
+    {
+        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_category_sizes')) {
+    function get_category_sizes()
+    {
+        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_category_sizes_by_id')) {
+    function get_category_sizes_by_id($id = null)
+    {
+        if (!is_null($id)) {
+            $get = ProductCategory::with('category_sizes')->find($id);
+            return $get;
+        } else {
+            return null;
+        }
+
+    }
+}
+
+if (!function_exists('get_product_units')) {
+    function get_product_units()
+    {
+        return \Botble\Vendorproductunits\Models\Vendorproductunits::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_vendor_products')) {
+    function get_vendor_products()
+    {
+        return \Botble\Vendorproducts\Models\Vendorproducts::where('status', 'published')->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_vendor_order_statuses')) {
+    function get_vendor_order_statuses()
+    {
+        $statuses = \Botble\Vendororderstatuses\Models\Vendororderstatuses::where('status', 'published')->pluck('name')->all();
+        $arr = [];
+        foreach ($statuses as $status) {
+            $arr[] = ['value' => strtolower($status), 'text' => ucwords($status)];
+        }
+        return $arr;
+    }
+}
+
+if (!function_exists('get_reg_product_categories_custom')) {
+    function get_reg_product_categories_custom()
+    {
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name', 'id')->all();
+    }
+}
+
+if (!function_exists('get_plu_product_categories_custom')) {
+    function get_plu_product_categories_custom()
+    {
+        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name', 'id')->all();
+    }
+}
+//Get General Data
+
+
+//Thread Related Functions
 if (!function_exists('get_thread_comments')) {
     function get_thread_comments($id)
     {
@@ -284,120 +416,318 @@ if (!function_exists('get_thread_comments')) {
     }
 }
 
-if (!function_exists('generate_sku_by_thread_variation')) {
-    function generate_sku_by_thread_variation($thread, $print_id)
+if (!function_exists('get_thread_variations')) {
+    function get_thread_variations($id)
     {
-      $reg_sku = $reg_cat = $plus_sku = $plus_cat = null;
-      $print = \Botble\Printdesigns\Models\Printdesigns::find($print_id)->pluck('name')->first();
-      $selectedRegCat = $selectedPluCat = null;
-      if($thread){
-        $selectedRegCat = $thread->regular_product_categories()->pluck('product_category_id')->first();
-        $selectedPluCat = $thread->plus_product_categories()->pluck('product_category_id')->first();
-      }
-
-      if(!empty($selectedRegCat)){
-        $reg_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedRegCat)->pluck('name')->first();
-        $reg_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($reg_cat, 0, 2) . rand(10,999) . substr($print, 0, 3));
-      }
-      if(!empty($selectedPluCat)){
-        $plus_cat = \Botble\Ecommerce\Models\ProductCategory::find($selectedPluCat)->pluck('name')->first();
-        $plus_sku = strtoupper(substr($thread->designer->first_name, 0, 1) . substr($plus_cat, 0, 2) . rand(10,999) . substr($print, 0, 3). '-X');
-      }
-
-      return ['reg' => $reg_sku , 'plus' => $plus_sku];
-    }
-
-}
-
-if (!function_exists('get_vendors')) {
-    function get_vendors()
-    {
-        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')->where('role_users.role_id', 3)->pluck('users.username','users.id')->all();
+        return \App\Models\ThreadVariation::where('thread_id', $id)->with(['printdesign', 'fabrics', 'wash', 'trim'])->get();
     }
 }
 
-if (!function_exists('get_seasons')) {
-    function get_seasons()
+if (!function_exists('generate_unique_attr_id')) {
+    function generate_unique_attr_id()
     {
-        return \Botble\Seasons\Models\Seasons::where('status', 'published')->pluck('name','id')->all();
+        $number = mt_rand(1000000000, 9999999999);
+        if (attr_id_exist($number)) {
+            generate_unique_attr_id();
+        }
+        return $number;
     }
 }
 
-if (!function_exists('get_reg_product_categories_custom')) {
-    function get_reg_product_categories_custom()
+if (!function_exists('attr_id_exist')) {
+    function attr_id_exist($num)
     {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 0)->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_plu_product_categories_custom')) {
-    function get_plu_product_categories_custom()
-    {
-        return \Botble\Ecommerce\Models\ProductCategory::where('status', 'published')->where('is_plus_cat', 1)->pluck('name','id')->all();
+        return \Illuminate\Support\Facades\DB::table('ec_product_variations')->where('configurable_product_id', $num)->exists();
     }
 }
 
 if (!function_exists('get_total_designs')) {
-    function get_total_designs()
+    function get_total_designs($id)
     {
-        return \Botble\Thread\Models\Thread::where('created_by', \Illuminate\Support\Facades\Auth::user()->id)->count();
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->count();
     }
 }
-
 
 if (!function_exists('get_approved_designs')) {
-    function get_approved_designs()
+    function get_approved_designs($id)
     {
-        return \Botble\Thread\Models\Thread::where('created_by', \Illuminate\Support\Facades\Auth::user()->id)->where('status', 'approved')->count();
+        return \Botble\Thread\Models\Thread::where('designer_id', $id)->where('status', 'approved')->count();
     }
 }
 
-if (!function_exists('get_designs')) {
-    function get_designs()
+if (!function_exists('generate_thread_sku')) {
+    function generate_thread_sku($catId, $designerId, $designerInitial, $isPlus = false)
     {
-        return \Botble\Printdesigns\Models\Printdesigns::where('status', 'published')->pluck('name','id')->all();
+        $category = ProductCategory::where('id', $catId)->value('sku_initial');
+        $categoryCnt = DB::table('category_designer_count')->where(['user_id' => $designerId, 'product_category_id' => $catId])->value('count') + 1;
+        $category_sku = strtoupper($designerInitial . $category . $categoryCnt);
+        DB::table('category_designer_count')->updateOrInsert(['user_id' => $designerId, 'product_category_id' => $catId], ['user_id' => $designerId, 'product_category_id' => $catId, 'count' => $categoryCnt]);
+
+        if ($isPlus) {
+            $category_sku .= '-X';
+        }
+
+        return $category_sku;
+    }
+}
+//Thread Related Functions
+
+//Product Pack Count
+if (!function_exists('quantity_calculate')) {
+    function quantityCalculate($id)
+    {
+        $category = ProductCategory::where('id', $id)->first();
+        $totalQuantity = 0;
+        foreach ($category->category_sizes as $cat) {
+
+            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
+            $totalQuantity += $quan;
+        }
+
+        return $totalQuantity;
     }
 }
 
-if (!function_exists('get_fits')) {
-    function get_fits()
+//Notifications
+if (!function_exists('generate_notification')) {
+    function generate_notification($type, $data)
     {
-        return \Botble\Fits\Models\Fits::where('status', 'published')->pluck('name','id')->all();
+        try {
+            $notification = array();
+            $notifiable = array();
+            $designer = [];
+            $vendor = [];
+            if ($type == 'thread_created') {
+                $creator = \Botble\ACL\Models\User::find($data->designer_id);
+                $notification = array();
+                $notification['sender_id'] = $data->designer_id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A new thread has been created by ' . $creator->first_name;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $vendor[] = $data->vendor_id;
+                }
+
+                $notifiable[] = get_design_manager();
+
+            } elseif ($type == 'thread_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = 'A thread has been updated by ' . \Illuminate\Support\Facades\Auth::user()->first_name;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $vendor[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $designer[] = $data->designer_id;
+                }
+                if (!get_design_manager()->contains($notification['sender_id'])) {
+                    $notifiable[] = get_design_manager();
+                }
+            } elseif ($type == 'thread_status_updated') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' has updated the thread status to ' . $data->status;
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $vendor[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $designer[] = $data->designer_id;
+                }
+
+                if (!get_design_manager()->contains($notification['sender_id'])) {
+                    $notifiable[] = get_design_manager();
+                }
+
+            } elseif ($type == 'thread_discussion') {
+                $notification = array();
+                $notification['sender_id'] = \Illuminate\Support\Facades\Auth::user()->id;
+                $notification['url'] = route('thread.details', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = \Illuminate\Support\Facades\Auth::user()->first_name . ' added a comment to the discussion in "' . $data->name . '" thread';
+                $notification['url'] = route('thread.details', $data->id);
+
+                if (!empty($data->vendor_id)) {
+                    $vendor[] = $data->vendor_id;
+                }
+                if ($notification['sender_id'] != $data->designer_id) {
+                    $designer[] = $data->designer_id;
+                }
+                if (!get_design_manager()->contains($notification['sender_id'])) {
+                    $notifiable[] = get_design_manager();
+                }
+            }
+
+            $notify = new \App\Models\Notification();
+            $notification_data = $notify->create($notification);
+            $other = array_merge($vendor, $designer);
+            if ($notification_data) {
+                notify_users($notifiable, $notification_data, $data, $other);
+            }
+        } catch (Exception $e) {
+            return $e;
+        }
+
     }
 }
 
-if (!function_exists('get_rises')) {
-    function get_rises()
+if (!function_exists('get_user_notifications')) {
+    function get_user_notifications()
     {
-        return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name','id')->all();
+        return \App\Models\UserNotifications::where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->latest()->get();
     }
 }
-
-if (!function_exists('get_fabrics')) {
-    function get_fabrics()
-    {
-        return \Botble\Fabrics\Models\Fabrics::where('status', 'published')->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_washes')) {
-    function get_washes()
-    {
-        return \Botble\Wash\Models\Wash::where('status', 'published')->pluck('name','id')->all();
-    }
-}
-
-if (!function_exists('get_category_sizes')) {
-    function get_category_sizes()
-    {
-        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name','id')->all();
-    }
-}
+//Notifications
 
 
+//Utils
 if (!function_exists('parse_date')) {
     function parse_date($date)
     {
-        return date('M d,Y', strtotime($date));
+        return date('d F, Y', strtotime($date));
     }
 }
+
+if (!function_exists('get_barcode')) {
+    function get_barcode()
+    {
+        $code = '00' . rand(00000000000, 99999999999);
+        $aa = new DNS1D();
+        $image = $aa->getBarcodePNG($code, 'C39', 2, 33);
+        $name = 'products_barcode/' . $code . '.' . 'jpg';
+        Storage::put($name, base64_decode($image));
+        return ['upc' => $code, 'barcode' => $name];
+    }
+}
+
+if (!function_exists('get_design_manager')) {
+    function get_design_manager()
+    {
+//        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+//            ->join('roles', 'role_users.role_id', 'roles.id')
+//            ->where('roles.slug', 'design-manager')
+//            ->pluck('users.id');
+
+        $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control'])
+//            ->where('roles.slug', 'design-manager')
+            ->pluck('user_id');
+
+        return $manager;
+//        if ($manager) {
+//            return $manager->id;
+//        } else {
+//            return null;
+//        }
+    }
+}
+
+if (!function_exists('notify_users')) {
+    function notify_users($notifiables, $notification, $resource_data, $other = null)
+    {
+        //Todo Refactor
+        if ($other != null) {
+            foreach ($other as $item) {
+                $user_notification['notification_id'] = $notification->id;
+                $user_notification['user_id'] = $item;
+                $noti = \App\Models\UserNotifications::create($user_notification);
+                if ($noti) {
+                    broadcast(new \App\Events\NotifyManager($item, $notification, $resource_data));
+                }
+            }
+        }
+        if (count($notifiables)) {
+            foreach ($notifiables as $notifiable) {
+
+                foreach ($notifiable as $key => $value) {
+
+                    $user_notification['notification_id'] = $notification->id;
+                    $user_notification['user_id'] = $value;
+                    $noti = \App\Models\UserNotifications::create($user_notification);
+                    if ($noti) {
+                        broadcast(new \App\Events\NotifyManager($value, $notification, $resource_data));
+                    }
+                }
+
+            }
+
+        }
+
+    }
+}
+
+if (!function_exists('create_customer')) {
+    function create_customer($data)
+    {
+        $customer = DB::table('ec_customers')->insert($data);
+        return $customer;
+    }
+}
+
+if (!function_exists('omni_api')) {
+    function omni_api($url, $data = [], $type = 'GET')
+    {
+        $curl = curl_init();
+        $request = [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => $type,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_SANDBOX_TOKEN')]
+        ];
+
+        if ($type == 'POST') {
+            $request[CURLOPT_POSTFIELDS] = json_encode($data);
+            $request[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+        }
+
+        curl_setopt_array($curl, $request);
+
+        $response = curl_exec($curl);
+        $info = curl_getinfo($curl);
+        curl_close($curl);
+        return [$response, $info];
+    }
+}
+
+if (!function_exists('get_order_statuses')) {
+    function get_order_statuses()
+    {
+        $pl = [];
+        $statuses = Orderstatuses::where('status', 'published')->get();
+        foreach ($statuses as $status) {
+            $pl[] = [
+                'value' => strtolower($status->name),
+                'text'  => strtoupper($status->name),
+            ];
+        }
+        return $pl;
+    }
+}
+
+if (!function_exists('get_payment_methods')) {
+    function get_payment_methods()
+    {
+        $payment_methods = Paymentmethods::where('status', 'published')->get()->toArray();
+        return $payment_methods;
+    }
+}
+
+//Utils

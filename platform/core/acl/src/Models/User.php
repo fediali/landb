@@ -2,6 +2,8 @@
 
 namespace Botble\ACL\Models;
 
+use App\Models\UserCart;
+use App\Models\UserWishlist;
 use Botble\ACL\Notifications\ResetPasswordNotification;
 use Botble\ACL\Traits\PermissionTrait;
 use Botble\Base\Supports\Avatar;
@@ -41,6 +43,11 @@ class User extends Authenticatable
         'password',
         'avatar_id',
         'permissions',
+        'name_initials',
+        'commission_percentage',
+        'ecom_commission_percent',
+        'is_allow_qty_share',
+        'salesperson_id',
     ];
 
     /**
@@ -251,4 +258,38 @@ class User extends Authenticatable
 
         return parent::delete();
     }
+
+    /**
+     * @return HasMany
+     */
+    public function user_other_emails()
+    {
+        return $this->hasMany(UserOtherEmail::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function salesperson()
+    {
+        return $this->belongsTo(User::class, 'salesperson_id');
+    }
+
+    public function cart(){
+      return $this->hasOne(UserCart::class, 'user_id');
+    }
+
+    public function UserCartId(){
+      return $this->cart()->pluck('id')->first();
+    }
+
+    public function wishlist(){
+      return $this->hasOne(UserWishlist::class, 'user_id');
+    }
+
+    public function UserWishlistId(){
+      return $this->wishlist()->pluck('id')->first();
+    }
+
+
 }

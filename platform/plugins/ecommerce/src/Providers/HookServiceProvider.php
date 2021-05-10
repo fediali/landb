@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Providers;
 use Assets;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Dashboard\Supports\DashboardWidgetInstance;
+use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Models\Brand;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
@@ -175,7 +176,7 @@ class HookServiceProvider extends ServiceProvider
     {
         if (!$this->pendingOrders) {
             $this->pendingOrders = $this->app->make(OrderInterface::class)->allBy([
-                'status'                => BaseStatusEnum::PENDING,
+                'status'                => OrderStatusEnum::PROCESSING,
                 'ec_orders.is_finished' => 1,
             ], ['address']);
         }

@@ -2,11 +2,14 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\InventoryHistory;
+use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Services\Products\UpdateDefaultProductService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class Product extends BaseModel
 {
@@ -37,8 +41,11 @@ class Product extends BaseModel
         'status',
         'images',
         'sku',
+        'warehouse_sec',
         'order',
         'quantity',
+        'in_person_sales_qty',
+        'online_sales_qty',
         'allow_checkout_when_out_of_stock',
         'with_storehouse_management',
         'is_featured',
@@ -57,6 +64,7 @@ class Product extends BaseModel
         'height',
         'weight',
         'barcode',
+        'upc',
         'length_unit',
         'wide_unit',
         'height_unit',
@@ -64,6 +72,7 @@ class Product extends BaseModel
         'tax_id',
         'status',
         'views',
+        'oos_date',
     ];
 
     /**
@@ -109,9 +118,15 @@ class Product extends BaseModel
             Review::where('product_id', $product->id)->delete();
         });
 
-        self::updated(function (Product $product) {
+        /*self::updated(function (Product $product) {
             if ($product->is_variation && $product->original_product->defaultVariation->product_id == $product->id) {
                 app(UpdateDefaultProductService::class)->execute($product);
+            }
+        });*/
+
+        self::updated(function (Product $product) {
+            if ($product->is_variation && $product->quantity < 1) {
+                DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => Carbon::now()]);
             }
         });
     }
@@ -125,6 +140,16 @@ class Product extends BaseModel
             ProductCategory::class,
             'ec_product_category_product',
             'product_id',
+            'category_id'
+        );
+    }
+    /**
+     * @return BelongsToMany
+     */
+    public function category()
+    {
+        return $this->belongsTo(
+            ProductCategory::class,
             'category_id'
         );
     }
@@ -447,7 +472,15 @@ class Product extends BaseModel
             return false;
         }
 
-        return $this->quantity <= 0 && !$this->allow_checkout_when_out_of_stock;
+        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+            $checkQty = $this->online_sales_qty <= 0 ? true : false;
+        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
+        } else {
+            $checkQty = $this->quantity <= 0 ? true : false;
+        }
+
+        return $checkQty && !$this->allow_checkout_when_out_of_stock;
     }
 
     /**
@@ -562,5 +595,9 @@ class Product extends BaseModel
             ->withPivot(['price', 'quantity', 'sold'])
             ->where('status', BaseStatusEnum::PUBLISHED)
             ->notExpired();
+    }
+
+    public function inventory_history(){
+      return $this->hasMany(InventoryHistory::class, 'product_id');
     }
 }

@@ -1,0 +1,9 @@
+{
+    "name": "Orderstatuses",
+    "namespace": "Botble\\Orderstatuses\\",
+    "provider": "Botble\\Orderstatuses\\Providers\\OrderstatusesServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module orderstatuses"
+}

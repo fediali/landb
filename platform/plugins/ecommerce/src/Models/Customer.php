@@ -2,10 +2,15 @@
 
 namespace Botble\Ecommerce\Models;
 
+use App\Models\CustomerAddress;
+use App\Models\CustomerCard;
+use App\Models\UserCart;
+use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use RvMedia;
@@ -16,6 +21,8 @@ use RvMedia;
 class Customer extends Authenticatable
 {
     use Notifiable;
+
+    use SoftDeletes;
 
     /**
      * @var string
@@ -34,6 +41,7 @@ class Customer extends Authenticatable
         'avatar',
         'phone',
         'dob',
+        'status',
     ];
 
     /**
@@ -92,10 +100,10 @@ class Customer extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    public function wishlist(): HasMany
-    {
-        return $this->hasMany(Wishlist::class, 'customer_id');
-    }
+    /* public function wishlist(): HasMany
+     {
+         return $this->hasMany(Wishlist::class, 'customer_id');
+     }*/
 
     protected static function boot()
     {
@@ -106,5 +114,73 @@ class Customer extends Authenticatable
             Review::where('customer_id', $customer->id)->delete();
             Wishlist::where('customer_id', $customer->id)->delete();
         });
+    }
+
+    public function detail()
+    {
+        return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(UserCart::class, 'user_id');
+    }
+
+    public function UserCartId()
+    {
+        $cart = $this->cart();
+        if ($cart) {
+            return $this->cart()->pluck('id')->first();
+        } else {
+            return null;
+        }
+
+    }
+
+    public function details()
+    {
+        return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function shippingAddress()
+    {
+        return $this->addresses()->where('type', 'shipping');
+    }
+
+    public function billingAddress()
+    {
+
+        return $this->addresses()->where('type', 'billing');
+    }
+
+    public function wishlist()
+    {
+        return $this->hasOne(UserWishlist::class, 'user_id');
+    }
+
+    public function UserWishlistId()
+    {
+        return $this->wishlist()->pluck('id')->first();
+    }
+
+    public function pendingOrder()
+    {
+        return $this->orders()->where('user_id', $this->id)->where('is_finished', 0)->first();
+    }
+
+    public function pendingOrderId()
+    {
+        $cart = $this->pendingOrder();
+        if ($cart) {
+            return $cart->id;
+        } else {
+            return null;
+        }
+
+    }
+
+    public function card()
+    {
+        return $this->hasMany(CustomerCard::class, 'customer_id');
     }
 }

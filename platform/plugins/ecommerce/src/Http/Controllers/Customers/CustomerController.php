@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers\Customers;
 
+use App\Models\CustomerCard;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
@@ -11,6 +12,7 @@ use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Forms\CustomerForm;
 use Botble\Ecommerce\Http\Requests\AddCustomerWhenCreateOrderRequest;
+use Botble\Ecommerce\Http\Requests\AddressRequest;
 use Botble\Ecommerce\Http\Requests\CustomerCreateRequest;
 use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
@@ -99,10 +101,44 @@ class CustomerController extends BaseController
 
         $customer = $this->customerRepository->findOrFail($id);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
-
+        $card = [];
         $customer->password = null;
+        if (!$customer->card->isEmpty()) {
+            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $card = json_decode($card);
+        }
 
-        return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
+
+        return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
+        //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
+    }
+
+    public function addAddress($id)
+    {
+        $user = $id;
+        return view('plugins/ecommerce::customers.address', [$id], compact('user'));
+    }
+
+    public function postCustomerAddress(AddressRequest $request, BaseHttpResponse $response)
+    {
+        if ($request->input('is_default') == 1) {
+            $this->addressRepository->update([
+                'is_default'  => 1,
+                'customer_id' => $request->input('customer_id'),
+            ], ['is_default' => 0]);
+        }
+        $request->merge([
+            'customer_id' => $request->input('customer_id'),
+            'is_default'  => $request->input('is_default', 0),
+        ]);
+
+        $address = $this->addressRepository->createOrUpdate($request->input());
+
+        return $response
+            ->setNextUrl(route('customer.edit', [$request->customer_id]))
+            ->setMessage(trans('core/base::notices.create_success_message'));
+
     }
 
     /**
@@ -227,7 +263,6 @@ class CustomerController extends BaseController
     public function getCustomerAddresses($id, BaseHttpResponse $response)
     {
         $addresses = $this->addressRepository->allBy(['customer_id' => $id]);
-
         return $response->setData($addresses);
     }
 
@@ -254,7 +289,8 @@ class CustomerController extends BaseController
     public function postCreateCustomerWhenCreatingOrder(
         AddCustomerWhenCreateOrderRequest $request,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $request->merge(['password' => bcrypt(time())]);
         $customer = $this->customerRepository->createOrUpdate($request->input());
         $customer->avatar = (string)$customer->avatar_url;
@@ -272,4 +308,20 @@ class CustomerController extends BaseController
             ->setData(compact('address', 'customer'))
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
+
+    public function getAddresses($id, BaseHttpResponse $response)
+    {
+        $addresses = $this->addressRepository->findOrFail($id);
+        return $response->setData($addresses);
+    }
+
+    public function postCustomerCard(Request $request)
+    {
+        $request['customer_omni_id'] = $request->customer_data['customer_id'];
+        $request['customer_data'] = json_encode($request->customer_data);
+        $card = CustomerCard::create($request->all());
+        return $card;
+    }
+
+
 }

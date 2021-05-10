@@ -47,15 +47,33 @@
         <input class="form-control" placeholder="Fabric Print Direction" data-counter="120" name="fabric_print_direction" type="text" id="fabric_print_direction" value="{{$options['data']['model']->fabric_print_direction}}">
     </div>
 
-    {{--<div class="form-group" id="Wash-div">
-        <label for="wash" class="control-label">Wash</label>
-        <input class="form-control" placeholder="Wash" data-counter="120" name="wash" type="text" id="wash" value="{{$options['data']['model']->wash}}">
-    </div>--}}
+    <div class="form-group">
+        <label for="reg_pack_qty" class="control-label">Reg Pack Qty</label>
+        <input class="form-control" placeholder="Reg Pack Qty" name="reg_pack_qty" type="number" id="reg_pack_qty" value="{{$options['data']['model']->reg_pack_qty}}">
+    </div>
+
+    <div class="form-group">
+        <label for="plus_pack_qty" class="control-label">Plus Pack Qty</label>
+        <input class="form-control" placeholder="Plus Pack Qty" name="plus_pack_qty" type="number" id="plus_pack_qty" value="{{$options['data']['model']->plus_pack_qty}}">
+    </div>
 
 </div>
 
-
-
+<div class="form-group">
+    <label for="spec_file" class="control-label">Tech Spec Files <span class="image-sugg">Image Size (454px by 669px)</span></label>
+    <div class="image-box">
+        <input type="file" name="spec_files[]" class="image-data" multiple>
+        <br><br>
+        @foreach($options['data']['model']->spec_files as $spec_file)
+            <div class="preview-image-wrapper">
+                <img src="{{url($spec_file->spec_file)}}" alt="Preview image" class="preview_image" width="150">
+                <a href="javascript:void(0)" class="rem-spec-file" data-value="{{$spec_file->id}}" title="Remove image">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        @endforeach
+    </div>
+</div>
 
 <script>
   $(document).ready(function () {
@@ -66,14 +84,40 @@
       $('#is_denim').change(function() {
           if (this.checked) {
               $('div#denim-fields').removeClass('hidden');
+              $('label.material-ip').parent().parent().parent().hide();
+              $('label.label-ip').parent().parent().parent().show();
           } else {
               $('div#denim-fields').addClass('hidden');
+              $('label.material-ip').parent().parent().parent().show();
+              $('label.label-ip').parent().parent().parent().hide();
           }
       });
+
+      $('select#pp_sample').change(function() {
+          var pp_sample_date = new Date($('#order_date').val());
+          pp_sample_date.setDate(pp_sample_date.getDate() + 50);
+          if ($(this).val() == 'yes') {
+              // $('#pp_sample_date').val(pp_sample_date).trigger('change');
+              // $('#pp_sample_date').datepicker('setDate', pp_sample_date);
+          } else {
+              // $('#pp_sample_date').val('');
+          }
+      });
+
+      $(document).on('click', 'a.rem-spec-file', function () {
+          let $this = $(this);
+          let specFileId = $(this).data('value');
+          $.ajax({
+              url : '/admin/threads/removeThreadSpecFile/'+specFileId,
+              type : 'GET',
+              success : function(data) {
+                  $this.parent().remove();
+              },
+              error : function(request,error) {}
+          });
+      });
+
   });
 </script>
 
-
-<style>
-
-</style>
+<style></style>

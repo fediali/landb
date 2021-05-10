@@ -18,7 +18,7 @@ class ThreadCreateThreadTable extends Migration
             $table->integer('designer_id')->index('th_designer_id_fk');
             $table->integer('vendor_id')->nullable()->index('th_vendor_id_fk');
             $table->integer('season_id')->index('th_season_id_fk');
-            $table->string('order_no', 255);
+            $table->string('order_no', 255)->nullable();
             $table->string('order_status', 100)->default('new');
             $table->string('pp_sample', 50)->nullable()->default('no');
             $table->string('pp_sample_size', 100)->nullable();
@@ -36,7 +36,7 @@ class ThreadCreateThreadTable extends Migration
             $table->integer('rise_id')->nullable()->index('th_rise_id_fk');
             $table->integer('fabric_id')->nullable()->index('th_fabric_id_fk');
             $table->string('fabric_print_direction', 150)->nullable();
-            $table->string('spec_file', 255)->nullable();
+            //$table->string('spec_file', 255)->nullable();
             $table->string('status', 60)->default('published');
             $table->integer('business_id')->default(1);
             $table->integer('created_by')->default(0);

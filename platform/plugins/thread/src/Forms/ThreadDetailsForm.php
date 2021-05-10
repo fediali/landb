@@ -23,6 +23,7 @@ class ThreadDetailsForm extends FormAbstract
       $printdesigns = get_print_designs();
       //dd($printdesigns);
       $variations = get_thread_variations($this->model->id);
+      //dd($variations);
       $comments = get_thread_comments($this->model->id);
       $seasons = get_seasons();
       $fits = get_fits();

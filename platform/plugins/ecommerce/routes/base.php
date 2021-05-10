@@ -142,9 +142,26 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'products.index',
             ]);
 
+            Route::get('inventory_history/{id}', [
+                'as'         => 'inventory_history',
+                'uses'       => 'ProductController@inventory_history',
+                'permission' => 'products.index',
+            ]);
+            Route::get('product_timeline/{id}', [
+                'as'         => 'product_timeline',
+                'uses'       => 'ProductController@product_timeline',
+                'permission' => 'products.index',
+            ]);
+
             Route::post('update-order-by', [
                 'as'         => 'update-order-by',
                 'uses'       => 'ProductController@postUpdateOrderby',
+                'permission' => 'products.edit',
+            ]);
+
+            Route::post('update-wh-sec/{id}', [
+                'as'         => 'update-wh-sec',
+                'uses'       => 'ProductController@updateProdWarehouseSection',
                 'permission' => 'products.edit',
             ]);
         });
@@ -269,9 +286,9 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Fronts', 'middle
             'uses' => 'PublicProductController@getProduct',
         ]);
 
-        Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
-            'uses' => 'PublicProductController@getProductCategory',
-        ]);
+        /* Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', [
+             'uses' => 'PublicProductController@getProductCategory',
+         ]);*/
 
         Route::get(SlugHelper::getPrefix(ProductTag::class, 'product-tags') . '/{slug}', [
             'uses' => 'PublicProductController@getProductTag',

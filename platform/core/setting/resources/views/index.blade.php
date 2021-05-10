@@ -31,6 +31,13 @@
 
                         <div class="form-group">
                             <label class="text-title-field"
+                                   for="sales_percentage">Selling Price Percentage</label>
+                            <input type="number" class="next-input" name="sales_percentage" id="sales_percentage"
+                                   value="{{ setting('sales_percentage') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="text-title-field"
                                    for="time_zone">{{ trans('core/setting::setting.general.time_zone') }}
                             </label>
                             <div class="ui-select-wrapper">

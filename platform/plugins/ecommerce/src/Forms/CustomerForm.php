@@ -34,6 +34,13 @@ class CustomerForm extends FormAbstract
                     'data-counter' => 60,
                 ],
             ])
+//            ->add('Add Address', 'button', [
+//                'url'     => route('customer.address', [1]),
+//                'value'   => route('customer.address', [1]),
+//                'wrapper' => [
+//                    'class' => 'btn btn-info'
+//                ],
+//            ])
             ->add('is_change_password', 'checkbox', [
                 'label'      => trans('plugins/ecommerce::customer.change_password'),
                 'label_attr' => ['class' => 'control-label'],

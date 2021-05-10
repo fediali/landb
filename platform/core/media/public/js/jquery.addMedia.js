@@ -1,1 +1,184 @@
-(()=>{function e(t){return(e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(t)}!function(t){"use strict";var a=function(e,a){this.options=a,t(e).rvMedia({multiple:!0,onSelectFiles:function(e,r){if(void 0!==e)switch(r.data("editor")){case"summernote":!function(e,a){if(0!==a.length)for(var r=e.data("target"),l=0;l<a.length;l++)if("video"===a[l].type){var i=a[l].full_url;i=i.replace("watch?v=","embed/"),t(r).summernote("pasteHTML",'<iframe width="420" height="315" src="'+i+'" frameborder="0" allowfullscreen></iframe>')}else"image"===a[l].type?t(r).summernote("insertImage",a[l].full_url,a[l].basename):t(r).summernote("pasteHTML",'<a href="'+a[l].full_url+'">'+a[l].full_url+"</a>")}(r,e);break;case"wysihtml5":!function(e,t){if(0!==t.length){for(var a="",r=0;r<t.length;r++)if("video"===t[r].type){var l=t[r].full_url;a+='<iframe width="420" height="315" src="'+(l=l.replace("watch?v=","embed/"))+'" frameborder="0" allowfullscreen></iframe>'}else"image"===t[r].type?a+='<img src="'+t[r].full_url+'" alt="'+t[r].name+'">':a+='<a href="'+t[r].full_url+'">'+t[r].full_url+"</a>";if(e.getValue().length>0){var i=e.getValue();e.composer.commands.exec("insertHTML",a),e.getValue()===i&&e.setValue(e.getValue()+a)}else e.setValue(e.getValue()+a)}}(t(a.target).data("wysihtml5").editor,e);break;case"ckeditor":!function(e,a){var r=e.data("target").replace("#",""),l="";t.each(a,(function(e,t){var a=t.full_url;"youtube"===t.type?(a=a.replace("watch?v=","embed/"),l+='<iframe width="420" height="315" src="'+a+'" frameborder="0" allowfullscreen></iframe><br />'):"image"===t.type?l+='<img src="'+a+'" alt="'+t.name+'" /><br />':l+='<a href="'+a+'">'+t.name+"</a><br />"})),CKEDITOR.instances[r].insertHtml(l)}(r,e);break;case"tinymce":!function(e){var a="";t.each(e,(function(e,t){var r=t.full_url;"youtube"===t.type?(r=r.replace("watch?v=","embed/"),a+='<iframe width="420" height="315" src="'+r+'" frameborder="0" allowfullscreen></iframe><br />'):"image"===t.type?a+='<img src="'+r+'" alt="'+t.name+'" /><br />':a+='<a href="'+r+'">'+t.name+"</a><br />"})),tinymce.activeEditor.execCommand("mceInsertContent",!1,a)}(e)}}})};function r(r){return this.each((function(){var l=t(this),i=l.data("bs.media"),n=t.extend({},l.data(),"object"===e(r)&&r);i||l.data("bs.media",new a(this,n))}))}a.VERSION="1.1.0",t.fn.addMedia=r,t.fn.addMedia.Constructor=a,t(window).on("load",(function(){t('[data-type="rv-media"]').each((function(){var e=t(this);r.call(e,e.data())}))}))}(jQuery)})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!********************************************************************!*\
+  !*** ./platform/core/media/resources/assets/js/jquery.addMedia.js ***!
+  \********************************************************************/
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* ========================================================================
+ * AddMedia.js v1.0
+ * Requires Botble Media
+ * ======================================================================== */
++function ($) {
+  'use strict';
+  /**
+   * @param element
+   * @param options
+   * @constructor
+   */
+
+  var AddMedia = function AddMedia(element, options) {
+    this.options = options;
+    $(element).rvMedia({
+      multiple: true,
+      onSelectFiles: function onSelectFiles(files, $el) {
+        if (typeof files !== 'undefined') {
+          switch ($el.data('editor')) {
+            case 'summernote':
+              handleInsertImagesForSummerNote($el, files);
+              break;
+
+            case 'wysihtml5':
+              var editor = $(options.target).data('wysihtml5').editor;
+              handleInsertImagesForWysihtml5Editor(editor, files);
+              break;
+
+            case 'ckeditor':
+              handleForCkeditor($el, files);
+              break;
+
+            case 'tinymce':
+              handleForTinyMce(files);
+              break;
+          }
+        }
+      }
+    });
+  };
+
+  AddMedia.VERSION = '1.1.0';
+  /**
+   * Insert images to summernote editor
+   * @param $el
+   * @param files
+   */
+
+  function handleInsertImagesForSummerNote($el, files) {
+    if (files.length === 0) {
+      return;
+    }
+
+    var instance = $el.data('target');
+
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].type === 'video') {
+        var link = files[i].full_url;
+        link = link.replace('watch?v=', 'embed/');
+        $(instance).summernote('pasteHTML', '<iframe width="420" height="315" src="' + link + '" frameborder="0" allowfullscreen></iframe>');
+      } else if (files[i].type === 'image') {
+        $(instance).summernote('insertImage', files[i].full_url, files[i].basename);
+      } else {
+        $(instance).summernote('pasteHTML', '<a href="' + files[i].full_url + '">' + files[i].full_url + '</a>');
+      }
+    }
+  }
+  /**
+   * Insert images to Wysihtml5 editor
+   * @param editor
+   * @param files
+   */
+
+
+  function handleInsertImagesForWysihtml5Editor(editor, files) {
+    if (files.length === 0) {
+      return;
+    } // insert images for the wysihtml5 editor
+
+
+    var s = '';
+
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].type === 'video') {
+        var link = files[i].full_url;
+        link = link.replace('watch?v=', 'embed/');
+        s += '<iframe width="420" height="315" src="' + link + '" frameborder="0" allowfullscreen></iframe>';
+      } else if (files[i].type === 'image') {
+        s += '<img src="' + files[i].full_url + '" alt="' + files[i].name + '">';
+      } else {
+        s += '<a href="' + files[i].full_url + '">' + files[i].full_url + '</a>';
+      }
+    }
+
+    if (editor.getValue().length > 0) {
+      var length = editor.getValue();
+      editor.composer.commands.exec('insertHTML', s);
+
+      if (editor.getValue() === length) {
+        editor.setValue(editor.getValue() + s);
+      }
+    } else {
+      editor.setValue(editor.getValue() + s);
+    }
+  }
+  /**
+   * @param $el
+   * @param files
+   */
+
+
+  function handleForCkeditor($el, files) {
+    var instance = $el.data('target').replace('#', '');
+    var content = '';
+    $.each(files, function (index, file) {
+      var link = file.full_url;
+
+      if (file.type === 'youtube') {
+        link = link.replace('watch?v=', 'embed/');
+        content += '<iframe width="420" height="315" src="' + link + '" frameborder="0" allowfullscreen></iframe><br />';
+      } else if (file.type === 'image') {
+        content += '<img src="' + link + '" alt="' + file.name + '" /><br />';
+      } else {
+        content += '<a href="' + link + '">' + file.name + '</a><br />';
+      }
+    });
+    CKEDITOR.instances[instance].insertHtml(content);
+  }
+  /**
+   * @param files
+   */
+
+
+  function handleForTinyMce(files) {
+    var html = '';
+    $.each(files, function (index, file) {
+      var link = file.full_url;
+
+      if (file.type === 'youtube') {
+        link = link.replace('watch?v=', 'embed/');
+        html += '<iframe width="420" height="315" src="' + link + '" frameborder="0" allowfullscreen></iframe><br />';
+      } else if (file.type === 'image') {
+        html += '<img src="' + link + '" alt="' + file.name + '" /><br />';
+      } else {
+        html += '<a href="' + link + '">' + file.name + '</a><br />';
+      }
+    });
+    tinymce.activeEditor.execCommand('mceInsertContent', false, html);
+  }
+  /**
+   * @param option
+   */
+
+
+  function callAction(option) {
+    return this.each(function () {
+      var $this = $(this);
+      var data = $this.data('bs.media');
+      var options = $.extend({}, $this.data(), _typeof(option) === 'object' && option);
+
+      if (!data) {
+        $this.data('bs.media', new AddMedia(this, options));
+      }
+    });
+  }
+
+  $.fn.addMedia = callAction;
+  $.fn.addMedia.Constructor = AddMedia;
+  $(window).on('load', function () {
+    $('[data-type="rv-media"]').each(function () {
+      var $addMedia = $(this);
+      callAction.call($addMedia, $addMedia.data());
+    });
+  });
+}(jQuery);
+/******/ })()
+;

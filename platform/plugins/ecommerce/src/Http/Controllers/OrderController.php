@@ -2,7 +2,12 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
+use App\Imports\OrderImportFile;
+use App\Models\CardPreAuth;
+use App\Models\OrderImport;
+use App\Models\OrderImportUpload;
 use Assets;
+use Botble\ACL\Models\Role;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
@@ -16,6 +21,12 @@ use Botble\Ecommerce\Http\Requests\CreateOrderRequest;
 use Botble\Ecommerce\Http\Requests\CreateShipmentRequest;
 use Botble\Ecommerce\Http\Requests\RefundRequest;
 use Botble\Ecommerce\Http\Requests\UpdateOrderRequest;
+use Botble\Ecommerce\Models\Address;
+use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderAddressInterface;
@@ -37,11 +48,14 @@ use EmailHandler;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 use OrderHelper;
 use RvMedia;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -122,7 +136,8 @@ class OrderController extends BaseController
         StoreLocatorInterface $storeLocatorRepository,
         OrderProductInterface $orderProductRepository,
         AddressInterface $addressRepository
-    ) {
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->orderHistoryRepository = $orderHistoryRepository;
@@ -161,7 +176,8 @@ class OrderController extends BaseController
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
 
-        return view('plugins/ecommerce::orders.create');
+        // return view('plugins/ecommerce::orders.create');
+        return view('plugins/ecommerce::orders.create-back');
     }
 
     /**
@@ -170,6 +186,43 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
+        $condition = [];
+        $meta_condition = [];
+        if ($request->input('order_id') && $request->input('order_id') > 0) {
+            $condition = ['id' => $request->input('order_id')];
+            $meta_condition = ['order_id' => $request->input('order_id')];
+
+            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+            foreach ($order_products as $order_product) {
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+            OrderProduct::where('order_id', $request->input('order_id'))->delete();
+        }
+
+        foreach ($request->input('products', []) as $productItem) {
+            $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
+            if (!$product) {
+                continue;
+            }
+            $demandQty = Arr::get($productItem, 'quantity', 1);
+
+            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                $stockQty = $product->online_sales_qty;
+            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                $stockQty = $product->in_person_sales_qty;
+            } else {
+                $stockQty = $product->quantity;
+            }
+
+            if ($stockQty < $demandQty) {
+                return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in this Qty!');
+            }
+        }
+
         $request->merge([
             'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
             'currency_id'          => get_application_currency_id(),
@@ -185,30 +238,32 @@ class OrderController extends BaseController
             'description'          => $request->input('note'),
             'is_confirmed'         => 1,
             'status'               => OrderStatusEnum::PROCESSING,
+            'order_type'           => $request->input('order_type'),
         ]);
 
-        $order = $this->orderRepository->createOrUpdate($request->input());
+        $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
 
         if ($order) {
+
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order_from_payment_page',
                 'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'create_order',
                 'description' => trans('plugins/ecommerce::order.new_order',
                     ['order_id' => get_order_code($order->id)]),
                 'order_id'    => $order->id,
-            ]);
+            ], $meta_condition);
 
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'confirm_order',
                 'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
                 'order_id'    => $order->id,
                 'user_id'     => Auth::user()->getKey(),
-            ]);
+            ], $meta_condition);
 
             $payment = $this->paymentRepository->createOrUpdate([
                 'amount'          => $order->amount,
@@ -218,7 +273,7 @@ class OrderController extends BaseController
                 'payment_type'    => 'confirm',
                 'order_id'        => $order->id,
                 'charge_id'       => Str::upper(Str::random(10)),
-            ]);
+            ], $meta_condition);
 
             $order->payment_id = $payment->id;
             $order->save();
@@ -231,11 +286,11 @@ class OrderController extends BaseController
                     ]),
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ]);
+                ], $meta_condition);
             }
 
             if ($request->input('customer_address.name')) {
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $request->input('customer_address.name'),
                     'phone'    => $request->input('customer_address.phone'),
                     'email'    => $request->input('customer_address.email'),
@@ -245,15 +300,15 @@ class OrderController extends BaseController
                     'country'  => $request->input('customer_address.country'),
                     'address'  => $request->input('customer_address.address'),
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
-                $this->orderAddressRepository->create([
+                $this->orderAddressRepository->createOrUpdate([
                     'name'     => $customer->name,
                     'phone'    => $customer->phone,
                     'email'    => $customer->email,
                     'order_id' => $order->id,
-                ]);
+                ], $meta_condition);
             }
 
             foreach ($request->input('products', []) as $productItem) {
@@ -275,12 +330,31 @@ class OrderController extends BaseController
 
                 $this->orderProductRepository->create($data);
 
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $product->id)
-                    ->where('with_storehouse_management', 1)
-                    ->where('quantity', '>', 0)
-                    ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+                if ($order->order_type == Order::NORMAL) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $product->id)
+                        ->where('with_storehouse_management', 1)
+                        ->where('quantity', '>', 0)
+                        ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+
+                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('online_sales_qty', '>', 0)
+                            ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->id)
+                            ->where('with_storehouse_management', 1)
+                            ->where('in_person_sales_qty', '>', 0)
+                            ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
+                    }
+                }
+
             }
         }
 
@@ -316,10 +390,16 @@ class OrderController extends BaseController
                 $weight += $product->weight;
             }
         }
-
+        $cards = [
+            '0' => 'Add New Card'
+        ];
         $defaultStore = get_primary_store_locator();
-
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore'));
+        if (!$order->user->card->isEmpty()) {
+            $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+        }
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
     /**
@@ -470,7 +550,8 @@ class OrderController extends BaseController
         HandleShippingFeeService $shippingFeeService,
         Request $request,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $order = $this->orderRepository->findOrFail($orderId);
 
         $weight = 0;
@@ -522,7 +603,8 @@ class OrderController extends BaseController
         CreateShipmentRequest $request,
         BaseHttpResponse $response,
         ShipmentHistoryInterface $shipmentHistoryRepository
-    ) {
+    )
+    {
         $order = $this->orderRepository->findOrFail($id);
         $result = $response;
         $products = [];
@@ -821,7 +903,8 @@ class OrderController extends BaseController
         Request $request,
         BaseHttpResponse $response,
         HandleShippingFeeService $shippingFeeService
-    ) {
+    )
+    {
         $weight = 0;
         $orderAmount = 0;
 
@@ -870,7 +953,8 @@ class OrderController extends BaseController
         ApplyCouponRequest $request,
         HandleApplyCouponService $handleApplyCouponService,
         BaseHttpResponse $response
-    ) {
+    )
+    {
         $result = $handleApplyCouponService->applyCouponWhenCreatingOrderFromAdmin($request);
 
         if ($result['error']) {
@@ -891,6 +975,87 @@ class OrderController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse|Factory|View
      */
+    public function editOrder($id, Request $request, BaseHttpResponse $response)
+    {
+
+        if (!$id) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        page_title()->setTitle(trans('plugins/ecommerce::order.reorder'));
+
+        $order = $this->orderRepository->findById($id);
+
+        if (!$order) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        $productIds = $order->products->pluck('product_id')->all();
+
+        $products = $this->productRepository
+            ->getModel()
+            ->whereIn('id', $productIds)
+            ->get();
+
+        foreach ($products as &$availableProduct) {
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+                false, RvMedia::getDefaultImage());
+            $availableProduct->price = $availableProduct->front_sale_price;
+            $availableProduct->product_name = $availableProduct->name;
+            $availableProduct->product_link = route('products.edit', $availableProduct->id);
+            $availableProduct->select_qty = 1;
+            $availableProduct->product_id = $availableProduct->id;
+            $orderProduct = $order->products->where('product_id', $availableProduct->id)->first();
+            if ($orderProduct) {
+                $availableProduct->select_qty = $orderProduct->qty;
+            }
+            foreach ($availableProduct->variations as &$variation) {
+                $variation->price = $variation->product->front_sale_price;
+                foreach ($variation->variationItems as &$variationItem) {
+                    $variationItem->attribute_title = $variationItem->attribute->title;
+                }
+            }
+        }
+
+        $customer = null;
+        $customerAddresses = [];
+        $customerOrderNumbers = 0;
+        if ($order->user_id) {
+            $customer = $this->customerRepository->findById($order->user_id);
+            $customer->avatar = (string)$customer->avatar_url;
+
+            if ($customer) {
+                $customerOrderNumbers = $customer->orders()->count();
+            }
+
+            $customerAddresses = $customer->addresses->toArray();
+        }
+        $customerAddress = $order->address;
+
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/order-create.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
+
+        return view('plugins/ecommerce::orders.reorder', compact(
+            'order',
+            'products',
+            'productIds',
+            'customer',
+            'customerAddresses',
+            'customerAddress',
+            'customerOrderNumbers'
+        ));
+    }
+
     public function getReorder(Request $request, BaseHttpResponse $response)
     {
         if (!$request->input('order_id')) {
@@ -1032,5 +1197,515 @@ class OrderController extends BaseController
                 ->setError()
                 ->setMessage(trans('plugins/ecommerce::order.error_when_sending_email'));
         }
+    }
+
+    public function import(Request $request)
+    {
+        $import = null;
+        $import_errors = $request->import_errors;
+
+        if ($request->import) {
+            $importOrder = OrderImport::where('order_import_upload_id', $request->import)->pluck('order_id');
+            $import = Order::whereIN('id', $importOrder)->get();
+        }
+        return view('plugins/ecommerce::order-import.create', compact('import', 'import_errors'));
+    }
+
+    public function importOrder(Request $request, BaseHttpResponse $response)
+    {
+        //TODO Refactor the code
+        if ($request->hasfile('file')) {
+            $type = strtolower($request['file']->getClientOriginalExtension());
+            $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
+            $spec_file_name = time() . rand(1, 100) . '.' . $type;
+            $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
+            $order = Excel::toCollection(new OrderImportFile(), $move);
+
+            $upload = OrderImportUpload::create(['file' => $move]);
+
+            $errors = [];
+
+            if ($request->market_place == Order::LASHOWROOM) {
+                foreach ($order as $od) {
+                    foreach ($od as $row) {
+                        if (!isset($row['po'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
+
+                        $customer = Customer::where(['phone' => $row['phone_number']])->first();
+                        if ($customer == null) {
+                            //creating Customer
+                            $data['name'] = $row['business_contact_name'];
+                            $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
+                            $data['phone'] = $row['phone_number'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['business_company_name'];
+                            $detail['type'] = Order::LASHOWROOM;
+
+                            CustomerDetail::create($detail);
+
+                            //creating address
+                            $baddress['address'] = $row['billing_address'];
+                            $baddress['city'] = $row['billing_city'];
+                            $baddress['state'] = $row['billing_state'];
+                            $baddress['zip_code'] = $row['billing_zip_code'];
+                            $baddress['customer_id'] = $customer['id'];
+                            $baddress['phone'] = $row['phone_number'];
+                            $baddress['country'] = $row['billing_county'];
+                            $baddress['name'] = $row['business_contact_name'];
+
+                            $billing = Address::create($baddress);
+
+                            $saddress['address'] = $row['shipping_address'];
+                            $saddress['city'] = $row['shipping_city'];
+                            $saddress['state'] = $row['shipping_state'];
+                            $saddress['zip_code'] = $row['shipping_zip_code'];
+                            $saddress['country'] = $row['shipping_country'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['phone_number'];
+                            $saddress['name'] = $row['shipping_contact_name'];
+
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
+                        //Finding Product For Order
+                        $product = Product::where('sku', $row['style_no'])->first();
+
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['original_qty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif ($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            }
+
+                        } else {
+                            $errors[] = $row['style_no'] . ' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style_no'] . ' product is out of stock.';
+                        }
+
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
+
+                        if ($orderPo != null && $product && $checkProdQty) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else if ($product) {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['original_amount']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder && $product && $checkProdQty) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['po'];
+                                    $orderInfo['order_date'] = $row['order_date'];
+                                    $orderInfo['type'] = Order::LASHOWROOM;
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
+
+                                    $upload_id = OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            } elseif ($request->market_place == Order::ORANGESHINE) {
+                foreach ($order as $od) {
+                    foreach ($od as $row) {
+                        if (!isset($row['invoice'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
+
+                        if ($row['payment'] == 'PayPal') {
+                            $customer = Customer::where(['phone' => $row['shipping_phone']])->first();
+                        } else {
+                            $customer = Customer::where(['phone' => $row['billing_phone']])->first();
+                        }
+                        if ($customer == null) {
+                            //creating Customer
+                            $data['name'] = $row['company'];
+                            $data['email'] = str_replace(' ', '', $row['company']) . '@orangeshine.com';
+                            $data['phone'] = ($row['payment'] == 'PayPal') ? $row['shipping_phone'] : $row['billing_phone'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['company'];
+                            $detail['type'] = Order::ORANGESHINE;
+
+                            CustomerDetail::create($detail);
+                            if ($row['payment'] != 'PayPal') {
+                                $baddress['address'] = $row['billing_address'];
+                                $baddress['city'] = $row['billing_city'];
+                                $baddress['state'] = $row['billing_state'];
+                                $baddress['zip_code'] = $row['billing_zip'];
+                                $baddress['customer_id'] = $customer['id'];
+                                $baddress['phone'] = $row['billing_phone'];
+                                $baddress['country'] = $row['billing_country'];
+                                $baddress['name'] = $row['company'];
+                                $baddress['type'] = 'billing';
+                                $billing = Address::create($baddress);
+                            }
+                            //creating address
+
+                            $saddress['address'] = $row['shipping_address'];
+                            $saddress['city'] = $row['shipping_city'];
+                            $saddress['state'] = $row['shipping_state'];
+                            $saddress['zip_code'] = $row['shipping_zip'];
+                            $saddress['country'] = $row['shipping_country'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['shipping_phone'];
+                            $saddress['name'] = $row['shipping_company_name'];
+                            $baddress['type'] = 'shipping';
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
+                        //Finding Product For Order
+                        $product = Product::where('sku', $row['style'])->first();
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['total_qty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif ($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            }
+
+                        } else {
+                            $errors[] = $row['style'] . ' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['style'] . ' product is out of stock.';
+                        }
+
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
+                        if ($orderPo != null && $product && $checkProdQty) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else if ($product) {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['order_amt']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder && $product && $checkProdQty) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['invoice'];
+                                    $orderInfo['order_date'] = $row['order_date'];
+                                    $orderInfo['type'] = Order::ORANGESHINE;
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
+
+                                    $upload_id = OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            } else {
+                foreach ($order as $od) {
+
+                    foreach ($od as $row) {
+                        if (!isset($row['ponumber'])) {
+                            return $response
+                                ->setError()
+                                ->setMessage('Wrong File Selected');
+                        }
+
+                        $customer = Customer::where(['phone' => $row['phonenumber']])->first();
+                        if ($customer == null) {
+                            //creating Customer
+                            $data['name'] = $row['companyname'];
+                            $data['email'] = str_replace(' ', '', $row['companyname']) . '@fashiongo.com';
+                            $data['phone'] = $row['phonenumber'];
+                            $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $customer = Customer::create($data);
+                            $detail['customer_id'] = $customer['id'];
+                            $detail['company'] = $row['companyname'];
+                            $detail['type'] = Order::FASHIONGO;
+
+                            CustomerDetail::create($detail);
+
+                            $baddress['address'] = $row['billingstreet'];
+                            $baddress['city'] = $row['billingcity'];
+                            $baddress['state'] = $row['billingstate'];
+                            $baddress['zip_code'] = $row['billingzipcode'];
+                            $baddress['customer_id'] = $customer['id'];
+                            $baddress['phone'] = $row['phonenumber'];
+                            $baddress['country'] = $row['billingcountry'];
+                            $baddress['name'] = $row['companyname'];
+                            $baddress['type'] = 'billing';
+                            $billing = Address::create($baddress);
+
+                            //creating address
+
+                            $saddress['address'] = $row['shippingstreet'];
+                            $saddress['city'] = $row['shippingcity'];
+                            $saddress['state'] = $row['shippingstate'];
+                            $saddress['zip_code'] = $row['shippingzipcode'];
+                            $saddress['country'] = $row['shippingcountry'];
+                            $saddress['customer_id'] = $customer['id'];
+                            $saddress['phone'] = $row['phonenumber'];
+                            $saddress['name'] = $row['companyname'];
+                            $baddress['type'] = 'shipping';
+                            $shipping = Address::create($saddress);
+
+                        }
+
+                        $orderQuantity = 0;
+                        $checkProdQty = false;
+                        //Finding Product For Order
+                        $product = Product::where('sku', $row['styleno'])->first();
+                        if ($product) {
+                            //count pack quantity for product
+                            $pack = quantityCalculate($product['category_id']);
+                            $orderQuantity = $row['totalqty'] / $pack;
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                                if ($orderQuantity <= $product->online_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->online_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->online_sales_qty;
+                                    $orderQuantity = $product->online_sales_qty;
+                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                                if ($orderQuantity <= $product->in_person_sales_qty) {
+                                    $checkProdQty = true;
+                                } elseif ($product->in_person_sales_qty > 0) {
+                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+                                    $orderQuantity = $product->in_person_sales_qty;
+                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            } else {
+                                if ($orderQuantity <= $product->quantity) {
+                                    $checkProdQty = true;
+                                } elseif ($product->quantity > 0) {
+                                    $remQty = $orderQuantity - $product->quantity;
+                                    $orderQuantity = $product->quantity;
+                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                }
+                            }
+
+                        } else {
+                            $errors[] = $row['styleno'] . ' product is not found.';
+                        }
+
+                        if (!$checkProdQty && $product) {
+                            $errors[] = $row['styleno'] . ' product is out of stock.';
+                        }
+
+                        $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
+                        if ($orderPo != null && $product && $checkProdQty) {
+                            $detail['order_id'] = $orderPo->order_id;
+                            $detail['qty'] = $orderQuantity;
+                            $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
+                            $detail['product_id'] = $product->id;
+                            $detail['product_name'] = $product->name;
+                            $importOrder = OrderProduct::create($detail);
+                            //import record
+                        } else if ($product) {
+                            $iorder['user_id'] = $customer->id;
+                            $iorder['amount'] = str_replace('$', '', $row['totalamount']);;
+                            $iorder['currency_id'] = 1;
+                            $iorder['is_confirmed'] = 1;
+                            $iorder['is_finished'] = 1;
+                            $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $importOrder = Order::create($iorder);
+                            if ($importOrder && $product && $checkProdQty) {
+                                $detail['order_id'] = $importOrder->id;
+                                $detail['qty'] = $orderQuantity;
+                                $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
+                                $detail['product_id'] = $product->id;
+                                $detail['product_name'] = $product->name;
+                                $orderProduct = OrderProduct::create($detail);
+                                if ($orderProduct) {
+                                    $orderInfo['order_id'] = $importOrder->id;
+                                    $orderInfo['po_number'] = $row['ponumber'];
+                                    $orderInfo['order_date'] = $row['orderdate'];
+                                    $orderInfo['type'] = Order::FASHIONGO;
+                                    $orderInfo['order_import_upload_id'] = $upload->id;
+                                    $upload_id = OrderImport::create($orderInfo);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        } else {
+            return 'not supported';
+        }
+
+        return redirect(route('orders.import', ['import' => $upload->id, 'import_errors' => $errors]));
+    }
+
+    public function charge(Request $request)
+    {
+        $data = [
+            'payment_method_id' => $request->payment_id,
+            'meta'              => [
+                'reference' => $request->order_id,
+                'tax'       => 0,
+                'subtotal'  => $request->sub_total,
+                'lineItems' => []
+            ],
+            'total'             => $request->amount,
+            'pre_auth'          => 1
+        ];
+        $url = (env("OMNI_URL") . "charge/");
+        list($response, $info) = omni_api($url, $data, 'POST');
+
+        $status = $info['http_code'];
+
+        if (floatval($status) == 200) {
+            $response = json_decode($response, true);
+            $order['order_id'] = $request->order_id;
+            $order['transaction_id'] = $response['id'];
+            $order['response'] = json_encode($response);
+            $order['status'] = 0;
+            CardPreAuth::create($order);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $errors;
+        }
+
+        //$response->setMessage('Payment Successfully');
+        return back();
+    }
+
+    public function capture(Request $request)
+    {
+        $data = [
+            'total' => $request->amount,
+        ];
+        $url = (env("OMNI_URL") . "transaction/" . $request->transaction_id . "/capture");
+        list($response, $info) = omni_api($url, $data, 'POST');
+        $status = $info['http_code'];
+        if (floatval($status) == 200) {
+            $order['status'] = 1;
+            CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $errors;
+        }
+        //$response->setMessage('Payment Successfully');
+        return back();
+    }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $order = $this->orderRepository->findOrFail($request->input('pk'));
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $order->fill($requestData);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $order));
+        $this->orderRepository->createOrUpdate($order);
+        return $response;
     }
 }

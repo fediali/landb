@@ -10,6 +10,32 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@deletes',
                 'permission' => 'orders.destroy',
             ]);
+            Route::post('charge', [
+                'as'         => 'charge',
+                'uses'       => 'OrderController@charge',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('capture', [
+                'as'         => 'capture',
+                'uses'       => 'OrderController@capture',
+                'permission' => 'orders.create',
+            ]);
+            Route::get('import', [
+                'as'         => 'import',
+                'uses'       => 'OrderController@import',
+                'permission' => 'orders.import',
+            ]);
+            Route::post('import-order', [
+                'as'         => 'import-order',
+                'uses'       => 'OrderController@importOrder',
+                'permission' => 'orders.import',
+            ]);
+
+            Route::get('edit-order/{id}', [
+                'as'         => 'editOrder',
+                'uses'       => 'OrderController@editOrder',
+                'permission' => 'orders.edit',
+            ]);
 
             Route::get('reorder', [
                 'as'         => 'reorder',
@@ -92,6 +118,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::post('coupon/apply', [
                 'as'         => 'apply-coupon-when-creating-order',
                 'uses'       => 'OrderController@postApplyCoupon',
+                'permission' => 'orders.create',
+            ]);
+
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'OrderController@changeStatus',
                 'permission' => 'orders.create',
             ]);
 

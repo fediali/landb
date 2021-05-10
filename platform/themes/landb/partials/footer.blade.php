@@ -1,0 +1,289 @@
+<section class="needhelp">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="help_heading">
+                    <h3>Need <br> <em>Help?</em></h3>
+                </div>
+            </div>
+            <div class="col-md-8">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="helpbox">
+                            <h5>Where to buy?</h5>
+                            <p>Interested? Find the nearest store to me</p>
+                            <strong>Product Locator</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="helpbox">
+                            <h5>Wholesale</h5>
+                            <p>Already a member? Login to discover our collections.</p>
+                            <strong>Login</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="helpbox">
+                            <h5>Need Help?</h5>
+                            <p>Haven't found what you're looking for? Contact us.</p>
+                            <strong>Customer support</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="footer_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    {!!
+                        Menu::renderMenuLocation('footer-menu', [
+                            'options' => [],
+                            'theme' => true,
+                            'view' => 'footer-menu',
+                        ])
+                    !!}
+                    {{--<div class="col-4">
+                        <h6>Navigate</h6>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Collection</a></li>
+                            <li><a href="#">Lookbook</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <h6>Need Help</h6>
+                        <ul>
+                            <li><a href="#">Customer Service</a></li>
+                            <li><a href="#">Store Loacator</a></li>
+                            <li><a href="#">Login</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <h6>Social Media</h6>
+                        <ul>
+                            <li><a href="#">Instagram</a></li>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Snapchat</a></li>
+
+                        </ul>
+                    </div>--}}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="footerlogo">
+                    <a href="#"><img class="revealUp" src="https://localhost/landb/public/landb/img/footer-logo.png" alt=""></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>All rights reserved - 2021 © Landbappreal</p>
+            <p>Terms & Conditions</p>
+            <!-- <p> Website by xyz</p> -->
+        </div>
+    </div>
+</footer>
+<script src="{{ asset('landb/js/jquery.js') }}"></script>
+<script src="{{ asset('landb/js/popper.js') }}"></script>
+<script src="{{ asset('landb/js/bootstrap.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
+<script src="{{ asset('landb/js/custom.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function() {
+    $("#filtertoggle").click(function() {
+      $(this).toggleClass("on");
+      $("#filtermenu").slideToggle();
+    });
+  });
+</script>
+<script>
+  jQuery(document).ready(function() {
+    // This button will increment the value
+    $('.qtyplus').click(function(e) {
+      var newVal = 0;
+      // Stop acting like a button
+      e.preventDefault();
+      // Get the field name
+      fieldName = $(this).attr('field');
+      // Get its current value
+      var currentVal = parseInt($(this).prev('input[name=' + fieldName + ']').val());
+      // If is not undefined
+      if (!isNaN(currentVal)) {
+        // Increment
+        newVal = currentVal + 1;
+        $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);
+      } else {
+        // Otherwise put a 0 there
+        $(this).prev('input[name=' + fieldName + ']').val(0);
+      }
+      if($(this).data('update') == '1') {
+        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+      }
+    });
+    // This button will decrement the value till 0
+    $(".qtyminus").click(function(e) {
+      var newVal = 0;
+      // Stop acting like a button
+      e.preventDefault();
+      // Get the field name
+      fieldName = $(this).attr('field');
+      // Get its current value
+      var currentVal = parseInt($(this).next('input[name=' + fieldName + ']').val());
+      // If it isn't undefined or its greater than 0
+      if (!isNaN(currentVal) && currentVal > 0) {
+        newVal = currentVal - 1;
+        // Decrement one
+        $(this).next('input[name=' + fieldName + ']').val(currentVal - 1);
+      } else {
+        // Otherwise put a 0 there
+        $(this).next('input[name=' + fieldName + ']').val(0);
+      }
+      if($(this).data('update') == '1'){
+        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
+      }
+
+    });
+
+    $('input[name="payment_method"]').on('click', function () {
+      if(this.value == 'omni_payment'){
+        $('.paypal-payment').hide();
+        $('.card-payment').show();
+      }else{
+        $('.card-payment').hide();
+        $('.paypal-payment').show();
+      }
+    });
+
+    var tokenizeButton = document.querySelector('#tokenizebutton');
+
+    // Init FattMerchant API
+    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
+      number: {
+        id: 'fattjs-number',
+        placeholder: '0000 0000 0000 0000',
+        style: 'width: 90%; height:90%; border-radius: 3px; border: 1px solid #ccc; padding: .5em .5em; font-size: 91%;'
+      },
+      cvv: {
+        id: 'fattjs-cvv',
+        placeholder: '000',
+        style: 'width: 30px; height:90%; border-radius: 3px; border: 1px solid #ccc; padding: .5em .5em; font-size: 91%;'
+      }
+    });
+
+    // tell fattJs to load in the card fields
+    fattJs.showCardForm().then(handler => {
+      console.log('form loaded');
+  })
+  .catch(err => {
+      console.log('error init form ' + err);
+    // reinit form
+  });
+
+    fattJs.on('card_form_complete', (message) => {
+        // activate pay button
+        //payButton.disabled = false;
+        var billing = $("#billing_address option:selected").text();
+
+
+        tokenizeButton.disabled = billing === 'Select Address';
+        console.log(message);
+    });
+    fattJs.on('card_form_incomplete', (message) => {
+      // deactivate pay button
+      //payButton.disabled = true;
+      tokenizeButton.disabled = true;
+        console.log(message);
+    });
+
+    document.querySelector('#tokenizebutton').onclick = (e) => {
+      e.preventDefault();
+      console.log('working')
+      var month = $('.month').val();
+      var year = $('.year').val();
+      successElement = document.querySelector('.success');
+      var errorElement = document.querySelector('.error');
+      toggle_loader(true);
+
+      var form = document.querySelector('form');
+      console.log('getting address', "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]: null }}")
+      var extraDetails = {
+        firstname: "{{auth('customer')->user() ? auth('customer')->user()->details->first_name : 'john'}}",
+        lastname: "{{auth('customer')->user() ? auth('customer')->user()->detail->last_name : 'doe'}}",
+        method: "card",
+        month: month,
+        year: year,
+        phone: "{{auth('customer')->user() ? auth('customer')->user()->phone : null}}",
+        address_1: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->address: null }}",
+        address_city: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->city: null }}",
+        address_state: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->state: null }}",
+        address_zip: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->zip_code: null }}",
+        address_country: "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]->country: null }}",
+        url: "https://omni.fattmerchant.com/#/bill/",
+        validate: false,
+      };
+      console.log(extraDetails)
+      // call tokenize api
+      fattJs.tokenize(extraDetails).then((result) => {
+        console.log(result);
+      if (result) {
+        toastr['success']('Card has been verified!', 'Success');
+        functionAddCard(result, {{auth('customer')->user() ?auth('customer')->user()->id : null}});
+
+      }
+      toggle_loader(false);
+    })
+    .catch(err => {
+        toastr['error'](err.message, 'Error');
+      toggle_loader(false);
+    });
+    }
+  });
+  
+  function toggle_loader(event) {
+    if(event){
+      $('.loading-overlay').addClass('is-active');
+    }else{
+      $('.loading-overlay').removeClass('is-active');
+    }
+
+  }
+
+  function functionAddCard(result, customer_id) {
+    console.log('addingCard', result);
+    $.ajax({
+      url: '{{ route('customers.create-customer-payment') }}',
+      type: 'post',
+      data: {
+        '_token': '{{ csrf_token() }}',
+        'customer_data': result,
+        'customer_id': customer_id,
+      },
+      success: function (data) {
+        console.log(data)
+        toastr['success']('Card has been added Successfully', 'Thanks!');
+
+        $('#checkout-main-form').submit();
+      },
+      error: function (request, status, error) {
+        toastr['warning']('Notification Unreadable', 'Reading Error');
+      }
+    });
+  }
+</script>
+
+</body>
+
+</html>

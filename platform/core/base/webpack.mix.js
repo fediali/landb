@@ -22,6 +22,7 @@ mix
     .js(source + '/resources/assets/js/cache.js', dist + '/js')
     .js(source + '/resources/assets/js/tags.js', dist + '/js')
     .js(source + '/resources/assets/js/system-info.js', dist + '/js')
+    .js(source + '/resources/assets/js/laravel-echo-setup.js', dist + '/js')
 
     .copyDirectory(dist + '/css', source + '/public/css')
     .copyDirectory(dist + '/js', source + '/public/js');

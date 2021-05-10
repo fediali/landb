@@ -1,1 +1,123 @@
-(()=>{function a(a,t){for(var n=0;n<t.length;n++){var e=t[n];e.enumerable=e.enumerable||!1,e.configurable=!0,"value"in e&&(e.writable=!0),Object.defineProperty(a,e.key,e)}}var t=function(){function t(){!function(a,t){if(!(a instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t)}var n,e,o;return n=t,o=[{key:"setAnimation",value:function(a,t){a.each((function(){var a=$(this),n="animated "+a.data("animation-"+t);a.addClass(n).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",(function(){a.removeClass(n)}))}))}}],(e=[{key:"init",value:function(){var a=$(document).find(".owl-slider");a.length>0&&a.each((function(){var n=$(this),e=n.data("owl-auto"),o=n.data("owl-loop"),i=n.data("owl-speed"),l=n.data("owl-gap"),d=n.data("owl-nav"),m=n.data("owl-dots"),r=n.data("owl-animate-in")?n.data("owl-animate-in"):"",s=n.data("owl-animate-out")?n.data("owl-animate-out"):"",u=n.data("owl-item"),w=n.data("owl-item-xs"),c=n.data("owl-item-sm"),f=n.data("owl-item-md"),v=n.data("owl-item-lg"),h=n.data("owl-item-xl"),p=n.data("owl-nav-left")?n.data("owl-nav-left"):'<i class="fa fa-angle-left"></i>',g=n.data("owl-nav-right")?n.data("owl-nav-right"):'<i class="fa fa-angle-right"></i>',y=n.data("owl-duration"),b="on"===n.data("owl-mousedrag"),A=n.data("owl-center");a.children("div, span, a, img, h1, h2, h3, h4, h5, h5").length>=2&&(n.owlCarousel({rtl:"rtl"===$("body").prop("dir"),animateIn:r,animateOut:s,margin:l,autoplay:e,autoplayTimeout:i,autoplayHoverPause:!0,loop:o,nav:d,mouseDrag:b,touchDrag:!0,autoplaySpeed:y,navSpeed:y,dotsSpeed:y,dragEndSpeed:y,navText:[p,g],dots:m,items:u,center:Boolean(A),responsive:{0:{items:w},480:{items:c},768:{items:f},992:{items:v},1200:{items:h},1680:{items:u}}}),n.on("change.owl.carousel",(function(a){var e=$(".owl-item",n).eq(a.item.index).find("[data-animation-out]");t.setAnimation(e,"out")})),n.on("changed.owl.carousel",(function(a){var e=$(".owl-item",n).eq(a.item.index).find("[data-animation-in]");t.setAnimation(e,"in")})))}))}}])&&a(n.prototype,e),o&&a(n,o),t}();$(document).ready((function(){(new t).init()}))})();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*****************************************************************************!*\
+  !*** ./platform/plugins/simple-slider/resources/assets/js/simple-slider.js ***!
+  \*****************************************************************************/
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var SimpleSliderManagement = /*#__PURE__*/function () {
+  function SimpleSliderManagement() {
+    _classCallCheck(this, SimpleSliderManagement);
+  }
+
+  _createClass(SimpleSliderManagement, [{
+    key: "init",
+    value: function init() {
+      var target = $(document).find('.owl-slider');
+
+      if (target.length > 0) {
+        target.each(function () {
+          var el = $(this),
+              dataAuto = el.data('owl-auto'),
+              dataLoop = el.data('owl-loop'),
+              dataSpeed = el.data('owl-speed'),
+              dataGap = el.data('owl-gap'),
+              dataNav = el.data('owl-nav'),
+              dataDots = el.data('owl-dots'),
+              dataAnimateIn = el.data('owl-animate-in') ? el.data('owl-animate-in') : '',
+              dataAnimateOut = el.data('owl-animate-out') ? el.data('owl-animate-out') : '',
+              dataDefaultItem = el.data('owl-item'),
+              dataItemXS = el.data('owl-item-xs'),
+              dataItemSM = el.data('owl-item-sm'),
+              dataItemMD = el.data('owl-item-md'),
+              dataItemLG = el.data('owl-item-lg'),
+              dataItemXL = el.data('owl-item-xl'),
+              dataNavLeft = el.data('owl-nav-left') ? el.data('owl-nav-left') : '<i class="fa fa-angle-left"></i>',
+              dataNavRight = el.data('owl-nav-right') ? el.data('owl-nav-right') : '<i class="fa fa-angle-right"></i>',
+              duration = el.data('owl-duration'),
+              dataMouseDrag = el.data('owl-mousedrag') === 'on',
+              center = el.data('owl-center');
+
+          if (target.children('div, span, a, img, h1, h2, h3, h4, h5, h5').length >= 2) {
+            el.owlCarousel({
+              rtl: $('body').prop('dir') === 'rtl',
+              animateIn: dataAnimateIn,
+              animateOut: dataAnimateOut,
+              margin: dataGap,
+              autoplay: dataAuto,
+              autoplayTimeout: dataSpeed,
+              autoplayHoverPause: true,
+              loop: dataLoop,
+              nav: dataNav,
+              mouseDrag: dataMouseDrag,
+              touchDrag: true,
+              autoplaySpeed: duration,
+              navSpeed: duration,
+              dotsSpeed: duration,
+              dragEndSpeed: duration,
+              navText: [dataNavLeft, dataNavRight],
+              dots: dataDots,
+              items: dataDefaultItem,
+              center: Boolean(center),
+              responsive: {
+                0: {
+                  items: dataItemXS
+                },
+                480: {
+                  items: dataItemSM
+                },
+                768: {
+                  items: dataItemMD
+                },
+                992: {
+                  items: dataItemLG
+                },
+                1200: {
+                  items: dataItemXL
+                },
+                1680: {
+                  items: dataDefaultItem
+                }
+              }
+            });
+            el.on('change.owl.carousel', function (event) {
+              var $currentItem = $('.owl-item', el).eq(event.item.index);
+              var $elementsToAnimation = $currentItem.find('[data-animation-out]');
+              SimpleSliderManagement.setAnimation($elementsToAnimation, 'out');
+            });
+            el.on('changed.owl.carousel', function (event) {
+              var $currentItem = $('.owl-item', el).eq(event.item.index);
+              var $elementsToAnimation = $currentItem.find('[data-animation-in]');
+              SimpleSliderManagement.setAnimation($elementsToAnimation, 'in');
+            });
+          }
+        });
+      }
+    }
+  }], [{
+    key: "setAnimation",
+    value: function setAnimation(_elem, _InOut) {
+      var animationEndEvent = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+      _elem.each(function () {
+        var $elem = $(this);
+        var $animationType = 'animated ' + $elem.data('animation-' + _InOut);
+        $elem.addClass($animationType).one(animationEndEvent, function () {
+          $elem.removeClass($animationType);
+        });
+      });
+    }
+  }]);
+
+  return SimpleSliderManagement;
+}();
+
+$(document).ready(function () {
+  new SimpleSliderManagement().init();
+});
+/******/ })()
+;

@@ -2,6 +2,7 @@
 
 namespace Botble\Threadorders\Models;
 
+use App\Models\InventoryHistory;
 use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -12,11 +13,16 @@ use Botble\Fits\Models\Fits;
 use Botble\Rises\Models\Rises;
 use Botble\Seasons\Models\Seasons;
 use Botble\Thread\Models\Thread;
+use Botble\Vendorproducts\Models\Vendorproducts;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Threadorders extends BaseModel
 {
+    use SoftDeletes;
     use EnumCastable;
 
     /**
@@ -32,7 +38,7 @@ class Threadorders extends BaseModel
      * @var array
      */
     protected $dates = [
-        'pp_sample_date',
+        //'pp_sample_date',
         'order_date',
         'ship_date',
         'cancel_date',
@@ -51,9 +57,10 @@ class Threadorders extends BaseModel
         'season_id',
         'order_no',
         'order_status',
-        'pp_sample',
-        'pp_sample_size',
-        'pp_sample_date',
+        'thread_status',
+        //'pp_sample',
+        //'pp_sample_size',
+        //'pp_sample_date',
         'material',
         'sleeve',
         'label',
@@ -61,13 +68,17 @@ class Threadorders extends BaseModel
         'order_date',
         'ship_date',
         'cancel_date',
+        'elastic_waste_pant',
+        'vendor_product_id',
         'is_denim',
         'inseam',
         'fit_id',
         'rise_id',
         'fabric_id',
         'fabric_print_direction',
-        'spec_file',
+        'reg_pack_qty',
+        'plus_pack_qty',
+        //'spec_file',
         'business_id',
         'created_by',
         'updated_by',
@@ -85,9 +96,28 @@ class Threadorders extends BaseModel
 
     protected $with = [];
 
+    protected $appends = ['thread_order_has_pushed'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (isset(auth()->user()->roles[0])) {
+                if (auth()->user()->roles[0]->slug == 'vendor') {
+                    $query->where('vendor_id', auth()->user()->id);
+                }
+            }
+        });
+    }
+
+    public function vendor_product()
+    {
+        return $this->belongsTo(Vendorproducts::class, 'vendor_product_id', 'id');
+    }
+
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function thread(): BelongsTo
     {
@@ -95,8 +125,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function designer(): BelongsTo
     {
@@ -104,8 +134,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function vendor(): BelongsTo
     {
@@ -113,8 +143,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function season(): BelongsTo
     {
@@ -122,8 +152,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fit(): BelongsTo
     {
@@ -131,8 +161,8 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function rise(): BelongsTo
     {
@@ -140,11 +170,36 @@ class Threadorders extends BaseModel
     }
 
     /**
-     * @deprecated
      * @return BelongsTo
+     * @deprecated
      */
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
+
+    public function threadOrderVariations($type = false)
+    {
+        return DB::table('thread_order_variations')
+            ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name', 'printdesigns.file AS design_file')
+            ->join('ec_product_categories', 'ec_product_categories.id', 'thread_order_variations.product_category_id')
+            ->leftJoin('vendorproductunits', 'vendorproductunits.id', 'thread_order_variations.product_unit_id')
+            ->leftJoin('printdesigns', 'printdesigns.id', 'thread_order_variations.print_design_id')
+            ->where('thread_order_id', $this->id)
+            ->when($type, function ($q) use ($type) {
+                $q->where('category_type', $type);
+            })
+            ->orderBy('category_type')
+            ->get();
+    }
+
+    public function getThreadOrderHasPushedAttribute()
+    {
+        $check = InventoryHistory::where('order_id', $this->id)->value('id');
+        if ($check) {
+            return true;
+        }
+        return false;
+    }
+
 }

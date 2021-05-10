@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInventoryProductsPivotTable extends Migration
+class CreateUserWishlistItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateInventoryProductsPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_products_pivot', function (Blueprint $table) {
+        Schema::create('user_wishlist_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('inventory_id');
-            $table->string('sku');
-            $table->integer('barcode');
-            $table->integer('quantity');
+            $table->integer('wishlist_id');
+            $table->integer('product_id');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +30,6 @@ class CreateInventoryProductsPivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_products_pivot');
+        Schema::dropIfExists('user_wishlist_items');
     }
 }

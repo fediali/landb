@@ -108,3 +108,4 @@
 @else
     <p>{!! trans('plugins/ecommerce::products.form.create_product_variations', ['link' => Html::link(route('product-attribute-sets.create'), trans('plugins/ecommerce::products.form.add_new_attributes'))]) !!}</p>
 @endif
+ 

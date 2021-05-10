@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Tables;
 use BaseHelper;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use EcommerceHelper;
@@ -23,7 +24,7 @@ class OrderTable extends TableAbstract
     /**
      * @var bool
      */
-    protected $hasFilter = true;
+    protected $hasFilter = false;
 
     /**
      * OrderTable constructor.
@@ -53,8 +54,12 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
+            ->editColumn('order_type', function ($item) {
+                return $item->order_type_html;
+            })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                // return $item->status->toHtml();
+                return view('plugins/ecommerce::orders/orderStatus', ['item' => $item])->render();
             })
             ->editColumn('payment_status', function ($item) {
                 return $item->payment->status->label() ? $item->payment->status->toHtml() : '&mdash;';
@@ -83,7 +88,15 @@ class OrderTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('orders.edit', 'orders.destroy', $item);
+                $html = '';
+                if (Auth::user()->hasPermission('orders.edit')) {
+                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
+                        $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
+                    }
+                    $html .= '<a href="'.route('orders.edit', $item->id).'" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
+                }
+                //orders.edit
+                return $this->getOperations('', 'orders.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -98,6 +111,7 @@ class OrderTable extends TableAbstract
         $select = [
             'ec_orders.id',
             'ec_orders.status',
+            'ec_orders.order_type',
             'ec_orders.user_id',
             'ec_orders.created_at',
             'ec_orders.amount',
@@ -112,6 +126,19 @@ class OrderTable extends TableAbstract
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
 
+        $order_type = $this->request()->input('order_type',false);
+        $product_id = $this->request()->input('product_id',false);
+        if ($order_type && in_array($order_type, [Order::NORMAL, Order::PRE_ORDER])) {
+            $query->where('ec_orders.order_type', $order_type);
+        }
+        if ($product_id) {
+            $getProdIds = ProductVariation::where('configurable_product_id', $product_id)->pluck('product_id')->all();
+            $getProdIds[] = $product_id;
+            $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')
+                ->whereIn('ec_order_product.product_id', $getProdIds)
+                ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
+        }
+
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -121,18 +148,18 @@ class OrderTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'              => [
+            'id'      => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'user_id'         => [
+            'user_id' => [
                 'name'  => 'ec_orders.user_id',
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
             ],
-            'amount'          => [
+            'amount'  => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
                 'class' => 'text-center',
@@ -168,6 +195,11 @@ class OrderTable extends TableAbstract
                 'title' => trans('core/base::tables.status'),
                 'class' => 'text-center',
             ],
+            'order_type'    => [
+                'name'  => 'ec_orders.order_type',
+                'title' => 'Order Type',
+                'class' => 'text-center',
+            ],
             'created_at'      => [
                 'name'  => 'ec_orders.created_at',
                 'title' => trans('core/base::tables.created_at'),
@@ -192,6 +224,18 @@ class OrderTable extends TableAbstract
     /**
      * {@inheritDoc}
      */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Order::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function bulkActions(): array
     {
         return $this->addDeleteAction(route('orders.deletes'), 'orders.destroy', parent::bulkActions());
@@ -203,7 +247,7 @@ class OrderTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'ec_orders.status'     => [
+            /*'ec_orders.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => OrderStatusEnum::labels(),
@@ -212,7 +256,7 @@ class OrderTable extends TableAbstract
             'ec_orders.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 

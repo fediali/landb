@@ -45,3 +45,109 @@ if (!function_exists('generate_shortcode')) {
         return shortcode()->generateShortcode($name, $attributes);
     }
 }
+if (!function_exists('image_html_generator')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = null)
+  {
+
+        $html = '<img 
+            ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . ' 
+            ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . ' 
+            ' . (!is_null($class) ? 'class="' . $class . '"' : '') . ' 
+            src="' . asset('storage/'.$img). '" 
+            alt="' . (!is_null($alt) ? $alt : 'Education image') . '" 
+            loading="lazy"
+            onerror = "this.src=\''. asset('images/lucky&blessed_logo_sign_Black 1.png') .'\'">'
+            ;
+
+    return $html;
+  }
+}
+if (!function_exists('generate_product_url')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function generate_product_url($type, $id)
+  {
+    if($type == 'save'){
+      return URL::to('/product/save/'.$id);
+    }elseif ($type == 'detail'){
+      return URL::to('/product/detail/'.$id);
+    }elseif ($type == 'cart'){
+      return URL::to('/product/add/cart/'.$id);
+    }elseif ($type == 'wishlist'){
+      return route('public.add_to_wishlist', ['id' => $id]);
+    }else{
+      return URL::to('/products');
+    }
+    
+  }
+}
+
+if (!function_exists('parent_categories')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function parent_categories()
+  {
+      $categories =  \Botble\Ecommerce\Models\ProductCategory::where('ec_product_categories.parent_id', 0)->where('ec_product_categories.status', 'published')->join('slugs', 'slugs.reference_id', 'ec_product_categories.id')->where('slugs.prefix', 'product-categories')->select('slugs.key', 'ec_product_categories.name', 'ec_product_categories.id')->get();
+      return $categories;
+  }
+}
+
+if (!function_exists('product_tags')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function product_tags()
+  {
+      $tags =  \Botble\Ecommerce\Models\ProductTag::where('ec_product_tags.status', 'published')->join('slugs', 'slugs.reference_id', 'ec_product_tags.id')->where('slugs.prefix', 'product-tags')->select('slugs.key', 'ec_product_tags.name', 'ec_product_tags.id')->get();
+      return $tags;
+  }
+}
+
+if (!function_exists('category_sizes')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function category_sizes()
+  {
+    $sizes = \Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->get();
+      return $sizes;
+  }
+}
+
+if (!function_exists('cart_count')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function cart_count()
+  {
+    if(auth('customer')->user()){
+      $total = 0;
+      $order = \Botble\Ecommerce\Models\Order::with('products')->where('user_id', auth('customer')->user()->id)->where('is_finished', 0)->first();
+      if($order){
+        foreach ($order->products as $product){
+          $total = $total + $product->qty;
+        }
+      }
+      return $total;
+    }else{
+      return 0;
+    }
+  }
+}
