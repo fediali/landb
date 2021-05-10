@@ -545,63 +545,89 @@
                 <div id="menu3" class="tab-pane fade">
                     <div class="row mt-5">
                         <div class="col-lg-6">
+                            <form method="POST" action="{{ route('customer.edit-account-post', 'store_locator') }}">
+                                @csrf
                             <div class="d-flex">
-                                <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                <input class="mt-1 mr-2" type="checkbox" name="add_store_locator" value="1">
                                 <label class="mr-2 tax-checkbox-label" for="vehicle1"> Add me to the Store Locator </label>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <p class="textbox-label">Company Name</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_company') is-invalid @enderror" type="text" name="locator_company" value="{{ old('locator_company',@$user->storeLocator->locator_company) }}"/>
+                                    @error('locator_company')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">Mobile</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_phone') is-invalid @enderror" type="text"  name="locator_phone" value="{{ old('locator_phone',@$user->storeLocator->locator_phone) }}"/>
+                                    @error('locator_phone')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">Website</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_website') is-invalid @enderror" type="text"  name="locator_website" value="{{ old('locator_website',@$user->storeLocator->locator_website) }}"/>
+                                    @error('locator_website')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-12">
                                     <p class="textbox-label">Address</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_address') is-invalid @enderror" type="text"  name="locator_address" value="{{ old('locator_address',@$user->storeLocator->locator_address) }}"/>
+                                    @error('locator_company')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">City</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_city') is-invalid @enderror" type="text"  name="locator_city" value="{{ old('locator_city',@$user->storeLocator->locator_city) }}"/>
+                                    @error('locator_city')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">Country</p>
-                                    <select class="input-textbox">
-                                        <option></option>
-                                    </select>
+                                    <input class="input-textbox form-control @error('locator_country') is-invalid @enderror" type="text"  name="locator_country" value="{{ old('locator_country',@$user->storeLocator->locator_country) }}"/>
+                                    @error('locator_country')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">State/Province/Region</p>
-                                    <select class="input-textbox">
-                                        <option></option>
-                                    </select>
+                                    <input class="input-textbox form-control @error('locator_state') is-invalid @enderror" type="text"  name="locator_state" value="{{ old('locator_state',@$user->storeLocator->locator_state) }}"/>
+                                    @error('locator_state')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">Zip/Postal Code</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_zip_code') is-invalid @enderror" type="text"  name="locator_zip_code" value="{{ old('locator_zip_code',@$user->storeLocator->locator_zip_code) }}"/>
+                                    @error('locator_zip_code')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-5">
                                     <p class="textbox-label">Customer Type</p>
-                                    <input class="input-textbox" type="text" />
+                                    <input class="input-textbox form-control @error('locator_customer_type') is-invalid @enderror" type="text"  name="locator_customer_type" value="{{ old('locator_customer_type',@$user->storeLocator->locator_customer_type) }}"/>
+                                    @error('locator_customer_type')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="col-lg-5">
+                                {{--<div class="col-lg-5">
                                     <p class="textbox-label">Customer Type</p>
                                     <input class="input-textbox" type="text" />
-                                </div>
+                                </div>--}}
                                 <div class="col-lg-2">
                                     <a href="#" class=" btn cart-btn w-100 mt-w">Select</a>
 
                                 </div>
                                 <div class="col-lg-3 mt-5">
-                                    <a href="#" class=" btn cart-btn w-100">Submit</a>
+                                    <input type="submit" class="btn cart-btn w-100" value="Submit">
                                 </div>
                             </div>
+                            </form>
                         </div>
                         <div class="col-lg-1"></div>
                         <div class="col-lg-5">

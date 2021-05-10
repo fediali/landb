@@ -4,11 +4,13 @@ namespace Theme\Landb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\StoreLocator;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,7 +31,7 @@ class CustomerController extends Controller
   }
 
   public function edit(){
-    $data['user'] = $this->customer->with(['details','shippingAddress', 'BillingAddress'])->find(auth('customer')->user()->id);
+    $data['user'] = $this->customer->with(['details','shippingAddress', 'BillingAddress', 'storeLocator'])->find(auth('customer')->user()->id);
     //dd($data['user']->shippingAddress[0]->first_name);
     return Theme::scope('customer.edit', $data)->render();
   }
@@ -44,6 +46,9 @@ class CustomerController extends Controller
         break;
       case 'tax_certificate':
         $this->updateTaxCertificate($request);
+        break;
+      case 'store_locator':
+        $this->updateStoreLocator($request);
         break;
       default:
         return redirect()->back();
@@ -155,6 +160,40 @@ class CustomerController extends Controller
       unset($data['_token']);
 
     $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
+
+  }
+
+  public function updateStoreLocator($request) {
+    $user = auth('customer')->user();
+
+    $validate = $request->validate([
+        'locator_company' => 'required|max:255',
+        'locator_phone' => 'required|max:12',
+        'locator_website' => 'required|max:255',
+        'locator_address' => 'required|max:255',
+        'locator_city' => 'required|max:255',
+        'locator_country' => 'required|max:255',
+        'locator_state' => 'required|max:255',
+        'locator_zip_code' => 'required|max:255',
+        'locator_customer_type' => 'required|max:255',
+    ]);
+    $data = $request->all();
+      unset($data['_token']);
+
+    $store = CustomerStoreLocator::updateOrCreate(['customer_id' => $user->id] , $data);
+
+    if(isset($data['add_store_locator'])){
+      StoreLocator::updateOrCreate(['customer_store_locator_id' => $store->id],
+          [
+              'name' => $data['locator_company'],
+              'email' => auth('customer')->user()->email,
+              'phone' => $data['locator_phone'],
+              'address' => $data['locator_address'],
+              'city' => $data['locator_city'],
+              'state' => $data['locator_state'],
+              'country' => $data['locator_country']
+          ]);
+    }
 
   }
 
