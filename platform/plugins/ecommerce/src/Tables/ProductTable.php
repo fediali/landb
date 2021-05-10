@@ -150,10 +150,10 @@ class ProductTable extends TableAbstract
                     ->where('order_type', Order::PRE_ORDER)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->groupBy('ec_orders.id')
-                    ->count('ec_orders.id');
+                    ->get();
                 $html = '&mdash;';
-                if ($orderQty) {
-                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . $orderQty . '</em></span></a>';
+                if ($orderQty && $preOrderQty) {
+                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . count($orderQty) . '</em></span></a>';
                 }
                 return $html;
             })

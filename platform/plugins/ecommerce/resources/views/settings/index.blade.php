@@ -362,8 +362,15 @@
                                        @if (!EcommerceHelper::isZipCodeEnabled()) checked @endif>{{ trans('core/setting::setting.general.no') }}
                             </label>
                         </div>
+
+                        <div class="form-group">
+                            <label class="text-title-field" for="pre_order_max_qty">Pre-order Max Qty</label>
+                            <input type="number" class="next-input" name="pre_order_max_qty" id="pre_order_max_qty" value="{{ get_ecommerce_setting('pre_order_max_qty') }}">
+                        </div>
+
                     </div>
                 </div>
+
             </div>
 
             <div class="flexbox-annotated-section" style="border: none">
