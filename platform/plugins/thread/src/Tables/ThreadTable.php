@@ -183,7 +183,7 @@ class ThreadTable extends TableAbstract
                 'name'    => 'threads.status',
                 'title'   => trans('core/base::tables.status'),
                 'width'   => '100px',
-                'visible' => (Auth::user()->hasPermission(['thread.create'])) ? true : false,
+//                'visible' => (Auth::user()->hasPermission(['thread.create'])) ? true : false,
             ],
             'ready'               => [
                 'name'    => 'threads.ready',
