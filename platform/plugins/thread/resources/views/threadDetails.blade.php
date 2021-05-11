@@ -35,6 +35,15 @@
                             <h3 class="widget-user-username widget-title-color-red font-bold profile-name">{{ $thread->designer->first_name.' '.$thread->designer->last_name }}</h3>
                             <h5 class="widget-user-desc text-dark">Designer</h5>
                         </div>
+                        <div class="widget-user-header">
+                            <label>{{trans('core/base::tables.status')}}</label>
+                            {!!
+                         Form::select('status',\Botble\Thread\Models\Thread::$STATUS, ($thread->status) ? $thread->status:null, [
+                             'class' => '',
+                             'id'    => 'thread_status',
+                         ])
+                     !!}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,7 +82,6 @@
                 <div class="">
                     <div class="table-responsive">
                         <table>
-
                             <tbody>
                             <tr>
                                 <td colspan="1" rowspan="3" class="tablelogo">
@@ -81,7 +89,8 @@
                                 </td>
                                 <td style="width: 12%;" colspan="1" rowspan="1">
                                     <p class="font-bold font-12">Order Date:<br>
-                                        <span class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase">{{ parse_date($thread->order_date) }}</span>
                                     </p>
                                 </td>
                                 <td rowspan="1" colspan="1">
@@ -91,7 +100,8 @@
                                 </td>
                                 <td colspan="1">
                                     <p class="font-bold font-12">Designer: <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
                                     </p>
                                 </td>
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
@@ -118,17 +128,20 @@
                                 @endif
                                 <td style="width: 13%;" rowspan="1" colspan="2">
                                     <p class="font-bold font-12">PP Sample Due Date <br>
-                                        <span class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
+                                        <span
+                                            class="widget-title-color-red"> {{ parse_date($thread->pp_sample_date) }}</span>
                                     </p>
                                 </td>
                                 <td colspan="2">
                                     <p class="font-bold font-12">Request PP Sample: <br>
-                                        <span class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase">{{ @$thread->pp_sample }}</span>
                                     </p>
                                 </td>
                                 <td>
                                     <p class="font-bold font-12">PP Sample Size: <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ @$thread->pp_sample_size }}</span>
                                     </p>
                                 </td>
                             </tr>
@@ -156,34 +169,40 @@
                                 </td>
                                 <td colspan="2">
                                     <p class="font-bold font-12">Season: <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ @$thread->season->name }}</span>
                                     </p>
                                 </td>
                                 <td colspan="2">
                                     <p class="font-bold font-12">Vendor: <br>
-                                        <span class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                                     </p>
                                 </td>
                                 <td colspan="1">
                                     <p class="font-bold font-12">Status: <br>
-                                        <span class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase">{{ $thread->thread_status }}</span>
                                     </p>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="3">
                                     <p class="font-bold font-12">Shipping Method: <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ $thread->shipping_method }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ $thread->shipping_method }}</span>
                                     </p>
                                 </td>
                                 <td colspan="3">
                                     <p class="font-bold font-12">Ship Date: <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ parse_date($thread->ship_date) }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ parse_date($thread->ship_date) }}</span>
                                     </p>
                                 </td>
                                 <td colspan="4">
                                     <p class="font-bold font-12">No Later Than <br>
-                                        <span class="widget-title-color-red text-uppercase"> {{ parse_date($thread->cancel_date) }}</span>
+                                        <span
+                                            class="widget-title-color-red text-uppercase"> {{ parse_date($thread->cancel_date) }}</span>
                                     </p>
                                 </td>
                             </tr>
@@ -199,7 +218,8 @@
                                         <div class="slideshow-container mt-4">
                                             @foreach($thread->spec_files as $file)
                                                 <div class="mySlides1 images">
-                                                    <img src="{{ asset($file->spec_file) }}" style="width:100%; height:669px;">
+                                                    <img src="{{ asset($file->spec_file) }}"
+                                                         style="width:100%; height:669px;">
                                                     {{--<div class="text">Caption Text</div>--}}
                                                 </div>
                                             @endforeach
@@ -241,7 +261,8 @@
                                                                     @foreach($fits as $key => $fit)
                                                                         <div class="checkbox">
                                                                             <label for=""> {{ $fit }}</label>
-                                                                            <input type="checkbox" disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                            <input type="checkbox"
+                                                                                   disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -258,7 +279,8 @@
                                                                     @foreach($rises as $key => $rise)
                                                                         <div class="checkbox">
                                                                             <label for=""> {{ $rise }}</label>
-                                                                            <input type="checkbox" disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
+                                                                            <input type="checkbox"
+                                                                                   disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -275,7 +297,8 @@
                                                                     @foreach($fabrics as $key => $fabric)
                                                                         <div class="checkbox">
                                                                             <label for=""> {{ $fabric }}</label>
-                                                                            <input type="checkbox" disabled {!! ($key == $thread->fabric_id) ? 'checked' : '' !!}>
+                                                                            <input type="checkbox"
+                                                                                   disabled {!! ($key == $thread->fabric_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
                                                                 </div>
@@ -314,36 +337,46 @@
                                                         <div class="d-flex">
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                    <div
+                                                                        class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                         @foreach($variations as $variation)
                                                                             @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                                <h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>
+                                                                                <h5 class=" mt-2">{{$loop->iteration}}.
+                                                                                    Variation: {{$variation->name}}</h5>
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6 images">
-                                                                                        <p class="mb-0 mt-2"><label for="">Print/Color:</label>{{ @$variation->printdesign->name }}</p>
+                                                                                        <p class="mb-0 mt-2"><label
+                                                                                                for="">Print/Color:</label>{{ @$variation->printdesign->name }}
+                                                                                        </p>
                                                                                         <img class="w-100" height="120"
                                                                                              width="120"
                                                                                              style="object-fit: cover"
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
                                                                                         <div id="image-viewer">
                                                                                             <span class="close">X</span>
-                                                                                            <img class="viewer-modal-content" id="full-image">
+                                                                                            <img
+                                                                                                class="viewer-modal-content"
+                                                                                                id="full-image">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="mt-3 mb-2">
                                                                                     <p class="text-black font-12 text-uppercase m-0">
                                                                                         <span for="">REG. Sku: </span>
-                                                                                        <span class="widget-title-color-red ">{{ $variation->sku }} </span>
+                                                                                        <span
+                                                                                            class="widget-title-color-red ">{{ $variation->sku }} </span>
                                                                                     </p>
                                                                                     @if($variation->plus_sku)
                                                                                         <p class="text-black font-12 text-uppercase m-0">
-                                                                                            <span for="">PLUS Sku: </span>
-                                                                                            <span class="widget-title-color-red">{{ $variation->plus_sku }}</span>
+                                                                                            <span
+                                                                                                for="">PLUS Sku: </span>
+                                                                                            <span
+                                                                                                class="widget-title-color-red">{{ $variation->plus_sku }}</span>
                                                                                         </p>
                                                                                     @endif
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                        <span
+                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             @endif
@@ -367,19 +400,22 @@
                                                 <tr>
                                                     <td>
                                                         <p class="font-bold font-12"> Material:
-                                                            <span class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span>
+                                                            <span
+                                                                class="widget-title-color-red text-uppercase">{{ @$thread->material }}</span>
                                                         </p>
                                                     </td>
                                                     <td rowspan="2">
                                                         <p class="font-bold font-12">Label:
-                                                            <span class="widget-title-color-red text-uppercase"> {{ @$thread->label }}</span>
+                                                            <span
+                                                                class="widget-title-color-red text-uppercase"> {{ @$thread->label }}</span>
                                                         </p>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <p class="font-bold font-12">Sleeve Length:
-                                                            <span class="widget-title-color-red text-uppercase">{{ @$thread->sleeve }}</span>
+                                                            <span
+                                                                class="widget-title-color-red text-uppercase">{{ @$thread->sleeve }}</span>
                                                         </p>
                                                     </td>
                                                 </tr>
@@ -409,15 +445,18 @@
                                                                     </div>
 
                                                                     <div class="box row d-mt-block">
-                                                                        <div class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
-                                                                            <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                        <div
+                                                                            class="col-lg-{{ count($variation->fabrics) ? '12' : '6' }}">
+                                                                            <div
+                                                                                class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                                 <h5 class=" mt-2">
                                                                                     {{$loop->iteration}}.
                                                                                     Variation: {{ $variation->name }}</h5>
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6 images">
                                                                                         <p class="mb-0 mt-2">
-                                                                                            <label for="">Print/Color:</label>
+                                                                                            <label
+                                                                                                for="">Print/Color:</label>
                                                                                             {{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100"
@@ -426,7 +465,9 @@
                                                                                              style="object-fit: cover">
                                                                                         <div id="image-viewer">
                                                                                             <span class="close">X</span>
-                                                                                            <img class="viewer-modal-content" id="full-image">
+                                                                                            <img
+                                                                                                class="viewer-modal-content"
+                                                                                                id="full-image">
                                                                                         </div>
                                                                                         <p class="text-black font-12 text-uppercase m-0">
                                                                                             <span for="">Notes:</span>
@@ -439,7 +480,8 @@
                                                                                                 <label for="">Print/Color:</label>
                                                                                                 {{ @$fabric->printdesign->name }}
                                                                                                 <a href="{{ route('thread.removeFabric', $fabric->id) }}">
-                                                                                                    <strong class="float-right">
+                                                                                                    <strong
+                                                                                                        class="float-right">
                                                                                                         <i class="fa fa-times"></i>
                                                                                                     </strong>
                                                                                                 </a>
@@ -453,11 +495,14 @@
                                                                                     @endforeach
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
-                                                                                            <div class="col-lg-6 images">
+                                                                                            <div
+                                                                                                class="col-lg-6 images">
                                                                                                 <p class="mb-0 mt-2">
-                                                                                                    <label for="">Trim:</label>
+                                                                                                    <label
+                                                                                                        for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
-                                                                                                        <strong class="float-right">
+                                                                                                        <strong
+                                                                                                            class="float-right">
                                                                                                             <i class="fa fa-times"></i>
                                                                                                         </strong>
                                                                                                     </a>
@@ -481,15 +526,18 @@
                                                                                     <p class="text-black font-12 text-uppercase m-0">
                                                                                         <span for="">REG. Packs:</span>
                                                                                         {{ $variation->regular_qty }} |
-                                                                                        <span class="widget-title-color-red ">
+                                                                                        <span
+                                                                                            class="widget-title-color-red ">
                                                                                             Sku: {{ $variation->sku }}
                                                                                         </span>
                                                                                     </p>
                                                                                     @if($variation->plus_sku)
                                                                                         <p class="text-black font-12 text-uppercase m-0">
-                                                                                            <span for="">PLUS Packs:</span>
+                                                                                            <span
+                                                                                                for="">PLUS Packs:</span>
                                                                                             {{ $variation->plus_qty }} |
-                                                                                            <span class="widget-title-color-red">
+                                                                                            <span
+                                                                                                class="widget-title-color-red">
                                                                                                 Plus Sku: {{ $variation->plus_sku }}
                                                                                             </span>
                                                                                         </p>
@@ -519,22 +567,23 @@
 
     </div>
     <div class="tab-pane fade" id="ppsample" role="tabpanel" aria-labelledby="ppsample">
-    <div class="p-3">
-    <div class="p-3 mb-3 thread-area">
+        <div class="p-3">
+            <div class="p-3 mb-3 thread-area">
                 <div class="row">
                     <div class="col-lg-12 ">
                         <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
                     </div>
                 </div>
                 <br>
-                    <div class="row">
-                        <div class="col-lg-4 mb-3">
-                            <h5 class="variation-text">PP Sample </h5>
-                            <img class="w-100" src="./public/storage/image-1.jpg" height="250" width="120" style="object-fit: cover">
-                        </div>
-                        <div class="col-lg-8 mb-3">
-                                <div class="row">
-                                <div class="col-lg-3 mt-3">
+                <div class="row">
+                    <div class="col-lg-4 mb-3">
+                        <h5 class="variation-text">PP Sample </h5>
+                        <img class="w-100" src="./public/storage/image-1.jpg" height="250" width="120"
+                             style="object-fit: cover">
+                    </div>
+                    <div class="col-lg-8 mb-3">
+                        <div class="row">
+                            <div class="col-lg-3 mt-3">
                                 <p class="m-0 heading">Date</p>
                                 <p>Vendor</p>
                             </div>
@@ -574,12 +623,12 @@
                                 <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
                                 <p>Vendor</p>
                             </div>
-                             </div>
                         </div>
-
                     </div>
+
+                </div>
             </div>
-    </div>
+        </div>
     </div>
 </div>
 
@@ -763,6 +812,24 @@
         $("#image-viewer .close").click(function () {
             $('#image-viewer').hide();
         });
+
+        $("#thread_status").on('change', function () {
+            $.ajax({
+                url: '{{ route('thread.changeStatus') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'pk': {{$thread->id}},
+                    'value': $("select#thread_status option:selected").val(),
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('Notification Unreadable', 'Reading Error');
+                }
+            });
+        })
     });
 
 </script>

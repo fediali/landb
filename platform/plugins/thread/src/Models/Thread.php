@@ -96,6 +96,16 @@ class Thread extends BaseModel
 
     protected $appends = ['thread_has_order'];
 
+    public const published = 'published';
+    public const draft = 'draft';
+    public const pending = 'pending';
+
+    public static $STATUS = [
+        self::published => self::published,
+        self::draft     => self::draft,
+        self::pending   => self::pending,
+    ];
+
     public const NEW = 'new';
     public const REORDER = 'reorder';
     public const CANCEL = 'cancel';
@@ -130,9 +140,9 @@ class Thread extends BaseModel
     public const GROUND = 'ground';
 
     public static $shipping_methods = [
-        self::AIR => self::AIR,
-        self::UCL => self::UCL,
-        self::SEA => self::SEA,
+        self::AIR    => self::AIR,
+        self::UCL    => self::UCL,
+        self::SEA    => self::SEA,
         self::GROUND => self::GROUND,
     ];
 
