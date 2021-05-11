@@ -630,7 +630,7 @@ if (!function_exists('get_design_manager')) {
 //            ->pluck('users.id');
 
         $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
-            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control'])
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control','admin'])
 //            ->where('roles.slug', 'design-manager')
             ->pluck('user_id');
 
