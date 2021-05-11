@@ -26,6 +26,7 @@ class StoreLocator extends BaseModel
         'city',
         'is_primary',
         'is_shipping_location',
+        'customer_store_locator_id'
     ];
 
     /**
