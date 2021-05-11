@@ -68,8 +68,7 @@ class ThreadTable extends TableAbstract
             ->editColumn('created_at', function ($item) {
                 return date('M d,Y', strtotime(BaseHelper::formatDate($item->created_at, '')));
 
-            })
-            ->addColumn('create_thread_order', function ($item) {
+            })->addColumn('create_thread_order', function ($item) {
                 if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && count($item->thread_variations)) {
                     if ($item->thread_has_order) {
                         return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
