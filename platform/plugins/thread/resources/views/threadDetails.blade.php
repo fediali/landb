@@ -44,6 +44,15 @@
                          ])
                      !!}
                         </div>
+                        <div class="widget-user-header">
+                            <label>Ready to Order</label>
+                            {!!
+                         Form::select('ready',\Botble\Thread\Models\Thread::$READY, ($thread->ready) ? $thread->ready:null, [
+                             'class' => '',
+                             'id'    => 'ready',
+                         ])
+                     !!}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -814,6 +823,7 @@
         });
 
         $("#thread_status").on('change', function () {
+
             $.ajax({
                 url: '{{ route('thread.changeStatus') }}',
                 type: 'post',
@@ -821,6 +831,24 @@
                     '_token': '{{ csrf_token() }}',
                     'pk': {{$thread->id}},
                     'value': $("select#thread_status option:selected").val(),
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('Notification Unreadable', 'Reading Error');
+                }
+            });
+        });
+
+        $("#ready").on('change', function () {
+            $.ajax({
+                url: '{{ route('thread.changeStatus') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'pk': {{$thread->id}},
+                    'ready': $("select#ready option:selected").val(),
                 },
                 success: function (data) {
                     location.reload();

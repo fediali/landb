@@ -549,10 +549,13 @@ class ThreadController extends BaseController
     {
 
         $thread = $this->threadRepository->findOrFail($request->input('pk'));
-        $requestData['status'] = $request->input('value');
+        if (isset($request->ready)) {
+            $requestData['ready'] = $request->input('ready');
+        } else {
+            $requestData['status'] = $request->input('value');
+        }
         $requestData['updated_by'] = auth()->user()->id;
         $thread->fill($requestData);
-
 
         $notification = generate_notification('thread_status_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));

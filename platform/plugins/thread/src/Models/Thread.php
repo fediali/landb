@@ -83,6 +83,7 @@ class Thread extends BaseModel
         'status',
         'created_at',
         'updated_at',
+        'ready',
     ];
 
     /**
@@ -99,7 +100,14 @@ class Thread extends BaseModel
     public const published = 'published';
     public const draft = 'draft';
     public const pending = 'pending';
+    public const No = 'No';
+    public const Yes = 'Yes';
 
+    public static $READY = [
+        self::No  => self::No,
+        self::Yes => self::Yes,
+
+    ];
     public static $STATUS = [
         self::published => self::published,
         self::draft     => self::draft,
