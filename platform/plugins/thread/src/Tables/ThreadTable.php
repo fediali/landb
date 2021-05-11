@@ -59,12 +59,15 @@ class ThreadTable extends TableAbstract
                  })*/
             ->editColumn('designer_id', function ($item) {
                 return $item->designer ? $item->designer->getFullName() : null;
+            })->editColumn('vendor_id', function ($item) {
+                return $item->vendor_id ? $item->vendor->getFullName() : null;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('created_at', function ($item) {
-                return BaseHelper::formatDate($item->created_at);
+                return date('M d,Y', strtotime(BaseHelper::formatDate($item->created_at, '')));
+
             })
             ->addColumn('create_thread_order', function ($item) {
                 if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && count($item->thread_variations)) {
@@ -153,6 +156,12 @@ class ThreadTable extends TableAbstract
                 'title' => 'Reg SKU',
                 'class' => 'text-left'
             ],
+            'vendor_id'           => [
+                'name'    => 'threads.vendor_id',
+                'title'   => 'Vendor',
+                'width'   => '50px',
+                'visible' => (Auth::user()->hasPermission(['threadorders.create'])) ? true : false,
+            ],
             'designer_id'         => [
                 'name'  => 'threads.designer_id',
                 'title' => 'Designer',
@@ -183,6 +192,7 @@ class ThreadTable extends TableAbstract
                 'width'   => '50px',
                 'visible' => (Auth::user()->hasPermission(['threadorders.create'])) ? true : false,
             ]
+
         ];
     }
 
