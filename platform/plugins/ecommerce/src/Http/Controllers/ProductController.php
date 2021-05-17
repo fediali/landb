@@ -966,18 +966,14 @@ class ProductController extends BaseController
 
     public function inventory_history($id)
     {
-
         $data = Product::with(['inventory_history'])->where('id', $id)->first();
         return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data'));
-
     }
 
     public function product_timeline($id)
     {
-
-        $data = Product::with(['inventory_history'])->where('id', $id)->first();
+        $data = InventoryHistory::where('parent_product_id', $id)->orderBy('created_at', 'ASC')->get();
         return view('plugins/ecommerce::products.partials.product_timeline', compact('data'));
-
     }
 
     public function updateProdWarehouseSection($id, Request $request, BaseHttpResponse $response)

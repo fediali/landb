@@ -48,7 +48,6 @@ use EmailHandler;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -330,6 +329,8 @@ class OrderController extends BaseController
 
                 $this->orderProductRepository->create($data);
 
+                $preQty = $product->quantity;
+
                 if ($order->order_type == Order::NORMAL) {
                     $this->productRepository
                         ->getModel()
@@ -338,14 +339,15 @@ class OrderController extends BaseController
                         ->where('quantity', '>', 0)
                         ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
 
-                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                         $this->productRepository
                             ->getModel()
                             ->where('id', $product->id)
                             ->where('with_storehouse_management', 1)
                             ->where('online_sales_qty', '>', 0)
                             ->decrement('online_sales_qty', Arr::get($productItem, 'quantity', 1));
-                    } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                    }
+                    if (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                         $this->productRepository
                             ->getModel()
                             ->where('id', $product->id)
@@ -353,6 +355,9 @@ class OrderController extends BaseController
                             ->where('in_person_sales_qty', '>', 0)
                             ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
                     }
+
+                    $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
+                    set_product_oos_date($order->id, $product, Arr::get($productItem, 'quantity', 1), $preQty);
                 }
 
                 if ($order->order_type == Order::PRE_ORDER) {
@@ -369,8 +374,6 @@ class OrderController extends BaseController
                 }
 
             }
-
-
 
         }
 

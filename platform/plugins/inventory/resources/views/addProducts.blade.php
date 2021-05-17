@@ -157,12 +157,7 @@
                   let rec_qty = '<input style="width: 60px; text-align:center" name="received_qty_'+pcount+'" id="received_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0">';
                   //let los_qty = '<input style="width: 60px; text-align:center" name="loose_qty_'+pcount+'" id="loose_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0">';
 
-                  let dlt_btn = '<div class="btn-group">\n' +
-                  '                <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>\n' +
-                  '                <div class="dropdown-menu">\n' +
-                  '                    <a class="dropdown-item" onclick="deleteProduct('+product.id+')" href="javascript:void(0)">Delete</a>\n' +
-                  '                </div>\n' +
-                  '              </div>';
+                  let dlt_btn = '<a class="dropdown-item" onclick="deleteProduct('+product.id+')" href="javascript:void(0)"><i class="fa fa-trash" title="Delete"></i></a>';
 
                   if (product.is_variation) {
                       m_img = '';

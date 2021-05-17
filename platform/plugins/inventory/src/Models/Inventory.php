@@ -45,7 +45,7 @@ class Inventory extends BaseModel
 
     public function products()
     {
-        return $this->hasMany(InventoryProducts::class, 'inventory_id');
+        return $this->hasMany(InventoryProducts::class, 'inventory_id')->where('inventory_products.is_variation', 1 );
     }
 
     public function getIsFullReleasedAttribute()

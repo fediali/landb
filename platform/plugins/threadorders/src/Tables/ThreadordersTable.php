@@ -198,7 +198,8 @@ class ThreadordersTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
+        return [];
+        // return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
     }
 
     /**

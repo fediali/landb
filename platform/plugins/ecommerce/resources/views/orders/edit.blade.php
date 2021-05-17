@@ -650,21 +650,19 @@
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
-
-
                             </div>
                         </div>
-                                                 
+
                         <div class="wrapper-content bg-gray-white mb20">
 
 <!-- card -->
                             @if($order->preauth == null)
-                            <div class="row m-0 pt-4 bg-white"> 
+                            <div class="row m-0 pt-4 bg-white">
                                 <div class="col-lg-12 ">
-                                <span class="mb-2">Card</span>    
+                                <span class="mb-2">Card</span>
                                 {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!} </div>
                                 </div>
-                                
+
                                 <div class="add_card bg-white">
 
                                     <div class="row group m-0 pt-4 ">
@@ -704,7 +702,7 @@
                                     <div class="row m-0">
                                         <div class="col-lg-6">
                                         <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
-                                        </div> 
+                                        </div>
                                     </div>
                                     <div class="row m-0">
                                         <div class="col-lg-12">
@@ -717,9 +715,9 @@
                                         <div class="loader" style="margin: auto">
                                         </div>
                                     </div>
-                                        </div> 
+                                        </div>
                                     </div>
-                                   
+
                                 </div>
                                 <div class="pd-all-20 bg-white">
                                     <form action="{{route('orders.charge')}}" method="POST">
