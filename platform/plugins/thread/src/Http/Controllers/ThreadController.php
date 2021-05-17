@@ -204,7 +204,7 @@ class ThreadController extends BaseController
             $reg_sku = $thread->regular_product_categories()->value('sku');
             $plu_sku = $reg_sku . '-X';
             $thread->regular_product_categories()->attach([
-                $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => @$requestData['plus_product_unit_id'], 'per_piece_qty' => @$requestData['plus_per_piece_qty']]
+                $requestData['plus_category_id'] => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => @$requestData['plus_product_unit_id'], 'per_piece_qty' => @$requestData['plus_per_piece_qty']]
             ]);
         }
 
@@ -411,7 +411,6 @@ class ThreadController extends BaseController
     {
         $data = $request->all();
         $id = $data['var_id'];
-
         $checkDupli = ThreadVariation::where(['thread_id' => $data['thread_id'], 'print_id' => $data['print_id']])->where('id', '!=', $id)->first();
         if (!$checkDupli) {
             $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
@@ -550,11 +549,13 @@ class ThreadController extends BaseController
     {
 
         $thread = $this->threadRepository->findOrFail($request->input('pk'));
-        $requestData['status'] = $request->input('value');
+        if (isset($request->ready)) {
+            $requestData['ready'] = $request->input('ready');
+        } else {
+            $requestData['status'] = $request->input('value');
+        }
         $requestData['updated_by'] = auth()->user()->id;
-
         $thread->fill($requestData);
-
 
         $notification = generate_notification('thread_status_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));

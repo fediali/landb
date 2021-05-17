@@ -41,6 +41,17 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
   Route::post('/checkout', 'CheckoutController@proceedPayment')
       ->name('public.cart.order_checkout');
+
+  Route::group(['prefix' => 'customer', 'as' => 'customer.'], function (){
+    Route::get('/edit-account', [
+        'as'         => 'edit-account',
+        'uses'       => 'CustomerController@edit'
+    ]);
+    Route::post('/edit-account/{type}', [
+        'as'         => 'edit-account-post',
+        'uses'       => 'CustomerController@update'
+    ]);
+  });
 });
 Theme::routes();
 

@@ -119,6 +119,7 @@ class ThreadordersTable extends TableAbstract
         $model = $this->repository->getModel();
         $select = [
             'threadorders.id',
+            'threadorders.thread_id',
             'threadorders.name',
             'threadorders.order_status',
             'threadorders.created_at',
@@ -137,9 +138,9 @@ class ThreadordersTable extends TableAbstract
     {
 
         return [
-            'id'           => [
-                'name'  => 'threadorders.id',
-                'title' => trans('core/base::tables.id'),
+            'thread_id'    => [
+                'name'  => 'threadorders.thread_id',
+                'title' => 'Thread ID',
                 'width' => '20px',
 
             ],
