@@ -146,7 +146,7 @@ class CheckoutController extends Controller
     $token = OrderHelper::getOrderSessionToken();
     $order = $this->orderRepository->getFirstBy(compact('token'), [], ['address', 'products']);
     if ($token !== session('tracked_start_checkout') || !$order) {
-      return $response->setNextUrl(url('/'));
+      return $response->setNextUrl(url('/'))->with('success', 'Something went wrong!');
     }
     $payment = Payment::where('charge_id' , $chargeId)->first();
     //dd($payment);
