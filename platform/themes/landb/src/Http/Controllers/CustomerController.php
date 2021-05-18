@@ -36,6 +36,16 @@ class CustomerController extends Controller
     return Theme::scope('customer.edit', $data)->render();
   }
 
+  public function show(){
+    $data['user'] = $this->customer->with(['details','shippingAddress', 'BillingAddress', 'storeLocator',
+        'orders' => function($query){
+            $query->orderBy('id', 'desc');
+        }
+    ])->find(auth('customer')->user()->id);
+    //dd($data['user']->shippingAddress[0]->first_name);
+    return Theme::scope('customer.profile', $data)->render();
+  }
+
   public function update($type, Request $request){
     switch ($type){
       case 'account':
