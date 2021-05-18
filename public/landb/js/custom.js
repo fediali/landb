@@ -176,6 +176,7 @@ function update_cart_item(input, val, url, action) {
     '_token': $('meta[name="csrf-token"]').attr('content'),
     'id': id,
     'quantity': val,
+    'action': action
   };
   console.log(formData)
   $.ajax({

@@ -47,6 +47,10 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         'as'         => 'edit-account',
         'uses'       => 'CustomerController@edit'
     ]);
+    Route::get('/overview', [
+        'as'         => 'overview',
+        'uses'       => 'CustomerController@show'
+    ]);
     Route::post('/edit-account/{type}', [
         'as'         => 'edit-account-post',
         'uses'       => 'CustomerController@update'
