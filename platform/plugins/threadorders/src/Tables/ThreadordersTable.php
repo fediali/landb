@@ -136,7 +136,6 @@ class ThreadordersTable extends TableAbstract
      */
     public function columns()
     {
-
         return [
             'thread_id'    => [
                 'name'  => 'threadorders.thread_id',

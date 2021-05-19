@@ -50,4 +50,9 @@ class ThreadVariation extends Model
     {
         return $this->hasMany(ThreadVariationTrim::class, 'thread_variation_id');
     }
+
+    public function ppSample()
+    {
+        return $this->hasMany(ThreadVariationPPSample::class, 'thread_variation_id');
+    }
 }
