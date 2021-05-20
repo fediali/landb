@@ -4,6 +4,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="customer-page-title">{{ __('Change password') }}</h2>
+            
         </div>
         <div class="panel-body">
             {!! Form::open(['route' => 'customer.post.change-password', 'method' => 'post']) !!}

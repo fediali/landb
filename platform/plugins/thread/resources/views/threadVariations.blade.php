@@ -557,13 +557,14 @@ $variations = $options['data']['variations'];
                         <input class="form-control" placeholder="Receive Date" name="receive_date" type="date">
                     </div>
                     <div class="mt-3">
-                        <label class="font-bold">Comments:</label>
-                        <textarea class="form-control" placeholder="Comments" name="comments" type="text">
+                        <label class="font-bold">Comments:</label> 
+                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2" aria-invalid="false"></textarea>
+                    </div> 
                         </textarea>
-                    </div>
                     <div class="mt-3">
                         <label class="font-bold">Status:</label>
                         <select class="form-control" name="status">
+                            <option>Pending</option>
                             <option>Approved</option>
                             <option>Rejected</option>
                         </select>
