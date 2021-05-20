@@ -228,3 +228,17 @@
     padding: 2px 10px !important;
     width: 100%;
 }
+
+.btn-card {
+    width: 100%;
+    background: #d64635;
+    border: #d64635;
+    border-radius: 0;
+}
+
+.card-area {
+    position: absolute;
+    top: 190px;
+    right: 40px;
+    width: 24.5%;
+}

@@ -9,7 +9,7 @@
         </create-order>
     </div>
 
-    <div class="wrapper-content mb20">
+    <div class="card-area wrapper-content mb20">
         <div>
             <div class="wrapper-content bg-gray-white mb20">
                 <!--<div class="row m-0 pt-4 bg-white">
@@ -20,8 +20,8 @@
                         </select>
                     </div>
                 </div>-->
-
-                <div class="add_card bg-white">
+                <button type="button" class="btn btn-info btn-card" data-toggle="collapse" data-target="#demo">Add Card</button>
+                <div id="demo" class="add_card bg-white collapse in">
                     <div class="row group m-0 pt-4 ">
                         <label class="col-lg-12 ">
                             <span class="mb-2">Billing Address</span>
