@@ -138,7 +138,8 @@ $(document).ready(function () {
         if(result.status == 401){
           toastr['error']('You need to login first' , 'Unauthorized!');
         }else{
-          toastr['error'](result.message , 'Error');
+          console.log(result.responseJSON.message)
+          toastr['error'](result.responseJSON.message , 'Error');
         }
       }
     })
@@ -172,6 +173,7 @@ $(document).ready(function () {
 function update_cart_item(input, val, url, action) {
   var id = input.data('id');
   var price = input.data('price');
+  var status = 0;
   var formData = {
     '_token': $('meta[name="csrf-token"]').attr('content'),
     'id': id,
@@ -183,6 +185,7 @@ function update_cart_item(input, val, url, action) {
     type: 'POST',
     url: url,
     data: formData,
+    async: false,
     beforeSend: function () {
       toggle_loader(true);
     },
@@ -198,16 +201,19 @@ function update_cart_item(input, val, url, action) {
       $('#total-cart-price').html((action === 'inc') ? parseFloat(subTotal)+parseFloat(price) : subTotal-price);
       $('#grand-total-cart-price').html((action === 'inc') ? parseFloat(grandTotal)+parseFloat(price) : grandTotal-price);
       $('#user-cart-count').html((action === 'inc') ? parseFloat($('#user-cart-count').text()) + 1 : parseFloat($('#user-cart-count').text()) - 1);
-      toggle_loader(false);
+      /*toggle_loader(false);*/
     },
     error: function (result) {
-      toggle_loader(false);
-      toastr['error'](result.message , 'Error');
+        toastr['error'](result.responseJSON.message , 'Error');
+      status = 1;
     }
-  })
+  });
+  toggle_loader(false);
+  return status;
 }
 
 function toggle_product_detail(id) {
+  e.preventDefault();
   $.ajax({
     type: 'GET',
     url: '/product/detail/'+id,

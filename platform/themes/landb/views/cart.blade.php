@@ -50,7 +50,7 @@
             <div class="col-lg-2 mt-2">
                 <form id='myform' method='POST' action='#'>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
-                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' />
+                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' readonly/>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
                 </form>
             </div>

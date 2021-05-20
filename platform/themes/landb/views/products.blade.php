@@ -187,7 +187,7 @@
                     $limit = isset($_GET['limit']) ? $_GET['limit'] : '3';
                     $col = ($limit == '3') ? '4' : $limit;
                     $col = ($limit == '4') ? '3' : $col;
-                    $col = ($limit == '5') ? '5' : $col;
+                    $col = ($limit == '5') ? 'custom-5' : $col;
                 ?>
             @foreach($products as $key => $product)
                 <div class="listbox col-lg-{{$col}}">
@@ -198,8 +198,9 @@
                         <p>{{ $product->name }}</p>
                     </div>
                     <span>Restock</span>
+
                     <div class="imgoverlay">
-                        <a href="#" onclick="toggle_product_detail('{{ $product->id }}')"><i class="far fa-eye"></i></a>
+                        <a href="javascript:void(0);" onclick="toggle_product_detail('{{ $product->id }}')"><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
                             <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
@@ -215,12 +216,14 @@
 
                     </div>
                 </div>
-                <div class="caption">
-                    <h4>{{ $product->name }}</h4>
-                    <div class="price">
-                        ${{ $product->price }}
-                    </div>
-                </div>
+               <a href="{!! generate_product_url('detail', $product->id) !!}">
+                   <div class="caption">
+                       <h4>{{ $product->name }}</h4>
+                       <div class="price">
+                           ${{ $product->price }}
+                       </div>
+                   </div>
+               </a>
             </div>
             @endforeach
             @else

@@ -52,7 +52,7 @@ class CartController extends Controller
   public function createCart(Request $request){
     $data = $request->all();
     $product = Product::find($data['product_id']);
-    if($product){
+    if($product && $product->quantity >= $data['quantity']){
       $cartItem = $this->createCartItem($data, $product);
       if($cartItem){
         return response()->json(['message' => 'Product added to cart successfully'], 200);
@@ -60,7 +60,7 @@ class CartController extends Controller
         return response()->json(['message' => 'Server Error'], 500);
       }
     }else{
-      return response()->json(['message' => 'Product not found'], 404);
+      return response()->json(['message' => 'Required quantity is currently out of stock!'], 403);
     }
   }
 
@@ -117,17 +117,25 @@ class CartController extends Controller
     $data = $request->all();
     if(!empty($data['id'])){
       $orderProduct = OrderProduct::where('id', $data['id'])->first();
-      if($data['quantity'] == 0){
-        $update = $orderProduct->delete();
+      $product = Product::find($orderProduct->product_id);
+      if($product){
+        if($data['action'] == 'inc' && $product->quantity < 1){
+          return response()->json(['message' => 'Product is out of stock'], 403);
+        }
+        if($data['quantity'] == 0){
+          $update = $orderProduct->delete();
+        }else{
+          $update = $orderProduct->update(['qty' => $data['quantity']]);
+          $this->getOrderAndUpdateAmount();
+        }
+        if($update){
+          update_product_quantity($orderProduct->product_id, 1, $data['action']);
+          return response()->json(['message' => 'Cart Updated successfully'], 200);
+        }else{
+          return response()->json(['message' => 'Server Error'], 500);
+        }
       }else{
-        $update = $orderProduct->update(['qty' => $data['quantity']]);
-        $this->getOrderAndUpdateAmount();
-      }
-      if($update){
-        update_product_quantity($orderProduct->product_id, 1, $data['action']);
-        return response()->json(['message' => 'Cart Updated successfully'], 200);
-      }else{
-        return response()->json(['message' => 'Server Error'], 500);
+        return response()->json(['message' => 'Product not Found'], 500);
       }
     }else{
       return response()->json(['message' => 'Cart Item not found'], 404);
