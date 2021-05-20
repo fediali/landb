@@ -81,7 +81,7 @@
     }
 
     function orderEdit(data) {
-        console.log('sss');
+        console.log(data);
     }
 </script>
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
@@ -105,14 +105,10 @@
             $span.show();
             console.log(data);
         });
-
-
-    {{--window.Echo.channel('order-edit.{{(Auth::check()) ? Auth::user()->id : ''}}')--}}
-    {{--    .listen('.orderEdit', (data) => {--}}
-    {{--        alert('ss')--}}
-    {{--        console.log('test', data);--}}
-    {{--        orderEdit(data);--}}
-    {{--    });--}}
+    window.Echo.channel('order-edit.{{(Auth::check()) ? Auth::user()->id : ''}}')
+        .listen('.orderEdit', (data) => {
+            orderEdit(data);
+        });
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"

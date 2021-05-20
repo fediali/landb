@@ -1065,7 +1065,7 @@ class OrderController extends BaseController
                 'vendor/core/plugins/ecommerce/js/order-create.js',
             ])
             ->addScripts(['blockui', 'input-mask']);
-//        event(new OrderEdit(Auth::user(), $order));
+        event(new OrderEdit(Auth::user(), $order));
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
             'products',
