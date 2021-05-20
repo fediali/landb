@@ -9,7 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ThreadApproval implements ShouldBroadcastNow
+class OrderEdit implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -18,9 +18,17 @@ class ThreadApproval implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct()
+    protected $order;
+    protected $user;
+
+    public function __construct($user, $order)
     {
+
         //
+        $this->order = $order;
+        $this->user = $user;
+
+
     }
 
     /**
@@ -30,15 +38,30 @@ class ThreadApproval implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('thread_approved');
+        return new Channel('order-edit' . $this->user->id);
     }
+
     public function broadcastAs()
     {
-      return 'ThreadApprovalEvent';
+        return 'orderEdit';
     }
+
+//    public function broadcastWith()
+//    {
+//        return 'ss';
+//
+////        return [
+////            'id'    => $this->user->id,
+////            'order' => $this->order,
+////            'on'    => now()->toDateTimeString(),
+////        ];
+//    }
 
     public function broadcastWith()
     {
-      return ['title'=>'Thread Approved'];
+        return ['message' =>
+                    's'];
     }
+
+
 }

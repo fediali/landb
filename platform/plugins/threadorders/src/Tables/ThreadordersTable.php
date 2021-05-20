@@ -119,6 +119,7 @@ class ThreadordersTable extends TableAbstract
         $model = $this->repository->getModel();
         $select = [
             'threadorders.id',
+            'threadorders.thread_id',
             'threadorders.name',
             'threadorders.order_status',
             'threadorders.created_at',
@@ -135,11 +136,10 @@ class ThreadordersTable extends TableAbstract
      */
     public function columns()
     {
-
         return [
-            'id'           => [
-                'name'  => 'threadorders.id',
-                'title' => trans('core/base::tables.id'),
+            'thread_id'    => [
+                'name'  => 'threadorders.thread_id',
+                'title' => 'Thread ID',
                 'width' => '20px',
 
             ],
@@ -198,7 +198,8 @@ class ThreadordersTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
+        return [];
+        // return $this->addDeleteAction(route('threadorders.deletes'), 'threadorders.destroy', parent::bulkActions());
     }
 
     /**

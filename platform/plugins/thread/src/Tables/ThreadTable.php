@@ -59,14 +59,16 @@ class ThreadTable extends TableAbstract
                  })*/
             ->editColumn('designer_id', function ($item) {
                 return $item->designer ? $item->designer->getFullName() : null;
+            })->editColumn('vendor_id', function ($item) {
+                return $item->vendor_id ? $item->vendor->getFullName() : null;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('created_at', function ($item) {
-                return BaseHelper::formatDate($item->created_at);
-            })
-            ->addColumn('create_thread_order', function ($item) {
+                return date('M d,Y', strtotime(BaseHelper::formatDate($item->created_at, '')));
+
+            })->addColumn('create_thread_order', function ($item) {
                 if ($item->vendor_id > 0 && $item->status == BaseStatusEnum::PUBLISHED && count($item->thread_variations)) {
                     if ($item->thread_has_order) {
                         return '<a href="' . route('threadorders.createThreadOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Re-Order"><i class="fa fa-shopping-cart"></i> Re-Order</a>';
@@ -91,7 +93,7 @@ class ThreadTable extends TableAbstract
                 $html .= '<a href="' . route('thread.details', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
 
                 if (!$item->thread_has_order && auth()->user()->hasPermission('thread.destroy')) {
-                    $html .= '<a href="#" class="btn btn-icon btn-sm btn-danger deleteDialog" data-toggle="tooltip" data-section="'.route('thread.destroy', $item->id).'" role="button" data-original-title="'.trans('core/base::tables.delete_entry').'" >
+                    $html .= '<a href="#" class="btn btn-icon btn-sm btn-danger deleteDialog" data-toggle="tooltip" data-section="' . route('thread.destroy', $item->id) . '" role="button" data-original-title="' . trans('core/base::tables.delete_entry') . '" >
                                 <i class="fa fa-trash"></i>
                               </a>';
                 }
@@ -116,6 +118,7 @@ class ThreadTable extends TableAbstract
             'threads.vendor_id',
             'threads.created_at',
             'threads.status',
+            'threads.ready',
         ];
 
         $query = $model
@@ -137,45 +140,58 @@ class ThreadTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'        => [
+            'id'                  => [
                 'name'  => 'threads.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'name'      => [
+            'name'                => [
                 'name'  => 'threads.name',
                 'title' => 'Description',
                 'class' => 'text-left',
             ],
-            'reg_sku'      => [
+            'reg_sku'             => [
                 'name'  => 'categories_threads.sku',
                 'title' => 'Reg SKU',
                 'class' => 'text-left'
             ],
-            'designer_id'   => [
-                'name'      => 'threads.designer_id',
-                'title'     => 'Designer',
-                'class'     => 'no-sort text-left',
+            'vendor_id'           => [
+                'name'    => 'threads.vendor_id',
+                'title'   => 'Vendor',
+                'width'   => '50px',
+                'visible' => (Auth::user()->hasPermission(['threadorders.create'])) ? true : false,
+            ],
+            'designer_id'         => [
+                'name'  => 'threads.designer_id',
+                'title' => 'Designer',
+                'class' => 'no-sort text-left',
                 //'orderable' => false,
             ],
             'create_thread_order' => [
-                'name'    => 'thread_order',
-                'title'   => 'Create Order',
-                'width'   => '100px',
+                'name'       => 'thread_order',
+                'title'      => 'Create Order',
+                'width'      => '100px',
                 'searchable' => false,
-                'visible' => (Auth::user()->hasPermission(['threadorders.order'])) ? true : false,
+                'visible'    => (Auth::user()->hasPermission(['threadorders.order'])) ? true : false,
             ],
-            'created_at'   => [
+            'created_at'          => [
                 'name'  => 'threads.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status'      => [
+            'status'              => [
                 'name'    => 'threads.status',
                 'title'   => trans('core/base::tables.status'),
                 'width'   => '100px',
-              //  'visible' => (Auth::user()->hasPermission('thread.create')) ? true : false,
+//                'visible' => (Auth::user()->hasPermission(['thread.create'])) ? true : false,
+            ],
+            'ready'               => [
+                'name'    => 'threads.ready',
+                'title'   => 'Ready To Order',
+                'width'   => '50px',
+                'visible' => (Auth::user()->hasPermission(['threadorders.create'])) ? true : false,
             ]
+
         ];
     }
 
@@ -220,7 +236,7 @@ class ThreadTable extends TableAbstract
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],*/
-            'threads.status'     => [
+            'threads.status' => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),

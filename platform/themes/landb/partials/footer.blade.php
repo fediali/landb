@@ -284,6 +284,16 @@
   }
 </script>
 
+@if(session()->has('success'))
+    <script>
+      toastr['success']("{{ session()->get('success') }}", 'Success!');
+    </script>
+@elseif(session()->has('error'))
+    <script>
+      toastr['error']("{{ session()->get('error') }}", 'Error!');
+    </script>
+@endif
+
 </body>
 
 </html>

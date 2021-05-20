@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\InventoryHistory;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Supports\SortItemsWithChildrenHelper;
 use Botble\Blog\Repositories\Interfaces\CategoryInterface;
@@ -7,8 +8,10 @@ use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
 use Botble\Ecommerce\Models\ProductCategory;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Orderstatuses\Models\Orderstatuses;
 use Botble\Paymentmethods\Models\Paymentmethods;
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -569,6 +572,14 @@ if (!function_exists('generate_notification')) {
                 if (!get_design_manager()->contains($notification['sender_id'])) {
                     $notifiable[] = get_design_manager();
                 }
+            } elseif ($type == 'pre_order_max_qty') {
+                $notification = array();
+                $notification['sender_id'] = auth()->user()->id;
+                $notification['url'] = route('products.edit', $data->id);
+                $notification['action'] = $type;
+                $notification['ref_id'] = $data->id;
+                $notification['message'] = $data->name.' has reached the max qty of order.';
+                $notifiable[] = get_design_manager();
             }
 
             $notify = new \App\Models\Notification();
@@ -622,7 +633,7 @@ if (!function_exists('get_design_manager')) {
 //            ->pluck('users.id');
 
         $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
-            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control'])
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control','admin'])
 //            ->where('roles.slug', 'design-manager')
             ->pluck('user_id');
 
@@ -727,6 +738,55 @@ if (!function_exists('get_payment_methods')) {
     {
         $payment_methods = Paymentmethods::where('status', 'published')->get()->toArray();
         return $payment_methods;
+    }
+}
+
+if (!function_exists('set_product_oos_date')) {
+    function set_product_oos_date($orderId, $product, $qty, $preQty)
+    {
+        if ($product->is_variation && $product->quantity < 1) {
+            if (!$product->oos_date) {
+                DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => Carbon::now()]);
+                $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                DB::table('ec_products')->where('id', $getParentProdId)->update(['oos_date' => Carbon::now()]);
+                $logParam = [
+                    'parent_product_id' => $getParentProdId,
+                    'product_id' => $product->id,
+                    'sku' => $product->sku,
+                    'quantity' => $qty,
+                    'new_stock' => $product->quantity,
+                    'old_stock' => $preQty,
+                    'order_id' => $orderId,
+                    'created_by' => auth()->user()->id,
+                    'reference' => InventoryHistory::PROD_OSS
+                ];
+                log_product_history($logParam);
+            }
+        } else {
+            DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => NULL]);
+        }
+    }
+}
+
+if (!function_exists('log_product_history')) {
+    function log_product_history($params)
+    {
+        InventoryHistory::create([
+            'parent_product_id' => isset($params['parent_product_id']) ? $params['parent_product_id'] : NULL,
+            'product_id' => isset($params['product_id']) ? $params['product_id'] : NULL,
+            'sku' => isset($params['sku']) ? $params['sku'] : NULL,
+
+            'quantity' => isset($params['quantity']) ? $params['quantity'] : NULL,
+            'new_stock' => isset($params['new_stock']) ? $params['new_stock'] : NULL,
+            'old_stock' => isset($params['old_stock']) ? $params['old_stock'] : NULL,
+
+            'order_id' => isset($params['order_id']) ? $params['order_id'] : NULL,
+            'inventory_id' => isset($params['inventory_id']) ? $params['inventory_id'] : NULL,
+            'thread_order_id' => isset($params['thread_order_id']) ? $params['thread_order_id'] : NULL,
+
+            'created_by' => auth()->user()->id,
+            'reference' => isset($params['reference']) ? $params['reference'] : NULL
+        ]);
     }
 }
 

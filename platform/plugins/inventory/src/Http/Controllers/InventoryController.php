@@ -93,7 +93,7 @@ class InventoryController extends BaseController
                     }
                     InventoryProducts::create($product);
                 } else {
-                    break;
+                    continue;
                 }
             }
         }
@@ -164,7 +164,7 @@ class InventoryController extends BaseController
                     }
                     InventoryProducts::create($product);
                 } else {
-                    break;
+                    continue;
                 }
             }
         }
@@ -228,10 +228,13 @@ class InventoryController extends BaseController
         $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
             'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
+            //->leftJoin('inventory_history', 'inventory_history.parent_product_id', 'ec_products.id')
+            //->whereNull('inventory_history.inventory_id')
             //->where('ec_products.barcode', $request->get('barcode'))
             ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
             //->orWhere('parent_sku', $request->get('barcode'))
             //->where('status', 'published')
+            ->orderBy('thread_order_variations.thread_order_id', 'DESC')
             ->get();
         if ($products) {
             return response()->json(['products' => $products, 'status' => 'success'], 200);
@@ -275,21 +278,25 @@ class InventoryController extends BaseController
 
                             if ($product->save()) {
 
-                                InventoryHistory::create([
+                                $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                                $logParam = [
+                                    'parent_product_id' => $getParentProdId,
                                     'product_id' => $product->id,
+                                    'sku' => $product->sku,
                                     'quantity' => $inv_product->received_qty,
                                     'new_stock' => $product->quantity,
                                     'old_stock' => $old_stock,
                                     'created_by' => Auth::user()->id,
                                     'inventory_id' => $inventory->id,
-                                    'reference' => 'inventory.push_to_ecommerce'
-                                ]);
+                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                ];
+                                log_product_history($logParam);
 
                                 QtyAllotmentHistory::create([
                                     'product_id' => $product->id,
                                     'online_sales_qty' => $qtyOS,
                                     'in_person_sales_qty' => $qtyIS,
-                                    'reference' => 'inventory.push_to_ecommerce'
+                                    'reference' => InventoryHistory::PROD_STOCK_ADD
                                 ]);
 
                             }
@@ -360,21 +367,25 @@ class InventoryController extends BaseController
 
                             if ($product->save()) {
 
-                                InventoryHistory::create([
+                                $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                                $logParam = [
+                                    'parent_product_id' => $getParentProdId,
                                     'product_id' => $product->id,
+                                    'sku' => $product->sku,
                                     'quantity' => $inv_product->received_qty,
                                     'new_stock' => $product->quantity,
                                     'old_stock' => $old_stock,
                                     'created_by' => Auth::user()->id,
                                     'inventory_id' => $inventory->id,
-                                    'reference' => 'inventory.push_to_ecommerce'
-                                ]);
+                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                ];
+                                log_product_history($logParam);
 
                                 QtyAllotmentHistory::create([
                                     'product_id' => $product->id,
                                     'online_sales_qty' => $qtyOS,
                                     'in_person_sales_qty' => $qtyIS,
-                                    'reference' => 'inventory.push_to_ecommerce'
+                                    'reference' => InventoryHistory::PROD_STOCK_ADD
                                 ]);
 
                             }

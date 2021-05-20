@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+    return (int)$user->id === (int)$id;
 });
 
-/*Broadcast::channel('push_thread_notification_.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});*/
+Broadcast::channel('order-edit.{id}', function ($user, $id) {
+    return true;
+});

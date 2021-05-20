@@ -195,7 +195,7 @@ class Threadorders extends BaseModel
 
     public function getThreadOrderHasPushedAttribute()
     {
-        $check = InventoryHistory::where('order_id', $this->id)->value('id');
+        $check = InventoryHistory::where('thread_order_id', $this->id)/*->where('reference', '!=', InventoryHistory::PROD_REORDER)*/->value('id');
         if ($check) {
             return true;
         }

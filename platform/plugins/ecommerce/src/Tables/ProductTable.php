@@ -150,10 +150,10 @@ class ProductTable extends TableAbstract
                     ->where('order_type', Order::PRE_ORDER)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
                     ->groupBy('ec_orders.id')
-                    ->count('ec_orders.id');
+                    ->get();
                 $html = '&mdash;';
-                if ($orderQty) {
-                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . $orderQty . '</em></span></a>';
+                if ($orderQty && $preOrderQty) {
+                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . count($orderQty) . '</em></span></a>';
                 }
                 return $html;
             })
@@ -185,7 +185,7 @@ class ProductTable extends TableAbstract
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<a href="' . route('products.inventory_history', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Inventory History"><i class="fa fa-list-alt"></i></a>';
-                $html .= '<a href="' . route('products.product_timeline', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Product Timeline"><i class="fa fa-list-alt"></i></a>';
+                $html .= '<a href="' . route('products.product_timeline', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Product Timeline"><i class="fa fa-calendar-times"></i></a>';
                 $html .= '<a href="#" data-toggle="modal" data-target="#allotment-modal" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Quantity Allotment"><i class="fa fa-check-circle"></i></a>';
 
                 return $this->getOperations('products.edit', 'products.destroy', $item, $html);

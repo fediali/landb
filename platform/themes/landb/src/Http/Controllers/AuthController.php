@@ -32,7 +32,6 @@ class AuthController extends Controller
   public function __construct()
   {
     $this->middleware('customer.guest', ['except' => 'logout']);
-
     session(['url.intended' => URL::previous()]);
     $this->redirectTo = session()->get('url.intended');
   }

@@ -78,11 +78,11 @@ class regenerateThreadSKU extends Command
                         $pdSKU = Printdesigns::where('id', $variation->print_id)->value('sku');
 
                         if ($reg_sku) {
-                            $variation->sku = $reg_sku . strtoupper($pdSKU);
+                            $variation->sku = $reg_sku . '-' . strtoupper($pdSKU);
                         }
 
                         if ($plu_sku) {
-                            $variation->plus_sku = str_replace('-X', '', $plu_sku) . strtoupper($pdSKU) . '-X';
+                            $variation->plus_sku = str_replace('-X', '', $plu_sku) . '-' . strtoupper($pdSKU) . '-X';
                         }
 
                         $variation->save();

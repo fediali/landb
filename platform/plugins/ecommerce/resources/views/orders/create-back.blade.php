@@ -7,6 +7,70 @@
             :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
             :payment_methods="{{ json_encode(get_payment_methods()) }}">
         </create-order>
+
+        {{--<div class="wrapper-content bg-gray-white mb20">
+            <div class="row m-0 pt-4 bg-white">
+                <div class="col-lg-12 ">
+                    <span class="mb-2">Card</span>
+                    {!!Form::select('card_list', [], null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                </div>
+            </div>
+
+            <div class="add_card bg-white">
+                <div class="row group m-0 pt-4 ">
+                    <label class="col-lg-12 ">
+                        <span class="mb-2">Billing Address</span>
+                        {!! Form::select('billing_address', [],null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
+                    </label>
+                </div>
+                <div class="group row m-0">
+                    <label class="col-lg-12">
+                        <div id="card-element" class="field">
+                            <span>Card</span>
+                            <div id="fattjs-number" style="height: 35px"></div>
+                            <span class="mt-2">CVV</span>
+                            <div id="fattjs-cvv" style="height: 35px"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="row m-0">
+                    <div class="col-lg-3">
+                        <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
+                    </div>
+                    <p class="mt-2"> / </p>
+                    <div class="col-lg-3">
+                        <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="col-lg-6">
+                        <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="col-lg-12">
+                        <div class="outcome">
+                            <div class="error"></div>
+                            <div class="success">
+                                Successful! The ID is
+                                <span class="token"></span>
+                            </div>
+                            <div class="loader" style="margin: auto"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pd-all-20 bg-white">
+                <form action="{{route('orders.charge')}}" method="POST">
+                    @csrf
+                    <input type="hidden" value="" name="order_id" class="order_id">
+                    <input type="hidden" value="" name="amount">
+                    <button type="submit" class="btn btn-info">Create Payment</button>
+                </form>
+            </div>
+        </div>--}}
+
     </div>
 @stop
 

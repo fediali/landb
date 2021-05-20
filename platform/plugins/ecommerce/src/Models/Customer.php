@@ -4,6 +4,8 @@ namespace Botble\Ecommerce\Models;
 
 use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
+use App\Models\CustomerStoreLocator;
+use App\Models\CustomerTaxCertificate;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\Base\Supports\Avatar;
@@ -52,6 +54,22 @@ class Customer extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    public static $customerType = ['Western', 'Boho', 'Contemporary', 'Conservative', 'Other'];
+    public static $hearUs = [
+        '1' => 'Google',
+        '2' => 'Social',
+        '3' => 'LAShowroom',
+        '4' => 'Fashiongo',
+        '5' => 'Dallas Market',
+        '6' => 'Atlanta Market',
+        '7' => 'Other'
+    ];
+    public static $preferredCommunication = [
+        '1' => 'Email',
+        '2' => 'Phone',
+        '3' => 'Email & Phone'
     ];
 
     /**
@@ -140,6 +158,14 @@ class Customer extends Authenticatable
     public function details()
     {
         return $this->hasOne(CustomerDetail::class, 'customer_id');
+    }
+
+    public function taxCertificate(){
+      return $this->hasOne(CustomerTaxCertificate::class, 'customer_id');
+    }
+
+    public function storeLocator(){
+      return $this->hasOne(CustomerStoreLocator::class, 'customer_id');
     }
 
     public function shippingAddress()
