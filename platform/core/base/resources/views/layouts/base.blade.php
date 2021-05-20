@@ -32,13 +32,14 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
 
     {!! Assets::renderHeader(['core']) !!}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
             integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
             crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
           integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
           crossorigin="anonymous"/>
@@ -78,6 +79,10 @@
         $span.text(Number($('#notification-count').text()) + 1);
         $span.show();
     }
+
+    function orderEdit(data) {
+        console.log('sss');
+    }
 </script>
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
@@ -85,12 +90,12 @@
     href="{{ asset('css/custom.css') }}"
     rel="stylesheet">
 
-
 <script type="text/javascript">
     window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
         .listen('.ThreadEvent', (data) => {
             toastr['success'](data.message, 'New Thread Notification');
             pushNotification(data);
+            console.log(data);
         });
     window.Echo.channel('thread_approved')
         .listen('.ThreadApprovalEvent', (data) => {
@@ -98,7 +103,17 @@
             var $span = $('.notification-count');
             $span.text(Number($('#notification-count').text()) + 1);
             $span.show();
+            console.log(data);
         });
+
+
+    {{--window.Echo.channel('order-edit.{{(Auth::check()) ? Auth::user()->id : ''}}')--}}
+    {{--    .listen('.orderEdit', (data) => {--}}
+    {{--        alert('ss')--}}
+    {{--        console.log('test', data);--}}
+    {{--        orderEdit(data);--}}
+    {{--    });--}}
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
         integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="

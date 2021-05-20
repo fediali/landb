@@ -3,6 +3,7 @@
 namespace Botble\Thread\Http\Controllers;
 
 use App\Events\NotifyManager;
+use App\Models\ThreadVariationPPSample;
 use App\Models\ThreadVariationTrim;
 use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -590,5 +591,14 @@ class ThreadController extends BaseController
         $notification = DB::table('user_notifications')->where('id', $request->notification_id)->update(['seen' => 1]);
     }
 
+    public function variationPPSample(Request $request)
+    {
+        $pp_sample = ThreadVariationPPSample::create($request->all());
+        if ($pp_sample) {
+            return redirect()->back()->with('success', 'PP Sample Updated');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
 
 }

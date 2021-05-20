@@ -3016,7 +3016,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
  
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .grid-container {
-        height: 1380vh !important;
+        height: 1420vh !important;
     }
 }
 
@@ -3042,3 +3042,93 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     height: 55px !important;
 
   }
+
+  @media screen and (min-width: 320px) and (max-width: 767px) { 
+    .navbar-parent ul li.nav-item a.nav-link { 
+        padding: 5px !important;
+    }
+    header .container {
+        padding-right: 5px !important;
+        padding-left: 5px !important;
+    }
+    .navbar-parent ul {
+        overflow: inherit !important;
+    }
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 991px) { 
+    #register-form { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    #login-form { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+
+    .tab-content { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    .nav-tabs { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    .shoplisting .listbox .img .imgoverlay {
+        opacity: 1 !important;
+    } 
+    .ItemPrice {
+        text-align: center !important;
+    }
+    .cart-m-title {
+        display: block !important;
+    }
+}
+
+.cart-m-title {
+    display: none;
+}
+
+.customer-body {
+    margin-top: 100px;
+}
+
+.mt-card-avatar {
+    text-align: center;
+}
+
+
+.mt-card-avatar img {
+height: 70px;
+}
+
+
+.collection-item {
+    color: #000 !important;
+}
+
+.list-group-item .active{ 
+    font-weight: 600;
+    color: #e91e63 !important;
+}
+
+.profile-sidebar {
+    background: #e8e8e8;
+    padding-top: 15px;
+}
+
+.customer-btn {
+    background-color: #000 !important;
+    border: #000 !important;
+}
+
+.btn-order-detail {
+    background-color: #000 !important;
+    border: #000 !important;
+}
+
+.btn-add-address {
+    background-color: #000 !important;
+    border: #000 !important;
+}

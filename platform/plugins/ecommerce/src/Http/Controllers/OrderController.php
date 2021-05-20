@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
+use App\Events\OrderEdit;
 use App\Imports\OrderImportFile;
 use App\Models\CardPreAuth;
 use App\Models\OrderImport;
@@ -418,6 +419,7 @@ class OrderController extends BaseController
             list($card, $info) = omni_api($url);
             $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
         }
+
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
@@ -1063,7 +1065,7 @@ class OrderController extends BaseController
                 'vendor/core/plugins/ecommerce/js/order-create.js',
             ])
             ->addScripts(['blockui', 'input-mask']);
-
+//        event(new OrderEdit(Auth::user(), $order));
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
             'products',
