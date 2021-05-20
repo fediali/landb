@@ -80,15 +80,11 @@
         $span.show();
     }
 
-    function orderEdit(data) {
-        console.log(data);
-    }
 </script>
+
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
-<link
-    href="{{ asset('css/custom.css') }}"
-    rel="stylesheet">
+<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
 <script type="text/javascript">
     window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
@@ -97,6 +93,7 @@
             pushNotification(data);
             console.log(data);
         });
+
     window.Echo.channel('thread_approved')
         .listen('.ThreadApprovalEvent', (data) => {
             toastr['success'](data.title, 'New Thread Notification');
@@ -105,15 +102,14 @@
             $span.show();
             console.log(data);
         });
-    window.Echo.channel('order-edit.{{(Auth::check()) ? Auth::user()->id : ''}}')
-        .listen('.orderEdit', (data) => {
-            orderEdit(data);
-        });
-
 </script>
+
+@stack('echo-server')
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
         integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+</script>
 
 </body>
 </html>

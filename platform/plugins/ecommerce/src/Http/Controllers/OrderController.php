@@ -45,6 +45,7 @@ use Botble\Ecommerce\Tables\OrderTable;
 use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Enums\PaymentStatusEnum;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
+use Carbon\Carbon;
 use EmailHandler;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -276,6 +277,10 @@ class OrderController extends BaseController
             ], $meta_condition);
 
             $order->payment_id = $payment->id;
+
+            $order->editing_by = NULL;
+            $order->editing_started_at = NULL;
+
             $order->save();
 
             if ($request->input('payment_status') === PaymentStatusEnum::COMPLETED) {
@@ -998,7 +1003,6 @@ class OrderController extends BaseController
      */
     public function editOrder($id, Request $request, BaseHttpResponse $response)
     {
-
         if (!$id) {
             return $response
                 ->setError()
@@ -1015,6 +1019,14 @@ class OrderController extends BaseController
                 ->setError()
                 ->setNextUrl(route('orders.index'))
                 ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        $editing_started_at = Carbon::parse($order->editing_started_at);
+        if ($order->editing_by && $order->editing_by != auth()->user()->id && $editing_started_at->diffInSeconds(Carbon::now()) <= 60*5) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage('This is order already in editing by '.auth()->user()->getFullName());
         }
 
         $productIds = $order->products->pluck('product_id')->all();
@@ -1065,7 +1077,12 @@ class OrderController extends BaseController
                 'vendor/core/plugins/ecommerce/js/order-create.js',
             ])
             ->addScripts(['blockui', 'input-mask']);
-        event(new OrderEdit(Auth::user(), $order));
+
+        $order->editing_by = auth()->user()->id;
+        $order->editing_started_at = Carbon::now();
+        $order->save();
+        event(new OrderEdit(auth()->user(), $order));
+
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
             'products',

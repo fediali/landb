@@ -30,10 +30,8 @@
                 :is_selected_shipping="true"
                 :customer_order_numbers="{{ $customerOrderNumbers }}"
                 :currency="'{{ get_application_currency()->symbol }}'"
-                :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
-
-        ></create-order>
-
+                :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}">
+        </create-order>
     </div>
 @stop
 
@@ -48,6 +46,15 @@
             "Out of stock": "{{ trans('plugins/ecommerce::order.out_of_stock') }}",
             "product(s) available": "{{ trans('plugins/ecommerce::order.products_available') }}",
             "No products found!": "{{ trans('plugins/ecommerce::order.no_products_found') }}",
-        }
+        };
+
+    </script>
+@endpush
+
+@push('echo-server')
+    <script>
+        window.Echo.channel('order-edit-{{$order->id}}').listen('.orderEdit', (data) => {
+            console.log(data, "=======");
+        });
     </script>
 @endpush

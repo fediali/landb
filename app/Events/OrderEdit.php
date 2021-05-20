@@ -23,11 +23,8 @@ class OrderEdit implements ShouldBroadcastNow
 
     public function __construct($user, $order)
     {
-        //
         $this->order = $order;
         $this->user = $user;
-
-
     }
 
     /**
@@ -37,7 +34,7 @@ class OrderEdit implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('order-edit.' . $this->user->id);
+        return new Channel('order-edit-' . $this->order->id);
     }
 
     public function broadcastAs()
@@ -48,11 +45,10 @@ class OrderEdit implements ShouldBroadcastNow
     public function broadcastWith()
     {
         return [
-            'id'    => $this->user->id,
-            'order' => $this->order->id,
-            'on'    => now()->toDateTimeString(),
+            'user_id'  => $this->user->id,
+            'order_id' => $this->order->id,
+            'time'     => now()->toDateTimeString(),
         ];
     }
-
 
 }
