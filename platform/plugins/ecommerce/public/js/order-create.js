@@ -785,6 +785,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -8446,15 +8494,17 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
-                              _vm._s(
-                                _vm._f("formatPrice")(
-                                  _vm.has_applied_discount
-                                    ? _vm.child_discount_amount
-                                    : 0
-                                )
-                              ) +
-                                " " +
-                                _vm._s(_vm.currency)
+                              "\n                                        " +
+                                _vm._s(
+                                  _vm._f("formatPrice")(
+                                    _vm.has_applied_discount
+                                      ? _vm.child_discount_amount
+                                      : 0
+                                  )
+                                ) +
+                                "\n                                        " +
+                                _vm._s(_vm.currency) +
+                                "\n                                    "
                             )
                           ])
                         ]),
@@ -8568,7 +8618,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Create Order")]
+                    [_vm._v("Create Order\n                        ")]
                   )
                 ]
               )
@@ -8785,17 +8835,35 @@ var render = function() {
                                                         }
                                                       },
                                                       [
-                                                        _c("span", [
-                                                          _vm._v(
-                                                            _vm._s(
-                                                              customer.email
-                                                                ? customer.email
-                                                                : "-"
+                                                        _c(
+                                                          "span",
+                                                          {
+                                                            staticClass: "asd"
+                                                          },
+                                                          [
+                                                            _vm._v(
+                                                              _vm._s(
+                                                                customer.email
+                                                                  ? customer.email
+                                                                  : "-"
+                                                              )
                                                             )
-                                                          )
-                                                        ])
+                                                          ]
+                                                        )
                                                       ]
-                                                    )
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c("input", {
+                                                      attrs: {
+                                                        type: "hidden",
+                                                        id:
+                                                          "customer_information"
+                                                      },
+                                                      domProps: {
+                                                        value:
+                                                          _vm.child_customer_id
+                                                      }
+                                                    })
                                                   ]
                                                 )
                                               ]
@@ -9052,7 +9120,12 @@ var render = function() {
                                   )
                                 ])
                               ]
-                            )
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              attrs: { type: "hidden", id: "customer_id" },
+                              domProps: { value: _vm.child_customer_id }
+                            })
                           ]
                         ),
                         _vm._v(" "),
@@ -9467,7 +9540,7 @@ var render = function() {
               _vm._v(
                 "\n                " +
                   _vm._s(_vm.__("With storehouse management?")) +
-                  "\n                "
+                  "\n            "
               )
             ])
           ]),

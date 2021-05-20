@@ -125,9 +125,9 @@
         // form.querySelector('input[name=cardholder-last-name]').value = 'Doe';
         // form.querySelector('input[name=phone]').value = '+1111111111111111';
     }).catch(err => {
-            console.log('error init form ' + err);
-            // reinit form
-        });
+        console.log('error init form ' + err);
+        // reinit form
+    });
 
     fattJs.on('card_form_complete', (message) => {
         // activate pay button
@@ -138,11 +138,12 @@
         console.log(message);
     });
 
-    /*$('#billing_address').on('change', function () {
+    $(document).on('click', 'overflow-ellipsis', function () {
+        console.log('testing card');
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
         $.ajax({
-            url: "{{--{{ route('customers.get-addresses','') }}--}}" + "/" + $("#billing_address option:selected").val(),
+            url: "{{ route('customers.get-addresses','') }}" + "/" + $("#billing_address option:selected").val(),
             type: 'get',
             success: function (data) {
                 address = data;
@@ -151,7 +152,7 @@
                 toastr['warning']('Notification Unreadable', 'Reading Error');
             }
         });
-    });*/
+    }).trigger('visibility');
 
     fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button
@@ -181,10 +182,10 @@
             month: month,
             year: year,
             phone: "{{isset($customer) ? $customer->phone : null}}",
-            address_1:     'asd',//address.data.address,
-            address_city:  'asd',//address.data.city,
+            address_1: 'asd',//address.data.address,
+            address_city: 'asd',//address.data.city,
             address_state: 'asd',//address.data.state,
-            address_zip:   'asd',//address.data.zip_code,
+            address_zip: 'asd',//address.data.zip_code,
             address_country: 'asd',//address.data.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
