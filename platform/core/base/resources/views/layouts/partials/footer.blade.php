@@ -78,7 +78,8 @@
             });
             console.log(not_id);
         })
-        var card = $("select.card_list option:selected").val();
+
+        /*var card = $("select.card_list option:selected").val();
         console.log(card)
         $('.payment_id').val(card);
         if (card == 0) {
@@ -94,9 +95,10 @@
             } else {
                 $('.add_card').hide();
             }
-        });
-    })
-    var payButton = document.querySelector('#paybutton');
+        });*/
+    });
+
+    // var payButton = document.querySelector('#paybutton');
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
@@ -122,8 +124,7 @@
         // form.querySelector('input[name=cardholder-first-name]').value = 'Jon';
         // form.querySelector('input[name=cardholder-last-name]').value = 'Doe';
         // form.querySelector('input[name=phone]').value = '+1111111111111111';
-    })
-        .catch(err => {
+    }).catch(err => {
             console.log('error init form ' + err);
             // reinit form
         });
@@ -133,15 +134,15 @@
         //payButton.disabled = false;
         var billing = $("#billing_address option:selected").text();
 
-
         tokenizeButton.disabled = billing === 'Select Address';
         console.log(message);
     });
-    $('#billing_address').on('change', function () {
+
+    /*$('#billing_address').on('change', function () {
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
         $.ajax({
-            url: "{{ route('customers.get-addresses','') }}" + "/" + $("#billing_address option:selected").val(),
+            url: "{{--{{ route('customers.get-addresses','') }}--}}" + "/" + $("#billing_address option:selected").val(),
             type: 'get',
             success: function (data) {
                 address = data;
@@ -150,8 +151,8 @@
                 toastr['warning']('Notification Unreadable', 'Reading Error');
             }
         });
+    });*/
 
-    });
     fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button
         //payButton.disabled = true;
@@ -159,7 +160,7 @@
         console.log(message);
     });
 
-    document.querySelector('#tokenizebutton').onclick = () => {
+    $('button#tokenizebutton').on('click', () => {
         console.log('working')
         var month = $('.month').val();
         var year = $('.year').val();
@@ -172,7 +173,7 @@
         loaderElement.classList.add('visible');
 
         var form = document.querySelector('form');
-        console.log('getting address', address.data)
+        // console.log('getting address', address.data)
         var extraDetails = {
             firstname: "{{isset($customer->detail->first_name) ? $customer->detail->first_name : 'john'}}",
             lastname: "{{isset ($customer->detail->last_name) ?$customer->detail->last_name : 'doe'}}",
@@ -180,11 +181,11 @@
             month: month,
             year: year,
             phone: "{{isset($customer) ? $customer->phone : null}}",
-            address_1: address.data.address,
-            address_city: address.data.city,
-            address_state: address.data.state,
-            address_zip: address.data.zip_code,
-            address_country: address.data.country,
+            address_1:     'asd',//address.data.address,
+            address_city:  'asd',//address.data.city,
+            address_state: 'asd',//address.data.state,
+            address_zip:   'asd',//address.data.zip_code,
+            address_country: 'asd',//address.data.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
         };
@@ -206,8 +207,7 @@
                 errorElement.classList.add('visible');
                 loaderElement.classList.remove('visible');
             });
-    }
-
+    });
 
     function functionAddCard(result, customer_id) {
         console.log('addingCard', result);
@@ -226,8 +226,7 @@
                 toastr['warning']('Notification Unreadable', 'Reading Error');
             }
         });
-        console.log(not_id);
+        //console.log(not_id);
     }
-
 
 </script>
