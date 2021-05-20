@@ -1,5 +1,6 @@
 <template>
     <div class="flexbox-grid no-pd-none">
+
         <div class="flexbox-content">
             <div class="wrapper-content">
                 <div class="pd-all-20">
@@ -240,6 +241,7 @@
                 </div>
             </div>
         </div>
+
         <div class="flexbox-content flexbox-right">
             <div class="wrapper-content mb20">
                 <div v-if="!child_customer_id || !child_customer">
@@ -1440,4 +1442,5 @@
             },
         }
     }
+
 </script>
