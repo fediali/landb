@@ -30,31 +30,35 @@
                             </div>
                         </div>
 
-                        <div class="profile-usermenu">
+                        <div class="profile-usermenu mt-2">
                             <ul class="list-group">
                                 <li class="list-group-item" style="display:none">
-                                    <a href="{{ route('customer.overview') }}" class="collection-item @if (Route::currentRouteName() == 'customer.overview') active @endif">{{ __('Overview') }}</a>
                                     <i class="fa fa-user-circle-o float-right" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.overview') }}" class="ml-2 collection-item @if (Route::currentRouteName() == 'customer.overview') active @endif">{{ __('Overview') }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{{ route('customer.edit-account') }}" class="collection-item @if (Route::currentRouteName() == 'customer.edit-account') active @endif">{{ __('Profile') }}</a>
                                     <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.edit-account') }}" class="ml-2 collection-item @if (Route::currentRouteName() == 'customer.edit-account') active @endif">{{ __('Profile') }}</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{{ route('customer.orders') }}" class="collection-item @if (Route::currentRouteName() == 'customer.orders') active @endif">{{ __('Orders') }}</a>
                                     <i class="fa fa-first-order" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.orders') }}" class="ml-2 collection-item @if (Route::currentRouteName() == 'customer.orders') active @endif">{{ __('Orders') }}</a>
+
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{{ route('customer.address') }}" class="collection-item @if (Route::currentRouteName() == 'customer.address') active @endif">{{ __('Address books') }}</a>
                                     <i class="fa fa-book" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.address') }}" class="ml-2 collection-item @if (Route::currentRouteName() == 'customer.address') active @endif">{{ __('Address books') }}</a>
+
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{{ route('customer.change-password') }}" class="collection-item @if (Route::currentRouteName() == 'customer.change-password') active @endif">{{ __('Change password') }}</a>
                                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.change-password') }}" class="ml-2 collection-item @if (Route::currentRouteName() == 'customer.change-password') active @endif">{{ __('Change password') }}</a>
+
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="{{ route('customer.logout') }}" class="collection-item">{{ __('Logout') }}</a>
                                     <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    <a href="{{ route('customer.logout') }}" class="ml-2 collection-item">{{ __('Logout') }}</a>
+
 
                                 </li>
                             </ul>

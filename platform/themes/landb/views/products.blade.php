@@ -10,7 +10,7 @@
 </section>
 <section class="shoplisting_wrap">
     <div class="container">
-        <div class="filterbar d_flex">
+        <div class="filterbar mb-2 d_flex">
             <ul class="leftbar">
                 <li>Showing 1-12 of 21 results</li>
                 <li class="seprator"></li>
@@ -190,7 +190,7 @@
                     $col = ($limit == '5') ? '5' : $col;
                 ?>
             @foreach($products as $key => $product)
-                <div class="listbox col-lg-{{$col}}">
+                <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
                     <div class="caro_text">
