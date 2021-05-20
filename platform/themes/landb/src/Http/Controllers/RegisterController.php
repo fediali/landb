@@ -193,4 +193,10 @@ class RegisterController extends Controller
     {
         return auth('customer');
     }
+
+
+  protected function redirectTo()
+  {
+    return redirect()->route('customer.pendingNotification'); // return dynamicaly generated URL.
+  }
 }

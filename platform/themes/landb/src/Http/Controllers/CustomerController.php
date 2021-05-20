@@ -250,4 +250,8 @@ class CustomerController extends Controller
 
     return $request->validate($rules);
   }
+
+  public function pendingNotification(){
+    return Theme::scope('customer.verify')->render();
+  }
 }

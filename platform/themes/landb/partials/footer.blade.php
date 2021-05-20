@@ -113,6 +113,7 @@
   jQuery(document).ready(function() {
     // This button will increment the value
     $('.qtyplus').click(function(e) {
+      toggle_loader(true);
       var newVal = 0;
       // Stop acting like a button
       e.preventDefault();
@@ -124,18 +125,24 @@
       if (!isNaN(currentVal)) {
         // Increment
         newVal = currentVal + 1;
-        $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);
+       /* $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);*/
       } else {
         // Otherwise put a 0 there
-        $(this).prev('input[name=' + fieldName + ']').val(0);
+        newVal = 0;
+        /*$(this).prev('input[name=' + fieldName + ']').val(0);*/
       }
       if($(this).data('update') == '1') {
-        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+        var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+        if(update == 0){
+          $(this).prev('input[name=' + fieldName + ']').val(newVal);
+        }
+        console.log('result: '+newVal);
       }
     });
     // This button will decrement the value till 0
     $(".qtyminus").click(function(e) {
       var newVal = 0;
+      var addVal = 0;
       // Stop acting like a button
       e.preventDefault();
       // Get the field name
@@ -146,13 +153,17 @@
       if (!isNaN(currentVal) && currentVal > 0) {
         newVal = currentVal - 1;
         // Decrement one
-        $(this).next('input[name=' + fieldName + ']').val(currentVal - 1);
+        /*$(this).next('input[name=' + fieldName + ']').val();*/
       } else {
+        newVal = 0;
         // Otherwise put a 0 there
-        $(this).next('input[name=' + fieldName + ']').val(0);
+        /*$(this).next('input[name=' + fieldName + ']').val(0);*/
       }
       if($(this).data('update') == '1'){
-        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
+        var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
+        if(update == 0){
+          $(this).next('input[name=' + fieldName + ']').val(newVal);
+        }
       }
 
     });
@@ -251,12 +262,13 @@
     });
     }
   });
-  
+
   function toggle_loader(event) {
     if(event){
-      $('.loading-overlay').addClass('is-active');
+        $('.loading-overlay').addClass('is-active');
+
     }else{
-      $('.loading-overlay').removeClass('is-active');
+        $('.loading-overlay').removeClass('is-active');
     }
 
   }
@@ -283,6 +295,16 @@
     });
   }
 </script>
+
+@if(session()->has('success'))
+    <script>
+      toastr['success']("{{ session()->get('success') }}", 'Success!');
+    </script>
+@elseif(session()->has('error'))
+    <script>
+      toastr['error']("{{ session()->get('error') }}", 'Error!');
+    </script>
+@endif
 
 </body>
 

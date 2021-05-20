@@ -83,11 +83,11 @@
                     margin-top: -10px;
                 " id="user-cart-count">{{ cart_count() }}</span>
                 <li>
-                    <a href="#"><i class="fal fa-user"></i></a>
+                    <a href="{{ route('customer.overview') }}"><i class="fal fa-user"></i></a>
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                        <a href="{{ route('customer.overview') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>

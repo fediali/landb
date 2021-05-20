@@ -578,64 +578,50 @@
     <div class="tab-pane fade" id="ppsample" role="tabpanel" aria-labelledby="ppsample">
         <div class="p-3">
             <div class="p-3 mb-3 thread-area">
-                <div class="row">
-                    <div class="col-lg-12 ">
-                        <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-lg-4 mb-3">
-                        <h5 class="variation-text">PP Sample </h5>
-                        <img class="w-100" src="./public/storage/image-1.jpg" height="250" width="120"
-                             style="object-fit: cover">
-                    </div>
-                    <div class="col-lg-8 mb-3">
-                        <div class="row">
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Date</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Style #</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Description</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">PP Sample Due Date</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Strike Off Receive Date</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Sample # 1 Receive Date</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Sample # 1 Comments</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Strike Off Receive Date</p>
-                                <p>Vendor</p>
-                            </div>
-                            <div class="col-lg-3 mt-3">
-                                <p class="m-0 heading">Strike Off Approved Rejected Comments</p>
-                                <p>Vendor</p>
-                            </div>
+                @foreach($variations as $pp_sample)
+
+                    <div class="row">
+                        <div class="col-lg-12 ">
+                            <h6 class="mb-1 thread-head"> THREAD VARIATIONS ({{@$pp_sample->name}}) </h6>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-4 mb-3">
+                            <h5 class="variation-text">PP Sample </h5>
+                            <img class="w-100"
+                                 src="{{ asset('storage/'.strtolower(@$pp_sample->printDesign->file)) }}"
+                                 height="250" width="120"
+                                 style="object-fit: cover">
+                        </div>
 
-                </div>
+                        <div class="col-lg-8 mb-3">
+                            @foreach($pp_sample->ppSample as $sample)
+                                <div class="row">
+
+                                    <div class="col-lg-3 mt-3">
+                                        <p class="m-0 heading">Receive Date</p>
+                                        <p>{{date('M-d ,Y', strtotime($sample->receive_date))}}</p>
+                                    </div>
+                                    <div class="col-lg-3 mt-3">
+                                        <p class="m-0 heading">Comments</p>
+                                        <p>{{@$sample->comments}}</p>
+                                    </div>
+                                    <div class="col-lg-3 mt-3">
+                                        <p class="m-0 heading">Status</p>
+                                        <p>{{@$sample->status}}</p>
+                                    </div>
+                                    {{--                                <div class="col-lg-3 mt-3">--}}
+                                    {{--                                    <p class="m-0 heading">image</p>--}}
+                                    {{--                                    <p>Vendor</p>--}}
+                                    {{--                                </div>--}}
+                                </div>
+                            @endforeach
+                        </div>
+
+
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

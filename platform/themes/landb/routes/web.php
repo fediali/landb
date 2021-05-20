@@ -9,7 +9,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
     });
 });
-Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']],function () {
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']],function () {
   Route::get('logout', 'AuthController@logout')->name('public.logout');
 
   Route::get('/cart', 'CartController@getIndex')
@@ -61,6 +61,11 @@ Theme::routes();
 
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
+
+        Route::get('/customer/verify', [
+            'as'         => 'customer.pendingNotification',
+            'uses'       => 'CustomerController@pendingNotification'
+        ]);
 
         Route::get('/', 'LandbController@getIndex')
             ->name('public.index');
