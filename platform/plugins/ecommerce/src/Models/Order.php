@@ -68,7 +68,9 @@ class Order extends BaseModel
         'is_finished',
         'token',
         'payment_id',
-        'order_type'
+        'order_type',
+        'editing_by',
+        'editing_started_at',
     ];
 
     /**
