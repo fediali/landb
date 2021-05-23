@@ -1014,6 +1014,8 @@ class OrderController extends BaseController
 
         $order = $this->orderRepository->findById($id);
 
+        event(new OrderEdit(auth()->user(), $order));
+
         if (!$order) {
             return $response
                 ->setError()
@@ -1081,7 +1083,6 @@ class OrderController extends BaseController
         $order->editing_by = auth()->user()->id;
         $order->editing_started_at = Carbon::now();
         $order->save();
-        event(new OrderEdit(auth()->user(), $order));
 
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',

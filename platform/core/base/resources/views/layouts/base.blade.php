@@ -87,6 +87,7 @@
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
 <script type="text/javascript">
+
     window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
         .listen('.ThreadEvent', (data) => {
             toastr['success'](data.message, 'New Thread Notification');
@@ -102,6 +103,16 @@
             $span.show();
             console.log(data);
         });
+
+    window.Echo.private('order-edit-access-{{auth()->user()->id}}').listenForWhisper('.orderEditAccess', (data) => {
+        if (data.user_id == "{{auth()->user()->id}}") {
+            if (data.access) {
+                toastr['success']('Your Edit request against this Order # '+data.order_id, ' has been Granted. You can Edit now!');
+            } else {
+                toastr['warning']('Your Edit request against this Order # '+data.order_id, ' has been Rejected. Please try Later!');
+            }
+        }
+    });
 </script>
 
 @stack('echo-server')

@@ -4,12 +4,13 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderEdit implements ShouldBroadcastNow
+class OrderEditAccess implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -18,13 +19,11 @@ class OrderEdit implements ShouldBroadcastNow
      *
      * @return void
      */
-    protected $order;
-    protected $user;
+    protected $data;
 
-    public function __construct($user, $order)
+    public function __construct($data)
     {
-        $this->order = $order;
-        $this->user = $user;
+        $this->data = $data;
     }
 
     /**
@@ -34,20 +33,20 @@ class OrderEdit implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('order-edit-' . $this->order->id);
+        return new PresenceChannel('order-edit-access-' . $this->data->user_id);
     }
 
     public function broadcastAs()
     {
-        return 'orderEdit';
+        return 'orderEditAccess';
     }
 
     public function broadcastWith()
     {
         return [
-            'user_id'  => $this->user->id,
-            'user_name'  => $this->user->getFullName(),
-            'order_id' => $this->order->id,
+            'user_id'  => $this->data->user_id,
+            'user_name'  => $this->data->user_name,
+            'order_id' => $this->data->order_id,
             'time'     => now()->toDateTimeString(),
         ];
     }
