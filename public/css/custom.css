@@ -235,10 +235,8 @@
     border: #d64635;
     border-radius: 0;
 }
-
 .card-area {
-    position: absolute;
-    top: 190px;
-    right: 40px;
     width: 24.5%;
+    margin-top: -10px;
+    margin-left: 240px;
 }

@@ -58,6 +58,7 @@
 
 <script>
     var address = '';
+    var customer = '';
     $(document).ready(function () {
         $('.notification_read').on('click', function () {
             console.log('working');
@@ -79,7 +80,8 @@
             console.log(not_id);
         })
 
-        /*var card = $("select.card_list option:selected").val();
+        $('.card_fields').hide();
+        var card = $("select.card_list option:selected").val();
         console.log(card)
         $('.payment_id').val(card);
         if (card == 0) {
@@ -95,7 +97,7 @@
             } else {
                 $('.add_card').hide();
             }
-        });*/
+        });
     });
 
     // var payButton = document.querySelector('#paybutton');
@@ -137,9 +139,48 @@
         tokenizeButton.disabled = billing === 'Select Address';
         console.log(message);
     });
+    $(document).on('click', '.credit_card', function () {
+        $('select#billing_address').empty();
+        var baddress = [];
+        var customer_id = $('#customer_id').val();
+        if (typeof customer_id === "undefined") {
+            $('.card_customer_select').show();
+            $('.card_fields').hide();
+        } else {
+            $('.card_customer_select').hide();
+            $('.card_fields').show();
+            $.ajax({
+                url: "{{ route('customers.get-customer-addresses','') }}" + "/" + customer_id,
+                type: 'get',
+                success: function (data) {
+                    $.each(data.data, function (addressID, address) {
+                        if (address.type === 'billing') {
+                            var data = {
+                                id: address.id,
+                                text: address.address
+                            };
+                            console.log(address);
+                            html = `<option value="${address.id}">
+                                ${address.address}
+                            </option>`
+                            $('select#billing_address').append(html);
+                        }
 
-    $(document).on('click', 'overflow-ellipsis', function () {
-        console.log('testing card');
+                    });
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('No Address', 'Reading Error');
+                }
+            });
+            setTimeout(function () {
+                getbillingadress();
+                getCustomer();
+            }, 2000);
+        }
+
+    });
+
+    function getbillingadress() {
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
         $.ajax({
@@ -149,10 +190,23 @@
                 address = data;
             },
             error: function (request, status, error) {
-                toastr['warning']('Notification Unreadable', 'Reading Error');
+                toastr['warning']('No Address', 'Reading Error');
             }
         });
-    }).trigger('visibility');
+    }
+
+    function getCustomer() {
+        $.ajax({
+            url: "{{ route('customers.get-customer','') }}" + "/" + $('#customer_id').val(),
+            type: 'get',
+            success: function (data) {
+                customer = data;
+            },
+            error: function (request, status, error) {
+                toastr['warning']('No Address', 'Reading Error');
+            }
+        });
+    }
 
     fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button
@@ -172,21 +226,21 @@
         successElement.classList.remove('visible');
         errorElement.classList.remove('visible');
         loaderElement.classList.add('visible');
-
         var form = document.querySelector('form');
-        // console.log('getting address', address.data)
+        console.log('customer data', customer.data)
         var extraDetails = {
-            firstname: "{{isset($customer->detail->first_name) ? $customer->detail->first_name : 'john'}}",
-            lastname: "{{isset ($customer->detail->last_name) ?$customer->detail->last_name : 'doe'}}",
+            firstname: customer.data.detail.first_name,
+            lastname: customer.data.detail.last_name,
+            email: customer.data.email,
             method: "card",
             month: month,
             year: year,
-            phone: "{{isset($customer) ? $customer->phone : null}}",
-            address_1: 'asd',//address.data.address,
-            address_city: 'asd',//address.data.city,
-            address_state: 'asd',//address.data.state,
-            address_zip: 'asd',//address.data.zip_code,
-            address_country: 'asd',//address.data.country,
+            phone: customer.data.detail.phone,
+            address_1: address.data.address,
+            address_city: address.data.city,
+            address_state: address.data.state,
+            address_zip: address.data.zip_code,
+            address_country: address.data.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
         };
@@ -197,7 +251,7 @@
             if (result) {
                 successElement.querySelector('.token').textContent = result.id;
                 successElement.classList.add('visible');
-                functionAddCard(result, {{isset($customer) ?$customer->id : null}});
+                functionAddCard(result, customer.data.id);
 
             }
             loaderElement.classList.remove('visible');
