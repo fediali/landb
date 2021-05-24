@@ -657,7 +657,8 @@ class OrderController extends BaseController
             'cod_amount' => $request->input('cod_amount') ?? ($order->payment->status !== PaymentStatusEnum::COMPLETED ? $order->amount : 0),
             'cod_status' => 'pending',
             'type'       => $request->input('method'),
-            'status'     => ShippingStatusEnum::DELIVERING,
+            // 'status'     => ShippingStatusEnum::DELIVERING,
+            'status'     => ShippingStatusEnum::PICKING,
             'price'      => $order->shipping_amount,
             'store_id'   => $request->input('store_id'),
         ];
@@ -1766,6 +1767,35 @@ class OrderController extends BaseController
             }
         }
         return redirect()->back();
+    }
+
+    public function verifyOrderProductShipmentBarcode($orderId, $barcode, Request $request, BaseHttpResponse $response)
+    {
+        if ($barcode) {
+            $product = Product::where('upc', $barcode)->first();
+            if ($product) {
+                $orderProduct = OrderProduct::where(['order_id' => $orderId, 'product_id' => $product->id])->first();
+                $demandQty = $orderProduct->qty;
+                if ($product->quantity >= $demandQty) {
+                    $where = ['order_id' => $orderId, 'product_id' => $product->id];
+                    $data = $where;
+                    $data['is_verified'] = 1;
+                    $data['created_by'] = auth()->user()->id;
+                    OrderProductShipmentVerify::updateOrCreate($where, $data);
+                    // return redirect()->back();
+                    return response()->json(['status' => 'success'], 200);
+                } else {
+                    // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
+                    return response()->json(['status' => 'error'], 404);
+                }
+            } else {
+                // return $response->setCode(406)->setError()->setMessage('Product not found!');
+                return response()->json(['status' => 'error'], 404);
+            }
+        } else {
+            // return $response->setCode(406)->setError()->setMessage('This barcode '. $barcode . ' is not available!');
+            return response()->json(['status' => 'error'], 404);
+        }
     }
 
 }

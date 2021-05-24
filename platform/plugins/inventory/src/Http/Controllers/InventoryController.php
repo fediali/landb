@@ -232,6 +232,8 @@ class InventoryController extends BaseController
             //->whereNull('inventory_history.inventory_id')
             //->where('ec_products.barcode', $request->get('barcode'))
             ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
+            ->orWhere('ec_products.upc', $request->get('barcode'))
+            //->orWhere('ec_products.barcode', $request->get('barcode'))
             //->orWhere('parent_sku', $request->get('barcode'))
             //->where('status', 'published')
             ->orderBy('thread_order_variations.thread_order_id', 'DESC')

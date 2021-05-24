@@ -1,9 +1,11 @@
 
 <br><hr style="border-top: 2px solid #eee;"><h2>Products</h2>
+
 <div class="form-group">
     <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
     <span id="product-error" class="invalid-feedback"></span>
 </div>
+
 <table class="table inventory-add">
     <thead>
     <tr>
@@ -35,7 +37,8 @@
 
                     <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
 
-                    @if(!$product->is_variation)
+                    {{--@if(!$product->is_variation)--}}
+                    @if($product->barcode)
                         <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
                     @else
                         <td></td>
@@ -82,7 +85,10 @@
         @endif
     </tbody>
 </table>
-<script src="{{ asset('js/barcodeScanner.js') }}"></script>
+
+
+{{--<script src="{{ asset('js/barcodeScanner.js') }}"></script>--}}
+
 <script>
   $(document).scannerDetection({
     //https://github.com/kabachello/jQuery-Scanner-Detection
@@ -161,7 +167,7 @@
 
                   if (product.is_variation) {
                       m_img = '';
-                      b_img = '';
+                      // b_img = '';
                       product.name = '';
                       //ecom_qty = '';product.quantity = '';
                       ord_qty = '';product.ordered_qty = '';

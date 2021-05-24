@@ -16,6 +16,7 @@ use Botble\Base\Supports\Enum;
  * @method static ShippingStatusEnum NOT_DELIVERED()
  * @method static ShippingStatusEnum AUDITED()
  * @method static ShippingStatusEnum CANCELED()
+ * @method static ShippingStatusEnum SHIPMENT_COMPLETED()
  */
 class ShippingStatusEnum extends Enum
 {
@@ -30,6 +31,7 @@ class ShippingStatusEnum extends Enum
     public const NOT_DELIVERED = 'not_delivered';
     public const AUDITED = 'audited';
     public const CANCELED = 'canceled';
+    public const SHIPMENT_COMPLETED = 'shipment_completed';
 
     /**
      * @var string
