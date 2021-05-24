@@ -223,3 +223,20 @@
 .order-detail {
     font-size: 20px !important;
 }
+
+.widget-user-header select {
+    padding: 2px 10px !important;
+    width: 100%;
+}
+
+.btn-card {
+    width: 100%;
+    background: #d64635;
+    border: #d64635;
+    border-radius: 0;
+}
+.card-area {
+    width: 24.5%;
+    margin-top: -10px;
+    margin-left: 240px;
+}

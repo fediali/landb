@@ -35,24 +35,48 @@
                             <h3 class="widget-user-username widget-title-color-red font-bold profile-name">{{ $thread->designer->first_name.' '.$thread->designer->last_name }}</h3>
                             <h5 class="widget-user-desc text-dark">Designer</h5>
                         </div>
-                        <div class="widget-user-header">
-                            <label>{{trans('core/base::tables.status')}}</label>
-                            {!!
-                         Form::select('status',\Botble\Thread\Models\Thread::$STATUS, ($thread->status) ? $thread->status:null, [
-                             'class' => '',
-                             'id'    => 'thread_status',
-                         ])
-                     !!}
+                        <div class="row">
+                            <div class="col-lg-4">
+                            <div class="widget-user-header">
+                                <div class="row">
+                                 <div class="col-lg-4">
+                                   <label class="mr-2">{{trans('core/base::tables.status')}}</label> 
+                                 </div>
+                                 <div class="col-lg-8">
+                                 {!!
+                                    Form::select('status',\Botble\Thread\Models\Thread::$STATUS, ($thread->status) ? $thread->status:null, [
+                                        'class' => '',
+                                        'id'    => 'thread_status',
+                                    ])
+                                !!}
+                                 </div>
+                                </div>
+                           
                         </div>
-                        <div class="widget-user-header">
-                            <label>Ready to Order</label>
-                            {!!
+                            </div> 
+                        </div>
+                        <div class="row mt-2"> 
+                            <div class="col-lg-4">
+                            <div class="widget-user-header">
+                            <div class="row">
+                                 <div class="col-lg-4">
+                                 <label class="mr-2">Ready to Order</label>
+
+                                 </div>
+                                 <div class="col-lg-8">
+                                 {!!
                          Form::select('ready',\Botble\Thread\Models\Thread::$READY, ($thread->ready) ? $thread->ready:null, [
                              'class' => '',
                              'id'    => 'ready',
                          ])
                      !!}
+                                 </div>
+                                </div>
+                           
                         </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -577,7 +601,7 @@
     </div>
     <div class="tab-pane fade" id="ppsample" role="tabpanel" aria-labelledby="ppsample">
         <div class="p-3">
-            <div class="p-3 mb-3 thread-area">
+            <div class="">
                 @foreach($variations as $pp_sample)
 
                     <div class="row">
@@ -586,7 +610,7 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row">
+                    <div class="row p-3 mb-3 thread-area">
                         <div class="col-lg-4 mb-3">
                             <h5 class="variation-text">PP Sample </h5>
                             <img class="w-100"

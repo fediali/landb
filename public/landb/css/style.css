@@ -984,6 +984,8 @@ section.parallax_video video {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 20%;
     max-width: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .shoplisting .listbox .img {
@@ -1226,7 +1228,7 @@ section.parallax_video video {
 
 @media (max-width: 991px) {
     .navbar-brand img {
-        width: 130px;
+        width: 100%;
     }
     h1 {
         font-size: 40px;
@@ -3034,7 +3036,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 @media screen and (min-width: 2300px) and (max-width: 4000px) {
     .grid-container {
-        height: 1350vh !important;
+        height: 1190vh !important;
     }
 }
 
@@ -3132,3 +3134,168 @@ height: 70px;
     background-color: #000 !important;
     border: #000 !important;
 }
+
+
+/* TABS CSS START */
+
+
+/* Style the tab */
+
+.tab {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 20%;
+}
+
+
+/* Style the buttons inside the tab */
+
+.tab button {
+    display: block;
+    background-color: #fff;
+    color: black;
+    padding: 15px 15px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d8d8d8;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current "tab button" class */
+
+.tab button.active {
+    background-color: #f3f2f5;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    float: left;
+    padding: 0px 12px;
+    width: 80%;
+    border-left: none;
+}
+
+.woocommerce-info,
+.woocommerce-message {
+    padding: 1em 2em 1em 3.5em;
+    position: relative;
+    background-color: #f7f6f7;
+    color: #515151;
+    border-top: 2px solid #000;
+    list-style: none outside;
+    width: auto;
+    word-wrap: break-word;
+}
+
+.woocommerce table.my_account_orders {
+    font-size: .85em;
+}
+
+.woocommerce table.shop_table {
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin: 0 -1px 24px 0;
+    text-align: left;
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+}
+
+.woocommerce .my_account_orders.account-orders-table>thead tr th {
+    background: #f7f7f7 none repeat scroll 0 0;
+    color: #afafaf;
+    text-transform: uppercase;
+}
+
+.woocommerce table.shop_table th {
+    font-weight: 700;
+    padding: 9px 12px;
+    line-height: 1.5em;
+}
+
+.woocommerce table.my_account_orders td,
+.woocommerce table.my_account_orders th {
+    padding: 4px 8px;
+    vertical-align: middle;
+}
+
+.woocommerce table.shop_table td {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    padding: 9px 12px;
+    vertical-align: middle;
+    line-height: 1.5em;
+}
+
+table.shop_table tr td,
+table.shop_table tr th {
+    padding: 20px !important;
+}
+
+@media screen and (min-width: 320px) and (max-width: 991px) { 
+.tabcontent {
+    width: 100% !important;
+}
+.tab {
+    width: 100% !important;
+}
+.grid-container {
+    display: none !important;
+} 
+#register-form label {
+    width: 90% !important;
+}
+.shipping-checkbox-area p {
+    width: 100% !important;
+}
+.shipping-checkbox-area div {
+    display: flex !important;
+}
+.shipping-checkbox-area input[type="radio"] {
+    width: 25px !important;
+}
+.shipping-checkbox-area {
+    display: contents !important;
+}
+#menu .main-nav {
+    display: block !important;
+}
+nav.main-nav .nav-col {
+    min-width: 100% !important; 
+    width: 100% !important;
+    margin-bottom: 30px !important;
+}
+}
+
+/* TABS CSS END */
+
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .banner img { 
+        height: 200px; 
+    }
+ }
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .banner img { 
+        height: 300px; 
+    }
+ }
+
+ 
+#myOverlay {
+    z-index: 10000 !important;
+}
+

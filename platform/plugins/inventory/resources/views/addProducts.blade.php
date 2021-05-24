@@ -87,8 +87,6 @@
 </table>
 
 
-{{--<script src="{{ asset('js/barcodeScanner.js') }}"></script>--}}
-
 <script>
   $(document).scannerDetection({
     //https://github.com/kabachello/jQuery-Scanner-Detection

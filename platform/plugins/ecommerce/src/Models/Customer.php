@@ -45,6 +45,9 @@ class Customer extends Authenticatable
         'dob',
         'status',
     ];
+    protected $with = [
+        'detail'
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -160,12 +163,14 @@ class Customer extends Authenticatable
         return $this->hasOne(CustomerDetail::class, 'customer_id');
     }
 
-    public function taxCertificate(){
-      return $this->hasOne(CustomerTaxCertificate::class, 'customer_id');
+    public function taxCertificate()
+    {
+        return $this->hasOne(CustomerTaxCertificate::class, 'customer_id');
     }
 
-    public function storeLocator(){
-      return $this->hasOne(CustomerStoreLocator::class, 'customer_id');
+    public function storeLocator()
+    {
+        return $this->hasOne(CustomerStoreLocator::class, 'customer_id');
     }
 
     public function shippingAddress()
@@ -204,7 +209,6 @@ class Customer extends Authenticatable
         }
 
     }
-
     public function card()
     {
         return $this->hasMany(CustomerCard::class, 'customer_id');

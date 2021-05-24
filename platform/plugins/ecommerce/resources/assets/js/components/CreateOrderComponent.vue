@@ -4,7 +4,7 @@
         <div class="flexbox-content">
             <div class="wrapper-content">
                 <div class="pd-all-20">
-                    <label class="title-product-main text-no-bold">{{ __('Order information')}}</label>
+                    <label class="title-product-main text-no-bold">{{ __('Order information') }}</label>
                 </div>
                 <div class="pd-all-10-20 border-top-title-main">
                     <div class="clearfix">
@@ -68,7 +68,8 @@
                                 <div class="panel-body">
                                     <div class="box-search-advance-head" v-b-modal.add-product-item>
                                         <img width="30"
-                                             src="//hstatic.net/0/0/global/design/imgs/next-create-custom-line-item.svg" alt="icon">
+                                             src="//hstatic.net/0/0/global/design/imgs/next-create-custom-line-item.svg"
+                                             alt="icon">
                                         <span class="ml10"
                                               data-bind="text:CustomFieldName">{{ __('Create a new product') }}</span>
                                     </div>
@@ -85,11 +86,18 @@
                                                          :src="product_item.image_url"
                                                          :title="product_item.name" :alt="product_item.name">
                                                 </div>
-                                                <label class="inline_block ml10 mt10 ws-nm" style="width:calc(100% - 50px);">
-                                                    {{ product_item.name }} ({{product_item.sku}})
+                                                <label class="inline_block ml10 mt10 ws-nm"
+                                                       style="width:calc(100% - 50px);">
+                                                    {{ product_item.name }} ({{ product_item.sku }})
                                                     <span v-if="!product_item.variations.length">
-                                                        <span v-if="product_item.is_out_of_stock" class="text-danger"><small>&nbsp;({{ __('Out of stock') }})</small></span>
-                                                        <span v-if="!product_item.is_out_of_stock && product_item.quantity > 0"><small>&nbsp;({{ product_item.quantity }} {{ __('product(s) available') }})</small></span>
+                                                        <span v-if="product_item.is_out_of_stock"
+                                                              class="text-danger"><small>&nbsp;({{
+                                                                __('Out of stock')
+                                                            }})</small></span>
+                                                        <span
+                                                            v-if="!product_item.is_out_of_stock && product_item.quantity > 0"><small>&nbsp;({{
+                                                                product_item.quantity
+                                                            }} {{ __('product(s) available') }})</small></span>
                                                     </span>
                                                 </label>
                                                 <div v-if="product_item.variations.length">
@@ -100,20 +108,28 @@
                                                             @click="selectProductVariant(product_item, variation)"
                                                             v-if="variation.variation_items.length">
                                                             <a class="color_green float-left">
-                                                                    <span v-for="(productItem, index) in variation.variation_items">
+                                                                    <span
+                                                                        v-for="(productItem, index) in variation.variation_items">
                                                                         {{ productItem.attribute_title }}
-                                                                        <span v-if="index !== variation.variation_items.length - 1">/</span>
+                                                                        <span
+                                                                            v-if="index !== variation.variation_items.length - 1">/</span>
                                                                     </span>
                                                             </a>
                                                             <span>&nbsp;({{ variation.product.sku }})</span>
-                                                            <span v-if="variation.is_out_of_stock" class="text-danger"><small>&nbsp;({{ __('Out of stock') }})</small></span>
-                                                            <span v-if="!variation.is_out_of_stock && variation.quantity > 0"><small>&nbsp;({{ variation.quantity }} {{ __('product(s) available') }})</small></span>
+                                                            <span v-if="variation.is_out_of_stock"
+                                                                  class="text-danger"><small>&nbsp;({{
+                                                                    __('Out of stock')
+                                                                }})</small></span>
+                                                            <span
+                                                                v-if="!variation.is_out_of_stock && variation.quantity > 0"><small>&nbsp;({{
+                                                                    variation.quantity
+                                                                }} {{ __('product(s) available') }})</small></span>
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </li>
                                             <li v-if="list_products.data.length === 0">
-                                                <span>{{ __('No products found!')}}</span>
+                                                <span>{{ __('No products found!') }}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -154,7 +170,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="text-title-field" for="txt-note">{{ __('Note') }}</label>
-                                <textarea class="ui-text-area textarea-auto-height" id="txt-note" rows="2" placeholder="Note for order..." v-model="note"></textarea>
+                                <textarea class="ui-text-area textarea-auto-height" id="txt-note" rows="2"
+                                          placeholder="Note for order..." v-model="note"></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="text-title-field">Select Order Type</label>
@@ -188,24 +205,30 @@
                                     <tr>
                                         <td>
                                             <a href="#" v-b-modal.add-discounts class="hover-underline">
-                                                <span v-if="!has_applied_discount"><i class="fa fa-plus-circle"></i> {{ __('Add discount') }}</span>
-                                                <span v-if="has_applied_discount">{{ __('Discount')}}</span>
+                                                <span v-if="!has_applied_discount"><i
+                                                    class="fa fa-plus-circle"></i> {{ __('Add discount') }}</span>
+                                                <span v-if="has_applied_discount">{{ __('Discount') }}</span>
                                             </a>
                                             <p class="mb0 font-size-12px"
                                                v-if="child_discount_description && has_applied_discount">{{
-                                                child_discount_description }}</p>
+                                                    child_discount_description
+                                                }}</p>
                                         </td>
-                                        <td class="pl10">{{ has_applied_discount ? child_discount_amount : 0 | formatPrice }} {{ currency }}</td>
+                                        <td class="pl10">
+                                            {{ has_applied_discount ? child_discount_amount : 0 | formatPrice }}
+                                            {{ currency }}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <a href="#" v-b-modal.add-shipping class="hover-underline">
                                                 <span v-if="!child_is_selected_shipping"><i
-                                                        class="fa fa-plus-circle"></i> {{ __('Add shipping fee') }}</span>
+                                                    class="fa fa-plus-circle"></i> {{ __('Add shipping fee') }}</span>
                                                 <span v-if="child_is_selected_shipping">{{ __('Shipping') }}</span>
                                             </a>
                                             <p class="mb0 font-size-12px" v-if="child_shipping_method_name">{{
-                                                child_shipping_method_name }}</p>
+                                                    child_shipping_method_name
+                                                }}</p>
                                         </td>
                                         <td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>
                                     </tr>
@@ -235,7 +258,9 @@
                             <!--<button class="btn btn-primary" v-b-modal.make-paid :disabled="!child_product_ids.length">{{ __('Paid') }}</button>-->
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
                             <!--<input type="hidden" v-model="child_payment_method" value="cod">-->
-                            <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">Create Order</button>
+                            <button class="btn btn-primary ml15" @click="createOrder($event)"
+                                    :disabled="!child_product_ids.length || child_total_amount === 0">Create Order
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -266,7 +291,8 @@
                                             <div class="flexbox-grid-default flexbox-align-items-center">
                                                 <div class="flexbox-auto-40">
                                                     <img width="30"
-                                                         src="//hstatic.net/0/0/global/design/imgs/next-create-customer.svg" alt="icon">
+                                                         src="//hstatic.net/0/0/global/design/imgs/next-create-customer.svg"
+                                                         alt="icon">
                                                 </div>
                                                 <div class="flexbox-auto-content-right">
                                                     <span>{{ __('Create new customer') }}</span>
@@ -282,7 +308,8 @@
                                                     @click="selectCustomer(customer)">
                                                     <div class="flexbox-grid-default flexbox-align-items-center">
                                                         <div class="flexbox-auto-40">
-                                                            <div class="wrap-img inline_block vertical-align-t radius-cycle">
+                                                            <div
+                                                                class="wrap-img inline_block vertical-align-t radius-cycle">
                                                                 <img class="thumb-image radius-cycle"
                                                                      :src="customer.avatar_url">
                                                             </div>
@@ -291,8 +318,12 @@
                                                             <div class="overflow-ellipsis">{{ customer.name }}</div>
                                                             <div class="overflow-ellipsis">
                                                                 <a :href="'mailto:' + customer.email">
-                                                                    <span>{{ customer.email ? customer.email : '-' }}</span>
+                                                                    <span class="asd">{{
+                                                                            customer.email ? customer.email : '-'
+                                                                        }}</span>
                                                                 </a>
+                                                                <input type="hidden" :value="child_customer_id"
+                                                                       id="customer_information">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -354,7 +385,8 @@
                     <div class="next-card-section border-none-t">
                         <ul class="ws-nm">
                             <li>
-                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle" alt="User Picture"
+                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle"
+                                     alt="User Picture"
                                      :src="child_customer.avatar_url">
                                 <div class="pull-right color_darkblue mt20">
                                     <i class="fas fa-inbox"></i>
@@ -364,7 +396,8 @@
                                     {{ __('order(s)') }}
                                 </div>
                             </li>
-                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{ child_customer.name
+                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{
+                                    child_customer.name
                                 }}</a>
                             </li>
                             <li>
@@ -373,6 +406,8 @@
                                         <a :href="'mailto:' + child_customer.email">
                                             <span>{{ child_customer.email ? child_customer.email : '-' }}</span>
                                         </a>
+                                        <input type="hidden" :value="child_customer_id"
+                                               id="customer_id">
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-email>
@@ -394,7 +429,7 @@
                             <li class="clearfix">
                                 <div class="flexbox-grid-default">
                                     <div class="flexbox-auto-content-left">
-                                        <label class="title-text-second">{{ __('Shipping Address')}}</label>
+                                        <label class="title-text-second">{{ __('Shipping Address') }}</label>
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-address>
@@ -416,10 +451,12 @@
                                             <option v-for="address_item in child_customer_addresses"
                                                     :value="address_item.id"
                                                     :selected="parseInt(address_item.id) === parseInt(customer_address.email)">
-                                                {{ address_item.address + ', ' + address_item.city + ', ' +
-                                                address_item.state + ', ' +
-                                                address_item.country + (zip_code_enabled ? ', ' +
-                                            address_item.zip_code : '') }}
+                                                {{
+                                                    address_item.address + ', ' + address_item.city + ', ' +
+                                                    address_item.state + ', ' +
+                                                    address_item.country + (zip_code_enabled ? ', ' +
+                                                        address_item.zip_code : '')
+                                                }}
                                             </option>
                                         </select>
                                         <svg class="svg-next-icon svg-next-icon-size-16">
@@ -431,7 +468,8 @@
                                 </div>
                                 <div>{{ child_customer_address.name }}</div>
                                 <div>{{ child_customer_address.phone }}</div>
-                                <div><a :href="'mailto:' + child_customer_address.email">{{ child_customer_address.email
+                                <div><a :href="'mailto:' + child_customer_address.email">{{
+                                        child_customer_address.email
                                     }}</a>
                                 </div>
                                 <div>{{ child_customer_address.address }}</div>
@@ -441,7 +479,9 @@
                                 <div v-if="zip_code_enabled">{{ child_customer_address.zip_code }}</div>
                                 <div>
                                     <a target="_blank" class="hover-underline"
-                                       :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{ __('See on maps') }}</a>
+                                       :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{
+                                            __('See on maps')
+                                        }}</a>
                                 </div>
                             </li>
                         </ul>
@@ -473,7 +513,7 @@
                     <input type="checkbox" class="hrv-checkbox" v-model="product.with_storehouse_management"
                            value="1">
                     {{ __('With storehouse management?') }}
-                    </label>
+                </label>
             </div>
             <div class="row" v-show="product.with_storehouse_management">
                 <div class="col-8">
@@ -576,7 +616,9 @@
                                 <div class="next-input--stylized border-radius-left-none">
                                     <input class="next-input next-input--invisible"
                                            v-model="discount_custom_value">
-                                    <span class="next-input-add-on next-input__add-on--after">{{ discount_type_unit }}</span>
+                                    <span class="next-input-add-on next-input__add-on--after">{{
+                                            discount_type_unit
+                                        }}</span>
                                 </div>
                             </div>
                         </div>
@@ -612,7 +654,9 @@
                         </div>
                         <div class="ui-banner__content">
                             <h2 class="ui-banner__title">{{ __('How to select configured shipping?') }}</h2>
-                            <div class="ws-nm">{{ __('Please add customer information with the complete shipping address to see the configured shipping rates') }}.
+                            <div class="ws-nm">{{
+                                    __('Please add customer information with the complete shipping address to see the configured shipping rates')
+                                }}.
                             </div>
                         </div>
                     </div>
@@ -709,7 +753,7 @@
                 </div>
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
-                        <label class="text-title-field">{{ __('State')}}</label>
+                        <label class="text-title-field">{{ __('State') }}</label>
                         <input type="text" class="next-input customer-address-state"
                                :value="child_customer_address.state">
                     </div>
@@ -721,7 +765,7 @@
                 </div>
                 <div class="next-form-grid" v-if="zip_code_enabled">
                     <div class="next-form-grid-cell">
-                        <label class="text-title-field">{{ __('Zip code')}}</label>
+                        <label class="text-title-field">{{ __('Zip code') }}</label>
                         <input type="text" class="next-input customer-address-zip-code"
                                :value="child_customer_address.zip_code">
                     </div>
@@ -733,7 +777,9 @@
                  @ok="createOrder($event, true)">
             <label class="ws-nm">{{ __('Confirm payment is paid for this order') }}</label>
             <p>
-                {{ __('Payment status of the order is Paid. Once the order has been created, you cannot change the payment method or status') }}.
+                {{
+                    __('Payment status of the order is Paid. Once the order has been created, you cannot change the payment method or status')
+                }}.
             </p>
             <p>{{ __('Select payment method') }}</p>
             <div class="ui-select-wrapper mb15 next-input--is-focused">
@@ -753,7 +799,9 @@
                  @ok="createOrder($event)">
             <label class="ws-nm">{{ __('Confirm that payment for this order will be paid later') }}</label>
             <p>
-                {{ __('Payment status of the order is Pending. Once the order has been created, you cannot change the payment method or status') }}.
+                {{
+                    __('Payment status of the order is Pending. Once the order has been created, you cannot change the payment method or status')
+                }}.
             </p>
             <div class="ui-select-wrapper mb15 next-input--is-focused">
                 <select class="ui-select" v-model="child_payment_method">
@@ -772,675 +820,675 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            products: {
-                type: Array,
-                default: () => [],
-            },
-            product_ids: {
-                type: Array,
-                default: () => [],
-            },
-            customer_id: {
-                type: Number,
-                default: () => null,
-            },
-            order_id: {
-                type: Number,
-                default: () => null,
-            },
-            customer: {
-                type: Object,
-                default: () => {
-                    return {
-                        email: 'guest@example.com',
-                    };
-                },
-            },
-            customer_addresses: {
-                type: Array,
-                default: () => [],
-            },
-            order_types: {
-                type: Object,
-                default: () => [],
-            },
-            payment_methods: {
-                type: Object,
-                default: () => [],
-            },
-            sel_order_type: {
-                type: String,
-                default: () => 'normal',
-            },
-            customer_address: {
-                type: Object,
-                default: () => ({
-                    name: null,
-                    email: null,
-                    address: null,
-                    phone: null,
-                    country: 'AF',
-                    state: null,
-                    city: null,
-                    zip_code: null,
-                }),
-            },
-            customer_order_numbers: {
-                type: Number,
-                default: () => 0,
-            },
-            sub_amount: {
-                type: Number,
-                default: () => 0,
-            },
-            total_amount: {
-                type: Number,
-                default: () => 0,
-            },
-            discount_amount: {
-                type: Number,
-                default: () => 0,
-            },
-            discount_description: {
-                type: String,
-                default: () => null,
-            },
-            shipping_amount: {
-                type: Number,
-                default: () => 0,
-            },
-            shipping_method: {
-                type: String,
-                default: () => 'default',
-            },
-            shipping_option: {
-                type: String,
-                default: () => '',
-            },
-            is_selected_shipping: {
-                type: Boolean,
-                default: () => false,
-            },
-            shipping_method_name: {
-                type: String,
-                default: () => 'Default',
-            },
-            payment_method: {
-                type: String,
-                default: () => 'cod',
-            },
-            currency: {
-                type: String,
-                default: () => null,
-                required: true
-            },
-            zip_code_enabled: {
-                type: Number,
-                default: () => 0,
-                required: true
+export default {
+    props: {
+        products: {
+            type: Array,
+            default: () => [],
+        },
+        product_ids: {
+            type: Array,
+            default: () => [],
+        },
+        customer_id: {
+            type: Number,
+            default: () => null,
+        },
+        order_id: {
+            type: Number,
+            default: () => null,
+        },
+        customer: {
+            type: Object,
+            default: () => {
+                return {
+                    email: 'guest@example.com',
+                };
             },
         },
-        data: function () {
-            return {
-                list_products: {
-                    data: [],
-                },
-                hidden_product_search_panel: true,
-                loading: false,
-                note: null,
-                order_type: 'normal',
-                customers: {
-                    data: [],
-                },
-                hidden_customer_search_panel: true,
-                customer_keyword: null,
-                countries: [],
-                shipping_type: 'custom',
-                product: {
-                    name: null,
+        customer_addresses: {
+            type: Array,
+            default: () => [],
+        },
+        order_types: {
+            type: Object,
+            default: () => [],
+        },
+        payment_methods: {
+            type: Object,
+            default: () => [],
+        },
+        sel_order_type: {
+            type: String,
+            default: () => 'normal',
+        },
+        customer_address: {
+            type: Object,
+            default: () => ({
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            }),
+        },
+        customer_order_numbers: {
+            type: Number,
+            default: () => 0,
+        },
+        sub_amount: {
+            type: Number,
+            default: () => 0,
+        },
+        total_amount: {
+            type: Number,
+            default: () => 0,
+        },
+        discount_amount: {
+            type: Number,
+            default: () => 0,
+        },
+        discount_description: {
+            type: String,
+            default: () => null,
+        },
+        shipping_amount: {
+            type: Number,
+            default: () => 0,
+        },
+        shipping_method: {
+            type: String,
+            default: () => 'default',
+        },
+        shipping_option: {
+            type: String,
+            default: () => '',
+        },
+        is_selected_shipping: {
+            type: Boolean,
+            default: () => false,
+        },
+        shipping_method_name: {
+            type: String,
+            default: () => 'Default',
+        },
+        payment_method: {
+            type: String,
+            default: () => 'cod',
+        },
+        currency: {
+            type: String,
+            default: () => null,
+            required: true
+        },
+        zip_code_enabled: {
+            type: Number,
+            default: () => 0,
+            required: true
+        },
+    },
+    data: function () {
+        return {
+            list_products: {
+                data: [],
+            },
+            hidden_product_search_panel: true,
+            loading: false,
+            note: null,
+            order_type: 'normal',
+            customers: {
+                data: [],
+            },
+            hidden_customer_search_panel: true,
+            customer_keyword: null,
+            countries: [],
+            shipping_type: 'custom',
+            product: {
+                name: null,
+                price: 0,
+                sku: null,
+                with_storehouse_management: false,
+                allow_checkout_when_out_of_stock: false,
+                quantity: 0,
+            },
+            shipping_methods: {
+                'default': {
+                    name: 'Default',
                     price: 0,
-                    sku: null,
-                    with_storehouse_management: false,
-                    allow_checkout_when_out_of_stock: false,
-                    quantity: 0,
-                },
-                shipping_methods: {
-                    'default': {
-                        name: 'Default',
-                        price: 0,
-                    }
-                },
-                discount_type_unit: this.currency,
-                discount_type: 'amount',
-                coupon_code: null,
-                child_discount_description: this.discount_description,
-                has_invalid_coupon: false,
-                has_applied_discount: this.discount_amount > 0,
-                discount_custom_value: 0,
-                child_customer: this.customer,
-                child_customer_id: this.customer_id,
-                child_customer_order_numbers: this.customer_order_numbers,
-                child_customer_addresses: this.customer_addresses,
-                child_customer_address: this.customer_address,
-                child_products: this.products,
-                child_product_ids: this.product_ids,
-                child_sub_amount: this.sub_amount,
-                child_total_amount: this.total_amount,
-                child_discount_amount: this.discount_amount,
-                child_shipping_amount: this.shipping_amount,
-                child_shipping_method: this.shipping_method,
-                child_shipping_option: this.shipping_option,
-                child_shipping_method_name: this.shipping_method_name,
-                child_is_selected_shipping: this.is_selected_shipping,
-                child_payment_method: this.payment_method,
+                }
+            },
+            discount_type_unit: this.currency,
+            discount_type: 'amount',
+            coupon_code: null,
+            child_discount_description: this.discount_description,
+            has_invalid_coupon: false,
+            has_applied_discount: this.discount_amount > 0,
+            discount_custom_value: 0,
+            child_customer: this.customer,
+            child_customer_id: this.customer_id,
+            child_customer_order_numbers: this.customer_order_numbers,
+            child_customer_addresses: this.customer_addresses,
+            child_customer_address: this.customer_address,
+            child_products: this.products,
+            child_product_ids: this.product_ids,
+            child_sub_amount: this.sub_amount,
+            child_total_amount: this.total_amount,
+            child_discount_amount: this.discount_amount,
+            child_shipping_amount: this.shipping_amount,
+            child_shipping_method: this.shipping_method,
+            child_shipping_option: this.shipping_option,
+            child_shipping_method_name: this.shipping_method_name,
+            child_is_selected_shipping: this.is_selected_shipping,
+            child_payment_method: this.payment_method,
+        }
+    },
+    mounted: function () {
+        let context = this;
+        $(document).on('click', 'body', (e) => {
+            let container = $('.box-search-advance');
+
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                context.hidden_customer_search_panel = true;
+                context.hidden_product_search_panel = true;
+            }
+        });
+    },
+    methods: {
+        loadListCustomersForSearch: function (page = 1, force = false) {
+            let context = this;
+            context.hidden_customer_search_panel = false;
+            $('.textbox-advancesearch.customer').closest('.box-search-advance.customer').find('.panel').addClass('active');
+            if (_.isEmpty(context.customers.data) || force) {
+                context.loading = true;
+                axios
+                    .get(route('customers.get-list-customers-for-search', {
+                        keyword: context.customer_keyword,
+                        page: page
+                    }))
+                    .then(res => {
+                        context.customers = res.data.data;
+                        context.loading = false;
+                    })
+                    .catch(res => {
+                        Botble.handleError(res.response.data);
+                    });
             }
         },
-        mounted: function () {
+        loadListProductsAndVariations: function (page = 1, force = false) {
             let context = this;
-            $(document).on('click', 'body', (e) => {
-                let container = $('.box-search-advance');
+            context.hidden_product_search_panel = false;
+            $('.textbox-advancesearch.product').closest('.box-search-advance.product').find('.panel').addClass('active');
+            if (_.isEmpty(context.list_products.data) || force) {
+                context.loading = true;
+                axios
+                    .get(route('products.get-all-products-and-variations', {
+                        keyword: context.product_keyword,
+                        page: page
+                    }))
+                    .then(res => {
+                        context.list_products = res.data.data;
+                        context.loading = false;
+                    })
+                    .catch(res => {
+                        Botble.handleError(res.response.data);
+                    });
+            }
+        },
+        handleSearchProduct: function (value) {
+            if (value !== this.product_keyword) {
+                let context = this;
+                this.product_keyword = value;
+                setTimeout(() => {
+                    context.loadListProductsAndVariations(1, true);
+                }, 500);
+            }
+        },
+        selectProductVariant: function (product, variation = null) {
+            if ((!_.isEmpty(variation) && variation.is_out_of_stock) || (_.isEmpty(variation) && product.is_out_of_stock)) {
+                Botble.showError('Cannot select out of stock product!');
+                return false;
+            }
 
-                if (!container.is(e.target) && container.has(e.target).length === 0) {
-                    context.hidden_customer_search_panel = true;
-                    context.hidden_product_search_panel = true;
+            if (!_.isEmpty(variation)) {
+                if (!_.includes(this.child_product_ids, variation.product_id)) {
+                    let productItem = variation;
+                    productItem.product_name = product.name;
+                    productItem.image_url = product.image_url;
+                    productItem.price = variation.price;
+                    productItem.product_link = route('products.edit', variation.product_id);
+                    productItem.select_qty = 1;
+                    this.child_products.push(productItem);
+                    this.child_product_ids.push(variation.product_id);
+                }
+            } else if (!_.includes(this.child_product_ids, product.id)) {
+                let productItem = product;
+                productItem.product_name = product.name;
+                productItem.image_url = product.image_url;
+                productItem.price = product.price;
+                productItem.product_link = route('products.edit', product.id);
+                productItem.select_qty = 1;
+                this.child_products.push(productItem);
+                this.child_product_ids.push(product.id);
+            }
+            this.hidden_product_search_panel = true;
+        },
+        selectCustomer: function (customer) {
+            this.child_customer = customer;
+            this.child_customer_id = customer.id;
+
+            this.loadCustomerAddress(this.child_customer_id);
+
+            this.getOrderNumbers();
+        },
+        removeCustomer: function () {
+            this.child_customer = this.customer;
+            this.child_customer_id = null;
+            this.child_customer_addresses = [];
+            this.child_customer_address = {
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            };
+            this.child_customer_order_numbers = 0;
+        },
+        handleRemoveVariant: function ($event, variant) {
+            $event.preventDefault();
+            this.child_product_ids = _.reject(this.child_product_ids, (item) => {
+                return item === variant.product_id;
+            });
+
+            this.child_products = _.reject(this.child_products, (item) => {
+                return item.product_id === variant.product_id;
+            });
+        },
+        loadCountries: function () {
+            let context = this;
+            if (_.isEmpty(context.countries)) {
+                axios
+                    .get(route('ajax.countries.list'))
+                    .then(res => {
+                        context.countries = res.data.data;
+                    })
+                    .catch(res => {
+                        Botble.handleError(res.response.data);
+                    });
+            }
+        },
+        createOrder: function ($event, paid = false) {
+            $event.preventDefault();
+            $($event.target).find('.btn-primary').addClass('button-loading');
+            let context = this;
+
+            let products = [];
+            _.each(this.child_products, function (item) {
+                products.push({
+                    id: (item.configurable_product_id ? item.product_id : item.id),
+                    quantity: item.select_qty
+                });
+            });
+
+            axios
+                .post(route('orders.create'), {
+                    products: products,
+                    payment_status: paid ? 'completed' : 'pending',
+                    payment_method: this.child_payment_method,
+                    shipping_method: this.child_shipping_method,
+                    shipping_option: this.child_shipping_option,
+                    shipping_amount: this.child_shipping_amount,
+                    discount_amount: this.child_discount_amount,
+                    discount_description: this.child_discount_description,
+                    coupon_code: this.coupon_code,
+                    customer_id: this.child_customer_id,
+                    order_id: this.order_id,
+                    note: this.note,
+                    order_type: this.order_type,
+                    amount: this.child_sub_amount,
+                    customer_address: this.child_customer_address,
+                })
+                .then(res => {
+                    let data = res.data.data;
+                    if (data.error) {
+                        Botble.showError(Botble.showError(res.data.message))
+                    } else {
+                        Botble.showSuccess(res.data.message);
+                        if (paid) {
+                            context.$root.$emit('bv::hide::modal', 'make-paid');
+                        } else {
+                            context.$root.$emit('bv::hide::modal', 'make-pending');
+                        }
+
+                        setTimeout(() => {
+                            window.location.href = route('orders.edit', data.id);
+                        }, 1000);
+                    }
+                })
+                .catch(res => {
+                    if (res.response.data.error) {
+                        Botble.showError(Botble.showError(res.response.data.message))
+                    } else {
+                        Botble.handleError(res.response.data);
+                    }
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                });
+        },
+        createProduct: function ($event) {
+            $event.preventDefault();
+            $($event.target).find('.btn-primary').addClass('button-loading');
+            let context = this;
+
+            axios
+                .post(route('products.create-product-when-creating-order'), context.product)
+                .then(res => {
+                    if (res.data.error) {
+                        Botble.showError(Botble.showError(res.data.message))
+                    } else {
+
+                        context.product = res.data.data;
+
+                        context.list_products = {
+                            data: [],
+                        };
+
+                        let productItem = context.product;
+                        productItem.product_name = context.product.name;
+                        productItem.image_url = context.product.image_url;
+                        productItem.price = context.product.price;
+                        productItem.product_link = route('products.edit', context.product.id);
+
+                        context.child_products.push(productItem);
+                        context.child_product_ids.push(context.product.id);
+
+                        context.hidden_product_search_panel = true;
+
+                        Botble.showSuccess(res.data.message);
+
+                        context.$root.$emit('bv::hide::modal', 'add-product-item');
+                    }
+                })
+                .catch(res => {
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                    Botble.handleError(res.response.data);
+                });
+        },
+        updateCustomerEmail: function ($event) {
+            $event.preventDefault();
+            $($event.target).find('.btn-primary').addClass('button-loading');
+
+            let context = this;
+
+            axios
+                .post(route('customers.update-email', context.child_customer.id), {
+                    email: context.child_customer.email,
+                })
+                .then(res => {
+                    if (res.data.error) {
+                        Botble.showError(Botble.showError(res.data.message))
+                    } else {
+                        Botble.showSuccess(res.data.message);
+
+                        context.$root.$emit('bv::hide::modal', 'edit-email')
+                    }
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                })
+                .catch(res => {
+                    Botble.handleError(res.response.data);
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                });
+        },
+        updateOrderAddress: function ($event) {
+            $event.preventDefault();
+
+            if (this.customer) {
+
+                $($event.target).addClass('button-loading');
+
+                let $modal = $(event.target).closest('.modal-dialog');
+                this.child_customer_address.name = $modal.find('.customer-address-name').val();
+                this.child_customer_address.email = $modal.find('.customer-address-email').val();
+                this.child_customer_address.phone = $modal.find('.customer-address-phone').val();
+                this.child_customer_address.address = $modal.find('.customer-address-address').val();
+                this.child_customer_address.city = $modal.find('.customer-address-city').val();
+                this.child_customer_address.state = $modal.find('.customer-address-state').val();
+                this.child_customer_address.country = $modal.find('.customer-address-country').val();
+                this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val();
+
+                // this.loadCountries();
+                this.$root.$emit('bv::hide::modal', 'edit-address');
+                $($event.target).removeClass('button-loading');
+            }
+        },
+        createNewCustomer: function ($event) {
+            $event.preventDefault();
+            let context = this;
+
+            $($event.target).find('.btn-primary').addClass('button-loading');
+
+            axios
+                .post(route('customers.create-customer-when-creating-order'), {
+                    customer_id: context.child_customer_id,
+                    name: context.child_customer_address.name,
+                    email: context.child_customer_address.email,
+                    phone: context.child_customer_address.phone,
+                    address: context.child_customer_address.address,
+                    country: context.child_customer_address.country,
+                    state: context.child_customer_address.state,
+                    city: context.child_customer_address.city,
+                    zip_code: context.child_customer_address.zip_code,
+                })
+                .then(res => {
+                    if (res.data.error) {
+                        Botble.showError(Botble.showError(res.data.message))
+                    } else {
+                        context.child_customer_address = res.data.data.address;
+                        context.child_customer = res.data.data.customer;
+                        context.child_customer_id = context.child_customer.id;
+
+                        context.customers = {
+                            data: [],
+                        };
+
+                        Botble.showSuccess(res.data.message);
+
+                        context.$root.$emit('bv::hide::modal', 'add-customer');
+                    }
+
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                })
+                .catch(res => {
+                    Botble.handleError(res.response.data);
+                    $($event.target).find('.btn-primary').removeClass('button-loading');
+                });
+        },
+        selectCustomerAddress: function (event) {
+            let context = this;
+            _.each(this.child_customer_addresses, (item) => {
+                if (parseInt(item.id) === parseInt(event.target.value)) {
+                    context.child_customer_address = item;
                 }
             });
         },
-        methods: {
-            loadListCustomersForSearch: function (page = 1, force = false) {
-                let context = this;
-                context.hidden_customer_search_panel = false;
-                $('.textbox-advancesearch.customer').closest('.box-search-advance.customer').find('.panel').addClass('active');
-                if (_.isEmpty(context.customers.data) || force) {
-                    context.loading = true;
-                    axios
-                        .get(route('customers.get-list-customers-for-search', {
-                            keyword: context.customer_keyword,
-                            page: page
-                        }))
-                        .then(res => {
-                            context.customers = res.data.data;
-                            context.loading = false;
-                        })
-                        .catch(res => {
-                            Botble.handleError(res.response.data);
-                        });
-                }
-            },
-            loadListProductsAndVariations: function (page = 1, force = false) {
-                let context = this;
-                context.hidden_product_search_panel = false;
-                $('.textbox-advancesearch.product').closest('.box-search-advance.product').find('.panel').addClass('active');
-                if (_.isEmpty(context.list_products.data) || force) {
-                    context.loading = true;
-                    axios
-                        .get(route('products.get-all-products-and-variations', {
-                            keyword: context.product_keyword,
-                            page: page
-                        }))
-                        .then(res => {
-                            context.list_products = res.data.data;
-                            context.loading = false;
-                        })
-                        .catch(res => {
-                            Botble.handleError(res.response.data);
-                        });
-                }
-            },
-            handleSearchProduct: function (value) {
-                if (value !== this.product_keyword) {
-                    let context = this;
-                    this.product_keyword = value;
-                    setTimeout(() => {
-                        context.loadListProductsAndVariations(1, true);
-                    }, 500);
-                }
-            },
-            selectProductVariant: function (product, variation = null) {
-                if ((!_.isEmpty(variation) && variation.is_out_of_stock) || (_.isEmpty(variation) && product.is_out_of_stock)) {
-                    Botble.showError('Cannot select out of stock product!');
-                    return false;
-                }
-
-                if (!_.isEmpty(variation)) {
-                    if (!_.includes(this.child_product_ids, variation.product_id)) {
-                        let productItem = variation;
-                        productItem.product_name = product.name;
-                        productItem.image_url = product.image_url;
-                        productItem.price = variation.price;
-                        productItem.product_link = route('products.edit', variation.product_id);
-                        productItem.select_qty = 1;
-                        this.child_products.push(productItem);
-                        this.child_product_ids.push(variation.product_id);
+        getOrderNumbers: function () {
+            let context = this;
+            axios
+                .get(route('customers.get-customer-order-numbers', context.child_customer_id))
+                .then(res => {
+                    context.child_customer_order_numbers = res.data.data;
+                })
+                .catch(res => {
+                    Botble.handleError(res.response.data);
+                });
+        },
+        loadCustomerAddress: function () {
+            let context = this;
+            axios
+                .get(route('customers.get-customer-addresses', context.child_customer_id))
+                .then(res => {
+                    context.child_customer_addresses = res.data.data;
+                    if (!_.isEmpty(context.child_customer_addresses)) {
+                        context.child_customer_address = _.first(context.child_customer_addresses);
                     }
-                } else if (!_.includes(this.child_product_ids, product.id)) {
-                    let productItem = product;
-                    productItem.product_name = product.name;
-                    productItem.image_url = product.image_url;
-                    productItem.price = product.price;
-                    productItem.product_link = route('products.edit', product.id);
-                    productItem.select_qty = 1;
-                    this.child_products.push(productItem);
-                    this.child_product_ids.push(product.id);
-                }
-                this.hidden_product_search_panel = true;
-            },
-            selectCustomer: function (customer) {
-                this.child_customer = customer;
-                this.child_customer_id = customer.id;
-
-                this.loadCustomerAddress(this.child_customer_id);
-
-                this.getOrderNumbers();
-            },
-            removeCustomer: function () {
-                this.child_customer = this.customer;
-                this.child_customer_id = null;
-                this.child_customer_addresses = [];
-                this.child_customer_address = {
-                    name: null,
-                    email: null,
-                    address: null,
-                    phone: null,
-                    country: 'AF',
-                    state: null,
-                    city: null,
-                    zip_code: null,
-                };
-                this.child_customer_order_numbers = 0;
-            },
-            handleRemoveVariant: function ($event, variant) {
-                $event.preventDefault();
-                this.child_product_ids = _.reject(this.child_product_ids, (item) => {
-                    return item === variant.product_id;
+                })
+                .catch(res => {
+                    Botble.handleError(res.response.data);
                 });
+        },
+        selectShippingMethod: function ($event) {
+            $event.preventDefault();
+            let context = this;
+            $($event.target).find('.btn-primary').addClass('button-loading');
 
-                this.child_products = _.reject(this.child_products, (item) => {
-                    return item.product_id === variant.product_id;
-                });
-            },
-            loadCountries: function () {
-                let context = this;
-                if (_.isEmpty(context.countries)) {
-                    axios
-                        .get(route('ajax.countries.list'))
-                        .then(res => {
-                            context.countries = res.data.data;
-                        })
-                        .catch(res => {
-                            Botble.handleError(res.response.data);
-                        });
+            context.child_is_selected_shipping = true;
+
+            if (context.shipping_type === 'free-shipping') {
+                context.child_shipping_method_name = 'Free shipping';
+                context.child_shipping_amount = 0;
+            } else {
+                let selected_shipping = $($event.target).find('.ui-select').val();
+                if (!_.isEmpty(selected_shipping)) {
+                    selected_shipping = selected_shipping.split(';');
+                    context.child_shipping_method = selected_shipping[0].trim();
+                    context.child_shipping_option = selected_shipping[1].trim();
+                    context.child_shipping_amount = parseFloat(selected_shipping[2].trim());
+                    context.child_shipping_method_name = $($event.target).find('.ui-select option:selected').data('name')
                 }
-            },
-            createOrder: function ($event, paid = false) {
-                $event.preventDefault();
-                $($event.target).find('.btn-primary').addClass('button-loading');
-                let context = this;
+            }
 
-                let products = [];
-                _.each(this.child_products, function (item) {
-                    products.push({
-                        id: (item.configurable_product_id ? item.product_id : item.id),
-                        quantity: item.select_qty
-                    });
+            setTimeout(function () {
+                $($event.target).find('.btn-primary').removeClass('button-loading');
+                context.$root.$emit('bv::hide::modal', 'add-shipping');
+            }, 500);
+        },
+        loadAvailableShippingMethods: function () {
+            let context = this;
+            axios
+                .get(route('orders.get-available-shipping-methods', {
+                    address: context.child_customer_address.address,
+                    country: context.child_customer_address.country,
+                    state: context.child_customer_address.state,
+                    city: context.child_customer_address.city,
+                    zip_code: context.child_customer_address.zip_code,
+                    products: context.child_product_ids,
+                }))
+                .then(res => {
+                    context.shipping_methods = res.data.data;
+                })
+                .catch(res => {
+                    Botble.handleError(res.response.data);
                 });
+        },
+        changeDiscountType: function (event) {
+            if ($(event.target).val() === 'amount') {
+                this.discount_type_unit = this.currency;
+            } else {
+                this.discount_type_unit = '%';
+            }
+            this.discount_type = $(event.target).val();
+        },
+        handleAddDiscount: function (event) {
+            event.preventDefault();
+            let context = this;
 
+            context.has_applied_discount = true;
+
+            context.has_invalid_coupon = false;
+
+            let button = $(event.target).find('.btn-primary');
+
+            button.addClass('button-loading').prop('disabled', true);
+
+            if (!_.isEmpty(context.coupon_code)) {
                 axios
-                    .post(route('orders.create'), {
-                        products: products,
-                        payment_status: paid ? 'completed' : 'pending',
-                        payment_method: this.child_payment_method,
-                        shipping_method: this.child_shipping_method,
-                        shipping_option: this.child_shipping_option,
-                        shipping_amount: this.child_shipping_amount,
-                        discount_amount: this.child_discount_amount,
-                        discount_description: this.child_discount_description,
-                        coupon_code: this.coupon_code,
-                        customer_id: this.child_customer_id,
-                        order_id: this.order_id,
-                        note: this.note,
-                        order_type: this.order_type,
-                        amount: this.child_sub_amount,
-                        customer_address: this.child_customer_address,
-                    })
-                    .then(res => {
-                        let data = res.data.data;
-                        if (data.error) {
-                            Botble.showError(Botble.showError(res.data.message))
-                        } else {
-                            Botble.showSuccess(res.data.message);
-                            if (paid) {
-                                context.$root.$emit('bv::hide::modal', 'make-paid');
-                            } else {
-                                context.$root.$emit('bv::hide::modal', 'make-pending');
-                            }
-
-                            setTimeout(() => {
-                                window.location.href = route('orders.edit', data.id);
-                            }, 1000);
-                        }
-                    })
-                    .catch(res => {
-                        if (res.response.data.error) {
-                            Botble.showError(Botble.showError(res.response.data.message))
-                        } else {
-                            Botble.handleError(res.response.data);
-                        }
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
-                    });
-            },
-            createProduct: function ($event) {
-                $event.preventDefault();
-                $($event.target).find('.btn-primary').addClass('button-loading');
-                let context = this;
-
-                axios
-                    .post(route('products.create-product-when-creating-order'), context.product)
-                    .then(res => {
-                        if (res.data.error) {
-                            Botble.showError(Botble.showError(res.data.message))
-                        } else {
-
-                            context.product = res.data.data;
-
-                            context.list_products = {
-                                data: [],
-                            };
-
-                            let productItem = context.product;
-                            productItem.product_name = context.product.name;
-                            productItem.image_url = context.product.image_url;
-                            productItem.price = context.product.price;
-                            productItem.product_link = route('products.edit', context.product.id);
-
-                            context.child_products.push(productItem);
-                            context.child_product_ids.push(context.product.id);
-
-                            context.hidden_product_search_panel = true;
-
-                            Botble.showSuccess(res.data.message);
-
-                            context.$root.$emit('bv::hide::modal', 'add-product-item');
-                        }
-                    })
-                    .catch(res => {
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
-                        Botble.handleError(res.response.data);
-                    });
-            },
-            updateCustomerEmail: function ($event) {
-                $event.preventDefault();
-                $($event.target).find('.btn-primary').addClass('button-loading');
-
-                let context = this;
-
-                axios
-                    .post(route('customers.update-email', context.child_customer.id), {
-                        email: context.child_customer.email,
-                    })
-                    .then(res => {
-                        if (res.data.error) {
-                            Botble.showError(Botble.showError(res.data.message))
-                        } else {
-                            Botble.showSuccess(res.data.message);
-
-                            context.$root.$emit('bv::hide::modal', 'edit-email')
-                        }
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
-                    })
-                    .catch(res => {
-                        Botble.handleError(res.response.data);
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
-                    });
-            },
-            updateOrderAddress: function ($event) {
-                $event.preventDefault();
-
-                if (this.customer) {
-
-                    $($event.target).addClass('button-loading');
-
-                    let $modal = $(event.target).closest('.modal-dialog');
-                    this.child_customer_address.name = $modal.find('.customer-address-name').val();
-                    this.child_customer_address.email = $modal.find('.customer-address-email').val();
-                    this.child_customer_address.phone = $modal.find('.customer-address-phone').val();
-                    this.child_customer_address.address = $modal.find('.customer-address-address').val();
-                    this.child_customer_address.city = $modal.find('.customer-address-city').val();
-                    this.child_customer_address.state = $modal.find('.customer-address-state').val();
-                    this.child_customer_address.country = $modal.find('.customer-address-country').val();
-                    this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val();
-
-                    // this.loadCountries();
-                    this.$root.$emit('bv::hide::modal', 'edit-address');
-                    $($event.target).removeClass('button-loading');
-                }
-            },
-            createNewCustomer: function ($event) {
-                $event.preventDefault();
-                let context = this;
-
-                $($event.target).find('.btn-primary').addClass('button-loading');
-
-                axios
-                    .post(route('customers.create-customer-when-creating-order'), {
-                        customer_id: context.child_customer_id,
-                        name: context.child_customer_address.name,
-                        email: context.child_customer_address.email,
-                        phone: context.child_customer_address.phone,
-                        address: context.child_customer_address.address,
+                    .post(route('orders.apply-coupon-when-creating-order'), {
+                        coupon_code: context.coupon_code,
                         country: context.child_customer_address.country,
-                        state: context.child_customer_address.state,
-                        city: context.child_customer_address.city,
-                        zip_code: context.child_customer_address.zip_code,
+                        shipping_amount: context.child_shipping_amount,
+                        product_ids: context.child_product_ids,
+                        customer_id: context.child_customer_id,
+                        sub_total: context.child_sub_amount,
                     })
                     .then(res => {
                         if (res.data.error) {
-                            Botble.showError(Botble.showError(res.data.message))
+                            Botble.showError(res.data.message);
+                            context.has_invalid_coupon = true;
                         } else {
-                            context.child_customer_address = res.data.data.address;
-                            context.child_customer = res.data.data.customer;
-                            context.child_customer_id = context.child_customer.id;
-
-                            context.customers = {
-                                data: [],
-                            };
-
+                            context.child_discount_amount = res.data.data.discount_amount;
+                            if (res.data.data.is_free_shipping) {
+                                context.child_shipping_amount = 0;
+                            }
                             Botble.showSuccess(res.data.message);
-
-                            context.$root.$emit('bv::hide::modal', 'add-customer');
                         }
+                        button.removeClass('button-loading');
 
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
+                        context.$root.$emit('bv::hide::modal', 'add-discounts');
                     })
                     .catch(res => {
                         Botble.handleError(res.response.data);
-                        $($event.target).find('.btn-primary').removeClass('button-loading');
+                        button.removeClass('button-loading');
                     });
-            },
-            selectCustomerAddress: function (event) {
-                let context = this;
-                _.each(this.child_customer_addresses, (item) => {
-                    if (parseInt(item.id) === parseInt(event.target.value)) {
-                        context.child_customer_address = item;
-                    }
-                });
-            },
-            getOrderNumbers: function () {
-                let context = this;
-                axios
-                    .get(route('customers.get-customer-order-numbers', context.child_customer_id))
-                    .then(res => {
-                        context.child_customer_order_numbers = res.data.data;
-                    })
-                    .catch(res => {
-                        Botble.handleError(res.response.data);
-                    });
-            },
-            loadCustomerAddress: function () {
-                let context = this;
-                axios
-                    .get(route('customers.get-customer-addresses', context.child_customer_id))
-                    .then(res => {
-                        context.child_customer_addresses = res.data.data;
-                        if (!_.isEmpty(context.child_customer_addresses)) {
-                            context.child_customer_address = _.first(context.child_customer_addresses);
-                        }
-                    })
-                    .catch(res => {
-                        Botble.handleError(res.response.data);
-                    });
-            },
-            selectShippingMethod: function ($event) {
-                $event.preventDefault();
-                let context = this;
-                $($event.target).find('.btn-primary').addClass('button-loading');
-
-                context.child_is_selected_shipping = true;
-
-                if (context.shipping_type === 'free-shipping') {
-                    context.child_shipping_method_name = 'Free shipping';
-                    context.child_shipping_amount = 0;
+            } else {
+                if (this.discount_type === 'percentage') {
+                    context.child_discount_amount = context.child_total_amount * context.discount_custom_value / 100;
                 } else {
-                    let selected_shipping = $($event.target).find('.ui-select').val();
-                    if (!_.isEmpty(selected_shipping)) {
-                        selected_shipping = selected_shipping.split(';');
-                        context.child_shipping_method = selected_shipping[0].trim();
-                        context.child_shipping_option = selected_shipping[1].trim();
-                        context.child_shipping_amount = parseFloat(selected_shipping[2].trim());
-                        context.child_shipping_method_name = $($event.target).find('.ui-select option:selected').data('name')
-                    }
+                    context.child_discount_amount = context.discount_custom_value;
                 }
 
                 setTimeout(function () {
-                    $($event.target).find('.btn-primary').removeClass('button-loading');
-                    context.$root.$emit('bv::hide::modal', 'add-shipping');
+                    button.removeClass('button-loading').prop('disabled', false);
+                    context.$root.$emit('bv::hide::modal', 'add-discounts');
                 }, 500);
-            },
-            loadAvailableShippingMethods: function () {
-                let context = this;
-                axios
-                    .get(route('orders.get-available-shipping-methods', {
-                        address: context.child_customer_address.address,
-                        country: context.child_customer_address.country,
-                        state: context.child_customer_address.state,
-                        city: context.child_customer_address.city,
-                        zip_code: context.child_customer_address.zip_code,
-                        products: context.child_product_ids,
-                    }))
-                    .then(res => {
-                        context.shipping_methods = res.data.data;
-                    })
-                    .catch(res => {
-                        Botble.handleError(res.response.data);
-                    });
-            },
-            changeDiscountType: function (event) {
-                if ($(event.target).val() === 'amount') {
-                    this.discount_type_unit = this.currency;
-                } else {
-                    this.discount_type_unit = '%';
-                }
-                this.discount_type = $(event.target).val();
-            },
-            handleAddDiscount: function (event) {
-                event.preventDefault();
-                let context = this;
-
-                context.has_applied_discount = true;
-
-                context.has_invalid_coupon = false;
-
-                let button = $(event.target).find('.btn-primary');
-
-                button.addClass('button-loading').prop('disabled', true);
-
-                if (!_.isEmpty(context.coupon_code)) {
-                    axios
-                        .post(route('orders.apply-coupon-when-creating-order'), {
-                            coupon_code: context.coupon_code,
-                            country: context.child_customer_address.country,
-                            shipping_amount: context.child_shipping_amount,
-                            product_ids: context.child_product_ids,
-                            customer_id: context.child_customer_id,
-                            sub_total: context.child_sub_amount,
-                        })
-                        .then(res => {
-                            if (res.data.error) {
-                                Botble.showError(res.data.message);
-                                context.has_invalid_coupon = true;
-                            } else {
-                                context.child_discount_amount = res.data.data.discount_amount;
-                                if (res.data.data.is_free_shipping) {
-                                    context.child_shipping_amount = 0;
-                                }
-                                Botble.showSuccess(res.data.message);
-                            }
-                            button.removeClass('button-loading');
-
-                            context.$root.$emit('bv::hide::modal', 'add-discounts');
-                        })
-                        .catch(res => {
-                            Botble.handleError(res.response.data);
-                            button.removeClass('button-loading');
-                        });
-                } else {
-                    if (this.discount_type === 'percentage') {
-                        context.child_discount_amount = context.child_total_amount * context.discount_custom_value / 100;
-                    } else {
-                        context.child_discount_amount = context.discount_custom_value;
-                    }
-
-                    setTimeout(function () {
-                        button.removeClass('button-loading').prop('disabled', false);
-                        context.$root.$emit('bv::hide::modal', 'add-discounts');
-                    }, 500);
-                }
-            },
-            calculateAmount: function (products) {
-                let context = this;
-                context.child_sub_amount = 0;
-                _.each(products, function (item) {
-                    context.child_sub_amount += parseFloat(item.price) * parseInt(item.select_qty);
-                });
-                context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(context.child_discount_amount) + parseFloat(context.child_shipping_amount);
-                if (context.child_total_amount < 0) {
-                    context.child_total_amount = 0;
-                }
-            },
-            handleChangeQuantity: function () {
-                this.calculateAmount(this.child_products);
-            },
-            resetProductData: function () {
-                this.product = {
-                    name: null,
-                    price: 0,
-                    sku: null,
-                    with_storehouse_management: false,
-                    allow_checkout_when_out_of_stock: false,
-                    quantity: 0,
-                };
             }
         },
-        watch: {
-            'child_products': function (value) {
-                this.calculateAmount(value);
-            },
-            'child_discount_amount': function (value) {
-                let context = this;
-                context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(value) + parseFloat(context.child_shipping_amount);
-            },
-            'child_shipping_amount': function (value) {
-                let context = this;
-                context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(context.child_discount_amount) + parseFloat(value);
-            },
-            'shipping_type': function (value) {
-                if (value === 'free-shipping') {
-                    this.child_shipping_amount = 0;
-                }
-            },
+        calculateAmount: function (products) {
+            let context = this;
+            context.child_sub_amount = 0;
+            _.each(products, function (item) {
+                context.child_sub_amount += parseFloat(item.price) * parseInt(item.select_qty);
+            });
+            context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(context.child_discount_amount) + parseFloat(context.child_shipping_amount);
+            if (context.child_total_amount < 0) {
+                context.child_total_amount = 0;
+            }
+        },
+        handleChangeQuantity: function () {
+            this.calculateAmount(this.child_products);
+        },
+        resetProductData: function () {
+            this.product = {
+                name: null,
+                price: 0,
+                sku: null,
+                with_storehouse_management: false,
+                allow_checkout_when_out_of_stock: false,
+                quantity: 0,
+            };
         }
+    },
+    watch: {
+        'child_products': function (value) {
+            this.calculateAmount(value);
+        },
+        'child_discount_amount': function (value) {
+            let context = this;
+            context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(value) + parseFloat(context.child_shipping_amount);
+        },
+        'child_shipping_amount': function (value) {
+            let context = this;
+            context.child_total_amount = parseFloat(context.child_sub_amount) - parseFloat(context.child_discount_amount) + parseFloat(value);
+        },
+        'shipping_type': function (value) {
+            if (value === 'free-shipping') {
+                this.child_shipping_amount = 0;
+            }
+        },
     }
+}
 
 </script>

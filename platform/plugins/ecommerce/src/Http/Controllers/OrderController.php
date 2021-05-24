@@ -429,6 +429,8 @@ class OrderController extends BaseController
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
+
+
     /**
      * @param int $id
      * @param UpdateOrderRequest $request
@@ -1005,6 +1007,7 @@ class OrderController extends BaseController
      */
     public function editOrder($id, Request $request, BaseHttpResponse $response)
     {
+
         if (!$id) {
             return $response
                 ->setError()
@@ -1026,11 +1029,11 @@ class OrderController extends BaseController
         }
 
         $editing_started_at = Carbon::parse($order->editing_started_at);
-        if ($order->editing_by && $order->editing_by != auth()->user()->id && $editing_started_at->diffInSeconds(Carbon::now()) <= 60*5) {
+        if ($order->editing_by && $order->editing_by != auth()->user()->id && $editing_started_at->diffInSeconds(Carbon::now()) <= 60 * 5) {
             return $response
                 ->setError()
                 ->setNextUrl(route('orders.index'))
-                ->setMessage('This is order already in editing by '.auth()->user()->getFullName());
+                ->setMessage('This is order already in editing by ' . auth()->user()->getFullName());
         }
 
         $productIds = $order->products->pluck('product_id')->all();
