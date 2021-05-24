@@ -252,6 +252,6 @@ class CustomerController extends Controller
   }
 
   public function pendingNotification(){
-    return Theme::scope('customer.verify')->render();
+//    return Theme::scope('customer.verify')->render();
   }
 }
