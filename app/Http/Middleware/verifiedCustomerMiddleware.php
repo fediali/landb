@@ -16,9 +16,9 @@ class verifiedCustomerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-//      if(auth('customer')->user() && auth('customer')->user()->status != 'verified'){
-//        return redirect()->route('customer.pendingNotification');
-//      }
-//        return $next($request);
+      if(auth('customer')->user() && auth('customer')->user()->status != 'verified'){
+        return redirect()->route('customer.pendingNotification');
+      }
+        return $next($request);
     }
 }
