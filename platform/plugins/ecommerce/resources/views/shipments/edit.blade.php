@@ -275,6 +275,27 @@
     {!! Form::modalAction('confirm-change-status-modal', trans('plugins/ecommerce::shipping.change_status_confirm_title'), 'info', trans('plugins/ecommerce::shipping.change_status_confirm_description'), 'confirm-change-shipment-status-button', trans('plugins/ecommerce::shipping.accept')) !!}
 @stop
 
+<script>
+    function get_product_by_barcode(barcode, loader){
+        $.ajax({
+            type: "GET",
+            url: "{{ url('/admin/orders/verify-product-shipment-barcode/'.$orderProduct->order_id) }}/"+barcode,
+            success: function (result) {
+                if (result.status == 'success') {
+                    loader.removeClass('loading');
+                    window.location.reload();
+                }
+            },
+            error: function (result) {
+                $('#product-error').html('Product Not found!');
+                $('#product-error').show();
+                $('#scannerInput').addClass('is-invalid');
+                loader.removeClass('loading');
+            }
+        });
+    }
+</script>
+
 <style>
     #scannerInput {
         box-sizing: border-box;
