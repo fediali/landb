@@ -984,6 +984,8 @@ section.parallax_video video {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 20%;
     max-width: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .shoplisting .listbox .img {
@@ -1226,7 +1228,7 @@ section.parallax_video video {
 
 @media (max-width: 991px) {
     .navbar-brand img {
-        width: 130px;
+        width: 100%;
     }
     h1 {
         font-size: 40px;
@@ -3267,6 +3269,14 @@ table.shop_table tr th {
 }
 .shipping-checkbox-area {
     display: contents !important;
+}
+#menu .main-nav {
+    display: block !important;
+}
+nav.main-nav .nav-col {
+    min-width: 100% !important; 
+    width: 100% !important;
+    margin-bottom: 30px !important;
 }
 }
 
