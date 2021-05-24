@@ -85,6 +85,7 @@ class Threadorders extends BaseModel
         'status',
         'created_at',
         'updated_at',
+        'is_pieces',
     ];
 
     /**

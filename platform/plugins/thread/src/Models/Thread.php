@@ -84,6 +84,7 @@ class Thread extends BaseModel
         'created_at',
         'updated_at',
         'ready',
+        'is_pieces',
     ];
 
     /**
