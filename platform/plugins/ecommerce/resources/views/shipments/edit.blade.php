@@ -27,6 +27,9 @@
                             <div class="table-wrapper p-none">
                                 <table class="order-totals-summary">
                                     <tbody>
+                                    @php
+                                        $shipment_status = true;
+                                    @endphp
                                     @foreach ($shipment->order->products as $orderProduct)
                                         @php
                                             $product = get_products([
@@ -48,6 +51,9 @@
                                                     'ec_products.is_variation',
                                                 ],
                                             ]);
+                                            if (!$orderProduct->shipment_verified) {
+                                                $shipment_status = false;
+                                            }
                                         @endphp
                                         @if ($product)
                                             <tr class="border-bottom">
@@ -124,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-                @if ($shipment->status != \Botble\Ecommerce\Enums\ShippingStatusEnum::CANCELED)
+                @if ($shipment_status && $shipment->status != \Botble\Ecommerce\Enums\ShippingStatusEnum::CANCELED)
                     <br>
                     <div class="shipment-actions">
                         <div class="dropdown btn-group">
@@ -136,9 +142,10 @@
                                 <div>
                                     <ul class="applist-menu">
                                         <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::PICKING }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::PICKING()->label() }}</a></li>
-                                        <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERING }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERING()->label() }}</a></li>
+                                        <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::SHIPMENT_COMPLETED }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::SHIPMENT_COMPLETED()->label() }}</a></li>
+                                        {{--<li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERING }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERING()->label() }}</a></li>
                                         <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERED }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::DELIVERED()->label() }}</a></li>
-                                        <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::NOT_DELIVERED }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::NOT_DELIVERED()->label() }}</a></li>
+                                        <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::NOT_DELIVERED }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::NOT_DELIVERED()->label() }}</a></li>--}}
                                         <li><a data-value="{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::CANCELED }}" data-target="{{ route('ecommerce.shipments.update-status', $shipment->id) }}">{{ \Botble\Ecommerce\Enums\ShippingStatusEnum::CANCELED()->label() }}</a></li>
                                     </ul>
                                 </div>
@@ -194,7 +201,20 @@
                 </div>
             </div>
             <div class="flexbox-content flexbox-right">
+
                 <div class="wrapper-content">
+                    <div class="pd-all-20">
+                        <label class="title-product-main text-no-bold">Scan Product</label>
+                    </div>
+                    <div class="pd-all-20 p-t15 p-b15 border-top-title-main ps-relative">
+                        <div class="flexbox-grid-form flexbox-grid-form-no-outside-padding mb10">
+                            <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to verify product">
+                            <span id="product-error" class="invalid-feedback"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper-content mt20">
                     <div class="pd-all-20">
                         <label class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::shipping.shipment_information') }}</label>
                     </div>
@@ -254,3 +274,14 @@
     </div>
     {!! Form::modalAction('confirm-change-status-modal', trans('plugins/ecommerce::shipping.change_status_confirm_title'), 'info', trans('plugins/ecommerce::shipping.change_status_confirm_description'), 'confirm-change-shipment-status-button', trans('plugins/ecommerce::shipping.accept')) !!}
 @stop
+
+<style>
+    #scannerInput {
+        box-sizing: border-box;
+        height: 30px;
+        padding: 10px;
+    }
+    #scannerInput.loading {
+        background: url(http://www.xiconeditor.com/image/icons/loading.gif) no-repeat right center;
+    }
+</style>

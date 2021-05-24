@@ -133,6 +133,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('verify-product-shipment-barcode/{orderId}/{barcode}', [
+                'as'         => 'verifyOrderProductShipmentBarcode',
+                'uses'       => 'OrderController@verifyOrderProductShipmentBarcode',
+                'permission' => 'orders.create',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {
