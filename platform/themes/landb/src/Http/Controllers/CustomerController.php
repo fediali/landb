@@ -26,6 +26,7 @@ use URL;
 class CustomerController extends Controller
 {
   protected $customer;
+
   public function __construct(Customer $customer) {
     $this->customer = $customer;
   }
@@ -252,6 +253,6 @@ class CustomerController extends Controller
   }
 
   public function pendingNotification(){
-//    return Theme::scope('customer.verify')->render();
+    return Theme::scope('customer.verify')->render();
   }
 }
