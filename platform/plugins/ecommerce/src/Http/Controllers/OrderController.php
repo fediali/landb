@@ -27,6 +27,7 @@ use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
+use Botble\Ecommerce\Models\OrderProductShipmentVerify;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
@@ -1017,6 +1018,8 @@ class OrderController extends BaseController
 
         $order = $this->orderRepository->findById($id);
 
+        event(new OrderEdit(auth()->user(), $order));
+
         if (!$order) {
             return $response
                 ->setError()
@@ -1084,7 +1087,6 @@ class OrderController extends BaseController
         $order->editing_by = auth()->user()->id;
         $order->editing_started_at = Carbon::now();
         $order->save();
-        event(new OrderEdit(auth()->user(), $order));
 
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
@@ -1749,4 +1751,21 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
         return $response;
     }
+
+    public function verifyOrderProductShipment($orderId, $prodId, $prodQty, Request $request, BaseHttpResponse $response)
+    {
+        if ($prodId && $prodQty) {
+            $product = $this->productRepository->findById($prodId);
+            $demandQty = $prodQty;
+            if ($product->quantity >= $demandQty) {
+                $where = ['order_id' => $orderId, 'product_id' => $prodId];
+                $data = $where;
+                $data['is_verified'] = 1;
+                $data['created_by'] = auth()->user()->id;
+                OrderProductShipmentVerify::updateOrCreate($where, $data);
+            }
+        }
+        return redirect()->back();
+    }
+
 }

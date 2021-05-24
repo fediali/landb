@@ -54,7 +54,16 @@
 @push('echo-server')
     <script>
         window.Echo.channel('order-edit-{{$order->id}}').listen('.orderEdit', (data) => {
-            console.log(data, "=======");
+            if (data.user_id != "{{auth()->user()->id}}") {
+                var reply = confirm(data.user_name + " is trying to access this order edit! \n You want to give him access ? \n Press Ok to grant Or Cancel to Ignore request.");
+                if (reply) {
+                    data.access = 1;
+                    window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
+                } else {
+                    data.access = 0;
+                    window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
+                }
+            }
         });
     </script>
 @endpush

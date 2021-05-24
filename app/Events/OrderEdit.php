@@ -46,6 +46,7 @@ class OrderEdit implements ShouldBroadcastNow
     {
         return [
             'user_id'  => $this->user->id,
+            'user_name'  => $this->user->getFullName(),
             'order_id' => $this->order->id,
             'time'     => now()->toDateTimeString(),
         ];
