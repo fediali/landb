@@ -2,10 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -26,14 +24,9 @@ class OrderEditAccess implements ShouldBroadcastNow
         $this->data = $data;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
-        return new PresenceChannel('order-edit-access-' . $this->data->user_id);
+        return new PrivateChannel('order-edit-access-' . $this->data->user_id);
     }
 
     public function broadcastAs()

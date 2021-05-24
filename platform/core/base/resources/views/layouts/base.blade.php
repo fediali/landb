@@ -104,13 +104,15 @@
             console.log(data);
         });
 
-    window.Echo.private('order-edit-access-{{auth()->user()->id}}').listenForWhisper('.orderEditAccess', (data) => {
-        if (data.user_id == "{{auth()->user()->id}}") {
-            if (data.access) {
-                toastr['success']('Your Edit request against this Order # '+data.order_id, ' has been Granted. You can Edit now!');
-            } else {
-                toastr['warning']('Your Edit request against this Order # '+data.order_id, ' has been Rejected. Please try Later!');
-            }
+    window.Echo.private('order-edit-access-{{auth()->check() ? auth()->user()->id : ''}}').listenForWhisper('.orderEditAccess', (data) => {
+        if ("{{auth()->check()}}") {
+            /*if (data.user_id == "{{--{{auth()->user()->id}}--}}") {
+                if (data.access) {
+                    toastr['success']('Your Edit request against this Order # '+data.order_id, ' has been Granted. You can Edit now!');
+                } else {
+                    toastr['warning']('Your Edit request against this Order # '+data.order_id, ' has been Rejected. Please try Later!');
+                }
+            }*/
         }
     });
 </script>

@@ -127,6 +127,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('verify-product-shipment/{orderId}/{prodId}/{prodQty}', [
+                'as'         => 'verifyOrderProductShipment',
+                'uses'       => 'OrderController@verifyOrderProductShipment',
+                'permission' => 'orders.create',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {

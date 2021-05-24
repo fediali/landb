@@ -146,6 +146,15 @@ class Order extends BaseModel
      * @return HasMany
      */
     public
+    function shipment_verified_products()
+    {
+        return $this->hasMany(OrderProductShipmentVerify::class, 'order_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public
     function histories()
     {
         return $this->hasMany(OrderHistory::class, 'order_id')->with(['user', 'order']);

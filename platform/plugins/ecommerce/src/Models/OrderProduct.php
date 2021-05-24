@@ -43,6 +43,8 @@ class OrderProduct extends BaseModel
         'options' => 'json',
     ];
 
+    protected $appends = ['shipment_verified'];
+
     /**
      * @return BelongsTo
      */
@@ -50,4 +52,14 @@ class OrderProduct extends BaseModel
     {
         return $this->belongsTo(Product::class)->withDefault();
     }
+
+    public function getShipmentVerifiedAttribute()
+    {
+        $check = OrderProductShipmentVerify::where(['order_id' => $this->order_id, 'product_id' => $this->product_id])->value('is_verified');
+        if ($check) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -83,6 +83,13 @@
                                                 <td class="order-border text-right p-small p-sm-r border-none-r">
                                                     <span>{{ format_price($orderProduct->price * $orderProduct->qty) }}</span>
                                                 </td>
+                                                <td class="order-border text-center p-small">
+                                                    @if($orderProduct->shipment_verified)
+                                                        <label class="label label-success">Verified</label>
+                                                    @else
+                                                        <a href="{{route('orders.verifyOrderProductShipment', [$orderProduct->order_id,$orderProduct->product_id,$orderProduct->qty])}}"><label class="label label-primary">Click to Verify</label></a>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endif
                                     @endforeach
