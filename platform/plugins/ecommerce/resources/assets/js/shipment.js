@@ -54,6 +54,7 @@ $(document).ready(() => {
         endChar: [13],
         onComplete: function(barcode, qty){
             validScan = true;
+            $('#scannerInput').focus();
             $('#scannerInput').val(barcode);
             var e = $.Event( "keyup", { which: 13 } );
             $('#scannerInput').trigger(e);
