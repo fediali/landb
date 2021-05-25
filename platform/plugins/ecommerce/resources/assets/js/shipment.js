@@ -55,6 +55,8 @@ $(document).ready(() => {
         onComplete: function(barcode, qty){
             validScan = true;
             $('#scannerInput').val(barcode);
+            var e = $.Event( "keyup", { which: 13 } );
+            $('#scannerInput').trigger(e);
         },
         onError: function(string, qty) {
             console.log('Something went wrong. Try again!');
