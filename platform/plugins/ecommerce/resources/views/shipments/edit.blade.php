@@ -83,6 +83,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="order-border text-right p-small p-sm-r">
+                                                    <strong class="item-quantity">{{ $orderProduct->shipment_verified }} Qty Scanned</strong>
+                                                </td>
+                                                <td class="order-border text-right p-small p-sm-r">
                                                     <strong class="item-quantity">{{ $orderProduct->qty }}</strong>
                                                     <span class="item-multiplier mr5">×</span><b class="color-blue-line-through">{{ format_price($orderProduct->price) }}</b>
                                                 </td>
