@@ -211,6 +211,11 @@ class ThreadForm extends FormAbstract
                 ],
                 'choices'    => Thread::$order_statuses,
             ])*/
+            ->add('is_pieces', 'onOff', [
+                'label'         => 'Qty is in Pieces ?',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+            ])
             ->add('thread_status', 'customSelect', [
                 'label'      => 'Select Thread Status',
                 'label_attr' => ['class' => 'control-label required'],
@@ -307,6 +312,6 @@ class ThreadForm extends FormAbstract
                 'label'      => 'Tech Spec File',
                 'label_attr' => ['class' => 'control-label'],
             ])*/
-            ->setBreakFieldPoint('thread_status');
+            ->setBreakFieldPoint('is_pieces');
     }
 }
