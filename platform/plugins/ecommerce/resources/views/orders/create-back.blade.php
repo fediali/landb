@@ -29,7 +29,7 @@
                         <div class="row group m-0 pt-4 ">
                             <label class="col-lg-12 ">
                                 <span class="mb-2">Billing Address</span>
-                                {!!Form::select('card_list', [1,2], null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                {!!Form::select('card_list', [1,2], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
                             </label>
                         </div>
                         <div class="row group m-0 pt-4 ">
