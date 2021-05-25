@@ -286,8 +286,8 @@
                     window.location.reload();
                 }
             },
-            error: function (result) {
-                $('#product-error').html('Product Not found!');
+            error: function (result, status) {
+                $('#product-error').html(result.responseJSON.message);
                 $('#product-error').show();
                 $('#scannerInput').addClass('is-invalid');
                 loader.removeClass('loading');
