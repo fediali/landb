@@ -83,7 +83,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="order-border text-right p-small p-sm-r">
-                                                    <strong class="item-quantity">{{ $orderProduct->shipment_verified }} Qty Scanned</strong>
+                                                    <strong class="item-quantity">{{ $orderProduct->shipment_verified_qty }} Qty Scanned</strong>
                                                 </td>
                                                 <td class="order-border text-right p-small p-sm-r">
                                                     <strong class="item-quantity">{{ $orderProduct->qty }}</strong>
