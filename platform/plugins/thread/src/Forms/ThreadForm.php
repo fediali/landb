@@ -18,7 +18,7 @@ class ThreadForm extends FormAbstract
     {
         $vendor_products = get_vendor_products();
         $product_units = get_product_units();
-        $designers = get_designers();
+        $designers = get_designers_for_thread();
         $vendors = get_vendors();
         $seasons = get_seasons();
         $regular_categories = get_reg_product_categories_custom();
