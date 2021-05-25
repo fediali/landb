@@ -455,7 +455,7 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        {{--<span aria-hidden="true">×</span>--}}</button>
+                        {{--<span aria-hidden="true">×</span>--}}X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span
                             class="variation-name"></span></h4>
                     <div></div>

@@ -3022,10 +3022,16 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 991px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .grid-container {
         height: 1200vh !important;
     }
+    .browse_collection h1 {
+        font-size: 44px !important;
+    }
+    .qty {
+        width: 35% !important;
+}
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2200px) {
@@ -3488,3 +3494,8 @@ nav.main-nav .nav-col {
   }
 /************* TIMELINE CSS END *************/
 
+@media screen and (min-device-width: 320px) and (max-device-width: 991px) and (orientation : landscape){
+    .navbar-parent ul{
+        margin: auto !important;
+    }
+}

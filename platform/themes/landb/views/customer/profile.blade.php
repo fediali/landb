@@ -236,7 +236,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 mt-5">
+                                <div class="col-lg-2 mt-5">
                                     <input type="submit" class="btn cart-btn w-100" value="Save">
                                     {{--<a href="#" class=" btn cart-btn w-100">Register</a>--}}
                                 </div>
@@ -252,19 +252,25 @@
                             @csrf
                             <h4 class="profile-light-txt mt-2">User account information</h4>
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <p class="textbox-label">Email</p>
                                     <input class="input-textbox" type="email" value="{{ $user->email }}" disabled/>
+                              </div>
+                                <div class="col-lg-6">
                                     <p class="textbox-label">Old Password</p>
                                     <input class="input-textbox form-control @error('old_password') is-invalid @enderror" type="password" name="old_password"/>
                                     @error('old_password')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                 </div>
+                                <div class="col-lg-6"> 
                                     <p class="textbox-label">Password</p>
                                     <input class="input-textbox form-control @error('new_password') is-invalid @enderror" type="password" name="new_password"/>
                                     @error('new_password')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                     </div>
+                                <div class="col-lg-6"> 
                                     <p class="textbox-label">Confirm Password</p>
                                     <input class="input-textbox form-control @error('new_password') is-invalid @enderror" type="password" name="new_password_confirmation" />
                                 </div>

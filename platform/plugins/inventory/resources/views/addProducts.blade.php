@@ -5,7 +5,7 @@
     <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
     <span id="product-error" class="invalid-feedback"></span>
 </div>
-
+<div class="table-responsive">
 <table class="table inventory-add">
     <thead>
     <tr>
@@ -85,7 +85,7 @@
         @endif
     </tbody>
 </table>
-
+</div>
 
 <script>
   $(document).scannerDetection({
