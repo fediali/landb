@@ -20,6 +20,7 @@ class OrderProductShipmentVerify extends BaseModel
         'order_id',
         'product_id',
         'is_verified',
+        'qty',
         'created_by',
     ];
 

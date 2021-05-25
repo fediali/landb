@@ -291,6 +291,7 @@
                 $('#product-error').show();
                 $('#scannerInput').addClass('is-invalid');
                 loader.removeClass('loading');
+                $('#scannerInput').val('');
             }
         });
     }
