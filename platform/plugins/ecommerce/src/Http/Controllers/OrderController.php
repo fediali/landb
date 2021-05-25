@@ -1775,46 +1775,51 @@ class OrderController extends BaseController
             $product = Product::where('upc', $barcode)->first();
             if ($product) {
                 $orderProduct = OrderProduct::where(['order_id' => $orderId, 'product_id' => $product->id])->first();
-                $demandQty = $orderProduct->qty;
-                if ($product->quantity >= $demandQty) {
+                if ($orderProduct) {
+                    $demandQty = $orderProduct->qty;
+                    if ($product->quantity >= $demandQty) {
 
-                    $where = ['order_id' => $orderId, 'product_id' => $product->id];
-                    $data = $where;
-                    if ($demandQty == 1) {
-                        $data['is_verified'] = 1;
-                    }
-                    $data['qty'] = 1;
-                    $data['created_by'] = auth()->user()->id;
-
-                    $check = OrderProductShipmentVerify::where($where)->first();
-                    if (!$check) {
-                        OrderProductShipmentVerify::create($where, $data);
-                    } else {
-                        if ($demandQty == $check->qty) {
+                        $where = ['order_id' => $orderId, 'product_id' => $product->id];
+                        $data = $where;
+                        if ($demandQty == 1) {
                             $data['is_verified'] = 1;
-                            OrderProductShipmentVerify::where($where)->update($data);
-                        } else {
-                            $data['qty'] = $check->qty + 1;
-                            if ($demandQty == $data['qty']) {
-                                $data['is_verified'] = 1;
-                            }
-                            OrderProductShipmentVerify::where($where)->update($data);
                         }
-                    }
+                        $data['qty'] = 1;
+                        $data['created_by'] = auth()->user()->id;
 
-                    // return redirect()->back();
-                    return response()->json(['status' => 'success'], 200);
+                        $check = OrderProductShipmentVerify::where($where)->first();
+                        if (!$check) {
+                            OrderProductShipmentVerify::create($data);
+                        } else {
+                            if ($demandQty == $check->qty) {
+                                $data['qty'] = $demandQty;
+                                $data['is_verified'] = 1;
+                                OrderProductShipmentVerify::where($where)->update($data);
+                            } else {
+                                $data['qty'] = $check->qty + 1;
+                                if ($demandQty == $data['qty']) {
+                                    $data['is_verified'] = 1;
+                                }
+                                OrderProductShipmentVerify::where($where)->update($data);
+                            }
+                        }
+                        // return redirect()->back();
+                        return response()->json(['status' => 'success'], 200);
+                    } else {
+                        // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
+                        return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in ordered Qty!'], 404);
+                    }
                 } else {
                     // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
-                    return response()->json(['status' => 'error'], 404);
+                    return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in order!'], 404);
                 }
             } else {
                 // return $response->setCode(406)->setError()->setMessage('Product not found!');
-                return response()->json(['status' => 'error'], 404);
+                return response()->json(['status' => 'error', 'message' => 'Product not found!'], 404);
             }
         } else {
             // return $response->setCode(406)->setError()->setMessage('This barcode '. $barcode . ' is not available!');
-            return response()->json(['status' => 'error'], 404);
+            return response()->json(['status' => 'error', 'message' => 'This barcode '. $barcode . ' is not available!'], 404);
         }
     }
 
