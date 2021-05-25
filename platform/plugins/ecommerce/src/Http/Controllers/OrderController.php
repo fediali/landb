@@ -1777,7 +1777,7 @@ class OrderController extends BaseController
                 $orderProduct = OrderProduct::where(['order_id' => $orderId, 'product_id' => $product->id])->first();
                 if ($orderProduct) {
                     $demandQty = $orderProduct->qty;
-                    if ($product->quantity >= $demandQty) {
+                    //if ($product->quantity >= $demandQty) {
 
                         $where = ['order_id' => $orderId, 'product_id' => $product->id];
                         $data = $where;
@@ -1805,21 +1805,21 @@ class OrderController extends BaseController
                         }
                         // return redirect()->back();
                         return response()->json(['status' => 'success'], 200);
-                    } else {
+                    /*} else {
                         // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
-                        return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in ordered Qty!'], 404);
-                    }
+                        return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in ordered Qty!'], 406);
+                    }*/
                 } else {
                     // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
-                    return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in order!'], 404);
+                    return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in order!'], 406);
                 }
             } else {
                 // return $response->setCode(406)->setError()->setMessage('Product not found!');
-                return response()->json(['status' => 'error', 'message' => 'Product not found!'], 404);
+                return response()->json(['status' => 'error', 'message' => 'Product not found!'], 406);
             }
         } else {
             // return $response->setCode(406)->setError()->setMessage('This barcode '. $barcode . ' is not available!');
-            return response()->json(['status' => 'error', 'message' => 'This barcode '. $barcode . ' is not available!'], 404);
+            return response()->json(['status' => 'error', 'message' => 'This barcode '. $barcode . ' is not available!'], 406);
         }
     }
 
