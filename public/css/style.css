@@ -404,10 +404,7 @@ body {
         max-width: 1024px;
     }
 
-    #add_variation .modal-lg {
-        max-width: 1200px;
-        width: 1200px;
-    }
+    
 }
 
 @media screen and (min-width: 320px) and (max-device-width: 991px) {
