@@ -6,6 +6,35 @@ $variations = $options['data']['variations'];
 ?>
 <div class="row">
     <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+            <div class="col-md-3 mt-3">
+            <label for="name">Name:</label>
+            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-12">
         <hr>
         @if($thread->is_denim == 1)
             <div class="box-body">
