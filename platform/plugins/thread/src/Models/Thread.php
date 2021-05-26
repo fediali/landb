@@ -8,6 +8,7 @@ use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Blog\Models\Category;
+use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Fabrics\Models\Fabrics;
 use Botble\Fits\Models\Fits;
@@ -87,6 +88,7 @@ class Thread extends BaseModel
         'updated_at',
         'ready',
         'is_pieces',
+        'pvt_customer_id',
     ];
 
     /**
@@ -200,6 +202,15 @@ class Thread extends BaseModel
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'vendor_id')->withDefault();
+    }
+
+    /**
+     * @return BelongsTo
+     * @deprecated
+     */
+    public function pvt_customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'pvt_customer_id')->withDefault();
     }
 
     /**

@@ -307,6 +307,14 @@ if (!function_exists('get_salesperson')) {
             ->pluck('users.username', 'users.id')->all();
     }
 }
+
+if (!function_exists('get_private_customers')) {
+    function get_private_customers()
+    {
+        return \Botble\Ecommerce\Models\Customer::where('is_private', 1)->pluck('name', 'id')->all();
+    }
+}
+
 //Get User By Roles
 
 
