@@ -79,6 +79,9 @@ class ThreadTable extends TableAbstract
                     return 'N/A';
                 }
             })
+            ->editColumn('is_denim', function ($item) {
+                return $item->is_denim ? 'Yes' : 'No';
+            })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();
                 return view('plugins/thread::threadStatus', ['item' => $item])->render();
@@ -119,6 +122,7 @@ class ThreadTable extends TableAbstract
             'threads.created_at',
             'threads.status',
             'threads.ready',
+            'threads.is_denim',
         ];
 
         $query = $model
@@ -164,6 +168,12 @@ class ThreadTable extends TableAbstract
             'designer_id'         => [
                 'name'  => 'threads.designer_id',
                 'title' => 'Designer',
+                'class' => 'no-sort text-left',
+                //'orderable' => false,
+            ],
+            'is_denim'         => [
+                'name'  => 'threads.is_denim',
+                'title' => 'Denim',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
             ],

@@ -68,6 +68,14 @@ class CustomerForm extends FormAbstract
                 'wrapper'    => [
                     'class' => $this->formHelper->getConfig('defaults.wrapper_class') . ($this->getModel()->id ? ' hidden' : null),
                 ],
+            ])
+            ->add('is_private', 'checkbox', [
+                'label'      => 'Is Private?',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'hrv-checkbox',
+                ],
+                'value'      => 1,
             ]);
     }
 }
