@@ -395,6 +395,10 @@ class ThreadordersController extends BaseController
                     $product->description = $variation->name;
                     $product->content = $variation->name;
                     $product->status = BaseStatusEnum::PUBLISHED;
+                    if ($threadorder->thread_status == Thread::PRIVATE) {
+                        $product->status = BaseStatusEnum::DRAFT;
+                        $product->private_label = 1;
+                    }
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
                     $product->quantity = 0;
