@@ -88,6 +88,12 @@ class ThreadController extends BaseController
         $requestData['created_by'] = auth()->user()->id;
         $requestData['updated_by'] = auth()->user()->id;
 
+        if (isset($requestData['is_pieces'])) {
+            $requestData['is_pieces'] = 1;
+        } else {
+            $requestData['is_pieces'] = 0;
+        }
+
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
         $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : substr($thread->designer->first_name, 0, 3);
@@ -161,6 +167,12 @@ class ThreadController extends BaseController
 
         $requestData = $request->input();
         $requestData['updated_by'] = auth()->user()->id;
+
+        if (isset($requestData['is_pieces'])) {
+            $requestData['is_pieces'] = 1;
+        } else {
+            $requestData['is_pieces'] = 0;
+        }
 
         $thread->fill($requestData);
 

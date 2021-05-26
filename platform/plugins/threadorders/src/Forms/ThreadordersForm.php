@@ -170,6 +170,16 @@ class ThreadordersForm extends FormAbstract
                 'data' => $this->model
             ])
 
+            ->add('thread_status', 'customSelect', [
+                'label'      => 'Select Thread Status',
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder' => 'Select Thread Status',
+                    'class'       => 'select-search-full',
+                    'disabled'
+                ],
+                'choices'    => Thread::$thread_statuses,
+            ])
             ->add('vendor_product_id', 'customSelect', [
                 'label'      => 'Select Vendor Making Product',
                 'label_attr' => ['class' => 'control-label'],
@@ -209,6 +219,6 @@ class ThreadordersForm extends FormAbstract
                 'default_value' => now(config('app.timezone'))->format('d M, Y'),
                 'value' => old('cancel_date', date('d M, Y', strtotime($this->model->cancel_date)))
             ])
-            ->setBreakFieldPoint('vendor_product_id');
+            ->setBreakFieldPoint('thread_status');
     }
 }

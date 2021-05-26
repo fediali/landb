@@ -68,7 +68,7 @@ $variations = $options['data']['variations'];
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="d-flex w-100">
-                               
+
                                 <h4 class="modal-title text-center w-100 thread-pop-head"> Adding Variations <span
                                         class="variation-name"></span></h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
@@ -185,8 +185,8 @@ $variations = $options['data']['variations'];
                         <th scope="col">Regular Sku</th>
                         <th scope="col">Plus Sku</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Regular Qty</th>
-                        <th scope="col">Plus Qty</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
                         <th scope="col">Notes</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -306,12 +306,12 @@ $variations = $options['data']['variations'];
                                             </div>--}}
                                         </td>
                                         <td width="10%">
-                                            <label for="pack_id">Regular:</label>
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
                                             <input required class="form-control variation_qty"
                                                    placeholder="Add Regular Quantity" name="regular_qty[]" type="text">
                                         </td>
                                         <td width="10%">
-                                            <label for="pack_id">Plus:</label>
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}:</label>
                                             <input required class="form-control variation_plus_qty"
                                                    placeholder="Add Plus Quantity" name="plus_qty[]" type="text">
                                         </td>
@@ -404,13 +404,13 @@ $variations = $options['data']['variations'];
                                         </select>
                                     </td>
                                     <td width="10%" class="no-denim-field">
-                                        <label>Regular:</label>
-                                        <input class="form-control" placeholder="Add Regular Quantity"
+                                        <label>{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
+                                        <input class="form-control" placeholder="Add Quantity"
                                                name="regular_qty" id="ed-reg-qty" type="text">
                                     </td>
                                     <td width="10%" class="no-denim-field">
-                                        <label>Plus:</label>
-                                        <input class="form-control" placeholder="Add Plus Quantity" name="plus_qty"
+                                        <label>{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}</label>
+                                        <input class="form-control" placeholder="Add Quantity" name="plus_qty"
                                                id="ed-plu-qty" type="text">
                                     </td>
                                     <td width="10%">
@@ -558,9 +558,9 @@ $variations = $options['data']['variations'];
                         <input class="form-control" placeholder="Receive Date" name="receive_date" type="date">
                     </div>
                     <div class="mt-3">
-                        <label class="font-bold">Comments:</label> 
+                        <label class="font-bold">Comments:</label>
                         <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2" aria-invalid="false"></textarea>
-                    </div> 
+                    </div>
                         </textarea>
                     <div class="mt-3">
                         <label class="font-bold">Status:</label>

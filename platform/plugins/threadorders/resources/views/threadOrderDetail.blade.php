@@ -26,9 +26,19 @@
 
             <div class="row">
                 <div class="col-lg-3">
+                    <p class="m-0 heading">Thread Status</p>
+                    <p>{{$orderDetail->thread_status}}</p>
+                </div>
+                <div class="col-lg-3">
                     <p class="m-0 heading">Vendor</p>
                     <p>{{$orderDetail->vendor->getFullName()}}</p>
                 </div>
+                @if($orderDetail->thread_status == \Botble\Thread\Models\Thread::PRIVATE && $orderDetail->pvt_customer_id)
+                    <div class="col-lg-3">
+                        <p class="m-0 heading">Pvt. Customer</p>
+                        <p>{{$orderDetail->pvt_customer->name}}</p>
+                    </div>
+                @endif
                 <div class="col-lg-3">
                     <p class="m-0 heading">Order No.</p>
                     <p>{{$orderDetail->order_no}}</p>
@@ -99,7 +109,7 @@
                             <p>{{$variation->category_type}}</p>
                         </div>
                         <div class="col-lg-1">
-                            <p class="m-0 heading">Qty</p>
+                            <p class="m-0 heading">{{$orderDetail->is_pieces ? 'Pieces Qty' : 'Pack Qty'}}</p>
                             <p>{{$variation->quantity}}</p>
                         </div>
                         <div class="col-lg-1">
@@ -125,7 +135,7 @@
         </div>
     </div>
 @stop
- 
+
 
 @section('javascript')
 <script>
