@@ -471,6 +471,7 @@ class ThreadordersController extends BaseController
                                         $barcodePackAll = get_barcode();
                                         $packAllProd->upc = $barcodePackAll['upc'];
                                         $packAllProd->barcode = $barcodePackAll['barcode'];
+                                        $packAllProd->private_label = $product->private_label;
                                         $packAllProd->save();
 
                                         $logParam = [
@@ -504,6 +505,7 @@ class ThreadordersController extends BaseController
                                                 $barcodeSize = get_barcode();
                                                 $sizeProd->upc = $barcodeSize['upc'];
                                                 $sizeProd->barcode = $barcodeSize['barcode'];
+                                                $sizeProd->private_label = $product->private_label;
                                                 $sizeProd->save();
 
                                                 $logParam = [
