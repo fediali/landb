@@ -62,17 +62,17 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
             Route::get('address/{id}', [
                 'as'         => 'customer-addresses',
                 'uses'       => 'CustomerController@addAddress',
-                'permission' => 'customer.index',
+                'permission' => 'customer.create',
             ]);
             Route::post('create-customer-address', [
                 'as'         => 'create-customer-address',
                 'uses'       => 'CustomerController@postCustomerAddress',
-                'permission' => 'customer.index',
+                'permission' => 'customer.create',
             ]);
             Route::post('create-customer-payment', [
                 'as'         => 'create-customer-payment',
                 'uses'       => 'CustomerController@postCustomerCard',
-                'permission' => 'customer.index',
+                'permission' => 'customer.create',
             ]);
         });
     });
