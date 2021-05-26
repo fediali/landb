@@ -80,24 +80,7 @@
             console.log(not_id);
         })
 
-        $('.card_fields').hide();
-        var card = $("select.card_list option:selected").val();
-        console.log(card)
-        $('.payment_id').val(card);
-        if (card == 0) {
-            $('.add_card').show();
-        } else {
-            $('.add_card').hide();
-        }
-        $('.card_list').on('change', function () {
-            var card = $("select.card_list option:selected").val();
-            $('.payment_id').val(card);
-            if (card == 0) {
-                $('.add_card').show();
-            } else {
-                $('.add_card').hide();
-            }
-        });
+
     });
 
     // var payButton = document.querySelector('#paybutton');
@@ -223,7 +206,13 @@
                 });
                 htmls += "<option value='0'> Add New Card</option>";
                 $('#card_id').html(htmls);
-
+                var card = $("select.card_list option:selected").val();
+                $('.payment_id').val(card);
+                if (card == 0) {
+                    $('.add_card').show();
+                } else {
+                    $('.add_card').hide();
+                }
             },
             error: function (request, status, error) {
                 toastr['warning']('No Cards', 'Reading Error');

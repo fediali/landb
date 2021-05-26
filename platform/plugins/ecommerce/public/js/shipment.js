@@ -79,7 +79,12 @@ $(document).ready(function () {
     endChar: [13],
     onComplete: function onComplete(barcode, qty) {
       validScan = true;
+      $('#scannerInput').focus();
       $('#scannerInput').val(barcode);
+      var e = $.Event("keyup", {
+        which: 13
+      });
+      $('#scannerInput').trigger(e);
     },
     onError: function onError(string, qty) {
       console.log('Something went wrong. Try again!');
