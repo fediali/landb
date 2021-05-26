@@ -99,12 +99,122 @@
                             <i class="fa fa-check-circle"></i> Save &amp; Edit
                         </button>
                     </div>
-                </div>
 
+                </div>
+                <div class="p-2 bg-white">
+                    @php
+                        $options = [
+                                    ['value' => 'verified', 'text' => 'Verified'],
+                                    ['value' => 'pending', 'text' => 'Pending'],
+                                    ['value' => 'draft', 'text' => 'Draft']
+                                   ];
+                    @endphp
+                    Status:
+                    <select name="status">
+                        @foreach($options as $key => $option)
+                            <option value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
             </div>
         </div>
+        <div class="p-3 bg-white mt-3">
+            <div class="row">
+                <div class="col-lg-12 mb-3">
+                    <h5>Customer account information</h5>
+                </div>
+                <div class="col-lg-12 mb-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p class="textbox-label">First Name</p>
+                            <input class="input-textbox form-control @error('first_name') is-invalid @enderror" type="text" name="first_name" value="{{ old('first_name',@$customer->details->first_name) }}"/>
+                            @error('first_name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Last Name</p>
+                            <input class="input-textbox form-control @error('last_name') is-invalid @enderror" type="text" name="last_name"  value="{{ old('last_name',@$customer->details->last_name) }}"/>
+                            @error('last_name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Business Phone</p>
+                            <input class="input-textbox form-control @error('business_phone') is-invalid @enderror" type="text" name="business_phone" value="{{ old('business_phone', @$customer->details->business_phone )  }}"/>
+                            @error('business_phone')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">Company</p>
+                            <input class="input-textbox form-control @error('company') is-invalid @enderror" type="text" name="company" value="{{ old('company', @$customer->details->company) }}"/>
+                            @error('company')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">Customer Type</p>
+                            @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
+                                <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}" @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif>
+                                <label class="mr-2" for="vehicle1"> {{ $type }}</label>
+                            @endforeach
+                            @error('customer_type')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Store’s Facebook</p>
+                            <input class="input-textbox form-control" type="text" name="store_facebook" value="{{ old('store_facebook', @$customer->details->store_facebook) }}"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Store’s Instagram</p>
+                            <input class="input-textbox form-control" type="text" name="store_instagram" value="{{ old('store_instagram', @$customer->details->store_instagram) }}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">Store’s Brick & Mortar address</p>
+                            <input class="input-textbox form-control" type="text" name="mortar_address" value="{{ old('mortar_address', @$customer->details->mortar_address) }}" />
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Where did they find us from?</p>
+                            <select class="input-textbox form-control" name="hear_us">
+                                <option @if(is_null(@$customer->details->hear_us)) selected @endif disabled hidden>Select an Option</option>
+                                @foreach(\Botble\Ecommerce\Models\Customer::$hearUs as $key => $hearUs)
+                                    <option value="{{ $key }}" @if(@$customer->details->hear_us == $key || old('hear_us') == $key) selected @endif>{{ $hearUs }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Preffered Way of Communication</p>
+                            <select class="input-textbox form-control" name="preferred_communication">
+                                <option @if(is_null(@$customer->details->preferred_communication)) selected @endif disabled hidden>Select an Option</option>
+                                @foreach(\Botble\Ecommerce\Models\Customer::$preferredCommunication as $key => $preferred)
+                                    <option value="{{ $key }}" @if(@$customer->details->preferred_communication == $key || old('preferred_communication') == $key) selected @endif>{{ $preferred }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Sales Tax ID</p>
+                            <input class="input-textbox form-control @error('sales_tax_id') is-invalid @enderror" type="text" name="sales_tax_id" value="{{ old('sales_tax_id', @$customer->details->sales_tax_id) }}" />
+                            @error('sales_tax_id')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="textbox-label">Which shows/events do you attend?</p>
+                            <input class="input-textbox form-control" type="text" name="events_attended" value="{{ old('events_attended' , @$customer->details->events_attended )}}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">Comments</p>
+                            <textarea rows="4" name="comments" class="input-textbox form-control">{{ old('comments',@$customer->details->comments) }}</textarea>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </form>
 
     <div class="row">
@@ -246,7 +356,9 @@
                 {{--                    <button class="btn btn-info mt-3 ">Pay $1</button>--}}
                 {{--                </form>--}}
             </div>
+
         </div>
+
     </div>
 
 
@@ -316,6 +428,7 @@
                         </thead>
                         <tbody>
 
+                        @if(isset($card))
                         @foreach($card as $cards)
                             <tr>
                                 <td>{{$cards->person_name}}</td>
@@ -326,7 +439,7 @@
                                 {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                             </tr>
                         @endforeach
-
+                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -335,7 +448,6 @@
         </div>
 
     </div>
-
 
 
     <!-- Modal -->
