@@ -19,10 +19,12 @@ use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Thread extends BaseModel
 {
     use EnumCastable;
+    use SoftDeletes;
 
     /**
      * The database table used by the model.

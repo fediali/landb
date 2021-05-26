@@ -175,6 +175,7 @@
             setTimeout(function () {
                 getbillingadress();
                 getCustomer();
+                getCards();
             }, 2000);
         }
 
@@ -203,7 +204,29 @@
                 customer = data;
             },
             error: function (request, status, error) {
-                toastr['warning']('No Address', 'Reading Error');
+                toastr['warning']('No Customer', 'Reading Error');
+            }
+        });
+    }
+
+    function getCards() {
+        var htmls = '';
+        $('#card_id').empty();
+        $.ajax({
+            url: "{{ route('customers.get-cards','') }}" + "/" + $('#customer_id').val(),
+            type: 'get',
+            success: function (data) {
+                card = data;
+                console.log(card)
+                $.each(card.data, function (index, element) {
+                    htmls += "<option value='" + (element.id) + "'>" + element.nickname + "</option>";
+                });
+                htmls += "<option value='0'> Add New Card</option>";
+                $('#card_id').html(htmls);
+
+            },
+            error: function (request, status, error) {
+                toastr['warning']('No Cards', 'Reading Error');
             }
         });
     }

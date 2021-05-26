@@ -22,10 +22,10 @@
         <div class="flexbox-grid no-pd-none">
             <div class="flexbox-content">
                 <div class="panel panel-default">
-                    <div class="wrapper-content">
+                    <div class="wrapper-content p-3">
                         <div class="clearfix">
                             <div class="table-wrapper p-none">
-                                <table class="order-totals-summary">
+                                <table class="order-totals-summary mb-3">
                                     <tbody>
                                     @php
                                         $shipment_status = true;

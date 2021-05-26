@@ -332,13 +332,9 @@ class CustomerController extends BaseController
     public function getCustomerCard($id, BaseHttpResponse $response)
     {
         $customer = $this->customerRepository->findOrFail($id);
-        $cards = [
-            '0' => 'Add New Card'
-        ];
         $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
         list($card, $info) = omni_api($url);
-        $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
-        dd($cards);
+        $cards = collect(json_decode($card));
         return $response->setData($cards);
 
     }
