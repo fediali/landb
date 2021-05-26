@@ -3258,6 +3258,9 @@ table.shop_table tr th {
     width: 25px !important;
     height: 15px;
 }
+.shipping-checkbox-area {
+    display: contents !important;
+}
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) { 
@@ -3265,13 +3268,15 @@ table.shop_table tr th {
         width: 25px !important;
         height: 25px;
     }
-}
-@media screen and (min-width: 991px) and (max-width: 1025) { 
-    .shipping-checkbox-area p {
-        font-size: 12px !important;
-    }
+   
 }
 
+@media screen and (min-width: 992px) and (max-width: 1024px) {
+    .shipping-checkbox-area p {
+        width:60%;
+    }
+}
+  
 @media screen and (min-width: 320px) and (max-width: 991px) { 
 .tabcontent {
     width: 100% !important;
@@ -3289,9 +3294,7 @@ table.shop_table tr th {
 .shipping-checkbox-area div {
     display: flex !important;
 } 
-.shipping-checkbox-area {
-    display: contents !important;
-}
+
 #menu .main-nav {
     display: block !important;
 }

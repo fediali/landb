@@ -205,7 +205,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="shipping-checkbox-area mt-2 d-flex">
-                        <p>Billing and shipping addresses are the same</p>
+                        <p class="text-billing">Billing and shipping addresses are the same</p>
                         <div class="ml-3">
                             <input class="ml-2" type="radio" name="billing" value="1" data-toggle="collapse" data-target=".collapseOne.show" checked>
                             <label class="mr-2 mb-0" for="vehicle1"> Yes</label>
