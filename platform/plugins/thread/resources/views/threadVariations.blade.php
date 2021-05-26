@@ -5,35 +5,24 @@ $variations = $options['data']['variations'];
 
 ?>
 <div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
-            </div>
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
-            </div>
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
-            </div>
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
-            </div>
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
-            </div>
-            <div class="col-md-3 mt-3">
-            <label for="name">Name:</label>
-            <input required="" class="form-control variation_name" placeholder="Add Name" name="name[]" type="text" aria-required="true">
+
+    @if($thread->is_pieces)
+        <div class="col-md-12">
+            <div class="row">
+                @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
+                    <div class="col-md-3 mt-3">
+                        <label for="name">{{$catSize->name}}</label>
+                        <input type="hidden" name="thread_id" value="{{$thread->id}}" id="pvt-thread-id">
+                        <input type="hidden" name="product_category_id" value="{{$thread->regular_product_categories()->first()->id}}" id="pvt-prod-cat-id">
+                        <input type="hidden" name="cat_sizes[]" value="{{$catSize->id}}" id="pvt-cat-sizes">
+                        <input type="number" name="cat_sizes_qty[]" class="form-control cat_sizes_qty" value="{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}" placeholder="Enter Qty" required aria-required="true">
+                    </div>
+                @endforeach
+                <input type="button" value="Submit" id="pvt-cat-sizes-qty-submit">
             </div>
         </div>
-    </div>
-    
+    @endif
+
     <div class="col-md-12">
         <hr>
         @if($thread->is_denim == 1)
@@ -467,8 +456,7 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation"
-                               value="Update">
+                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation" value="Update">
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -928,6 +916,32 @@ $variations = $options['data']['variations'];
                 },
                 error: function (request, error) {
                     location.reload();
+                }
+            });
+        });
+
+        $(document).on('click', '#pvt-cat-sizes-qty-submit', function () {
+            $.ajax({
+                url: '{{ route('thread.addPvtCatSizesQty') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'thread_id': $('#pvt-thread-id').val(),
+                    'product_category_id': $('#pvt-prod-cat-id').val(),
+                    'cat_sizes[]': $('input#pvt-cat-sizes').map(function () {
+                        return this.value;
+                    }).get(),
+                    'cat_sizes_qty[]': $('input.cat_sizes_qty').map(function () {
+                        return this.value;
+                    }).get(),
+                },
+                success: function (data) {
+                    toastr['success']('Successfully Added', 'Success');
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    location.reload();
+                    toastr['warning']('Something went wrong', 'Error');
                 }
             });
         });

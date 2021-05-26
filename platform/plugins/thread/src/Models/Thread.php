@@ -274,6 +274,11 @@ class Thread extends BaseModel
         return $this->hasMany(ThreadSpecFile::class, 'thread_id');
     }
 
+    public function pvt_cat_sizes_qty()
+    {
+        return $this->hasMany(ThreadPvtCatSizesQty::class, 'thread_id');
+    }
+
     public function getThreadVariationsAttribute()
     {
         return ThreadVariation::where('thread_id', $this->id)->where('status', 'active')->get();

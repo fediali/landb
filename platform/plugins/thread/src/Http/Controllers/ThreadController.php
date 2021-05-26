@@ -17,6 +17,7 @@ use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
+use Botble\Thread\Models\ThreadPvtCatSizesQty;
 use Botble\Thread\Models\ThreadSpecFile;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
@@ -610,6 +611,29 @@ class ThreadController extends BaseController
             return redirect()->back()->with('success', 'PP Sample Updated');
         } else {
             return redirect()->back()->with('error', 'Server error');
+        }
+    }
+
+    public function addPvtCatSizesQty(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data['thread_id']) && isset($data['product_category_id']) && isset($data['cat_sizes']) && isset($data['cat_sizes_qty'])) {
+            ThreadPvtCatSizesQty::where('thread_id', $data['thread_id'])->delete();
+
+            $postData['thread_id'] = $data['thread_id'];
+            $postData['product_category_id'] = $data['product_category_id'];
+
+            foreach ($data['cat_sizes'] as $key => $cat_size) {
+                $postData['category_size_id'] = $cat_size;
+                $postData['qty'] = $data['cat_sizes_qty'][$key];
+                ThreadPvtCatSizesQty::create($postData);
+            }
+
+            return response()->json(['status' => 'success'], 200);
+
+        } else {
+            return response()->json(['status' => 'error'], 500);
         }
     }
 
