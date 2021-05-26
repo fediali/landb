@@ -39,6 +39,7 @@ return [
         'not_delivered' => 'Not delivered',
         'audited'       => 'Audited',
         'canceled'      => 'Canceled',
+        'shipment_completed' => 'Shipment Completed',
     ],
     'cod_statuses'                        => [
         'pending'   => 'Pending',

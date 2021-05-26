@@ -27,6 +27,7 @@ use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
+use Botble\Ecommerce\Models\OrderProductShipmentVerify;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
@@ -45,6 +46,7 @@ use Botble\Ecommerce\Tables\OrderTable;
 use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Enums\PaymentStatusEnum;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
+use Carbon\Carbon;
 use EmailHandler;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -276,6 +278,10 @@ class OrderController extends BaseController
             ], $meta_condition);
 
             $order->payment_id = $payment->id;
+
+            $order->editing_by = NULL;
+            $order->editing_started_at = NULL;
+
             $order->save();
 
             if ($request->input('payment_status') === PaymentStatusEnum::COMPLETED) {
@@ -422,6 +428,8 @@ class OrderController extends BaseController
 
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
+
+
 
     /**
      * @param int $id
@@ -649,7 +657,8 @@ class OrderController extends BaseController
             'cod_amount' => $request->input('cod_amount') ?? ($order->payment->status !== PaymentStatusEnum::COMPLETED ? $order->amount : 0),
             'cod_status' => 'pending',
             'type'       => $request->input('method'),
-            'status'     => ShippingStatusEnum::DELIVERING,
+            // 'status'     => ShippingStatusEnum::DELIVERING,
+            'status'     => ShippingStatusEnum::PICKING,
             'price'      => $order->shipping_amount,
             'store_id'   => $request->input('store_id'),
         ];
@@ -1010,11 +1019,21 @@ class OrderController extends BaseController
 
         $order = $this->orderRepository->findById($id);
 
+        event(new OrderEdit(auth()->user(), $order));
+
         if (!$order) {
             return $response
                 ->setError()
                 ->setNextUrl(route('orders.index'))
                 ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
+        }
+
+        $editing_started_at = Carbon::parse($order->editing_started_at);
+        if ($order->editing_by && $order->editing_by != auth()->user()->id && $editing_started_at->diffInSeconds(Carbon::now()) <= 60 * 5) {
+            return $response
+                ->setError()
+                ->setNextUrl(route('orders.index'))
+                ->setMessage('This is order already in editing by ' . auth()->user()->getFullName());
         }
 
         $productIds = $order->products->pluck('product_id')->all();
@@ -1065,7 +1084,11 @@ class OrderController extends BaseController
                 'vendor/core/plugins/ecommerce/js/order-create.js',
             ])
             ->addScripts(['blockui', 'input-mask']);
-//        event(new OrderEdit(Auth::user(), $order));
+
+        $order->editing_by = auth()->user()->id;
+        $order->editing_started_at = Carbon::now();
+        $order->save();
+
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
             'products',
@@ -1729,4 +1752,75 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
         return $response;
     }
+
+    public function verifyOrderProductShipment($orderId, $prodId, $prodQty, Request $request, BaseHttpResponse $response)
+    {
+        if ($prodId && $prodQty) {
+            $product = $this->productRepository->findById($prodId);
+            $demandQty = $prodQty;
+            if ($product->quantity >= $demandQty) {
+                $where = ['order_id' => $orderId, 'product_id' => $prodId];
+                $data = $where;
+                $data['is_verified'] = 1;
+                $data['created_by'] = auth()->user()->id;
+                OrderProductShipmentVerify::updateOrCreate($where, $data);
+            }
+        }
+        return redirect()->back();
+    }
+
+    public function verifyOrderProductShipmentBarcode($orderId, $barcode, Request $request, BaseHttpResponse $response)
+    {
+        if ($barcode) {
+            $product = Product::where('upc', $barcode)->first();
+            if ($product) {
+                $orderProduct = OrderProduct::where(['order_id' => $orderId, 'product_id' => $product->id])->first();
+                if ($orderProduct) {
+                    $demandQty = $orderProduct->qty;
+                    //if ($product->quantity >= $demandQty) {
+
+                        $where = ['order_id' => $orderId, 'product_id' => $product->id];
+                        $data = $where;
+                        if ($demandQty == 1) {
+                            $data['is_verified'] = 1;
+                        }
+                        $data['qty'] = 1;
+                        $data['created_by'] = auth()->user()->id;
+
+                        $check = OrderProductShipmentVerify::where($where)->first();
+                        if (!$check) {
+                            OrderProductShipmentVerify::create($data);
+                        } else {
+                            if ($demandQty == $check->qty) {
+                                $data['qty'] = $demandQty;
+                                $data['is_verified'] = 1;
+                                OrderProductShipmentVerify::where($where)->update($data);
+                            } else {
+                                $data['qty'] = $check->qty + 1;
+                                if ($demandQty == $data['qty']) {
+                                    $data['is_verified'] = 1;
+                                }
+                                OrderProductShipmentVerify::where($where)->update($data);
+                            }
+                        }
+                        // return redirect()->back();
+                        return response()->json(['status' => 'success'], 200);
+                    /*} else {
+                        // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
+                        return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in ordered Qty!'], 406);
+                    }*/
+                } else {
+                    // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
+                    return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in order!'], 406);
+                }
+            } else {
+                // return $response->setCode(406)->setError()->setMessage('Product not found!');
+                return response()->json(['status' => 'error', 'message' => 'Product not found!'], 406);
+            }
+        } else {
+            // return $response->setCode(406)->setError()->setMessage('This barcode '. $barcode . ' is not available!');
+            return response()->json(['status' => 'error', 'message' => 'This barcode '. $barcode . ' is not available!'], 406);
+        }
+    }
+
 }

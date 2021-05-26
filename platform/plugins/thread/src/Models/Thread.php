@@ -8,6 +8,7 @@ use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Blog\Models\Category;
+use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Fabrics\Models\Fabrics;
 use Botble\Fits\Models\Fits;
@@ -19,10 +20,12 @@ use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Thread extends BaseModel
 {
     use EnumCastable;
+    use SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -84,6 +87,8 @@ class Thread extends BaseModel
         'created_at',
         'updated_at',
         'ready',
+        'is_pieces',
+        'pvt_customer_id',
     ];
 
     /**
@@ -197,6 +202,15 @@ class Thread extends BaseModel
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'vendor_id')->withDefault();
+    }
+
+    /**
+     * @return BelongsTo
+     * @deprecated
+     */
+    public function pvt_customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'pvt_customer_id')->withDefault();
     }
 
     /**

@@ -28,7 +28,8 @@
                 @if(!count($user->orders))
                  <div class="woocommerce-info"> No order has been made yet. </div>
                 @else
-                    <table class="table table-hover table-striped">
+                <div class="table-responsive">
+                <table class="table table-hover table-striped">
                         <thead>
                         <tr>
                             <th scope="col">Order #</th>
@@ -58,17 +59,20 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                   
                 @endif
             </div>
 
             <div id="Addresses" class="tabcontent">
                 <div class="row">
+                <div class="col-lg-12">
                     <form method="POST" action="{{ route('customer.edit-account-post', 'address') }}">
                             @csrf
                             <div class="row">
                                 <input type="hidden" name="shipping_id" value="{{ @$user->shippingAddress[0]->id }}">
                                 <div class="col-lg-6">
-                                    <h4 class="profile-light-txt mt-5">Shipping information</h4>
+                                    <h4 class="profile-light-txt mt-2">Shipping information</h4>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <p class="textbox-label">First Name</p>
@@ -232,12 +236,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 mt-5">
+                                <div class="col-lg-2 mt-5">
                                     <input type="submit" class="btn cart-btn w-100" value="Save">
                                     {{--<a href="#" class=" btn cart-btn w-100">Register</a>--}}
                                 </div>
                             </div>
                         </form>
+                </div>
                 </div>
             </div>
             <div id="Account" class="tabcontent">
@@ -245,21 +250,27 @@
                     <div class="col-lg-12">
                         <form method="POST" action="{{ route('customer.edit-account-post', 'account') }}">
                             @csrf
-                            <h4 class="profile-light-txt">User account information</h4>
+                            <h4 class="profile-light-txt mt-2">User account information</h4>
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <p class="textbox-label">Email</p>
                                     <input class="input-textbox" type="email" value="{{ $user->email }}" disabled/>
+                              </div>
+                                <div class="col-lg-6">
                                     <p class="textbox-label">Old Password</p>
                                     <input class="input-textbox form-control @error('old_password') is-invalid @enderror" type="password" name="old_password"/>
                                     @error('old_password')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                 </div>
+                                <div class="col-lg-6"> 
                                     <p class="textbox-label">Password</p>
                                     <input class="input-textbox form-control @error('new_password') is-invalid @enderror" type="password" name="new_password"/>
                                     @error('new_password')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                     </div>
+                                <div class="col-lg-6"> 
                                     <p class="textbox-label">Confirm Password</p>
                                     <input class="input-textbox form-control @error('new_password') is-invalid @enderror" type="password" name="new_password_confirmation" />
                                 </div>

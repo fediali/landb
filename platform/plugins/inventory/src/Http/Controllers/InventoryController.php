@@ -232,13 +232,30 @@ class InventoryController extends BaseController
             //->whereNull('inventory_history.inventory_id')
             //->where('ec_products.barcode', $request->get('barcode'))
             ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
+            //->orWhere('ec_products.upc', $request->get('barcode'))
+            //->orWhere('ec_products.barcode', $request->get('barcode'))
             //->orWhere('parent_sku', $request->get('barcode'))
             //->where('status', 'published')
             ->orderBy('thread_order_variations.thread_order_id', 'DESC')
             ->get();
-        if ($products) {
+        if ($products && count($products) > 1) {
             return response()->json(['products' => $products, 'status' => 'success'], 200);
         } else {
+            $getProdIdByUPC = Product::where('upc', $request->get('barcode'))->value('id');
+            $getChildIds = ProductVariation::where('configurable_product_id', $getProdIdByUPC)->pluck('product_id')->all();
+            $getChildIds[] = $getProdIdByUPC;
+
+            $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+                'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
+                ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
+                ->whereIn('ec_products.id', $getChildIds)
+                ->orderBy('thread_order_variations.thread_order_id', 'DESC')
+                ->get();
+
+            if ($products && count($products) > 1) {
+                return response()->json(['products' => $products, 'status' => 'success'], 200);
+            }
+
             return response()->json(['product' => [], 'status' => 'error'], 404);
         }
     }

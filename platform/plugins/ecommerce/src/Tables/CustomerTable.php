@@ -63,6 +63,9 @@ class CustomerTable extends TableAbstract
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
+            })
+            ->editColumn('is_private', function ($item) {
+                return $item->is_private ? 'Yes' : 'No';
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -84,6 +87,7 @@ class CustomerTable extends TableAbstract
             'ec_customers.name',
             'ec_customers.email',
             'ec_customers.avatar',
+            'ec_customers.is_private',
             'ec_customers.created_at',
         ];
 
@@ -112,6 +116,11 @@ class CustomerTable extends TableAbstract
             'email'      => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
+                'class' => 'text-left',
+            ],
+            'is_private'      => [
+                'name'  => 'ec_customers.is_private',
+                'title' => 'Is Private',
                 'class' => 'text-left',
             ],
             'created_at' => [

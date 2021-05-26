@@ -277,6 +277,17 @@ if (!function_exists('get_designers')) {
     }
 }
 
+if (!function_exists('get_designers_for_thread')) {
+    function get_designers_for_thread()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->whereIn('roles.slug', ['designer', 'admin', 'product-developmentquality-control', 'design-manager'])
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
+
+
 if (!function_exists('get_vendors')) {
     function get_vendors()
     {
@@ -296,6 +307,14 @@ if (!function_exists('get_salesperson')) {
             ->pluck('users.username', 'users.id')->all();
     }
 }
+
+if (!function_exists('get_private_customers')) {
+    function get_private_customers()
+    {
+        return \Botble\Ecommerce\Models\Customer::where('is_private', 1)->pluck('name', 'id')->all();
+    }
+}
+
 //Get User By Roles
 
 
@@ -578,7 +597,7 @@ if (!function_exists('generate_notification')) {
                 $notification['url'] = route('products.edit', $data->id);
                 $notification['action'] = $type;
                 $notification['ref_id'] = $data->id;
-                $notification['message'] = $data->name.' has reached the max qty of order.';
+                $notification['message'] = $data->name . ' has reached the max qty of order.';
                 $notifiable[] = get_design_manager();
             }
 
@@ -633,7 +652,7 @@ if (!function_exists('get_design_manager')) {
 //            ->pluck('users.id');
 
         $manager = DB::table('role_users')->leftJoin('roles', 'roles.id', 'role_users.role_id')
-            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control','admin'])
+            ->whereIn('roles.slug', ['design-manager', 'product-developmentquality-control', 'admin'])
 //            ->where('roles.slug', 'design-manager')
             ->pluck('user_id');
 
@@ -751,14 +770,14 @@ if (!function_exists('set_product_oos_date')) {
                 DB::table('ec_products')->where('id', $getParentProdId)->update(['oos_date' => Carbon::now()]);
                 $logParam = [
                     'parent_product_id' => $getParentProdId,
-                    'product_id' => $product->id,
-                    'sku' => $product->sku,
-                    'quantity' => $qty,
-                    'new_stock' => $product->quantity,
-                    'old_stock' => $preQty,
-                    'order_id' => $orderId,
-                    'created_by' => auth()->user()->id,
-                    'reference' => InventoryHistory::PROD_OSS
+                    'product_id'        => $product->id,
+                    'sku'               => $product->sku,
+                    'quantity'          => $qty,
+                    'new_stock'         => $product->quantity,
+                    'old_stock'         => $preQty,
+                    'order_id'          => $orderId,
+                    'created_by'        => auth()->user()->id,
+                    'reference'         => InventoryHistory::PROD_OSS
                 ];
                 log_product_history($logParam);
             }
@@ -773,19 +792,19 @@ if (!function_exists('log_product_history')) {
     {
         InventoryHistory::create([
             'parent_product_id' => isset($params['parent_product_id']) ? $params['parent_product_id'] : NULL,
-            'product_id' => isset($params['product_id']) ? $params['product_id'] : NULL,
-            'sku' => isset($params['sku']) ? $params['sku'] : NULL,
+            'product_id'        => isset($params['product_id']) ? $params['product_id'] : NULL,
+            'sku'               => isset($params['sku']) ? $params['sku'] : NULL,
 
-            'quantity' => isset($params['quantity']) ? $params['quantity'] : NULL,
+            'quantity'  => isset($params['quantity']) ? $params['quantity'] : NULL,
             'new_stock' => isset($params['new_stock']) ? $params['new_stock'] : NULL,
             'old_stock' => isset($params['old_stock']) ? $params['old_stock'] : NULL,
 
-            'order_id' => isset($params['order_id']) ? $params['order_id'] : NULL,
-            'inventory_id' => isset($params['inventory_id']) ? $params['inventory_id'] : NULL,
+            'order_id'        => isset($params['order_id']) ? $params['order_id'] : NULL,
+            'inventory_id'    => isset($params['inventory_id']) ? $params['inventory_id'] : NULL,
             'thread_order_id' => isset($params['thread_order_id']) ? $params['thread_order_id'] : NULL,
 
             'created_by' => auth()->user()->id,
-            'reference' => isset($params['reference']) ? $params['reference'] : NULL
+            'reference'  => isset($params['reference']) ? $params['reference'] : NULL
         ]);
     }
 }

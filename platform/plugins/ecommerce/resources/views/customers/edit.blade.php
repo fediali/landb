@@ -47,6 +47,13 @@
                                    id="password_confirmation">
                         </div>
                         <div class="clearfix"></div>
+
+                        <div class="form-group">
+                            <input class="hrv-checkbox" id="is_private" name="is_private" type="checkbox" value="{{$customer->is_private}}" {{$customer->is_private ? 'checked' : ''}}>
+                            <label for="is_private" class="control-label">Is Private?</label>
+                        </div>
+                        <div class="clearfix"></div>
+
                     </div>
                 </div>
 

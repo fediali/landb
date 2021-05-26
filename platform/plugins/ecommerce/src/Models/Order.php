@@ -68,7 +68,9 @@ class Order extends BaseModel
         'is_finished',
         'token',
         'payment_id',
-        'order_type'
+        'order_type',
+        'editing_by',
+        'editing_started_at',
     ];
 
     /**
@@ -138,6 +140,15 @@ class Order extends BaseModel
     function products()
     {
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public
+    function shipment_verified_products()
+    {
+        return $this->hasMany(OrderProductShipmentVerify::class, 'order_id');
     }
 
     /**

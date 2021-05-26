@@ -5,6 +5,7 @@ namespace Botble\Thread\Forms;
 use Botble\Base\Forms\FormAbstract;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Thread\Forms\Fields\AddDenimFields;
+use Botble\Thread\Forms\Fields\AddPvtLabelFields;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
 
@@ -18,8 +19,9 @@ class ThreadForm extends FormAbstract
     {
         $vendor_products = get_vendor_products();
         $product_units = get_product_units();
-        $designers = get_designers();
+        $designers = get_designers_for_thread();
         $vendors = get_vendors();
+        $private_customers = get_private_customers();
         $seasons = get_seasons();
         $regular_categories = get_reg_product_categories_custom();
         $plus_categories = get_plu_product_categories_custom();
@@ -46,6 +48,8 @@ class ThreadForm extends FormAbstract
         }
 
         $this->formHelper->addCustomField('addDenimFields', AddDenimFields::class);
+        $this->formHelper->addCustomField('addPvtLabelFields', AddPvtLabelFields::class);
+
         $this
             ->setupModel(new Thread)
             ->setValidatorClass(ThreadRequest::class)
@@ -217,8 +221,19 @@ class ThreadForm extends FormAbstract
                 'attr'       => [
                     'placeholder' => 'Select Thread Status',
                     'class'       => 'select-search-full',
+                    'id'       => 'sel-thread-status',
                 ],
                 'choices'    => Thread::$thread_statuses,
+            ])
+            /*->add('is_pieces', 'onOff', [
+                'label'         => 'Qty is in Pieces ?',
+                'label_attr'    => ['class' => 'control-label'],
+                'default_value' => false,
+            ])*/
+            ->add('PvtLabelFields', 'addPvtLabelFields', [
+                'label'      => 'Private Label Fields',
+                'label_attr' => ['class' => 'control-label pvt-ip'],
+                'data'       => ['model' => $this->model, 'private_customers' => $private_customers]
             ])
             ->add('shipping_method', 'customSelect', [
                 'label'      => 'Select Shipping Method',

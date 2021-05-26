@@ -253,6 +253,8 @@ class ThreadordersController extends BaseController
         $thread2 = $this->threadRepository->findOrFail($id);
 
         foreach ($thread2->thread_variations as $thread_variation) {
+            // TODO:: check unique barcode
+            $barcode = get_barcode();
             $threadOrderVar = [
                 'thread_order_id'     => $threadorders->id,
                 'category_type'       => 'regular',
@@ -267,8 +269,8 @@ class ThreadordersController extends BaseController
                 'quantity'            => $requestData['regular_qty'][$thread_variation->id],
                 'cost'                => $requestData['cost'][$thread_variation->id],
                 'notes'               => $thread_variation->notes,
-                'upc'                 => get_barcode()['upc'],
-                'barcode'             => get_barcode()['barcode'],
+                'upc'                 => $barcode['upc'],
+                'barcode'             => $barcode['barcode'],
             ];
             DB::table('thread_order_variations')->insert($threadOrderVar);
 
@@ -289,6 +291,7 @@ class ThreadordersController extends BaseController
             }
 
             if (isset($thread2->plus_product_categories[0])) {
+                $barcode = get_barcode();
                 $threadOrderVar = [
                     'thread_order_id'     => $threadorders->id,
                     'category_type'       => 'plus',
@@ -303,8 +306,8 @@ class ThreadordersController extends BaseController
                     'quantity'            => $requestData['plus_qty'][$thread_variation->id],
                     'cost'                => $requestData['cost'][$thread_variation->id],
                     'notes'               => $thread_variation->notes,
-                    'upc'                 => get_barcode()['upc'],
-                    'barcode'             => get_barcode()['barcode'],
+                    'upc'                 => $barcode['upc'],
+                    'barcode'             => $barcode['barcode'],
                 ];
                 DB::table('thread_order_variations')->insert($threadOrderVar);
 
@@ -459,19 +462,24 @@ class ThreadordersController extends BaseController
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
-                                        $prodSku = Product::where('id', $prodId)->value('sku');
+                                        $packAllProd = Product::where('id', $prodId)->first();
+
+                                        $barcodePackAll = get_barcode();
+                                        $packAllProd->upc = $barcodePackAll['upc'];
+                                        $packAllProd->barcode = $barcodePackAll['barcode'];
+                                        $packAllProd->save();
 
                                         $logParam = [
                                             'parent_product_id' => $product->id,
                                             'product_id' => $prodId,
-                                            'sku' => $prodSku,
+                                            'sku' => $packAllProd->sku,
                                             'thread_order_id'   => $threadorder->id,
                                             'created_by' => auth()->user()->id,
                                             'reference'  => InventoryHistory::PROD_PUSH_ECOM
                                         ];
                                         log_product_history($logParam);
-
                                     }
+
                                     if (count($getSizeAttrs)) {
                                         $product->productAttributeSets()->attach([$getSizeAttrSet]);
                                         $product->productAttributes()->attach($getSizeAttrs);
@@ -487,12 +495,17 @@ class ThreadordersController extends BaseController
 
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
-                                                $prodSku = Product::where('id', $prodId)->value('sku');
+                                                $sizeProd = Product::where('id', $prodId)->first();
+
+                                                $barcodeSize = get_barcode();
+                                                $sizeProd->upc = $barcodeSize['upc'];
+                                                $sizeProd->barcode = $barcodeSize['barcode'];
+                                                $sizeProd->save();
 
                                                 $logParam = [
                                                     'parent_product_id' => $product->id,
                                                     'product_id' => $prodId,
-                                                    'sku' => $prodSku,
+                                                    'sku' => $sizeProd->sku,
                                                     'thread_order_id'   => $threadorder->id,
                                                     'created_by' => auth()->user()->id,
                                                     'reference'  => InventoryHistory::PROD_PUSH_ECOM

@@ -26,6 +26,7 @@ use URL;
 class CustomerController extends Controller
 {
   protected $customer;
+
   public function __construct(Customer $customer) {
     $this->customer = $customer;
   }
