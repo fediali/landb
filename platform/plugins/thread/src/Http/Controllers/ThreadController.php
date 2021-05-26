@@ -163,7 +163,6 @@ class ThreadController extends BaseController
      */
     public function update($id, ThreadRequest $request, BaseHttpResponse $response)
     {
-
         $thread = $this->threadRepository->findOrFail($id);
 
         $requestData = $request->input();
@@ -383,6 +382,7 @@ class ThreadController extends BaseController
                 $input['name'] = @$data['name'][$i];
                 $input['print_id'] = @$data['print_id'][$i];
                 $input['wash_id'] = @$data['wash_id'][$i];
+                $input['fabric_id'] = @$data['fabric_id'][$i];
                 $input['cost'] = @$data['cost'][$i];
                 $input['notes'] = @$data['notes'][$i];
                 $input['status'] = 'active';
@@ -435,6 +435,7 @@ class ThreadController extends BaseController
             $input['name'] = @$data['name'];
             $input['print_id'] = @$data['print_id'];
             $input['wash_id'] = @$data['wash_id'];
+            $input['fabric_id'] = @$data['fabric_id'];
             $input['cost'] = @$data['cost'];
             $input['notes'] = @$data['notes'];
 

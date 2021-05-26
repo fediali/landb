@@ -21,9 +21,7 @@ class ThreadDetailsForm extends FormAbstract
     public function buildForm()
     {
       $printdesigns = get_print_designs();
-      //dd($printdesigns);
       $variations = get_thread_variations($this->model->id);
-      //dd($variations);
       $comments = get_thread_comments($this->model->id);
       $seasons = get_seasons();
       $fits = get_fits();
@@ -61,7 +59,7 @@ class ThreadDetailsForm extends FormAbstract
                 ]
             )->add('Variations', 'threadVariations', [
                 'label'      => 'threadVariations',
-                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations,'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
+                'data' => ['thread' => $this->model, 'printdesigns' => $printdesigns, 'variations' => $variations, 'fabrics' => $fabrics,'washes' => $wash, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat]
                 ]
             )->add('Comments', 'CommentBox', [
                 'label'      => 'CommentBox',

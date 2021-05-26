@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="form-group" id="fabric-div">
+    {{--<div class="form-group" id="fabric-div">
         <label for="fabric_id" class="control-label">Select Fabric</label>
         <div class="form-group">
             <select class="select-search-full" id="fabric_id" name="fabric_id">
@@ -40,14 +40,14 @@
                 @endforeach
             </select>
         </div>
-    </div>
+    </div>--}}
 
     <div class="form-group" id="fabric_print_direction-div">
         <label for="fabric_print_direction" class="control-label">Fabric Print Direction</label>
         <input class="form-control" placeholder="Fabric Print Direction" data-counter="120" name="fabric_print_direction" type="text" id="fabric_print_direction" value="{{$options['data']['model']->fabric_print_direction}}">
     </div>
 
-    <div class="form-group">
+    {{--<div class="form-group">
         <label for="reg_pack_qty" class="control-label">Reg Pack Qty</label>
         <input class="form-control" placeholder="Reg Pack Qty" name="reg_pack_qty" type="number" id="reg_pack_qty" value="{{$options['data']['model']->reg_pack_qty}}">
     </div>
@@ -55,7 +55,7 @@
     <div class="form-group">
         <label for="plus_pack_qty" class="control-label">Plus Pack Qty</label>
         <input class="form-control" placeholder="Plus Pack Qty" name="plus_pack_qty" type="number" id="plus_pack_qty" value="{{$options['data']['model']->plus_pack_qty}}">
-    </div>
+    </div>--}}
 
 </div>
 

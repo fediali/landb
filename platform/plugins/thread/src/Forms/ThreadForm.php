@@ -27,7 +27,7 @@ class ThreadForm extends FormAbstract
         $plus_categories = get_plu_product_categories_custom();
         $fits = get_fits();
         $rises = get_rises();
-        $fabrics = get_fabrics();
+        // $fabrics = get_fabrics();
         $wash = get_washes();
 
         $selectedRegCat = [];
@@ -196,7 +196,7 @@ class ThreadForm extends FormAbstract
                 'attr'       => [
                     'placeholder' => 'Denim Fields',
                 ],
-                'data'       => ['fits' => $fits, 'rises' => $rises, 'fabrics' => $fabrics, 'model' => $this->model, 'wash' => $wash]
+                'data'       => ['fits' => $fits, 'rises' => $rises, /*'fabrics' => $fabrics,*/ 'model' => $this->model, 'wash' => $wash]
             ])
             /*->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
@@ -310,7 +310,8 @@ class ThreadForm extends FormAbstract
                     'class' => 'form-control',
 //                    'id'    => 'sku-alert',
                 ]
-            ])->add('plus_sku', 'text', [
+            ])
+            ->add('plus_sku', 'text', [
                 'label'      => 'Plus SKU (For Previous Tech Pack)',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
