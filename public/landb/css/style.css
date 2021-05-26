@@ -3251,6 +3251,27 @@ table.shop_table tr th {
     padding: 20px !important;
 }
 
+@media screen and (min-width: 320px) and (max-width: 767px) { #register-form label {
+    width: 85% !important;
+}
+.shipping-checkbox-area input[type="radio"] {
+    width: 25px !important;
+    height: 15px;
+}
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) { 
+    .shipping-checkbox-area input[type="radio"] {
+        width: 25px !important;
+        height: 25px;
+    }
+}
+@media screen and (min-width: 991px) and (max-width: 1025) { 
+    .shipping-checkbox-area p {
+        font-size: 12px !important;
+    }
+}
+
 @media screen and (min-width: 320px) and (max-width: 991px) { 
 .tabcontent {
     width: 100% !important;
@@ -3261,18 +3282,13 @@ table.shop_table tr th {
 .grid-container {
     display: none !important;
 } 
-#register-form label {
-    width: 90% !important;
-}
+
 .shipping-checkbox-area p {
     width: 100% !important;
 }
 .shipping-checkbox-area div {
     display: flex !important;
-}
-.shipping-checkbox-area input[type="radio"] {
-    width: 25px !important;
-}
+} 
 .shipping-checkbox-area {
     display: contents !important;
 }
