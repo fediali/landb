@@ -16,7 +16,11 @@
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
     <!-- Custom Style Sheet -->
-    <link rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script src="{{ asset('landb/js/jquery.jquery.easing.1.3.js') }}"></script>
+<script src="{{ asset('landb/js/jquery.booklet.1.1.0.min.js') }}"></script>
+    <link type="text/css" rel="stylesheet" media="screen" href="{{ asset('landb/css/jquery.booklet.1.1.0.css') }}" />
+    <link type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
     <script src="{{ asset('js/barcodeScanner.js') }}"></script>
@@ -204,6 +208,7 @@
   background: #bbb;
 }
 </style>
+<script src="{{ asset('landb/js/flipbook.js') }}"></script>
 
 <script>
 function openSearch() {

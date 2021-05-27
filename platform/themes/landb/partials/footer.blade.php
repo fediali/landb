@@ -304,8 +304,7 @@
     <script>
       toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
-@endif
-
+@endif 
 </body>
 
 </html>
