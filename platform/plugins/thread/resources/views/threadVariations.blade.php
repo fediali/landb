@@ -8,9 +8,16 @@ $variations = $options['data']['variations'];
 
     @if($thread->is_pieces)
         <div class="col-md-12">
+            
             <div class="row">
+            <div class="col-md-12">
+                <div class="order-box">
+                <div class="row">
+                <div class="col-md-12">
+                <h6>PRIVATE LABEL SIZES</h6>
+                </div>
                 @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
-                    <div class="col-md-3 mt-3">
+                    <div class="col-md-2 mt-3">
                         <label for="name">{{$catSize->name}}</label>
                         <input type="hidden" name="thread_id" value="{{$thread->id}}" id="pvt-thread-id">
                         <input type="hidden" name="product_category_id" value="{{$thread->regular_product_categories()->first()->id}}" id="pvt-prod-cat-id">
@@ -18,7 +25,12 @@ $variations = $options['data']['variations'];
                         <input type="number" name="cat_sizes_qty[]" class="form-control cat_sizes_qty" value="{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}" placeholder="Enter Qty" required aria-required="true">
                     </div>
                 @endforeach
-                <input type="button" value="Submit" id="pvt-cat-sizes-qty-submit">
+                    <div class="col-md-2">
+                    <input class="btn btn-success w-100 btn-private" type="button" value="Submit" id="pvt-cat-sizes-qty-submit">
+                    </div>
+            </div>
+            </div>
+            </div>
             </div>
         </div>
     @endif
