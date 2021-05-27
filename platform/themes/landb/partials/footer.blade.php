@@ -94,6 +94,7 @@
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <script src="{{ asset('landb/js/popper.js') }}"></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
+<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
@@ -101,12 +102,39 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
+<![endif]-->
+<script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script>
+  $(document).ready(function() {
+    $("#signature").jSignature({
+      // line width
+      lineWidth:2,
+
+      // width/height of signature pad
+      width:150,
+      height:100,
+      background_color:"#0f0"
+
+
+  });
+    $("#undo-sign").on('click', function () {
+      $("#signature").jSignature('reset');
+    });
+
+    $("#signature").bind('change', function(e){
+      var base64 = $("#signature").jSignature("getData");
+      $("input[name='purchaser_sign']").val(base64);
+    })
+  })
+</script>
 <script>
   $(document).ready(function() {
     $("#filtertoggle").click(function() {
       $(this).toggleClass("on");
       $("#filtermenu").slideToggle();
     });
+    $("input[name='shipping_postal_code']").mask('99999?-9999');
   });
 </script>
 <script>

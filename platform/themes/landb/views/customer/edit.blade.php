@@ -520,7 +520,12 @@
                                     </div>
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Purchaser Sign</p>
-                                        <textarea rows="4" class="input-textbox bg-white form-control @error('purchaser_sign') is-invalid @enderror" name="purchaser_sign">{{ old('purchaser_sign',@$user->taxCertificate->purchaser_sign) }}</textarea>
+                                        @if(!empty(@$user->taxCertificate->purchaser_sign))
+                                            <img class="img-responsive" src="{{ asset($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                        @else
+                                            <span id="undo-sign" class="fa fa-undo"></span>
+                                            <div id="signature"></div>
+                                        @endif
                                         @error('purchaser_sign')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror

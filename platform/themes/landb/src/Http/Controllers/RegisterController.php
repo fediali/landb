@@ -117,10 +117,10 @@ class RegisterController extends Controller
               'store_instagram'         => $data['store_instagram'],
               'mortar_address'          => $data['mortar_address'],
               'newsletter'              => isset($data['newsletter']) ? $data['newsletter'] : 0,
-              'hear_us'                 => $data['hear_us'],
+              'hear_us'                 => isset($data['hear_us']) ? $data['hear_us'] : null,
               'comments'                => $data['comments'],
               'phone'                   => $data['mobile'],
-              'preferred_communication' => $data['preferred_communication'],
+              'preferred_communication' => isset($data['preferred_communication']) ? $data['preferred_communication'] : null,
               'events_attended'         => $data['events_attended']
           ]);
 
@@ -197,6 +197,6 @@ class RegisterController extends Controller
 
   protected function redirectTo()
   {
-    return redirect()->route('customer.pendingNotification'); // return dynamicaly generated URL.
+    return route('customer.contract-form'); // return dynamicaly generated URL.
   }
 }

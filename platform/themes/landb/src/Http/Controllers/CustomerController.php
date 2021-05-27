@@ -15,6 +15,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use SeoHelper;
@@ -152,6 +153,7 @@ class CustomerController extends Controller
   }
 
   public function updateTaxCertificate($request) {
+
     $user = auth('customer')->user();
 
     $validate = $request->validate([
@@ -167,8 +169,18 @@ class CustomerController extends Controller
         'date' => 'required',
         'purchaser_sign' => 'required',
     ]);
+
+    $image = $request->purchaser_sign;  // your base64 encoded
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $imageName = 'signatures/'.substr(microtime(), 2,7).'.'.'png';
+    /*\File::put(storage_path(). '/' . $imageName, base64_decode($image));*/
+    Storage::disk('public')->put($imageName, base64_decode($image));
+
     $data = $request->all();
       unset($data['_token']);
+
+      $data['purchaser_sign'] = 'storage/' . $imageName;
 
     $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
 
@@ -254,5 +266,10 @@ class CustomerController extends Controller
 
   public function pendingNotification(){
     return Theme::scope('customer.verify')->render();
+  }
+
+  public function contractForm(){
+    $data['user'] = $this->customer->with(['details','shippingAddress', 'BillingAddress', 'storeLocator'])->find(auth('customer')->user()->id);
+    return Theme::scope('customer.contract', $data)->render();
   }
 }
