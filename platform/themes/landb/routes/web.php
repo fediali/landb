@@ -53,6 +53,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'as'   => 'overview',
             'uses' => 'CustomerController@show'
         ]);
+
         Route::post('/edit-account/{type}', [
             'as'   => 'edit-account-post',
             'uses' => 'CustomerController@update'
@@ -67,6 +68,11 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/customer/verify', [
             'as'   => 'customer.pendingNotification',
             'uses' => 'CustomerController@pendingNotification'
+        ]);
+
+        Route::get('customer/contract-form', [
+            'as'   => 'customer.contract-form',
+            'uses' => 'CustomerController@contractForm'
         ]);
 
         Route::get('/', 'LandbController@getIndex')
