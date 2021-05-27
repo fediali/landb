@@ -809,4 +809,10 @@ if (!function_exists('log_product_history')) {
     }
 }
 
+if (!function_exists('get_pvt_cat_size_qty')) {
+    function get_pvt_cat_size_qty($threadId, $prodCatId, $catSizeId)
+    {
+        return \Botble\Thread\Models\ThreadPvtCatSizesQty::where(['thread_id' => $threadId, 'product_category_id' => $prodCatId, 'category_size_id' => $catSizeId])->value('qty');
+    }
+}
 //Utils

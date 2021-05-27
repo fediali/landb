@@ -16,7 +16,8 @@
         <th scope="col">E-commerce Qty</th>
         <th scope="col">Ordered Qty</th>
         <th scope="col">Cost Price</th>
-        <th scope="col">Sale Price</th>
+        <th scope="col">Pvt. Label</th>
+        {{--<th scope="col">Sale Price</th>--}}
         <th scope="col">Received Qty</th>
         {{--<th scope="col">Single Qty</th>--}}
         <th scope="col">Actions</th>
@@ -55,12 +56,14 @@
                     @if(!$product->is_variation)
                         <td>{{ $product->ordered_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_qty }}"></td>
                         <td>{{ $product->price }}</td>
-                        <td>{{ $product->sale_price }}</td>
+                        {{--<td>{{ $product->sale_price }}</td>--}}
                     @else
                         <td></td>
                         <td></td>
-                        <td></td>
+                        {{--<td></td>--}}
                     @endif
+
+                    <td>{{ $product->private_label ? 'Yes' : 'No' }}</td>
 
                     @if($product->is_variation)
                         <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}" id="received_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_qty }}"></td>
@@ -179,6 +182,11 @@
                       //dlt_btn = '';
                   }
 
+                  let private_label = 'No';
+                  if (product.private_label) {
+                      private_label = 'Yes';
+                  }
+
                   $('#tableBody').append(
                       '<tr data-id="'+product.id+'">\n' +
                       '        <td class=" text-center column-key-image">'+m_img+'</td>\n' +
@@ -188,7 +196,7 @@
                       '        <td>'+product.quantity+' '+ecom_qty+'</td>\n' +
                       '        <td>'+product.ordered_qty+' '+ord_qty+'</td>\n' +
                       '        <td>'+product.price+'</td>\n' +
-                      '        <td>'+product.sale_price+'</td>\n' +
+                      '        <td>'+private_label+'</td>\n' +
                       '        <td>'+rec_qty+'</td>\n' +
                       '        <td>'+dlt_btn+'</td>\n' +
                       '</tr>'

@@ -40,7 +40,7 @@
                             <div class="widget-user-header">
                                 <div class="row">
                                  <div class="col-lg-4">
-                                   <label class="mr-2">{{trans('core/base::tables.status')}}</label> 
+                                   <label class="mr-2">{{trans('core/base::tables.status')}}</label>
                                  </div>
                                  <div class="col-lg-8">
                                  {!!
@@ -51,11 +51,11 @@
                                 !!}
                                  </div>
                                 </div>
-                           
+
                         </div>
-                            </div> 
+                            </div>
                         </div>
-                        <div class="row mt-2"> 
+                        <div class="row mt-2">
                             <div class="col-lg-4">
                             <div class="widget-user-header">
                             <div class="row">
@@ -72,11 +72,11 @@
                      !!}
                                  </div>
                                 </div>
-                           
+
                         </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -139,10 +139,10 @@
                                 </td>
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
                                     <div class="regpack">
-                                        <h6>Reg Pack Size Run</h6>
+                                        <h6>{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
                                         @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                             <div class="sizediv">
-                                                {{ $reg_cat->name }}
+                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->name }}
                                             </div>
                                         @endforeach
                                     </div>

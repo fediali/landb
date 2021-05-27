@@ -226,7 +226,7 @@ class InventoryController extends BaseController
     public function getProductByBarcode(Request $request)
     {
         $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
-            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
+            'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
             //->leftJoin('inventory_history', 'inventory_history.parent_product_id', 'ec_products.id')
             //->whereNull('inventory_history.inventory_id')
@@ -246,7 +246,7 @@ class InventoryController extends BaseController
             $getChildIds[] = $getProdIdByUPC;
 
             $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
-                'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation')
+                'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
                 ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
                 ->whereIn('ec_products.id', $getChildIds)
                 ->orderBy('thread_order_variations.thread_order_id', 'DESC')

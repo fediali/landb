@@ -96,7 +96,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 event(new \App\Events\ThreadApproval());
                 return 'ok';
             });
-
+            Route::post('add-pvt-cat-sizes-qty', [
+                'as'         => 'addPvtCatSizesQty',
+                'uses'       => 'ThreadController@addPvtCatSizesQty',
+                'permission' => 'thread.create',
+            ]);
 
         });
     });

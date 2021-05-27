@@ -395,6 +395,10 @@ class ThreadordersController extends BaseController
                     $product->description = $variation->name;
                     $product->content = $variation->name;
                     $product->status = BaseStatusEnum::PUBLISHED;
+                    if ($threadorder->thread_status == Thread::PRIVATE) {
+                        $product->status = BaseStatusEnum::DRAFT;
+                        $product->private_label = 1;
+                    }
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
                     $product->quantity = 0;
@@ -467,6 +471,7 @@ class ThreadordersController extends BaseController
                                         $barcodePackAll = get_barcode();
                                         $packAllProd->upc = $barcodePackAll['upc'];
                                         $packAllProd->barcode = $barcodePackAll['barcode'];
+                                        $packAllProd->private_label = $product->private_label;
                                         $packAllProd->save();
 
                                         $logParam = [
@@ -500,6 +505,7 @@ class ThreadordersController extends BaseController
                                                 $barcodeSize = get_barcode();
                                                 $sizeProd->upc = $barcodeSize['upc'];
                                                 $sizeProd->barcode = $barcodeSize['barcode'];
+                                                $sizeProd->private_label = $product->private_label;
                                                 $sizeProd->save();
 
                                                 $logParam = [

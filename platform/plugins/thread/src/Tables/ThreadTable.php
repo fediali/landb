@@ -123,6 +123,7 @@ class ThreadTable extends TableAbstract
             'threads.status',
             'threads.ready',
             'threads.is_denim',
+            'threads.thread_status',
         ];
 
         $query = $model
@@ -174,6 +175,12 @@ class ThreadTable extends TableAbstract
             'is_denim'         => [
                 'name'  => 'threads.is_denim',
                 'title' => 'Denim',
+                'class' => 'no-sort text-left',
+                //'orderable' => false,
+            ],
+            'thread_status'         => [
+                'name'  => 'threads.thread_status',
+                'title' => 'Thread Status',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
             ],

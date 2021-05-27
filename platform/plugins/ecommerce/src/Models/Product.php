@@ -70,6 +70,7 @@ class Product extends BaseModel
         'status',
         'views',
         'oos_date',
+        'private_label',
     ];
 
     /**

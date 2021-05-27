@@ -15693,7 +15693,7 @@ Customized Bootstrap Close Icon
   background-repeat: no-repeat !important;
   text-indent: -10000px;
   outline: none;
-  /* background-image: url("/vendor/core/core/base/images/remove-icon-small.png") !important; */
+  background-image: url("/vendor/core/core/base/images/remove-icon-small.png") !important;
 }
 
 /***
@@ -29058,7 +29058,7 @@ Page footer
   top: 0;
   left: 235px;
   right: 0;
-  z-index: 100000;
+  z-index: 999;
   background-color: #ffffff;
   border-bottom: 1px solid #cccccc;
   box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.5);

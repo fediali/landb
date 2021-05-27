@@ -6,7 +6,9 @@
             <h4><label for="is_pieces" class="control-label">Qty is in Pieces ?</label></h4>
         </div>
         <div class="widget-body">
-            <input class="hrv-checkbox" id="is_pieces" name="is_pieces" type="checkbox" value="{{$options['data']['model']->is_pieces ? $options['data']['model']->is_pieces : 0}}" {{$options['data']['model']->is_pieces ? 'checked' : ''}}>
+            <input class="hrv-checkbox" id="is_pieces" name="is_pieces" type="checkbox"
+                   value="{{$options['data']['model']->is_pieces ? $options['data']['model']->is_pieces : 0}}"
+                    {{$options['data']['model']->is_pieces ? 'checked' : ''}}>
         </div>
     </div>
 
