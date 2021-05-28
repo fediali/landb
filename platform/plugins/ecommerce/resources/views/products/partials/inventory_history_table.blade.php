@@ -24,17 +24,17 @@
             <td class="center">{{ $history->new_stock ? $history->new_stock : 0 }}</td>
             <td class="center">{{ $history->old_stock ? $history->old_stock : 0 }}</td>
             {{--<td class="nowrap"><p class="muted"><small></small></p></td>--}}
-            <td class="nowrap">{{ $history->user->first_name. ' ' . $history->last_name }}</td>
+            <td class="nowrap">{{ @$history->user->first_name. ' ' . @$history->user->last_name }}</td>
             <td class="nowrap">
                 @if(!empty($history->thread_order_id))
-                    <a href="{{ route('threadorders.threadOrderDetail', ['id' => $history->thread_order->id]) }}" target="_blank">Thread Order #{{ $history->thread_order->order_no }}</a>
+                    <a href="{{ route('threadorders.threadOrderDetail', ['id' => @$history->thread_order->id]) }}" target="_blank">Thread Order #{{ @$history->thread_order->order_no }}</a>
                     <p class="muted"><small>Status: ThreadOrder &gt; {{ $history->thread_order->status }}</small></p>
-                @elseif(!empty($history->order_id))
-                    <a href="{{ route('orders.edit', $history->order->id) }}" target="_blank">Order #{{ $history->order->id }}</a>
-                    <p class="muted"><small>Status: Order &gt; {{ $history->order->status }}</small></p>
+                @elseif(!empty(@$history->order_id))
+                    <a href="{{ route('orders.edit', @$history->order->id) }}" target="_blank">Order #{{ @$history->order->id }}</a>
+                    <p class="muted"><small>Status: Order &gt; {{ @$history->order->status }}</small></p>
                 @elseif(!empty($history->inventory_id))
-                    <a href="{{ route('inventory.edit', ['inventory' => $history->inventory->id]) }}" target="_blank">Inventory ID: {{ $history->inventory->id }}</a>
-                    <p class="muted"><small>Status: Inventory &gt; {{ $history->inventory->status }}</small></p>
+                    <a href="{{ route('inventory.edit', ['inventory' => @$history->inventory->id]) }}" target="_blank">Inventory ID: {{ @$history->inventory->id }}</a>
+                    <p class="muted"><small>Status: Inventory &gt; {{ @$history->inventory->status }}</small></p>
                 @endif
 
             </td>
