@@ -58,11 +58,11 @@
                 var reply = confirm(data.user_name + " is trying to access this order edit! \n You want to give him access ? \n Press Ok to grant Or Cancel to Ignore request.");
                 if (reply) {
                     data.access = 1;
-                    window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
                 } else {
                     data.access = 0;
-                    window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
                 }
+                window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
+                // window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
             }
         });
     </script>
