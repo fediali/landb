@@ -151,7 +151,6 @@ class CustomerController extends BaseController
      */
     public function update($id, CustomerEditRequest $request, BaseHttpResponse $response)
     {
-      //dd($request->all());
         if ($request->input('is_change_password') == 1) {
             $request->merge(['password' => bcrypt($request->input('password'))]);
             $data = $request->input();

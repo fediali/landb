@@ -370,16 +370,36 @@
                                                         <div class="d-flex">
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <div
-                                                                        class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                    <div class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                         @foreach($variations as $variation)
                                                                             @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                                <h5 class=" mt-2">{{$loop->iteration}}.
-                                                                                    Variation: {{$variation->name}}</h5>
+                                                                                {{--<h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>--}}
+
+                                                                                <div class="box w-100">
+                                                                                    <h6>{{ $variation->name }}
+                                                                                        <button type="button"
+                                                                                                class="btn btn-warning add_print"
+                                                                                                data-toggle="modal"
+                                                                                                data-target="#modal-default"
+                                                                                                data-id="{{ $variation->id }}"
+                                                                                                data-name="{{ $variation->name }}">
+                                                                                            Add Fabric
+                                                                                        </button>
+                                                                                        <button type="button"
+                                                                                                class="btn btn-primary add_trim"
+                                                                                                data-toggle="modal"
+                                                                                                data-target="#modal-var-trim"
+                                                                                                data-id="{{ $variation->id }}">
+                                                                                            Add Trim
+                                                                                        </button>
+                                                                                    </h6>
+                                                                                </div>
+
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6 images">
-                                                                                        <p class="mb-0 mt-2"><label
-                                                                                                for="">Print/Color:</label>{{ @$variation->printdesign->name }}
+                                                                                        <p class="mb-0 mt-2">
+                                                                                            <label for="">Print/Color:</label>
+                                                                                            {{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100" height="120"
                                                                                              width="120"
@@ -387,29 +407,80 @@
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
                                                                                         <div id="image-viewer">
                                                                                             <span class="close">X</span>
-                                                                                            <img
-                                                                                                class="viewer-modal-content"
-                                                                                                id="full-image">
+                                                                                            <img class="viewer-modal-content" id="full-image">
                                                                                         </div>
                                                                                     </div>
+                                                                                    @foreach($variation->fabrics as $fabric)
+                                                                                        <div class="col-lg-6 images">
+                                                                                            <p class="mb-0 mt-2">
+                                                                                                <label for="">Print/Color:</label>
+                                                                                                {{ @$fabric->printdesign->name }}
+                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}">
+                                                                                                    <strong
+                                                                                                            class="float-right">
+                                                                                                        <i class="fa fa-times"></i>
+                                                                                                    </strong>
+                                                                                                </a>
+                                                                                            </p>
+                                                                                            <img class="w-100"
+                                                                                                 src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
+                                                                                                 height="120"
+                                                                                                 width="120"
+                                                                                                 style="object-fit: cover">
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                    @if($variation->trim->count() > 0)
+                                                                                        @foreach($variation->trim as $trim)
+                                                                                            <div
+                                                                                                    class="col-lg-6 images">
+                                                                                                <p class="mb-0 mt-2">
+                                                                                                    <label
+                                                                                                            for="">Trim:</label>
+                                                                                                    <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
+                                                                                                        <strong
+                                                                                                                class="float-right">
+                                                                                                            <i class="fa fa-times"></i>
+                                                                                                        </strong>
+                                                                                                    </a>
+                                                                                                </p>
+                                                                                                <img class="w-100"
+                                                                                                     src="{{ asset(strtolower(@$trim->trim_image)) }}"
+                                                                                                     height="120"
+                                                                                                     width="120"
+                                                                                                     style="object-fit: cover">
+                                                                                                <p class="mb-0 mt-2">
+                                                                                                    <label for="">
+                                                                                                        NOTES:{{@$trim->trim_note}}
+                                                                                                    </label>
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        @endforeach
+                                                                                    @endif
                                                                                 </div>
+
                                                                                 <div class="mt-3 mb-2">
+                                                                                    <p class="mb-0 mt-2">
+                                                                                        <label for="">Fabric:</label>
+                                                                                        {{ @$variation->fabric->name }}
+                                                                                    </p>
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">REG. Sku: </span>
-                                                                                        <span
-                                                                                            class="widget-title-color-red ">{{ $variation->sku }} </span>
+                                                                                        <span for="">REG. Packs:</span>
+                                                                                        {{ $variation->regular_qty }} |
+                                                                                        <span class="widget-title-color-red ">
+                                                                                            Sku: {{ $variation->sku }}
+                                                                                        </span>
                                                                                     </p>
                                                                                     @if($variation->plus_sku)
                                                                                         <p class="text-black font-12 text-uppercase m-0">
-                                                                                            <span
-                                                                                                for="">PLUS Sku: </span>
-                                                                                            <span
-                                                                                                class="widget-title-color-red">{{ $variation->plus_sku }}</span>
+                                                                                            <span for="">PLUS Packs:</span>
+                                                                                            {{ $variation->plus_qty }} |
+                                                                                            <span class="widget-title-color-red">
+                                                                                                Plus Sku: {{ $variation->plus_sku }}
+                                                                                            </span>
                                                                                         </p>
                                                                                     @endif
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span
-                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             @endif
