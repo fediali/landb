@@ -2,8 +2,8 @@
 @section('content')
     <section class="timeline">
         <p>
-            Product: <strong>{{ $data[0]->product->name }}</strong><br>
-            SKU: <strong>{{ $data[0]->product->sku }}</strong><br>
+            Product: <strong>{{ @$data[0]->product->name }}</strong><br>
+            SKU: <strong>{{ @$data[0]->product->sku }}</strong><br>
         </p>
         <br>
         <br>
@@ -16,19 +16,19 @@
                         <h5 class="mt-3 ml-3">{{ str_replace('_', ' ', strtoupper($history->reference)) }}</h5>
                         <div class="row">
                             @if(!empty($history->thread_order_id))
-                                <div class="col-lg-7"><p>Thread Order #{{ $history->thread_order->order_no }}</p></div>
-                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ $history->thread_order->status }}</small></p></div>
+                                <div class="col-lg-7"><p>Thread Order #{{ @$history->thread_order->order_no }}</p></div>
+                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ @$history->thread_order->status }}</small></p></div>
                             @elseif(!empty($history->order_id))
-                                <div class="col-lg-7"><p>Order #{{ $history->order->id }}</p></div>
-                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ $history->order->status }}</small></p></div>
+                                <div class="col-lg-7"><p>Order #{{ @$history->order->id }}</p></div>
+                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ @$history->order->status }}</small></p></div>
                             @elseif(!empty($history->inventory_id))
-                                <div class="col-lg-7"><p>Inventory ID: {{ $history->inventory->id }}</p></div>
-                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ $history->inventory->status }}</small></p></div>
+                                <div class="col-lg-7"><p>Inventory ID: {{ @$history->inventory->id }}</p></div>
+                                <div class="col-lg-5"><p class="muted"><small>Status: &gt; {{ @$history->inventory->status }}</small></p></div>
                             @endif
                         </div>
                         <div class="row">
                             <div class="col-lg-7"><p>User</p></div>
-                            <div class="col-lg-5"><p>{{ $history->user->first_name. ' ' . $history->last_name }}</p></div>
+                            <div class="col-lg-5"><p>{{ @$history->user->first_name. ' ' . @$history->user->last_name }}</p></div>
                         </div>
                         <div class="row">
                             <div class="col-lg-7"><p>Qty</p></div>
