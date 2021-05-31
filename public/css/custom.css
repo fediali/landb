@@ -278,3 +278,10 @@
  .btn-private {
     margin-top: 45px;
  }
+
+ 
+@media screen and (min-width: 992px) and (max-width: 2300px) {
+#add_variation .modal-lg {
+    max-width: 1200px !important;
+}
+}

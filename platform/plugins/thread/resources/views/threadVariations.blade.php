@@ -132,7 +132,7 @@ $variations = $options['data']['variations'];
                                             <label for="name">Name:</label>
                                             <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
-                                        <td width="25%">
+                                        <td width="15%">
                                             <label for="print_id">Print / Solid:</label><br>
                                             <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
@@ -160,7 +160,7 @@ $variations = $options['data']['variations'];
                                                 </div>
                                             </div>--}}
                                         </td>
-                                        <td width="15%">
+                                        <td width="8%">
                                             <label for="fabric_id" class="control-label">Select Fabric</label>
                                             <select class="select-search-full variation_fabric" id="fabric_id" name="fabric_id[]">
                                                 <option selected="selected" disabled value="">Select Fabric</option>
@@ -169,7 +169,7 @@ $variations = $options['data']['variations'];
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td width="15%">
+                                        <td width="8%">
                                             <label for="wash_id" class="control-label">Select Wash</label>
                                             <select class="select-search-full variation_wash" id="wash_id" name="wash_id[]">
                                                 <option selected="selected" disabled value="">Select Wash</option>
@@ -178,17 +178,17 @@ $variations = $options['data']['variations'];
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td width="10%">
+                                        <td width="13%">
                                             <label for="pack_id">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
                                             <input required class="form-control variation_qty"
                                                    placeholder="Add Qty" name="regular_qty[]" type="text">
                                         </td>
-                                        <td width="10%">
+                                        <td width="12%">
                                             <label for="pack_id">{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}:</label>
                                             <input required class="form-control variation_plus_qty"
                                                    placeholder="Add Qty" name="plus_qty[]" type="text">
                                         </td>
-                                        <td width="10%">
+                                        <td width="12%">
                                             <label for="cost">Cost:</label>
                                             <input required class="form-control variation_cost" placeholder="Add Cost"
                                                    name="cost[]" type="text">
@@ -198,7 +198,7 @@ $variations = $options['data']['variations'];
                                             <input required class="form-control variation_file" placeholder="Add File" name="file[]" type="file">
                                         </td>--}}
 
-                                        <td width="15%">
+                                        <td width="55%">
                                             <label for="Notes">Notes:</label>
                                             <textarea class="form-control variation_notes" placeholder="Add Notes"
                                                       name="notes[]" cols="50" rows="2"></textarea>
