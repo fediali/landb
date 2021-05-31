@@ -272,6 +272,30 @@ function toggle_product_detail(id) {
   })
 }
 
+function get_states(thiss, country, url){
+  $.ajax({
+    type: 'GET',
+    url: url,
+    data: {
+      'country' : country
+    },
+    beforeSend: function () {
+      toggle_loader(true);
+    },
+
+    success: function (result) {
+      thiss.find('option').remove();
+      jQuery.each(result, function (state, index) {
+        thiss.append(new Option(index, state));
+      });
+      toggle_loader(false);
+    },
+    error: function (e) {
+      toggle_loader(false);
+    }
+  })
+}
+
 /*
 $(document).ready(function () {
   $(".customer_type").change(function() {

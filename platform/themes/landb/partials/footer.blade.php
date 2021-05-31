@@ -135,6 +135,16 @@
       $("#filtermenu").slideToggle();
     });
     $("input[name='shipping_postal_code']").mask('99999?-9999');
+
+    $('select[name="shipping_country"]').on('change', function () {
+      get_states($('select[name="shipping_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
+    $('select[name="billing_country"]').on('change', function () {
+      get_states($('select[name="billing_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
+    $('select[name="locator_country"]').on('change', function () {
+      get_states($('select[name="locator_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
   });
 </script>
 <script>

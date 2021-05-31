@@ -22,6 +22,7 @@ use SeoHelper;
 use Symfony\Component\HttpFoundation\Response;
 use Theme;
 use URL;
+use CountryState;
 /*use Botble\Theme\Http\Controllers\PublicController;*/
 
 class CustomerController extends Controller
@@ -271,5 +272,10 @@ class CustomerController extends Controller
   public function contractForm(){
     $data['user'] = $this->customer->with(['details','shippingAddress', 'BillingAddress', 'storeLocator'])->find(auth('customer')->user()->id);
     return Theme::scope('customer.contract', $data)->render();
+  }
+
+  public function getStates(Request $request){
+    $country = $request->input('country');
+    return CountryState::getStates($country);
   }
 }

@@ -169,3 +169,31 @@ if (!function_exists('update_product_quantity')) {
   }
 
 }
+
+
+if (!function_exists('get_countries')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_countries()
+  {
+    return \CountryState::getCountries();
+  }
+
+}
+
+
+if (!function_exists('get_states')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_states($country = "US")
+  {
+    return \CountryState::getStates($country);
+  }
+
+}

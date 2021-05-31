@@ -103,5 +103,13 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::post('/register', 'RegisterController@register')
             ->name('public.register.post');
 
+
+      Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
+        Route::get('get_states', [
+            'as'   => 'getStates',
+            'uses' => 'CustomerController@getStates'
+        ]);
+      });
+
     });
 });
