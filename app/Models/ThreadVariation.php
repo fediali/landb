@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Botble\Fabrics\Models\Fabrics;
 use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Thread\Models\Thread;
 use Botble\Wash\Models\Wash;
@@ -28,7 +29,8 @@ class ThreadVariation extends Model
         'sku',
         'plus_sku',
         'is_denim',
-        'wash_id'
+        'wash_id',
+        'fabric_id',
     ];
 
     public function printDesign()
@@ -46,8 +48,18 @@ class ThreadVariation extends Model
         return $this->belongsTo(Wash::class, 'wash_id');
     }
 
+    public function fabric()
+    {
+        return $this->belongsTo(Fabrics::class, 'fabric_id');
+    }
+
     public function trim()
     {
         return $this->hasMany(ThreadVariationTrim::class, 'thread_variation_id');
+    }
+
+    public function ppSample()
+    {
+        return $this->hasMany(ThreadVariationPPSample::class, 'thread_variation_id');
     }
 }

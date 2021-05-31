@@ -1,9 +1,11 @@
 
 <br><hr style="border-top: 2px solid #eee;"><h2>Products</h2>
+
 <div class="form-group">
     <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
     <span id="product-error" class="invalid-feedback"></span>
 </div>
+<div class="table-responsive">
 <table class="table inventory-add">
     <thead>
     <tr>
@@ -14,7 +16,8 @@
         <th scope="col">E-commerce Qty</th>
         <th scope="col">Ordered Qty</th>
         <th scope="col">Cost Price</th>
-        <th scope="col">Sale Price</th>
+        <th scope="col">Pvt. Label</th>
+        {{--<th scope="col">Sale Price</th>--}}
         <th scope="col">Received Qty</th>
         {{--<th scope="col">Single Qty</th>--}}
         <th scope="col">Actions</th>
@@ -35,7 +38,8 @@
 
                     <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}"><input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}"></td>
 
-                    @if(!$product->is_variation)
+                    {{--@if(!$product->is_variation)--}}
+                    @if($product->barcode)
                         <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>
                     @else
                         <td></td>
@@ -52,12 +56,14 @@
                     @if(!$product->is_variation)
                         <td>{{ $product->ordered_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_qty }}"></td>
                         <td>{{ $product->price }}</td>
-                        <td>{{ $product->sale_price }}</td>
+                        {{--<td>{{ $product->sale_price }}</td>--}}
                     @else
                         <td></td>
                         <td></td>
-                        <td></td>
+                        {{--<td></td>--}}
                     @endif
+
+                    <td>{{ $product->private_label ? 'Yes' : 'No' }}</td>
 
                     @if($product->is_variation)
                         <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}" id="received_qty_{{ $product->pid }}" class="input-micro input-both-amount input_main" value="{{ $product->received_qty }}"></td>
@@ -82,7 +88,8 @@
         @endif
     </tbody>
 </table>
-<script src="{{ asset('js/barcodeScanner.js') }}"></script>
+</div>
+
 <script>
   $(document).scannerDetection({
     //https://github.com/kabachello/jQuery-Scanner-Detection
@@ -157,16 +164,11 @@
                   let rec_qty = '<input style="width: 60px; text-align:center" name="received_qty_'+pcount+'" id="received_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0">';
                   //let los_qty = '<input style="width: 60px; text-align:center" name="loose_qty_'+pcount+'" id="loose_qty_'+product.id+'" class="input-micro input-both-amount input_main" value="0">';
 
-                  let dlt_btn = '<div class="btn-group">\n' +
-                  '                <a class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i><span class="caret"></span></a>\n' +
-                  '                <div class="dropdown-menu">\n' +
-                  '                    <a class="dropdown-item" onclick="deleteProduct('+product.id+')" href="javascript:void(0)">Delete</a>\n' +
-                  '                </div>\n' +
-                  '              </div>';
+                  let dlt_btn = '<a class="dropdown-item" onclick="deleteProduct('+product.id+')" href="javascript:void(0)"><i class="fa fa-trash" title="Delete"></i></a>';
 
                   if (product.is_variation) {
                       m_img = '';
-                      b_img = '';
+                      // b_img = '';
                       product.name = '';
                       //ecom_qty = '';product.quantity = '';
                       ord_qty = '';product.ordered_qty = '';
@@ -180,6 +182,11 @@
                       //dlt_btn = '';
                   }
 
+                  let private_label = 'No';
+                  if (product.private_label) {
+                      private_label = 'Yes';
+                  }
+
                   $('#tableBody').append(
                       '<tr data-id="'+product.id+'">\n' +
                       '        <td class=" text-center column-key-image">'+m_img+'</td>\n' +
@@ -189,7 +196,7 @@
                       '        <td>'+product.quantity+' '+ecom_qty+'</td>\n' +
                       '        <td>'+product.ordered_qty+' '+ord_qty+'</td>\n' +
                       '        <td>'+product.price+'</td>\n' +
-                      '        <td>'+product.sale_price+'</td>\n' +
+                      '        <td>'+private_label+'</td>\n' +
                       '        <td>'+rec_qty+'</td>\n' +
                       '        <td>'+dlt_btn+'</td>\n' +
                       '</tr>'

@@ -181,7 +181,10 @@
                 <div class="col-lg-6">
                     <p class="textbox-label">Country</p>
                     <select class="input-textbox form-control  @error('shipping_country') is-invalid @enderror" name="shipping_country" required>
-                        <option value="ABC">ABC</option>
+                        <option selected hidden disabled>Select a Country</option>
+                        @foreach(get_countries() as $key => $country)
+                            <option value="{{ $key }}">{{ $country }}</option>
+                        @endforeach
                     </select>
                     @error('shipping_country')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -189,8 +192,8 @@
                 </div>
                 <div class="col-lg-6">
                     <p class="textbox-label">State/Province/Region</p>
-                    <select class="input-textbox form-control @error('shipping_state') is-invalid @enderror" name="shipping_state" required>
-                        <option value="XYZ">XYZ</option>
+                    <select class="input-textbox state-select form-control @error('shipping_state') is-invalid @enderror" name="shipping_state" required>
+                        <option selected hidden disabled>Select a State</option>
                     </select>@error('shipping_state')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -205,7 +208,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="shipping-checkbox-area mt-2 d-flex">
-                        <p>Billing and shipping addresses are the same</p>
+                        <p class="text-billing">Billing and shipping addresses are the same</p>
                         <div class="ml-3">
                             <input class="ml-2" type="radio" name="billing" value="1" data-toggle="collapse" data-target=".collapseOne.show" checked>
                             <label class="mr-2 mb-0" for="vehicle1"> Yes</label>
@@ -248,13 +251,16 @@
                                     <div class="col-lg-6">
                                         <p class="textbox-label">Country</p>
                                         <select class="input-textbox form-control" name="billing_country">
-                                            <option>ABC</option>
+                                            <option selected hidden disabled>Select a Country</option>
+                                            @foreach(get_countries() as $key => $country)
+                                                <option value="{{ $key }}">{{ $country }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="col-lg-6">
                                         <p class="textbox-label">State/Province/Region</p>
                                         <select class="input-textbox form-control" name="billing_state">
-                                            <option>ABC</option>
+                                            <option selected hidden disabled>Select a State</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-6">

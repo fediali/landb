@@ -8,8 +8,6 @@ use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
-use Botble\Ecommerce\Services\Products\UpdateDefaultProductService;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 
 class Product extends BaseModel
 {
@@ -73,6 +70,7 @@ class Product extends BaseModel
         'status',
         'views',
         'oos_date',
+        'private_label',
     ];
 
     /**
@@ -123,12 +121,6 @@ class Product extends BaseModel
                 app(UpdateDefaultProductService::class)->execute($product);
             }
         });*/
-
-        self::updated(function (Product $product) {
-            if ($product->is_variation && $product->quantity < 1) {
-                DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => Carbon::now()]);
-            }
-        });
     }
 
     /**
@@ -598,6 +590,6 @@ class Product extends BaseModel
     }
 
     public function inventory_history(){
-      return $this->hasMany(InventoryHistory::class, 'product_id');
+      return $this->hasMany(InventoryHistory::class, 'parent_product_id');
     }
 }

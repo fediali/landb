@@ -102,7 +102,11 @@ class InventoryTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('inventory.edit', 'inventory.destroy', $item);
+                if ($item->is_full_released) {
+                    return NULL;
+                } else {
+                    return $this->getOperations('inventory.edit', 'inventory.destroy', $item);
+                }
             })
             ->escapeColumns([])
             ->make(true);
@@ -177,7 +181,8 @@ class InventoryTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('inventory.deletes'), 'inventory.destroy', parent::bulkActions());
+        return parent::bulkActions();
+        // return $this->addDeleteAction(route('inventory.deletes'), 'inventory.destroy', parent::bulkActions());
     }
 
     /**
@@ -186,7 +191,7 @@ class InventoryTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'inventories.name' => [
+            /*'inventories.name' => [
                 'title' => trans('core/base::tables.name'),
                 'type' => 'text',
                 'validate' => 'required|max:120',
@@ -200,7 +205,7 @@ class InventoryTable extends TableAbstract
             'inventories.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type' => 'date',
-            ],
+            ],*/
         ];
     }
 

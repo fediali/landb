@@ -150,4 +150,50 @@ if (!function_exists('cart_count')) {
       return 0;
     }
   }
+
+}
+
+if (!function_exists('update_product_quantity')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function update_product_quantity($id, $qty, $type = 'inc')
+  {
+    if($type == 'inc'){
+      \Botble\Ecommerce\Models\Product::where('id', $id)->decrement('quantity' , $qty);
+    }elseif ($type == 'dec'){
+      \Botble\Ecommerce\Models\Product::where('id', $id)->increment('quantity' , $qty);
+    }
+  }
+
+}
+
+
+if (!function_exists('get_countries')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_countries()
+  {
+    return \CountryState::getCountries();
+  }
+
+}
+
+
+if (!function_exists('get_states')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_states($country = "US")
+  {
+    return \CountryState::getStates($country);
+  }
+
 }

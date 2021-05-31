@@ -3,6 +3,7 @@
 namespace Botble\Thread\Http\Controllers;
 
 use App\Events\NotifyManager;
+use App\Models\ThreadVariationPPSample;
 use App\Models\ThreadVariationTrim;
 use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -16,6 +17,7 @@ use Botble\Printdesigns\Models\Printdesigns;
 use Botble\Thread\Forms\ThreadDetailsForm;
 use Botble\Thread\Http\Requests\ThreadRequest;
 use Botble\Thread\Models\Thread;
+use Botble\Thread\Models\ThreadPvtCatSizesQty;
 use Botble\Thread\Models\ThreadSpecFile;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
@@ -87,6 +89,12 @@ class ThreadController extends BaseController
         $requestData['created_by'] = auth()->user()->id;
         $requestData['updated_by'] = auth()->user()->id;
 
+        if (isset($requestData['is_pieces'])) {
+            $requestData['is_pieces'] = 1;
+        } else {
+            $requestData['is_pieces'] = 0;
+        }
+
         $thread = $this->threadRepository->createOrUpdate($requestData);
 
         $designerName = strlen($thread->designer->name_initials) > 0 ? $thread->designer->name_initials : substr($thread->designer->first_name, 0, 3);
@@ -155,11 +163,16 @@ class ThreadController extends BaseController
      */
     public function update($id, ThreadRequest $request, BaseHttpResponse $response)
     {
-
         $thread = $this->threadRepository->findOrFail($id);
 
         $requestData = $request->input();
         $requestData['updated_by'] = auth()->user()->id;
+
+        if (isset($requestData['is_pieces'])) {
+            $requestData['is_pieces'] = 1;
+        } else {
+            $requestData['is_pieces'] = 0;
+        }
 
         $thread->fill($requestData);
 
@@ -204,7 +217,7 @@ class ThreadController extends BaseController
             $reg_sku = $thread->regular_product_categories()->value('sku');
             $plu_sku = $reg_sku . '-X';
             $thread->regular_product_categories()->attach([
-                $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => @$requestData['plus_product_unit_id'], 'per_piece_qty' => @$requestData['plus_per_piece_qty']]
+                $requestData['plus_category_id'] => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => @$requestData['plus_product_unit_id'], 'per_piece_qty' => @$requestData['plus_per_piece_qty']]
             ]);
         }
 
@@ -369,6 +382,7 @@ class ThreadController extends BaseController
                 $input['name'] = @$data['name'][$i];
                 $input['print_id'] = @$data['print_id'][$i];
                 $input['wash_id'] = @$data['wash_id'][$i];
+                $input['fabric_id'] = @$data['fabric_id'][$i];
                 $input['cost'] = @$data['cost'][$i];
                 $input['notes'] = @$data['notes'][$i];
                 $input['status'] = 'active';
@@ -411,7 +425,6 @@ class ThreadController extends BaseController
     {
         $data = $request->all();
         $id = $data['var_id'];
-
         $checkDupli = ThreadVariation::where(['thread_id' => $data['thread_id'], 'print_id' => $data['print_id']])->where('id', '!=', $id)->first();
         if (!$checkDupli) {
             $thread = Thread::with(['designer', 'season', 'vendor', 'fabric'])->find($data['thread_id']);
@@ -422,6 +435,7 @@ class ThreadController extends BaseController
             $input['name'] = @$data['name'];
             $input['print_id'] = @$data['print_id'];
             $input['wash_id'] = @$data['wash_id'];
+            $input['fabric_id'] = @$data['fabric_id'];
             $input['cost'] = @$data['cost'];
             $input['notes'] = @$data['notes'];
 
@@ -550,11 +564,13 @@ class ThreadController extends BaseController
     {
 
         $thread = $this->threadRepository->findOrFail($request->input('pk'));
-        $requestData['status'] = $request->input('value');
+        if (isset($request->ready)) {
+            $requestData['ready'] = $request->input('ready');
+        } else {
+            $requestData['status'] = $request->input('value');
+        }
         $requestData['updated_by'] = auth()->user()->id;
-
         $thread->fill($requestData);
-
 
         $notification = generate_notification('thread_status_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));
@@ -589,5 +605,37 @@ class ThreadController extends BaseController
         $notification = DB::table('user_notifications')->where('id', $request->notification_id)->update(['seen' => 1]);
     }
 
+    public function variationPPSample(Request $request)
+    {
+        $pp_sample = ThreadVariationPPSample::create($request->all());
+        if ($pp_sample) {
+            return redirect()->back()->with('success', 'PP Sample Updated');
+        } else {
+            return redirect()->back()->with('error', 'Server error');
+        }
+    }
+
+    public function addPvtCatSizesQty(Request $request)
+    {
+        $data = $request->all();
+
+        if (isset($data['thread_id']) && isset($data['product_category_id']) && isset($data['cat_sizes']) && isset($data['cat_sizes_qty'])) {
+            ThreadPvtCatSizesQty::where('thread_id', $data['thread_id'])->delete();
+
+            $postData['thread_id'] = $data['thread_id'];
+            $postData['product_category_id'] = $data['product_category_id'];
+
+            foreach ($data['cat_sizes'] as $key => $cat_size) {
+                $postData['category_size_id'] = $cat_size;
+                $postData['qty'] = $data['cat_sizes_qty'][$key];
+                ThreadPvtCatSizesQty::create($postData);
+            }
+
+            return response()->json(['status' => 'success'], 200);
+
+        } else {
+            return response()->json(['status' => 'error'], 500);
+        }
+    }
 
 }

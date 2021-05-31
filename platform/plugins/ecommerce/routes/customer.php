@@ -24,13 +24,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@getListCustomerForSearch',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
-
             Route::post('update-email/{id}', [
                 'as'         => 'update-email',
                 'uses'       => 'CustomerController@postUpdateEmail',
                 'permission' => 'customer.edit',
             ]);
-
             Route::get('get-customer-addresses/{id}', [
                 'as'         => 'get-customer-addresses',
                 'uses'       => 'CustomerController@getCustomerAddresses',
@@ -41,32 +39,40 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@getAddresses',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
-
+            Route::get('get-cards/{id}', [
+                'as'         => 'get-cards',
+                'uses'       => 'CustomerController@getCustomerCard',
+                'permission' => ['customers.index', 'orders.index'],
+            ]);
+            Route::get('get-customer/{id}', [
+                'as'         => 'get-customer',
+                'uses'       => 'CustomerController@getCustomer',
+                'permission' => ['customers.index', 'orders.index'],
+            ]);
             Route::get('get-customer-order-numbers/{id}', [
                 'as'         => 'get-customer-order-numbers',
                 'uses'       => 'CustomerController@getCustomerOrderNumbers',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
-
             Route::post('create-customer-when-creating-order', [
                 'as'         => 'create-customer-when-creating-order',
                 'uses'       => 'CustomerController@postCreateCustomerWhenCreatingOrder',
-                'permission' => 'customer.create',
+                'permission' => 'customers.create',
             ]);
             Route::get('address/{id}', [
                 'as'         => 'customer-addresses',
                 'uses'       => 'CustomerController@addAddress',
-                'permission' => 'customer.address',
+                'permission' => 'customers.create',
             ]);
             Route::post('create-customer-address', [
                 'as'         => 'create-customer-address',
                 'uses'       => 'CustomerController@postCustomerAddress',
-                'permission' => 'customer.address',
+                'permission' => 'customers.create',
             ]);
             Route::post('create-customer-payment', [
                 'as'         => 'create-customer-payment',
                 'uses'       => 'CustomerController@postCustomerCard',
-                'permission' => 'customer.address',
+                'permission' => 'customers.create',
             ]);
         });
     });

@@ -50,6 +50,7 @@ class Role extends BaseModel
         'permissions' => 'json',
     ];
 
+    const ADMIN = 'admin';
     const ONLINE_SALES = 'online-sales';
     const IN_PERSON_SALES = 'inperson-sales';
 

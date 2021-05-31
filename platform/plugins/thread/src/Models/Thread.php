@@ -8,6 +8,7 @@ use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Blog\Models\Category;
+use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Fabrics\Models\Fabrics;
 use Botble\Fits\Models\Fits;
@@ -19,10 +20,12 @@ use Botble\Vendorproducts\Models\Vendorproducts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Thread extends BaseModel
 {
     use EnumCastable;
+    use SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -83,6 +86,9 @@ class Thread extends BaseModel
         'status',
         'created_at',
         'updated_at',
+        'ready',
+        'is_pieces',
+        'pvt_customer_id',
     ];
 
     /**
@@ -95,6 +101,23 @@ class Thread extends BaseModel
     protected $with = [];
 
     protected $appends = ['thread_has_order'];
+
+    public const published = 'published';
+    public const draft = 'draft';
+    public const pending = 'pending';
+    public const No = 'No';
+    public const Yes = 'Yes';
+
+    public static $READY = [
+        self::No  => self::No,
+        self::Yes => self::Yes,
+
+    ];
+    public static $STATUS = [
+        self::published => self::published,
+        self::draft     => self::draft,
+        self::pending   => self::pending,
+    ];
 
     public const NEW = 'new';
     public const REORDER = 'reorder';
@@ -130,9 +153,9 @@ class Thread extends BaseModel
     public const GROUND = 'ground';
 
     public static $shipping_methods = [
-        self::AIR => self::AIR,
-        self::UCL => self::UCL,
-        self::SEA => self::SEA,
+        self::AIR    => self::AIR,
+        self::UCL    => self::UCL,
+        self::SEA    => self::SEA,
         self::GROUND => self::GROUND,
     ];
 
@@ -179,6 +202,15 @@ class Thread extends BaseModel
     public function vendor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'vendor_id')->withDefault();
+    }
+
+    /**
+     * @return BelongsTo
+     * @deprecated
+     */
+    public function pvt_customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'pvt_customer_id')->withDefault();
     }
 
     /**
@@ -240,6 +272,11 @@ class Thread extends BaseModel
     public function spec_files()
     {
         return $this->hasMany(ThreadSpecFile::class, 'thread_id');
+    }
+
+    public function pvt_cat_sizes_qty()
+    {
+        return $this->hasMany(ThreadPvtCatSizesQty::class, 'thread_id');
     }
 
     public function getThreadVariationsAttribute()

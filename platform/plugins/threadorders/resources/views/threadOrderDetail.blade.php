@@ -26,9 +26,19 @@
 
             <div class="row">
                 <div class="col-lg-3">
+                    <p class="m-0 heading">Thread Status</p>
+                    <p>{{$orderDetail->thread_status}}</p>
+                </div>
+                <div class="col-lg-3">
                     <p class="m-0 heading">Vendor</p>
                     <p>{{$orderDetail->vendor->getFullName()}}</p>
                 </div>
+                @if($orderDetail->thread_status == \Botble\Thread\Models\Thread::PRIVATE && $orderDetail->pvt_customer_id)
+                    <div class="col-lg-3">
+                        <p class="m-0 heading">Pvt. Customer</p>
+                        <p>{{$orderDetail->pvt_customer->name}}</p>
+                    </div>
+                @endif
                 <div class="col-lg-3">
                     <p class="m-0 heading">Order No.</p>
                     <p>{{$orderDetail->order_no}}</p>
@@ -90,16 +100,16 @@
                             <h5 class="variation-text">{{$loop->iteration}}. {{$variation->name}} </h5>
                             <img class="w-100" src="{{ asset('storage/'.strtolower(@$variation->design_file)) }}" height="120" width="120" style="object-fit: cover">
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-3">
                             <p class="m-0 heading">SKU</p>
                             <p>{{$variation->sku}}</p>
                         </div>
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             <p class="m-0 heading">Type</p>
                             <p>{{$variation->category_type}}</p>
                         </div>
                         <div class="col-lg-1">
-                            <p class="m-0 heading">Qty</p>
+                            <p class="m-0 heading">{{$orderDetail->is_pieces ? 'Pieces Qty' : 'Pack Qty'}}</p>
                             <p>{{$variation->quantity}}</p>
                         </div>
                         <div class="col-lg-1">
@@ -114,9 +124,9 @@
                             <p class="m-0 heading">UPC</p>
                             <p>{{$variation->upc}}</p>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-12">
                             <p class="m-0 heading">Barcode</p>
-                            <p><img src="{{asset('storage/'.$variation->barcode)}}" width="100%" height="30px"></p>
+                            <p><img src="{{asset('storage/'.$variation->barcode)}}" height="30px"></p>
                         </div>
                     </div>
                 @endforeach
@@ -125,7 +135,7 @@
         </div>
     </div>
 @stop
- 
+
 
 @section('javascript')
 <script>

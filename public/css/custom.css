@@ -223,3 +223,65 @@
 .order-detail {
     font-size: 20px !important;
 }
+
+.widget-user-header select {
+    padding: 2px 10px !important;
+    width: 100%;
+}
+
+.btn-card {
+    width: 100%;
+    background: #d64635;
+    border: #d64635;
+    border-radius: 0;
+}
+.card-area {
+    width: 24.5%;
+    margin-top: -10px;
+    margin-left: 240px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-right: 25px !important;
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .flexbox-grid-form-no-outside-padding > .flexbox-grid-form-item { 
+        
+    font-size: 11px !important;
+
+    } 
+    .order-border {
+        font-size: 12px !important; 
+    }
+    .wrap-img {
+        max-width: 25px !important;
+        max-height: 25px !important;
+        height: 25px !important;
+        width: 25px !important;
+    }
+    img.thumb-image {
+        max-width: 25px !important;
+        max-height: 25px !important; 
+    }
+    .order-border .flexbox-auto-50 {
+        flex: 0 0 0px !important;
+    }
+    .order-border  .flexbox-content { 
+        padding: 0 10px 0px !important; 
+    }
+    .flexbox-grid-default .flexbox-content td { 
+        font-size: 14px !important;
+    }
+ }
+
+ .btn-private {
+    margin-top: 45px;
+ }
+
+ 
+@media screen and (min-width: 992px) and (max-width: 2300px) {
+#add_variation .modal-lg {
+    max-width: 1200px !important;
+}
+}

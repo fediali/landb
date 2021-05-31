@@ -70,6 +70,48 @@ var ShipmentManagement = /*#__PURE__*/function () {
 
 $(document).ready(function () {
   new ShipmentManagement().init();
+  $(document).scannerDetection({
+    timeBeforeScanTest: 200,
+    // wait for the next character for upto 200ms
+    avgTimeByChar: 40,
+    // it's not a barcode if a character takes longer than 100ms
+    preventDefault: false,
+    endChar: [13],
+    onComplete: function onComplete(barcode, qty) {
+      validScan = true;
+      $('#scannerInput').focus();
+      $('#scannerInput').val(barcode);
+      var e = $.Event("keyup", {
+        which: 13
+      });
+      $('#scannerInput').trigger(e);
+    },
+    onError: function onError(string, qty) {
+      console.log('Something went wrong. Try again!');
+    }
+  });
+  $(document).ready(function () {
+    var input = document.getElementById("scannerInput"); // Execute a function when the user releases a key on the keyboard
+
+    input.addEventListener("keyup", function (event) {
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        var $t = $(event.currentTarget);
+        $t.addClass('loading');
+        $('#product-error').hide();
+        $('#scannerInput').removeClass('is-invalid');
+        get_product_by_barcode(this.value, $t);
+      }
+    });
+    var form = document.getElementsByTagName("form");
+    form[0].addEventListener("keydown", function (event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+      }
+    });
+  });
 });
 /******/ })()
 ;

@@ -223,7 +223,13 @@
                                     {{--<select class="input-textbox">
                                         <option></option>
                                     </select>--}}
-                                    <input class="input-textbox form-control @error('shipping_country') is-invalid @enderror" type="text"  name="shipping_country" value="{{ old('shipping_country',@$user->shippingAddress[0]->country) }}"/>
+                                    {{--<input class="input-textbox form-control @error('shipping_country') is-invalid @enderror" type="text"  name="shipping_country" value="{{ old('shipping_country',@$user->shippingAddress[0]->country) }}"/>--}}
+                                    <select class="input-textbox form-control  @error('shipping_country') is-invalid @enderror" name="shipping_country">
+                                        <option selected hidden disabled>Select a Country</option>
+                                        @foreach(get_countries() as $key => $country)
+                                            <option @if(old('shipping_country',@$user->shippingAddress[0]->country) == $key) selected @endif value="{{ $key }}">{{ $country }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('shipping_country')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -233,7 +239,13 @@
                                     {{--<select class="input-textbox">
                                         <option></option>
                                     </select>--}}
-                                    <input class="input-textbox form-control @error('shipping_state') is-invalid @enderror" type="text" name="shipping_state" value="{{ old('shipping_state',@$user->shippingAddress[0]->state) }}"/>
+                                    {{--<input class="input-textbox form-control @error('shipping_state') is-invalid @enderror" type="text" name="shipping_state" value="{{ old('shipping_state',@$user->shippingAddress[0]->state) }}"/>--}}
+                                    <select class="input-textbox form-control  @error('shipping_state') is-invalid @enderror" name="shipping_state">
+                                        <option selected hidden disabled>Select a State</option>
+                                        @foreach(get_states($user->shippingAddress[0]->country) as $key => $state)
+                                            <option @if(old('shipping_state',@$user->shippingAddress[0]->state) == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('shipping_state')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -316,7 +328,13 @@
                                                         {{--<select class="input-textbox">
                                                             <option></option>
                                                         </select>--}}
-                                                        <input class="input-textbox form-control @error('billing_country') is-invalid @enderror" type="text"  name="billing_country" value="{{ old('billing_country',@$user->billingAddress[0]->country) }}"/>
+                                                        {{--<input class="input-textbox form-control @error('billing_country') is-invalid @enderror" type="text"  name="billing_country" value="{{ old('billing_country',@$user->billingAddress[0]->country) }}"/>--}}
+                                                        <select class="input-textbox form-control  @error('billing_country') is-invalid @enderror" name="billing_country">
+                                                            <option selected hidden disabled>Select a Country</option>
+                                                            @foreach(get_countries() as $key => $country)
+                                                                <option @if(old('billing_country',@$user->billingAddress[0]->country) == $key) selected @endif value="{{ $key }}">{{ $country }}</option>
+                                                            @endforeach
+                                                        </select>
                                                         @error('billing_country')
                                                         <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
@@ -326,7 +344,13 @@
                                                         {{--<select class="input-textbox">
                                                             <option></option>
                                                         </select>--}}
-                                                        <input class="input-textbox form-control @error('billing_state') is-invalid @enderror" type="text"  name="billing_state" value="{{ old('billing_state',@$user->billingAddress[0]->state) }}"/>
+                                                       {{-- <input class="input-textbox form-control @error('billing_state') is-invalid @enderror" type="text"  name="billing_state" value="{{ old('billing_state',@$user->billingAddress[0]->state) }}"/>--}}
+                                                        <select class="input-textbox form-control  @error('billing_state') is-invalid @enderror" name="billing_state">
+                                                            <option selected hidden disabled>Select a State</option>
+                                                            @foreach(get_states($user->billingAddress[0]->country) as $key => $state)
+                                                                <option @if(old('shipping_state',@$user->billingAddress[0]->state) == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
+                                                            @endforeach
+                                                        </select>
                                                         @error('billing_state')
                                                         <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
@@ -520,7 +544,12 @@
                                     </div>
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Purchaser Sign</p>
-                                        <textarea rows="4" class="input-textbox bg-white form-control @error('purchaser_sign') is-invalid @enderror" name="purchaser_sign">{{ old('purchaser_sign',@$user->taxCertificate->purchaser_sign) }}</textarea>
+                                        @if(!empty(@$user->taxCertificate->purchaser_sign))
+                                            <img class="img-responsive" src="{{ asset($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                        @else
+                                            <span id="undo-sign" class="fa fa-undo"></span>
+                                            <div id="signature"></div>
+                                        @endif
                                         @error('purchaser_sign')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -589,14 +618,26 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">Country</p>
-                                    <input class="input-textbox form-control @error('locator_country') is-invalid @enderror" type="text"  name="locator_country" value="{{ old('locator_country',@$user->storeLocator->locator_country) }}"/>
+                                    {{--<input class="input-textbox form-control @error('locator_country') is-invalid @enderror" type="text"  name="locator_country" value="{{ old('locator_country',@$user->storeLocator->locator_country) }}"/>--}}
+                                    <select class="input-textbox form-control  @error('locator_country') is-invalid @enderror" name="locator_country">
+                                        <option selected hidden disabled>Select a Country</option>
+                                        @foreach(get_countries() as $key => $country)
+                                            <option @if(old('locator_country',@$user->storeLocator->locator_country) == $key) selected @endif value="{{ $key }}">{{ $country }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('locator_country')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-lg-6">
                                     <p class="textbox-label">State/Province/Region</p>
-                                    <input class="input-textbox form-control @error('locator_state') is-invalid @enderror" type="text"  name="locator_state" value="{{ old('locator_state',@$user->storeLocator->locator_state) }}"/>
+                                    {{--<input class="input-textbox form-control @error('locator_state') is-invalid @enderror" type="text"  name="locator_state" value="{{ old('locator_state',@$user->storeLocator->locator_state) }}"/>--}}
+                                    <select class="input-textbox form-control  @error('locator_state') is-invalid @enderror" name="locator_state">
+                                        <option selected hidden disabled>Select a State</option>
+                                        @foreach(get_states($user->storeLocator->locator_country) as $key => $state)
+                                            <option @if(old('locator_state',@$user->storeLocator->locator_state) == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('locator_state')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror

@@ -15,10 +15,11 @@
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
-    <!-- Custom Style Sheet -->
-    <link rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
+    <!-- Custom Style Sheet -->  
+    <link type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
+    <script src="{{ asset('js/barcodeScanner.js') }}"></script>
     <title>LandBAppreal</title>
     <style>
         .loading-overlay {
@@ -83,11 +84,11 @@
                     margin-top: -10px;
                 " id="user-cart-count">{{ cart_count() }}</span>
                 <li>
-                    <a href="#"><i class="fal fa-user"></i></a>
+                    <a href="{{ route('customer.overview') }}"><i class="fal fa-user"></i></a>
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a>{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                        <a href="{{ route('customer.overview') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
@@ -137,11 +138,11 @@
   </div>
 </div>
 
-<style> 
+<style>
 * {
   box-sizing: border-box;
 }
-  
+
 .overlay {
   height: 100%;
   width: 100%;
@@ -203,6 +204,7 @@
   background: #bbb;
 }
 </style>
+<script src="{{ asset('landb/js/flipbook.js') }}"></script>
 
 <script>
 function openSearch() {

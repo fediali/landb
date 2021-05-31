@@ -30,10 +30,8 @@
                 :is_selected_shipping="true"
                 :customer_order_numbers="{{ $customerOrderNumbers }}"
                 :currency="'{{ get_application_currency()->symbol }}'"
-                :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
-
-        ></create-order>
-
+                :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}">
+        </create-order>
     </div>
 @stop
 
@@ -48,6 +46,24 @@
             "Out of stock": "{{ trans('plugins/ecommerce::order.out_of_stock') }}",
             "product(s) available": "{{ trans('plugins/ecommerce::order.products_available') }}",
             "No products found!": "{{ trans('plugins/ecommerce::order.no_products_found') }}",
-        }
+        };
+
+    </script>
+@endpush
+
+@push('echo-server')
+    <script>
+        window.Echo.channel('order-edit-{{$order->id}}').listen('.orderEdit', (data) => {
+            if (data.user_id != "{{auth()->user()->id}}") {
+                var reply = confirm(data.user_name + " is trying to access this order edit! \n You want to give him access ? \n Press Ok to grant Or Cancel to Ignore request.");
+                if (reply) {
+                    data.access = 1;
+                } else {
+                    data.access = 0;
+                }
+                window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
+                // window.Echo.private('order-edit-access-'+data.user_id).whisper('.orderEditAccess', data);
+            }
+        });
     </script>
 @endpush

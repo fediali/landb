@@ -29,9 +29,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Threadorders\Forms\ThreadordersForm;
 use Botble\Base\Forms\FormBuilder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use SlugHelper;
 
@@ -255,7 +253,8 @@ class ThreadordersController extends BaseController
         $thread2 = $this->threadRepository->findOrFail($id);
 
         foreach ($thread2->thread_variations as $thread_variation) {
-
+            // TODO:: check unique barcode
+            $barcode = get_barcode();
             $threadOrderVar = [
                 'thread_order_id'     => $threadorders->id,
                 'category_type'       => 'regular',
@@ -270,11 +269,29 @@ class ThreadordersController extends BaseController
                 'quantity'            => $requestData['regular_qty'][$thread_variation->id],
                 'cost'                => $requestData['cost'][$thread_variation->id],
                 'notes'               => $thread_variation->notes,
-                'upc'                 => get_barcode()['upc'],
-                'barcode'             => get_barcode()['barcode'],
+                'upc'                 => $barcode['upc'],
+                'barcode'             => $barcode['barcode'],
             ];
             DB::table('thread_order_variations')->insert($threadOrderVar);
+
+            if ($thread_order_status == Thread::REORDER) {
+                $prodId = Product::where('sku', $thread_variation->sku)->value('id');
+                if ($prodId) {
+                    $logParam = [
+                        'parent_product_id' => $prodId,
+                        'product_id' => $prodId,
+                        'sku' => $thread_variation->sku,
+                        'thread_order_id' => $threadorders->id,
+                        'quantity' => $requestData['regular_qty'][$thread_variation->id],
+                        'created_by' => auth()->user()->id,
+                        'reference' => InventoryHistory::PROD_REORDER
+                    ];
+                    log_product_history($logParam);
+                }
+            }
+
             if (isset($thread2->plus_product_categories[0])) {
+                $barcode = get_barcode();
                 $threadOrderVar = [
                     'thread_order_id'     => $threadorders->id,
                     'category_type'       => 'plus',
@@ -289,10 +306,27 @@ class ThreadordersController extends BaseController
                     'quantity'            => $requestData['plus_qty'][$thread_variation->id],
                     'cost'                => $requestData['cost'][$thread_variation->id],
                     'notes'               => $thread_variation->notes,
-                    'upc'                 => get_barcode()['upc'],
-                    'barcode'             => get_barcode()['barcode'],
+                    'upc'                 => $barcode['upc'],
+                    'barcode'             => $barcode['barcode'],
                 ];
                 DB::table('thread_order_variations')->insert($threadOrderVar);
+
+                if ($thread_order_status == Thread::REORDER) {
+                    $prodId = Product::where('sku', $thread_variation->plus_sku)->value('id');
+                    if ($prodId) {
+                        $logParam = [
+                            'parent_product_id' => $prodId,
+                            'product_id' => $prodId,
+                            'sku' => $thread_variation->plus_sku,
+                            'thread_order_id' => $threadorders->id,
+                            'quantity' => $requestData['plus_qty'][$thread_variation->id],
+                            'created_by' => auth()->user()->id,
+                            'reference' => InventoryHistory::PROD_REORDER
+                        ];
+                        log_product_history($logParam);
+                    }
+                }
+
             }
         }
 
@@ -361,6 +395,10 @@ class ThreadordersController extends BaseController
                     $product->description = $variation->name;
                     $product->content = $variation->name;
                     $product->status = BaseStatusEnum::PUBLISHED;
+                    if ($threadorder->thread_status == Thread::PRIVATE) {
+                        $product->status = BaseStatusEnum::DRAFT;
+                        $product->private_label = 1;
+                    }
                     $product->sku = $variation->sku;
                     $product->category_id = $variation->product_category_id;
                     $product->quantity = 0;
@@ -426,7 +464,27 @@ class ThreadordersController extends BaseController
                                     if ($result['created']) {
                                         app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
+
+                                        $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                        $packAllProd = Product::where('id', $prodId)->first();
+
+                                        $barcodePackAll = get_barcode();
+                                        $packAllProd->upc = $barcodePackAll['upc'];
+                                        $packAllProd->barcode = $barcodePackAll['barcode'];
+                                        $packAllProd->private_label = $product->private_label;
+                                        $packAllProd->save();
+
+                                        $logParam = [
+                                            'parent_product_id' => $product->id,
+                                            'product_id' => $prodId,
+                                            'sku' => $packAllProd->sku,
+                                            'thread_order_id'   => $threadorder->id,
+                                            'created_by' => auth()->user()->id,
+                                            'reference'  => InventoryHistory::PROD_PUSH_ECOM
+                                        ];
+                                        log_product_history($logParam);
                                     }
+
                                     if (count($getSizeAttrs)) {
                                         $product->productAttributeSets()->attach([$getSizeAttrSet]);
                                         $product->productAttributes()->attach($getSizeAttrs);
@@ -439,8 +497,27 @@ class ThreadordersController extends BaseController
                                             $result = $this->productVariation->getVariationByAttributesOrCreate($product->id, $addedAttributes);
                                             if ($result['created']) {
                                                 app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $this->productVariation, $product->id, $response);
+
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
+                                                $sizeProd = Product::where('id', $prodId)->first();
+
+                                                $barcodeSize = get_barcode();
+                                                $sizeProd->upc = $barcodeSize['upc'];
+                                                $sizeProd->barcode = $barcodeSize['barcode'];
+                                                $sizeProd->private_label = $product->private_label;
+                                                $sizeProd->save();
+
+                                                $logParam = [
+                                                    'parent_product_id' => $product->id,
+                                                    'product_id' => $prodId,
+                                                    'sku' => $sizeProd->sku,
+                                                    'thread_order_id'   => $threadorder->id,
+                                                    'created_by' => auth()->user()->id,
+                                                    'reference'  => InventoryHistory::PROD_PUSH_ECOM
+                                                ];
+                                                log_product_history($logParam);
+
                                             }
                                         }
                                     }
@@ -448,15 +525,6 @@ class ThreadordersController extends BaseController
                             }
                         }
 
-                        InventoryHistory::create([
-                            'product_id' => $product->id,
-                            'order_id'   => $threadorder->id,
-                            //'quantity' => $variation->quantity, // transaction qty
-                            //'new_stock' => $variation->quantity, // new stock qty
-                            //'old_stock' => 0, // 0 when new prod add
-                            'created_by' => auth()->user()->id,
-                            'reference'  => 'threadorders.push_to_ecommerce'
-                        ]);
                     }
                 } else {
                     $exist = true;
@@ -473,7 +541,6 @@ class ThreadordersController extends BaseController
             return $response->setPreviousUrl(route('thread.index'))->setMessage('Order pushed to E-commerce Successfully');
         }
     }
-
 
     public function showThreadOrderDetail($id, Request $request)
     {

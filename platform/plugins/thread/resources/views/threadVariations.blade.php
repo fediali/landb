@@ -5,6 +5,36 @@ $variations = $options['data']['variations'];
 
 ?>
 <div class="row">
+
+    @if($thread->is_pieces)
+        <div class="col-md-12">
+            
+            <div class="row">
+            <div class="col-md-12">
+                <div class="order-box">
+                <div class="row">
+                <div class="col-md-12">
+                <h6>PRIVATE LABEL SIZES</h6>
+                </div>
+                @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
+                    <div class="col-md-2 mt-3">
+                        <label for="name">{{$catSize->name}}</label>
+                        <input type="hidden" name="thread_id" value="{{$thread->id}}" id="pvt-thread-id">
+                        <input type="hidden" name="product_category_id" value="{{$thread->regular_product_categories()->first()->id}}" id="pvt-prod-cat-id">
+                        <input type="hidden" name="cat_sizes[]" value="{{$catSize->id}}" id="pvt-cat-sizes">
+                        <input type="number" name="cat_sizes_qty[]" class="form-control cat_sizes_qty" value="{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}" placeholder="Enter Qty" required aria-required="true">
+                    </div>
+                @endforeach
+                    <div class="col-md-2">
+                    <input class="btn btn-success w-100 btn-private" type="button" value="Submit" id="pvt-cat-sizes-qty-submit">
+                    </div>
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    @endif
+
     <div class="col-md-12">
         <hr>
         @if($thread->is_denim == 1)
@@ -15,20 +45,25 @@ $variations = $options['data']['variations'];
                     <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Fabric or Print</th>
+                        <th scope="col">Print Design</th>
+                        <th scope="col">Fabric</th>
                         <th scope="col">Wash</th>
                         <th scope="col">Cost</th>
                         <th scope="col">Status</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
                         <th scope="col">Notes</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
+
                     @foreach($variations as $key => $variation)
                         @if($variation->is_denim == 1)
                             <tr>
                                 <td>{{ $variation->name }}</td>
                                 <td>{{ @$variation->printdesign->name }}</td>
+                                <td>{{ @$variation->fabric->name  }}</td>
                                 <td>{{ @$variation->wash->name  }}</td>
                                 <td>{{ $variation->cost }}</td>
                                 <td>
@@ -40,17 +75,23 @@ $variations = $options['data']['variations'];
                                            class="btn btn-danger">{{ ucfirst($variation->status) }}</a>
                                     @endif
                                 </td>
+                                <td>{{ $variation->regular_qty }}</td>
+                                <td>{{ $variation->plus_qty }}</td>
                                 <td>{{ $variation->notes }}</td>
                                 <td>
                                     <div class="table-actions" style="display: inline-block; font-size: 5px">
                                         {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a class="btn btn-info btn-sm edit-variation" data-var-name="{{$variation->name}}"
+                                        <a class="btn btn-info btn-sm edit-variation"
+                                           data-var-name="{{$variation->name}}"
                                            data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
+                                           data-fabric-id="{{$variation->fabric_id}}"
+                                           data-reg-qty="{{$variation->regular_qty}}"
+                                           data-plu-qty="{{$variation->plus_qty}}"
                                            data-wash-id="{{$variation->wash_id}}" data-var-cost="{{$variation->cost}}"
                                            data-var-notes="{{$variation->notes}}">
                                             <i class="fa fa-edit"></i>
-                                        </a> 
+                                        </a>
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
@@ -67,9 +108,10 @@ $variations = $options['data']['variations'];
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="d-flex w-100">
+                                <h4 class="modal-title text-center w-100 thread-pop-head"> Adding Variations
+                                    <span class="variation-name"></span>
+                                </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                <h4 class="modal-title text-center w-100 thread-pop-head"> Adding Variations <span
-                                        class="variation-name"></span></h4>
                                 <div></div>
                             </div>
                         </div>
@@ -82,26 +124,20 @@ $variations = $options['data']['variations'];
                                     <tbody id="multi-variations">
                                     <tr>
                                         <td style="width: 13%;">
-                                            <button type="button" class="add_row form-control btn btn-secondary"
-                                                    id="add-new"><i class="fa fa-plus"></i> Add:
-                                            </button>
+                                            <button type="button" class="add_row form-control btn btn-secondary" id="add-new"><i class="fa fa-plus"></i> Add:</button>
                                         </td>
                                     </tr>
                                     <tr class="duplicate">
                                         <td width="10%">
                                             <label for="name">Name:</label>
-                                            <input required class="form-control variation_name" placeholder="Add Name"
-                                                   name="name[]" type="text">
+                                            <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
-
-                                        <td width="25%">
+                                        <td width="15%">
                                             <label for="print_id">Print / Solid:</label><br>
-                                            <select class="form-control print_design" name="print_id[]"
-                                                    style="width: 100%">
+                                            <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
-                                                    <option value="{{ $print->id }}"
-                                                            data-file="{{strtolower($print->file)}}">
+                                                    <option value="{{ $print->id }}" data-file="{{strtolower($print->file)}}">
                                                         {{ $print->name }}
                                                     </option>
                                                 @endforeach
@@ -124,17 +160,35 @@ $variations = $options['data']['variations'];
                                                 </div>
                                             </div>--}}
                                         </td>
-                                        <td width="15%">
+                                        <td width="8%">
+                                            <label for="fabric_id" class="control-label">Select Fabric</label>
+                                            <select class="select-search-full variation_fabric" id="fabric_id" name="fabric_id[]">
+                                                <option selected="selected" disabled value="">Select Fabric</option>
+                                                @foreach($options['data']['fabrics'] as $key => $fabric)
+                                                    <option value="{{$key}}">{{$fabric}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td width="8%">
                                             <label for="wash_id" class="control-label">Select Wash</label>
-                                            <select class="select-search-full variation_wash" id="wash_id"
-                                                    name="wash_id[]">
+                                            <select class="select-search-full variation_wash" id="wash_id" name="wash_id[]">
                                                 <option selected="selected" disabled value="">Select Wash</option>
                                                 @foreach($options['data']['washes'] as $key => $wash)
                                                     <option value="{{$key}}">{{$wash}}</option>
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td width="10%">
+                                        <td width="13%">
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
+                                            <input required class="form-control variation_qty"
+                                                   placeholder="Add Qty" name="regular_qty[]" type="text">
+                                        </td>
+                                        <td width="12%">
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}:</label>
+                                            <input required class="form-control variation_plus_qty"
+                                                   placeholder="Add Qty" name="plus_qty[]" type="text">
+                                        </td>
+                                        <td width="12%">
                                             <label for="cost">Cost:</label>
                                             <input required class="form-control variation_cost" placeholder="Add Cost"
                                                    name="cost[]" type="text">
@@ -143,7 +197,8 @@ $variations = $options['data']['variations'];
                                             <label for="pack_id">File:</label>
                                             <input required class="form-control variation_file" placeholder="Add File" name="file[]" type="file">
                                         </td>--}}
-                                        <td width="15%">
+
+                                        <td width="55%">
                                             <label for="Notes">Notes:</label>
                                             <textarea class="form-control variation_notes" placeholder="Add Notes"
                                                       name="notes[]" cols="50" rows="2"></textarea>
@@ -171,8 +226,7 @@ $variations = $options['data']['variations'];
             </div>
         @else
             <div class="box-body">
-                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
-                   data-target="#add_variation"> Add Variation</a><br>
+                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
@@ -183,13 +237,14 @@ $variations = $options['data']['variations'];
                         <th scope="col">Regular Sku</th>
                         <th scope="col">Plus Sku</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Regular Qty</th>
-                        <th scope="col">Plus Qty</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
+                        <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
                         <th scope="col">Notes</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
+
                     @foreach($variations as $key => $variation)
                         @if($variation->is_denim == 0)
                             <tr>
@@ -223,7 +278,11 @@ $variations = $options['data']['variations'];
                                            data-var-notes="{{$variation->notes}}">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a data-toggle="modal" data-target="#ppModal" class="btn btn-primary btn-sm"><i class="fa fa-paper-plane"></i></a>
+                                        <a data-toggle="modal" data-target="#ppModal"
+                                           class="btn btn-primary btn-sm pp_sample"
+                                           data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
+                                            <i class="fa fa-paper-plane"></i>
+                                        </a>
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
@@ -240,8 +299,7 @@ $variations = $options['data']['variations'];
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="d-flex w-100">
-                                <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span
-                                        class="variation-name"></span></h4>
+                                <h4 class="modal-title text-center w-100 thread-pop-head">Adding Variations <span class="variation-name"></span></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">x</span>
                                 </button>
@@ -257,22 +315,18 @@ $variations = $options['data']['variations'];
                                     <tbody id="multi-variations">
                                     <tr>
                                         <td style="width: 13%;">
-                                            <button type="button" class="add_row form-control btn btn-secondary"
-                                                    id="add-new"><i class="fa fa-plus"></i> Add:
-                                            </button>
+                                            <button type="button" class="add_row form-control btn btn-secondary" id="add-new"><i class="fa fa-plus"></i> Add:</button>
                                         </td>
                                     </tr>
                                     <tr class="duplicate">
                                         <td width="10%">
                                             <label for="name">Name:</label>
-                                            <input required class="form-control variation_name" placeholder="Add Name"
-                                                   name="name[]" type="text">
+                                            <input required class="form-control variation_name" placeholder="Add Name" name="name[]" type="text">
                                         </td>
 
                                         <td width="20%">
                                             <label for="print_id">Print / Solid:</label><br>
-                                            <select class="form-control print_design" name="print_id[]"
-                                                    style="width: 100%">
+                                            <select class="form-control print_design" name="print_id[]" style="width: 100%">
                                                 <option selected="selected" value="">Select Print</option>
                                                 @foreach($options['data']['printdesigns'] as $key => $print)
                                                     <option value="{{ $print->id }}"
@@ -300,14 +354,14 @@ $variations = $options['data']['variations'];
                                             </div>--}}
                                         </td>
                                         <td width="10%">
-                                            <label for="pack_id">Regular:</label>
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
                                             <input required class="form-control variation_qty"
-                                                   placeholder="Add Regular Quantity" name="regular_qty[]" type="text">
+                                                   placeholder="Add Qty" name="regular_qty[]" type="text">
                                         </td>
                                         <td width="10%">
-                                            <label for="pack_id">Plus:</label>
+                                            <label for="pack_id">{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}:</label>
                                             <input required class="form-control variation_plus_qty"
-                                                   placeholder="Add Plus Quantity" name="plus_qty[]" type="text">
+                                                   placeholder="Add Qty" name="plus_qty[]" type="text">
                                         </td>
                                         <td width="10%">
                                             <label for="cost">Cost:</label>
@@ -356,8 +410,9 @@ $variations = $options['data']['variations'];
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="d-flex w-100">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span class="variation-name"></span></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+                            <h4 class="modal-title text-center w-100 thread-pop-head">Edit Variation <span
+                                    class="variation-name"></span></h4>
                             <div></div>
                         </div>
                     </div>
@@ -388,6 +443,14 @@ $variations = $options['data']['variations'];
                                         </select>
                                     </td>
                                     <td width="15%" class="denim-field">
+                                        <label for="var_fabric_id" class="control-label">Select Fabric</label>
+                                        <select class="select-search-full" id="ed-fabric-id" name="var_fabric_id">
+                                            <option selected="selected" disabled value="">Select Fabric</option>
+                                            @foreach($options['data']['fabrics'] as $key => $fabric)
+                                                <option value="{{$key}}">{{$fabric}}</option>
+                                            @endforeach
+                                        </select>
+
                                         <label for="var_wash_id" class="control-label">Select Wash</label>
                                         <select class="select-search-full" id="ed-wash-id" name="var_wash_id">
                                             <option selected="selected" disabled value="">Select Wash</option>
@@ -396,14 +459,14 @@ $variations = $options['data']['variations'];
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td width="10%" class="no-denim-field">
-                                        <label>Regular:</label>
-                                        <input class="form-control" placeholder="Add Regular Quantity"
+                                    <td width="10%" class="{{--no-denim-field--}}">
+                                        <label>{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</label>
+                                        <input class="form-control" placeholder="Add Quantity"
                                                name="regular_qty" id="ed-reg-qty" type="text">
                                     </td>
-                                    <td width="10%" class="no-denim-field">
-                                        <label>Plus:</label>
-                                        <input class="form-control" placeholder="Add Plus Quantity" name="plus_qty"
+                                    <td width="10%" class="{{--no-denim-field--}}">
+                                        <label>{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}</label>
+                                        <input class="form-control" placeholder="Add Quantity" name="plus_qty"
                                                id="ed-plu-qty" type="text">
                                     </td>
                                     <td width="10%">
@@ -431,8 +494,7 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation"
-                               value="Update">
+                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation" value="Update">
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -449,7 +511,7 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        {{--<span aria-hidden="true">×</span>--}}</button>
+                        {{--<span aria-hidden="true">×</span>--}}X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span
                             class="variation-name"></span></h4>
                     <div></div>
@@ -542,37 +604,34 @@ $variations = $options['data']['variations'];
                     <div></div>
                 </div>
             </div>
-            <div class="modal-body">
-                <form>
-                    <div> 
-                        <label class="font-bold">PP Sample Due Date:</label>
-                        <input class="form-control" placeholder="PP Sample Due Date" name="" type="datetime"  >
-                    </div>
-                    <div class="mt-3"> 
-                        <label class="font-bold">Strike Off Approved/Rejected Comments:</label>
-                        <input class="form-control" placeholder="Strike Off Approved/Rejected Comments" name="" type="text"  >
-                    </div>
-                    <div class="mt-3"> 
+            <form method="post" action="{{route('thread.addPPsample')}}">
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="thread_variation_id" class="thread_variation_id" value="">
+                    <div class="mt-3">
                         <label class="font-bold">Receive Date:</label>
-                        <input class="form-control" placeholder="Receive Date" name="" type="datetime"  >
+                        <input class="form-control" placeholder="Receive Date" name="receive_date" type="date">
                     </div>
-                    <div class="mt-3"> 
+                    <div class="mt-3">
                         <label class="font-bold">Comments:</label>
-                        <input class="form-control" placeholder="Comments" name="" type="text"  >
+                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2" aria-invalid="false"></textarea>
                     </div>
-                    <div class="mt-3"> 
+                        </textarea>
+                    <div class="mt-3">
                         <label class="font-bold">Status:</label>
-                        <select class="form-control">
+                        <select class="form-control" name="status">
+                            <option>Pending</option>
                             <option>Approved</option>
                             <option>Rejected</option>
                         </select>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <input type="button" class="btn btn-primary save-thread" value="Save" id="submitVariationTrim">
-            </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary save-thread" value="Save">
+                </div>
+            </form>
         </div>
         <!-- /.modal-content -->
     </div>
@@ -585,6 +644,10 @@ $variations = $options['data']['variations'];
 
 <script>
     $(document).ready(function () {
+        $(document).on('click', 'a.pp_sample', function () {
+            console.log($(this).data('var-id'));
+            $('.thread_variation_id').val($(this).data('var-id'));
+        })
 
         function formatState(state) {
             if (!state.id) {
@@ -640,7 +703,6 @@ $variations = $options['data']['variations'];
 
         $(document).on('click', '#submitVariationFabric', function () {
             $.ajax({
-
                 beforeSend: function () {
                     if (!validateField('#variation_fabic_name', 'Variation name')) return false;
                     if (!validateField('select.print_design_var', 'Print')) return false;
@@ -672,14 +734,12 @@ $variations = $options['data']['variations'];
                             return false
                         }
                     });
-
                     $('select.print_design').each(function () {
                         if (!validateField(this, 'Print')) {
                             error = true;
                             return false
                         }
                     });
-
                     if (error) {
                         return false;
                     }
@@ -735,14 +795,12 @@ $variations = $options['data']['variations'];
                             return false
                         }
                     });
-
                     $('select.print_design').each(function () {
                         if (!validateField(this, 'Print')) {
                             error = true;
                             return false
                         }
                     });
-
                     if (error) {
                         return false;
                     }
@@ -759,7 +817,16 @@ $variations = $options['data']['variations'];
                     'print_id[]': $('select.print_design').map(function () {
                         return this.value;
                     }).get(),
+                    'fabric_id[]': $('.variation_fabric').map(function () {
+                        return this.value;
+                    }).get(),
                     'wash_id[]': $('.variation_wash').map(function () {
+                        return this.value;
+                    }).get(),
+                    'regular_qty[]': $('input:text.variation_qty').map(function () {
+                        return this.value;
+                    }).get(),
+                    'plus_qty[]': $('input:text.variation_plus_qty').map(function () {
                         return this.value;
                     }).get(),
                     'cost[]': $('input:text.variation_cost').map(function () {
@@ -799,6 +866,8 @@ $variations = $options['data']['variations'];
             $('#ed-var-name').val(varName);
             let printId = $(this).data('print-id');
             $('#ed-print-id').val(printId);
+            let fabricId = $(this).data('fabric-id');
+            $('#ed-fabric-id').val(fabricId);
             let washId = $(this).data('wash-id');
             $('#ed-wash-id').val(washId);
             let regQty = $(this).data('reg-qty');
@@ -821,8 +890,10 @@ $variations = $options['data']['variations'];
             if (denim == 1) {
                 $('td.denim-field').show();
                 $('td.no-denim-field').hide();
-                $('#ed-regular_qty').removeAttr('required');
-                $('#ed-plus_qty').removeAttr('required');
+                //$('#ed-regular_qty').removeAttr('required');
+                //$('#ed-plus_qty').removeAttr('required');
+                $('#ed-regular_qty').attr('required', true);
+                $('#ed-plus_qty').attr('required', true);
                 $('#ed-var-name').removeAttr('required');
             } else {
                 $('td.no-denim-field').show();
@@ -847,6 +918,7 @@ $variations = $options['data']['variations'];
                     'name': $('#ed-var-name').val(),
                     'print_id': $('#ed-print-id').val(),
                     'wash_id': $('#ed-wash-id').val(),
+                    'fabric_id': $('#ed-fabric-id').val(),
                     'regular_qty': $('#ed-reg-qty').val(),
                     'plus_qty': $('#ed-plu-qty').val(),
                     'cost': $('#ed-cost').val(),
@@ -891,6 +963,32 @@ $variations = $options['data']['variations'];
                 },
                 error: function (request, error) {
                     location.reload();
+                }
+            });
+        });
+
+        $(document).on('click', '#pvt-cat-sizes-qty-submit', function () {
+            $.ajax({
+                url: '{{ route('thread.addPvtCatSizesQty') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'thread_id': $('#pvt-thread-id').val(),
+                    'product_category_id': $('#pvt-prod-cat-id').val(),
+                    'cat_sizes[]': $('input#pvt-cat-sizes').map(function () {
+                        return this.value;
+                    }).get(),
+                    'cat_sizes_qty[]': $('input.cat_sizes_qty').map(function () {
+                        return this.value;
+                    }).get(),
+                },
+                success: function (data) {
+                    toastr['success']('Successfully Added', 'Success');
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    location.reload();
+                    toastr['warning']('Something went wrong', 'Error');
                 }
             });
         });

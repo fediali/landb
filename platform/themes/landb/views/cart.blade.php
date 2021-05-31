@@ -45,18 +45,18 @@
                 </div>
             </div>
             <div class="col-lg-2 mt-2 text-center">
-                <p class="mt-2">$ {{ $cartItem->price }}</p>
+                <p class="mt-2"><b class="cart-m-title">Price</b>$ {{ $cartItem->price }}</p>
             </div>
             <div class="col-lg-2 mt-2">
                 <form id='myform' method='POST' action='#'>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
-                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' />
+                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' readonly/>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
                 </form>
             </div>
-            <div class="col-lg-2 mt-2">
+            <div class="col-lg-2 mt-2 ItemPrice">
                 @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
-                <p class="mt-2">$ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
+                <p class="mt-2"><b class="cart-m-title">Total</b> $ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
             </div>
         </div>
         <hr>

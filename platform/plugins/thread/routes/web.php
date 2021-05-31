@@ -6,6 +6,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
 
         Route::group(['prefix' => 'threads', 'as' => 'thread.'], function () {
             Route::resource('', 'ThreadController')->parameters(['' => 'thread']);
+            Route::post('addPPsample', [
+                'as'         => 'addPPsample',
+                'uses'       => 'ThreadController@variationPPSample',
+                'permission' => 'thread.create',
+            ]);
             Route::delete('items/destroy', [
                 'as'         => 'deletes',
                 'uses'       => 'ThreadController@deletes',
@@ -91,6 +96,11 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 event(new \App\Events\ThreadApproval());
                 return 'ok';
             });
+            Route::post('add-pvt-cat-sizes-qty', [
+                'as'         => 'addPvtCatSizesQty',
+                'uses'       => 'ThreadController@addPvtCatSizesQty',
+                'permission' => 'thread.create',
+            ]);
 
         });
     });

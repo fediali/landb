@@ -16,6 +16,7 @@ use Botble\Ecommerce\Http\Requests\AddressRequest;
 use Botble\Ecommerce\Http\Requests\CustomerCreateRequest;
 use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
+use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Tables\CustomerTable;
@@ -99,7 +100,8 @@ class CustomerController extends BaseController
     {
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        $customer = $this->customerRepository->findOrFail($id);
+        $customer = Customer::with(['details','shippingAddress', 'BillingAddress', 'storeLocator'])->findOrFail($id);
+        //dd($customer);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
         $card = [];
         $customer->password = null;
@@ -157,6 +159,12 @@ class CustomerController extends BaseController
         }
 
         $customer = $this->customerRepository->createOrUpdate($data, ['id' => $id]);
+        $data = $request->all();
+        $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status'];
+        $data = array_diff_key($data, array_flip($remove));
+        $data['customer_type'] = json_encode($data['customer_type']);
+        $customer->details()->update($data);
+        //dd($customer, $request->all());
 
         event(new UpdatedContentEvent(CUSTOMER_MODULE_SCREEN_NAME, $request, $customer));
 
@@ -315,6 +323,12 @@ class CustomerController extends BaseController
         return $response->setData($addresses);
     }
 
+    public function getCustomer($id, BaseHttpResponse $response)
+    {
+        $customer = $this->customerRepository->findOrFail($id);
+        return $response->setData($customer);
+    }
+
     public function postCustomerCard(Request $request)
     {
         $request['customer_omni_id'] = $request->customer_data['customer_id'];
@@ -323,5 +337,14 @@ class CustomerController extends BaseController
         return $card;
     }
 
+    public function getCustomerCard($id, BaseHttpResponse $response)
+    {
+        $customer = $this->customerRepository->findOrFail($id);
+        $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+        list($card, $info) = omni_api($url);
+        $cards = collect(json_decode($card));
+        return $response->setData($cards);
+
+    }
 
 }

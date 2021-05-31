@@ -984,6 +984,8 @@ section.parallax_video video {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 20%;
     max-width: 20%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .shoplisting .listbox .img {
@@ -1226,7 +1228,7 @@ section.parallax_video video {
 
 @media (max-width: 991px) {
     .navbar-brand img {
-        width: 130px;
+        width: 100%;
     }
     h1 {
         font-size: 40px;
@@ -3016,14 +3018,20 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
  
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .grid-container {
-        height: 1380vh !important;
+        height: 1420vh !important;
     }
 }
 
-@media screen and (min-width: 768px) and (max-width: 991px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .grid-container {
         height: 1200vh !important;
     }
+    .browse_collection h1 {
+        font-size: 44px !important;
+    }
+    .qty {
+        width: 35% !important;
+}
 }
 
 @media screen and (min-width: 1400px) and (max-width: 2200px) {
@@ -3034,7 +3042,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 @media screen and (min-width: 2300px) and (max-width: 4000px) {
     .grid-container {
-        height: 1350vh !important;
+        height: 1190vh !important;
     }
 }
 
@@ -3042,3 +3050,472 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     height: 55px !important;
 
   }
+
+  @media screen and (min-width: 320px) and (max-width: 767px) { 
+    .navbar-parent ul li.nav-item a.nav-link { 
+        padding: 5px !important;
+    }
+    header .container {
+        padding-right: 5px !important;
+        padding-left: 5px !important;
+    }
+    .navbar-parent ul {
+        overflow: inherit !important;
+    }
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 991px) { 
+    #register-form { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    #login-form { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+
+    .tab-content { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    .nav-tabs { 
+        padding-left: 15px;
+        padding-right: 15px;
+    } 
+    .shoplisting .listbox .img .imgoverlay {
+        opacity: 1 !important;
+    } 
+    .ItemPrice {
+        text-align: center !important;
+    }
+    .cart-m-title {
+        display: block !important;
+    }
+}
+
+.cart-m-title {
+    display: none;
+}
+
+.customer-body {
+    margin-top: 100px;
+}
+
+.mt-card-avatar {
+    text-align: center;
+}
+
+
+.mt-card-avatar img {
+height: 70px;
+}
+
+
+.collection-item {
+    color: #000 !important;
+}
+
+.list-group-item .active{ 
+    font-weight: 600;
+    color: #e91e63 !important;
+}
+
+.profile-sidebar {
+    background: #e8e8e8;
+    padding-top: 15px;
+}
+
+.customer-btn {
+    background-color: #000 !important;
+    border: #000 !important;
+}
+
+.btn-order-detail {
+    background-color: #000 !important;
+    border: #000 !important;
+}
+
+.btn-add-address {
+    background-color: #000 !important;
+    border: #000 !important;
+}
+
+
+/* TABS CSS START */
+
+
+/* Style the tab */
+
+.tab {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 20%;
+}
+
+
+/* Style the buttons inside the tab */
+
+.tab button {
+    display: block;
+    background-color: #fff;
+    color: black;
+    padding: 15px 15px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d8d8d8;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current "tab button" class */
+
+.tab button.active {
+    background-color: #f3f2f5;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    float: left;
+    padding: 0px 12px;
+    width: 80%;
+    border-left: none;
+}
+
+.woocommerce-info,
+.woocommerce-message {
+    padding: 1em 2em 1em 3.5em;
+    position: relative;
+    background-color: #f7f6f7;
+    color: #515151;
+    border-top: 2px solid #000;
+    list-style: none outside;
+    width: auto;
+    word-wrap: break-word;
+}
+
+.woocommerce table.my_account_orders {
+    font-size: .85em;
+}
+
+.woocommerce table.shop_table {
+    border: 1px solid rgba(0, 0, 0, .1);
+    margin: 0 -1px 24px 0;
+    text-align: left;
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+}
+
+.woocommerce .my_account_orders.account-orders-table>thead tr th {
+    background: #f7f7f7 none repeat scroll 0 0;
+    color: #afafaf;
+    text-transform: uppercase;
+}
+
+.woocommerce table.shop_table th {
+    font-weight: 700;
+    padding: 9px 12px;
+    line-height: 1.5em;
+}
+
+.woocommerce table.my_account_orders td,
+.woocommerce table.my_account_orders th {
+    padding: 4px 8px;
+    vertical-align: middle;
+}
+
+.woocommerce table.shop_table td {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    padding: 9px 12px;
+    vertical-align: middle;
+    line-height: 1.5em;
+}
+
+table.shop_table tr td,
+table.shop_table tr th {
+    padding: 20px !important;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) { #register-form label {
+    width: 85% !important;
+}
+.shipping-checkbox-area input[type="radio"] {
+    width: 25px !important;
+    height: 15px;
+}
+.shipping-checkbox-area {
+    display: contents !important;
+}
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) { 
+    .shipping-checkbox-area input[type="radio"] {
+        width: 25px !important;
+        height: 25px;
+    }
+   
+}
+
+@media screen and (min-width: 992px) and (max-width: 1024px) {
+    .shipping-checkbox-area p {
+        width:60%;
+    }
+}
+  
+@media screen and (min-width: 320px) and (max-width: 991px) { 
+.tabcontent {
+    width: 100% !important;
+}
+.tab {
+    width: 100% !important;
+}
+.grid-container {
+    display: none !important;
+} 
+
+.shipping-checkbox-area p {
+    width: 100% !important;
+}
+.shipping-checkbox-area div {
+    display: flex !important;
+} 
+
+#menu .main-nav {
+    display: block !important;
+}
+nav.main-nav .nav-col {
+    min-width: 100% !important; 
+    width: 100% !important;
+    margin-bottom: 30px !important;
+}
+}
+
+/* TABS CSS END */
+
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .banner img { 
+        height: 200px; 
+    }
+ }
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .banner img { 
+        height: 300px; 
+    }
+ }
+
+ 
+#myOverlay {
+    z-index: 10000 !important;
+}
+
+
+
+/************* TIMELINE CSS START *************/
+ 
+.timeline {
+    position: relative;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 15px 0;
+  }
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: #000000;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -1px;
+  }
+  
+  .container-timeline {
+    padding: 15px 30px;
+    position: relative;
+    background: inherit;
+    width: 50%;
+  }
+  
+  .container-timeline.left {
+    left: 0;
+  }
+  
+  .container-timeline.right {
+    left: 50%;
+  }
+  
+  .container-timeline::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: calc(50% - 8px);
+    right: -8px;
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 16px;
+    z-index: 1;
+  }
+  
+  .container-timeline.right::after {
+    left: -8px;
+  }
+  
+  .container-timeline::before {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 2px;
+    top: calc(50% - 1px);
+    right: 8px;
+    background: #000;
+    z-index: 1;
+  }
+  
+  .container-timeline.right::before {
+    left: 8px;
+  }
+  
+  .container-timeline .date {
+    position: absolute;
+    display: inline-block;
+    top: calc(50% - 8px);
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 1;
+  }
+  
+  .container-timeline.left .date {
+    right: -75px;
+  }
+  
+  .container-timeline.right .date {
+    left: -75px;
+  }
+  
+  .container-timeline .icon {
+    position: absolute;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    padding: 9px 0;
+    top: calc(50% - 20px);
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #000;
+    z-index: 1;
+  }
+  
+  .container-timeline.left .icon {
+    right: 56px;
+  }
+  
+  .container-timeline.right .icon {
+    left: 56px;
+  }
+  
+  .container-timeline .content {
+    padding: 30px 90px 30px 30px;
+    background: #ffeeb5;
+    position: relative;
+    border-radius: 10px 10px 10px 10px;
+}
+
+  
+  .container-timeline.right .content {
+    padding: 30px 30px 30px 90px;
+    border-radius: 10px 10px 10px 10px;
+  }
+  
+  .container-timeline .content h2 {
+    margin: 10px 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+  }
+  
+  .container-timeline .content p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 22px;
+    color: #000000;
+  }
+  
+  @media (max-width: 767.98px) {
+    .timeline::after {
+      left: 90px;
+    }
+  
+    .container-timeline {
+      width: 100%;
+      padding-left: 120px;
+      padding-right: 30px;
+    }
+  
+    .container-timeline.right {
+      left: 0%;
+    }
+  
+    .container-timeline.left::after, 
+    .container-timeline.right::after {
+      left: 82px;
+    }
+  
+    .container-timeline.left::before,
+    .container-timeline.right::before {
+      left: 100px;
+      border-color: transparent #006E51 transparent transparent;
+    }
+  
+    .container-timeline.left .date,
+    .container-timeline.right .date {
+      right: auto;
+      left: 15px;
+    }
+  
+    .container-timeline.left .icon,
+    .container-timeline.right .icon {
+      right: auto;
+      left: 146px;
+    }
+  
+    .container-timeline.left .content,
+    .container-timeline.right .content {
+      padding: 30px 30px 30px 90px;
+      border-radius: 10px 10px 10px 10px;
+
+    }
+  }
+/************* TIMELINE CSS END *************/
+
+@media screen and (min-device-width: 320px) and (max-device-width: 991px) and (orientation : landscape){
+    .navbar-parent ul{
+        margin: auto !important;
+    }
+}
+  

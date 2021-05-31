@@ -94,6 +94,7 @@
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <script src="{{ asset('landb/js/popper.js') }}"></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
+<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
@@ -101,11 +102,48 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
+<![endif]-->
+<script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script>
+  $(document).ready(function() {
+    $("#signature").jSignature({
+      // line width
+      lineWidth:2,
+
+      // width/height of signature pad
+      width:150,
+      height:100,
+      background_color:"#0f0"
+
+
+  });
+    $("#undo-sign").on('click', function () {
+      $("#signature").jSignature('reset');
+    });
+
+    $("#signature").bind('change', function(e){
+      var base64 = $("#signature").jSignature("getData");
+      $("input[name='purchaser_sign']").val(base64);
+    })
+  })
+</script>
 <script>
   $(document).ready(function() {
     $("#filtertoggle").click(function() {
       $(this).toggleClass("on");
       $("#filtermenu").slideToggle();
+    });
+    $("input[name='shipping_postal_code']").mask('99999?-9999');
+
+    $('select[name="shipping_country"]').on('change', function () {
+      get_states($('select[name="shipping_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
+    $('select[name="billing_country"]').on('change', function () {
+      get_states($('select[name="billing_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
+    $('select[name="locator_country"]').on('change', function () {
+      get_states($('select[name="locator_state"]'), this.value, '{{ route('ajax.getStates') }}');
     });
   });
 </script>
@@ -113,6 +151,7 @@
   jQuery(document).ready(function() {
     // This button will increment the value
     $('.qtyplus').click(function(e) {
+      toggle_loader(true);
       var newVal = 0;
       // Stop acting like a button
       e.preventDefault();
@@ -124,18 +163,24 @@
       if (!isNaN(currentVal)) {
         // Increment
         newVal = currentVal + 1;
-        $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);
+       /* $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);*/
       } else {
         // Otherwise put a 0 there
-        $(this).prev('input[name=' + fieldName + ']').val(0);
+        newVal = 0;
+        /*$(this).prev('input[name=' + fieldName + ']').val(0);*/
       }
       if($(this).data('update') == '1') {
-        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+        var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+        if(update == 0){
+          $(this).prev('input[name=' + fieldName + ']').val(newVal);
+        }
+        console.log('result: '+newVal);
       }
     });
     // This button will decrement the value till 0
     $(".qtyminus").click(function(e) {
       var newVal = 0;
+      var addVal = 0;
       // Stop acting like a button
       e.preventDefault();
       // Get the field name
@@ -146,13 +191,17 @@
       if (!isNaN(currentVal) && currentVal > 0) {
         newVal = currentVal - 1;
         // Decrement one
-        $(this).next('input[name=' + fieldName + ']').val(currentVal - 1);
+        /*$(this).next('input[name=' + fieldName + ']').val();*/
       } else {
+        newVal = 0;
         // Otherwise put a 0 there
-        $(this).next('input[name=' + fieldName + ']').val(0);
+        /*$(this).next('input[name=' + fieldName + ']').val(0);*/
       }
       if($(this).data('update') == '1'){
-        update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
+        var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
+        if(update == 0){
+          $(this).next('input[name=' + fieldName + ']').val(newVal);
+        }
       }
 
     });
@@ -251,12 +300,13 @@
     });
     }
   });
-  
+
   function toggle_loader(event) {
     if(event){
-      $('.loading-overlay').addClass('is-active');
+        $('.loading-overlay').addClass('is-active');
+
     }else{
-      $('.loading-overlay').removeClass('is-active');
+        $('.loading-overlay').removeClass('is-active');
     }
 
   }
@@ -284,6 +334,15 @@
   }
 </script>
 
+@if(session()->has('success'))
+    <script>
+      toastr['success']("{{ session()->get('success') }}", 'Success!');
+    </script>
+@elseif(session()->has('error'))
+    <script>
+      toastr['error']("{{ session()->get('error') }}", 'Error!');
+    </script>
+@endif 
 </body>
 
 </html>
