@@ -7,6 +7,17 @@
                     <label class="title-product-main text-no-bold">{{ __('Order information') }}</label>
                 </div>
                 <div class="pd-all-10-20 border-top-title-main">
+
+                    <div class="form-group">
+                        <label class="text-title-field">Select Order Type</label>
+                        <select class="form-control" id="order-type" v-model="order_type">
+                            <option value="" :disabled="true" :selected="true">Select Order Type</option>
+                            <option v-for="(value, index) in order_types" :value="index" :selected="index === sel_order_type">
+                                {{ value }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="clearfix">
                         <div class="table-wrapper p-none mb20 ps-relative z-index-4" v-if="child_products.length">
                             <table class="table-normal">
@@ -172,16 +183,6 @@
                                 <label class="text-title-field" for="txt-note">{{ __('Note') }}</label>
                                 <textarea class="ui-text-area textarea-auto-height" id="txt-note" rows="2"
                                           placeholder="Note for order..." v-model="note"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="text-title-field">Select Order Type</label>
-                                <select class="form-control" id="order-type" v-model="order_type">
-                                    <option value="" :disabled="true" :selected="true">Select Order Type</option>
-                                    <option v-for="(value, index) in order_types" :value="index"
-                                            :selected="index === sel_order_type">
-                                        {{ value }}
-                                    </option>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="text-title-field">Select Payment Method</label>
@@ -1048,8 +1049,10 @@ export default {
         },
         selectProductVariant: function (product, variation = null) {
             if ((!_.isEmpty(variation) && variation.is_out_of_stock) || (_.isEmpty(variation) && product.is_out_of_stock)) {
-                Botble.showError('Cannot select out of stock product!');
-                return false;
+                if (this.order_type == 'normal') {
+                    Botble.showError('Cannot select out of stock product!');
+                    return false;
+                }
             }
 
             if (!_.isEmpty(variation)) {

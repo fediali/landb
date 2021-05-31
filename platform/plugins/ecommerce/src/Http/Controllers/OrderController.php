@@ -220,8 +220,10 @@ class OrderController extends BaseController
                 $stockQty = $product->quantity;
             }
 
-            if ($stockQty < $demandQty) {
-                return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in this Qty!');
+            if ($request->input('order_type') != Order::PRE_ORDER) {
+                if ($stockQty < $demandQty) {
+                    return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in this Qty!');
+                }
             }
         }
 

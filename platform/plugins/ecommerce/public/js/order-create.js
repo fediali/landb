@@ -833,6 +833,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1107,8 +1108,10 @@ __webpack_require__.r(__webpack_exports__);
       var variation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
       if (!_.isEmpty(variation) && variation.is_out_of_stock || _.isEmpty(variation) && product.is_out_of_stock) {
-        Botble.showError('Cannot select out of stock product!');
-        return false;
+        if (this.order_type == 'normal') {
+          Botble.showError('Cannot select out of stock product!');
+          return false;
+        }
       }
 
       if (!_.isEmpty(variation)) {
@@ -7568,6 +7571,73 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "pd-all-10-20 border-top-title-main" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { staticClass: "text-title-field" }, [
+                _vm._v("Select Order Type")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.order_type,
+                      expression: "order_type"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { id: "order-type" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.order_type = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "option",
+                    {
+                      attrs: { value: "", disabled: true },
+                      domProps: { selected: true }
+                    },
+                    [_vm._v("Select Order Type")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.order_types, function(value, index) {
+                    return _c(
+                      "option",
+                      {
+                        domProps: {
+                          value: index,
+                          selected: index === _vm.sel_order_type
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(value) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "clearfix" }, [
               _vm.child_products.length
                 ? _c(
@@ -8287,73 +8357,6 @@ var render = function() {
                       }
                     }
                   })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { staticClass: "text-title-field" }, [
-                    _vm._v("Select Order Type")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.order_type,
-                          expression: "order_type"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { id: "order-type" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.order_type = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    [
-                      _c(
-                        "option",
-                        {
-                          attrs: { value: "", disabled: true },
-                          domProps: { selected: true }
-                        },
-                        [_vm._v("Select Order Type")]
-                      ),
-                      _vm._v(" "),
-                      _vm._l(_vm.order_types, function(value, index) {
-                        return _c(
-                          "option",
-                          {
-                            domProps: {
-                              value: index,
-                              selected: index === _vm.sel_order_type
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(value) +
-                                "\n                                "
-                            )
-                          ]
-                        )
-                      })
-                    ],
-                    2
-                  )
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
