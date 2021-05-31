@@ -10,8 +10,8 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
     <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
             <h2 class="mt-5 mb-4 text-center signin-head">SIGN IN</h2>
 
             <form class="" id="login-form" method="POST" action="{{ route('public.login.post') }}">
@@ -37,7 +37,7 @@
                     <a href="#" class="color-black"> Forgot Password?</a>
                 </div>
                 <div class="col-lg-12 mt-5">
-                    <input type="submit" form="login-form" class=" btn cart-btn w-100" value="Sign In">{{--<a href="#" class=" btn cart-btn w-100">Sign In</a>--}}
+                    <input type="submit" form="login-form" class=" btn border-btn w-100" value="Sign In">{{--<a href="#" class=" btn cart-btn w-100">Sign In</a>--}}
                 </div>
                 <div class="col-lg-12 mt-3 mb-5">
                     <a href="{{ route('public.register') }}" class=" btn border-btn w-100">Register</a>
@@ -46,6 +46,6 @@
             </form>
 
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-4"></div>
     </div>
 </section>

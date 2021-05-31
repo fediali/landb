@@ -3519,3 +3519,12 @@ nav.main-nav .nav-col {
     }
 }
   
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.cart-area {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+}
