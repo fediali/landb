@@ -30,7 +30,7 @@
     </div>
     @php $grand_total = 0; @endphp
     @foreach($cart->products as $cartItem)
-        <div class="row mb-4 mt-4 cartitem-{{ $cartItem->id }}">
+        <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
                 <div class="d-flex">
                     {!! image_html_generator(@$cartItem->product->images[0], @$cartItem->product->name, '95px', '75px' ) !!}
@@ -58,8 +58,7 @@
                 @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
                 <p class="mt-2"><b class="cart-m-title">Total</b> $ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
             </div>
-        </div>
-        <hr>
+        </div> 
     @endforeach
     {{--<div class="row mb-4 mt-4">
         <div class="col-lg-6 mt-2">
