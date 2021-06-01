@@ -46,6 +46,7 @@ $variations = $options['data']['variations'];
             <div class="box-body">
                 <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
                    data-target="#add_variation"> Add Variation</a><br>
+                <div class="table-responsive">
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
@@ -112,6 +113,8 @@ $variations = $options['data']['variations'];
 
                     </tbody>
                 </table>
+                </div>
+
             </div>
             <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
@@ -246,9 +249,9 @@ $variations = $options['data']['variations'];
             </div>
         @else
             <div class="box-body">
-                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
-                   data-target="#add_variation"> Add Variation</a><br>
-                <table class="table" id="thread-variations">
+                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
+               <div class="table-responsive">
+               <table class="table" id="thread-variations">
                     <thead>
                     <tr>
                         <th scope="col">Thread</th>
@@ -314,6 +317,8 @@ $variations = $options['data']['variations'];
 
                     </tbody>
                 </table>
+               </div>
+
             </div>
             <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
@@ -523,8 +528,7 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation"
-                               value="Update">
+                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation" value="Update">
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -541,8 +545,7 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        {{--<span aria-hidden="true">×</span>--}}X
-                    </button>
+                        {{--<span aria-hidden="true">×</span>--}}X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span
                             class="variation-name"></span></h4>
                     <div></div>
@@ -645,10 +648,9 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="mt-3">
                         <label class="font-bold">Comments:</label>
-                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2"
-                                  aria-invalid="false"></textarea>
+                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2" aria-invalid="false"></textarea>
                     </div>
-                    </textarea>
+                        </textarea>
                     <div class="mt-3">
                         <label class="font-bold">Status:</label>
                         <select class="form-control" name="status">

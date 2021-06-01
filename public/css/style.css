@@ -407,10 +407,17 @@ body {
     
 }
 
-@media screen and (min-width: 320px) and (max-device-width: 991px) {
+@media screen and (min-width: 320px) and (max-width: 991px) { 
+    .main-form {
+        width: 100% !important;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 991px) {
     .d-mt-block {
         display: block !important;
     }
+    
 }
 
 @media (max-width: 768px) {
@@ -430,12 +437,7 @@ body {
 }
 
 @media (max-width: 767px) {
-    .denim_table th,
-    .denim_table td {
-        display: block;
-        border: 0;
-        border-bottom: solid 1px #333;
-    }
+    
 
     td.tablelogo {
         text-align: center;
