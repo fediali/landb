@@ -12,7 +12,8 @@
                         <label class="text-title-field">Select Order Type</label>
                         <select class="form-control" id="order-type" v-model="order_type">
                             <option value="" :disabled="true" :selected="true">Select Order Type</option>
-                            <option v-for="(value, index) in order_types" :value="index" :selected="index === sel_order_type">
+                            <option v-for="(value, index) in order_types" :value="index"
+                                    :selected="index === sel_order_type">
                                 {{ value }}
                             </option>
                         </select>
@@ -1155,6 +1156,7 @@ export default {
                     order_type: this.order_type,
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,
+                    order_card: $("select.card_list option:selected").val(),
                 })
                 .then(res => {
                     let data = res.data.data;

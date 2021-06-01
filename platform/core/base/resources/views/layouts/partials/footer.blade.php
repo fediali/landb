@@ -60,6 +60,14 @@
     var address = '';
     var customer = '';
     $(document).ready(function () {
+        var card = $("select.card_list option:selected").val();
+        $('.payment_id').val(card);
+        if (card == 0) {
+            $('.add_card').show();
+        } else {
+            $('.add_card').hide();
+        }
+
         $('.notification_read').on('click', function () {
             console.log('working');
             var not_id = $(this).data('id');
@@ -199,11 +207,13 @@
             url: "{{ route('customers.get-cards','') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
-                card = data;
-                console.log(card)
-                $.each(card.data, function (index, element) {
-                    htmls += "<option value='" + (element.id) + "'>" + element.nickname + "</option>";
-                });
+                if (data.data !== 0) {
+                    card = data;
+                    console.log(card)
+                    $.each(card.data, function (index, element) {
+                        htmls += "<option value='" + (element.id) + "'>" + element.nickname + "</option>";
+                    });
+                }
                 htmls += "<option value='0'> Add New Card</option>";
                 $('#card_id').html(htmls);
                 var card = $("select.card_list option:selected").val();
@@ -274,7 +284,6 @@
                 successElement.querySelector('.token').textContent = result.id;
                 successElement.classList.add('visible');
                 functionAddCard(result, customer.data.id);
-
             }
             loaderElement.classList.remove('visible');
         })

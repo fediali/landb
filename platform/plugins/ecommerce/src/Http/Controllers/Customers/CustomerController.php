@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Http\Controllers\Customers;
 
+use App\Models\CardPreAuth;
 use App\Models\CustomerCard;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
@@ -100,7 +101,7 @@ class CustomerController extends BaseController
     {
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        $customer = Customer::with(['details','shippingAddress', 'BillingAddress', 'storeLocator'])->findOrFail($id);
+        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator'])->findOrFail($id);
         //dd($customer);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
         $card = [];
@@ -334,15 +335,47 @@ class CustomerController extends BaseController
         $request['customer_omni_id'] = $request->customer_data['customer_id'];
         $request['customer_data'] = json_encode($request->customer_data);
         $card = CustomerCard::create($request->all());
+        $customer = json_decode($request->customer_data);
+        $data = [
+            'payment_method_id' => $customer->id,
+            'meta'              => [
+                'reference' => 'Card Validation',
+                'tax'       => 0,
+                'subtotal'  => 1,
+                'lineItems' => []
+            ],
+            'total'             => 1,
+            'pre_auth'          => 1
+        ];
+        $url = (env("OMNI_URL") . "charge/");
+        list($response, $info) = omni_api($url, $data, 'POST');
+
+        $status = $info['http_code'];
+
+        if (floatval($status) == 200) {
+            $response = json_decode($response, true);
+        } else {
+            $errors = [
+                422 => 'The transaction didn\'t reach a gateway',
+                400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+                401 => 'The account is not yet activated or ready to process payments.',
+                500 => 'Unknown issue - Please contact Fattmerchant'
+            ];
+            return $errors;
+        }
         return $card;
     }
 
     public function getCustomerCard($id, BaseHttpResponse $response)
     {
         $customer = $this->customerRepository->findOrFail($id);
-        $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-        list($card, $info) = omni_api($url);
-        $cards = collect(json_decode($card));
+        if (count($customer->card) > 0) {
+            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+            list($card, $info) = omni_api($url);
+            $cards = collect(json_decode($card));
+        } else {
+            $cards = 0;
+        }
         return $response->setData($cards);
 
     }

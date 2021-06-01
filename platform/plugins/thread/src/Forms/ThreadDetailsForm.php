@@ -45,8 +45,6 @@ class ThreadDetailsForm extends FormAbstract
         $plus_sku = @$selectedPluCat->sku;
       }
 
-      //dd($fits);
-      //dd($comments);
         $this->formHelper->addCustomField('threadDetails', ThreadDetails::class);
         $this->formHelper->addCustomField('threadVariations', ThreadVariations::class);
         $this->formHelper->addCustomField('CommentBox', CommentBox::class);

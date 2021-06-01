@@ -188,6 +188,7 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
+
         $condition = [];
         $meta_condition = [];
         if ($request->input('order_id') && $request->input('order_id') > 0) {
@@ -430,7 +431,6 @@ class OrderController extends BaseController
 
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
-
 
 
     /**
@@ -1781,32 +1781,32 @@ class OrderController extends BaseController
                     $demandQty = $orderProduct->qty;
                     //if ($product->quantity >= $demandQty) {
 
-                        $where = ['order_id' => $orderId, 'product_id' => $product->id];
-                        $data = $where;
-                        if ($demandQty == 1) {
-                            $data['is_verified'] = 1;
-                        }
-                        $data['qty'] = 1;
-                        $data['created_by'] = auth()->user()->id;
+                    $where = ['order_id' => $orderId, 'product_id' => $product->id];
+                    $data = $where;
+                    if ($demandQty == 1) {
+                        $data['is_verified'] = 1;
+                    }
+                    $data['qty'] = 1;
+                    $data['created_by'] = auth()->user()->id;
 
-                        $check = OrderProductShipmentVerify::where($where)->first();
-                        if (!$check) {
-                            OrderProductShipmentVerify::create($data);
+                    $check = OrderProductShipmentVerify::where($where)->first();
+                    if (!$check) {
+                        OrderProductShipmentVerify::create($data);
+                    } else {
+                        if ($demandQty == $check->qty) {
+                            $data['qty'] = $demandQty;
+                            $data['is_verified'] = 1;
+                            OrderProductShipmentVerify::where($where)->update($data);
                         } else {
-                            if ($demandQty == $check->qty) {
-                                $data['qty'] = $demandQty;
+                            $data['qty'] = $check->qty + 1;
+                            if ($demandQty == $data['qty']) {
                                 $data['is_verified'] = 1;
-                                OrderProductShipmentVerify::where($where)->update($data);
-                            } else {
-                                $data['qty'] = $check->qty + 1;
-                                if ($demandQty == $data['qty']) {
-                                    $data['is_verified'] = 1;
-                                }
-                                OrderProductShipmentVerify::where($where)->update($data);
                             }
+                            OrderProductShipmentVerify::where($where)->update($data);
                         }
-                        // return redirect()->back();
-                        return response()->json(['status' => 'success'], 200);
+                    }
+                    // return redirect()->back();
+                    return response()->json(['status' => 'success'], 200);
                     /*} else {
                         // return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in ordered Qty!');
                         return response()->json(['status' => 'error', 'message' => $product->sku . ' is not available in ordered Qty!'], 406);
@@ -1821,7 +1821,7 @@ class OrderController extends BaseController
             }
         } else {
             // return $response->setCode(406)->setError()->setMessage('This barcode '. $barcode . ' is not available!');
-            return response()->json(['status' => 'error', 'message' => 'This barcode '. $barcode . ' is not available!'], 406);
+            return response()->json(['status' => 'error', 'message' => 'This barcode ' . $barcode . ' is not available!'], 406);
         }
     }
 

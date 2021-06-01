@@ -834,6 +834,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1209,7 +1210,8 @@ __webpack_require__.r(__webpack_exports__);
         note: this.note,
         order_type: this.order_type,
         amount: this.child_sub_amount,
-        customer_address: this.child_customer_address
+        customer_address: this.child_customer_address,
+        order_card: $("select.card_list option:selected").val()
       }).then(function (res) {
         var data = res.data.data;
 

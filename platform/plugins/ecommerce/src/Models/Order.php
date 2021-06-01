@@ -71,6 +71,7 @@ class Order extends BaseModel
         'order_type',
         'editing_by',
         'editing_started_at',
+        'order_card',
     ];
 
     /**

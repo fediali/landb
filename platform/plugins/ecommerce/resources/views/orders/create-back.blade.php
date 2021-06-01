@@ -12,14 +12,6 @@
     <div class="card-area wrapper-content mb20">
         <div>
             <div class="wrapper-content bg-gray-white mb20">
-                <!--<div class="row m-0 pt-4 bg-white">
-                    <div class="col-lg-12 ">
-                        <span class="mb-2">Card</span>
-                        <select class="ui-select">
-                            <option value="">Select Card</option>
-                        </select>
-                    </div>
-                </div>-->
                 <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse"
                         data-target="#demo">
                     Credit Card
@@ -28,8 +20,8 @@
                     <div class="card_fields">
                         <div class="row group m-0 pt-4 ">
                             <label class="col-lg-12 ">
-                                <span class="mb-2">Billing Address</span>
-                                {!!Form::select('card_list', [1,2], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
+                                <span class="mb-2">Credit Card</span>
+                                {!!Form::select('order_card', ['No Credit Card Found'], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
                             </label>
                         </div>
                         <div class="row group m-0 pt-4 ">
