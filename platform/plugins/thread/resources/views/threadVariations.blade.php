@@ -8,7 +8,7 @@ $variations = $options['data']['variations'];
 
     @if($thread->is_pieces)
         <div class="col-md-12">
-            
+
             <div class="row">
             <div class="col-md-12">
                 <div class="order-box">
@@ -283,6 +283,7 @@ $variations = $options['data']['variations'];
                                            data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
                                             <i class="fa fa-paper-plane"></i>
                                         </a>
+
                                         <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
                                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                     </div>
