@@ -8,6 +8,7 @@ use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Thread\Models\Thread;
+use Illuminate\Database\Eloquent\Builder;
 
 class Threadvariationsamples extends BaseModel
 {
@@ -39,6 +40,18 @@ class Threadvariationsamples extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (isset(auth()->user()->roles[0])) {
+                if (auth()->user()->roles[0]->slug == 'photographer') {
+                    $query->where('photographer_id', auth()->user()->id);
+                }
+            }
+        });
+    }
 
     public function photographer()
     {

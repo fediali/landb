@@ -22,6 +22,11 @@ Route::group(['namespace' => 'Botble\Threadvariationsamples\Http\Controllers', '
                 'uses'       => 'ThreadvariationsamplesController@uploadSampleMedia',
                 'permission' => 'threadvariationsamples.index',
             ]);
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'ThreadvariationsamplesController@changeStatus',
+                'permission' => 'threadvariationsamples.create',
+            ]);
         });
     });
 

@@ -75,7 +75,8 @@ class ThreadvariationsamplesTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                // return $item->status->toHtml();
+                return view('plugins/threadvariationsamples::sampleStatus', ['item' => $item])->render();
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -160,6 +161,18 @@ class ThreadvariationsamplesTable extends TableAbstract
         // $buttons = $this->addCreateButton(route('threadvariationsamples.create'), 'threadvariationsamples.create');
         $buttons = [];
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Threadvariationsamples::class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Threadvariationsamples::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**

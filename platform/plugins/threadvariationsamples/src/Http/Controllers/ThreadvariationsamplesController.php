@@ -65,6 +65,7 @@ class ThreadvariationsamplesController extends BaseController
         $requestData = $request->input();
         $requestData['created_by'] = auth()->user()->id;
         $requestData['updated_by'] = auth()->user()->id;
+        $requestData['status'] = 'not_return';
         $threadvariationsamples = $this->threadvariationsamplesRepository->createOrUpdate($requestData);
 
         event(new CreatedContentEvent(THREADVARIATIONSAMPLES_MODULE_SCREEN_NAME, $request, $threadvariationsamples));
@@ -174,6 +175,18 @@ class ThreadvariationsamplesController extends BaseController
             ThreadVariationSampleMedia::create(['thread_variation_sample_id' => $id, 'media' => 'storage/sample_media_files/' . $spec_file_name]);
         }
         return $response->setMessage('Media Uploaded Successfully!');
+    }
+
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $threadvariationsample = $this->threadvariationsamplesRepository->findOrFail($request->input('pk'));
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+        $threadvariationsample->fill($requestData);
+
+        event(new UpdatedContentEvent(THREADVARIATIONSAMPLES_MODULE_SCREEN_NAME, $request, $threadvariationsample));
+        $this->threadvariationsamplesRepository->createOrUpdate($threadvariationsample);
+        return $response;
     }
 
 }
