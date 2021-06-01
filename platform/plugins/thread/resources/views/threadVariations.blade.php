@@ -41,6 +41,7 @@ $variations = $options['data']['variations'];
             <div class="box-body">
                 <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
                    data-target="#add_variation"> Add Variation</a><br>
+                <div class="table-responsive">
                 <table class="table" id="thread-variations">
                     <thead>
                     <tr>
@@ -102,6 +103,8 @@ $variations = $options['data']['variations'];
 
                     </tbody>
                 </table>
+                </div>
+                
             </div>
             <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
@@ -227,7 +230,8 @@ $variations = $options['data']['variations'];
         @else
             <div class="box-body">
                 <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
-                <table class="table" id="thread-variations">
+               <div class="table-responsive">
+               <table class="table" id="thread-variations">
                     <thead>
                     <tr>
                         <th scope="col">Thread</th>
@@ -293,6 +297,8 @@ $variations = $options['data']['variations'];
 
                     </tbody>
                 </table>
+               </div>
+               
             </div>
             <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
                 <div class="modal-dialog modal-lg">

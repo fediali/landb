@@ -13,7 +13,7 @@
                     <div class="timeline-img"></div>
                     <div class="timeline-content timeline-card js--fadeInRight">
                         <div class="date">{{ date('d/m/Y, h:m A', strtotime($history->created_at)) }}</div>
-                        <h5 class="mt-3 ml-3">{{ str_replace('_', ' ', strtoupper($history->reference)) }}</h5>
+                        <h5 class="mt-3 pt-3 ml-3">{{ str_replace('_', ' ', strtoupper($history->reference)) }}</h5>
                         <div class="row">
                             @if(!empty($history->thread_order_id))
                                 <div class="col-lg-7"><p>Thread Order #{{ @$history->thread_order->order_no }}</p></div>

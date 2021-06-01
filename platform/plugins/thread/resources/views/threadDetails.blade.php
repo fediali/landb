@@ -736,11 +736,12 @@
     .widget.meta-boxes.form-actions.form-actions-default.action-horizontal {
         display: none;
     }
-
+ 
+    @media screen and (min-width: 992px) and (max-width: 2500px) { 
     .main-form {
         width: 135% !important;
     }
-
+}
 
     .mySlides1, .mySlides2 {
         display: none
