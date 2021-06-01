@@ -315,6 +315,15 @@ if (!function_exists('get_private_customers')) {
     }
 }
 
+if (!function_exists('get_photographers')) {
+    function get_photographers()
+    {
+        return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
+            ->join('roles', 'role_users.role_id', 'roles.id')
+            ->where('roles.slug', 'photographer')
+            ->pluck('users.username', 'users.id')->all();
+    }
+}
 //Get User By Roles
 
 

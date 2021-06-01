@@ -3,12 +3,10 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-toggle="tab" href="#home">Details
-        </button>
+        <button class="nav-link active" id="home-tab" data-toggle="tab" href="#home">Details</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" data-toggle="tab" href="#ppsample">PP Sample
-        </button>
+        <button class="nav-link" data-toggle="tab" href="#ppsample">PP Sample</button>
     </li>
     <li class="nav-item" role="presentation">
         <a class="nav-link" href="{{route('thread.edit', $thread->id)}}">Edit</a>
@@ -674,7 +672,6 @@
         <div class="p-3">
             <div class="">
                 @foreach($variations as $pp_sample)
-
                     <div class="row">
                         <div class="col-lg-12 ">
                             <h6 class="mb-1 thread-head"> THREAD VARIATIONS ({{@$pp_sample->name}}) </h6>
@@ -689,11 +686,9 @@
                                  height="250" width="120"
                                  style="object-fit: cover">
                         </div>
-
                         <div class="col-lg-8 mb-3">
                             @foreach($pp_sample->ppSample as $sample)
                                 <div class="row">
-
                                     <div class="col-lg-3 mt-3">
                                         <p class="m-0 heading">Receive Date</p>
                                         <p>{{date('M-d ,Y', strtotime($sample->receive_date))}}</p>
@@ -706,12 +701,16 @@
                                         <p class="m-0 heading">Status</p>
                                         <p>{{@$sample->status}}</p>
                                     </div>
-
+                                    {{--<div class="col-lg-3 mt-3">--}}
+                                    {{--    <p class="m-0 heading">image</p>--}}
+                                    {{--    <p>Vendor</p>--}}
+                                    {{--</div>--}}
                                 </div>
                             @endforeach
+                            <a data-toggle="modal" data-target="#thVarSampleModal" class="btn btn-primary btn-sm thVarSampleModal" data-var-id="{{$variation->id}}">
+                                <i class="fa fa-paper-plane"></i>
+                            </a>
                         </div>
-
-
                     </div>
                 @endforeach
             </div>
@@ -719,7 +718,51 @@
     </div>
 </div>
 
+<div class="modal fade in" id="thVarSampleModal" style="display: none; padding-right: 17px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex w-100">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">
+                        Thread Variation Sample
+                        <span class="variation-name"></span>
+                    </h4>
+                    <div></div>
+                </div>
+            </div>
+            <form method="post" action="{{route('threadvariationsamples.create')}}">
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="thread_id" class="th_id" value="{{$thread->id}}">
+                    <input type="hidden" name="thread_variation_id" class="th_var_id" value="">
+                    <div class="mt-3">
+                        <label class="font-bold">Select Date:</label>
+                        <input type="date" name="assign_date" class="form-control assign_date" required>
+                    </div>
+                    <div class="mt-3">
+                        <label class="font-bold">Select Photographer:</label>
+                        <select name="photographer_id" class="form-control photographer_id" required>
+                            <option value="" disabled selected>Select Photographer</option>
+                            @foreach($options['data']['photographers'] as $id => $name)
+                                <option value="{{$id}}">{{$name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary th_var_sample_submit" value="Submit">
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+
 <style>
 
     .col-md-3.right-sidebar {
@@ -733,8 +776,8 @@
     .widget.meta-boxes.form-actions.form-actions-default.action-horizontal {
         display: none;
     }
- 
-    @media screen and (min-width: 992px) and (max-width: 2500px) { 
+
+    @media screen and (min-width: 992px) and (max-width: 2500px) {
     .main-form {
         width: 135% !important;
     }
@@ -863,10 +906,9 @@
     /* IMAGE SLIDER VIEWER CSS */
 </style>
 
-
 <script>
     var slideIndex = [1, 1];
-    var slideId = ["mySlides1", "mySlides2"]
+    var slideId = ["mySlides1", "mySlides2"];
     showSlides(1, 0);
     showSlides(1, 1);
 
@@ -892,6 +934,7 @@
 
 <script>
     $(document).ready(function () {
+
         $(".images img").click(function () {
             $("#full-image").attr("src", $(this).attr("src"));
             $('#image-viewer').show();
@@ -902,7 +945,6 @@
         });
 
         $("#thread_status").on('change', function () {
-
             $.ajax({
                 url: '{{ route('thread.changeStatus') }}',
                 type: 'post',
@@ -936,8 +978,34 @@
                     toastr['warning']('Notification Unreadable', 'Reading Error');
                 }
             });
-        })
+        });
+
+        $(document).on('click', 'a.thVarSampleModal', function () {
+            $('input.th_var_id').val($(this).data('var-id'));
+        });
+
+        $(document).on('click', 'input.th_var_sample_submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{ route('threadvariationsamples.create') }}',
+                type: 'post',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'thread_id': $('input.th_id').val(),
+                    'thread_variation_id': $('input.th_var_id').val(),
+                    'assign_date': $('input.assign_date').val(),
+                    'photographer_id': $('select.photographer_id').val(),
+                },
+                success: function (data) {
+                    toastr['success']('Successfully Added', 'Success');
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('Something went wrong', 'Error');
+                    location.reload();
+                }
+            });
+        });
+
     });
-
 </script>
-

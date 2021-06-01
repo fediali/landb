@@ -1,0 +1,9 @@
+{
+    "name": "Threadvariationsamples",
+    "namespace": "Botble\\Threadvariationsamples\\",
+    "provider": "Botble\\Threadvariationsamples\\Providers\\ThreadvariationsamplesServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module threadvariationsamples"
+}

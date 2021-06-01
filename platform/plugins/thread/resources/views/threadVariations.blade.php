@@ -596,24 +596,22 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head">Add Variation Trim <span
-                            class="variation-name"></span></h4>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">Add Variation Trim
+                        <span class="variation-name"></span>
+                    </h4>
                     <div></div>
                 </div>
             </div>
             <div class="modal-body">
                 <form>
                     <div>
-                        <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id"
-                               type="hidden">
+                        <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
                         <label class="font-bold">Trim Note:</label>
-                        <input class="form-control" placeholder="Enter Trim Note" name="trim_note" type="text"
-                               id="variation_trim_note">
+                        <input class="form-control" placeholder="Enter Trim Note" name="trim_note" type="text" id="variation_trim_note">
                     </div>
                     <div>
                         <label class="font-bold">Trim Image:</label>
-                        <input class="form-control" name="trim_image" type="file"
-                               id="variation_trim_image">
+                        <input class="form-control" name="trim_image" type="file" id="variation_trim_image">
                     </div>
                 </form>
             </div>
