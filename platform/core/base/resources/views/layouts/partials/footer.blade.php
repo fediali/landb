@@ -159,7 +159,7 @@
                 getbillingadress();
                 getCustomer();
                 getCards();
-            }, 2000);
+            }, 500);
         }
 
     });
@@ -219,6 +219,16 @@
             }
         });
     }
+
+    $('.card_list').on('change', function () {
+        var card = $("select.card_list option:selected").val();
+        $('.payment_id').val(card);
+        if (card == 0) {
+            $('.add_card').show();
+        } else {
+            $('.add_card').hide();
+        }
+    })
 
     fattJs.on('card_form_incomplete', (message) => {
         // deactivate pay button

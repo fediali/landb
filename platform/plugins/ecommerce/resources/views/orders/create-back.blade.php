@@ -24,7 +24,7 @@
                         data-target="#demo">
                     Credit Card
                 </button>
-                <div id="demo" class="add_card bg-white collapse in">
+                <div id="demo" class="bg-white collapse in">
                     <div class="card_fields">
                         <div class="row group m-0 pt-4 ">
                             <label class="col-lg-12 ">
@@ -42,42 +42,50 @@
 
                             </label>
                         </div>
-                        <div class="group row m-0">
-                            <label class="col-lg-12">
-                                <div id="card-element" class="field">
-                                    <span>Card</span>
-                                    <div id="fattjs-number" style="height: 35px"></div>
-                                    <span class="mt-2">CVV</span>
-                                    <div id="fattjs-cvv" style="height: 35px"></div>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="row m-0">
-                            <div class="col-lg-3">
-                                <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
-                            </div>
-                            <p class="mt-2"> / </p>
-                            <div class="col-lg-3">
-                                <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
-                            </div>
-                        </div>
-                        <div class="row m-0">
-                            <div class="col-lg-6">
-                                <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
-                            </div>
-                        </div>
-                        <div class="row m-0">
-                            <div class="col-lg-12">
-                                <div class="outcome">
-                                    <div class="error"></div>
-                                    <div class="success">
-                                        Successful! The ID is
-                                        <span class="token"></span>
+                        <div class="add_card">
+                            <div class="group row m-0">
+                                <label class="col-lg-12">
+                                    <div id="card-element" class="field">
+                                        <span>Card</span>
+                                        <div id="fattjs-number" style="height: 35px"></div>
+                                        <span class="mt-2">CVV</span>
+                                        <div id="fattjs-cvv" style="height: 35px"></div>
                                     </div>
-                                    <div class="loader" style="margin: auto"></div>
+                                </label>
+                            </div>
+
+                            <div class="row m-0">
+                                <div class="col-lg-3">
+                                    <input name="month" size="3" maxlength="2" placeholder="MM"
+                                           class="form-control month">
+                                </div>
+                                <p class="mt-2"> / </p>
+                                <div class="col-lg-3">
+                                    <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                           class="form-control year">
                                 </div>
                             </div>
+                            <div class="row m-0">
+                                <div class="col-lg-6">
+                                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                                </div>
+                            </div>
+                            <div class="row m-0">
+                                <div class="col-lg-12">
+                                    <div class="outcome">
+                                        <div class="error"></div>
+                                        <div class="success">
+                                            Successful! The ID is
+                                            <span class="token"></span>
+                                        </div>
+                                        <div class="loader" style="margin: auto"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+
                     </div>
                     <span class="card_customer_select">Please Select Customer First</span>
                 </div>
