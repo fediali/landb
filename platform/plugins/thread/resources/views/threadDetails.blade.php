@@ -706,10 +706,7 @@
                                         <p class="m-0 heading">Status</p>
                                         <p>{{@$sample->status}}</p>
                                     </div>
-                                    {{--                                <div class="col-lg-3 mt-3">--}}
-                                    {{--                                    <p class="m-0 heading">image</p>--}}
-                                    {{--                                    <p>Vendor</p>--}}
-                                    {{--                                </div>--}}
+
                                 </div>
                             @endforeach
                         </div>
