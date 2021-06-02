@@ -122,6 +122,8 @@
                             <option value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
                         @endforeach
                     </select>
+
+                    <a class="btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View All Orders</a>
                 </div>
 
             </div>

@@ -12,6 +12,7 @@ use EcommerceHelper;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use Html;
 
 class OrderTable extends TableAbstract
 {
@@ -74,7 +75,8 @@ class OrderTable extends TableAbstract
                 return format_price($item->shipping_amount, $item->currency_id);
             })
             ->editColumn('user_id', function ($item) {
-                return $item->user->name ?? $item->address->name;
+                // return $item->user->name ?? $item->address->name;
+                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -128,6 +130,11 @@ class OrderTable extends TableAbstract
 
         $order_type = $this->request()->input('order_type',false);
         $product_id = $this->request()->input('product_id',false);
+        $user_id = $this->request()->input('user_id',false);
+
+        if ($user_id) {
+            $query->where('ec_orders.user_id', $user_id);
+        }
         if ($order_type && in_array($order_type, [Order::NORMAL, Order::PRE_ORDER])) {
             $query->where('ec_orders.order_type', $order_type);
         }
