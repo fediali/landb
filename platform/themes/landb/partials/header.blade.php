@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
     <script src="{{ asset('js/barcodeScanner.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">
+    <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
     <title>LandBAppreal</title>
     <style>
         .loading-overlay {

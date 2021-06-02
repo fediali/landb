@@ -1656,6 +1656,7 @@ input.qtyminus {
     font-size: 16px;
     border: none;
     padding: 12px;
+    text-transform: capitalize;
     border-radius: 0px !important;
     line-height: 19px;
     text-align: center;
@@ -1680,6 +1681,7 @@ input.qtyminus {
     line-height: 19px;
     text-align: center;
     color: #000000;
+    text-transform: capitalize;
     border: 1px solid #000;
 }
 
@@ -3397,7 +3399,7 @@ nav.main-nav .nav-col {
   .container-timeline .date {
     position: absolute;
     display: inline-block;
-    top: calc(50% - 8px);
+    top: calc(50% - 22px);
     text-align: center;
     font-size: 14px;
     font-weight: bold;
@@ -3408,11 +3410,28 @@ nav.main-nav .nav-col {
   }
   
   .container-timeline.left .date {
-    right: -75px;
+    right: -590px;
+    width: 100%;
   }
-  
+  .container-timeline.left .date .timeline-addbtn{
+    width: 85%;
+  }
+  .container-timeline.left .date .timeline-callbtn{
+    width: 85%;
+    margin-left: 64px !IMPORTANT;
+    MARGIN-TOP: 10PX;
+  }
+  .container-timeline.right .date .timeline-addbtn{
+    width: 85%;
+  }
+  .container-timeline.right .date .timeline-callbtn{
+    width: 85%; 
+    MARGIN-TOP: 10PX;
+    margin-left: -60px;
+  }
   .container-timeline.right .date {
-    left: -75px;
+    left: -590px;
+    width: 100%;
   }
   
   .container-timeline .icon {
@@ -3468,12 +3487,12 @@ nav.main-nav .nav-col {
   
   @media (max-width: 767.98px) {
     .timeline::after {
-      left: 90px;
+      left: 23px;
     }
   
     .container-timeline {
       width: 100%;
-      padding-left: 120px;
+      padding-left: 40px;
       padding-right: 30px;
     }
   
@@ -3483,12 +3502,12 @@ nav.main-nav .nav-col {
   
     .container-timeline.left::after, 
     .container-timeline.right::after {
-      left: 82px;
+      left: 15px;
     }
   
     .container-timeline.left::before,
     .container-timeline.right::before {
-      left: 100px;
+      left: 30px;
       border-color: transparent #006E51 transparent transparent;
     }
   
@@ -3501,7 +3520,7 @@ nav.main-nav .nav-col {
     .container-timeline.left .icon,
     .container-timeline.right .icon {
       right: auto;
-      left: 146px;
+      left: 78px;
     }
   
     .container-timeline.left .content,
@@ -3511,9 +3530,42 @@ nav.main-nav .nav-col {
 
     }
   }
+  
+@media screen and (min-width: 320px) and (max-width: 991px) {
+    .container-timeline.left .date { 
+        width: 100%;
+    }
+    .container-timeline.right .date { 
+        width: 100%;
+    }
+    .container-timeline .date {
+        position: initial;
+    }
+    .container-timeline.left .date .timeline-addbtn{
+        width: 100%;
+        margin-left: 0px !important;
+    } 
+      .container-timeline.left .date .timeline-callbtn{
+        width: 100%; 
+        margin-left: 0px !important;
+      }
+      .container-timeline.right .date .timeline-addbtn{
+        width: 100%;
+      }
+      .container-timeline.right .date .timeline-callbtn{
+        width: 100%;  
+        margin-left: 0px !important;
+      }
+      .mobile-date {
+          display: block !important;
+      }
+      .mobile-display-none {
+          display: none;
+      }
+}
 /************* TIMELINE CSS END *************/
 
-@media screen and (min-device-width: 320px) and (max-device-width: 991px) and (orientation : landscape){
+@media screen and (min-width: 320px) and (max-width: 991px) and (orientation : landscape){
     .navbar-parent ul{
         margin: auto !important;
     }
@@ -3528,3 +3580,44 @@ nav.main-nav .nav-col {
     border-bottom: 1px solid #ddd;
     padding-bottom: 20px;
 }
+
+
+/************** CALENDER CSS START****************/
+.btn-calender {
+    background: #000;
+    border: 1px solid #EDEDED;
+    box-sizing: border-box;
+    border-radius: 0px;
+    width: 100%;
+    color: #fff;
+    height: 50px;
+}
+ 
+#Datepickk .d-table{
+    display: contents !important;
+} 
+
+#Datepickk .d-calendar {
+    max-height: 430px !important;
+}
+
+#Datepickk .d-week {
+    background-color: #4975ff !important;
+}
+
+.d-week p {
+    color:#fff !important;
+}
+
+#Datepickk .d-header i#d-previous:after {
+    border-right: 7px solid #000000 !important; 
+}
+
+#Datepickk .d-header i#d-next:after {
+    border-left: 7px solid #000000 !important; 
+}
+
+#Datepickk .d-header { 
+    background-color: #000000 !important; 
+}
+/************** CALENDER END START****************/
