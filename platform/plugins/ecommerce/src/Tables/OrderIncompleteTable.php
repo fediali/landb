@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Tables;
 
 use BaseHelper;
+use Botble\Ecommerce\Models\Order;
 
 class OrderIncompleteTable extends OrderTable
 {
@@ -146,5 +147,17 @@ class OrderIncompleteTable extends OrderTable
     public function buttons()
     {
         return [];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Order::where('ec_orders.is_finished', 0)->all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 }

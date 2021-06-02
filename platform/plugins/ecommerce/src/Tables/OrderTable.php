@@ -78,6 +78,9 @@ class OrderTable extends TableAbstract
                 // return $item->user->name ?? $item->address->name;
                 return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
+            ->editColumn('salesperson_id', function ($item) {
+                return 'N/A';
+            })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             });
@@ -121,6 +124,7 @@ class OrderTable extends TableAbstract
             'ec_orders.currency_id',
             'ec_orders.shipping_amount',
             'ec_orders.payment_id',
+            'ec_orders.salesperson_id',
         ];
 
         $query = $model
@@ -164,6 +168,11 @@ class OrderTable extends TableAbstract
             'user_id' => [
                 'name'  => 'ec_orders.user_id',
                 'title' => trans('plugins/ecommerce::order.customer_label'),
+                'class' => 'text-left',
+            ],
+            'salesperson_id' => [
+                'name'  => 'ec_orders.salesperson_id',
+                'title' => 'Salesperson',
                 'class' => 'text-left',
             ],
             'amount'  => [
