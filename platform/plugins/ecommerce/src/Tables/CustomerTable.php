@@ -8,7 +8,9 @@ use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 use Yajra\DataTables\DataTables;
 
 class CustomerTable extends TableAbstract
@@ -21,7 +23,18 @@ class CustomerTable extends TableAbstract
     /**
      * @var bool
      */
-    protected $hasFilter = true;
+    protected $hasFilter = false;
+
+    /**
+     * @var bool
+     */
+    public $hasCustomFilter = true;
+
+    /**
+     * @var string
+     */
+    protected $customFilterTemplate = 'plugins/ecommerce::customers.filter';
+
 
     /**
      * CustomerTable constructor.
@@ -93,6 +106,20 @@ class CustomerTable extends TableAbstract
 
         $query = $model->select($select);
 
+        $from_date = Carbon::now()->format('Y-m-d');
+        $to_date = Carbon::now()->format('Y-m-d');
+        $request = request();
+        if ($request->has('report_type')) {
+            $report_type = (int) $request->input('report_type');
+            if ($report_type) {
+                $from_date = Carbon::now()->subDays($report_type)->format('Y-m-d');
+                $to_date = Carbon::now()->format('Y-m-d');
+            }
+        }
+
+        $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "'.$from_date.'" AND DATE(ec_orders.created_at) <= "'.$to_date.'") AS order_count');
+        //$query = $query->orderBy('order_count', 'DESC');
+
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -121,6 +148,11 @@ class CustomerTable extends TableAbstract
             'is_private'      => [
                 'name'  => 'ec_customers.is_private',
                 'title' => 'Is Private',
+                'class' => 'text-left',
+            ],
+            'order_count'      => [
+                'name'  => 'order_count',
+                'title' => 'Order Count',
                 'class' => 'text-left',
             ],
             'created_at' => [
@@ -156,7 +188,7 @@ class CustomerTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'ec_customers.name'       => [
+            /*'ec_customers.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
@@ -169,7 +201,7 @@ class CustomerTable extends TableAbstract
             'ec_customers.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 
@@ -196,5 +228,29 @@ class CustomerTable extends TableAbstract
             'export',
             'reload',
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasCustomFilter(): bool
+    {
+        return $this->hasCustomFilter;
+    }
+
+    /**
+     * @return string
+     * @throws Throwable
+     */
+    public function renderCustomFilter(): string
+    {
+        $report_types = [
+            7 => 'Weekly',
+            15 => 'Bi-Weekly',
+            30 => 'Monthly',
+            120 => 'Quarterly',
+            180 => 'Six Month',
+        ];
+        return view($this->customFilterTemplate, compact('report_types'))->render();
     }
 }
