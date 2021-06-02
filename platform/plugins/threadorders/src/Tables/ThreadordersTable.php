@@ -63,6 +63,9 @@ class ThreadordersTable extends TableAbstract
                 // return $item->status->toHtml();
                 return view('plugins/threadorders::threadOrderStatus', ['item' => $item])->render();
             })
+            ->editColumn('sku', function ($item) {
+                return @$item->thread->regular_product_categories[0]->pivot->sku;
+            })
             ->editColumn('ecommerce', function ($item) {
                 if ($item->status == 'completed') {
                     if ($item->thread_order_has_pushed) {
@@ -142,6 +145,11 @@ class ThreadordersTable extends TableAbstract
                 'title' => 'Thread ID',
                 'width' => '20px',
 
+            ],
+            'sku'          => [
+                'name'  => 'threadorders.thread.categories_threads.sku',
+                'title' => 'SKU',
+                'class' => 'text-left',
             ],
             'name'         => [
                 'name'  => 'threadorders.name',
