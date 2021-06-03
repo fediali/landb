@@ -331,3 +331,96 @@
     }
 
 </script>
+
+
+{{--CUSTOMER ADDRESS MODAL--}}
+<script>
+  $(document).ready(function () {
+    $('.address-country').on('change', function () {
+      get_states($('select[name="address_state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
+
+    $('.toggle-edit-address').on('click', function (e) {
+      var data = $(this).data('row');
+
+      $('input[name=address_id]').val(data.id);
+      $('input[name=address_first_name]').val(data.first_name);
+      $('input[name=address_last_name]').val(data.last_name);
+      $('input[name=address_company]').val(data.company);
+      $('input[name=address_phone]').val(data.phone);
+      $('input[name=address_address]').val(data.address);
+      $('input[name=address_city]').val(data.city);
+      $('input[name=address_zip_code]').val(data.zip_code);
+
+      get_countries($('select[name="address_country"]'), data.country);
+      get_states($('select[name="address_state"]'), data.country, data.state);
+
+
+      $('#edit_address').modal('toggle');
+      console.log(data);
+    });
+
+    $('#address_form').on('submit', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'post',
+        url: '{{ route('customers.update-customer-address') }}',
+        data: $(this).serialize(),
+        success: function (result) {
+          toastr['success']('Success', 'Address updated successfully', result.message);
+          $('#edit_address').modal('toggle');
+          location.reload();
+        },
+        error: function(){
+          toastr['error']('Error!', 'Server Error');
+        }
+      });
+
+    });
+  });
+  function get_states(thiss, country, old){
+    $.ajax({
+      type: 'GET',
+      url: '{{ URL::to('ajax/get_states') }}',
+      data: {
+        'country' : country
+      },
+      beforeSend: function () {
+      },
+
+      success: function (result) {
+        thiss.find('option').remove();
+        jQuery.each(result, function (index, state) {
+          if(index === old){
+            thiss.append(new Option(state, index, null, true));
+          }else{
+            thiss.append(new Option(state, index));
+          }
+        });
+      },
+      error: function (e) {
+      }
+    })
+  }
+  function get_countries(thiss, old){
+    $.ajax({
+      type: 'GET',
+      url: '{{ URL::to('ajax/get_countries') }}',
+      async: false,
+      success: function (result) {
+        thiss.find('option').remove();
+        jQuery.each(result, function (index, country) {
+          if(index === old){
+            console.log('old: '+ old+ " new: "+index)
+            thiss.append(new Option(country, index, null, true));
+          }else{
+            thiss.append(new Option(country, index));
+          }
+
+        });
+      },
+      error: function (e) {
+      }
+    })
+  }
+</script>

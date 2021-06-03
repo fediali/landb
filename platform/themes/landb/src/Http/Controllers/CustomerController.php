@@ -278,4 +278,8 @@ class CustomerController extends Controller
     $country = $request->input('country');
     return CountryState::getStates($country);
   }
+
+  public function getCountries(Request $request){
+    return CountryState::getCountries();
+  }
 }

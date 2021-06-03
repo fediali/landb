@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Http\Controllers\Customers;
 
 use App\Models\CardPreAuth;
+use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
@@ -378,6 +379,22 @@ class CustomerController extends BaseController
         }
         return $response->setData($cards);
 
+    }
+
+    public function updateCustomerAddress(Request $request){
+      $data = $request->all();
+      $newData = array();
+      foreach ($data as $key => $value){
+        $newData[str_replace('address_', '', $key)] = $value;
+      }
+      $id = $newData['id'];
+      unset($newData['id']);
+      $update = CustomerAddress::updateOrCreate(['id' => $id], $newData);
+      if($update){
+        return response()->json(['message' => 'Address updated successfully'], 200);
+      }else{
+        return response()->json(['message' => 'Server Error'], 500);
+      }
     }
 
 }

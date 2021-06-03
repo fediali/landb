@@ -74,6 +74,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@postCustomerCard',
                 'permission' => 'customers.create',
             ]);
+            Route::post('update-customer-address', [
+                'as'         => 'update-customer-address',
+                'uses'       => 'CustomerController@updateCustomerAddress',
+                'permission' => 'customers.create',
+            ]);
         });
     });
 });

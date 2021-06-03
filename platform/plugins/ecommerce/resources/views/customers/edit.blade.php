@@ -405,9 +405,11 @@
                                 <td>{{$row->zip_code}}</td>
                                 <td>{{$row->country}}</td>
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
-                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
-
-                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                <td>
+                                    <a data-row="{{ $row }}" class="toggle-edit-address"><i class="fa fa-edit"></i></a>
+                                    &nbsp;
+                                    <a><i class="fa fa-trash"></i></a>
+                                </td>
                             </tr>
                         @endforeach
 
@@ -473,95 +475,89 @@
                         <div></div>
                     </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">Full
-                                        Name</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="Full Name" data-counter="120"
-                                       name="name" type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">Email</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="Email" data-counter="120" name="name"
-                                       type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">Phone</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="Phone" data-counter="120" name="name"
-                                       type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">Country</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="Country" data-counter="120"
-                                       name="name" type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">State</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="State" data-counter="120" name="name"
-                                       type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">City</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="City" data-counter="120" name="name"
-                                       type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="name" class="control-label required" aria-required="true"> <label for="name"
-                                                                                                              class="control-label"
-                                                                                                              aria-required="true">Address</label>
-                                </label>
-                                <input class="form-control is-valid" placeholder="Address" data-counter="120"
-                                       name="name" type="text" value="asdas" id="name" aria-invalid="false"
-                                       aria-describedby="name-error">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <button type="submit" name="submit" value="save" class="btn btn-info w-100 mb-4">
-                                <i class="fa fa-save"></i> Save
-                            </button>
-                        </div>
+                <form id="address_form">
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="address_id" value="">
+                            <div class="col-lg-6">
+                                <p class="textbox-label">First Name</p>
+                                <input class="input-textbox form-control @error('address_first_name') is-invalid @enderror" type="text" name="address_first_name" value=""/>
 
-
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Last Name</p>
+                                <input class="input-textbox form-control @error('address_last_name') is-invalid @enderror" type="text"  name="address_last_name" value=""/>
+                                @error('address_last_name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Company Name</p>
+                                <input class="input-textbox form-control @error('address_company') is-invalid @enderror" type="text"  name="address_company" value="{{ old('address_company',@$customer->addresses[0]->company) }}"/>
+                                @error('address_company')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Mobile</p>
+                                <input class="input-textbox form-control @error('address_phone') is-invalid @enderror" type="text"  name="address_phone" value="{{ old('address_phone',@$customer->addresses[0]->phone) }}"/>
+                                @error('address_phone')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-12">
+                                <p class="textbox-label">Address</p>
+                                <input class="input-textbox form-control @error('address_address') is-invalid @enderror" type="text"  name="address_address" value="{{ old('address_address',@$customer->addresses[0]->address) }}"/>
+                                @error('address_address')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">City</p>
+                                <input class="input-textbox form-control @error('address_city') is-invalid @enderror" type="text"  name="address_city" value="{{ old('address_city',@$customer->addresses[0]->city) }}"/>
+                                @error('address_city')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Country</p>
+                                {{--<select class="input-textbox">
+                                    <option></option>
+                                </select>--}}
+                                {{--<input class="input-textbox form-control @error('address_country') is-invalid @enderror" type="text"  name="address_country" value="{{ old('address_country',@$customer->addresses[0]->country) }}"/>--}}
+                                <select class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror" name="address_country">
+                                    <option selected hidden disabled>Select a Country</option>
+                                </select>
+                                @error('address_country')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">State/Province/Region</p>
+                                {{--<select class="input-textbox">
+                                    <option></option>
+                                </select>--}}
+                                {{--<input class="input-textbox form-control @error('address_state') is-invalid @enderror" type="text"  name="address_state" value="{{ old('address_state',@$customer->addresses[0]->state) }}"/>--}}
+                                <select class="input-textbox form-control  @error('address_state') is-invalid @enderror" name="address_state">
+                                    <option selected hidden disabled>Select a State</option>
+                                </select>
+                                @error('address_state')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Zip/Postal Code</p>
+                                <input class="input-textbox form-control @error('address_zip_code') is-invalid @enderror" type="text"  name="address_zip_code" value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
+                                @error('address_zip_code')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-info" type="submit" value="Update">
+                    </div>
+                </form>
             </div>
 
 
@@ -590,4 +586,5 @@
         font-size: 14px;
     }
 </style>
+
 

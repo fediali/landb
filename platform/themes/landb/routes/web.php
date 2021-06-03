@@ -109,6 +109,10 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'as'   => 'getStates',
             'uses' => 'CustomerController@getStates'
         ]);
+        Route::get('get_countries', [
+            'as'   => 'getCountries',
+            'uses' => 'CustomerController@getCountries'
+        ]);
       });
 
     });
