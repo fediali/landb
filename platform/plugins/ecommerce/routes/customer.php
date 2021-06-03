@@ -64,6 +64,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@addAddress',
                 'permission' => 'customers.create',
             ]);
+            Route::get('delete-address', [
+                'as'         => 'delete-address',
+                'uses'       => 'CustomerController@deleteAddress',
+                'permission' => 'customers.create',
+            ]);
             Route::post('create-customer-address', [
                 'as'         => 'create-customer-address',
                 'uses'       => 'CustomerController@postCustomerAddress',

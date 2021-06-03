@@ -397,4 +397,15 @@ class CustomerController extends BaseController
       }
     }
 
+    public function deleteAddress(Request $request, BaseHttpResponse $response){
+      $id = $request->get('id');
+
+      $address = CustomerAddress::find($id);
+      if($address){
+        $address->delete();
+      }
+
+      return $response->setMessage(trans('core/base::notices.delete_success_message'));
+    }
+
 }

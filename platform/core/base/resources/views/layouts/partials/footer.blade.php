@@ -340,6 +340,14 @@
       get_states($('select[name="address_state"]'), this.value, '{{ route('ajax.getStates') }}');
     });
 
+    $('.delete_address').on('click', function (e) {
+      var data = $(this).data('id');
+      var r=confirm("Are you sure you want to delete this address?");
+      if (r==true) {
+        window.location.replace('{{ route('customers.delete-address') }}'+'?id='+data);
+      }
+
+    });
     $('.toggle-edit-address').on('click', function (e) {
       var data = $(this).data('row');
 
