@@ -60,6 +60,12 @@
     var address = '';
     var customer = '';
     $(document).ready(function () {
+
+        payment_method()
+
+        $('.method').on('change', function () {
+            payment_method();
+        })
         var card = $("select.card_list option:selected").val();
         $('.payment_id').val(card);
         if (card == 0) {
@@ -88,6 +94,15 @@
             console.log(not_id);
         })
 
+        function payment_method() {
+            var payment_method = $("select.method option:selected").val();
+
+            if (payment_method == 'omni-pay') {
+                $('.card-area').show();
+            } else {
+                $('.card-area').hide();
+            }
+        }
 
     });
 

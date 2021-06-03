@@ -15,7 +15,7 @@ class PrintdesignsForm extends FormAbstract
      */
     public function buildForm()
     {
-        $designers = get_designers();
+        $designers = get_designers_for_thread();
         $designers = [0 => trans('plugins/blog::categories.none')] + $designers;
 
         $this

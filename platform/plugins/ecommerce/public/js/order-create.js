@@ -8377,7 +8377,8 @@ var render = function() {
                           expression: "payment_method"
                         }
                       ],
-                      staticClass: "form-control",
+                      staticClass: "form-control method",
+                      attrs: { name: "method" },
                       on: {
                         change: function($event) {
                           var $$selectedVal = Array.prototype.filter

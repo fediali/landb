@@ -187,7 +187,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="text-title-field">Select Payment Method</label>
-                                <select class="form-control" v-model="payment_method">
+                                <select name="method" class="form-control method" v-model="payment_method">
                                     <option value="" :disabled="true" :selected="true">Select Payment Method</option>
                                     <option v-for="(pm) in payment_methods" :value="pm.slug"
                                             :selected="pm.slug === sel_payment_method">
