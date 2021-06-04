@@ -117,6 +117,7 @@ class Order extends BaseModel
             if (isset(auth()->user()->roles[0])) {
                 if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
                     $query->where('ec_orders.salesperson_id', auth()->user()->id);
+                    $query->orWhere('ec_customers.salesperson_id', auth()->user()->id);
                 }
             }
         });

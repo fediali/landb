@@ -129,6 +129,7 @@ class OrderTable extends TableAbstract
 
         $query = $model
             ->select($select)
+            ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
 
