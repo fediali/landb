@@ -8,6 +8,7 @@ use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
+use Botble\ACL\Models\User;
 use Botble\Base\Supports\Avatar;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -45,6 +46,7 @@ class Customer extends Authenticatable
         'dob',
         'status',
         'is_private',
+        'salesperson_id',
     ];
     protected $with = [
         'detail'
@@ -213,5 +215,10 @@ class Customer extends Authenticatable
     public function card()
     {
         return $this->hasMany(CustomerCard::class, 'customer_id');
+    }
+
+    public function salesperson()
+    {
+        return $this->belongsTo(User::class, 'salesperson_id');
     }
 }

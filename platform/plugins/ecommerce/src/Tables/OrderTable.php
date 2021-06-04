@@ -79,7 +79,7 @@ class OrderTable extends TableAbstract
                 return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
             ->editColumn('salesperson_id', function ($item) {
-                return 'N/A';
+                return $item->salesperson? $item->salesperson->getFullName() : 'N/A';
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);

@@ -14,6 +14,8 @@ class CustomerForm extends FormAbstract
      */
     public function buildForm()
     {
+        $salesperson = get_salesperson();
+
         $this
             ->setupModel(new Customer)
             ->setValidatorClass(CustomerCreateRequest::class)
@@ -76,6 +78,15 @@ class CustomerForm extends FormAbstract
                     'class' => 'hrv-checkbox',
                 ],
                 'value'      => 1,
+            ])
+            ->add('salesperson_id', 'customSelect', [
+                'label'      => 'Select Salesperson',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder' => 'Select Salesperson',
+                    'class'       => 'select-search-full',
+                ],
+                'choices'    => $salesperson,
             ]);
     }
 }

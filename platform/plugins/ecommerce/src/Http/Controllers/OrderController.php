@@ -285,6 +285,8 @@ class OrderController extends BaseController
             $order->editing_by = NULL;
             $order->editing_started_at = NULL;
 
+            $order->salesperson_id = auth()->user()->id;
+
             $order->save();
 
             if ($request->input('payment_status') === PaymentStatusEnum::COMPLETED) {

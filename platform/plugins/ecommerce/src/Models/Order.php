@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\CardPreAuth;
+use Botble\ACL\Models\User;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
@@ -72,6 +73,9 @@ class Order extends BaseModel
         'editing_by',
         'editing_started_at',
         'order_card',
+        'salesperson_id',
+        'sales_commission_amount',
+        'sales_commission_percent',
     ];
 
     /**
@@ -217,6 +221,11 @@ class Order extends BaseModel
     public function preauth()
     {
         return $this->hasOne(CardPreAuth::class, 'order_id');
+    }
+
+    public function salesperson()
+    {
+        return $this->belongsTo(User::class, 'salesperson_id');
     }
 
 }

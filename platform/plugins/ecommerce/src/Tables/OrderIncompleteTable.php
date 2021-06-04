@@ -29,13 +29,20 @@ class OrderIncompleteTable extends OrderTable
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                // return $item->status->toHtml();
+                return view('plugins/ecommerce::orders/orderStatus', ['item' => $item])->render();
             })
             ->editColumn('amount', function ($item) {
                 return format_price($item->amount, $item->currency_id);
             })
             ->editColumn('user_id', function ($item) {
                 return $item->user->name ?? $item->address->name;
+            })
+            ->editColumn('phone', function ($item) {
+                return $item->user->phone ?? $item->user->phone;
+            })
+            ->editColumn('salesperson_id', function ($item) {
+                return $item->salesperson? $item->salesperson->getFullName() : 'N/A';
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -69,10 +76,14 @@ class OrderIncompleteTable extends OrderTable
             'ec_orders.created_at',
             'ec_orders.amount',
             'ec_orders.currency_id',
+            'ec_customers.phone',
+            'ec_orders.salesperson_id',
+            'ec_orders.status',
         ];
 
         $query = $model
             ->select()
+            ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
             ->with(['user'])
             ->where('ec_orders.is_finished', 0);
 
@@ -111,9 +122,24 @@ class OrderIncompleteTable extends OrderTable
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
             ],
+            'phone'    => [
+                'name'  => 'ec_customers.phone',
+                'title' => 'Phone',
+                'class' => 'text-left',
+            ],
+            'salesperson_id' => [
+                'name'  => 'ec_orders.salesperson_id',
+                'title' => 'Salesperson',
+                'class' => 'text-left',
+            ],
             'amount'     => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
+                'class' => 'text-center',
+            ],
+            'status'          => [
+                'name'  => 'ec_orders.status',
+                'title' => trans('core/base::tables.status'),
                 'class' => 'text-center',
             ],
             'created_at' => [
@@ -123,6 +149,18 @@ class OrderIncompleteTable extends OrderTable
                 'class' => 'text-left',
             ],
         ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Order::where('ec_orders.is_finished', 0)->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**
@@ -147,17 +185,5 @@ class OrderIncompleteTable extends OrderTable
     public function buttons()
     {
         return [];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function htmlDrawCallbackFunction(): ?string
-    {
-        $return = parent::htmlDrawCallbackFunction();
-        if (Order::where('ec_orders.is_finished', 0)->all()->count()) {
-            $return .= '$(".editable").editable();';
-        }
-        return $return;
     }
 }

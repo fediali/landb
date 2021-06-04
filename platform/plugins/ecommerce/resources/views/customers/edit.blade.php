@@ -54,6 +54,16 @@
                         </div>
                         <div class="clearfix"></div>
 
+                        <div class="form-group">
+                        <select class="input-textbox form-control" name="salesperson_id">
+                            <option value="" selected disabled>Select Salesperson</option>
+                            @foreach(get_salesperson() as $id => $name)
+                                <option value="{{ $id }}" @if(@$customer->salesperson_id == $id || old('hear_us') == $id) selected @endif>{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                        <div class="clearfix"></div>
+
                     </div>
                 </div>
 

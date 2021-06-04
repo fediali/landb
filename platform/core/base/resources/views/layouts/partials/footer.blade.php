@@ -337,7 +337,7 @@
 <script>
   $(document).ready(function () {
     $('.address-country').on('change', function () {
-      get_states($('select[name="address_state"]'), this.value, '{{ route('ajax.getStates') }}');
+      // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
     });
 
     $('.delete_address').on('click', function (e) {
