@@ -162,7 +162,7 @@ class CustomerController extends BaseController
 
         $customer = $this->customerRepository->createOrUpdate($data, ['id' => $id]);
         $data = $request->all();
-        $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status'];
+        $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
         $data = array_diff_key($data, array_flip($remove));
         $data['customer_type'] = json_encode($data['customer_type']);
         $customer->details()->update($data);
