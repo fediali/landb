@@ -315,6 +315,13 @@ if (!function_exists('get_private_customers')) {
     }
 }
 
+if (!function_exists('get_customers')) {
+    function get_customers()
+    {
+        return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
+    }
+}
+
 if (!function_exists('get_photographers')) {
     function get_photographers()
     {

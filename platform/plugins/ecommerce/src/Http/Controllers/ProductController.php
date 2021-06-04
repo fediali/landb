@@ -17,6 +17,7 @@ use Botble\Ecommerce\Http\Requests\CreateProductWhenCreatingOrderRequest;
 use Botble\Ecommerce\Http\Requests\ProductRequest;
 use Botble\Ecommerce\Http\Requests\ProductUpdateOrderByRequest;
 use Botble\Ecommerce\Http\Requests\ProductVersionRequest;
+use Botble\Ecommerce\Models\CustomerProductDemand;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Eloquent\ProductVariationRepository;
 use Botble\Ecommerce\Repositories\Interfaces\BrandInterface;
@@ -983,5 +984,20 @@ class ProductController extends BaseController
         $this->productRepository->createOrUpdate($product);
 
         return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function addCustomerProductDemandQty($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+
+        $customerID = $request->input('customer_id', NULL);
+        $demandQty = $request->input('demand_qty', NULL);
+
+        if ($product && $customerID && $demandQty) {
+            $data = ['customer_id' => $customerID, 'product_id' => $id, 'demand_qty' => $demandQty];
+            CustomerProductDemand::create($data);
+        }
+
+        return $response->setMessage('Product Demand Added Successfully!');
     }
 }
