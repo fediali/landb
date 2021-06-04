@@ -116,7 +116,7 @@ class Order extends BaseModel
         static::addGlobalScope('userScope', function (Builder $query) {
             if (isset(auth()->user()->roles[0])) {
                 if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
-                    $query->where('salesperson_id', auth()->user()->id);
+                    $query->where('ec_orders.salesperson_id', auth()->user()->id);
                 }
             }
         });
