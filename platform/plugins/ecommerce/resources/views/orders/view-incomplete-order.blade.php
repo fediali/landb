@@ -197,6 +197,11 @@
                                 </div>
                             </li>
                         </ul>
+                        @if(Auth::user()->hasPermission('orders.editOrder'))
+                            @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
+                                <a href="{{ route('orders.editOrder', $order->id) }}" class="btn btn-info"><i class="fa fa-edit"></i> Edit Order</a>&nbsp;
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>

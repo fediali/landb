@@ -188,7 +188,6 @@ class OrderController extends BaseController
      */
     public function store(CreateOrderRequest $request, BaseHttpResponse $response)
     {
-
         $condition = [];
         $meta_condition = [];
         if ($request->input('order_id') && $request->input('order_id') > 0) {
@@ -285,6 +284,7 @@ class OrderController extends BaseController
             $order->editing_by = NULL;
             $order->editing_started_at = NULL;
 
+            $order->is_finished = 1;
             $order->salesperson_id = auth()->user()->id;
 
             $order->save();
