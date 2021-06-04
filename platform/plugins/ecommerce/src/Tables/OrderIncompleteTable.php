@@ -45,7 +45,13 @@ class OrderIncompleteTable extends OrderTable
                 return $item->user->phone ?? $item->user->phone;
             })
             ->editColumn('salesperson_id', function ($item) {
-                return $item->salesperson? $item->salesperson->getFullName() : 'N/A';
+                if (@$item->salesperson) {
+                    return $item->salesperson->getFullName();
+                } else if (@$item->user->salesperson) {
+                    return $item->user->salesperson->getFullName();
+                } else {
+                    return 'N/A';
+                }
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
