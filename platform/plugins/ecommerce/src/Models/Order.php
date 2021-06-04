@@ -74,6 +74,7 @@ class Order extends BaseModel
         'editing_started_at',
         'order_card',
         'salesperson_id',
+        'temp_sales_rep',
         'sales_commission_amount',
         'sales_commission_percent',
     ];

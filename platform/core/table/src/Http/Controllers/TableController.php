@@ -114,6 +114,9 @@ class TableController extends Controller
 
         try {
             $object->saveBulkChanges($ids, $inputKey, $inputValue);
+            if ($request->input('class') == 'Botble\Ecommerce\Tables\OrderIncompleteTable' && $inputKey == 'ec_orders.salesperson_id') {
+                $object->saveBulkChanges($ids, 'temp_sales_rep', 1);
+            }
         } catch (Exception $exception) {
             return $response
                 ->setError()

@@ -82,7 +82,7 @@ class OrderIncompleteTable extends OrderTable
         ];
 
         $query = $model
-            ->select()
+            ->select($select)
             ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
             ->with(['user'])
             ->where('ec_orders.is_finished', 0);
@@ -176,7 +176,14 @@ class OrderIncompleteTable extends OrderTable
      */
     public function getBulkChanges(): array
     {
-        return [];
+        return [
+            'ec_orders.salesperson_id'     => [
+                'title'    => 'Salesperson',
+                'type'     => 'select',
+                'choices'  => get_salesperson(),
+                'validate' => 'required',
+            ],
+        ];
     }
 
     /**
