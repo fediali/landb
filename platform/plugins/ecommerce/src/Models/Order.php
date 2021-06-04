@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\CardPreAuth;
+use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
@@ -11,6 +12,7 @@ use Botble\Ecommerce\Enums\ShippingMethodEnum;
 use Botble\Ecommerce\Repositories\Interfaces\ShipmentInterface;
 use Botble\Payment\Models\Payment;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -109,6 +111,14 @@ class Order extends BaseModel
             OrderProduct::where('order_id', $order->id)->delete();
             OrderAddress::where('order_id', $order->id)->delete();
             app(PaymentInterface::class)->deleteBy(['order_id' => $order->id]);
+        });
+
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (isset(auth()->user()->roles[0])) {
+                if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
+                    $query->where('salesperson_id', auth()->user()->id);
+                }
+            }
         });
     }
 
