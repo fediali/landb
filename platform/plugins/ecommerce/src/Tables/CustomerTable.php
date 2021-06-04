@@ -154,6 +154,7 @@ class CustomerTable extends TableAbstract
                 'name'  => 'order_count',
                 'title' => 'Order Count',
                 'class' => 'text-left',
+                'searchable' => false
             ],
             'created_at' => [
                 'name'  => 'ec_customers.created_at',
