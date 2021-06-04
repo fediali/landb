@@ -37,7 +37,8 @@ class OrderIncompleteTable extends OrderTable
                 return format_price($item->amount, $item->currency_id);
             })
             ->editColumn('user_id', function ($item) {
-                return $item->user->name ?? $item->address->name;
+                // return $item->user->name ?? $item->address->name;
+                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
             ->editColumn('phone', function ($item) {
                 return $item->user->phone ?? $item->user->phone;
