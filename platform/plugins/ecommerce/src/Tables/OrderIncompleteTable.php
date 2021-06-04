@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Tables;
 use BaseHelper;
 use Botble\Ecommerce\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Html;
 
 class OrderIncompleteTable extends OrderTable
 {
