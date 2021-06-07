@@ -58,7 +58,7 @@
                             <a href="{{ $notification->notification->url }}"
                                class="dropdown-item d-flex notification_read new-notification {{($notification->seen == 0) ? 'notification-new' : ''}}"
                                style="white-space: normal" data-id="{{$notification->id}}">
-                                <p style="width:74%;"><i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}</p>
+                                <p style="width:73%; margin-right: 3px;"><i class="fas fa-volume-up mr-2"></i> {{ $notification->notification->message }}</p>
                                 <p style="width:26%;"
                                     class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</p>
                             </a>

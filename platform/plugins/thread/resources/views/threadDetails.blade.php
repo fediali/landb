@@ -108,9 +108,12 @@
                 </div>
                 <!-- /.row -->
             </div>
-
-            <section class="denim_table new_clothing">
+            <!-- <form >  
+    <button class="btn" onclick="PrintDiv()" >Print</button>  
+    </form>                   -->
+            <section id="printdivcontent" class="denim_table new_clothing">
                 <div class="">
+                
                     <div class="table-responsive">
                         <table>
                             <tbody>
@@ -905,7 +908,19 @@
 
     /* IMAGE SLIDER VIEWER CSS */
 </style>
-
+<script type="text/javascript">  
+        function PrintDiv() {  
+            alert("Working");
+            // var divContents = document.getElementById("printdivcontent").innerHTML;  
+            // var printWindow = window.open('', '', 'height=200,width=400');  
+            // printWindow.document.write('<html><head><title>Print DIV Content</title>');  
+            // printWindow.document.write('</head><body >');  
+            // printWindow.document.write(divContents);  
+            // printWindow.document.write('</body></html>');  
+            // printWindow.document.close();  
+            // printWindow.print();  
+        }  
+    </script>
 <script>
     var slideIndex = [1, 1];
     var slideId = ["mySlides1", "mySlides2"];
@@ -1009,3 +1024,4 @@
 
     });
 </script>
+
