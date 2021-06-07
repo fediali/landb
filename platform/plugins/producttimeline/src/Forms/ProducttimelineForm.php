@@ -48,15 +48,6 @@ class ProducttimelineForm extends FormAbstract
                     'class' => 'form-control select-full',
                 ],
                 'choices'    => BaseStatusEnum::labels(),
-            ])->add('date', 'date', [
-                'label'         => 'Date',
-                'label_attr'    => ['class' => 'control-label'],
-                'attr'          => [
-                    'class'            => 'form-control datepicker',
-                    'data-date-format' => 'd M, yyyy',
-                ],
-                'default_value' => now(config('app.timezone'))->format('d M, Y'),
-                'value'         => $this->model->pp_sample_date ? date('d M, Y', strtotime($this->model->pp_sample_date)) : now(config('app.timezone'))->format('d M, Y')
             ])->add('schedule_date', 'datetime-local', [
                 'label'      => 'Schedule Date',
                 'label_attr' => ['class' => 'control-label'],

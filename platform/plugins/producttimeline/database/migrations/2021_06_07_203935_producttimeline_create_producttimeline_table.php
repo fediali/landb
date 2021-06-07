@@ -16,7 +16,6 @@ class ProducttimelineCreateProducttimelineTable extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('status', 60)->default('published');
-            $table->date('date');
             $table->datetime('schedule_date');
             $table->integer('business_id')->default(1);
             $table->integer('created_by');
