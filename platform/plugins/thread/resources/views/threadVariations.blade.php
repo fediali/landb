@@ -47,72 +47,73 @@ $variations = $options['data']['variations'];
                 <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
                    data-target="#add_variation"> Add Variation</a><br>
                 <div class="table-responsive">
-                <table class="table" id="thread-variations">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Print Design</th>
-                        <th scope="col">Fabric</th>
-                        <th scope="col">Wash</th>
-                        <th scope="col">Cost</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
-                        <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
-                        <th scope="col">Notes</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                    <table class="table" id="thread-variations">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Print Design</th>
+                            <th scope="col">Fabric</th>
+                            <th scope="col">Wash</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
+                            <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    @foreach($variations as $key => $variation)
-                        @if($variation->is_denim == 1)
-                            <tr>
-                                <td>{{ $variation->name }}</td>
-                                <td>{{ @$variation->printdesign->name }}</td>
-                                <td>{{ @$variation->fabric->name  }}</td>
-                                <td>{{ @$variation->wash->name  }}</td>
-                                <td>{{ $variation->cost }}</td>
-                                <td>
-                                    @if($variation->status == 'active')
-                                        <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}"
-                                           class="btn btn-success">{{ ucfirst($variation->status) }}</a>
-                                    @elseif($variation->status == 'inactive')
-                                        <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'active']) }}"
-                                           class="btn btn-danger">{{ ucfirst($variation->status) }}</a>
-                                    @endif
-                                </td>
-                                <td>{{ $variation->regular_qty }}</td>
-                                <td>{{ $variation->plus_qty }}</td>
-                                <td>{{ $variation->notes }}</td>
-                                <td>
-                                    <div class="table-actions" style="display: inline-block; font-size: 5px">
-                                        {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                        <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a class="btn btn-info btn-sm edit-variation"
-                                           data-var-name="{{$variation->name}}"
-                                           data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
-                                           data-fabric-id="{{$variation->fabric_id}}"
-                                           data-reg-qty="{{$variation->regular_qty}}"
-                                           data-plu-qty="{{$variation->plus_qty}}"
-                                           data-wash-id="{{$variation->wash_id}}" data-var-cost="{{$variation->cost}}"
-                                           data-var-notes="{{$variation->notes}}">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#ppModal"
-                                           class="btn btn-primary btn-sm pp_sample"
-                                           data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
-                                            <i class="fa fa-paper-plane"></i>
-                                        </a>
-                                        <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
-                                           class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
+                        @foreach($variations as $key => $variation)
+                            @if($variation->is_denim == 1)
+                                <tr>
+                                    <td>{{ $variation->name }}</td>
+                                    <td>{{ @$variation->printdesign->name }}</td>
+                                    <td>{{ @$variation->fabric->name  }}</td>
+                                    <td>{{ @$variation->wash->name  }}</td>
+                                    <td>{{ $variation->cost }}</td>
+                                    <td>
+                                        @if($variation->status == 'active')
+                                            <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}"
+                                               class="btn btn-success">{{ ucfirst($variation->status) }}</a>
+                                        @elseif($variation->status == 'inactive')
+                                            <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'active']) }}"
+                                               class="btn btn-danger">{{ ucfirst($variation->status) }}</a>
+                                        @endif
+                                    </td>
+                                    <td>{{ $variation->regular_qty }}</td>
+                                    <td>{{ $variation->plus_qty }}</td>
+                                    <td>{{ $variation->notes }}</td>
+                                    <td>
+                                        <div class="table-actions" style="display: inline-block; font-size: 5px">
+                                            {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
+                                            <a class="btn btn-info btn-sm edit-variation"
+                                               data-var-name="{{$variation->name}}"
+                                               data-var-id="{{$variation->id}}" data-print-id="{{$variation->print_id}}"
+                                               data-fabric-id="{{$variation->fabric_id}}"
+                                               data-reg-qty="{{$variation->regular_qty}}"
+                                               data-plu-qty="{{$variation->plus_qty}}"
+                                               data-wash-id="{{$variation->wash_id}}"
+                                               data-var-cost="{{$variation->cost}}"
+                                               data-var-notes="{{$variation->notes}}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#ppModal"
+                                               class="btn btn-primary btn-sm pp_sample"
+                                               data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
+                                                <i class="fa fa-paper-plane"></i>
+                                            </a>
+                                            <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
+                                               class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>
@@ -249,75 +250,79 @@ $variations = $options['data']['variations'];
             </div>
         @else
             <div class="box-body">
-                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal" data-target="#add_variation"> Add Variation</a><br>
-               <div class="table-responsive">
-               <table class="table" id="thread-variations">
-                    <thead>
-                    <tr>
-                        <th scope="col">Thread</th>
-                        <th scope="col">Fabric or Print</th>
-                        <th scope="col">Cost</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Regular Sku</th>
-                        <th scope="col">Plus Sku</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
-                        <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
-                        <th scope="col">Notes</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <a href="javascript:void(0)" class="btn btn-secondary float-right mb-3" data-toggle="modal"
+                   data-target="#add_variation"> Add Variation</a><br>
+                <div class="table-responsive">
+                    <table class="table" id="thread-variations">
+                        <thead>
+                        <tr>
+                            <th scope="col">Thread</th>
+                            <th scope="col">Fabric or Print</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Regular Sku</th>
+                            <th scope="col">Plus Sku</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">{{$thread->is_pieces ? 'Reg. Pieces Qty' : 'Reg. Pack Qty'}}</th>
+                            <th scope="col">{{$thread->is_pieces ? 'Plus. Pieces Qty' : 'Plus. Pack Qty'}}</th>
+                            <th scope="col">Notes</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    @foreach($variations as $key => $variation)
-                        @if($variation->is_denim == 0)
-                            <tr>
-                                <td>{{ $thread->name }}</td>
-                                <td>{{ @$variation->printdesign->name }}</td>
-                                <td>{{ $variation->cost }}</td>
-                                <td>{{ $variation->name }}</td>
-                                <td>{{ $variation->sku }}</td>
-                                <td>{{ $variation->plus_sku }}</td>
-                                <td>
-                                    @if($variation->status == 'active')
-                                        <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}"
-                                           class="btn btn-success">{{ ucfirst($variation->status) }}</a>
-                                    @elseif($variation->status == 'inactive')
-                                        <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'active']) }}"
-                                           class="btn btn-danger">{{ ucfirst($variation->status) }}</a>
-                                    @endif
-                                </td>
-                                <td>{{ $variation->regular_qty }}</td>
-                                <td>{{ $variation->plus_qty }}</td>
-                                <td>{{ $variation->notes }}</td>
-                                <td>
-                                    <div class="table-actions" style="display: inline-block; font-size: 5px">
-                                        {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                        <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
-                                        <a class="btn btn-info btn-sm edit-variation"
-                                           data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}"
-                                           data-print-id="{{$variation->print_id}}" data-var-cost="{{$variation->cost}}"
-                                           data-reg-qty="{{$variation->regular_qty}}"
-                                           data-plu-qty="{{$variation->plus_qty}}"
-                                           data-var-notes="{{$variation->notes}}">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a data-toggle="modal" data-target="#ppModal"
-                                           class="btn btn-primary btn-sm pp_sample"
-                                           data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
-                                            <i class="fa fa-paper-plane"></i>
-                                        </a>
-                                        <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
-                                           class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
+                        @foreach($variations as $key => $variation)
+                            @if($variation->is_denim == 0)
+                                <tr>
+                                    <td>{{ $thread->name }}</td>
+                                    <td>{{ @$variation->printdesign->name }}</td>
+                                    <td>{{ $variation->cost }}</td>
+                                    <td>{{ $variation->name }}</td>
+                                    <td>{{ $variation->sku }}</td>
+                                    <td>{{ $variation->plus_sku }}</td>
+                                    <td>
+                                        @if($variation->status == 'active')
+                                            <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'inactive']) }}"
+                                               class="btn btn-success">{{ ucfirst($variation->status) }}</a>
+                                        @elseif($variation->status == 'inactive')
+                                            <a href="{{ route('thread.updateVariationStatus', ['id' => $variation->id, 'status' => 'active']) }}"
+                                               class="btn btn-danger">{{ ucfirst($variation->status) }}</a>
+                                        @endif
+                                    </td>
+                                    <td>{{ $variation->regular_qty }}</td>
+                                    <td>{{ $variation->plus_qty }}</td>
+                                    <td>{{ $variation->notes }}</td>
+                                    <td>
+                                        <div class="table-actions" style="display: inline-block; font-size: 5px">
+                                            {{--<a class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>--}}
+                                            <a class="btn btn-info btn-sm edit-variation"
+                                               data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}"
+                                               data-print-id="{{$variation->print_id}}"
+                                               data-var-cost="{{$variation->cost}}"
+                                               data-reg-qty="{{$variation->regular_qty}}"
+                                               data-plu-qty="{{$variation->plus_qty}}"
+                                               data-reg-sku="{{$variation->sku}}"
+                                               data-plu-sku="{{$variation->plus_sku}}"
+                                               data-var-notes="{{$variation->notes}}">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#ppModal"
+                                               class="btn btn-primary btn-sm pp_sample"
+                                               data-var-id="{{$variation->id}}" data-var-name="{{$variation->name}}">
+                                                <i class="fa fa-paper-plane"></i>
+                                            </a>
+                                            <a href="{{ route('thread.removeVariation', ['id'=> $variation->id]) }}"
+                                               class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
 
-                    </tbody>
-                </table>
-               </div>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <div class="modal fade in" id="add_variation" style="display: none; padding-right: 17px;">
@@ -501,21 +506,33 @@ $variations = $options['data']['variations'];
                                     <td width="10%" class="{{--no-denim-field--}}">
                                         <label>{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}</label>
                                         <input class="form-control" placeholder="Add Quantity" name="plus_qty"
-                                               id="ed-plu-qty" type="text">
+                                               id="ed-reg-qty" type="text">
                                     </td>
+                                    {{--                                    <td width="10%" class="--}}{{--no-denim-field--}}{{--">--}}
+                                    {{--                                        <label>{{'REG SKU'}}</label>--}}
+                                    {{--                                        <input class="form-control" placeholder="Add Quantity" name="plus_qty"--}}
+                                    {{--                                               id="ed-reg-sku" type="text">--}}
+                                    {{--                                    </td>--}}
+                                    {{--                                    <td width="10%" class="--}}{{--no-denim-field--}}{{--">--}}
+                                    {{--                                        <label>{{'Plus SKU'}}</label>--}}
+                                    {{--                                        <input class="form-control" placeholder="Add Quantity" name="plus_qty"--}}
+                                    {{--                                               id="ed-plu-sku" type="text">--}}
+                                    {{--                                    </td>--}}
                                     <td width="10%">
                                         <label for="cost">Cost:</label>
                                         <input class="form-control" placeholder="Add Cost" name="cost" type="text"
                                                id="ed-cost">
                                     </td>
-                                    {{--<td width="15%" class="no-denim-field">
+                                    <td width="15%" class="no-denim-field">
                                         <label for="reg_sku">Reg Sku:</label>
-                                        <input class="form-control reg_sku" placeholder="Reg SKU" name="req_sku" type="text">
+                                        <input class="form-control reg_sku" placeholder="Reg SKU" name="regular_sku"
+                                               type="text" id="ed-sku">
                                     </td>
                                     <td width="15%" class="no-denim-field">
                                         <label for="plus_sku">Plus Sku:</label>
-                                        <input class="form-control plus_sku" placeholder="Plus Cost" name="plus_sku" type="text">
-                                    </td>--}}
+                                        <input class="form-control" placeholder="Plus Cost" name="plus_sku"
+                                               type="text" id="ed-plus-sku">
+                                    </td>
                                     <td width="15%">
                                         <label for="Notes">Notes:</label>
                                         <textarea class="form-control" placeholder="Add Notes" name="notes" cols="50"
@@ -528,7 +545,8 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation" value="Update">
+                        <input class="btn btn-primary save-thread" type="button" id="submit_edit_variation"
+                               value="Update">
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -545,7 +563,8 @@ $variations = $options['data']['variations'];
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        {{--<span aria-hidden="true">×</span>--}}X</button>
+                        {{--<span aria-hidden="true">×</span>--}}X
+                    </button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Add More Fabric to <span
                             class="variation-name"></span></h4>
                     <div></div>
@@ -605,9 +624,11 @@ $variations = $options['data']['variations'];
             <div class="modal-body">
                 <form>
                     <div>
-                        <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id" type="hidden">
+                        <input class="thread_variation_id" name="thread_variation_id" id="thread_variation_id"
+                               type="hidden">
                         <label class="font-bold">Trim Note:</label>
-                        <input class="form-control" placeholder="Enter Trim Note" name="trim_note" type="text" id="variation_trim_note">
+                        <input class="form-control" placeholder="Enter Trim Note" name="trim_note" type="text"
+                               id="variation_trim_note">
                     </div>
                     <div>
                         <label class="font-bold">Trim Image:</label>
@@ -646,9 +667,10 @@ $variations = $options['data']['variations'];
                     </div>
                     <div class="mt-3">
                         <label class="font-bold">Comments:</label>
-                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2" aria-invalid="false"></textarea>
+                        <textarea class="form-control " placeholder="Comments" name="comments" cols="50" rows="2"
+                                  aria-invalid="false"></textarea>
                     </div>
-                        </textarea>
+                    </textarea>
                     <div class="mt-3">
                         <label class="font-bold">Status:</label>
                         <select class="form-control" name="status">
@@ -910,6 +932,10 @@ $variations = $options['data']['variations'];
             $('#ed-cost').val(cost);
             let notes = $(this).data('var-notes');
             $('#ed-notes').val(notes);
+            let reg_sku = $(this).data('reg-sku');
+            $('#ed-sku').val(reg_sku);
+            let plus_sku = $(this).data('plu-sku');
+            $('#ed-plus-sku').val(plus_sku);
 
             $('select#ed-print-id').select2({
                 templateResult: formatState

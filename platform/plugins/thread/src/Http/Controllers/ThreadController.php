@@ -444,12 +444,13 @@ class ThreadController extends BaseController
             $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
             if ($selRegCat) {
                 $input['regular_qty'] = @$data['regular_qty'];
-                $input['sku'] = $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
+                $input['sku'] =  $data['regular_sku'];
+//                    : $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
             }
             $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();
             if ($selPluCat) {
                 $input['plus_qty'] = @$data['plus_qty'];
-                $input['plus_sku'] = str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/) . '-X';
+                $input['plus_sku'] = isset($data['plus_sku']) ? $data['regular_sku'] . '-X' : str_replace('-X', '', $selPluCat) . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/) . '-X';
             }
 
             $input['updated_by'] = auth()->user()->id;
