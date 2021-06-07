@@ -35,43 +35,43 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
-                            <div class="widget-user-header">
-                                <div class="row">
-                                 <div class="col-lg-4">
-                                   <label class="mr-2">{{trans('core/base::tables.status')}}</label>
-                                 </div>
-                                 <div class="col-lg-8">
-                                 {!!
-                                    Form::select('status',\Botble\Thread\Models\Thread::$STATUS, ($thread->status) ? $thread->status:null, [
-                                        'class' => '',
-                                        'id'    => 'thread_status',
-                                    ])
-                                !!}
-                                 </div>
-                                </div>
+                                <div class="widget-user-header">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="mr-2">{{trans('core/base::tables.status')}}</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            {!!
+                                               Form::select('status',\Botble\Thread\Models\Thread::$STATUS, ($thread->status) ? $thread->status:null, [
+                                                   'class' => '',
+                                                   'id'    => 'thread_status',
+                                               ])
+                                           !!}
+                                        </div>
+                                    </div>
 
-                        </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-lg-4">
-                            <div class="widget-user-header">
-                            <div class="row">
-                                 <div class="col-lg-4">
-                                 <label class="mr-2">Ready to Order</label>
+                                <div class="widget-user-header">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="mr-2">Ready to Order</label>
 
-                                 </div>
-                                 <div class="col-lg-8">
-                                 {!!
-                         Form::select('ready',\Botble\Thread\Models\Thread::$READY, ($thread->ready) ? $thread->ready:null, [
-                             'class' => '',
-                             'id'    => 'ready',
-                         ])
-                     !!}
-                                 </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            {!!
+                                    Form::select('ready',\Botble\Thread\Models\Thread::$READY, ($thread->ready) ? $thread->ready:null, [
+                                        'class' => '',
+                                        'id'    => 'ready',
+                                    ])
+                                !!}
+                                        </div>
+                                    </div>
+
                                 </div>
-
-                        </div>
                             </div>
                         </div>
 
@@ -108,12 +108,12 @@
                 </div>
                 <!-- /.row -->
             </div>
-            <!-- <form >  
-    <button class="btn" onclick="PrintDiv()" >Print</button>  
-    </form>                   -->
+            <form>
+                <button class="btn PrintDiv">Print</button>
+            </form>
             <section id="printdivcontent" class="denim_table new_clothing">
                 <div class="">
-                
+
                     <div class="table-responsive">
                         <table>
                             <tbody>
@@ -371,7 +371,8 @@
                                                         <div class="d-flex">
                                                             <div class="row">
                                                                 <div class="col-lg-6">
-                                                                    <div class="variationdiv variation-div pl-3 pr-3 mb-3">
+                                                                    <div
+                                                                        class="variationdiv variation-div pl-3 pr-3 mb-3">
                                                                         @foreach($variations as $variation)
                                                                             @if($variation->status == 'active' && $variation->is_denim == 1)
                                                                                 {{--<h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>--}}
@@ -399,7 +400,8 @@
                                                                                 <div class="row">
                                                                                     <div class="col-lg-6 images">
                                                                                         <p class="mb-0 mt-2">
-                                                                                            <label for="">Print/Color:</label>
+                                                                                            <label
+                                                                                                for="">Print/Color:</label>
                                                                                             {{ @$variation->printdesign->name }}
                                                                                         </p>
                                                                                         <img class="w-100" height="120"
@@ -408,7 +410,9 @@
                                                                                              src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
                                                                                         <div id="image-viewer">
                                                                                             <span class="close">X</span>
-                                                                                            <img class="viewer-modal-content" id="full-image">
+                                                                                            <img
+                                                                                                class="viewer-modal-content"
+                                                                                                id="full-image">
                                                                                         </div>
                                                                                     </div>
                                                                                     @foreach($variation->fabrics as $fabric)
@@ -418,7 +422,7 @@
                                                                                                 {{ @$fabric->printdesign->name }}
                                                                                                 <a href="{{ route('thread.removeFabric', $fabric->id) }}">
                                                                                                     <strong
-                                                                                                            class="float-right">
+                                                                                                        class="float-right">
                                                                                                         <i class="fa fa-times"></i>
                                                                                                     </strong>
                                                                                                 </a>
@@ -433,13 +437,13 @@
                                                                                     @if($variation->trim->count() > 0)
                                                                                         @foreach($variation->trim as $trim)
                                                                                             <div
-                                                                                                    class="col-lg-6 images">
+                                                                                                class="col-lg-6 images">
                                                                                                 <p class="mb-0 mt-2">
                                                                                                     <label
-                                                                                                            for="">Trim:</label>
+                                                                                                        for="">Trim:</label>
                                                                                                     <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
                                                                                                         <strong
-                                                                                                                class="float-right">
+                                                                                                            class="float-right">
                                                                                                             <i class="fa fa-times"></i>
                                                                                                         </strong>
                                                                                                     </a>
@@ -467,21 +471,25 @@
                                                                                     <p class="text-black font-12 text-uppercase m-0">
                                                                                         <span for="">REG. Packs:</span>
                                                                                         {{ $variation->regular_qty }} |
-                                                                                        <span class="widget-title-color-red ">
+                                                                                        <span
+                                                                                            class="widget-title-color-red ">
                                                                                             Sku: {{ $variation->sku }}
                                                                                         </span>
                                                                                     </p>
                                                                                     @if($variation->plus_sku)
                                                                                         <p class="text-black font-12 text-uppercase m-0">
-                                                                                            <span for="">PLUS Packs:</span>
+                                                                                            <span
+                                                                                                for="">PLUS Packs:</span>
                                                                                             {{ $variation->plus_qty }} |
-                                                                                            <span class="widget-title-color-red">
+                                                                                            <span
+                                                                                                class="widget-title-color-red">
                                                                                                 Plus Sku: {{ $variation->plus_sku }}
                                                                                             </span>
                                                                                         </p>
                                                                                     @endif
                                                                                     <p class="text-black font-12 text-uppercase m-0">
-                                                                                        <span for="">Notes:</span> {{ $variation->notes ?? 'None' }}
+                                                                                        <span
+                                                                                            for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                                     </p>
                                                                                 </div>
                                                                             @endif
@@ -710,7 +718,8 @@
                                     {{--</div>--}}
                                 </div>
                             @endforeach
-                            <a data-toggle="modal" data-target="#thVarSampleModal" class="btn btn-primary btn-sm thVarSampleModal" data-var-id="{{$variation->id}}">
+                            <a data-toggle="modal" data-target="#thVarSampleModal"
+                               class="btn btn-primary btn-sm thVarSampleModal" data-var-id="{{$variation->id}}">
                                 <i class="fa fa-paper-plane"></i>
                             </a>
                         </div>
@@ -781,10 +790,10 @@
     }
 
     @media screen and (min-width: 992px) and (max-width: 2500px) {
-    .main-form {
-        width: 135% !important;
+        .main-form {
+            width: 135% !important;
+        }
     }
-}
 
     .mySlides1, .mySlides2 {
         display: none
@@ -908,20 +917,10 @@
 
     /* IMAGE SLIDER VIEWER CSS */
 </style>
-<script type="text/javascript">  
-        function PrintDiv() {  
-            alert("Working");
-            // var divContents = document.getElementById("printdivcontent").innerHTML;  
-            // var printWindow = window.open('', '', 'height=200,width=400');  
-            // printWindow.document.write('<html><head><title>Print DIV Content</title>');  
-            // printWindow.document.write('</head><body >');  
-            // printWindow.document.write(divContents);  
-            // printWindow.document.write('</body></html>');  
-            // printWindow.document.close();  
-            // printWindow.print();  
-        }  
-    </script>
+
 <script>
+
+
     var slideIndex = [1, 1];
     var slideId = ["mySlides1", "mySlides2"];
     showSlides(1, 0);
@@ -949,6 +948,18 @@
 
 <script>
     $(document).ready(function () {
+        $('.PrintDiv').on('click', function () {
+            alert("Working");
+            var divContents = document.getElementById("printdivcontent").innerHTML;
+            var printWindow = window.open("", "", "height=200,width=400");
+            printWindow.document.write("<html><head><title>Print DIV Content</title>");
+            printWindow.document.write("</head><body >");
+            printWindow.document.write(divContents);
+            printWindow.document.write("</body></html>");
+            printWindow.document.close();
+            printWindow.print();
+        });
+
 
         $(".images img").click(function () {
             $("#full-image").attr("src", $(this).attr("src"));
