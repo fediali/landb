@@ -65,7 +65,6 @@ class ProducttimelineController extends BaseController
         $producttimeline = $this->producttimelineRepository->createOrUpdate($request->only(
             'name',
             'status',
-            'date',
             'schedule_date',
         ));
         $data = [];

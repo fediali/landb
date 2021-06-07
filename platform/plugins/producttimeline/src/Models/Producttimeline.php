@@ -23,7 +23,6 @@ class Producttimeline extends BaseModel
     protected $fillable = [
         'name',
         'status',
-        'date',
         'schedule_date',
         'created_by',
         'updated_by',

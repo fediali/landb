@@ -18,7 +18,6 @@ class ProducttimelineRequest extends Request
     {
         return [
             'name'   => 'required',
-            'date'   => 'required',
             'schedule_date'   => 'required',
             'status' => Rule::in(BaseStatusEnum::values()),
         ];
