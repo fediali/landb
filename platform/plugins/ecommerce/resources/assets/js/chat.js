@@ -12,5 +12,5 @@ Vue.prototype.__ = key => {
 };
 
 new Vue({
-    el: '#main-chat',
+    el: '#chat-main',
 });

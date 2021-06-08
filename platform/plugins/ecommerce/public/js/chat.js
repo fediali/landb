@@ -47,9 +47,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "ChatComponent",
+  // name: "ChatComponent",
   props: {
     authUser: {
       type: Object,
@@ -109,7 +108,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.post("/api/token", {
+                return axios.post("/admin/orders/generate-token", {
                   email: _this2.authUser.email
                 });
 
@@ -1055,7 +1054,63 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h3", [_vm._v("Hello World")])
+  return _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v(_vm._s(_vm.otherUser.name))
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      _vm._l(_vm.messages, function(message) {
+        return _c("div", { key: message.id }, [
+          _c(
+            "div",
+            { class: { "text-right": message.author === _vm.authUser.email } },
+            [
+              _vm._v(
+                "\n                " + _vm._s(message.body) + "\n            "
+              )
+            ]
+          )
+        ])
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-footer" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.newMessage,
+            expression: "newMessage"
+          }
+        ],
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Type your message..." },
+        domProps: { value: _vm.newMessage },
+        on: {
+          keyup: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+            ) {
+              return null
+            }
+            return _vm.sendMessage($event)
+          },
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.newMessage = $event.target.value
+          }
+        }
+      })
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -13275,7 +13330,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.__ = function (key) {
 };
 
 new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: '#main-chat'
+  el: '#chat-main'
 });
 })();
 

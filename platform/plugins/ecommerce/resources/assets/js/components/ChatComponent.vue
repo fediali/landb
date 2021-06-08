@@ -1,5 +1,5 @@
 <template>
-    <!--<div class="card">
+    <div class="card">
         <div class="card-header">{{ otherUser.name }}</div>
         <div class="card-body">
             <div v-for="message in messages" v-bind:key="message.id">
@@ -11,13 +11,12 @@
         <div class="card-footer">
             <input type="text" v-model="newMessage" class="form-control" placeholder="Type your message..." @keyup.enter="sendMessage"/>
         </div>
-    </div>-->
-    <h3>Hello World</h3>
+    </div>
 </template>
 
 <script>
 export default {
-    name: "ChatComponent",
+    // name: "ChatComponent",
     props: {
         authUser: {
             type: Object,
@@ -43,7 +42,7 @@ export default {
     },
     methods: {
         async fetchToken() {
-            const {data} = await axios.post("/api/token", {
+            const { data } = await axios.post("/admin/orders/generate-token", {
                 email: this.authUser.email
             });
             return data.token;
