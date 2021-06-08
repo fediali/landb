@@ -423,6 +423,7 @@ class ThreadController extends BaseController
 
     public function editVariation(Request $request)
     {
+
         $data = $request->all();
         $id = $data['var_id'];
         $checkDupli = ThreadVariation::where(['thread_id' => $data['thread_id'], 'print_id' => $data['print_id']])->where('id', '!=', $id)->first();
@@ -444,7 +445,7 @@ class ThreadController extends BaseController
             $selRegCat = $thread->regular_product_categories()->pluck('sku')->first();
             if ($selRegCat) {
                 $input['regular_qty'] = @$data['regular_qty'];
-                $input['sku'] =  $data['regular_sku'];
+                $input['sku'] = $data['regular_sku'];
 //                    : $selRegCat . strtoupper(substr($pdSKU, 0, 3) /*. rand(10, 999)*/);
             }
             $selPluCat = $thread->plus_product_categories()->pluck('sku')->first();

@@ -981,9 +981,12 @@ $variations = $options['data']['variations'];
                     'plus_qty': $('#ed-plu-qty').val(),
                     'cost': $('#ed-cost').val(),
                     'notes': $('#ed-notes').val(),
+                    'regular_sku': $('#ed-sku').val(),
+                    'plus_sku': $('#ed-plus-sku').val(),
                 },
                 success: function (data) {
                     location.reload();
+
                 },
                 error: function (request, status, error) {
                     location.reload();
