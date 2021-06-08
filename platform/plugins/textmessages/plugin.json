@@ -1,0 +1,9 @@
+{
+    "name": "Textmessages",
+    "namespace": "Botble\\Textmessages\\",
+    "provider": "Botble\\Textmessages\\Providers\\TextmessagesServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module textmessages"
+}
