@@ -15,9 +15,9 @@
                                     <p>No customers</p>
                                 @else
                                     <ul class="list-group list-group-flush">
-                                        @foreach ($customers as $id => $customer)
-                                            <a href="#" class="list-group-item list-group-item-action">{{ $customer }}</a>
-                                            <a href="{{ route('threadorders.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $id ]) }}" class="list-group-item list-group-item-action">{{ $customer }}</a>
+                                        @foreach ($customers as $customer)
+                                            <a href="#" class="list-group-item list-group-item-action">{{ $customer->name }}</a>
+                                            <a href="{{ route('orders.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}" class="list-group-item list-group-item-action">{{ $customer->name }}</a>
                                         @endforeach
                                     </ul>
                                 @endif
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <!-- chat component will be rendered here -->
+                        <chat-component {{--:auth-user="{{ auth()->user() }}" :other-user="{{ $otherUser }}"--}}></chat-component>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,6 @@
 
 
 @section('javascript')
-<script>
-
-</script>
+    <script src="https://media.twiliocdn.com/sdk/js/chat/v3.3/twilio-chat.min.js"></script>
+    <script></script>
 @endsection

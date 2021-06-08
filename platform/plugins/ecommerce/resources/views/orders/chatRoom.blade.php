@@ -17,7 +17,7 @@
                                     <ul class="list-group list-group-flush">
                                         @foreach ($customers as $id => $customer)
                                             <a href="#" class="list-group-item list-group-item-action">{{ $customer }}</a>
-                                            <a href="{{ route('threadorders.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $id ]) }}" class="list-group-item list-group-item-action">{{ $customer }}</a>
+                                            <a href="{{ route('orders.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $id ]) }}" class="list-group-item list-group-item-action">{{ $customer }}</a>
                                         @endforeach
                                     </ul>
                                 @endif

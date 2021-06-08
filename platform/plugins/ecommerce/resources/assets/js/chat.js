@@ -1,7 +1,7 @@
-import DiscountComponent from './components/DiscountComponent'
+import Chat from './components/ChatComponent'
 import Vue from 'vue';
 
-Vue.component('discount-component', DiscountComponent);
+Vue.component('chat-component', Chat.default);
 
 /**
  * This let us access the `__` method for localization in VueJS templates
@@ -12,5 +12,5 @@ Vue.prototype.__ = key => {
 };
 
 new Vue({
-    el: '#main-discount',
+    el: '#chat-component',
 });
