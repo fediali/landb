@@ -63,6 +63,13 @@ use RvMedia;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 
+
+
+use Twilio\Jwt\AccessToken;
+use Twilio\Jwt\Grants\ChatGrant;
+use Twilio\Rest\Client;
+
+
 class OrderController extends BaseController
 {
     /**
@@ -1827,4 +1834,55 @@ class OrderController extends BaseController
         }
     }
 
+
+
+    public function chatRoom(Request $request)
+    {
+        page_title()->setTitle('Chat Room');
+        $customers = get_customers();
+        return view('plugins/ecommerce::orders.chatRoom', compact('customers'));
+    }
+
+    public function chatMessage(Request $request, $ids)
+    {
+        $authUser = $request->user();
+        $otherUser = Customer::find(explode('-', $ids)[1]);
+        $customers = Customer::where('id', '<>', $authUser->id)->get();
+
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+        // Fetch channel or create a new one if it doesn't exist
+        try {
+            $channel = $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels($ids)->fetch();
+        } catch (\Twilio\Exceptions\RestException $e) {
+            $channel = $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels->create(['uniqueName' => $ids, 'type' => 'private']);
+        }
+
+        // Add first user to the channel
+        try {
+            $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members($authUser->email)->fetch();
+        } catch (\Twilio\Exceptions\RestException $e) {
+            $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members->create($authUser->email);
+        }
+
+        // Add second user to the channel
+        try {
+            $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members($otherUser->email)->fetch();
+        } catch (\Twilio\Exceptions\RestException $e) {
+            $twilio->chat->v2->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members->create($otherUser->email);
+        }
+
+        return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser'));
+    }
+
+    public function generate(Request $request)
+    {
+        $token = new AccessToken( env('TWILIO_AUTH_SID'), env('TWILIO_API_SID'), env('TWILIO_API_SECRET'), 3600, $request->email);
+
+        $chatGrant = new ChatGrant();
+        $chatGrant->setServiceSid(env('TWILIO_SERVICE_SID'));
+        $token->addGrant($chatGrant);
+
+        return response()->json([ 'token' => $token->toJWT() ]);
+    }
 }

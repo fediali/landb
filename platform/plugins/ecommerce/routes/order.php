@@ -139,6 +139,24 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+
+
+            Route::get('chat-room', [
+                'as'         => 'chatRoom',
+                'uses'       => 'OrderController@chatRoom',
+                'permission' => 'orders.create',
+            ]);
+            Route::get('messages/{ids}', [
+                'as'         => 'messages.chat',
+                'uses'       => 'OrderController@chatMessage',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('generate-token', [
+                'as'         => 'generate.token',
+                'uses'       => 'OrderController@generateToken',
+                'permission' => 'orders.create',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {
