@@ -414,7 +414,7 @@ $variations = $options['data']['variations'];
                                         </td>
                                         <td width="10%">
                                             <label for="plus_sku">Plus Sku:</label>
-                                            <input required class="form-control plus_sku" placeholder="Plus Cost"
+                                            <input required class="form-control plus_sku" placeholder="Plus SKU"
                                                    name="plus_sku[]" type="text">
                                         </td>
 
