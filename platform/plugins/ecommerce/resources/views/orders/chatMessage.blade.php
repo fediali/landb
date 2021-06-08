@@ -24,8 +24,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
-                        <chat-component {{--:auth-user="{{ auth()->user() }}" :other-user="{{ $otherUser }}"--}}></chat-component>
+                    <div class="col-md-9" id="chat-main">
+                        <chat-component :auth-user="{{ auth()->user() }}" :other-user="{{ $otherUser }}"></chat-component>
                     </div>
                 </div>
             </div>
