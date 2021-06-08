@@ -256,7 +256,7 @@
       tokenizeButton.disabled = true;
         console.log(message);
     });
-
+@if(auth('customer')->user() && auth('customer')->user()->details && isset(auth('customer')->user()->billingAddress[0]))
     document.querySelector('#tokenizebutton').onclick = (e) => {
       e.preventDefault();
       console.log('working')
@@ -267,7 +267,6 @@
       toggle_loader(true);
 
       var form = document.querySelector('form');
-      console.log('getting address', "{{ auth('customer')->user() ? auth('customer')->user()->billingAddress[0]: null }}")
       var extraDetails = {
         firstname: "{{auth('customer')->user() ? auth('customer')->user()->details->first_name : 'john'}}",
         lastname: "{{auth('customer')->user() ? auth('customer')->user()->detail->last_name : 'doe'}}",
@@ -299,6 +298,7 @@
       toggle_loader(false);
     });
     }
+ @endif
   });
 
   function toggle_loader(event) {

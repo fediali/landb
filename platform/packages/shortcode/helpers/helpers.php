@@ -61,7 +61,7 @@ if (!function_exists('image_html_generator')) {
             src="' . asset('storage/'.$img). '" 
             alt="' . (!is_null($alt) ? $alt : 'Education image') . '" 
             loading="lazy"
-            onerror = "this.src=\''. asset('images/lucky&blessed_logo_sign_Black 1.png') .'\'">'
+            onerror = "this.src=\'https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg\'">'
             ;
 
     return $html;

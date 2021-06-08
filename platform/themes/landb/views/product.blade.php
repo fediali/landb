@@ -14,14 +14,25 @@
 <section class="shoplisting_wrap">
     <div class="row">
         <div class="col-lg-1">
-            @foreach($product->images as $image)
-                {!! image_html_generator($image, $product->name, null, null, true, 'mt-2 side-img') !!}
-            @endforeach
+            @if(count($product->images))
+                @foreach($product->images as $image)
+                    {!! image_html_generator($image, $product->name, null, null, true, 'mt-2 side-img') !!}
+                @endforeach
+            @else
+                {!! image_html_generator('https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg', $product->name, null, null, true, 'mt-2 side-img') !!}
+                {!! image_html_generator('https://landbapparel.com/images/thumbnails/522/783/detailed/170/GDR08-AZSE__2_.jpg', $product->name, null, null, true, 'mt-2 side-img') !!}
+            @endif
+
         </div>
         <div class="col-lg-5 mt-2">
-            @foreach($product->images as $image)
-                {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
-            @endforeach
+            @if(count($product->images))
+                @foreach($product->images as $image)
+                    {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
+                @endforeach
+            @else
+                {!! image_html_generator('https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg', $product->name, null, null, true, 'front-img') !!}
+                {!! image_html_generator('https://landbapparel.com/images/thumbnails/522/783/detailed/170/GDR08-AZSE__2_.jpg', $product->name, null, null, true, 'front-img') !!}
+            @endif
         </div>
         <div class="col-lg-6">
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
