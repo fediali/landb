@@ -17,8 +17,8 @@
 
 <script>
 export default {
-    // name: "ChatComponent",
-    /*props: {
+    name: "ChatComponent",
+    props: {
         authUser: {
             type: Object,
             required: true
@@ -27,8 +27,8 @@ export default {
             type: Object,
             required: true
         }
-    },*/
-    /*data() {
+    },
+    data() {
         return {
             messages: [],
             newMessage: "",
@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         async fetchToken() {
-            const { data } = await axios.post("/api/token", {
+            const {data} = await axios.post("/api/token", {
                 email: this.authUser.email
             });
             return data.token;
@@ -68,6 +68,6 @@ export default {
             this.channel.sendMessage(this.newMessage);
             this.newMessage = "";
         }
-    }*/
+    }
 }
 </script>

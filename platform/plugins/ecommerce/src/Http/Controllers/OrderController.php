@@ -1839,6 +1839,12 @@ class OrderController extends BaseController
     public function chatRoom(Request $request)
     {
         page_title()->setTitle('Chat Room');
+        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+            ->addScriptsDirectly([
+                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+                'vendor/core/plugins/ecommerce/js/chat.js',
+            ])
+            ->addScripts(['blockui', 'input-mask']);
         $customers = get_customers();
         return view('plugins/ecommerce::orders.chatRoom', compact('customers'));
     }

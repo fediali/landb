@@ -1,7 +1,7 @@
 import Chat from './components/ChatComponent'
 import Vue from 'vue';
 
-Vue.component('chat-component', Chat.default);
+Vue.component('chat-component', Chat);
 
 /**
  * This let us access the `__` method for localization in VueJS templates
@@ -12,5 +12,5 @@ Vue.prototype.__ = key => {
 };
 
 new Vue({
-    el: '#chat-component',
+    el: '#main-chat',
 });
