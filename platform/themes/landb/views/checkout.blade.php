@@ -250,7 +250,7 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <label class="switch">
-                                                    <input type="checkbox" @if($address->is_default == 1) checked @endif name="is_default" class="set-default" data-id="{{ $address->id }}" data-type="shipping" placeholder="Default">
+                                                    <input type="checkbox" @if($address->is_default == 1) checked @endif name="is_default" class="set-default" data-id="{{ $address->id }}" data-type="billing" placeholder="Default">
                                                     <span class="slider round"></span>
                                                 </label>
                                                 <span class="text-muted">Default</span>
