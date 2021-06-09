@@ -157,11 +157,11 @@
                             <div class="regpack">
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                     Plus Pack Size Run</h6>
-                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+{{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
                                     <div class="sizediv">
-                                        {{ isset($plus_cat->name) }}
+{{--                                        {{ isset($plus_cat->name) }}--}}
                                     </div>
-                                @endforeach
+{{--                                @endforeach--}}
                             </div>
                         </td>
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
