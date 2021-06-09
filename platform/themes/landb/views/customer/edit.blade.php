@@ -25,7 +25,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
             </ul>
 
             <div class="tab-content product-tab-content">
-                <div id="home" class="tab-pane fade in active show">
+                <div id="home" class="tab-pane fade {{ ($tab == 'general') ? 'in active show': '' }}">
                     <div class="row">
                         <div class="col-lg-6">
                             <form method="POST" action="{{ route('customer.edit-account-post', 'account') }}">
@@ -168,7 +168,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                         </div>
                     </div>
                 </div>
-                <div id="menu1" class="tab-pane fade">
+                <div id="menu1" class="tab-pane fade {{ ($tab == 'shipping') ? 'in active show': '' }}">
                     <div class="row">
                         <div class="col-lg-2 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
@@ -396,7 +396,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                         </div>
                     </div>
                 </div>
-                <div id="menu2" class="tab-pane fade">
+                <div id="menu2" class="tab-pane fade {{ ($tab == 'tax_certificate') ? 'in active show': '' }}">
                     <form method="POST" action="{{ route('customer.edit-account-post', 'tax_certificate') }}">
                         @csrf
                     <div class="row mt-4">
@@ -577,7 +577,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                     </div>
                     </form>
                 </div>
-                <div id="menu3" class="tab-pane fade">
+                <div id="menu3" class="tab-pane fade {{ ($tab == 'store_locator') ? 'in active show': '' }}">
                     <div class="row mt-5">
                         <div class="col-lg-6">
                             <form method="POST" action="{{ route('customer.edit-account-post', 'store_locator') }}">
