@@ -156,6 +156,16 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@generateToken',
                 'permission' => 'orders.create',
             ]);
+            Route::post('send-sms', [
+                'as'         => 'send.sms',
+                'uses'       => 'OrderController@sendSMS',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('get-sms', [
+                'as'         => 'get.sms',
+                'uses'       => 'OrderController@getSMS',
+                'permission' => 'orders.create',
+            ]);
 
         });
 
