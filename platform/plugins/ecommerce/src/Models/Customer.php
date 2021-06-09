@@ -178,13 +178,20 @@ class Customer extends Authenticatable
 
     public function shippingAddress()
     {
-        return $this->addresses()->where('type', 'shipping');
+        $default =  $this->addresses()->where('type', 'shipping')->where('is_default', 1)->get();
+        if(count($default)){
+          return $this->addresses()->where('type', 'shipping')->where('is_default', 1);
+        }
+      return $this->addresses()->where('type', 'shipping');
     }
 
     public function billingAddress()
     {
-
-        return $this->addresses()->where('type', 'billing');
+      $default =  $this->addresses()->where('type', 'billing')->where('is_default', 1)->get();
+      if(count($default)){
+        return $this->addresses()->where('type', 'billing')->where('is_default', 1);
+      }
+      return $this->addresses()->where('type', 'billing');
     }
 
     public function wishlist()

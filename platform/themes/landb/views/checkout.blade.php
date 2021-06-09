@@ -143,6 +143,29 @@
                         <div class="col-lg-8"></div>
                     </div>
                     <div class="row">
+                        @foreach($user_info->addresses as $address)
+                           @if($address->type == 'shipping')
+                            <div class="col-lg-12 mt-3">
+                                <div class="card p-3">
+                                   <div class="row">
+                                       <div class="col-lg-10">
+                                           <h4>{{ $address->first_name.' '.$address->last_name }}</h4>
+                                           <small>{{ $address->address .', '. $address->city.', '. \CountryState::getStateName($address->state,$address->country) .', '. \CountryState::getCountryName($address->country)}}</small>
+                                       </div>
+                                       <div class="col-lg-2">
+                                           <label class="switch">
+                                               <input type="checkbox" @if($address->is_default == 1) checked @endif name="is_default" class="set-default" data-id="{{ $address->id }}" data-type="shipping" placeholder="Default">
+                                               <span class="slider round"></span>
+                                           </label>
+                                           <span class="text-muted">Default</span>
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                           @endif
+                        @endforeach
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <h4 class="profile-light-txt mt-5">Shipping information</h4>
                             <div class="row">
@@ -211,9 +234,32 @@
                 <div id="menu2" class="tab-pane fade {!! ((!empty($user_info->details)) && isset($user_info->shippingAddress[0]) && !isset($user_info->billingAddress[0]))  ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
-                            <a href="#" class=" btn border-btn w-100">Add a New Address</a>
+                            <a href="#" class=" btn border-btn w-100" data-toggle="modal" data-target="#add_address_modal">Add a New Address</a>
                         </div>
                         <div class="col-lg-8"></div>
+                    </div>
+                    <div class="row">
+                        @foreach($user_info->addresses as $address)
+                            @if($address->type == 'billing')
+                                <div class="col-lg-12 mt-3">
+                                    <div class="card p-3">
+                                        <div class="row">
+                                            <div class="col-lg-10">
+                                                <h4>{{ $address->first_name.' '.$address->last_name }}</h4>
+                                                <small>{{ $address->address .', '. $address->city.', '. \CountryState::getStateName($address->state,$address->country) .', '. \CountryState::getCountryName($address->country)}}</small>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <label class="switch">
+                                                    <input type="checkbox" @if($address->is_default == 1) checked @endif name="is_default" class="set-default" data-id="{{ $address->id }}" data-type="shipping" placeholder="Default">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <span class="text-muted">Default</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

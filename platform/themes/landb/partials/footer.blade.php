@@ -148,6 +148,17 @@
     $('select[name="country"]').on('change', function () {
       get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
     });
+
+    $('.set-default').on('change', function () {
+      var status = 1;
+      if($(this).is(':checked')){
+        status = 1;
+      }else{
+        status = 0;
+      }
+      location.replace("{{ URL::to('customer/update-default') }}?id="+ $(this).data('id')+"&type="+ $(this).data('type')+"&status="+status);
+      console.log(status, $(this).data('id'), $(this).data('type'))
+    });
   });
 </script>
 <script>

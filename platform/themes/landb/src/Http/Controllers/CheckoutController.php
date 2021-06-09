@@ -60,8 +60,8 @@ class CheckoutController extends Controller
               $query->with(['product']);
             }])->first();
 
-    $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress'])->first();
-
+    $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress', 'addresses'])->first();
+//dd($user);
     return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();
   }
 
