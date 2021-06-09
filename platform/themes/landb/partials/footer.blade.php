@@ -152,6 +152,7 @@
     });
 
     $('.set-default').on('change', function () {
+      toggle_loader(true);
       var status = 1;
       if($(this).is(':checked')){
         status = 1;

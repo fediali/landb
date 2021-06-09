@@ -197,3 +197,42 @@ if (!function_exists('get_states')) {
   }
 
 }
+
+
+if (!function_exists('get_state_name')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_state_name($state,$country)
+  {
+    $name = '';
+    try{
+      $name = \CountryState::getStateName($state,$country);
+  }catch (Exception $e){
+
+    }
+    return $name;
+  }
+
+}
+
+if (!function_exists('get_country_name')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function get_country_name($country)
+  {
+    $name = '';
+    try{
+      $name = \CountryState::getCountryName($country);
+  }catch (Exception $e){
+
+    }
+    return $name;
+  }
+
+}
