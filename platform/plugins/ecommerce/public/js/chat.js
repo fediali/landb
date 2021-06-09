@@ -48,6 +48,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   // name: "ChatComponent",
   props: {
@@ -58,38 +59,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     otherUser: {
       type: Object,
       required: true
+    },
+    messages: {
+      type: Array
+    },
+    sid: {
+      type: String
     }
   },
   data: function data() {
     return {
-      messages: [],
+      //messages: [],
       newMessage: "",
-      channel: ""
+      channel: "",
+      polling: null
     };
   },
   created: function created() {
     var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var token;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return _this.fetchToken();
+              // const token = await this.fetchToken();
+              // await this.initializeClient(token);
 
-            case 2:
-              token = _context.sent;
-              console.log(token, "==========");
-              _context.next = 6;
-              return _this.initializeClient(token);
+              /*await this.fetchMessages();*/
+              _this.pollData();
 
-            case 6:
-              _context.next = 8;
-              return _this.fetchMessages();
-
-            case 8:
+            case 1:
             case "end":
               return _context.stop();
           }
@@ -98,25 +98,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    fetchToken: function fetchToken() {
+    /*async fetchToken() {
+        const {data} = await axios.post("/admin/orders/generate-token", {
+            email: `${this.authUser.id}`
+        });
+        return data.token;
+    },*/
+
+    /*async fetchMessages() {
+        this.messages = (await this.channel.getMessages()).items;
+    },
+    sendMessage() {
+        this.channel.sendMessage(this.newMessage);
+        this.newMessage = "";
+    }*/
+
+    /*async initializeClient(token) {
+        const client = await Twilio.Chat.Client.create(token);
+        client.on("tokenAboutToExpire", async () => {
+            const token = await this.fetchToken();
+            client.updateToken(token);
+        });
+        this.channel = await client.getChannelByUniqueName(
+            `${this.authUser.id}-${this.otherUser.id}`
+        );
+        this.channel.on("messageAdded", message => {
+            this.messages.push(message);
+        });
+    },*/
+    sendMessage: function sendMessage() {
+      var _this2 = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var _yield$axios$post, data;
+        var self, _yield$axios$post, data;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.post("/admin/orders/generate-token", {
-                  email: '+4698450619'
+                self = _this2;
+                _context2.next = 3;
+                return axios.post("/admin/orders/send-sms", {
+                  sid: "".concat(_this2.authUser.id, "-").concat(_this2.otherUser.id),
+                  author: '+13345390661',
+                  //self.otherUser.phone,
+                  body: self.newMessage
                 });
 
-              case 2:
+              case 3:
                 _yield$axios$post = _context2.sent;
                 data = _yield$axios$post.data;
-                return _context2.abrupt("return", data.token);
+                _this2.messages = data.messages;
+                _this2.newMessage = "";
 
-              case 5:
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -124,85 +159,61 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    initializeClient: function initializeClient(token) {
-      var _this2 = this;
+    pollData: function pollData() {
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var client;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.next = 2;
-                return Twilio.Conversations.Client.create(token);
+                _this3.polling = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+                  var _yield$axios$post2, data;
 
-              case 2:
-                client = _context4.sent;
-                alert(client);
-                client.on("tokenAboutToExpire", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-                  var token;
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
                     while (1) {
                       switch (_context3.prev = _context3.next) {
                         case 0:
                           _context3.next = 2;
-                          return _this2.fetchToken();
+                          return axios.post("/admin/orders/get-sms", {
+                            sid: "".concat(_this3.authUser.id, "-").concat(_this3.otherUser.id)
+                          });
 
                         case 2:
-                          token = _context3.sent;
-                          client.updateToken(token);
+                          _yield$axios$post2 = _context3.sent;
+                          data = _yield$axios$post2.data;
+                          _this3.messages = data.messages;
 
-                        case 4:
+                        case 5:
                         case "end":
                           return _context3.stop();
                       }
                     }
                   }, _callee3);
-                })));
-                _context4.next = 7;
-                return client.getChannelByUniqueName("".concat(_this2.authUser.id, "-").concat(_this2.otherUser.id));
+                })), 10000);
 
-              case 7:
-                _this2.channel = _context4.sent;
-
-                _this2.channel.on("messageAdded", function (message) {
-                  _this2.messages.push(message);
-                });
-
-              case 9:
+              case 1:
               case "end":
                 return _context4.stop();
             }
           }
         }, _callee4);
       }))();
+    }
+  },
+  watch: {
+    /*sid(value) {
+        this.sid = value;
     },
-    fetchMessages: function fetchMessages() {
-      var _this3 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return _this3.channel.getMessages();
-
-              case 2:
-                _this3.messages = _context5.sent.items;
-
-              case 3:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
-    } // sendMessage() {
-    //     this.channel.sendMessage(this.newMessage);
-    //     this.newMessage = "";
-    // }
-
+    messages(value) {
+        this.messages = value;
+    },
+    authUser(value) {
+        this.authUser = value;
+    },
+    otherUser(value) {
+        this.otherUser = value;
+    }*/
   }
 });
 
@@ -1066,11 +1077,11 @@ var render = function() {
         return _c("div", { key: message.id }, [
           _c(
             "div",
-            { class: { "text-right": message.author === _vm.authUser.email } },
+            { class: { "text-right": message.author === "+13345390661" } },
             [
-              _vm._v(
-                "\n                " + _vm._s(message.body) + "\n            "
-              )
+              _c("i", [_vm._v(_vm._s(message.date))]),
+              _vm._v(" "),
+              _c("b", [_vm._v(_vm._s(message.body))])
             ]
           )
         ])
