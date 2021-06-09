@@ -246,7 +246,7 @@
                                         <div class="row">
                                             <div class="col-lg-10">
                                                 <h4>{{ $address->first_name.' '.$address->last_name }}</h4>
-                                                <small>{{ $address->address .', '. $address->city.', '. \CountryState::getStateName($address->state,$address->country) .', '. \CountryState::getCountryName($address->country)}}</small>
+                                                <small>{{ $address->address .', '. $address->city.', '. get_state_name($address->state,$address->country) .', '. get_country_name($address->country)}}</small>
                                             </div>
                                             <div class="col-lg-2">
                                                 <label class="switch">
