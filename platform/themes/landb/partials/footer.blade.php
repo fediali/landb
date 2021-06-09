@@ -48,7 +48,7 @@
                             'view' => 'footer-menu',
                         ])
                     !!}
-                    {{--<div class="col-4">
+                    <div class="col-4">
                         <h6>Navigate</h6>
                         <ul>
                             <li><a href="#">Home</a></li>
@@ -70,12 +70,14 @@
                     <div class="col-4">
                         <h6>Social Media</h6>
                         <ul>
-                            <li><a href="#">Instagram</a></li>
-                            <li><a href="#">Facebook</a></li>
-                            <li><a href="#">Snapchat</a></li>
+                            <li><a href="https://www.instagram.com/landb_official/">Instagram</a></li>
+                            <li><a href="https://www.facebook.com/LANDBOFFICIAL/">Facebook</a></li>
+                            <li><a href="https://www.pinterest.com/landb_official/">Pinterest</a></li>
+                            <li><a href="https://www.linkedin.com/company/landbofficial/">Linkedin</a></li>
+                            <li><a href="https://twitter.com/landb_official/">Twitter</a></li>
 
                         </ul>
-                    </div>--}}
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
