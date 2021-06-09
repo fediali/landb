@@ -64,7 +64,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 
 
-
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
 use Twilio\Rest\Client;
@@ -1835,7 +1834,6 @@ class OrderController extends BaseController
     }
 
 
-
     public function chatRoom(Request $request)
     {
         page_title()->setTitle('Chat Room');
@@ -1927,53 +1925,63 @@ class OrderController extends BaseController
             $twilio->conversations->v1->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members->create($otherUser->phone);
         }*/
 
-        /*$twilio->chat->v2->services("IS9185ce4d45cd4315b6140c6b0b8f2bcb")
-            ->channels("CHcb4aa085d8ca4a648867e04f61c2c1b3")
-            ->delete();*/
+//        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
+//            ->channels("CH7a9930ad18194a52a0e62e17f37ad72b")
+//            ->delete();
+//        $twilio->conversations->v1->conversations("CH63d8a63a03da43adb5849aa085fd0f4c")
+//            ->participants("MBd279743865664823a3e4f278c63d0492")
+//            ->delete();
+        $author = '+13345390661';
+        $body = 'Gand Marwao Gathiye Khaoo';
+//        $conversation = $this->makeConversation($ids);
+//        $participant = $this->createSMSParticipant($conversation->sid, $otherUser->phone);
+        //$chat = $this->createChatParticipant($conversation->sid, $otherUser->phone);
+        $sendMessage = $this->createMessage('CHdf9c1182df404518b8270608826ce544', $author, $body);
+        dd($sendMessage);
 
-        //$conversation = $this->makeConversation($ids);
-        //$participant = $this->createSMSParticipant($conversation->sid, $otherUser->phone);
-        //$participant = $this->createChatParticipant($conversation->sid, $otherUser->phone);
-
+        dd('s');
         return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser'));
     }
 
     public function generateToken(Request $request)
     {
-        $token = new AccessToken( env('TWILIO_AUTH_SID'), env('TWILIO_API_SID'), env('TWILIO_API_SECRET'), 3600, $request->email);
+        $token = new AccessToken(env('TWILIO_AUTH_SID'), env('TWILIO_API_SID'), env('TWILIO_API_SECRET'), 3600, $request->email);
 
         $chatGrant = new ChatGrant();
         $chatGrant->setServiceSid(env('TWILIO_SERVICE_SID'));
         $token->addGrant($chatGrant);
 
-        return response()->json([ 'token' => $token->toJWT() ]);
+        return response()->json(['token' => $token->toJWT()]);
     }
 
-    public function makeConversation($uniqueName){
+    public function makeConversation($uniqueName)
+    {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $conversation = $twilio->conversations->v1
             ->conversations
             ->create([
-                "friendlyName" => "Conversation-".$uniqueName,
-                "uniqueName" => $uniqueName,
+                "friendlyName" => "Conversation-" . $uniqueName,
+                "uniqueName"   => $uniqueName . rand(0000, 9999),
             ]);
 
         return $conversation;
     }
 
-    public function createSMSParticipant($sid, $number){
+    public function createSMSParticipant($sid, $number)
+    {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $participant = $twilio->conversations->v1
             ->conversations($sid)
             ->participants
             ->create([
-                'messagingBindingAddress' => $number,
+                'messagingBindingAddress'      => $number,
                 'messagingBindingProxyAddress' => '+13345390661'
             ]);
         return $participant;
     }
 
-    public function createChatParticipant($sid, $chat_id){
+    public function createChatParticipant($sid, $chat_id)
+    {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $participant = $twilio->conversations->v1
             ->conversations($sid)
@@ -1984,26 +1992,28 @@ class OrderController extends BaseController
         return $participant;
     }
 
-    public function createMessage($sid, $author, $body){
+    public function createMessage($sid, $author, $body)
+    {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $message = $twilio->conversations->v1
             ->conversations($sid)
             ->messages
             ->create([
                 'author' => $author,
-                'body' => $body
+                'body'   => $body
             ]);
         return $message;
     }
 
-    public function listMessages($sid){
+    public function listMessages($sid)
+    {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $messages = $twilio->conversations->v1
             ->conversations($sid)
             ->messages
             ->read(20);
         $array = array();
-        foreach($messages as $message){
+        foreach ($messages as $message) {
             array_push($array, [
                 $message->sid,
                 $message->author,
@@ -2014,7 +2024,8 @@ class OrderController extends BaseController
         return $array;
     }
 
-    private function convertTime($date){
+    private function convertTime($date)
+    {
         $dt = Carbon::parse($date);
         $new = $dt->toDayDateTimeString();
 
