@@ -1837,18 +1837,21 @@ class OrderController extends BaseController
     public function chatRoom(Request $request)
     {
         page_title()->setTitle('Chat Room');
-        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-            ->addScriptsDirectly([
-                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-                'vendor/core/plugins/ecommerce/js/chat.js',
-            ])
-            ->addScripts(['blockui', 'input-mask']);
+//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+//            ->addScriptsDirectly([
+//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+//                'vendor/core/plugins/ecommerce/js/chat.js',
+//            ])
+//            ->addScripts(['blockui', 'input-mask']);
         $customers = get_customers();
+        //Channel SID
+
         return view('plugins/ecommerce::orders.chatRoom', compact('customers'));
     }
 
     public function chatMessage(Request $request, $ids)
     {
+
 
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
@@ -1931,16 +1934,25 @@ class OrderController extends BaseController
 //        $twilio->conversations->v1->conversations("CH63d8a63a03da43adb5849aa085fd0f4c")
 //            ->participants("MBd279743865664823a3e4f278c63d0492")
 //            ->delete();
+        //Text Message
         $author = '+13345390661';
         $body = 'Gand Marwao Gathiye Khaoo';
+        //Making Conversation
 //        $conversation = $this->makeConversation($ids);
+        // New Conversation Participant Add
 //        $participant = $this->createSMSParticipant($conversation->sid, $otherUser->phone);
+        // Adding Participant
         //$chat = $this->createChatParticipant($conversation->sid, $otherUser->phone);
-        $sendMessage = $this->createMessage('CHdf9c1182df404518b8270608826ce544', $author, $body);
-        dd($sendMessage);
 
-        dd('s');
-        return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser'));
+        //Sending Text
+        //$sendMessage = $this->createMessage('CHdf9c1182df404518b8270608826ce544', $author, $body);
+//        dd($sendMessage);
+//
+//        dd('s');
+        $sid = 'CH286197bbcbf3448a9f89d46e70691a1b';
+        $messages = $this->listMessages($sid);
+
+        return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser', 'messages'));
     }
 
     public function generateToken(Request $request)
@@ -2012,16 +2024,16 @@ class OrderController extends BaseController
             ->conversations($sid)
             ->messages
             ->read(20);
-        $array = array();
-        foreach ($messages as $message) {
-            array_push($array, [
-                $message->sid,
-                $message->author,
-                $message->body,
-                $this->convertTime($message->dateCreated)
-            ]);
-        }
-        return $array;
+//        $array = array();
+//        foreach ($messages as $message) {
+//            array_push($array, [
+//                $message->sid,
+//                $message->author,
+//                $message->body,
+//                $this->convertTime($message->dateCreated)
+//            ]);
+//        }
+        return $messages;
     }
 
     private function convertTime($date)

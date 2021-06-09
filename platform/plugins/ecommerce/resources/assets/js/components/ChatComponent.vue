@@ -9,7 +9,8 @@
             </div>
         </div>
         <div class="card-footer">
-            <input type="text" v-model="newMessage" class="form-control" placeholder="Type your message..." @keyup.enter="sendMessage"/>
+            <input type="text" v-model="newMessage" class="form-control" placeholder="Type your message..."
+                   @keyup.enter="sendMessage"/>
         </div>
     </div>
 </template>
@@ -42,13 +43,14 @@ export default {
     },
     methods: {
         async fetchToken() {
-            const { data } = await axios.post("/admin/orders/generate-token", {
-                email: this.authUser.email
+            const {data} = await axios.post("/admin/orders/generate-token", {
+                email: '+4698450619'
             });
             return data.token;
         },
         async initializeClient(token) {
-            const client = await Twilio.Chat.Client.create(token);
+            const client = await Twilio.Conversations.Client.create(token);
+            alert(client);
             client.on("tokenAboutToExpire", async () => {
                 const token = await this.fetchToken();
                 client.updateToken(token);
@@ -63,10 +65,10 @@ export default {
         async fetchMessages() {
             this.messages = (await this.channel.getMessages()).items;
         },
-        sendMessage() {
-            this.channel.sendMessage(this.newMessage);
-            this.newMessage = "";
-        }
+        // sendMessage() {
+        //     this.channel.sendMessage(this.newMessage);
+        //     this.newMessage = "";
+        // }
     }
 }
 </script>

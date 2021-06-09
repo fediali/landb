@@ -47,6 +47,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   // name: "ChatComponent",
   props: {
@@ -98,8 +99,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     fetchToken: function fetchToken() {
-      var _this2 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var _yield$axios$post, data;
 
@@ -109,7 +108,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.next = 2;
                 return axios.post("/admin/orders/generate-token", {
-                  email: _this2.authUser.email
+                  email: '+4698450619'
                 });
 
               case 2:
@@ -126,7 +125,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     initializeClient: function initializeClient(token) {
-      var _this3 = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var client;
@@ -135,10 +134,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return Twilio.Chat.Client.create(token);
+                return Twilio.Conversations.Client.create(token);
 
               case 2:
                 client = _context4.sent;
+                alert(client);
                 client.on("tokenAboutToExpire", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
                   var token;
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
@@ -146,7 +146,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       switch (_context3.prev = _context3.next) {
                         case 0:
                           _context3.next = 2;
-                          return _this3.fetchToken();
+                          return _this2.fetchToken();
 
                         case 2:
                           token = _context3.sent;
@@ -159,17 +159,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }
                   }, _callee3);
                 })));
-                _context4.next = 6;
-                return client.getChannelByUniqueName("".concat(_this3.authUser.id, "-").concat(_this3.otherUser.id));
+                _context4.next = 7;
+                return client.getChannelByUniqueName("".concat(_this2.authUser.id, "-").concat(_this2.otherUser.id));
 
-              case 6:
-                _this3.channel = _context4.sent;
+              case 7:
+                _this2.channel = _context4.sent;
 
-                _this3.channel.on("messageAdded", function (message) {
-                  _this3.messages.push(message);
+                _this2.channel.on("messageAdded", function (message) {
+                  _this2.messages.push(message);
                 });
 
-              case 8:
+              case 9:
               case "end":
                 return _context4.stop();
             }
@@ -178,7 +178,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     fetchMessages: function fetchMessages() {
-      var _this4 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
@@ -186,10 +186,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return _this4.channel.getMessages();
+                return _this3.channel.getMessages();
 
               case 2:
-                _this4.messages = _context5.sent.items;
+                _this3.messages = _context5.sent.items;
 
               case 3:
               case "end":
@@ -198,11 +198,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee5);
       }))();
-    },
-    sendMessage: function sendMessage() {
-      this.channel.sendMessage(this.newMessage);
-      this.newMessage = "";
-    }
+    } // sendMessage() {
+    //     this.channel.sendMessage(this.newMessage);
+    //     this.newMessage = "";
+    // }
+
   }
 });
 
