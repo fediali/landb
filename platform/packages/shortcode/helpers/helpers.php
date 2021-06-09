@@ -191,9 +191,9 @@ if (!function_exists('get_states')) {
      * @param array $attributes
      * @return string
      */
-  function get_states($country = "US")
+  function get_states($country)
   {
-    return \CountryState::getStates($country);
+    return !empty($country) ? \CountryState::getStates($country) : [];
   }
 
 }
