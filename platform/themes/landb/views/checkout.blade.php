@@ -368,7 +368,7 @@
 
                                     </div>
                                     <div class="col-lg-5 col-5 text-right mt-5">
-                                <a style="font-size:14px" href="{{ route('customer.edit-account') }}" class="mt-5">Change</a>
+                                <a style="font-size:14px" href="{{ route('customer.edit-account', ['tab' => 'shipping']) }}" class="mt-5">Change</a>
 
                                     </div>
                                 </div>
@@ -379,7 +379,7 @@
 
                                     </div>
                                     <div class="col-lg-5 col-5 text-right mt-5">
-                                <a style="font-size:14px" href="{{ route('customer.edit-account') }}" class="mt-5">Change</a>
+                                <a style="font-size:14px" href="{{ route('customer.edit-account' , ['tab' => 'shipping']) }}" class="mt-5">Change</a>
 
                                     </div>
                                 </div>

@@ -1,3 +1,9 @@
+<?php
+
+$tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
+
+?>
+
 <section class="breadcrumb_wrap">
     <div class="pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
         <nav aria-label="breadcrumb">
@@ -12,10 +18,10 @@
     <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class="mt-4"><a class="active" data-toggle="tab" href="#home">General&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu2">Tax Certificate Online&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class="mt-4"><a data-toggle="tab" href="#menu3">Store Locator</a></li>
+                <li class="mt-4"><a class="{{ ($tab == 'general') ? 'active': '' }}" data-toggle="tab" href="#home">General&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a class="{{ ($tab == 'shipping') ? 'active': '' }}" data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a class="{{ ($tab == 'tax_certificate') ? 'active': '' }}" data-toggle="tab" href="#menu2">Tax Certificate Online&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="mt-4"><a class="{{ ($tab == 'store_locator') ? 'active': '' }}" data-toggle="tab" href="#menu3">Store Locator</a></li>
             </ul>
 
             <div class="tab-content product-tab-content">
