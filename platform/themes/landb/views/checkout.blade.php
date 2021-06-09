@@ -14,10 +14,10 @@
     <div class="row">
         <div class="col-lg-12 mt-2">
             <ul class="nav nav-tabs tabs-product">
-                <li class=""><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class=""><a class="{!! (!isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class=""><a class="{!! (!isset($user_info->billingAddress[0]))  ? 'active':'' !!}"  data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-                <li class=""><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment </a></li>
+                <li class="account-tab"><a class="{!! (empty($user_info->details)) ? 'active':'' !!}" data-toggle="tab" href="#home">Information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a id="shipping-tab" class="{!! ((!empty($user_info->details)) && !isset($user_info->shippingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class=""><a id="billing-tab" class="{!! ((!empty($user_info->details)) && isset($user_info->shippingAddress[0]) && !isset($user_info->billingAddress[0])) ? 'active': '' !!}"  data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li class="payment-tab"><a class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"  data-toggle="tab" href="#menu3">Payment </a></li>
             </ul>
 
             <div class="tab-content product-tab-content">
@@ -135,7 +135,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div id="menu1" class="tab-pane fade {!! (!isset($user_info->shippingAddress[0])) ? 'in active show':'' !!}">
+                <div id="menu1" class="tab-pane fade {!! ((!empty($user_info->details)) && !isset($user_info->shippingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
@@ -208,7 +208,7 @@
                         </div> 
                     </div>
                 </div>
-                <div id="menu2" class="tab-pane fade {!! (!isset($user_info->billingAddress[0]))  ? 'in active show':'' !!}">
+                <div id="menu2" class="tab-pane fade {!! ((!empty($user_info->details)) && isset($user_info->shippingAddress[0]) && !isset($user_info->billingAddress[0]))  ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
                             <a href="#" class=" btn border-btn w-100">Add a New Address</a>
@@ -368,7 +368,7 @@
 
                                     </div>
                                     <div class="col-lg-5 col-5 text-right mt-5">
-                                <a style="font-size:14px" href="{{ route('customer.edit-account', ['tab' => 'shipping']) }}" class="mt-5">Change</a>
+                                <a style="font-size:14px" href="javascript:void(0);" onclick="change_tab('shipping-tab')" class="mt-5">Change</a>
 
                                     </div>
                                 </div>
@@ -379,7 +379,7 @@
 
                                     </div>
                                     <div class="col-lg-5 col-5 text-right mt-5">
-                                <a style="font-size:14px" href="{{ route('customer.edit-account' , ['tab' => 'shipping']) }}" class="mt-5">Change</a>
+                                <a style="font-size:14px" href="javascript:void(0);" onclick="change_tab('billing-tab')" class="mt-5">Change</a>
 
                                     </div>
                                 </div>
@@ -445,3 +445,9 @@
     </div>
     
 </section>
+
+<script>
+    function change_tab(tab){
+      $('#'+tab).trigger('click');
+    }
+</script>
