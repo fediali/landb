@@ -9,8 +9,10 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
     });
 });
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
+  Route::get('logout', 'AuthController@logout')->name('public.logout');
+});
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']], function () {
-    Route::get('logout', 'AuthController@logout')->name('public.logout');
 
     Route::get('/cart', 'CartController@getIndex')
         ->name('public.cart_index');
@@ -42,7 +44,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
     Route::get('/product-timeline', 'ProductsController@timeline')
-        ->name('public.cart.order_checkout');
+        ->name('public.cart.timeline');
 
     Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
         Route::get('/edit-account', [
