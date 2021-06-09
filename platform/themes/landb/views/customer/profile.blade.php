@@ -140,7 +140,7 @@
                                             {{--<input class="input-textbox form-control @error('shipping_state') is-invalid @enderror" type="text" name="shipping_state" value="{{ old('shipping_state',@$user->shippingAddress[0]->state) }}"/>--}}
                                             <select class="input-textbox form-control  @error('shipping_state') is-invalid @enderror" name="shipping_state">
                                                 <option selected hidden disabled>Select a State</option>
-                                                @foreach(get_states($user->shippingAddress[0]->country) as $key => $state)
+                                                @foreach(get_states(@$user->shippingAddress[0]->country) as $key => $state)
                                                     <option @if(old('shipping_state',@$user->shippingAddress[0]->state) == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
                                                 @endforeach
                                             </select>
@@ -243,7 +243,7 @@
                                             {{--<input class="input-textbox form-control @error('billing_state') is-invalid @enderror" type="text"  name="billing_state" value="{{ old('billing_state',@$user->billingAddress[0]->state) }}"/>--}}
                                             <select class="input-textbox form-control  @error('billing_state') is-invalid @enderror" name="billing_state">
                                                 <option selected hidden disabled>Select a State</option>
-                                                @foreach(get_states($user->billingAddress[0]->country) as $key => $state)
+                                                @foreach(get_states(@$user->billingAddress[0]->country) as $key => $state)
                                                     <option @if(old('shipping_state',@$user->billingAddress[0]->state) == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
                                                 @endforeach
                                             </select>
