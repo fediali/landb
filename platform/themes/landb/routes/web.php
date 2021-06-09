@@ -43,6 +43,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
+
     Route::get('/product-timeline', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
@@ -54,6 +55,11 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/overview', [
             'as'   => 'overview',
             'uses' => 'CustomerController@show'
+        ]);
+
+        Route::get('/update-default', [
+            'as'   => 'update-default',
+            'uses' => 'CustomerController@updateDefaultById'
         ]);
 
         Route::post('/edit-account/{type}', [

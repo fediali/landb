@@ -300,9 +300,41 @@ class CustomerController extends Controller
 $data = $request->all();
 unset($data['_token']);
 
+$data['status'] = 'active';
+$data['customer_id'] = auth('customer')->user()->id;
+$data['name'] = auth('customer')->user()->name;
+$data['email'] = auth('customer')->user()->email;
+
+if(isset($data['set_default'])){
+  $data['is_default'] = 1;
+}else{
+  $data['is_default'] = 0;
+}
     $create = CustomerAddress::create($data);
+
+    if(isset($data['set_default'])){
+      $this->updateDefualtAddress($create->id, $create->type);
+    }
 
     return true;
 
+  }
+
+  public function updateDefaultById(Request $request) {
+    $id = $request->input('id');
+    $type = $request->input('type');
+    $status = $request->input('status');
+
+    //dd($id, $type, $status);
+    $this->updateDefualtAddress($id, $type, $status);
+
+    return redirect()->back()->with('success', 'Default updated');
+  }
+
+  public function updateDefualtAddress($id, $type, $status = 1){
+    $update = CustomerAddress::where('customer_id' , auth('customer')->user()->id)->where('type', $type)->update(['is_default' => 0]);
+    if($update){
+      CustomerAddress::where('id' , $id)->update(['is_default' => $status]);
+    }
   }
 }
