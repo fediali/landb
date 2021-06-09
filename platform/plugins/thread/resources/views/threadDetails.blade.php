@@ -107,8 +107,8 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-            </div> 
-            <input class="btn btn-primary mt-3 mb-1" type="button" id="btnPrint" value="Print" onclick='printDiv();'> 
+            </div>
+            <input class="btn btn-primary mt-3 mb-1" type="button" id="btnPrint" value="Print" onclick='printDiv();'>
             <div class="d-none" id="DivIdToPrint">
             <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
@@ -146,7 +146,7 @@
                <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2" class="p-0">
                   <div class="regpack">
                      <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;"> Plus Pack Size Run</h6>
-                     @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                     @foreach(@$options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                         <div class="sizediv">
                             {{ $plus_cat->name }}
                         </div>
@@ -180,8 +180,8 @@
                   </p>
                </td>
                <td colspan="2" style="width: 14%;border: 1px solid #333;  padding:0px 10px;">
-                  <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;">Category <br> 
-                     
+                  <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;">Category <br>
+
                      <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
                      Reg Pack: {{ $options['data']['reg_cat']->name }}<br>
                      <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
@@ -231,7 +231,7 @@
          border: solid 1px #333;
          padding: 15px;
          border-radius: 5px;">
-         <div style=" display: flex; 
+         <div style=" display: flex;
             margin-right: -15px;
             margin-left: -15px;">
             <div style=" flex: 0 0 20.333333%;
@@ -244,9 +244,9 @@
                   text-transform: uppercase;
                   margin: 0; font-family: 'Raleway', sans-serif;">Style</h4>
 
-                   
+
                 @if(!is_null($thread->spec_files))
-                @if(count($thread->spec_files))     
+                @if(count($thread->spec_files))
                <div style=" max-width: 1000px;
                   position: relative;
                   margin: auto; margin-top: 1.5rem !important;">
@@ -254,11 +254,11 @@
                   <div>
                      <img src="http://localhost/landb/public/storage/spec_files/161800407510.png" style="width:100%; height:310px;">
                   </div>
-                  @endforeach 
+                  @endforeach
                </div>
                @endif
                 @endif
-               <br> 
+               <br>
             </div>
             <div style="    flex: 0 0 73.76667%;
                max-width: 73.76667%;     position: relative;
@@ -277,7 +277,7 @@
                         margin-top: 15px;" >
                         <tbody>
                            <tr>
-                              <td style="border: 1px solid #333;  padding:0px 10px;"> 
+                              <td style="border: 1px solid #333;  padding:0px 10px;">
                                  <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;"> Material:
                                     <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->material }}</span>
                                  </p>
@@ -297,8 +297,8 @@
                            </tr>
                            <tr>
                               <td style="padding: 8px; vertical-align: top; font-size: 14px;" colspan="12">
-                                 <div style="background: #f5f5f5; padding: 10px; border-radius: 5px;"> 
-                                
+                                 <div style="background: #f5f5f5; padding: 10px; border-radius: 5px;">
+
                                     <div style="display: flex;flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
                                     @foreach($variations as $variation)
                                   @if($variation->status == 'active' && $variation->is_denim == 0)
@@ -314,7 +314,7 @@
                                                       <label for="">Print/Color:</label>
                                                       {{ @$variation->printdesign->name }}
                                                    </p>
-                                                   <img style=" width: 70% !important;" src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}" height="120" width="120" style="object-fit: cover"> 
+                                                   <img style=" width: 70% !important;" src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}" height="120" width="120" style="object-fit: cover">
                                                    <p style=" font-size: 12px !important; font-family: 'Raleway', sans-serif; margin:0px !important;">
                                                       <span for="">Notes:</span>
                                                       {{ $variation->notes ?? 'None' }}
@@ -324,9 +324,9 @@
                                                     @foreach($variation->trim as $trim)
                                                 <div style=" flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
-                                                      <label for="">Trim:</label> 
+                                                      <label for="">Trim:</label>
                                                    </p>
-                                                   <img style=" width: 70% !important;" src="{{ asset(strtolower(@$trim->trim_image)) }}" height="120" width="100%" style="object-fit: cover"> 
+                                                   <img style=" width: 70% !important;" src="{{ asset(strtolower(@$trim->trim_image)) }}" height="120" width="100%" style="object-fit: cover">
                                                    <p style=" font-size: 12px !important; font-family: 'Raleway', sans-serif; margin:0px !important;">
                                                       <span for="">Notes:</span>
                                                       {{@$trim->trim_note}}
@@ -334,7 +334,7 @@
                                                 </div>
                                                 @endforeach
                                                 @endif
-                                             </div> 
+                                             </div>
 
                                              <div style="margin-bottom: 0.5rem !important; margin-top: 5px !important !important;">
                                                 <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: 'Raleway', sans-serif;">
@@ -357,7 +357,7 @@
                                        </div>
                                        @endif
                               @endforeach
-                                    </div> 
+                                    </div>
                                  </div>
                               </td>
                            </tr>
@@ -1205,7 +1205,7 @@
 </script>
 
 <script>
-function printDiv() 
+function printDiv()
 {
 
   var divToPrint=document.getElementById('DivIdToPrint');
@@ -1223,7 +1223,7 @@ function printDiv()
 }
     $(document).ready(function () {
 
-      
+
 
 
         $(".images img").click(function () {
