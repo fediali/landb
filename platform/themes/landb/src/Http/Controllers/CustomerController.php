@@ -63,6 +63,9 @@ class CustomerController extends Controller
       case 'store_locator':
         $this->updateStoreLocator($request);
         break;
+      case 'add-address':
+        $this->addNewAddress($request);
+        break;
       default:
         return redirect()->back();
     }
@@ -281,5 +284,25 @@ class CustomerController extends Controller
 
   public function getCountries(Request $request){
     return CountryState::getCountries();
+  }
+
+  public function addNewAddress($request){
+    $request->validate([
+        'first_name'     => 'required|max:255',
+        'last_name'     => 'required|max:255',
+        'country'     => 'required|max:255',
+        'phone'     => 'required|max:12',
+        'company'     => 'required|max:255',
+        'city'     => 'required|max:255',
+        'state'     => 'required|max:255',
+        'type'      => 'required'
+    ]);
+$data = $request->all();
+unset($data['_token']);
+
+    $create = CustomerAddress::create($data);
+
+    return true;
+
   }
 }

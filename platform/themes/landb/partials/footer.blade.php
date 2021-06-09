@@ -145,6 +145,9 @@
     $('select[name="locator_country"]').on('change', function () {
       get_states($('select[name="locator_state"]'), this.value, '{{ route('ajax.getStates') }}');
     });
+    $('select[name="country"]').on('change', function () {
+      get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
+    });
   });
 </script>
 <script>

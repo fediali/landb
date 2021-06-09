@@ -138,7 +138,7 @@
                 <div id="menu1" class="tab-pane fade {!! ((!empty($user_info->details)) && !isset($user_info->shippingAddress[0])) ? 'in active show':'' !!}">
                     <div class="row">
                         <div class="col-lg-4 mt-5">
-                            <a href="#" class=" btn border-btn w-100">Add a New Address</a>
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#add_address_modal" class=" btn border-btn w-100">Add a New Address</a>
                         </div>
                         <div class="col-lg-8"></div>
                     </div>
@@ -445,7 +445,7 @@
     </div>
     
 </section>
-
+{!! Theme::partial('modals.add_address_modal') !!}
 <script>
     function change_tab(tab){
       $('#'+tab).trigger('click');
