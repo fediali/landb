@@ -213,7 +213,6 @@ function update_cart_item(input, val, url, action) {
 }
 
 function toggle_product_detail(id) {
-  e.preventDefault();
   $.ajax({
     type: 'GET',
     url: '/product/detail/'+id,

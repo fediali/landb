@@ -17,6 +17,8 @@ const dist = 'public/vendor/core/plugins/' + directory;
  |
  */
 
+mix.js(source + '/resources/assets/js/chat.js', dist + '/js').vue({ version: 2 });
+
 mix.js(source + '/resources/assets/js/discount.js', dist + '/js').vue({ version: 2 });
 mix.js(source + '/resources/assets/js/order-create.js', dist + '/js').vue({ version: 2 });
 
