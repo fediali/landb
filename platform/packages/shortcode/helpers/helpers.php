@@ -191,7 +191,7 @@ if (!function_exists('get_states')) {
      * @param array $attributes
      * @return string
      */
-  function get_states($country)
+  function get_states($country = '')
   {
     return !empty($country) ? \CountryState::getStates($country) : [];
   }
