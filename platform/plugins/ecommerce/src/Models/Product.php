@@ -71,6 +71,10 @@ class Product extends BaseModel
         'views',
         'oos_date',
         'private_label',
+        'restock',
+        'new_label',
+        'usa_made',
+        'ptype',
     ];
 
     /**
