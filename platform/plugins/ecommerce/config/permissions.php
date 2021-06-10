@@ -263,17 +263,17 @@ return [
     [
         'name'        => 'Create',
         'flag'        => 'customer.create',
-        'parent_flag' => 'customers.index',
+        'parent_flag' => 'customer.index',
     ],
     [
         'name'        => 'Edit',
         'flag'        => 'customer.edit',
-        'parent_flag' => 'customers.index',
+        'parent_flag' => 'customer.index',
     ],
     [
         'name'        => 'Delete',
         'flag'        => 'customer.destroy',
-        'parent_flag' => 'customers.index',
+        'parent_flag' => 'customer.index',
     ],
 
     [
