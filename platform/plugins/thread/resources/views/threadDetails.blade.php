@@ -285,7 +285,7 @@
                                         @foreach($thread->spec_files as $file)
                                             <div>
                                                 <img
-                                                    src="http://localhost/landb/public/storage/spec_files/161800407510.png"
+                                                    src="{{ asset($file->spec_file) }}"
                                                     style="width:100%; height:310px;">
                                             </div>
                                         @endforeach
