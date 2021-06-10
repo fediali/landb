@@ -2053,7 +2053,6 @@ class OrderController extends BaseController
         return $new;
     }
 
-
     public function sendSMS(Request $request)
     {
         $sid = $request->sid;
@@ -2063,6 +2062,7 @@ class OrderController extends BaseController
         $messages = $this->listMessages($sid);
         return response()->json(['messages' => $messages]);
     }
+
     public function getSMS(Request $request)
     {
         $sid = $request->sid;
