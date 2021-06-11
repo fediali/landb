@@ -52,10 +52,11 @@ class ProductsController extends Controller
         return Theme::scope('products', $data)->render();
     }
 
-    public function getDetails($id, Request $request)
+    public function getDetails($slug, Request $request)
     {
+
         $data = [
-            'product' => $this->productRepo->getProductsByParams(['first' => true, 'id' => $id, 'category' => true])
+            'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
         ];
         //dd($data['product']);
         if ($request->ajax()) {

@@ -22,7 +22,7 @@
                         {!! image_html_generator(@$latest_collection[0]->images[0]) !!}
                         <div class="imgcaption">
                             <a href="{!! generate_product_url('save', @$latest_collection[0]->id) !!}" class="save"><i class="fas fa-save"></i> Save</a>
-                            <a href="{!! generate_product_url('detail', @$latest_collection[0]->id) !!}" class="search"><i class="fal fa-search"></i></a>
+                            <a href="{!! generate_product_url('detail', @$latest_collection[0]->id, @$latest_collection[0]->product_slug) !!}" class="search"><i class="fal fa-search"></i></a>
                         </div>
                     </div>
                     @if(isset($latest_collection[1]))
@@ -31,7 +31,7 @@
                             {!! image_html_generator(@$latest_collection[1]->images[0], @$latest_collection[1]->name, null, null, true, 'imgtop') !!}
                             <div class="imgcaption">
                                 <a href="{!! generate_product_url('save', @$latest_collection[1]->id) !!}" class="save"><i class="fas fa-save"></i> Save</a>
-                                <a href="{!! generate_product_url('detail', @$latest_collection[1]->id) !!}" class="search"><i class="fal fa-search"></i></a>
+                                <a href="{!! generate_product_url('detail', @$latest_collection[1]->id, @$latest_collection[1]->product_slug) !!}" class="search"><i class="fal fa-search"></i></a>
                             </div>
                         </div>
                     </div>

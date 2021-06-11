@@ -21,7 +21,7 @@ class ProductsRepository{
     $simplePaginate = (isset($params['simplePaginate'])) ? true : false;
     $latest = (isset($params['latest'])) ? true : false;
     $first = (isset($params['first'])) ? true : false;
-    $id = (isset($params['id'])) ? $params['id'] : null;
+    $slug = (isset($params['slug'])) ? $params['slug'] : null;
     $category = (isset($params['category'])) ? true : false;
     $category_slug = (isset($params['category_slug'])) ? $params['category_slug'] : null;
 
@@ -61,7 +61,9 @@ class ProductsRepository{
       $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null): null;
     }
 
-    $data = $this->model->with(['productAttributeSets', 'category'])->where($this->model->getTable().'.quantity', '>', 0)
+    $data = $this->model->with(['productAttributeSets',  'attributesForProductList', 'category'])
+        ->where($this->model->getTable().'.status', 'published')
+        ->where($this->model->getTable().'.quantity', '>', 0)
             ->when($category , function ($query){
                 $query->with(['category' => function($que){
                   $que->with('category_sizes');
@@ -70,8 +72,11 @@ class ProductsRepository{
             ->when($is_featured , function ($query){
                 $query->where($this->model->getTable().'.is_featured', 1);
             })
-            ->when(!is_null($id) , function ($query) use ($id){
-                $query->where('id', $id);
+            ->when(!is_null($slug) , function ($query) use ($slug){
+                $query->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.key', $slug)->where('slugs.prefix', '=' ,'products');
+            })
+            ->when(is_null($slug) , function ($query){
+                $query->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.prefix', '=' ,'products');
             })
             ->when(!is_null($limit) , function ($query) use ($limit){
                 $query->limit($limit);
@@ -99,7 +104,7 @@ class ProductsRepository{
             ->when(!is_null($sort_by) && !is_null($sort_key) && !is_null($sort_type), function ($query) use ($sort_key,$sort_type){
               $query->orderBy($this->model->getTable().'.'.$sort_key, $sort_type);
             });
-
+      $data = $data->select('ec_products.*');
       if($paginate){
         $data = $data->paginate();
       }elseif($simplePaginate){

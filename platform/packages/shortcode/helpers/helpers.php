@@ -73,12 +73,14 @@ if (!function_exists('generate_product_url')) {
      * @param array $attributes
      * @return string
      */
-  function generate_product_url($type, $id)
+  function generate_product_url($type, $id, $slug = null)
   {
+
     if($type == 'save'){
       return URL::to('/product/save/'.$id);
     }elseif ($type == 'detail'){
-      return URL::to('/product/detail/'.$id);
+      return route('public.singleProduct', ['slug' => $slug]);
+      /*return URL::to('product/detail/'.$slug);*/
     }elseif ($type == 'cart'){
       return URL::to('/product/add/cart/'.$id);
     }elseif ($type == 'wishlist'){
