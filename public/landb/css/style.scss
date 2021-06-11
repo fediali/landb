@@ -1050,14 +1050,18 @@ section.parallax_video video {
 }
 
 .shoplisting .listbox .caption h4 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-    margin: 15px;
+    margin: 15px;    
+    color: #000;
+
 }
 
 .shoplisting .listbox .caption .price {
     font-family: "Saol Display Regular";
-    font-size: 24px;
+    font-size: 18px;
+    color: #000;
+
 }
 
 .pagination {

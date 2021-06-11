@@ -110,7 +110,7 @@
                 </div>
                 <!-- /.row -->
             </div>
-            <div class="d-none" id="DivIdToPrint">
+            <div class="" id="DivIdToPrint">
                 <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
                         margin-top: 15px;">
@@ -347,15 +347,15 @@
                                                                 <div
                                                                     style=" flex: 0 0 44.333333%; max-width: 44.333333%; position: relative; width: 100%; padding-right: 15px; padding-left: 15px;">
                                                                     <div
-                                                                        style="background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
+                                                                        style=" min-height: 445px; background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
                                                                         <h5 style=" margin-top: 0.5rem !important; font-family: 'Raleway', sans-serif;">
                                                                             {{$loop->iteration}}.
                                                                             Variation: {{ $variation->name }}
                                                                         </h5>
                                                                         <div
-                                                                            style=" display: flex;  margin-right: -15px; margin-left: -15px;">
+                                                                            style=" display: flex; flex-wrap:wrap;  margin-right: -15px; margin-left: -15px;">
                                                                             <div
-                                                                                style="  flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
+                                                                                style=" min-height: 245px; flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
                                                                                 <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
                                                                                     <label for="">Print/Color:</label>
                                                                                     {{ @$variation->printdesign->name }}
