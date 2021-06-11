@@ -83,6 +83,7 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
+        'product_slug'
     ];
 
     /**
@@ -437,6 +438,16 @@ class Product extends BaseModel
     public function getOriginalPriceAttribute()
     {
         return $this->front_sale_price ?? $this->price ?? 0;
+    }
+
+    /**
+     * Get Original price of products
+     * @return float
+     */
+    public function getProductSlugAttribute()
+    {
+        $slug = $this->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.reference_id', $this->id)->where('slugs.prefix', '=' ,'products')->pluck('key')->first();
+        return $slug;
     }
 
     /**

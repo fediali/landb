@@ -13,7 +13,7 @@
                     @foreach($latest_collection as $key => $product)
                         @if($key > 3)
                             <div>
-                               <a href="{!! generate_product_url('detail', $product->id) !!}">
+                               <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
                                    {!! image_html_generator(@$product->images[0]) !!}
                                    <div class="caro_text">
                                        <h5>Dresses</h5>
