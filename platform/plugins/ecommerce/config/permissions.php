@@ -257,23 +257,23 @@ return [
     ],
     [
         'name'        => 'Customers',
-        'flag'        => 'customers.index',
+        'flag'        => 'customer.index',
         'parent_flag' => 'plugins.ecommerce',
     ],
     [
         'name'        => 'Create',
-        'flag'        => 'customers.create',
-        'parent_flag' => 'customers.index',
+        'flag'        => 'customer.create',
+        'parent_flag' => 'customer.index',
     ],
     [
         'name'        => 'Edit',
-        'flag'        => 'customers.edit',
-        'parent_flag' => 'customers.index',
+        'flag'        => 'customer.edit',
+        'parent_flag' => 'customer.index',
     ],
     [
         'name'        => 'Delete',
-        'flag'        => 'customers.destroy',
-        'parent_flag' => 'customers.index',
+        'flag'        => 'customer.destroy',
+        'parent_flag' => 'customer.index',
     ],
 
     [

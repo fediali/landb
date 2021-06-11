@@ -3,8 +3,8 @@
         <div class="card-header">{{ otherUser.name }}</div>
         <div class="card-body">
             <div v-for="message in messages" v-bind:key="message.id">
-                <div :class="{ 'text-right': message.author === authUser.email }">
-                    {{ message.body }}
+                <div :class="{ 'text-right': message.author === '+13345390661' }">
+                    <i>{{ message.date }}</i> <b>{{ message.body }}</b>
                 </div>
             </div>
         </div>
@@ -13,6 +13,8 @@
         </div>
     </div>
 </template>
+
+
 
 <script>
 export default {
@@ -25,29 +27,44 @@ export default {
         otherUser: {
             type: Object,
             required: true
-        }
+        },
+        messages: {
+            type: Array
+        },
+        sid: {
+            type: String
+        },
     },
     data() {
         return {
-            messages: [],
+            //messages: [],
             newMessage: "",
-            channel: ""
+            channel: "",
+            polling: null
         };
     },
     async created() {
-        const token = await this.fetchToken();
-        console.log(token, "==========");
-        await this.initializeClient(token);
-        await this.fetchMessages();
+        // const token = await this.fetchToken();
+        // await this.initializeClient(token);
+        /*await this.fetchMessages();*/
+        this.pollData();
     },
     methods: {
-        async fetchToken() {
-            const { data } = await axios.post("/admin/orders/generate-token", {
-                email: this.authUser.email
+        /*async fetchToken() {
+            const {data} = await axios.post("/admin/orders/generate-token", {
+                email: `${this.authUser.id}`
             });
             return data.token;
+        },*/
+        /*async fetchMessages() {
+            this.messages = (await this.channel.getMessages()).items;
         },
-        async initializeClient(token) {
+        sendMessage() {
+            this.channel.sendMessage(this.newMessage);
+            this.newMessage = "";
+        }*/
+
+        /*async initializeClient(token) {
             const client = await Twilio.Chat.Client.create(token);
             client.on("tokenAboutToExpire", async () => {
                 const token = await this.fetchToken();
@@ -59,14 +76,41 @@ export default {
             this.channel.on("messageAdded", message => {
                 this.messages.push(message);
             });
-        },
-        async fetchMessages() {
-            this.messages = (await this.channel.getMessages()).items;
-        },
-        sendMessage() {
-            this.channel.sendMessage(this.newMessage);
+        },*/
+
+        async sendMessage() {
+            let self = this;
+            const {data} = await axios.post("/admin/orders/send-sms", {
+                sid: `${this.authUser.id}-${this.otherUser.id}`,
+                author: '+13345390661', //self.otherUser.phone,
+                body: self.newMessage,
+            });
+            this.messages = data.messages;
             this.newMessage = "";
+        },
+
+        async pollData () {
+            this.polling = setInterval(async () => {
+                const {data} = await axios.post("/admin/orders/get-sms", {
+                    sid: `${this.authUser.id}-${this.otherUser.id}`,
+                });
+                this.messages = data.messages;
+            }, 10000)
         }
+    },
+    watch: {
+        /*sid(value) {
+            this.sid = value;
+        },
+        messages(value) {
+            this.messages = value;
+        },
+        authUser(value) {
+            this.authUser = value;
+        },
+        otherUser(value) {
+            this.otherUser = value;
+        }*/
     }
 }
 </script>

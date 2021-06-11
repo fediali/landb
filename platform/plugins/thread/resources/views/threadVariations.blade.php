@@ -506,7 +506,7 @@ $variations = $options['data']['variations'];
                                     <td width="10%" class="{{--no-denim-field--}}">
                                         <label>{{$thread->is_pieces ? 'Plus Pieces Qty' : 'Plus Pack Qty'}}</label>
                                         <input class="form-control" placeholder="Add Quantity" name="plus_qty"
-                                               id="ed-reg-qty" type="text">
+                                               id="ed-plu-qty" type="text">
                                     </td>
                                     {{--                                    <td width="10%" class="--}}{{--no-denim-field--}}{{--">--}}
                                     {{--                                        <label>{{'REG SKU'}}</label>--}}

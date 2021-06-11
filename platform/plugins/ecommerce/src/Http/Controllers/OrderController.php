@@ -64,6 +64,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 
 
+use Twilio\Exceptions\RestException;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
 use Twilio\Rest\Client;
@@ -1837,18 +1838,21 @@ class OrderController extends BaseController
     public function chatRoom(Request $request)
     {
         page_title()->setTitle('Chat Room');
-        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
-            ->addScriptsDirectly([
-                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
-                'vendor/core/plugins/ecommerce/js/chat.js',
-            ])
-            ->addScripts(['blockui', 'input-mask']);
+//        Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
+//            ->addScriptsDirectly([
+//                'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
+//                'vendor/core/plugins/ecommerce/js/chat.js',
+//            ])
+//            ->addScripts(['blockui', 'input-mask']);
         $customers = get_customers();
+        //Channel SID
+
         return view('plugins/ecommerce::orders.chatRoom', compact('customers'));
     }
 
     public function chatMessage(Request $request, $ids)
     {
+
 
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
@@ -1925,22 +1929,37 @@ class OrderController extends BaseController
             $twilio->conversations->v1->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members->create($otherUser->phone);
         }*/
 
-//        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
-//            ->channels("CH7a9930ad18194a52a0e62e17f37ad72b")
-//            ->delete();
+        //$twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
+            //->channels("CH7a9930ad18194a52a0e62e17f37ad72b")
+            //->delete();
 //        $twilio->conversations->v1->conversations("CH63d8a63a03da43adb5849aa085fd0f4c")
 //            ->participants("MBd279743865664823a3e4f278c63d0492")
 //            ->delete();
-        $author = '+13345390661';
-        $body = 'Gand Marwao Gathiye Khaoo';
-//        $conversation = $this->makeConversation($ids);
+        //Text Message
+        //$author = '+13345390661';
+        //$body = 'Gand Marwao Gathiye Khaoo';
+        //Making Conversation
+        //$conversation = $this->makeConversation($ids);
+        // New Conversation Participant Add
 //        $participant = $this->createSMSParticipant($conversation->sid, $otherUser->phone);
+        // Adding Participant
         //$chat = $this->createChatParticipant($conversation->sid, $otherUser->phone);
-        $sendMessage = $this->createMessage('CHdf9c1182df404518b8270608826ce544', $author, $body);
-        dd($sendMessage);
 
-        dd('s');
-        return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser'));
+        //Sending Text
+        //$sendMessage = $this->createMessage('CHdf9c1182df404518b8270608826ce544', $author, $body);
+//        dd($sendMessage);
+//        dd('s');
+        //$sid = 'CH286197bbcbf3448a9f89d46e70691a1b';
+        //$messages = $this->listMessages($sid);
+
+        //dd($otherUser->phone);
+
+        $conversation = $this->makeConversation($ids, $otherUser->phone);
+        $sid = $conversation->sid;
+        $messages = json_encode($this->listMessages($sid));
+        // $participants = $twilio->conversations->v1->conversations($conversation->sid)->participants('MB7b0a555c2dfb47e49ca719a6643bdec4')->fetch();
+
+        return view('plugins/ecommerce::orders.chatMessage', compact('customers', 'otherUser', 'messages', 'sid'));
     }
 
     public function generateToken(Request $request)
@@ -1954,16 +1973,18 @@ class OrderController extends BaseController
         return response()->json(['token' => $token->toJWT()]);
     }
 
-    public function makeConversation($uniqueName)
+    public function makeConversation($uniqueName, $number = false)
     {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-        $conversation = $twilio->conversations->v1
-            ->conversations
-            ->create([
+        try {
+            $conversation = $twilio->conversations->v1->conversations($uniqueName)->fetch();
+        } catch (RestException $exception) {
+            $conversation = $twilio->conversations->v1->conversations->create([
                 "friendlyName" => "Conversation-" . $uniqueName,
-                "uniqueName"   => $uniqueName . rand(0000, 9999),
+                "uniqueName"   => $uniqueName,
             ]);
-
+            $this->createSMSParticipant($conversation->sid, $number);
+        }
         return $conversation;
     }
 
@@ -2011,14 +2032,14 @@ class OrderController extends BaseController
         $messages = $twilio->conversations->v1
             ->conversations($sid)
             ->messages
-            ->read(20);
+            ->read();
         $array = array();
         foreach ($messages as $message) {
             array_push($array, [
-                $message->sid,
-                $message->author,
-                $message->body,
-                $this->convertTime($message->dateCreated)
+                'id' => $message->sid,
+                'author' => $message->author,
+                'body' => $message->body,
+                'date' => $this->convertTime($message->dateCreated)
             ]);
         }
         return $array;
@@ -2030,6 +2051,23 @@ class OrderController extends BaseController
         $new = $dt->toDayDateTimeString();
 
         return $new;
+    }
+
+    public function sendSMS(Request $request)
+    {
+        $sid = $request->sid;
+        $author = $request->author;
+        $body = $request->body;
+        $this->createMessage($sid, $author, $body);
+        $messages = $this->listMessages($sid);
+        return response()->json(['messages' => $messages]);
+    }
+
+    public function getSMS(Request $request)
+    {
+        $sid = $request->sid;
+        $messages = $this->listMessages($sid);
+        return response()->json(['messages' => $messages]);
     }
 
 }

@@ -659,6 +659,17 @@ if (!function_exists('get_barcode')) {
     }
 }
 
+if (!function_exists('get_barcode_by_upc')) {
+    function get_barcode_by_upc($upc)
+    {
+        $aa = new DNS1D();
+        $image = $aa->getBarcodePNG($upc, 'C39', 2, 33);
+        $name = 'products_barcode/' . $upc . '.' . 'jpg';
+        Storage::put($name, base64_decode($image));
+        return ['upc' => $upc, 'barcode' => $name];
+    }
+}
+
 if (!function_exists('get_design_manager')) {
     function get_design_manager()
     {
@@ -804,7 +815,7 @@ if (!function_exists('set_product_oos_date')) {
 }
 
 if (!function_exists('log_product_history')) {
-    function log_product_history($params)
+    function log_product_history($params, $auth = true)
     {
         InventoryHistory::create([
             'parent_product_id' => isset($params['parent_product_id']) ? $params['parent_product_id'] : NULL,
@@ -819,7 +830,7 @@ if (!function_exists('log_product_history')) {
             'inventory_id'    => isset($params['inventory_id']) ? $params['inventory_id'] : NULL,
             'thread_order_id' => isset($params['thread_order_id']) ? $params['thread_order_id'] : NULL,
 
-            'created_by' => auth()->user()->id,
+            'created_by' => $auth ? auth()->user()->id : 1,
             'reference'  => isset($params['reference']) ? $params['reference'] : NULL
         ]);
     }
