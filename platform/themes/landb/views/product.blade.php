@@ -14,6 +14,7 @@
 <section class="shoplisting_wrap">
     <div class="row">
 
+        
         <div class="col-lg-1">
             @if(count($product->images))
                 @foreach($product->images as $image)
@@ -203,7 +204,7 @@
     </div>
     <div class="row">
         <div class="col-lg-12 mt-4">
-            <div class="shoplisting">
+            <div class="shoplisting detail-shoplist">
                 <div class="listbox">
                     <div class="img">
                         <img src="img/listing/listimg1.png" alt="">
