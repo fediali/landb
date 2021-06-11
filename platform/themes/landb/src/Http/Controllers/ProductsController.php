@@ -58,6 +58,9 @@ class ProductsController extends Controller
         $data = [
             'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
         ];
+        if(!$data['product']){
+          abort('404');
+        }
         //dd($data['product']);
         if ($request->ajax()) {
             return response()->json(['product' => $data['product']], 200);
