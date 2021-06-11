@@ -215,7 +215,7 @@ function update_cart_item(input, val, url, action) {
 function toggle_product_detail(id) {
   $.ajax({
     type: 'GET',
-    url: '/product/detail/'+id,
+    url: '/products/'+id,
     beforeSend: function () {
       $('#product-detail-name').html('');
       $('#product-detail-price').html('');

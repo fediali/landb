@@ -29,7 +29,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/payment/status', 'CheckoutController@getPayPalStatus')
         ->name('public.paypal_status');
 
-    Route::get('/product/detail/{slug?}', 'ProductsController@getDetails')
+    Route::get('/products/{slug?}', 'ProductsController@getDetails')
         ->name('public.singleProduct');
 
     Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
