@@ -78,7 +78,7 @@
                 <div class="row mt-4">
                     <div id="myform" class="col-lg-4">
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
-                        <input type='text' name='quantity' value='1' class='qty' readonly/>
+                        <input type='text' name='quantity' value='1' class='qty'  readonly/>
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
                     </div>
                     <div class="col-lg-4">

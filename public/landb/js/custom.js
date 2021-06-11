@@ -234,6 +234,7 @@ function toggle_product_detail(id) {
     success: function (result) {
       var images = sizes = categories = tags = '';
       var product = result.product;
+      console.log(product)
       var image = '<img src="images/lucky&blessed_logo_sign_Black 1.png" />';
       if (product.images !== null) {
         product.images.forEach(function (value, index) {

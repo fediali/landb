@@ -166,7 +166,7 @@
   jQuery(document).ready(function() {
     // This button will increment the value
     $('.qtyplus').click(function(e) {
-      toggle_loader(true);
+      /*toggle_loader(true);*/
       var newVal = 0;
       // Stop acting like a button
       e.preventDefault();
@@ -184,13 +184,17 @@
         newVal = 0;
         /*$(this).prev('input[name=' + fieldName + ']').val(0);*/
       }
-      if($(this).data('update') == '1') {
-        var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
-        if(update == 0){
-          $(this).prev('input[name=' + fieldName + ']').val(newVal);
-        }
-        console.log('result: '+newVal);
-      }
+
+          console.log($(this).data('update'))
+          if($(this).data('update') == '1') {
+            var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}', 'inc');
+            if(update == 0){
+              $(this).prev('input[name=' + fieldName + ']').val(newVal);
+            }
+            console.log('result: '+newVal);
+          }else{
+            $(this).prev('input[name=' + fieldName + ']').val(newVal);
+          }
     });
     // This button will decrement the value till 0
     $(".qtyminus").click(function(e) {
@@ -212,11 +216,14 @@
         // Otherwise put a 0 there
         /*$(this).next('input[name=' + fieldName + ']').val(0);*/
       }
+      console.log($(this).data('update'))
       if($(this).data('update') == '1'){
         var update = update_cart_item($(this), newVal, '{{ route('public.cart.update_cart') }}','dec');
         if(update == 0){
           $(this).next('input[name=' + fieldName + ']').val(newVal);
         }
+      }else{
+        $(this).next('input[name=' + fieldName + ']').val(newVal);
       }
 
     });
