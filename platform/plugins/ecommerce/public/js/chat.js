@@ -138,7 +138,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 self = _this2;
                 _context2.next = 3;
-                return axios.post("/admin/orders/send-sms", {
+                return axios.post("/admin/chatings/send-sms", {
                   sid: "".concat(_this2.authUser.id, "-").concat(_this2.otherUser.id),
                   author: '+13345390661',
                   //self.otherUser.phone,
@@ -175,7 +175,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       switch (_context3.prev = _context3.next) {
                         case 0:
                           _context3.next = 2;
-                          return axios.post("/admin/orders/get-sms", {
+                          return axios.post("/admin/chatings/get-sms", {
                             sid: "".concat(_this3.authUser.id, "-").concat(_this3.otherUser.id)
                           });
 
