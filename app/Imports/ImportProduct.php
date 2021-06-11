@@ -35,7 +35,6 @@ class ImportProduct implements ToModel, WithHeadingRow
 
             $check = Product::where('sku', $row['product_code'])->first();
             if (!$check) {
-                dd($row);
                 $packQuantity = $this->quantityCalculate($row['category_id']);
                 $product = new Product();
                 $product->name = $row['product'];
