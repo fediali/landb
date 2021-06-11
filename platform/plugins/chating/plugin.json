@@ -1,0 +1,9 @@
+{
+    "name": "Chating",
+    "namespace": "Botble\\Chating\\",
+    "provider": "Botble\\Chating\\Providers\\ChatingServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module chating"
+}
