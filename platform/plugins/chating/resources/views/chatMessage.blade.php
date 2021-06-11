@@ -16,7 +16,7 @@
                                 @else
                                     <ul class="list-group list-group-flush">
                                         @foreach ($customers as $customer)
-                                            <a href="{{ route('orders.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}" class="list-group-item list-group-item-action">{{ $customer->name }}</a>
+                                            <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}" class="list-group-item list-group-item-action">{{ $customer->name }}</a>
                                         @endforeach
                                     </ul>
                                 @endif
