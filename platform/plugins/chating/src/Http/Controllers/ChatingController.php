@@ -7,6 +7,9 @@ use Botble\Chating\Http\Requests\ChatingRequest;
 use Botble\Chating\Repositories\Interfaces\ChatingInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Repositories\Eloquent\CustomerRepository;
+use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
+use Botble\Textmessages\Repositories\Interfaces\TextmessagesInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
@@ -30,13 +33,17 @@ class ChatingController extends BaseController
      * @var ChatingInterface
      */
     protected $chatingRepository;
+    protected $customerRepository;
+    protected $textmessageRepository;
 
     /**
      * @param ChatingInterface $chatingRepository
      */
-    public function __construct(ChatingInterface $chatingRepository)
+    public function __construct(ChatingInterface $chatingRepository, CustomerInterface $customerRepository, TextmessagesInterface $textmessageRepository)
     {
         $this->chatingRepository = $chatingRepository;
+        $this->customerRepository = $customerRepository;
+        $this->textmessageRepository = $textmessageRepository;
     }
 
     /**
@@ -242,12 +249,18 @@ class ChatingController extends BaseController
             $twilio->conversations->v1->services(env('TWILIO_SERVICE_SID'))->channels($ids)->members->create($otherUser->phone);
         }*/
 
-        //$twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
-        //->channels("CH7a9930ad18194a52a0e62e17f37ad72b")
-        //->delete();
-//        $twilio->conversations->v1->conversations("CH63d8a63a03da43adb5849aa085fd0f4c")
-//            ->participants("MBd279743865664823a3e4f278c63d0492")
+//        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
+//            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
+//
+//        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
+//            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
+//            ->delete();
+
+//        $twilio->conversations->v1->conversations("CH5cd6cb9ec79f4005b1a060780da974d6")
+//            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
+//            ->delete();
+
         //Text Message
         //$author = '+13345390661';
         //$body = 'Gand Marwao Gathiye Khaoo';
@@ -282,8 +295,10 @@ class ChatingController extends BaseController
         return response()->json(['token' => $token->toJWT()]);
     }
 
-    public function makeConversation($uniqueName, $number = false)
+    public function makeConversation($uniqueName, $number = false, $text = false)
     {
+
+
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         try {
             $conversation = $twilio->conversations->v1->conversations($uniqueName)->fetch();
@@ -345,10 +360,10 @@ class ChatingController extends BaseController
         $array = array();
         foreach ($messages as $message) {
             array_push($array, [
-                'id' => $message->sid,
+                'id'     => $message->sid,
                 'author' => $message->author,
-                'body' => $message->body,
-                'date' => $this->convertTime($message->dateCreated)
+                'body'   => $message->body,
+                'date'   => $this->convertTime($message->dateCreated)
             ]);
         }
         return $array;
@@ -377,6 +392,20 @@ class ChatingController extends BaseController
         $sid = $request->sid;
         $messages = $this->listMessages($sid);
         return response()->json(['messages' => $messages]);
+    }
+
+    public function smsCampaign(Request $request)
+    {
+        $text = $this->textmessageRepository->findOrFail(1);
+        $author = '+13345390661';
+        $customer = Customer::where('is_text', 1)->get();
+        foreach ($customer as $c) {
+            $uniqueName = '1-' . $c->id;
+            $conversation = $this->makeConversation($uniqueName, $c->phone);
+            $message = $this->createMessage($conversation->sid, $author, $text->text);
+        }
+
+        return 'success';
     }
 
 

@@ -6,6 +6,8 @@ Route::group(['namespace' => 'Botble\Chating\Http\Controllers', 'middleware' => 
 
         Route::group(['prefix' => 'chatings', 'as' => 'chating.'], function () {
             Route::resource('', 'ChatingController')->parameters(['' => 'chating']);
+
+
             Route::delete('items/destroy', [
                 'as'         => 'deletes',
                 'uses'       => 'ChatingController@deletes',
@@ -15,6 +17,11 @@ Route::group(['namespace' => 'Botble\Chating\Http\Controllers', 'middleware' => 
             Route::get('chat-room', [
                 'as'         => 'chatRoom',
                 'uses'       => 'ChatingController@chatRoom',
+                'permission' => 'chating.create',
+            ]);
+            Route::get('sms-campaign', [
+                'as'         => 'smsCampaign',
+                'uses'       => 'ChatingController@smsCampaign',
                 'permission' => 'chating.create',
             ]);
             Route::get('messages/{ids}', [
