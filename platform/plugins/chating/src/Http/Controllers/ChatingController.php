@@ -405,7 +405,7 @@ class ChatingController extends BaseController
             $message = $this->createMessage($conversation->sid, $author, $text->text);
         }
 
-        return 'success';
+        return redirect()->back();
     }
 
 
