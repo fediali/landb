@@ -151,6 +151,16 @@ class Order extends BaseModel
         return $this->hasOne(OrderAddress::class, 'order_id')->withDefault();
     }
 
+    public function shippingAddress()
+    {
+      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'shipping');
+    }
+
+    public function billingAddress()
+    {
+      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'billing');
+    }
+
     /**
      * @return HasMany
      */

@@ -44,6 +44,12 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
 
+    Route::get('/order/success/{id}', 'OrderController@success')
+        ->name('public.order.success');
+
+    Route::get('/order/status/{id}', 'OrderController@index')
+        ->name('public.order.status');
+
     Route::get('/product-timeline', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 

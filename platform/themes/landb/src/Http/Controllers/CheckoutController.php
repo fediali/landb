@@ -15,6 +15,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Cart\CartItem;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
@@ -76,6 +77,7 @@ class CheckoutController extends Controller
   }
 
   public function proceedPayment(Request $request){
+
     $returnUrl = $request->input('return_url');
 
     $currency = $request->input('currency', config('plugins.payment.payment.currency'));
@@ -88,6 +90,26 @@ class CheckoutController extends Controller
         'currency' => $currency,
         'type'     => $request->input('payment_method'),
     ];
+
+    $order = Order::with('products')->find($request->input('order_id'));
+
+    if(!isset(auth('customer')->user()->shippingAddress[0])){
+      return redirect()->route('public.cart_index')->with('error', 'Shipping Address Not found!');
+    }
+
+    foreach ($order->products as $product){
+      $original = Product::find($product->product_id);
+      if($original->quantity == 0){
+        //dd($original);
+        $product->delete();
+        return redirect()->route('public.cart_index')->with('error', 'Product: "'.$original->name. '" is currently out of stock');
+      }elseif ($original->quantity < $product->qty){
+        return redirect()->route('public.cart_index')->with('error', 'Product: "'.$original->name. '" have only '. $original->quantity.' quantity left');
+      }
+      update_product_quantity($product->product_id, $product->qty, 'dec');
+    }
+    $this->addOrderAddresses($order->id);
+
     switch ($request->input('payment_method')) {
       case PaymentMethodEnum::PAYPAL:
 
@@ -144,20 +166,27 @@ class CheckoutController extends Controller
   ) {
     $chargeId = $palPaymentService->afterMakePayment($request);
     $token = OrderHelper::getOrderSessionToken();
-    $order = $this->orderRepository->getFirstBy(compact('token'), [], ['address', 'products']);
+    $order_id = $request->input('order_id');
+    $order = $this->orderRepository->findById($order_id, ['address', 'products']);
+    
     if ($token !== session('tracked_start_checkout') || !$order) {
+      foreach ($order->products as $product){
+       update_product_quantity($product->product_id, $product->qty, 'inc');
+      }
       return $response->setNextUrl(url('/'));
     }
     $payment = Payment::where('charge_id' , $chargeId)->first();
     //dd($payment);
     $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
+
+
     OrderHelper::clearSessions($token);
 
     /*return $response
         ->setNextUrl(url('/'))
         ->setMessage(__('Checkout successfully!'));*/
 
-    return Theme::scope('orderSuccess')->render();
+    return redirect()->route('public.order.success', ['id' => $order_id]);
   }
 
 
@@ -198,6 +227,37 @@ class CheckoutController extends Controller
 
     //$response->setMessage('Payment Successfully');
     return true;
+  }
+
+  public function addOrderAddresses($id){
+
+    $shipping = auth('customer')->user()->shippingAddress;
+    $billing = auth('customer')->user()->billingAddress;
+
+    if(isset($shipping[0])){
+      OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'shipping'],[
+          'name' => $shipping[0]->name,
+          'phone' => $shipping[0]->phone,
+          'email' => $shipping[0]->email,
+          'country' => $shipping[0]->country,
+          'state' => $shipping[0]->state,
+          'city' => $shipping[0]->city,
+          'address' => $shipping[0]->address,
+          'zip_code' => $shipping[0]->zip_code,
+      ]);
+    }
+    if(isset($billing[0])){
+      OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'billing'],[
+          'name' => $billing[0]->name,
+          'phone' => $billing[0]->phone,
+          'email' => $billing[0]->email,
+          'country' => $billing[0]->country,
+          'state' => $billing[0]->state,
+          'city' => $billing[0]->city,
+          'address' => $billing[0]->address,
+          'zip_code' => $billing[0]->zip_code,
+      ]);
+    }
   }
 
 }

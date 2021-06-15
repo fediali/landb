@@ -27,6 +27,7 @@ class OrderAddress extends BaseModel
         'address',
         'zip_code',
         'order_id',
+        'type'
     ];
 
     /**

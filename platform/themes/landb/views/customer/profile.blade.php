@@ -43,7 +43,7 @@
                         <tbody>
                             @foreach($user->orders as $order)
                                 <tr>
-                                    <th scope="row">{{ $order->id }}</th>
+                                    <th scope="row"><a href="{{ route('public.order.status', ['id' => $order->id]) }}">{{ $order->id }}</a></th>
                                     <td>{{ date('m D, Y', strtotime($order->created_at)) }}</td>
                                     <td><span class="badge badge-primary">{{ $order->status }}</span></td>
                                     <td>
