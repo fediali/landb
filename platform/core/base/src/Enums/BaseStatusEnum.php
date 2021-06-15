@@ -19,10 +19,24 @@ class BaseStatusEnum extends Enum
     public const DRAFT = 'draft';
     public const PENDING = 'pending';
 
+    public const SCHEDULE = 'schedule';
+
+
     public const HIDDEN = 'hidden';
     public const ACTIVE = 'active';
     public const DISABLED = 'disabled';
 
+
+    public static $SCHEDULE = [
+        'schedule'  => self::SCHEDULE,
+        'published' => self::PUBLISHED,
+
+    ];
+    public static $DEFAULT = [
+        'published' => self::PUBLISHED,
+        'draft'     => self::DRAFT,
+        'pending'   => self::PENDING,
+    ];
     public static $STATUSES = [
         'H' => self::HIDDEN,
         'A' => self::ACTIVE,

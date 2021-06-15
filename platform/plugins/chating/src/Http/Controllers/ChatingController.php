@@ -2,6 +2,7 @@
 
 namespace Botble\Chating\Http\Controllers;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Chating\Http\Requests\ChatingRequest;
 use Botble\Chating\Repositories\Interfaces\ChatingInterface;
@@ -9,6 +10,7 @@ use Botble\Base\Http\Controllers\BaseController;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Repositories\Eloquent\CustomerRepository;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
+use Botble\Textmessages\Models\Textmessages;
 use Botble\Textmessages\Repositories\Interfaces\TextmessagesInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -279,6 +281,18 @@ class ChatingController extends BaseController
         $conversation = $this->makeConversation($ids, $otherUser->phone);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
+//        $unread = $twilio->conversations->v1
+//            ->conversations($sid)
+//            ->messages
+//            ->read();
+//        dd($unread);
+//        foreach ($unread as $record) {
+//            print($record);
+//            exit();
+//        }
+
+        //unread message
+
         // $participants = $twilio->conversations->v1->conversations($conversation->sid)->participants('MB7b0a555c2dfb47e49ca719a6643bdec4')->fetch();
 
         return view('plugins/chating::chatMessage', compact('customers', 'otherUser', 'messages', 'sid'));
@@ -394,18 +408,21 @@ class ChatingController extends BaseController
         return response()->json(['messages' => $messages]);
     }
 
-    public function smsCampaign(Request $request)
+    public function smsCampaign($text_id)
     {
-        $text = $this->textmessageRepository->findOrFail(1);
-        $author = '+13345390661';
-        $customer = Customer::where('is_text', 1)->get();
-        foreach ($customer as $c) {
-            $uniqueName = '1-' . $c->id;
-            $conversation = $this->makeConversation($uniqueName, $c->phone);
-            $message = $this->createMessage($conversation->sid, $author, $text->text);
+        foreach ($text_id as $row) {
+            $text = $this->textmessageRepository->findOrFail($row);
+            $author = '+13345390661';
+            $customer = Customer::where('is_text', 1)->get();
+            foreach ($customer as $c) {
+                $uniqueName = '1-' . $c->id;
+                $conversation = $this->makeConversation($uniqueName, $c->phone);
+                $message = $this->createMessage($conversation->sid, $author, $text->text);
+            }
+            $status['status'] = BaseStatusEnum::PUBLISHED;
+            Textmessages::where('id', $text_id)->update($status);
         }
 
-        return redirect()->back();
     }
 
 

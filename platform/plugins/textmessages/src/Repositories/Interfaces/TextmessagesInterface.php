@@ -6,4 +6,6 @@ use Botble\Support\Repositories\Interfaces\RepositoryInterface;
 
 interface TextmessagesInterface extends RepositoryInterface
 {
+
 }
+

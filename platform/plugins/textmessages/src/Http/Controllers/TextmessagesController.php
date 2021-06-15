@@ -2,6 +2,7 @@
 
 namespace Botble\Textmessages\Http\Controllers;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Textmessages\Http\Requests\TextmessagesRequest;
 use Botble\Textmessages\Repositories\Interfaces\TextmessagesInterface;
@@ -61,6 +62,9 @@ class TextmessagesController extends BaseController
      */
     public function store(TextmessagesRequest $request, BaseHttpResponse $response)
     {
+        $request['status'] = 'schedule';
+        $request['schedule'] = $request->schedule;
+
         $textmessages = $this->textmessagesRepository->createOrUpdate($request->input());
 
         event(new CreatedContentEvent(TEXTMESSAGES_MODULE_SCREEN_NAME, $request, $textmessages));

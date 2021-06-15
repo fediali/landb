@@ -39,7 +39,7 @@ class TextmessagesForm extends FormAbstract
                     'class'            => 'form-control',
                     'data-date-format' => 'd M, yyyy',
                 ],
-                'value'         =>  date('m/d/Y h:i:s', strtotime($this->model->schedule_date))
+                'value'      => date('m/d/Y h:i:s', strtotime($this->model->schedule_date))
             ])
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
@@ -47,7 +47,7 @@ class TextmessagesForm extends FormAbstract
                 'attr'       => [
                     'class' => 'form-control select-full',
                 ],
-                'choices'    => BaseStatusEnum::labels(),
+                'choices'    => BaseStatusEnum::$SCHEDULE,
             ])
             ->setBreakFieldPoint('status');
     }

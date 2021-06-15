@@ -63,7 +63,7 @@ class TextmessagesTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                return $item->status;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -98,12 +98,12 @@ class TextmessagesTable extends TableAbstract
     public function columns()
     {
         return [
-            'id' => [
+            'id'         => [
                 'name'  => 'textmessages.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'name' => [
+            'name'       => [
                 'name'  => 'textmessages.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
@@ -113,7 +113,7 @@ class TextmessagesTable extends TableAbstract
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status' => [
+            'status'     => [
                 'name'  => 'textmessages.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
@@ -145,12 +145,12 @@ class TextmessagesTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'textmessages.name' => [
+            'textmessages.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'textmessages.status' => [
+            'textmessages.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),

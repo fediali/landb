@@ -1,51 +1,52 @@
 <template>
-     <div class="row heading">
-        <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
-        <div class="heading-avatar-icon">
-            <img src="https://bootdey.com/img/Content/avatar/avatar6.png">
-        </div>
-        </div>
-        <div class="col-sm-8 col-xs-7 heading-name">
-        <a class="heading-name-meta">{{ otherUser.name }}
-        </a> 
-        </div> 
-    </div>
-
-    <div class="row message" id="conversation"> 
-
-        <div class="row message-body">
-        <div v-for="message in messages" v-bind:key="message.id" class="col-sm-12 message-main-receiver">
-            <div :class="{ 'text-right receiver': message.author === '+13345390661' }">
-            <div class="message-text">
-            {{ message.body }}
+    <div class="card">
+        <div class="row heading">
+            <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+                <div class="heading-avatar-icon">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png">
+                </div>
             </div>
-            <span class="message-time pull-right">
+            <div class="col-sm-8 col-xs-7 heading-name">
+                <a class="heading-name-meta">{{ otherUser.name }}
+                </a>
+            </div>
+        </div>
+
+        <div class="row message" id="conversation">
+
+            <div class="row message-body">
+                <div v-for="message in messages" v-bind:key="message.id" class="col-sm-12 message-main-receiver">
+                    <div :class="{ 'text-right receiver': message.author === '+13345390661' }">
+                        <div class="message-text">
+                            {{ message.body }}
+                        </div>
+                        <span class="message-time pull-right">
                {{ message.date }}
             </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row reply">
+            <div class="col-sm-1 col-xs-1 reply-emojis">
+                <i class="fa fa-smile fa-2x"></i>
+            </div>
+            <div class="col-sm-9 col-xs-9 reply-main">
+                <input type="text" v-model="newMessage" class="form-control" placeholder="Type your message..."
+                       @keyup.enter="sendMessage"/>
+            </div>
+            <div class="col-sm-1 col-xs-1 reply-recording">
+                <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-1 col-xs-1 reply-send">
+                <i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i>
             </div>
         </div>
-        </div>
-
-       
     </div>
-
-    <div class="row reply">
-        <div class="col-sm-1 col-xs-1 reply-emojis">
-        <i class="fa fa-smile fa-2x"></i>
-        </div>
-        <div class="col-sm-9 col-xs-9 reply-main"> 
-         <input type="text" v-model="newMessage" class="form-control" placeholder="Type your message..." @keyup.enter="sendMessage"/>
-        </div>
-        <div class="col-sm-1 col-xs-1 reply-recording">
-        <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
-        </div>
-        <div class="col-sm-1 col-xs-1 reply-send">
-        <i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i>
-        </div>
-    </div>
-
 </template>
-
 
 
 <script>
@@ -121,7 +122,7 @@ export default {
             this.newMessage = "";
         },
 
-        async pollData () {
+        async pollData() {
             this.polling = setInterval(async () => {
                 const {data} = await axios.post("/admin/chatings/get-sms", {
                     sid: `${this.authUser.id}-${this.otherUser.id}`,

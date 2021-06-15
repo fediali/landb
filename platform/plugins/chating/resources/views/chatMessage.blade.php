@@ -36,7 +36,7 @@
                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
                             <p style="margin-top: 10px; margin-left: 10px;">Customers</p>
                             </div>
-                        </div> 
+                        </div>
                         </div>
 
                         <div class="row searchBox">
@@ -48,8 +48,8 @@
                         </div>
                         </div>
 
-                        <div class="row sideBar"> 
-  
+                        <div class="row sideBar">
+
                         @if (!count($customers))
                             <p>No customers</p>
                         @else
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         </a>
-                        @endforeach 
+                        @endforeach
                         @endif
                         </div>
                     </div>
@@ -139,14 +139,14 @@
                                 </div>
                             </div>
                             </div>
-                        </div> 
+                        </div>
                         </div>
                     </div>
                     </div>
 
                     <div class="col-sm-8 conversation" id="chat-main">
                     <chat-component :auth-user="{{ auth()->user() }}" :other-user="{{ $otherUser }}" :messages="{{$messages}}" :sid="{{$sid}}"></chat-component>
-                   
+
                     </div>
                 </div>
             </div>
