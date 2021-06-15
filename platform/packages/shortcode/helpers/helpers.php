@@ -61,7 +61,7 @@ if (!function_exists('image_html_generator')) {
             src="' . asset('storage/'.$img). '"
             alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
-            onerror = "this.src=\'https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg\'">'
+            onerror = "this.src=\''. asset('storage/default.jpg') .'\'">'
             ;
 
     return $html;

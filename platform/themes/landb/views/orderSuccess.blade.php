@@ -5,16 +5,16 @@
         </div>
         <div class="col-lg-3">
             <p>
-           <b> ORDER # 105768 </b>
+           <b> ORDER # {{ $order->id }} </b>
             </p>
             <p>
-                <b>ORDER DATE</b> 05/01/2021, 08:54 AM  
+                <b>ORDER DATE </b> {{ date('d/m/Y, h:i A', strtotime($order->created_at)) }}
             </p>
             <p>
-                <b>PAYMENT</b> UPS Shipping  
+                <b>PAYMENT</b> {{ ucfirst(str_replace(['-', '_'], ' ', @$order->payment->payment_channel)) }}
             </p>
             <p>
-                <b>STATUS</b> Pick up 
+                <b>STATUS</b> {{ ucfirst($order->status) }}
             </p>
 
         </div>
@@ -41,6 +41,7 @@
                 </p>
             </div>
             </div>
+            @if($order->billingAddress)
             <div class="col-lg-4">
                 <div class="p-3">
                 <h3>
@@ -48,20 +49,43 @@
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
-                    12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
+                    {{ $order->billingAddress->name.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                 </p>
                 <p>
-                    97251235552 
+                    {{ $order->billingAddress->phone }}
                 </p>
                 <p>
-                    customerservice@landapparel.com
+                    {{ $order->billingAddress->email }}
                 </p>
                 <p>
                     https://landapparel.com/
                 </p>
             </div>
             </div>
+            @endif
+            @if($order->shippingAddress)
             <div class="col-lg-4">
+                <div class="p-3">
+                <h3>
+                    <b>BILL TO</b>
+                     </h3>
+                     <hr style="border: 2px solid #DDD;">
+                <p>
+                    {{ $order->shippingAddress->name.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
+                </p>
+                <p>
+                    {{ $order->shippingAddress->phone }}
+                </p>
+                <p>
+                    {{ $order->shippingAddress->email }}
+                </p>
+                <p>
+                    https://landapparel.com/
+                </p>
+            </div>
+            </div>
+            @endif
+           {{-- <div class="col-lg-4">
                 <div class="p-3">
                 <h3>
                     <b>SHIP TO</b>
@@ -80,7 +104,7 @@
                     https://landapparel.com/
                 </p>
             </div>
-            </div>  
+            </div>  --}}
             </div>
     </section>
     <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
@@ -112,22 +136,26 @@
 
             </div>
         </div>
-        <div class="row mb-4 mt-4">
+        @foreach($order->products as $order_product)
+            <div class="row mb-4 mt-4">
             <div class="col-lg-7 mt-2">
                 <div class="d-flex">
-                    <img style="height: 95px; width: 75px;" src="./img/product/Front.png" />
+                    {!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}
                     <div class="ml-3">
-                        <p class="cart-product-name mt-2 mb-2">Coral Cut Out V-neck Basic Tee Plus Size</p>
-                        <p class="cart-product-code mb-2">CODE: MH0315-RSER</p>
-                        <p class="cart-product-size">SIZE: 2(XL), 2(2XL), 2(3XL) </p>
+                        <p class="cart-product-name mt-2 mb-2">{{ $order_product->product->name }}</p>
+                        <p class="cart-product-code mb-2">CODE: {{ $order_product->product->sku }}</p>
+                        @php $sizes = get_category_sizes_by_id($order_product->product->category_id); @endphp
+                        @if(!empty($sizes->category_sizes))
+                            <p class="cart-product-size">SIZE: @foreach($sizes->category_sizes as $size) {{ @$size->name }} {!! ($loop->last) ? '':',' !!} @endforeach</p>
+                        @endif
                     </div>
                 </div>
             </div>
             <div class="col-lg-1 mt-2 text-center">
-                <p class="mt-2">23</p>
+                <p class="mt-2">{{ $order_product->qty }}</p>
             </div>
             <div class="col-lg-1 mt-2">
-                <p class="mt-2">$ 25.00</p>
+                <p class="mt-2">$ {{ $order_product->price }}</p>
             </div>
             <div class="col-lg-1 mt-2 mb-txt-center text-center">
                 <p class="mt-2">-</p>
@@ -136,37 +164,11 @@
                 <p class="mt-2">-</p>
             </div>
             <div class="col-lg-1 mt-2">
-                <p class="mt-2">$ 25.00</p>
+                <p class="mt-2">$ {{ $order_product->qty*$order_product->price  }}</p>
             </div>
         </div>
+        @endforeach
         <hr>
-        <div class="row mb-4 mt-4">
-            <div class="col-lg-7 mt-2">
-                <div class="d-flex">
-                    <img style="height: 95px; width: 75px;" src="./img/product/Front.png" />
-                    <div class="ml-3">
-                        <p class="cart-product-name mt-2 mb-2">Coral Cut Out V-neck Basic Tee Plus Size</p>
-                        <p class="cart-product-code mb-2">CODE: MH0315-RSER</p>
-                        <p class="cart-product-size">SIZE: 2(XL), 2(2XL), 2(3XL) </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-1 mt-2 text-center">
-                <p class="mt-2">23</p>
-            </div>
-            <div class="col-lg-1 mt-2">
-                <p class="mt-2">$ 25.00</p>
-            </div>
-            <div class="col-lg-1 mt-2 mb-txt-center text-center">
-                <p class="mt-2">-</p>
-            </div>
-            <div class="col-lg-1 mt-2 text-center">
-                <p class="mt-2">-</p>
-            </div>
-            <div class="col-lg-1 mt-2">
-                <p class="mt-2">$ 25.00</p>
-            </div>
-        </div> 
 
         <hr style="border: 2px solid;">
         <div class="row">
@@ -179,7 +181,7 @@
                 <p class="mt-2">Subtotal</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ 40.00</p>
+                <p class="mt-2">$ {{ $order->amount }}</p>
             </div>
         </div>
         <div class="row">
@@ -187,7 +189,7 @@
                 <p class="mt-2">Shipping</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ 40.00</p>
+                <p class="mt-2">$ 00.00</p>
             </div>
         </div>
         <hr>
@@ -199,7 +201,7 @@
             </div>
             <div class="col-lg-6 col-6 text-right">
                 <h3>
-                    <b>$ 40.00</b>
+                    <b>$ {{ $order->amount }}</b>
                      </h3>
             </div>
         </div>
