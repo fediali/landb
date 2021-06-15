@@ -16,7 +16,7 @@
 
             <div class="row message-body">
                 <div v-for="message in messages" v-bind:key="message.id" class="col-sm-12 message-main-receiver">
-                    <div :class="{ 'text-right receiver': message.author === '+13345390661' }">
+                    <div :class="(message.author !== '+13345390661') ? 'sender':'receiver'">
                         <div class="message-text">
                             {{ message.body }}
                         </div>

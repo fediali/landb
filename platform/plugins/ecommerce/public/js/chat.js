@@ -1121,9 +1121,8 @@ var render = function() {
               _c(
                 "div",
                 {
-                  class: {
-                    "text-right receiver": message.author === "+13345390661"
-                  }
+                  class:
+                    message.author !== "+13345390661" ? "sender" : "receiver"
                 },
                 [
                   _c("div", { staticClass: "message-text" }, [
