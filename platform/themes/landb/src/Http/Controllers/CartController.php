@@ -99,7 +99,7 @@ class CartController extends Controller
         if ($checkCart) {
             $update = $checkCart->update(['qty' => $checkCart->qty + $data['quantity']]);
             if ($update) {
-                update_product_quantity($product->id, $data['quantity'], 'inc');
+                /*update_product_quantity($product->id, $data['quantity'], 'inc');*/
                 $this->getOrderAndUpdateAmount();
                 return true;
             }
@@ -113,7 +113,7 @@ class CartController extends Controller
                 'product_name' => $product->name,
             ]);
             if ($create) {
-                update_product_quantity($product->id, $data['quantity'], 'inc');
+                /*update_product_quantity($product->id, $data['quantity'], 'inc');*/
                 $this->getOrderAndUpdateAmount();
                 return true;
             }
@@ -138,7 +138,7 @@ class CartController extends Controller
                 $this->getOrderAndUpdateAmount();
             }
             if ($update) {
-                update_product_quantity($orderProduct->product_id, 1, $data['action']);
+                /*update_product_quantity($orderProduct->product_id, 1, $data['action']);*/
                 return response()->json(['message' => 'Cart Updated successfully'], 200);
             } else {
                 return response()->json(['message' => 'Server Error'], 500);

@@ -76,6 +76,7 @@ class CheckoutController extends Controller
   }
 
   public function proceedPayment(Request $request){
+
     $returnUrl = $request->input('return_url');
 
     $currency = $request->input('currency', config('plugins.payment.payment.currency'));
@@ -88,6 +89,21 @@ class CheckoutController extends Controller
         'currency' => $currency,
         'type'     => $request->input('payment_method'),
     ];
+
+    $order = Order::with('products')->find($request->input('order_id'));
+    dd($order);
+    foreach ($order->products as $product){
+      $original = Product::find($product->product_id);
+      if($original->quantity == 0){
+        //dd($original);
+        $product->delete();
+        return redirect()->route('public.cart_index')->with('error', 'Product: "'.$original->name. '" is currently out of stock');
+      }elseif ($original->quantity < $product->qty){
+        return redirect()->route('public.cart_index')->with('error', 'Product: "'.$original->name. '" have only '. $original->quantity.' quantity left');
+      }
+      update_product_quantity($product->product_id, $product->qty, 'dec');
+    }
+
     switch ($request->input('payment_method')) {
       case PaymentMethodEnum::PAYPAL:
 
@@ -144,13 +160,20 @@ class CheckoutController extends Controller
   ) {
     $chargeId = $palPaymentService->afterMakePayment($request);
     $token = OrderHelper::getOrderSessionToken();
-    $order = $this->orderRepository->getFirstBy(compact('token'), [], ['address', 'products']);
+    $order_id = $request->input('order_id');
+    $order = $this->orderRepository->findById($order_id, ['address', 'products']);
+    
     if ($token !== session('tracked_start_checkout') || !$order) {
+      foreach ($order->products as $product){
+       update_product_quantity($product->product_id, $product->qty, 'inc');
+      }
       return $response->setNextUrl(url('/'));
     }
     $payment = Payment::where('charge_id' , $chargeId)->first();
     //dd($payment);
     $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
+
+
     OrderHelper::clearSessions($token);
 
     /*return $response

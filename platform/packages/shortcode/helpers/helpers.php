@@ -163,11 +163,19 @@ if (!function_exists('update_product_quantity')) {
      */
   function update_product_quantity($id, $qty, $type = 'inc')
   {
-    if($type == 'inc'){
-      \Botble\Ecommerce\Models\Product::where('id', $id)->decrement('quantity' , $qty);
-    }elseif ($type == 'dec'){
-      \Botble\Ecommerce\Models\Product::where('id', $id)->increment('quantity' , $qty);
+    $product =  \Botble\Ecommerce\Models\Product::find($id);
+    if($product){
+      if($type == 'inc'){
+       $product->increment('quantity' , $qty);
+      }elseif ($type == 'dec'){
+        if($product->quantity > $qty){
+          $product->decrement('quantity' , $qty);
+        }else{
+          $product->update(['quantity' => 0]);
+        }
+      }
     }
+
   }
 
 }
