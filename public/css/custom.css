@@ -437,8 +437,9 @@
     background-color: #fff;
     overflow-y: auto;
     border: 1px solid #f7f7f7;
-    height: calc(100% - 120px);
+    height: 705px;
     display: block;
+    overflow-y: scroll;
   }
   
   .sideBar-body {
@@ -589,9 +590,10 @@
     background: url("w.jpg") no-repeat fixed center;
     background-size: cover;
     overflow-y: auto;
-    border: 1px solid #f7f7f7;
-    height: calc(100% - 120px);
+    border: 1px solid #f7f7f7; 
     display: block;
+    height: 705px;
+    overflow-y: scroll;
   }
   .message-previous {
     margin : 0 !important;
@@ -616,11 +618,11 @@
     padding: 0 !important;
     width: auto;
     height: auto;
+    background: #f7f7f7;
   }
   
   .message-main-receiver {
-    /*padding: 10px 20px;*/
-    max-width: 60%;
+    margin: 10px 0px; 
   }
   
   .message-main-sender {
