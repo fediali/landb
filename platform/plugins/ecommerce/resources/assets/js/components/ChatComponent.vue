@@ -80,7 +80,7 @@ export default {
 
         async sendMessage() {
             let self = this;
-            const {data} = await axios.post("/admin/orders/send-sms", {
+            const {data} = await axios.post("/admin/chatings/send-sms", {
                 sid: `${this.authUser.id}-${this.otherUser.id}`,
                 author: '+13345390661', //self.otherUser.phone,
                 body: self.newMessage,
@@ -91,7 +91,7 @@ export default {
 
         async pollData () {
             this.polling = setInterval(async () => {
-                const {data} = await axios.post("/admin/orders/get-sms", {
+                const {data} = await axios.post("/admin/chatings/get-sms", {
                     sid: `${this.authUser.id}-${this.otherUser.id}`,
                 });
                 this.messages = data.messages;

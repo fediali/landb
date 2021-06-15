@@ -54,12 +54,12 @@ if (!function_exists('image_html_generator')) {
   function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = null)
   {
 
-        $html = '<img 
-            ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . ' 
-            ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . ' 
-            ' . (!is_null($class) ? 'class="' . $class . '"' : '') . ' 
-            src="' . asset('storage/'.$img). '" 
-            alt="' . (!is_null($alt) ? $alt : 'Education image') . '" 
+        $html = '<img
+            ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
+            ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
+            ' . (!is_null($class) ? 'class="' . $class . '"' : '') . '
+            src="' . asset('storage/'.$img). '"
+            alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
             onerror = "this.src=\'https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg\'">'
             ;
@@ -88,7 +88,7 @@ if (!function_exists('generate_product_url')) {
     }else{
       return URL::to('/products');
     }
-    
+
   }
 }
 

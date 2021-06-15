@@ -193,10 +193,10 @@
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
-                    <div class="caro_text">
+                    {{--<div class="caro_text">
                         <h5>{{ @$product->category->name }}</h5>
                         <p>{{ $product->name }}</p>
-                    </div>
+                    </div>--}}
                     <span>Restock</span>
 
                     <div class="imgoverlay">

@@ -8,6 +8,7 @@ use Botble\Categorysizes\Models\Categorysizes;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductAttribute;
 use Botble\Ecommerce\Models\ProductAttributeSet;
+use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Slug\Models\Slug;
 use Illuminate\Support\Str;
@@ -31,12 +32,20 @@ class ImportProduct implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if ($row['product_code'] && $row['category_id'] && $row['product']) {
+        if ($row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
+
+            $category = ProductCategory::where('name', $row['category'])->first();
+            if (!$category && $row['category'] && $row['parent_id']) {
+                $category = new ProductCategory();
+                $category->name = $row['category'];
+                $category->parent_id = $row['parent_id'];
+                $category->save();
+            }
+
 
             $check = Product::where('sku', $row['product_code'])->first();
             if (!$check) {
-                dd($row);
-                $packQuantity = $this->quantityCalculate($row['category_id']);
+                $packQuantity = $this->quantityCalculate($category->id);
                 $product = new Product();
                 $product->name = $row['product'];
                 if ($row['full_description']) {
@@ -49,7 +58,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                     $product->status = BaseStatusEnum::$STATUSES[$row['status']];
                 }
                 $product->sku = $row['product_code'];
-                $product->category_id = $row['category_id'];
+                $product->category_id = $category->id;
                 $product->quantity = 0;
 
                 $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
@@ -88,7 +97,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                 }
 
                 if ($product->save()) {
-                    $product->categories()->sync([$row['category_id']]);
+                    $product->categories()->sync([$category->id]);
                     $product->productCollections()->detach();
                     $product->productCollections()->attach([1]);//new arrival
                     Slug::create([
@@ -107,7 +116,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                             $getSizeAttrSet = ProductAttributeSet::where('slug', 'size')->value('id');
                             if ($getSizeAttrSet) {
                                 $getCatSizes = Categorysizes::join('product_categories_sizes', 'categorysizes.id', 'product_categories_sizes.category_size_id')
-                                    ->where('product_categories_sizes.product_category_id', $row['category_id'])
+                                    ->where('product_categories_sizes.product_category_id', $category->id)
                                     ->pluck('categorysizes.name')
                                     ->all();
                                 $getSizeAttrs = [];
