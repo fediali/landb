@@ -12,13 +12,18 @@
                 <div class="row">
                     <div class="col-md-9">
                         <div class="main-form">
-                            <div class="form-body">
+                            <div style="background: #f1f1f1; padding: 15px; margin-bottom: 15px;   border-radius: 10px;" class="form-body">
                                 <div class="form-group">
 
                                     <label for="product_link" class="control-label required cloneItem"
                                            aria-required="true">Product Link</label>
                                     <input class="form-control" placeholder="Product Link" data-counter="120"
                                            name="product_link[]" type="text" id="product_link">
+                                           <button
+                                        style="position:absolute; top: -3px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
+                                        class="remove remove-btn" data-toggle="tooltip" data-placement="top"
+                                        title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
+                                    </button>
                                 </div>
 
                                 <div class="form-group">
@@ -34,11 +39,7 @@
                                 <div class="form-group">
                                     <label for="file" class="control-label cloneItem">Select File</label>
                                     @include('core/base::forms.partials.images', ['name' => 'product_image[]', 'values' => ''])
-                                    <button
-                                        style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
-                                        class="remove remove-btn" data-toggle="tooltip" data-placement="top"
-                                        title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
-                                    </button>
+                                   
                                 </div>
 
                                 <div class="clearfix"></div>

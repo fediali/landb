@@ -29775,6 +29775,7 @@ h4.modal-title {
   position: relative;
   border: 1px dashed #ccc;
   padding: 10px;
+ display: grid;
 }
 .gallery-images-wrapper ul.list-gallery-media-images {
   margin-bottom: 0;
