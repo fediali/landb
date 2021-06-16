@@ -151,6 +151,14 @@
       get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
     });
 
+
+    $('#variation-select').on('change', function () {
+      var id = $(this).val();
+console.log('id: '+id);
+      $('#variation-form').attr('data-id', id);
+      $('#variation-submit').attr('data-id', id);
+    });
+
     $('.set-default').on('change', function () {
       toggle_loader(true);
       var status = 1;
