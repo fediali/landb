@@ -7,7 +7,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Illuminate\Support\Facades\DB;
 
-class Timeline extends BaseModel
+class TimelineDetail extends BaseModel
 {
     use EnumCastable;
 
@@ -16,18 +16,19 @@ class Timeline extends BaseModel
      *
      * @var string
      */
-    protected $table = 'timelines';
+    protected $table = 'timelines_detail';
 
     /**
      * @var array
      */
     protected $fillable = [
-        'name',
-        'date',
-        'status',
+        'timelines_detail',
+        'product_image',
+        'product_link',
+        'product_desc',
     ];
     protected $with = [
-        'detail'
+
     ];
 
     /**
@@ -37,8 +38,9 @@ class Timeline extends BaseModel
         'status' => BaseStatusEnum::class,
     ];
 
-    public function detail()
+    public function timeline()
     {
-        return $this->hasMany(TimelineDetail::class, 'product_timeline_id');
+        return $this->belongsTo(Timeline::class);
     }
+
 }
