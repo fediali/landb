@@ -61,7 +61,8 @@ if (!function_exists('image_html_generator')) {
             src="' . asset('storage/'.$img). '"
             alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
-            onerror = "this.src=\''. asset('storage/default.jpg') .'\'">';
+            onerror = "this.src=\''. asset('images/default.jpg') .'\'">'
+            ;
 
     return $html;
   }
