@@ -15,6 +15,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Timeline\Forms\TimelineForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Facades\DB;
 
 class TimelineController extends BaseController
 {
@@ -62,18 +63,24 @@ class TimelineController extends BaseController
      */
     public function store(TimelineRequest $request, BaseHttpResponse $response)
     {
+
         $timeline = $this->timelineRepository->createOrUpdate($request->only(
             'name',
             'status',
             'date',
         ));
+        foreach ($request->product_link as $key => $value) {
+            $data = [
+                'product_timeline_id' => $timeline->id,
+                'product_link'        => $request->product_link[$key],
+                'product_desc'        => $request->product_desc[$key],
+                'product_image'       => $request->product_image[$key]
 
-        $data = [];
-        $data['product_timeline_id'] = $timeline->id;
-        $data['product_link'] = $request->product_link;
-        $data['product_desc'] = $request->product_desc;
-        $data['product_image'] = $request->product_image;
-        DB::table('timelines_detail')->insert($data);
+            ];
+            DB::table('timelines_detail')->insert($data);
+        }
+
+
 
         event(new CreatedContentEvent(TIMELINE_MODULE_SCREEN_NAME, $request, $timeline));
 
