@@ -1,7 +1,7 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <div class="p-3 bg-white">
+    <div class="">
         <div class="clearfix"></div>
 
         <div id="main">
@@ -52,9 +52,9 @@
                                         </div>
                                     </div>
 
-
+                                    <button style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;" class="remove remove-btn" data-toggle="tooltip" data-placement="top" title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X</button>
                                 </div>
-
+                                
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                                 <h4><label for="clone" class="control-label">Add More</label></h4>
                             </div>
                             <div class="widget-body">
-                                <button class="btn btn-info cloneTimeline" type="button">Add More</button>
+                                <button class="btn btn-info cloneTimeline clone" type="button">Add More</button>
 
                             </div>
                         </div>
@@ -182,3 +182,5 @@
         </div>
     </div>
 @stop
+
+
