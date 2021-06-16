@@ -18,43 +18,32 @@
                                     <label for="product_link" class="control-label required cloneItem"
                                            aria-required="true">Product Link</label>
                                     <input class="form-control" placeholder="Product Link" data-counter="120"
-                                           name="product_link" type="text" id="product_link"
-                                    >
-
-
+                                           name="product_link" type="text" id="product_link">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="product_desc" class="control-label required cloneItem"
                                            aria-required="true">Description</label>
                                     <textarea class="form-control" placeholder="Name" data-counter="120"
-                                              name="product_desc" cols="50" rows="10" id="product_desc"></textarea>
+                                              name="product_desc" cols="50" rows="10" id="product_desc">
+
+                                    </textarea>
 
                                 </div>
 
                                 <div class="form-group">
                                     <label for="file" class="control-label cloneItem">Select File</label>
 
-                                    <div class="image-box">
-                                        <input type="hidden" name="file" value="" class="image-data">
-                                        <div class="preview-image-wrapper ">
-                                            <img src="/vendor/core/core/base/images/placeholder.png" alt="Preview image"
-                                                 class="preview_image" width="150">
-                                            <a class="btn_remove_image" title="Remove image">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
-                                        <div class="image-box-actions">
-                                            <a href="#" class="btn_gallery" data-result="file"
-                                               data-action="select-image">
-                                                Choose image
-                                            </a>
-                                        </div>
-                                    </div>
 
-                                    <button style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;" class="remove remove-btn" data-toggle="tooltip" data-placement="top" title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X</button>
+                                    @include('core/base::forms.partials.images', ['name' => 'images[]', 'values' => ''])
+
+                                    <button
+                                        style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
+                                        class="remove remove-btn" data-toggle="tooltip" data-placement="top"
+                                        title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
+                                    </button>
                                 </div>
-                                
+
                                 <div class="clearfix"></div>
                             </div>
                         </div>
