@@ -32,10 +32,14 @@
                         <div class="widget-user-header bg-black">
                             <h3 class="widget-user-username widget-title-color-red font-bold profile-name">{{ $thread->designer->first_name.' '.$thread->designer->last_name }}</h3>
                             <h5 class="widget-user-desc text-dark">Designer</h5>
-                            @if ($variation->is_denim == 1 )
-                            <input style="position: absolute;   right: 25px;  top: 40px;" class="btn btn-primary mt-3 mb-1" type="button" id="btnPrintDenim" value="Print Denim" onclick='printDenimDiv();'>
-                            @else 
-                            <input style="position: absolute;   right: 25px;  top: 0px;" class="btn btn-primary mt-3 mb-1" type="button" id="btnPrint" value="Print" onclick='printDiv();'>
+                            @if ($thread->is_denim == 1 )
+                                <input style="position: absolute;   right: 25px;"
+                                       class="btn btn-primary mt-3 mb-1" type="button" id="btnPrintDenim"
+                                       value="Print" onclick='printDenimDiv();'>
+                            @else
+                                <input style="position: absolute;   right: 25px;"
+                                       class="btn btn-primary mt-3 mb-1" type="button" id="btnPrint" value="Print"
+                                       onclick='printDiv();'>
                             @endif
                         </div>
                         <div class="row">
@@ -161,11 +165,11 @@
                             <div class="regpack">
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                     Plus Pack Size Run</h6>
-{{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
-                                    <div class="sizediv">
-{{--                                        {{ isset($plus_cat->name) }}--}}
-                                    </div>
-{{--                                @endforeach--}}
+                                {{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
+                                <div class="sizediv">
+                                    {{--                                        {{ isset($plus_cat->name) }}--}}
+                                </div>
+                                {{--                                @endforeach--}}
                             </div>
                         </td>
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
@@ -475,11 +479,11 @@
                             <div class="regpack">
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                     Plus Pack Size Run</h6>
-{{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
-                                    <div class="sizediv">
-{{--                                        {{ isset($plus_cat->name) }}--}}
-                                    </div>
-{{--                                @endforeach--}}
+                                {{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
+                                <div class="sizediv">
+                                    {{--                                        {{ isset($plus_cat->name) }}--}}
+                                </div>
+                                {{--                                @endforeach--}}
                             </div>
                         </td>
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
@@ -622,213 +626,232 @@
                      text-transform: uppercase;
                      margin: 0; font-family: 'Raleway', sans-serif;">SPECIFICATIONS</h4>
                                 <div class="denim_table">
-                                <table style="border: 1px solid #333;
+                                    <table style="border: 1px solid #333;
                         border-collapse: collapse;
                         height: 100%; width: 100%;">
-                                                <thead>
-                                                <tr>
-                                                    <th style=" font-weight: 600; font-family: 'Raleway', sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;" colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
-                                                    <th style=" font-weight: 600; font-family: 'Raleway', sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;" colspan="1" rowspan="1">Label: {{ @$thread->label }}</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Fit</b>
-                                                            @foreach(array_chunk($options['data']['fits'], 5, true) as $fits)
-                                                                <div class="item">
-                                                                    @foreach($fits as $key => $fit)
-                                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
-                                                                            <label for=""> {{ $fit }}</label>
-                                                                            <input  style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+                                        <thead>
+                                        <tr>
+                                            <th style=" font-weight: 600; font-family: 'Raleway', sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
+                                            <th style=" font-weight: 600; font-family: 'Raleway', sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="1" rowspan="1">Label: {{ @$thread->label }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Fit</b>
+                                                    @foreach(array_chunk($options['data']['fits'], 5, true) as $fits)
+                                                        <div class="item">
+                                                            @foreach($fits as $key => $fit)
+                                                                <div
+                                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
+                                                                    <label for=""> {{ $fit }}</label>
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
     cursor: default;  opacity: 1.65 !important;" type="checkbox" type="checkbox"
-                                                                                   disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
-                                                                        </div>
-                                                                    @endforeach
+                                                                           disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                 </div>
                                                             @endforeach
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Rise</b>
-                                                            @foreach(array_chunk($options['data']['rises'], 1, true) as $rises)
-                                                                <div class="item">
-                                                                    @foreach($rises as $key => $rise)
-                                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
-                                                                            <label for=""> {{ $rise }}</label>
-                                                                            <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
-    cursor: default;  opacity: 1.65 !important;" type="checkbox" disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
-                                                                        </div>
-                                                                    @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Rise</b>
+                                                    @foreach(array_chunk($options['data']['rises'], 1, true) as $rises)
+                                                        <div class="item">
+                                                            @foreach($rises as $key => $rise)
+                                                                <div
+                                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
+                                                                    <label for=""> {{ $rise }}</label>
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+    cursor: default;  opacity: 1.65 !important;" type="checkbox"
+                                                                           disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
                                                                 </div>
                                                             @endforeach
                                                         </div>
-                                                    </td>
-                                                </tr> 
-                                                <tr>
-                                                    <td  style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Reg Pack Qty: </b>{{ $thread->reg_pack_qty }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Plus Pack Qty: </b>{{ $thread->plus_pack_qty }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Fabric Print Direction: </b>
-                                                            {{ $thread->fabric_print_direction }}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;" colspan="12">
-                                                        {{--<div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
-                                                            <b>Additional Notes: </b>
-                                                            {{ $thread->description }}
-                                                        </div>--}}
-                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif; display: flex !important;">
-                                                            <div style="    display: flex;
+                                                    @endforeach
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Reg Pack Qty: </b>{{ $thread->reg_pack_qty }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Plus Pack Qty: </b>{{ $thread->plus_pack_qty }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Fabric Print Direction: </b>
+                                                    {{ $thread->fabric_print_direction }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                                colspan="12">
+                                                {{--<div style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
+                                                    <b>Additional Notes: </b>
+                                                    {{ $thread->description }}
+                                                </div>--}}
+                                                <div
+                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif; display: flex !important;">
+                                                    <div style="    display: flex;
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;">
-                                                                <div style=" font-weight: 600; font-family: 'Raleway', sans-serif; flex: 0 0 50%;
+                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif; flex: 0 0 50%;
     max-width: 50%;    position: relative;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;">
-                                                                    <div
-                                                                    style="background: #ffffff;
+                                                            <div
+                                                                style="background: #ffffff;
     border: 1px solid #d0d0d0;
     border-radius: 10px; margin-bottom: 1rem !important; padding-right: 1rem !important; padding-left: 1rem !important; font-weight: 600; font-family: 'Raleway', sans-serif;">
-                                                                        @foreach($variations as $variation)
-                                                                            @if($variation->status == 'active' && $variation->is_denim == 1)
-                                                                                {{--<h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>--}}
- 
+                                                                @foreach($variations as $variation)
+                                                                    @if($variation->status == 'active' && $variation->is_denim == 1)
+                                                                        {{--<h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>--}}
 
-                                                                                <div style=" font-weight: 600; font-family: 'Raleway', sans-serif; display: flex;
+
+                                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif; display: flex;
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;">
-                                                                                    <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
+                                                                            <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
+    max-width: 40%;    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;">
+                                                                                <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                    <label
+                                                                                        for="">Print/Color:</label>
+                                                                                    {{ @$variation->printdesign->name }}
+                                                                                </p>
+                                                                                <img height="120"
+                                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;"
+                                                                                     src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
+
+                                                                            </div>
+                                                                            @foreach($variation->fabrics as $fabric)
+                                                                                <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
+    max-width: 40%;    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;">
+                                                                                    <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                        <label
+                                                                                            for="">Print/Color:</label>
+                                                                                        {{ @$fabric->printdesign->name }}
+                                                                                        <a href="{{ route('thread.removeFabric', $fabric->id) }}">
+                                                                                            <strong
+                                                                                                style=" font-weight: 600; font-family: 'Raleway', sans-serif;float: right !important;">
+                                                                                                <i class="fa fa-times"></i>
+                                                                                            </strong>
+                                                                                        </a>
+                                                                                    </p>
+                                                                                    <img
+                                                                                        src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
+                                                                                        height="120"
+                                                                                        style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;">
+                                                                                </div>
+                                                                            @endforeach
+                                                                            @if($variation->trim->count() > 0)
+                                                                                @foreach($variation->trim as $trim)
+                                                                                    <div
+                                                                                        style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
     max-width: 40%;    position: relative;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;">
                                                                                         <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                             <label
-                                                                                                for="">Print/Color:</label>
-                                                                                            {{ @$variation->printdesign->name }}
-                                                                                        </p>
-                                                                                        <img height="120" 
-                                                                                             style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;"
-                                                                                             src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
-                                                                                        
-                                                                                    </div>
-                                                                                    @foreach($variation->fabrics as $fabric)
-                                                                                        <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
-    max-width: 40%;    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;">
-                                                                                            <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
-                                                                                                <label for="">Print/Color:</label>
-                                                                                                {{ @$fabric->printdesign->name }}
-                                                                                                <a href="{{ route('thread.removeFabric', $fabric->id) }}">
-                                                                                                    <strong
+                                                                                                for="">Trim:</label>
+                                                                                            <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
+                                                                                                <strong
                                                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;float: right !important;">
-                                                                                                        <i class="fa fa-times"></i>
-                                                                                                    </strong>
-                                                                                                </a>
-                                                                                            </p>
-                                                                                            <img 
-                                                                                                 src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
-                                                                                                 height="120" 
-                                                                                                 style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;">
-                                                                                        </div>
-                                                                                    @endforeach
-                                                                                    @if($variation->trim->count() > 0)
-                                                                                        @foreach($variation->trim as $trim)
-                                                                                            <div
-                                                                                            style=" font-weight: 600; font-family: 'Raleway', sans-serif;flex: 0 0 40%;
-    max-width: 40%;    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;">
-                                                                                                <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
-                                                                                                    <label
-                                                                                                        for="">Trim:</label>
-                                                                                                    <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
-                                                                                                        <strong
-                                                                                                        style=" font-weight: 600; font-family: 'Raleway', sans-serif;float: right !important;">
-                                                                                                            <i class="fa fa-times"></i>
-                                                                                                        </strong>
-                                                                                                    </a>
-                                                                                                </p>
-                                                                                                <img 
-                                                                                                     src="{{ asset(strtolower(@$trim->trim_image)) }}"
-                                                                                                     height="120" 
-                                                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;">
-                                                                                                <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
-                                                                                                    <label for="">
-                                                                                                        NOTES:{{@$trim->trim_note}}
-                                                                                                    </label>
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        @endforeach
-                                                                                    @endif
-                                                                                </div>
+                                                                                                    <i class="fa fa-times"></i>
+                                                                                                </strong>
+                                                                                            </a>
+                                                                                        </p>
+                                                                                        <img
+                                                                                            src="{{ asset(strtolower(@$trim->trim_image)) }}"
+                                                                                            height="120"
+                                                                                            style=" font-weight: 600; font-family: 'Raleway', sans-serif;object-fit: cover;width: 100% !important;">
+                                                                                        <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                            <label for="">
+                                                                                                NOTES:{{@$trim->trim_note}}
+                                                                                            </label>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </div>
 
-                                                                                <div style=" font-weight: 600; font-family: 'Raleway', sans-serif;margin-bottom: 0.5rem !important; margin-top: 1rem !important;">
-                                                                                    <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
-                                                                                        <label for="">Fabric:</label>
-                                                                                        {{ @$variation->fabric->name }}
-                                                                                    </p>
-                                                                                    <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
-                                                                                        <span for="">REG. Packs:</span>
-                                                                                        {{ $variation->regular_qty }} |
-                                                                                        <span
-                                                                                        style=" font-weight: 600; font-family: 'Raleway', sans-serif; color: #f36a5a;">
+                                                                        <div
+                                                                            style=" font-weight: 600; font-family: 'Raleway', sans-serif;margin-bottom: 0.5rem !important; margin-top: 1rem !important;">
+                                                                            <p style=" font-weight: 600; font-family: 'Raleway', sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                <label for="">Fabric:</label>
+                                                                                {{ @$variation->fabric->name }}
+                                                                            </p>
+                                                                            <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                                <span for="">REG. Packs:</span>
+                                                                                {{ $variation->regular_qty }} |
+                                                                                <span
+                                                                                    style=" font-weight: 600; font-family: 'Raleway', sans-serif; color: #f36a5a;">
                                                                                             Sku: {{ $variation->sku }}
                                                                                         </span>
-                                                                                    </p>
-                                                                                    @if($variation->plus_sku)
-                                                                                        <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                            </p>
+                                                                            @if($variation->plus_sku)
+                                                                                <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
                                                                                             <span
                                                                                                 for="">PLUS Packs:</span>
-                                                                                            {{ $variation->plus_qty }} |
-                                                                                            <span
-                                                                                            style=" font-weight: 600; font-family: 'Raleway', sans-serif; color: #f36a5a;">
+                                                                                    {{ $variation->plus_qty }} |
+                                                                                    <span
+                                                                                        style=" font-weight: 600; font-family: 'Raleway', sans-serif; color: #f36a5a;">
                                                                                                 Plus Sku: {{ $variation->plus_sku }}
                                                                                             </span>
-                                                                                        </p>
-                                                                                    @endif
-                                                                                    <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                                </p>
+                                                                            @endif
+                                                                            <p style=" font-weight: 600; font-family: 'Raleway', sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
                                                                                         <span
                                                                                             for="">Notes:</span> {{ $variation->notes ?? 'None' }}
-                                                                                    </p>
-                                                                                </div>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
+                                                                            </p>
+                                                                        </div>
+                                                                    @endif
+                                                                @endforeach
                                                             </div>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                    <!-- <table style="border: 1px solid #333;
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                <!-- <table style="border: 1px solid #333;
                         border-collapse: collapse;
                         height: 100%;border-spacing: 0;    width: 100%;
                         margin-top: 15px;">
@@ -866,81 +889,81 @@
                                                     <div
                                                         style="display: flex;flex-wrap: wrap; margin-right: -15px; margin-left: -15px;">
                                                         @foreach($variations as $variation)
-                                                            @if($variation->status == 'active' && $variation->is_denim == 0)
-                                                                <div
-                                                                    style=" flex: 0 0 44.333333%; max-width: 44.333333%; position: relative; width: 100%; padding-right: 15px; padding-left: 15px;">
-                                                                    <div
-                                                                        style=" min-height: 445px; background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
-                                                                        <h5 style=" margin-top: 0.5rem !important; font-family: 'Raleway', sans-serif;">
-                                                                            {{$loop->iteration}}.
+                                    @if($variation->status == 'active' && $variation->is_denim == 0)
+                                        <div
+                                            style=" flex: 0 0 44.333333%; max-width: 44.333333%; position: relative; width: 100%; padding-right: 15px; padding-left: 15px;">
+                                            <div
+                                                style=" min-height: 445px; background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
+                                                <h5 style=" margin-top: 0.5rem !important; font-family: 'Raleway', sans-serif;">
+{{$loop->iteration}}.
                                                                             Variation: {{ $variation->name }}
-                                                                        </h5>
-                                                                        <div
-                                                                            style=" display: flex; flex-wrap:wrap;  margin-right: -15px; margin-left: -15px;">
-                                                                            <div
-                                                                                style=" min-height: 245px; flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                                                <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
-                                                                                    <label for="">Print/Color:</label>
-                                                                                    {{ @$variation->printdesign->name }}
-                                                                                </p>
-                                                                                <img style=" width: 70% !important;"
-                                                                                     src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
+                                            </h5>
+                                            <div
+                                                style=" display: flex; flex-wrap:wrap;  margin-right: -15px; margin-left: -15px;">
+                                                <div
+                                                    style=" min-height: 245px; flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
+                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
+                                                        <label for="">Print/Color:</label>
+{{ @$variation->printdesign->name }}
+                                            </p>
+                                            <img style=" width: 70% !important;"
+                                                 src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                      height="120" width="120"
                                                                                      style="object-fit: cover">
                                                                                 <p style=" font-size: 12px !important; font-family: 'Raleway', sans-serif; margin:0px !important;">
                                                                                     <span for="">Notes:</span>
                                                                                     {{ $variation->notes ?? 'None' }}
-                                                                                </p>
-                                                                            </div>
-                                                                            @if($variation->trim->count() > 0)
-                                                                                @foreach($variation->trim as $trim)
-                                                                                    <div
-                                                                                        style=" flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                                                        <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
-                                                                                            <label for="">Trim:</label>
-                                                                                        </p>
-                                                                                        <img
-                                                                                            style=" width: 70% !important;"
-                                                                                            src="{{ asset(strtolower(@$trim->trim_image)) }}"
+                                            </p>
+                                        </div>
+@if($variation->trim->count() > 0)
+                                            @foreach($variation->trim as $trim)
+                                                <div
+                                                    style=" flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
+                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: 'Raleway', sans-serif;">
+                                                        <label for="">Trim:</label>
+                                                    </p>
+                                                    <img
+                                                        style=" width: 70% !important;"
+                                                        src="{{ asset(strtolower(@$trim->trim_image)) }}"
                                                                                             height="120" width="100%"
                                                                                             style="object-fit: cover">
                                                                                         <p style=" font-size: 12px !important; font-family: 'Raleway', sans-serif; margin:0px !important;">
                                                                                             <span for="">Notes:</span>
                                                                                             {{@$trim->trim_note}}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </div>
+                                                    </p>
+                                                </div>
+@endforeach
+                                        @endif
+                                            </div>
 
-                                                                        <div
-                                                                            style="margin-bottom: 0.5rem !important; margin-top: 5px !important !important;">
-                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: 'Raleway', sans-serif;">
-                                                                                <span for="">REG. Packs:</span>
-                                                                                {{ $variation->regular_qty }} |
+                                            <div
+                                                style="margin-bottom: 0.5rem !important; margin-top: 5px !important !important;">
+                                                <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: 'Raleway', sans-serif;">
+                                                    <span for="">REG. Packs:</span>
+{{ $variation->regular_qty }} |
                                                                                 <span
                                                                                     class="widget-title-color-red ">
                                                     Sku: {{ $variation->sku }}
-                                                </span>
-                                                                            </p>
-                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: 'Raleway', sans-serif;">
-                                                                                {{ $variation->plus_qty }} |
+                                            </span>
+                                                                        </p>
+                                                                        <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: 'Raleway', sans-serif;">
+{{ $variation->plus_qty }} |
                                                                                 <span
                                                                                     class="widget-title-color-red">
                                                     Plus Sku: {{ $variation->plus_sku }}
-                                                </span>
-                                                                            </p>
-                                                                        </div>
+                                            </span>
+                                                                        </p>
                                                                     </div>
                                                                 </div>
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table> -->
+                                                            </div>
+@endif
+                                @endforeach
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table> -->
                                 </div>
                             </div>
                         </div>
@@ -1164,19 +1187,19 @@
                                                         <div style="display: flow-root;" class="tabrow">
                                                             <b>Fabric:</b>
                                                             @foreach(array_chunk($options['data']['fabrics'], 1, true) as $fabrics)
-                                                                <div class="item">
-                                                                    @foreach($fabrics as $key => $fabric)
-                                                                        <div class="checkbox">
-                                                                            <label for=""> {{ $fabric }}</label>
+                                                    <div class="item">
+@foreach($fabrics as $key => $fabric)
+                                                        <div class="checkbox">
+                                                            <label for=""> {{ $fabric }}</label>
                                                                             <input type="checkbox"
                                                                                    disabled {!! ($key == $thread->fabric_id) ? 'checked' : '' !!}>
                                                                         </div>
                                                                     @endforeach
-                                                                </div>
-                                                            @endforeach
                                                         </div>
-                                                    </td>
-                                                </tr> -->
+@endforeach
+                                                    </div>
+                                                </td>
+                                            </tr> -->
                                                 <tr>
                                                     <td colspan="12">
                                                         <div class="tabrow">
@@ -1804,19 +1827,19 @@
 
     function printDenimDiv() {
 
-    var divToPrint = document.getElementById('DivDenimToPrint');
+        var divToPrint = document.getElementById('DivDenimToPrint');
 
-    var newWin = window.open('', 'Print-Window');
+        var newWin = window.open('', 'Print-Window');
 
-    newWin.document.open();
+        newWin.document.open();
 
-    newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 
-    newWin.document.close();
+        newWin.document.close();
 
-    setTimeout(function () {
-        newWin.close();
-    }, 10);
+        setTimeout(function () {
+            newWin.close();
+        }, 10);
 
     }
 
