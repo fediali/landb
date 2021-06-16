@@ -33,11 +33,11 @@
                             <h3 class="widget-user-username widget-title-color-red font-bold profile-name">{{ $thread->designer->first_name.' '.$thread->designer->last_name }}</h3>
                             <h5 class="widget-user-desc text-dark">Designer</h5>
                             @if ($thread->is_denim == 1 )
-                                <input style="position: absolute;   right: 25px;  top: 40px;"
+                                <input style="position: absolute;   right: 25px;"
                                        class="btn btn-primary mt-3 mb-1" type="button" id="btnPrintDenim"
-                                       value="Print Denim" onclick='printDenimDiv();'>
+                                       value="Print" onclick='printDenimDiv();'>
                             @else
-                                <input style="position: absolute;   right: 25px;  top: 0px;"
+                                <input style="position: absolute;   right: 25px;"
                                        class="btn btn-primary mt-3 mb-1" type="button" id="btnPrint" value="Print"
                                        onclick='printDiv();'>
                             @endif
