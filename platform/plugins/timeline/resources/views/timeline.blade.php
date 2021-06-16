@@ -5,7 +5,8 @@
         <div class="clearfix"></div>
 
         <div id="main">
-            <form method="POST" action="{{route('timeline.store')}}" accept-charset="UTF-8" enctype="multipart/form-data">
+            <form method="POST" action="{{route('timeline.store')}}" accept-charset="UTF-8"
+                  enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -88,15 +89,11 @@
                             <div class="widget-body">
                                 <div class="ui-select-wrapper form-group">
                                     <select
-                                        class="form-control select-full ui-select ui-select select2-hidden-accessible"
-                                        id="status" name="status" tabindex="-1" aria-hidden="true">
+                                        class="form-control select-full ui-select ui-select"
+                                        id="status" name="status">
+                                        <option value="schedule">Schedule</option>
                                         <option value="published">Published</option>
-                                        <option value="draft">Draft</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="schedule">schedule</option>
-                                        <option value="hidden">hidden</option>
-                                        <option value="active">active</option>
-                                        <option value="disabled">disabled</option>
+                                        <option value="disabled">Disabled</option>
                                     </select>
                                     <svg class="svg-next-icon svg-next-icon-size-16">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -113,13 +110,7 @@
                             </div>
                             <div class="widget-body">
                                 <div class="input-group">
-                                    <input class="form-control  datepicker" name="date" type="text" value="06/16/2021"
-                                           id="date">
-                                    <span class="input-group-prepend">
-            <button class="btn default" type="button">
-                <i class="fa fa-calendar"></i>
-            </button>
-        </span>
+                                    <input class="form-control" name="date" type="date">
                                 </div>
 
 
