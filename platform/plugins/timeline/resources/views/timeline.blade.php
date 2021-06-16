@@ -5,9 +5,8 @@
         <div class="clearfix"></div>
 
         <div id="main">
-            <form method="POST" action="http://landb.co/admin/timelines/create" accept-charset="UTF-8"
-                  id="form_2e8c268d1fefa6f40f069e929ebc92bb" novalidate="novalidate"><input name="_token" type="hidden"
-                                                                                            value="Q7Iz0A8LyimsBmoRmXuMUcEjWqknDsPxd2UY3aVp">
+            <form method="POST" action="{{route('timeline.store')}}" accept-charset="UTF-8" enctype="multipart/form-data">
+                @csrf
 
                 <div class="row">
                     <div class="col-md-9">
@@ -18,43 +17,29 @@
                                     <label for="product_link" class="control-label required cloneItem"
                                            aria-required="true">Product Link</label>
                                     <input class="form-control" placeholder="Product Link" data-counter="120"
-                                           name="product_link" type="text" id="product_link"
-                                    >
-
-
+                                           name="product_link[]" type="text" id="product_link">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="product_desc" class="control-label required cloneItem"
                                            aria-required="true">Description</label>
-                                    <textarea class="form-control" placeholder="Name" data-counter="120"
-                                              name="product_desc" cols="50" rows="10" id="product_desc"></textarea>
+                                    <textarea class="form-control" placeholder="Name"
+                                              name="product_desc[]" id="product_desc">
+
+                                    </textarea>
 
                                 </div>
 
                                 <div class="form-group">
                                     <label for="file" class="control-label cloneItem">Select File</label>
-
-                                    <div class="image-box">
-                                        <input type="hidden" name="file" value="" class="image-data">
-                                        <div class="preview-image-wrapper ">
-                                            <img src="/vendor/core/core/base/images/placeholder.png" alt="Preview image"
-                                                 class="preview_image" width="150">
-                                            <a class="btn_remove_image" title="Remove image">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
-                                        <div class="image-box-actions">
-                                            <a href="#" class="btn_gallery" data-result="file"
-                                               data-action="select-image">
-                                                Choose image
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <button style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;" class="remove remove-btn" data-toggle="tooltip" data-placement="top" title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X</button>
+                                    @include('core/base::forms.partials.images', ['name' => 'product_image[]', 'values' => ''])
+                                    <button
+                                        style="position:absolute; bottom: 50px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
+                                        class="remove remove-btn" data-toggle="tooltip" data-placement="top"
+                                        title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
+                                    </button>
                                 </div>
-                                
+
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -81,30 +66,6 @@
                             </div>
                         </div>
                         <div id="waypoint"></div>
-                        <div class="form-actions form-actions-fixed-top hidden">
-                            <ol class="breadcrumb">
-
-                                <li class="breadcrumb-item"><a href="http://landb.co/admin">Dashboard</a></li>
-
-
-                                <li class="breadcrumb-item"><a href="http://landb.co/admin/timelines">Timelines</a></li>
-
-
-                                <li class="breadcrumb-item active">New timeline</li>
-
-                            </ol>
-
-
-                            <div class="btn-set">
-                                <button type="submit" name="submit" value="save" class="btn btn-info">
-                                    <i class="fa fa-save"></i> Save
-                                </button>
-                                &nbsp;
-                                <button type="submit" name="submit" value="apply" class="btn btn-success">
-                                    <i class="fa fa-check-circle"></i> Save &amp; Edit
-                                </button>
-                            </div>
-                        </div>
 
 
                         <div class="widget meta-boxes">
