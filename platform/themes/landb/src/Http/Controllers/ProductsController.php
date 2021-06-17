@@ -118,7 +118,7 @@ class ProductsController extends Controller
     {
         $tz = Carbon::now('America/Chicago')->toDateString();
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
-        $product = Timeline::where('date', $date)->get();
+        $product = Timeline::where('date', $date)->first();
         return Theme::scope('timeline', ['product' => $product])->render();
     }
 }

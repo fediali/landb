@@ -16,9 +16,9 @@
     {{--        </div>--}}
     {{--    </div>--}}
     <div class="timeline">
-        @foreach(@$product[0]->detail as $row)
+        @foreach(@$product->detail as $row)
             <div class="container-timeline left {{($loop->iteration % 2 == 0) ? 'right': 'left'}}">
-                <div class="date">{{$product[0]->date}}
+                <div class="date">{{$product->date}}
                     <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
                     <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                 </div>
