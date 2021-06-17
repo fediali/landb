@@ -9,45 +9,22 @@
     </div>
 </section>
 <section>
-{{--    <div class="row m-0">--}}
-{{--        <div class="col-lg-10"></div>--}}
-{{--        <div class="col-lg-2">--}}
-{{--            <button onclick="closeOnSelectDemo()" class="btn btn-calender"> Select Date</button>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    {{--    <div class="row m-0">--}}
+    {{--        <div class="col-lg-10"></div>--}}
+    {{--        <div class="col-lg-2">--}}
+    {{--            <button onclick="closeOnSelectDemo()" class="btn btn-calender"> Select Date</button>--}}
+    {{--        </div>--}}
+    {{--    </div>--}}
     <div class="timeline">
         @foreach($product[0]->detail as $row)
-            <div class="container-timeline left">
+            <div class="container-timeline left {{($loop->iteration % 2 == 0) ? 'right': 'left'}}">
                 <div class="date">{{$product[0]->date}}
                     <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
                     <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                 </div>
-
                 <i class="icon fa fa-home"></i>
                 <div class="content">
                     <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
-                </div>
-            </div>
-            <div class="container-timeline right">
-                <div class="date">
-                    <span class="d-none mobile-date">22 Oct</span>
-                    <a href="#" class=" btn cart-btn mr-2 timeline-addbtn">Add to Cart</a>
-                    <span class="mobile-display-none">22 Oct</span>
-                    <a href="#" class="timeline-callbtn btn border-btn mr-2">Call Us</a>
-
-
-                </div>
-                <i class="icon fa fa-gift"></i>
-                <div class="content">
-                    <img class="w-100" src="https://revamp.landbw.co/public/landb/img/browse-img-3.png"/>
-
-                    <h2>Lorem ipsum dolor sit amet</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet elit. Aliquam odio dolor, id luctus erat sagittis non. Ut blandit
-                        semper
-                        pretium.
-                    </p>
-                    <a href="#" class=" btn cart-btn mt-3">Check Now</a>
                 </div>
             </div>
         @endforeach
