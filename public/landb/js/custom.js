@@ -247,18 +247,18 @@ function toggle_product_detail(id) {
         $('#product-detail-image').html(image);
       }
       if (product.category !== null) {
-        if (product.category.category_sizes !== null) {
+        /*if (product.category.category_sizes !== null) {
           product.category.category_sizes.forEach(function (size, index) {
             sizes += size.name + ',';
             $("#product-detail-sizes-drop").append(new Option(size.name, size.id));
           });
-        }
+        }*/
       }
       $('#product-detail-name').html(product.name);
       $('#product-detail-price').html(product.price);
       $('#product-detail-desc').html(product.description);
       $('#product-detail-sizes').html(sizes);
-      $('#product-detail-category').html((product.category !== null) ? product.category.name : '');
+      /*$('#product-detail-category').html((product.category !== null) ? product.category.name : '');*/
       $('#product-detail-sku').html(product.sku);
       $('#product-detail-form').attr('data-id', product.id);
       $('#product-detail-button').attr('data-id', product.id);

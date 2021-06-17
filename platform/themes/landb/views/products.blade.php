@@ -190,6 +190,9 @@
                     $col = ($limit == '5') ? 'custom-5' : $col;
                 ?>
             @foreach($products as $key => $product)
+                @php
+                    $variation_id = \Botble\Ecommerce\Models\ProductVariation::where('configurable_product_id', $product->id)->where('ec_product_variations.is_default', 1)->pluck('product_id')->first();
+                @endphp
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
                     {!! image_html_generator(@$product->images[0]) !!}
@@ -203,7 +206,7 @@
                         <a href="javascript:void(0);" onclick="toggle_product_detail('{{ $product->product_slug }}')"><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
-                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $product->id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $variation_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
                                 <div class="col-lg-4">
                                     <input type='hidden' name='quantity' value='1' class='qty' />
                                 </div>
