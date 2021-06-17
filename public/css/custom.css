@@ -858,3 +858,8 @@
     }
   }
     
+
+  
+.gallery-images-wrapper { 
+   display: grid !important;
+  }

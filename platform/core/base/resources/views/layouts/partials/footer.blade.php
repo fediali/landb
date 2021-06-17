@@ -432,3 +432,25 @@
     })
   }
 </script>
+
+
+<script>
+$( document ).ready(function() { 
+
+// $(".cloneTimeline").click(function () {
+//     $(".form-body").clone(true).appendTo(".main-form");
+// });
+
+$('#main').on('click', '.remove', function() {
+    $('.remove').closest('#main').find('.form-body').not(':first').last().remove();
+    });
+    $('#main').on('click', '.clone', function() {
+    $('.clone').closest('#main').find('.form-body').first().clone().appendTo('.main-form');
+    });
+
+}); 
+
+
+
+   
+</script>

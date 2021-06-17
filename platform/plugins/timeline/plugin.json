@@ -1,0 +1,9 @@
+{
+    "name": "Timeline",
+    "namespace": "Botble\\Timeline\\",
+    "provider": "Botble\\Timeline\\Providers\\TimelineServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module timeline"
+}

@@ -30,7 +30,7 @@
 <section class="shoplisting_wrap">
     <div class="row">
 
-        
+
         <div class="col-lg-1">
             @if(count($product->images))
                 @foreach($product->images as $image)
@@ -40,7 +40,6 @@
                 <img class="mt-2 side-img" src="https://landbapparel.com/images/detailed/40/S-45_IVORY___5_.jpg">
                 <img class="mt-2 side-img" src="https://landbapparel.com/images/thumbnails/522/783/detailed/170/GDR08-AZSE__2_.jpg">
             @endif
-
         </div>
         <div class="col-lg-5 mt-2">
             @if(count($product->images))

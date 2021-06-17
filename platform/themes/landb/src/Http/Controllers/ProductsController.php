@@ -16,6 +16,8 @@ use Botble\Slug\Repositories\Interfaces\SlugInterface;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
+use Botble\Timeline\Models\Timeline;
+use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -114,11 +116,9 @@ class ProductsController extends Controller
 
     public function timeline(Request $request)
     {
-        //dd($data['product']);
-        if ($request->ajax()) {
-            return response()->json(['product' => $data['product']], 200);
-        } else {
-            return Theme::scope('timeline')->render();
-        }
+        $tz = Carbon::now('America/Chicago')->toDateString();
+        $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
+        $product = Timeline::where('date', $date)->get();
+        return Theme::scope('timeline', $product)->render();
     }
 }

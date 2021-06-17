@@ -117,6 +117,7 @@ class ProductController extends BaseController
      */
     public function create(FormBuilder $formBuilder)
     {
+
         page_title()->setTitle(trans('plugins/ecommerce::products.create'));
 
         Assets::addStyles(['datetimepicker'])
