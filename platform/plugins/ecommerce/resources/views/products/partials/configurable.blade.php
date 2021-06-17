@@ -9,13 +9,14 @@
             <thead>
             <tr>
                 <th>{{ trans('plugins/ecommerce::products.form.image') }}</th>
-                @foreach ($productAttributeSets->where('is_selected', '<>', null)->whereIn('id', $productVariationsInfo->pluck('attribute_set_id')->all())->sortBy('id') as $attributeSet)
+                @foreach ($productAttributeSets/*->where('is_selected', '<>', null)*/->whereIn('id', $productVariationsInfo->pluck('attribute_set_id')->all())->sortBy('id') as $attributeSet)
                     <th>{{ $attributeSet->title }}</th>
                 @endforeach
                 @foreach ($productAttributeSets->where('is_selected', '<>', null)->whereNotIn('id', $productVariationsInfo->pluck('attribute_set_id')->all())->sortBy('id') as $attributeSet)
                     <th>{{ $attributeSet->title }}</th>
                 @endforeach
                 <th>{{ trans('plugins/ecommerce::products.form.price') }}</th>
+                <th>Qty</th>
                 <th>{{ trans('plugins/ecommerce::products.form.is_default') }}</th>
                 <th class="text-center">{{ trans('plugins/ecommerce::products.form.action') }}</th>
             </tr>
@@ -50,6 +51,7 @@
                             @endif
                         @endif
                     </td>
+                    <td>{{$variation->product->quantity}}</td>
                     <td>
                         <label>
                             <input type="radio" class="hrv-radio"

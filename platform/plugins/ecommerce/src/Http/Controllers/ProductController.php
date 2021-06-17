@@ -689,8 +689,7 @@ class ProductController extends BaseController
 
         if ($addedAttributes && !empty($addedAttributes) && is_array($addedAttributes)) {
 
-            $result = $productVariation->getVariationByAttributesOrCreate($variation->configurable_product_id,
-                $addedAttributes);
+            $result = $productVariation->getVariationByAttributesOrCreate($variation->configurable_product_id, $addedAttributes);
 
             if (!$result['created'] && $result['variation']->id !== $variation->id) {
                 return $response
