@@ -1,0 +1,9 @@
+{
+    "name": "Threadsample",
+    "namespace": "Botble\\Threadsample\\",
+    "provider": "Botble\\Threadsample\\Providers\\ThreadsampleServiceProvider",
+    "author": "N/A",
+    "url": "N/A",
+    "version": "1.0",
+    "description": "The description for module threadsample"
+}
