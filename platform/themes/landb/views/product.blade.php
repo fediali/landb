@@ -1,6 +1,6 @@
 @php
     $productVariations = $product->variations()->with(['product'])->get();
-   // dd($productVariations);
+    //dd($productVariations);
     $default = 0;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
@@ -11,6 +11,7 @@
 //dd($productVariations);
     $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
           ->getVariationsInfo($productVariations->pluck('id')->toArray());
+
 
 //dd($productVariationsInfo, $productVariations);
 @endphp
@@ -52,7 +53,7 @@
         </div>
         <div class="col-lg-6">
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$ {{ $product->price }}</p>
+            <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <p class="detail-size-p mb-2"><span
                     class="detail-size">Size</span>@if(isset($product->category)) @foreach($product->category->category_sizes as $cat_size) {{ $cat_size->name }} {!! ($loop->last) ? '':',' !!} @endforeach @endif
@@ -65,7 +66,7 @@
                 @endif--}}
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
-                        <option value="{{ $variation->product_id }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
+                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
                     @endforeach
                 @endforeach
             </select>
