@@ -59,11 +59,12 @@ class CartController extends Controller
         $data = $request->all();
         $product = Product::find($data['product_id']);
     if($product && $product->quantity >= $data['quantity']){
-            $cartItem = $this->createCartItem($data, $product);
-            if ($cartItem) {
+            $cart_status = $this->createCartItem($data, $product);
+            //dd($cart_status);
+            if (empty($cart_status)) {
                 return response()->json(['message' => 'Product added to cart successfully'], 200);
             } else {
-                return response()->json(['message' => 'Server Error'], 500);
+                return response()->json(['message' => $cart_status], 500);
             }
         } else {
       return response()->json(['message' => 'Required quantity is currently out of stock!'], 403);
@@ -97,11 +98,14 @@ class CartController extends Controller
         $cartId = $this->getUserCart();
         $checkCart = OrderProduct::where('order_id', $cartId)->where('product_id', $product->id)->first();
         if ($checkCart) {
+          if($product->quantity < $checkCart->qty+$data['quantity'] ){
+            return 'Required quantity is currently out of stock!';
+          }
             $update = $checkCart->update(['qty' => $checkCart->qty + $data['quantity']]);
             if ($update) {
                 /*update_product_quantity($product->id, $data['quantity'], 'inc');*/
                 $this->getOrderAndUpdateAmount();
-                return true;
+                return '';
             }
         } else {
             $create = OrderProduct::create([
@@ -115,10 +119,10 @@ class CartController extends Controller
             if ($create) {
                 /*update_product_quantity($product->id, $data['quantity'], 'inc');*/
                 $this->getOrderAndUpdateAmount();
-                return true;
+                return '';
             }
         }
-        return false;
+        return 'Server Error!';
     }
 
     public function updateCartQuanity(Request $request)
