@@ -3,6 +3,7 @@
 namespace Botble\Threadsample\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Threadsample\Http\Requests\ThreadsampleRequest;
 use Botble\Threadsample\Repositories\Interfaces\ThreadsampleInterface;
 use Botble\Base\Http\Controllers\BaseController;
@@ -22,13 +23,15 @@ class ThreadsampleController extends BaseController
      * @var ThreadsampleInterface
      */
     protected $threadsampleRepository;
+    protected $threadRepository;
 
     /**
      * @param ThreadsampleInterface $threadsampleRepository
      */
-    public function __construct(ThreadsampleInterface $threadsampleRepository)
+    public function __construct(ThreadsampleInterface $threadsampleRepository, ThreadInterface $threadRepository)
     {
         $this->threadsampleRepository = $threadsampleRepository;
+        $this->threadRepository = $threadRepository;
     }
 
     /**
@@ -154,5 +157,15 @@ class ThreadsampleController extends BaseController
         }
 
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
+    }
+
+    public function show(Request $request, $id)
+    {
+        $thread = $this->threadRepository->findOrFail($id);
+        $request['thread_id'] = $thread->id;
+        $request['name'] = $thread->name;
+        $threadsample = $this->threadsampleRepository->createOrUpdate($request->input());
+
+        return redirect()->route('threadsample.edit', $threadsample->id);
     }
 }

@@ -335,122 +335,129 @@
 
 {{--CUSTOMER ADDRESS MODAL--}}
 <script>
-  $(document).ready(function () {
-    $('.address-country').on('change', function () {
-      // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
-    });
+    $(document).ready(function () {
+        $('.threadSampletech').on('click', function () {
+            var url = $('.threadSampletech').val();
+            console.log(url);
+            window.open(url);
 
-    $('.delete_address').on('click', function (e) {
-      var data = $(this).data('id');
-      var r=confirm("Are you sure you want to delete this address?");
-      if (r==true) {
-        window.location.replace('{{ route('customers.delete-address') }}'+'?id='+data);
-      }
+        })
 
-    });
-    $('.toggle-edit-address').on('click', function (e) {
-      var data = $(this).data('row');
-
-      $('input[name=address_id]').val(data.id);
-      $('input[name=address_first_name]').val(data.first_name);
-      $('input[name=address_last_name]').val(data.last_name);
-      $('input[name=address_company]').val(data.company);
-      $('input[name=address_phone]').val(data.phone);
-      $('input[name=address_address]').val(data.address);
-      $('input[name=address_city]').val(data.city);
-      $('input[name=address_zip_code]').val(data.zip_code);
-
-      get_countries($('select[name="address_country"]'), data.country);
-      get_states($('select[name="address_state"]'), data.country, data.state);
-
-
-      $('#edit_address').modal('toggle');
-      console.log(data);
-    });
-
-    $('#address_form').on('submit', function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: 'post',
-        url: '{{ route('customers.update-customer-address') }}',
-        data: $(this).serialize(),
-        success: function (result) {
-          toastr['success']('Success', 'Address updated successfully', result.message);
-          $('#edit_address').modal('toggle');
-          location.reload();
-        },
-        error: function(){
-          toastr['error']('Error!', 'Server Error');
-        }
-      });
-
-    });
-  });
-  function get_states(thiss, country, old){
-    $.ajax({
-      type: 'GET',
-      url: '{{ URL::to('ajax/get_states') }}',
-      data: {
-        'country' : country
-      },
-      beforeSend: function () {
-      },
-
-      success: function (result) {
-        thiss.find('option').remove();
-        jQuery.each(result, function (index, state) {
-          if(index === old){
-            thiss.append(new Option(state, index, null, true));
-          }else{
-            thiss.append(new Option(state, index));
-          }
+        $('.address-country').on('change', function () {
+            // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
         });
-      },
-      error: function (e) {
-      }
-    })
-  }
-  function get_countries(thiss, old){
-    $.ajax({
-      type: 'GET',
-      url: '{{ URL::to('ajax/get_countries') }}',
-      async: false,
-      success: function (result) {
-        thiss.find('option').remove();
-        jQuery.each(result, function (index, country) {
-          if(index === old){
-            console.log('old: '+ old+ " new: "+index)
-            thiss.append(new Option(country, index, null, true));
-          }else{
-            thiss.append(new Option(country, index));
-          }
+
+        $('.delete_address').on('click', function (e) {
+            var data = $(this).data('id');
+            var r = confirm("Are you sure you want to delete this address?");
+            if (r == true) {
+                window.location.replace('{{ route('customers.delete-address') }}' + '?id=' + data);
+            }
 
         });
-      },
-      error: function (e) {
-      }
-    })
-  }
+        $('.toggle-edit-address').on('click', function (e) {
+            var data = $(this).data('row');
+
+            $('input[name=address_id]').val(data.id);
+            $('input[name=address_first_name]').val(data.first_name);
+            $('input[name=address_last_name]').val(data.last_name);
+            $('input[name=address_company]').val(data.company);
+            $('input[name=address_phone]').val(data.phone);
+            $('input[name=address_address]').val(data.address);
+            $('input[name=address_city]').val(data.city);
+            $('input[name=address_zip_code]').val(data.zip_code);
+
+            get_countries($('select[name="address_country"]'), data.country);
+            get_states($('select[name="address_state"]'), data.country, data.state);
+
+
+            $('#edit_address').modal('toggle');
+            console.log(data);
+        });
+
+        $('#address_form').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: '{{ route('customers.update-customer-address') }}',
+                data: $(this).serialize(),
+                success: function (result) {
+                    toastr['success']('Success', 'Address updated successfully', result.message);
+                    $('#edit_address').modal('toggle');
+                    location.reload();
+                },
+                error: function () {
+                    toastr['error']('Error!', 'Server Error');
+                }
+            });
+
+        });
+    });
+
+    function get_states(thiss, country, old) {
+        $.ajax({
+            type: 'GET',
+            url: '{{ URL::to('ajax/get_states') }}',
+            data: {
+                'country': country
+            },
+            beforeSend: function () {
+            },
+
+            success: function (result) {
+                thiss.find('option').remove();
+                jQuery.each(result, function (index, state) {
+                    if (index === old) {
+                        thiss.append(new Option(state, index, null, true));
+                    } else {
+                        thiss.append(new Option(state, index));
+                    }
+                });
+            },
+            error: function (e) {
+            }
+        })
+    }
+
+    function get_countries(thiss, old) {
+        $.ajax({
+            type: 'GET',
+            url: '{{ URL::to('ajax/get_countries') }}',
+            async: false,
+            success: function (result) {
+                thiss.find('option').remove();
+                jQuery.each(result, function (index, country) {
+                    if (index === old) {
+                        console.log('old: ' + old + " new: " + index)
+                        thiss.append(new Option(country, index, null, true));
+                    } else {
+                        thiss.append(new Option(country, index));
+                    }
+
+                });
+            },
+            error: function (e) {
+            }
+        })
+    }
 </script>
 
 
 <script>
-$( document ).ready(function() { 
+    $(document).ready(function () {
 
 // $(".cloneTimeline").click(function () {
 //     $(".form-body").clone(true).appendTo(".main-form");
 // });
 
-$('#main').on('click', '.remove', function() {
-    $('.remove').closest('#main').find('.form-body').not(':first').last().remove();
+        $('#main').on('click', '.remove', function () {
+            $('.remove').closest('#main').find('.form-body').not(':first').last().remove();
+        });
+        $('#main').on('click', '.clone', function () {
+            $('.clone').closest('#main').find('.form-body').first().clone().appendTo('.main-form');
+        });
+
     });
-    $('#main').on('click', '.clone', function() {
-    $('.clone').closest('#main').find('.form-body').first().clone().appendTo('.main-form');
-    });
-
-}); 
 
 
-
-   
 </script>

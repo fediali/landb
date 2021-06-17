@@ -15,6 +15,8 @@ class ThreadsampleForm extends FormAbstract
      */
     public function buildForm()
     {
+        $thread = get_thread();
+
         $this
             ->setupModel(new Threadsample)
             ->setValidatorClass(ThreadsampleRequest::class)
@@ -26,6 +28,9 @@ class ThreadsampleForm extends FormAbstract
                     'placeholder'  => trans('core/base::forms.name_placeholder'),
                     'data-counter' => 120,
                 ],
+            ])->add('notes', 'textarea', [
+                'label'      => 'Notes',
+                'label_attr' => ['class' => 'control-label'],
             ])
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
@@ -33,8 +38,17 @@ class ThreadsampleForm extends FormAbstract
                 'attr'       => [
                     'class' => 'form-control select-full',
                 ],
-                'choices'    => BaseStatusEnum::labels(),
+                'choices'    => BaseStatusEnum::$THREADSAMPLE,
+            ])->add('thread_id', 'button', [
+                'label'      => 'View Thread',
+                'label_attr' => ['class' => 'control-label '],
+                'attr'       => [
+                    'class' => 'form-control btn btn-info threadSampletech',
+                    'value' => route('thread.details', $this->model->thread_id),
+                ],
+
             ])
             ->setBreakFieldPoint('status');
     }
 }
+

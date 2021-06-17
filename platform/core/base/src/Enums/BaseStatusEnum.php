@@ -25,8 +25,16 @@ class BaseStatusEnum extends Enum
     public const HIDDEN = 'hidden';
     public const ACTIVE = 'active';
     public const DISABLED = 'disabled';
+    public const PRODUCTION = 'production';
+    public const COMPLETE = 'complete';
+    public const SHIPPED = 'shipped';
 
-
+    public static $THREADSAMPLE = [
+        'pending'    => self::PENDING,
+        'production' => self::PRODUCTION,
+        'complete'   => self::COMPLETE,
+        'shipped'    => self::SHIPPED,
+    ];
     public static $SCHEDULE = [
         'schedule'  => self::SCHEDULE,
         'published' => self::PUBLISHED,

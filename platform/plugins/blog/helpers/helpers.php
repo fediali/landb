@@ -369,6 +369,13 @@ if (!function_exists('get_rises')) {
         return \Botble\Rises\Models\Rises::where('status', 'published')->pluck('name', 'id')->all();
     }
 }
+if (!function_exists('get_thread')) {
+    function get_thread()
+    {
+
+        return \Botble\Thread\Models\Thread::all()->pluck('name', 'id');
+    }
+}
 
 if (!function_exists('get_fabrics')) {
     function get_fabrics()

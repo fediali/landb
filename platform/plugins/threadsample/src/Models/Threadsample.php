@@ -23,6 +23,8 @@ class Threadsample extends BaseModel
     protected $fillable = [
         'name',
         'status',
+        'thread_id',
+        'notes',
     ];
 
     /**

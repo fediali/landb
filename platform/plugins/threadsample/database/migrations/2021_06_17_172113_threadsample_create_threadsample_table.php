@@ -17,6 +17,7 @@ class ThreadsampleCreateThreadsampleTable extends Migration
             $table->string('name', 255);
             $table->integer('thread_id');
             $table->string('status', 60)->default('pending');
+            $table->text('notes');
             $table->integer('business_id')->default(1);
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();

@@ -6,6 +6,11 @@ Route::group(['namespace' => 'Botble\Threadsample\Http\Controllers', 'middleware
 
         Route::group(['prefix' => 'threadsamples', 'as' => 'threadsample.'], function () {
             Route::resource('', 'ThreadsampleController')->parameters(['' => 'threadsample']);
+            Route::get('show/{id}', [
+                'as'         => 'show',
+                'uses'       => 'ThreadsampleController@show',
+                'permission' => 'threadsample.create',
+            ]);
             Route::delete('items/destroy', [
                 'as'         => 'deletes',
                 'uses'       => 'ThreadsampleController@deletes',
