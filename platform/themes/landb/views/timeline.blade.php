@@ -24,7 +24,6 @@
                         <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
                         <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                     </div>
-                    <i class="icon fa fa-home"></i>
                     <div class="content">
                         <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
                     </div>

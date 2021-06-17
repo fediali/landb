@@ -1000,10 +1000,12 @@ section.parallax_video video {
 .shoplisting .listbox .img {
     position: relative;
     cursor: pointer;
+    background: #ececec;
 }
 
 .shoplisting .listbox .img img {
     width: 100%;
+    object-fit: contain;
 }
 
 .shoplisting .listbox .img span {
@@ -3401,8 +3403,7 @@ nav.main-nav .nav-col {
     width: 50px;
     height: 2px;
     top: calc(50% - 1px);
-    right: 8px;
-    background: #000;
+    right: 8px; 
     z-index: 1;
   }
   
@@ -3432,7 +3433,7 @@ nav.main-nav .nav-col {
   }
   .container-timeline.left .date .timeline-callbtn{
     width: 85%;
-    margin-left: 64px !IMPORTANT;
+    margin-left: 10px !IMPORTANT;
     MARGIN-TOP: 10PX;
   }
   .container-timeline.right .date .timeline-addbtn{
@@ -3472,16 +3473,13 @@ nav.main-nav .nav-col {
     left: 56px;
   }
   
-  .container-timeline .content {
-    padding: 30px 90px 30px 30px;
-    background: #ffeeb5;
+  .container-timeline .content { 
     position: relative;
     border-radius: 10px 10px 10px 10px;
 }
 
   
-  .container-timeline.right .content {
-    padding: 30px 30px 30px 90px;
+  .container-timeline.right .content { 
     border-radius: 10px 10px 10px 10px;
   }
   
