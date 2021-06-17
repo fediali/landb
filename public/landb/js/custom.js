@@ -112,7 +112,7 @@ gsap.utils.toArray("section").forEach((elem) => {
 $(document).ready(function () {
   $(document).on('submit', 'form.add_to_cart_form', function (e) {
     e.preventDefault();
-    var id = $(this).data('id');
+    var id = $(this).attr('data-id');
     var qty = $(this).find('input[name="quantity"]').val();
     var formData = {
         '_token': $('meta[name="csrf-token"]').attr('content'),
