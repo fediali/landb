@@ -9,12 +9,12 @@
     </div>
 </section>
 <section>
-    <div class="row m-0">
-        <div class="col-lg-10"></div>
-        <div class="col-lg-2">
-            <button onclick="closeOnSelectDemo()" class="btn btn-calender"> Select Date</button>
-        </div>
-    </div>
+{{--    <div class="row m-0">--}}
+{{--        <div class="col-lg-10"></div>--}}
+{{--        <div class="col-lg-2">--}}
+{{--            <button onclick="closeOnSelectDemo()" class="btn btn-calender"> Select Date</button>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     <div class="timeline">
         @foreach($product[0]->detail as $row)
             <div class="container-timeline left">
@@ -26,14 +26,6 @@
                 <i class="icon fa fa-home"></i>
                 <div class="content">
                     <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
-
-                    {{--                    <h2>Lorem ipsum dolor sit amet</h2>--}}
-                    {{--                    <p>--}}
-                    {{--                        Lorem ipsum dolor sit amet elit. Aliquam odio dolor, id luctus erat sagittis non. Ut blandit--}}
-                    {{--                        semper--}}
-                    {{--                        pretium.--}}
-                    {{--                    </p>--}}
-                    <a href="{{$row->product_link}}" class=" btn cart-btn mt-3">View Now</a>
                 </div>
             </div>
             <div class="container-timeline right">
