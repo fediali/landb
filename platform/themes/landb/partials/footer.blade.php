@@ -153,10 +153,11 @@
 
 
     $('#variation-select').on('change', function () {
-      var id = $(this).val();
-console.log('id: '+id);
-      $('#variation-form').attr('data-id', id);
-      $('#variation-submit').attr('data-id', id);
+      var data = JSON.parse($(this).val());
+
+      $('#variation-form').attr('data-id', data.product_id);
+      $('#variation-submit').attr('data-id', data.product_id);
+      $('#product_price').html(data.product.price);
     });
 
     $('.set-default').on('change', function () {

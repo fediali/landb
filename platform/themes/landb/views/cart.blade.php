@@ -28,7 +28,9 @@
 
         </div>
     </div>
-    @php $grand_total = 0; @endphp
+    @php $grand_total = 0;
+
+    @endphp
     @foreach($cart->products as $cartItem)
         <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
@@ -37,9 +39,12 @@
                     <div class="ml-3">
                         <p class="cart-product-name mt-2 mb-2">{{ $cartItem->product->name }}</p>
                         <p class="cart-product-code mb-2">CODE: {{ $cartItem->product->sku }}</p>
-                        @php $sizes = get_category_sizes_by_id($cartItem->product->category_id); @endphp
-                        @if(!empty($sizes->category_sizes))
-                            <p class="cart-product-size">SIZE: @foreach($sizes->category_sizes as $size) {{ @$size->name }} {!! ($loop->last) ? '':',' !!} @endforeach</p>
+                        @php
+                            $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $cartItem->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
+
+                        @endphp
+                        @if($variation)
+                            <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
                         @endif
                     </div>
                 </div>
