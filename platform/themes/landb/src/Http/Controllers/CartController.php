@@ -125,10 +125,10 @@ class CartController extends Controller
     {
         $data = $request->all();
         if (!empty($data['id'])) {
-            $orderProduct = OrderProduct::where('id', $data['id'])->first();
+      $orderProduct = OrderProduct::where('id', $data['id'])->first();
       $product = Product::find($orderProduct->product_id);
       if($product){
-        if($data['action'] == 'inc' && $product->quantity < 1){
+        if($data['action'] == 'inc' && $product->quantity < $orderProduct->qty+1){
           return response()->json(['message' => 'Product is out of stock'], 403);
         }
             if ($data['quantity'] == 0) {

@@ -1,3 +1,19 @@
+@php
+    $productVariations = $product->variations()->with(['product'])->get();
+    $default = 0;
+    foreach ($productVariations as $variation){
+        if($variation->is_default == 1){
+            $default = $variation->product_id;
+        }
+    }
+    //dd($default);
+//dd($productVariations);
+    $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
+          ->getVariationsInfo($productVariations->pluck('id')->toArray());
+
+//dd($productVariationsInfo, $productVariations);
+@endphp
+
 <section class="breadcrumb_wrap">
     <div class="pl-3 pr-3">
         <nav aria-label="breadcrumb">
@@ -42,14 +58,20 @@
             <p class="detail-size-p mb-2"><span
                     class="detail-size">Size</span>@if(isset($product->category)) @foreach($product->category->category_sizes as $cat_size) {{ $cat_size->name }} {!! ($loop->last) ? '':',' !!} @endforeach @endif
             </p>
-            <select class="detail-size-select">
-                @if(isset($product->category))
+            <select class="detail-size-select" id="variation-select">
+                {{--@if(isset($product->category))
                     @foreach($product->category->category_sizes as $cat_size)
                         <option value="{{ $cat_size->id }}"> {{ $cat_size->name }} </option>
                     @endforeach
-                @endif
+                @endif--}}
+                @foreach($productVariations as $variation)
+                    @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
+                        <option value="{{ $variation->product_id }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
+                    @endforeach
+                @endforeach
             </select>
-            <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span>
+
+           {{-- <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span>
             </p>
             <div class="color-area mt-2">
                 <label class="container-check">
@@ -72,8 +94,8 @@
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
-            </div>
-            <form class="add_to_cart_form" data-id="{{ $product->id }}" method='POST'
+            </div>--}}
+            <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
                 <div class="row mt-4">
                     <div id="myform" class="col-lg-4">
@@ -82,7 +104,7 @@
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
                     </div>
                     <div class="col-lg-4">
-                        <button class="cart-btn w-100 add-to-cart-button cart-submit" data-id="{{ $product->id }}">Add
+                        <button class="cart-btn w-100 add-to-cart-button cart-submit" id="variation-submit" data-id="{{ $default }}">Add
                             to cart
                         </button>
                     </div>

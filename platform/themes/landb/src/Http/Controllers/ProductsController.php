@@ -7,8 +7,12 @@ use App\Http\Controllers\Controller;
 /*use Botble\Theme\Theme;*/
 
 use BaseHelper;
+use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
+use Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
+use Botble\Slug\Repositories\Interfaces\SlugInterface;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
@@ -24,16 +28,19 @@ use SeoHelper;
 use SiteMapManager;
 use SlugHelper;
 use Theme;
+use Botble\Base\Enums\BaseStatusEnum;
 
 /*use Botble\Theme\Http\Controllers\PublicController;*/
 
 class ProductsController extends Controller
 {
     private $productRepo;
+    protected $slugRepository;
 
-    public function __construct(ProductsRepository $productsRepo)
+    public function __construct(ProductsRepository $productsRepo, SlugInterface $slugRepository)
     {
         $this->productRepo = $productsRepo;
+        $this->slugRepository = $slugRepository;
     }
 
     public function getIndex()
@@ -57,12 +64,48 @@ class ProductsController extends Controller
     public function getDetails($slug, Request $request)
     {
 
-        $data = [
+        /*$data = [
             'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
         ];
-        if (!$data['product']) {
-            abort('404');
-        }
+        if(!$data['product']){
+          abort('404');
+        }*/
+
+      $slug = $this->slugRepository->getFirstBy([
+          'key'            => $slug,
+          'reference_type' => Product::class,
+          'prefix'         => SlugHelper::getPrefix(Product::class),
+      ]);
+
+      if (!$slug) {
+        abort(404);
+      }
+
+      $condition = [
+          'ec_products.id'     => $slug->reference_id,
+          'ec_products.status' => BaseStatusEnum::PUBLISHED,
+      ];
+
+      if (Auth::check() && request()->input('preview')) {
+        Arr::forget($condition, 'status');
+      }
+
+      $data['product'] = get_products([
+          'condition' => $condition,
+          'take'      => 1,
+          'with'      => [
+              'defaultProductAttributes',
+              'slugable',
+              'tags',
+              'tags.slugable',
+          ],
+      ]);
+
+
+      if (!$data['product']) {
+        abort(404);
+      }
+      //dd($data['product']->variations()->get());
         //dd($data['product']);
         if ($request->ajax()) {
             return response()->json(['product' => $data['product']], 200);
