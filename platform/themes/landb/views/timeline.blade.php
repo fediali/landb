@@ -16,24 +16,24 @@
         </div>
     </div>
     <div class="timeline">
-        @foreach($product->detail as $row)
+        @foreach($product[0]->detail as $row)
             <div class="container-timeline left">
-                <div class="date"> {{$row->date}}
+                <div class="date">{{$product[0]->date}}
                     <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
                     <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                 </div>
 
                 <i class="icon fa fa-home"></i>
                 <div class="content">
-                    <img class="w-100" src="https://revamp.landbw.co/public/landb/img/browse-img-3.png"/>
+                    <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
 
-                    <h2>Lorem ipsum dolor sit amet</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet elit. Aliquam odio dolor, id luctus erat sagittis non. Ut blandit
-                        semper
-                        pretium.
-                    </p>
-                    <a href="#" class=" btn cart-btn mt-3">Check Now</a>
+                    {{--                    <h2>Lorem ipsum dolor sit amet</h2>--}}
+                    {{--                    <p>--}}
+                    {{--                        Lorem ipsum dolor sit amet elit. Aliquam odio dolor, id luctus erat sagittis non. Ut blandit--}}
+                    {{--                        semper--}}
+                    {{--                        pretium.--}}
+                    {{--                    </p>--}}
+                    <a href="{{$row->product_link}}" class=" btn cart-btn mt-3">View Now</a>
                 </div>
             </div>
             <div class="container-timeline right">
