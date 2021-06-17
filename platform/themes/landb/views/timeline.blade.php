@@ -16,18 +16,20 @@
     {{--        </div>--}}
     {{--    </div>--}}
     <div class="timeline">
-        @foreach($product->detail as $row)
-            <div class="container-timeline left {{($loop->iteration % 2 == 0) ? 'right': 'left'}}">
-                <div class="date">{{\Carbon\Carbon::createFromDate('')}}
-                    <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
-                    <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
+        @isset($product)
+            @foreach($product->detail as $row)
+                <div class="container-timeline left {{($loop->iteration % 2 == 0) ? 'right': 'left'}}">
+                    <div class="date">{{\Carbon\Carbon::createFromDate('')}}
+                        <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
+                        <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
+                    </div>
+                    <i class="icon fa fa-home"></i>
+                    <div class="content">
+                        <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
+                    </div>
                 </div>
-                <i class="icon fa fa-home"></i>
-                <div class="content">
-                    <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>
-                </div>
-            </div>
-        @endforeach
+            @endforeach
+        @endisset
     </div>
 </section>
 <script>
