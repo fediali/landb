@@ -81,7 +81,6 @@ class TimelineController extends BaseController
         }
 
 
-
         event(new CreatedContentEvent(TIMELINE_MODULE_SCREEN_NAME, $request, $timeline));
 
         return $response
@@ -103,8 +102,8 @@ class TimelineController extends BaseController
         event(new BeforeEditContentEvent($request, $timeline));
 
         page_title()->setTitle(trans('plugins/timeline::timeline.edit') . ' "' . $timeline->name . '"');
-
-        return $formBuilder->create(TimelineForm::class, ['model' => $timeline])->renderForm();
+        return view('plugins/timeline::timeline', compact($timeline));
+//        return $formBuilder->create(TimelineForm::class, ['model' => $timeline])->renderForm();
     }
 
     /**
