@@ -81,6 +81,8 @@ class ThreadTable extends TableAbstract
             })
             ->editColumn('is_denim', function ($item) {
                 return $item->is_denim ? 'Yes' : 'No';
+            })->editColumn('is_denim', function ($item) {
+                return $item->is_denim ? 'Yes' : 'No';
             })
             ->editColumn('status', function ($item) {
                 //return $item->status->toHtml();
