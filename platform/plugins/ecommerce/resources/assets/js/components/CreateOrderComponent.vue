@@ -189,8 +189,7 @@
                                 <label class="text-title-field">Select Payment Method</label>
                                 <select name="method" class="form-control method" v-model="payment_method">
                                     <option value="" :disabled="true" :selected="true">Select Payment Method</option>
-                                    <option v-for="(pm) in payment_methods" :value="pm.slug"
-                                            :selected="pm.slug === sel_payment_method">
+                                    <option v-for="(pm) in payment_methods" :value="pm.slug">
                                         {{ pm.name }}
                                     </option>
                                 </select>
@@ -857,7 +856,7 @@ export default {
             default: () => [],
         },
         payment_methods: {
-            type: Object,
+            type: Array,
             default: () => [],
         },
         sel_order_type: {
@@ -1028,6 +1027,7 @@ export default {
                 axios
                     .get(route('products.get-all-products-and-variations', {
                         keyword: context.product_keyword,
+                        order_type: context.order_type,
                         page: page
                     }))
                     .then(res => {
