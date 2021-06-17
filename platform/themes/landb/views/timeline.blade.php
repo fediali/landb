@@ -18,9 +18,9 @@
     <div class="timeline">
         @foreach($product->detail as $row)
             <div class="container-timeline left">
-                <div class="date"> {{$product->date}}
-                    <a href="#" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
-                    <a href="#" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
+                <div class="date"> {{$row->date}}
+                    <a href="{{$row->product_link}}" class=" btn cart-btn ml-2 timeline-addbtn">Add to Cart</a>
+                    <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                 </div>
 
                 <i class="icon fa fa-home"></i>

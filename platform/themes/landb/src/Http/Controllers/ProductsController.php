@@ -71,41 +71,41 @@ class ProductsController extends Controller
           abort('404');
         }*/
 
-      $slug = $this->slugRepository->getFirstBy([
-          'key'            => $slug,
-          'reference_type' => Product::class,
-          'prefix'         => SlugHelper::getPrefix(Product::class),
-      ]);
+        $slug = $this->slugRepository->getFirstBy([
+            'key'            => $slug,
+            'reference_type' => Product::class,
+            'prefix'         => SlugHelper::getPrefix(Product::class),
+        ]);
 
-      if (!$slug) {
-        abort(404);
-      }
+        if (!$slug) {
+            abort(404);
+        }
 
-      $condition = [
-          'ec_products.id'     => $slug->reference_id,
-          'ec_products.status' => BaseStatusEnum::PUBLISHED,
-      ];
+        $condition = [
+            'ec_products.id'     => $slug->reference_id,
+            'ec_products.status' => BaseStatusEnum::PUBLISHED,
+        ];
 
-      if (Auth::check() && request()->input('preview')) {
-        Arr::forget($condition, 'status');
-      }
+        if (Auth::check() && request()->input('preview')) {
+            Arr::forget($condition, 'status');
+        }
 
-      $data['product'] = get_products([
-          'condition' => $condition,
-          'take'      => 1,
-          'with'      => [
-              'defaultProductAttributes',
-              'slugable',
-              'tags',
-              'tags.slugable',
-          ],
-      ]);
+        $data['product'] = get_products([
+            'condition' => $condition,
+            'take'      => 1,
+            'with'      => [
+                'defaultProductAttributes',
+                'slugable',
+                'tags',
+                'tags.slugable',
+            ],
+        ]);
 
 
-      if (!$data['product']) {
-        abort(404);
-      }
-      //dd($data['product']->variations()->get());
+        if (!$data['product']) {
+            abort(404);
+        }
+        //dd($data['product']->variations()->get());
         //dd($data['product']);
         if ($request->ajax()) {
             return response()->json(['product' => $data['product']], 200);
@@ -119,6 +119,7 @@ class ProductsController extends Controller
         $tz = Carbon::now('America/Chicago')->toDateString();
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
         $product = Timeline::where('date', $date)->get();
-        return Theme::scope('timeline', $product)->render();
+
+        return Theme::scope('timeline', ['product' => $product])->render();
     }
 }
