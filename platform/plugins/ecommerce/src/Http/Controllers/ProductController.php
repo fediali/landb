@@ -18,6 +18,7 @@ use Botble\Ecommerce\Http\Requests\ProductRequest;
 use Botble\Ecommerce\Http\Requests\ProductUpdateOrderByRequest;
 use Botble\Ecommerce\Http\Requests\ProductVersionRequest;
 use Botble\Ecommerce\Models\CustomerProductDemand;
+use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Eloquent\ProductVariationRepository;
 use Botble\Ecommerce\Repositories\Interfaces\BrandInterface;
@@ -907,8 +908,17 @@ class ProductController extends BaseController
      */
     public function getAllProductAndVariations(Request $request, BaseHttpResponse $response)
     {
+        $excludeOOS = false;
+        $orderType = $request->input('order_type', Order::NORMAL);
+        if ($orderType == Order::NORMAL) {
+            $excludeOOS = true;
+        }
+
         $availableProducts = $this->productRepository
             ->getModel()
+            ->when($excludeOOS == true, function ($q) {
+                $q->where('quantity', '>', 0);
+            })
             ->where('status', BaseStatusEnum::PUBLISHED)
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {

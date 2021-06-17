@@ -834,7 +834,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -882,7 +881,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     payment_methods: {
-      type: Object,
+      type: Array,
       "default": function _default() {
         return [];
       }
@@ -1087,6 +1086,7 @@ __webpack_require__.r(__webpack_exports__);
         context.loading = true;
         axios.get(route('products.get-all-products-and-variations', {
           keyword: context.product_keyword,
+          order_type: context.order_type,
           page: page
         })).then(function (res) {
           context.list_products = res.data.data;
@@ -8406,22 +8406,13 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _vm._l(_vm.payment_methods, function(pm) {
-                        return _c(
-                          "option",
-                          {
-                            domProps: {
-                              value: pm.slug,
-                              selected: pm.slug === _vm.sel_payment_method
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(pm.name) +
-                                "\n                                "
-                            )
-                          ]
-                        )
+                        return _c("option", { domProps: { value: pm.slug } }, [
+                          _vm._v(
+                            "\n                                    " +
+                              _vm._s(pm.name) +
+                              "\n                                "
+                          )
+                        ])
                       })
                     ],
                     2
