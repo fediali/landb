@@ -94,7 +94,7 @@ class ThreadTable extends TableAbstract
                     $html .= '<a href="'.route('threadorders.createThreadOrder', $item->id).'" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order"><i class="fa fa-shopping-cart"></i></a>';
                 }*/
                 $html .= '<a href="' . route('thread.details', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
-                $html .= '<a href="' . route('threadsample.show', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Thread Sample"><i class="fa fa-eye"></i></a>';
+                $html .= '<a href="' . route('threadsample.show', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Thread Sample"><i class="fa fa-paper-plane"></i></a>';
 
                 if (!$item->thread_has_order && auth()->user()->hasPermission('thread.destroy')) {
                     $html .= '<a href="#" class="btn btn-icon btn-sm btn-danger deleteDialog" data-toggle="tooltip" data-section="' . route('thread.destroy', $item->id) . '" role="button" data-original-title="' . trans('core/base::tables.delete_entry') . '" >
@@ -173,13 +173,13 @@ class ThreadTable extends TableAbstract
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
             ],
-            'is_denim'         => [
+            'is_denim'            => [
                 'name'  => 'threads.is_denim',
                 'title' => 'Denim',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
             ],
-            'thread_status'         => [
+            'thread_status'       => [
                 'name'  => 'threads.thread_status',
                 'title' => 'Thread Status',
                 'class' => 'no-sort text-left',
@@ -198,9 +198,9 @@ class ThreadTable extends TableAbstract
                 'width' => '100px',
             ],
             'status'              => [
-                'name'    => 'threads.status',
-                'title'   => trans('core/base::tables.status'),
-                'width'   => '100px',
+                'name'  => 'threads.status',
+                'title' => trans('core/base::tables.status'),
+                'width' => '100px',
 //                'visible' => (Auth::user()->hasPermission(['thread.create'])) ? true : false,
             ],
             'ready'               => [

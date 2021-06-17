@@ -126,9 +126,9 @@ class ThreadsampleTable extends TableAbstract
      */
     public function buttons()
     {
-        $buttons = $this->addCreateButton(route('threadsample.create'), 'threadsample.create');
-
-        return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Threadsample::class);
+//        $buttons = $this->addCreateButton(route('threadsample.create'), 'threadsample.create');
+//
+//        return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Threadsample::class);
     }
 
     /**

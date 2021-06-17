@@ -44,7 +44,7 @@ class ThreadsampleForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label '],
                 'attr'       => [
                     'class' => 'form-control btn btn-info threadSampletech',
-                    'value' => route('thread.details', $this->model->thread_id),
+                    'value' => isset($this->model->thread_id) ? route('thread.details', $this->model->thread_id) : '',
                 ],
 
             ])
