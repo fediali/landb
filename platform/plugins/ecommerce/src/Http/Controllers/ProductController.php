@@ -12,6 +12,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
+use Botble\Categorysizes\Models\Categorysizes;
 use Botble\Ecommerce\Forms\ProductForm;
 use Botble\Ecommerce\Http\Requests\CreateProductWhenCreatingOrderRequest;
 use Botble\Ecommerce\Http\Requests\ProductRequest;
@@ -20,6 +21,9 @@ use Botble\Ecommerce\Http\Requests\ProductVersionRequest;
 use Botble\Ecommerce\Models\CustomerProductDemand;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductAttribute;
+use Botble\Ecommerce\Models\ProductAttributeSet;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Eloquent\ProductVariationRepository;
 use Botble\Ecommerce\Repositories\Interfaces\BrandInterface;
 use Botble\Ecommerce\Repositories\Interfaces\GroupedProductInterface;
@@ -166,7 +170,7 @@ class ProductController extends BaseController
         $product = $service->execute($request, $product);
         $storeProductTagService->execute($request, $product);
 
-        $addedAttributes = $request->input('added_attributes', []);
+        /*$addedAttributes = $request->input('added_attributes', []);
 
         if ($request->input('is_added_attributes') == 1 && $addedAttributes) {
             $storeAttributesOfProductService->execute($product, array_keys($addedAttributes));
@@ -195,7 +199,7 @@ class ProductController extends BaseController
             }
 
             $this->postSaveAllVersions([$variation['id'] => $variation], $variationRepository, $product->id, $response);
-        }
+        }*/
 
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
@@ -205,6 +209,88 @@ class ProductController extends BaseController
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
         }
+
+
+        $catId = @$request->only('categories')['categories'][0];
+        if ($catId) {
+            $getTypeAttrSet = ProductAttributeSet::where('slug', 'type')->value('id');
+            if ($getTypeAttrSet) {
+                $getTypeAttrs = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->pluck('id')->all();
+                if ($getTypeAttrs) {
+                    $product->productAttributeSets()->attach([$getTypeAttrSet]);
+                    $product->productAttributes()->attach($getTypeAttrs);
+                    $getSizeAttrSet = ProductAttributeSet::where('slug', 'size')->value('id');
+                    if ($getSizeAttrSet) {
+                        $getCatSizes = Categorysizes::join('product_categories_sizes', 'categorysizes.id', 'product_categories_sizes.category_size_id')
+                            ->where('product_categories_sizes.product_category_id', $catId)
+                            ->pluck('categorysizes.name')
+                            ->all();
+                        $getSizeAttrs = [];
+                        foreach ($getCatSizes as $getCatSize) {
+                            $sizeExist = ProductAttribute::where('slug', strtolower($getCatSize))->where('attribute_set_id', $getSizeAttrSet)->value('id');
+                            if ($sizeExist) {
+                                $getSizeAttrs[] = $sizeExist;
+                            } else {
+                                $sizeAttrData = ['attribute_set_id' => $getSizeAttrSet, 'title' => $getCatSize, 'slug' => strtolower($getCatSize)];
+                                $sizeAttr = ProductAttribute::create($sizeAttrData);
+                                if ($sizeAttr) {
+                                    $getSizeAttrs[] = $sizeAttr->id;
+                                }
+                            }
+                        }
+
+
+                        $addedAttributes = [];
+                        $getTypePackAttr = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->where('slug', 'pack')->value('id');
+                        $addedAttributes[$getTypeAttrSet] = $getTypePackAttr;
+                        $getSizeAllAttr = ProductAttribute::where('attribute_set_id', $getSizeAttrSet)->where('slug', 'all')->value('id');
+                        $addedAttributes[$getSizeAttrSet] = $getSizeAllAttr;
+                        $result = $variationRepository->getVariationByAttributesOrCreate($product->id, $addedAttributes);
+
+                        if ($result['created']) {
+                            app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $variationRepository, $product->id, $response);
+                            ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
+
+                            $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                            $packAllProd = Product::where('id', $prodId)->first();
+
+                            $barcodePackAll = get_barcode();
+                            $packAllProd->upc = $barcodePackAll['upc'];
+                            $packAllProd->barcode = $barcodePackAll['barcode'];
+                            $packAllProd->private_label = $product->private_label;
+                            $packAllProd->save();
+                        }
+
+                        if (count($getSizeAttrs)) {
+                            $product->productAttributeSets()->attach([$getSizeAttrSet]);
+                            $product->productAttributes()->attach($getSizeAttrs);
+
+                            foreach ($getSizeAttrs as $getSizeAttr) {
+                                $addedAttributes = [];
+                                $getTypeSingleAttr = ProductAttribute::where('attribute_set_id', $getTypeAttrSet)->where('slug', 'single')->value('id');
+                                $addedAttributes[$getTypeAttrSet] = $getTypeSingleAttr;
+                                $addedAttributes[$getSizeAttrSet] = $getSizeAttr;
+                                $result = $variationRepository->getVariationByAttributesOrCreate($product->id, $addedAttributes);
+                                if ($result['created']) {
+                                    app('eComProdContr')->postSaveAllVersions([$result['variation']->id => ['attribute_sets' => $addedAttributes]], $variationRepository, $product->id, $response);
+
+                                    $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                    Product::where('id', $prodId)->update(['price' => 0]);
+                                    $sizeProd = Product::where('id', $prodId)->first();
+
+                                    $barcodeSize = get_barcode();
+                                    $sizeProd->upc = $barcodeSize['upc'];
+                                    $sizeProd->barcode = $barcodeSize['barcode'];
+                                    $sizeProd->private_label = $product->private_label;
+                                    $sizeProd->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         return $response
             ->setPreviousUrl(route('products.index'))
