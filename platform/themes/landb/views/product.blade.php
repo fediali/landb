@@ -1,5 +1,5 @@
 @php
-    $productVariations = $product->variations()->with(['product'])->get();
+
     //dd($productVariations);
     $default = 0;
     $default_max = 1;
@@ -58,7 +58,12 @@
             <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <p class="detail-size-p mb-2"><span
-                    class="detail-size">Size</span>@if(isset($product->category)) @foreach($product->category->category_sizes as $cat_size) {{ $cat_size->name }} {!! ($loop->last) ? '':',' !!} @endforeach @endif
+                    class="detail-size">Size</span>
+                @foreach($productVariations as $variation)
+                    @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
+                        {{ $item->title }}{{ (!$loop->last) ? ' ,' : '' }}
+                    @endforeach
+                @endforeach
             </p>
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))

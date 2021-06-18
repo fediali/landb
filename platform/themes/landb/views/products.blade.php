@@ -302,12 +302,9 @@
                             <p class="detail-price mb-2" >$ <span  id="product-detail-price">0.0</span></p>
                             <p class="short-description mb-2" id="product-detail-desc"></p>
                             <p class="detail-size-p mb-2"><span class="detail-size">Size</span> <span  id="product-detail-sizes"></span> </p>
-                            <select class="detail-size-select" id="product-detail-sizes-drop">
-                                <option disabled hidden selected>Select a Size</option>
-                            </select>
                             <div class="row mt-4">
                                 <form class="add_to_cart_form"  id="product-detail-form" data-id="" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6" hidden>
                                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity' />
                                         <input id="product-detail-qty" type='text' name='quantity' value='1' class='qty' readonly />
                                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity' />
