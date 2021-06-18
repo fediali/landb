@@ -858,7 +858,20 @@
     }
   }
     
+.msg_unread {
+    background: #efefef !important;
+}
 
+.msg-count {
+    background: #33ff33;
+    width: 20px;
+    height: 20px;
+    border-radius: 15px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    right: 10px;
+}
   
 .gallery-images-wrapper { 
    display: grid !important;

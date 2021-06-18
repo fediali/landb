@@ -159,4 +159,15 @@
 @section('javascript')
     <script src="https://media.twiliocdn.com/sdk/js/chat/v3.3/twilio-chat.min.js"></script>
     <script></script>
+    <script>
+var height = 0;
+$('.message-body div').each(function(i, value){
+    height += parseInt($(this).height());
+});
+
+height += '';
+
+$('div').animate({scrollTop: height});
+ 
+</script>
 @endsection
