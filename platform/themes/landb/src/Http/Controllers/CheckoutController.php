@@ -61,6 +61,14 @@ class CheckoutController extends Controller
               $query->with(['product']);
             }])->first();
 
+    foreach ($cart->products as $cartProduct){
+      if($cartProduct->product->quantity < 1){
+        return redirect()->route('public.cart_index', ['discard' => 'true', 'item' => $cartProduct->id])->with('error', '"'.$cartProduct->product->name. '" is out of stock and is removed from cart!');
+      }elseif ($cartProduct->product->quantity < $cartProduct->qty){
+        return redirect()->route('public.cart_index', ['discard' => 'false', 'item' => $cartProduct->id])->with('error', 'Required quantity of "'.$cartProduct->product->name. '" is out of stock. Only'. $cartProduct->product->quantity .' left in stock!');
+      }
+    }
+
     $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress', 'addresses'])->first();
 //dd($user);
     return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();

@@ -45,8 +45,15 @@ class CartController extends Controller
         $this->user = auth('customer')->user();
     }
 
-    public function getIndex()
+    public function getIndex(Request $request)
     {
+      if($request->has('discard')){
+        if($request->discard == 'true'){
+          if($request->has('item')){
+            OrderProduct::find($request->item)->delete();
+          }
+        }
+      }
         $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
