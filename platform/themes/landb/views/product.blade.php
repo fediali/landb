@@ -118,12 +118,12 @@
                     class="detail-category-p mt-2">{{ @$product->category->name }}</span></p>
             {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p">Pottery</span> </p>--}}
             <div class="d-flex mt-4">
-                <p class="share-text pt-1 mr-2"> Share this items :
+                <!-- <p class="share-text pt-1 mr-2"> Share this items :
                 </p>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/snapchat.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/facebook.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/Twitter.png') }}"/></a>
-                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a>
+                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a> -->
             </div>
         </div>
     </div>
