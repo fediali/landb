@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use BaseHelper;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
+use Botble\SimpleSlider\Models\SimpleSlider;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
@@ -23,6 +24,7 @@ use Theme;
 class LandbController extends Controller
 {
   private $productRepo;
+  protected $homeSliderKey = 'home-slider';
 
   public function __construct(ProductsRepository $productsRepo) {
     $this->productRepo = $productsRepo;
@@ -33,6 +35,7 @@ class LandbController extends Controller
     $data = [
         'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 20, 'array' => true]),
         'latest_collection'=> $this->productRepo->getProductsByParams(['latest' => true, 'limit' => 20, 'array' => true]),
+        'slider' => $this->getHomeSlideshow()
     ];
     //dd($data['latest_collection']);
    return Theme::scope('index', $data)->render();
@@ -40,5 +43,10 @@ class LandbController extends Controller
 
   public function orderSuccess(){
     return Theme::scope('orderSuccess', [])->render();
+  }
+
+  public function getHomeSlideshow(){
+    $data = SimpleSlider::where('key' ,  $this->homeSliderKey)->with(['sliderItems'])->first();
+    return $data;
   }
 }
