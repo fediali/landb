@@ -191,7 +191,7 @@
                 ?>
             @foreach($products as $key => $product)
                 @php
-                    $variation_id = \Botble\Ecommerce\Models\ProductVariation::where('configurable_product_id', $product->id)->where('ec_product_variations.is_default', 1)->pluck('product_id')->first();
+                    $variation_id = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')->where('ep.quantity', '>', 0)->where('ec_product_variations.configurable_product_id', $product->id)->orderBy('ec_product_variations.is_default', 'desc')->pluck('ec_product_variations.product_id')->first();
                 @endphp
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
@@ -305,29 +305,6 @@
                             <select class="detail-size-select" id="product-detail-sizes-drop">
                                 <option disabled hidden selected>Select a Size</option>
                             </select>
-                            <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span> </p>
-                            <div class="color-area mt-2">
-                                <label class="container-check">
-                                    <input type="checkbox" checked="checked">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="container-check">
-                                    <input type="checkbox" >
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="container-check">
-                                    <input type="checkbox" >
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="container-check">
-                                    <input type="checkbox" >
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="container-check">
-                                    <input type="checkbox" >
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
                             <div class="row mt-4">
                                 <form class="add_to_cart_form"  id="product-detail-form" data-id="" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
                                     <div class="col-lg-6">
