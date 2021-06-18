@@ -102,13 +102,21 @@ class ProductsController extends Controller
         ]);
 
 
-        if (!$data['product']) {
-            abort(404);
+      if (!$data['product']) {
+        abort(404);
+      }
+      $data['productVariations'] = $data['product']->variations()->with(['product'])->orderBy('is_default', 'desc')->get();
+      foreach ($data['productVariations'] as $key => $variation){
+        if($variation->product->quantity < 1){
+          $data['productVariations']->forget($key);
         }
-        //dd($data['product']->variations()->get());
+      }
+      //dd($data['product']->variations()->get());
         //dd($data['product']);
         if ($request->ajax()) {
-            return response()->json(['product' => $data['product']], 200);
+          $values = $data['productVariations']->values();
+          $data['productVariations'] = $values->all();
+            return response()->json(['product' => $data['product'], 'productVariations' => $data['productVariations']], 200);
         } else {
             return Theme::scope('product', $data)->render();
         }

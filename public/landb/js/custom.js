@@ -234,10 +234,9 @@ function toggle_product_detail(id) {
     success: function (result) {
       var images = sizes = categories = tags = '';
       var product = result.product;
-      console.log(product)
+      var variations = result.productVariations;
       var image = '<img !important;" src="images/default.jpg" />';
       var image1 = '<img src="images/default.jpg" />';
-      console.log(product.images)
       if (product.images !== null && product.images.length !== 0) {
         product.images.forEach(function (value, index) {
           images += '<a href="javascript:void(0)" class="selected" data-full="storage/'+ value +'"><img src="storage/'+ value +'" /></a>';
@@ -257,13 +256,13 @@ function toggle_product_detail(id) {
         }*/
       }
       $('#product-detail-name').html(product.name);
-      $('#product-detail-price').html(product.price);
+      $('#product-detail-price').html(variations[0].product.price);
       $('#product-detail-desc').html(product.description);
       $('#product-detail-sizes').html(sizes);
       /*$('#product-detail-category').html((product.category !== null) ? product.category.name : '');*/
       $('#product-detail-sku').html(product.sku);
-      $('#product-detail-form').attr('data-id', product.id);
-      $('#product-detail-button').attr('data-id', product.id);
+      $('#product-detail-form').attr('data-id', variations[0].product_id);
+      $('#product-detail-button').attr('data-id', variations[0].product_id);
       $('#myModal').modal('toggle');
       toggle_loader(false);
     },
