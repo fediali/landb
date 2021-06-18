@@ -240,7 +240,9 @@
           $(this).next('input[name=' + fieldName + ']').val(newVal);
         }
       }else{
-        $(this).next('input[name=' + fieldName + ']').val(newVal);
+        if(newVal > 0){
+          $(this).next('input[name=' + fieldName + ']').val(newVal);
+        }
       }
 
     });

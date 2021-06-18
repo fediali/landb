@@ -235,15 +235,17 @@ function toggle_product_detail(id) {
       var images = sizes = categories = tags = '';
       var product = result.product;
       console.log(product)
-      var image = '<img src="images/lucky&blessed_logo_sign_Black 1.png" />';
-      if (product.images !== null) {
+      var image = '<img !important;" src="images/default.jpg" />';
+      var image1 = '<img src="images/default.jpg" />';
+      console.log(product.images)
+      if (product.images !== null && product.images.length !== 0) {
         product.images.forEach(function (value, index) {
           images += '<a href="javascript:void(0)" class="selected" data-full="storage/'+ value +'"><img src="storage/'+ value +'" /></a>';
         });
         $('#product-detail-images').html(images);
         $('#product-detail-image').html('<img src="storage/'+ product.images[0] +'" />');
       }else{
-        $('#product-detail-images').html('<a href="javascript:void(0)" class="selected" data-full="images/lucky&blessed_logo_sign_Black 1.png">+image+</a>');
+        $('#product-detail-images').html('<a href="javascript:void(0)" class="selected mt-2 side-img" data-full="images/default.jpg">'+image1+'</a>');
         $('#product-detail-image').html(image);
       }
       if (product.category !== null) {

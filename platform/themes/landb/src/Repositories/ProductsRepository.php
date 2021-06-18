@@ -61,9 +61,11 @@ class ProductsRepository{
       $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null): null;
     }
 
-    $data = $this->model->with(['productAttributeSets',  'attributesForProductList', 'category'])
+    $data = $this->model->with(['category'])
+        ->join('ec_product_variations as epv' , 'epv.configurable_product_id' , 'ec_products.id')
+        ->join('ec_products as ep' , 'epv.product_id', 'ep.id')
+        ->where('ep.quantity', '>', 0)
         ->where($this->model->getTable().'.status', 'published')
-        ->where($this->model->getTable().'.quantity', '>', 0)
             ->when($category , function ($query){
                 $query->with(['category' => function($que){
                   $que->with('category_sizes');
@@ -104,7 +106,7 @@ class ProductsRepository{
             ->when(!is_null($sort_by) && !is_null($sort_key) && !is_null($sort_type), function ($query) use ($sort_key,$sort_type){
               $query->orderBy($this->model->getTable().'.'.$sort_key, $sort_type);
             });
-      $data = $data->select('ec_products.*');
+      $data = $data->select('ec_products.*')->groupBy('ec_products.id');
       if($paginate){
         $data = $data->paginate();
       }elseif($simplePaginate){
