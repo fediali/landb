@@ -158,6 +158,8 @@
       $('#variation-form').attr('data-id', data.product_id);
       $('#variation-submit').attr('data-id', data.product_id);
       $('#product_price').html(data.product.price);
+      $('#variation-quantity').attr('max', data.product.quantity);
+      $('#variation-quantity').val(1);
     });
 
     $('.set-default').on('change', function () {
@@ -185,10 +187,14 @@
       fieldName = $(this).attr('field');
       // Get its current value
       var currentVal = parseInt($(this).prev('input[name=' + fieldName + ']').val());
+      var max = parseInt($(this).prev('input[name=' + fieldName + ']').attr('max'));
       // If is not undefined
       if (!isNaN(currentVal)) {
         // Increment
         newVal = currentVal + 1;
+        if(newVal > max){
+          newVal = currentVal;
+        }
        /* $(this).prev('input[name=' + fieldName + ']').val(currentVal + 1);*/
       } else {
         // Otherwise put a 0 there

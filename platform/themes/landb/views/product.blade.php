@@ -2,9 +2,11 @@
     $productVariations = $product->variations()->with(['product'])->get();
     //dd($productVariations);
     $default = 0;
+    $default_max = 1;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
             $default = $variation->product_id;
+            $default_max = $variation->product->quantity;
         }
     }
     //dd($default);
@@ -100,7 +102,7 @@
                 <div class="row mt-4">
                     <div id="myform" class="col-lg-4">
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
-                        <input type='text' name='quantity' value='1' class='qty'  readonly/>
+                        <input id="variation-quantity" type='text' name='quantity' value='1' min="1" max="{{ $default_max }}" class='qty'  readonly/>
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
                     </div>
                     <div class="col-lg-4">
