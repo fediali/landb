@@ -4,9 +4,9 @@
 
         <!-- Indicators -->
         <ul class="carousel-indicators">
-            <li data-target="#demo" data-slide-to="0" class="active"></li>
-            <li data-target="#demo" data-slide-to="1"></li>
-            <li data-target="#demo" data-slide-to="2"></li>
+            @foreach($slider->sliderItems as $item)
+                <li data-target="#demo" data-slide-to="{{ $loop->iteration-1 }}" class="{{ ($loop->first) ? 'active': '' }}"></li>
+            @endforeach
         </ul>
         
         <!-- The slideshow -->
