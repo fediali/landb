@@ -17,6 +17,7 @@
                 @endforeach
                 <th>{{ trans('plugins/ecommerce::products.form.price') }}</th>
                 <th>Qty</th>
+                <th>UPC</th>
                 <th>{{ trans('plugins/ecommerce::products.form.is_default') }}</th>
                 <th class="text-center">{{ trans('plugins/ecommerce::products.form.action') }}</th>
             </tr>
@@ -52,6 +53,7 @@
                         @endif
                     </td>
                     <td>{{$variation->product->quantity}}</td>
+                    <td>{{$variation->product->upc}}</td>
                     <td>
                         <label>
                             <input type="radio" class="hrv-radio"
