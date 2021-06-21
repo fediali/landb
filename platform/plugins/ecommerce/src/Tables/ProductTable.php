@@ -225,7 +225,8 @@ class ProductTable extends TableAbstract
 
         $query = $model
             ->select($select)
-            ->where('is_variation', 0);
+            ->where('is_variation', 0)
+            ->where('status', '!=', BaseStatusEnum::HIDDEN);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
