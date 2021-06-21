@@ -136,7 +136,7 @@ class CheckoutController extends Controller
           $payment = Payment::where('charge_id' , $chargeId)->first();
           //dd($payment);
           $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);
-          return Theme::scope('orderSuccess', ['id' => $payment->order_id])->render();
+          return redirect()->route('public.order.success', ['id' => $payment->order_id]);
         }
         break;
 
