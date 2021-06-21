@@ -225,8 +225,37 @@
                        <div class="price">
                            ${{ $product->price }}
                        </div>
+                      
                    </div>
                </a>
+                <div class="text-center">
+                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" >ADD TO BAG
+                        </button>
+                </div>
+               
+                        <div class="product-tile__variants-area welcomeDiv">
+                            <div class="product-tile__variants-heading">
+                            Select a Size
+                            </div>
+                            <button type="button" class="product-tile__hide-variants">
+                            <span>X</span>
+                            </button>
+                            <div class="product-tile__variants"><label>
+                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738638460" data-title="S" required="">
+                                <span class="product-tile__variant">S
+                    </span>
+                                </label><label>
+                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738572924" data-title="M" required="">
+                                <span class="product-tile__variant">M
+                    </span>
+                                </label><label>
+                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738605692" data-title="L" required="">
+                                <span class="product-tile__variant">L
+                    </span>
+                                </label></div>
+                            <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span></button>
+                           
+                        </div>  
             </div>
             @endforeach
             @else
@@ -333,3 +362,4 @@
         </div>
     </div>
     <!-- Modal Quick View -->
+ 
