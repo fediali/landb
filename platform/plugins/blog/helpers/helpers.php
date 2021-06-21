@@ -316,9 +316,14 @@ if (!function_exists('get_private_customers')) {
 }
 
 if (!function_exists('get_customers')) {
-    function get_customers()
+    function get_customers($id = 0)
     {
-        return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
+        if ($id) {
+            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', $id)->pluck('name', 'id');
+        } else {
+            return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
+        }
+
     }
 }
 

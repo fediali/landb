@@ -5,6 +5,7 @@ namespace Botble\Chating\Http\Controllers;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Chating\Http\Requests\ChatingRequest;
+use Botble\Chating\Models\ChattingRecord;
 use Botble\Chating\Repositories\Interfaces\ChatingInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Ecommerce\Models\Customer;
@@ -22,6 +23,8 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Chating\Forms\ChatingForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Twilio\Exceptions\RestException;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
@@ -177,7 +180,21 @@ class ChatingController extends BaseController
     public function chatRoom(Request $request)
     {
         page_title()->setTitle('Chat Room');
-        $customers = get_customers();
+        $id = Auth::id();
+        $customers = get_customers($id);
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+
+        $conversation = $twilio->conversations->v1->conversations->read();
+
+//        foreach ($conversation as $record) {
+//
+//            $messages = $twilio->conversations->v1
+//                ->conversations($record->sid)
+//                ->messages->read();
+//            (count($messages));
+//        }
+
+
         return view('plugins/chating::chatRoom', compact('customers'));
     }
 
@@ -278,18 +295,17 @@ class ChatingController extends BaseController
         //$sid = 'CH286197bbcbf3448a9f89d46e70691a1b';
         //$messages = $this->listMessages($sid);
 
+
         $conversation = $this->makeConversation($ids, $otherUser->phone);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
-//        $unread = $twilio->conversations->v1
-//            ->conversations($sid)
-//            ->messages
-//            ->read();
-//        dd($unread);
-//        foreach ($unread as $record) {
-//            print($record);
-//            exit();
-//        }
+        $record = [];
+        $record['user_id'] = $authUser->id;
+        $record['customer_id'] = $otherUser->id;
+        $record['message_sid'] = $conversation->sid;
+        $record['chat_count'] = 0;
+        ChattingRecord::updateOrCreate($record);
+
 
         //unread message
 
@@ -422,6 +438,13 @@ class ChatingController extends BaseController
             $status['status'] = BaseStatusEnum::PUBLISHED;
             Textmessages::where('id', $text_id)->update($status);
         }
+
+    }
+
+    public function listAll()
+    {
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+        $messages = $twilio->conversations->v1->conversations->read();
 
     }
 
