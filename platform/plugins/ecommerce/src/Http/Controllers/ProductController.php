@@ -344,11 +344,12 @@ class ProductController extends BaseController
                         foreach ($version['attribute_sets'] as $attributeId) {
                             $attribute = $this->productAttributeRepository->findById($attributeId);
                             if ($attribute) {
-                                $productRelatedToVariation->sku .= '-' . $attribute->slug;
+                                // $productRelatedToVariation->sku .= '-' . $attribute->slug;
                             }
                         }
                     }
                 }
+
                 $productRelatedToVariation->price = Arr::get($version, 'price', $product->price);
                 $productRelatedToVariation->sale_price = Arr::get($version, 'sale_price', $product->sale_price);
                 $productRelatedToVariation->description = Arr::get($version, 'description');
