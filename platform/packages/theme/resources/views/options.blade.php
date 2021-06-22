@@ -183,6 +183,32 @@
                                     </div>
                                 </div>
                             </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Section 5</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Products gallery Placements</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group form-group-no-margin">
+                                            <label for="home_section_5_products" class="control-label">Products(Max: 9)</label>
+                                            <div class="multi-choices-widget list-item-checkbox">
+                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                    'categories' => $products,
+                                                    'value'      => json_decode(setting('theme-landb-home_section_5_products')),
+                                                    'currentId'  => null,
+                                                    'name'       => 'home_section_5_products[]'
+                                                ])
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
                         </div>
                 </div>
             </div>
