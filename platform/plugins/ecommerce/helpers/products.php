@@ -418,3 +418,16 @@ if (!function_exists('get_product_attributes_with_set')) {
         return $attributes;
     }
 }
+
+if (!function_exists('get_products_data')) {
+    /**
+     * Get list attributes by set id of product
+     * @param Product $product
+     * @param int $setId
+     * @return array
+     */
+    function get_products_data()
+    {
+        return Product::where('status', 'published')->select('name', 'id')->get();
+    }
+}
