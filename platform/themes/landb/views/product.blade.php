@@ -31,30 +31,42 @@
         </nav>
     </div>
 </section>
-<section class="shoplisting_wrap">
+<section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
+        <div class="col-lg-6">
+                <div class="fancy-container clearfix">
+                    <div class="gallery">
+                        <div class="previews">
+                        @if(count($product->images))
+                            @foreach($product->images as $image)
+                                {!! image_html_generator($image, $product->name, null, null, true, ' side-img') !!}
+                            @endforeach
+                        @else
+                        <a href="javascript:void(0)" class="selected" data-full="{{ asset('images/default.jpg') }}"><img src="{{ asset('images/default.jpg') }}" /></a>
+                            <!-- <img class="mt-2 side-img" src="{{ asset('images/default.jpg') }}"> -->
+                        @endif
+                            <!-- <a href="javascript:void(0)" class="selected" data-full="img/product/top1large.jpg"><img src="img/product/top1small.jpg" /></a>
+                            <a href="javascript:void(0)" data-full="img/product/top2large.jpg"><img src="img/product/top2small.jpg" /></a>
+                            <a href="javascript:void(0)" data-full="img/product/top3large.jpg"><img src="img/product/top3small.jpg" /></a>
+                            <a href="javascript:void(0)" data-full="img/product/top4large.jpg"><img src="img/product/top4small.jpg" /></a>
+                            <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a> -->
+                        </div>
+                        <div class="full text-center">
+                        @if(count($product->images))
+                            @foreach($product->images as $image)
+                                {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
+                            @endforeach
+                        @else
+                            <img src="{{ asset('images/default.jpg') }}">
+                        @endif
+                            <!-- first image is viewable to start --> 
+                        </div>
+                </div>
+                </div>
 
-
-        <div class="col-lg-1">
-            @if(count($product->images))
-                @foreach($product->images as $image)
-                    {!! image_html_generator($image, $product->name, null, null, true, 'mt-2 side-img') !!}
-                @endforeach
-            @else
-                <img class="mt-2 side-img" src="{{ asset('images/default.jpg') }}">
-            @endif
-        </div>
-        <div class="col-lg-5 mt-2">
-            @if(count($product->images))
-                @foreach($product->images as $image)
-                    {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
-                @endforeach
-            @else
-                <img class="front-img" src="{{ asset('images/default.jpg') }}">
-            @endif
         </div>
         <div class="col-lg-6">
-            <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
+        <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row">
@@ -130,16 +142,113 @@
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
                     class="detail-category-p mt-2">{{ @$product->category->name }}</span></p>
+        </div>
+
+        <!-- <div class="col-lg-1">
+            @if(count($product->images))
+                @foreach($product->images as $image)
+                    {!! image_html_generator($image, $product->name, null, null, true, 'mt-2 side-img') !!}
+                @endforeach
+            @else
+                <img class="mt-2 side-img" src="{{ asset('images/default.jpg') }}">
+            @endif
+        </div>
+        <div class="col-lg-5 mt-2">
+            @if(count($product->images))
+                @foreach($product->images as $image)
+                    {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
+                @endforeach
+            @else
+                <img class="front-img" src="{{ asset('images/default.jpg') }}">
+            @endif
+        </div> -->
+        <!-- <div class="col-lg-6">
+            <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
+            <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
+            <p class="short-description mb-2">{!! $product->description !!} </p>
+            <div class="row">
+            <div class="col-md-6">
+            <p class="detail-size-p mb-2"><span
+                    class="detail-size">Size</span>
+                @foreach($productVariations as $variation)
+                    @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
+                        {{ $item->title }}{{ (!$loop->last) ? ' ,' : '' }}
+                    @endforeach
+                @endforeach
+            </p>
+            </div>
+            <div class="col-md-6">
+            <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
+            </div>
+            </div>
+            
+            
+            <select class="detail-size-select" id="variation-select">
+                {{--@if(isset($product->category))
+                    @foreach($product->category->category_sizes as $cat_size)
+                        <option value="{{ $cat_size->id }}"> {{ $cat_size->name }} </option>
+                    @endforeach
+                @endif--}}
+                @foreach($productVariations as $variation)
+                    @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
+                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
+                    @endforeach
+                @endforeach
+            </select> -->
+
+           {{-- <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span>
+            </p>
+            <div class="color-area mt-2">
+                <label class="container-check">
+                    <input type="checkbox" checked="checked">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container-check">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container-check">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container-check">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container-check">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div>--}}
+            <!-- <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
+                  action='{{ route('public.cart.add_to_cart') }}'>
+                <div class="row m-0 mt-4">
+                    <div id="myform" class="col-lg-4">
+                        <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
+                        <input id="variation-quantity" type='text' name='quantity' value='1' min="1" max="{{ $default_max }}" class='qty'  readonly/>
+                        <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
+                    </div>
+                    <div class="col-lg-4">
+                        <button class="cart-btn w-100 add-to-cart-button cart-submit" id="variation-submit" data-id="{{ $default }}">Add
+                            to cart
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span
+                    class="detail-basic-p">{{ $product->sku }}</span></p>
+            <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
+                    class="detail-category-p mt-2">{{ @$product->category->name }}</span></p> -->
             {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p">Pottery</span> </p>--}}
-            <div class="d-flex mt-4">
-                <!-- <p class="share-text pt-1 mr-2"> Share this items :
+            <!-- <div class="d-flex mt-4">
+                <p class="share-text pt-1 mr-2"> Share this items :
                 </p>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/snapchat.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/facebook.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/Twitter.png') }}"/></a>
-                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a> -->
+                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a> 
             </div>
-        </div>
+        </div>-->
     </div>
     <div class="row">
         <div class="col-lg-12 mt-4">

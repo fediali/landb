@@ -15,6 +15,7 @@
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('landb/css/jquery.fancybox.css') }}"/>
     <!-- Custom Style Sheet -->  
     <link type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />

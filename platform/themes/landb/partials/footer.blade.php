@@ -95,6 +95,7 @@
 </footer>
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <script src="{{ asset('landb/js/popper.js') }}"></script>
+<script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
 <script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -386,6 +387,24 @@
 })
 
 </script>
+<script>
+        $(document).ready(function() {
+            $('a').click(function() {
+                var largeImage = $(this).attr('data-full');
+                $('.selected').removeClass();
+                $(this).addClass('selected');
+                $('.full img').hide();
+                $('.full img').attr('src', largeImage);
+                $('.full img').fadeIn();
+
+
+            }); // closing the listening on a click
+            $('.full img').on('click', function() {
+                var modalImage = $(this).attr('src');
+                $.fancybox.open(modalImage);
+            });
+        }); //closing our doc ready
+    </script>
 
 @if(session()->has('success'))
     <script>
