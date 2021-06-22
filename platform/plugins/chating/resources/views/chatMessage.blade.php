@@ -48,35 +48,77 @@
                         </div>
                         </div>
 
-                        <div class="row sideBar">
+{{--                        <div class="row sideBar">--}}
 
-                        @if (!count($customers))
-                            <p>No customers</p>
-                        @else
-                        @foreach ($customers as $customer)
-                        <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}">
-                        <div class="row sideBar-body">
-                            <div class="col-sm-3 col-xs-3 sideBar-avatar">
-                            <div class="avatar-icon">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
-                            </div>
-                            </div>
-                            <div class="col-sm-9 col-xs-9 sideBar-main">
-                            <div class="row">
-                                <div class="col-sm-8 col-xs-8 sideBar-name">
-                                <span class="name-meta">{{ $customer->name }}
+{{--                        @if (!count($customers))--}}
+{{--                            <p>No customers</p>--}}
+{{--                        @else--}}
+{{--                        @foreach ($customers as $customer)--}}
+{{--                        <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}">--}}
+{{--                        <div class="row sideBar-body">--}}
+{{--                            <div class="col-sm-3 col-xs-3 sideBar-avatar">--}}
+{{--                            <div class="avatar-icon">--}}
+{{--                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png">--}}
+{{--                            </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-sm-9 col-xs-9 sideBar-main">--}}
+{{--                            <div class="row">--}}
+{{--                                <div class="col-sm-8 col-xs-8 sideBar-name">--}}
+{{--                                <span class="name-meta">{{ $customer->name }}--}}
+{{--                                </span>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-sm-4 col-xs-4 pull-right sideBar-time">--}}
+{{--                                <span class="time-meta pull-right">--}}
+{{--                                </span>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        </a>--}}
+{{--                        @endforeach--}}
+{{--                        @endif--}}
+{{--                        </div>--}}
+
+                        <div class="row sideBar">
+                            @if (!count($customers))
+
+                                <p>No customers</p>
+                            @else
+
+                                @foreach ($customers as $customer)
+
+                                    <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}"
+                                       class="list-group-item list-group-item-action">
+                                        <div
+                                            class="row {{  (!$customer->chat->isEmpty()) ? (get_chat($customer->chat[0]->message_sid,auth()->user()->twilio_number ) > $customer->chat[0]->chat_count) ? 'msg_unread':'' : '' }} sideBar-body">
+                                            <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                                                <div class="avatar-icon">
+                                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9 col-xs-9 sideBar-main">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-xs-8 sideBar-name">
+                                <span class="name-meta">{{$customer->name}}
                                 </span>
-                                </div>
-                                <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                                                    </div>
+                                                    <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                                 <span class="time-meta pull-right">
                                 </span>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </a>
-                        @endforeach
-                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if(!$customer->chat->isEmpty())
+                                                @if(get_chat($customer->chat[0]->message_sid, auth()->user()->twilio_number) > $customer->chat[0]->chat_count)
+                                                    <p class="msg-count">{{get_chat($customer->chat[0]->message_sid,auth()->user()->twilio_number) - $customer->chat[0]->chat_count }}</p>
+                                                @endif()
+                                            @endisset()
+                                        </div>
+                                    </a>
+                                @endforeach
+                            @endif
+
                         </div>
                     </div>
 
@@ -168,6 +210,6 @@ $('.message-body div').each(function(i, value){
 height += '';
 
 $('div').animate({scrollTop: height});
- 
+
 </script>
 @endsection

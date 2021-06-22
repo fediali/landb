@@ -16,6 +16,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
+use Twilio\Rest\Client;
 
 if (!function_exists('get_featured_posts')) {
     /**
@@ -319,11 +320,30 @@ if (!function_exists('get_customers')) {
     function get_customers($id = 0)
     {
         if ($id) {
-            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', $id)->pluck('name', 'id');
+            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', $id)->get();
         } else {
             return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
         }
 
+    }
+}
+
+if (!function_exists('get_chat')) {
+    function get_chat($sid = 0, $number = 0)
+    {
+
+        if ($sid) {
+            $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+            $messages = $twilio->conversations->v1
+                ->conversations($sid)
+                ->messages
+                ->read();
+            $text = Arr::where($messages, function ($val, $key) use ($number){
+                return $val->author !== $number;
+            });
+
+            return count($text);
+        }
     }
 }
 

@@ -10,6 +10,7 @@ use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\ACL\Models\User;
 use Botble\Base\Supports\Avatar;
+use Botble\Chating\Models\ChattingRecord;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -227,5 +228,10 @@ class Customer extends Authenticatable
     public function salesperson()
     {
         return $this->belongsTo(User::class, 'salesperson_id');
+    }
+
+    public function chat()
+    {
+        return $this->hasMany(ChattingRecord::class, 'customer_id');
     }
 }

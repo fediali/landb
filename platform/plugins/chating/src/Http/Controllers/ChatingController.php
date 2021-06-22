@@ -184,8 +184,8 @@ class ChatingController extends BaseController
         $customers = get_customers($id);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $conversation = $twilio->conversations->v1->conversations->read();
-
+        $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
+//        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
 //
 //            $messages = $twilio->conversations->v1
@@ -299,12 +299,23 @@ class ChatingController extends BaseController
         $conversation = $this->makeConversation($ids, $otherUser->phone);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
-        $record = [];
-        $record['user_id'] = $authUser->id;
-        $record['customer_id'] = $otherUser->id;
-        $record['message_sid'] = $conversation->sid;
-        $record['chat_count'] = 0;
-        ChattingRecord::updateOrCreate($record);
+        $chatting = get_chat($sid, $authUser->twilio_number);
+        $chat = ChattingRecord::where([
+            'user_id'     => $authUser->id,
+            'customer_id' => $otherUser->id,
+            'message_sid' => $conversation->sid,
+        ])->first();
+        if ($chat) {
+            $record['chat_count'] = ($chatting == 0) ? 0 : $chatting;
+            ChattingRecord::where('id', $chat->id)->update($record);
+        } else {
+            $record = [];
+            $record['user_id'] = $authUser->id;
+            $record['customer_id'] = $otherUser->id;
+            $record['message_sid'] = $conversation->sid;
+            $record['chat_count'] = 0;
+            ChattingRecord::updateOrCreate($record);
+        }
 
 
         //unread message

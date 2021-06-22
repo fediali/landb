@@ -48,6 +48,8 @@ class User extends Authenticatable
         'ecom_commission_percent',
         'is_allow_qty_share',
         'salesperson_id',
+        'twilio_number',
+        'phone_number',
     ];
 
     /**
