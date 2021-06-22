@@ -286,6 +286,14 @@
 }
 }
 
+#add_variation .modal-lg {
+  width: 1200px !important;
+}
+
+#add_variation table {
+  overflow:hidden;
+}
+
 
 .fa-2x {
     font-size: 1.5em;
