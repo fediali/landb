@@ -27,6 +27,9 @@
                             <a href="#tab_{{ $section['id'] }}" class="nav-link @if ($loop->first) active @endif" data-toggle="tab">@if (!empty($section['icon']))<i class="{{ $section['icon'] }}"></i> @endif {{ __($section['title']) }}</a>
                         </li>
                     @endforeach
+                        <li class="nav-item">
+                            <a href="#tab_home_sections" class="nav-link" data-toggle="tab"><i class="fa fa-home"></i> Home page</a>
+                        </li>
                 </ul>
             </div>
             <div class="theme-option-main">
@@ -45,6 +48,106 @@
                             @endforeach
                         </div>
                     @endforeach
+
+                        <div class="tab-pane " id="tab_home_sections">
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Section 1</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Latest Collections Placements</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group">
+                                            <label for="home_section_1_heading" class="control-label">Heading</label>
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_1_heading" type="text" value="{{ setting('theme-landb-home_section_1_heading') }}" id="home_section_1_heading">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="home_section_1_description" class="control-label">Descriptions</label>
+                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_1_description" type="text" value="" id="home_section_1_description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="home_section_1_link" class="control-label">Link</label>
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_1_link" type="text" value="" id="home_section_1_link">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Section 2</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Browse Collections Placements</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group">
+                                            <label for="home_section_2_heading" class="control-label">Heading</label>
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_2_heading" type="text" value="" id="home_section_2_heading">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="home_section_2_link" class="control-label">Link</label>
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_2_link" type="text" value="" id="home_section_2_link">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Section 3</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Video Placement</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group">
+                                            <label for="home_section_3_video" class="control-label">Video URL</label>
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_3_video" type="text" value="" id="home_section_3_video">
+                                            @include('core/base::forms.partials.images', ['name' => 'home_section_3_video', 'values' => ''])
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Section 4</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Latest Collections Placements</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group">
+                                            <label for="home_section_4_heading" class="control-label">Heading</label>
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_4_heading" type="text" value="" id="home_section_4_heading">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="home_section_4_description" class="control-label">Descriptions</label>
+                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_4_description" type="text" value="" id="home_section_4_description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="home_section_4_link" class="control-label">Link</label>
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_4_link" type="text" value="" id="home_section_4_link">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                        </div>
                 </div>
             </div>
             <div class="theme-option-sticky">
