@@ -373,6 +373,18 @@
       }
     });
   }
+
+  $(document).ready(function(){ 
+ $('.welcomeDiv').hide();
+ $('.addTobag').on('click',function(){ 
+     $('.welcomeDiv').toggle();
+ })  
+ $('.product-tile__hide-variants').on('click',function(){
+     
+     $('.welcomeDiv').hide();
+ })  
+})
+
 </script>
 
 @if(session()->has('success'))

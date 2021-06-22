@@ -57,6 +57,8 @@
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
+            <div class="row">
+            <div class="col-md-6">
             <p class="detail-size-p mb-2"><span
                     class="detail-size">Size</span>
                 @foreach($productVariations as $variation)
@@ -65,6 +67,13 @@
                     @endforeach
                 @endforeach
             </p>
+            </div>
+            <div class="col-md-6">
+            <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
+            </div>
+            </div>
+            
+            
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))
                     @foreach($product->category->category_sizes as $cat_size)
@@ -104,7 +113,7 @@
             </div>--}}
             <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
-                <div class="row mt-4">
+                <div class="row m-0 mt-4">
                     <div id="myform" class="col-lg-4">
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
                         <input id="variation-quantity" type='text' name='quantity' value='1' min="1" max="{{ $default_max }}" class='qty'  readonly/>
@@ -305,3 +314,109 @@
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+      <button style="position: absolute; right: 10px;font-size: 38px; font-weight: 200; top: -5px;" type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-body size-chart mt-4">
+        <table>
+<tbody>
+<tr tabindex="0">
+<td>SIZE</td>
+<td>XS</td>
+<td>S</td>
+<td>M</td>
+<td>L</td>
+<td>XL</td>
+</tr>
+<tr tabindex="0">
+<td>US/CAN</td>
+<td>1</td>
+<td>3, 5</td>
+<td>7, 9</td>
+<td>11, 13</td>
+<td>15</td>
+</tr>
+<tr tabindex="0">
+<td>Bust (in)</td>
+<td>31-33</td>
+<td>33-35</td>
+<td>35-37</td>
+<td>37-39</td>
+<td>39-41</td>
+</tr>
+<tr tabindex="0">
+<td>Waist (in)</td>
+<td>24-25</td>
+<td>26-27</td>
+<td>28-29</td>
+<td>30-31</td>
+<td>32</td>
+</tr>
+<tr tabindex="0">
+<td>Hips (in)</td>
+<td>33-34</td>
+<td>35-36</td>
+<td>37-38</td>
+<td>39-40</td>
+<td>41</td>
+</tr>
+<tr tabindex="0">
+<td>UK</td>
+<td>2, 4</td>
+<td>6, 8</td>
+<td>10, 12</td>
+<td>14, 16</td>
+<td>18</td>
+</tr>
+<tr tabindex="0">
+<td>EU</td>
+<td>32, 34</td>
+<td>36, 38</td>
+<td>40, 42</td>
+<td>44, 46</td>
+<td>48</td>
+</tr>
+<tr tabindex="0">
+<td>AUS</td>
+<td>2, 4</td>
+<td>6, 8</td>
+<td>10, 12</td>
+<td>14, 16</td>
+<td>18</td>
+</tr>
+<tr tabindex="0">
+<td>Bust (cm)</td>
+<td>78-83</td>
+<td>83-89</td>
+<td>89-94</td>
+<td>94-99</td>
+<td>99-104</td>
+</tr>
+<tr tabindex="0">
+<td>Waist (cm)</td>
+<td>60-65</td>
+<td>65-70</td>
+<td>70-75</td>
+<td>75-80</td>
+<td>80-85</td>
+</tr>
+<tr tabindex="0">
+<td>Hips (cm)</td>
+<td>83-88</td>
+<td>88-93</td>
+<td>93-98</td>
+<td>98-103</td>
+<td>103-108</td>
+</tr>
+</tbody>
+</table>
+        </div> 
+      </div>
+      
+    </div>
+  </div>
