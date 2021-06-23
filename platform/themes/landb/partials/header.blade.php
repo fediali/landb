@@ -57,7 +57,7 @@
     <div class="topbar">
         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
     </div>
-    <div class="container">
+    <div class="pl-5 pr-5">
         <div class="topnav d-flex">
             <ul>
                 <li>
