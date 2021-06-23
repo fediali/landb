@@ -202,6 +202,16 @@ nav.navbar {
     list-style: none;
     margin: 0;
     padding: 0;
+    margin-top: 25px;
+}
+
+.social-footer-a {
+    width: 20%;
+}
+
+.menu-footer {
+    position: fixed;
+    bottom: 50px;
 }
 
 #menu .main-nav a {
@@ -246,6 +256,7 @@ nav.navbar {
 #menu .menu-footer a {
     color: #000000;
     text-decoration: none;
+    font-weight: bold;
 }
 
 button.toggle-menu.active {
@@ -1718,6 +1729,7 @@ input.qtyminus {
 .side-img {
     height: 120px;
     width: 105px;
+    margin-bottom: 10px !important;
 }
 
 .detail-subheading {
@@ -1991,6 +2003,8 @@ input.qtyminus {
 .gallery .desc {
     float: left;
     margin-right: 10px;
+    display: grid;
+    margin-bottom: 10px !important;
 }
 
 .gallery .desc,
@@ -3841,4 +3855,8 @@ header {
     clear: both;
     display: inline-block; 
     white-space: nowrap;
+}
+
+#menu .main-nav h5 a {
+    font-weight: bold;
 }

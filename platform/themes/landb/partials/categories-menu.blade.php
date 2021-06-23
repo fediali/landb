@@ -254,7 +254,7 @@
     <footer class="menu-footer">
         <nav class="footer-nav">
 
-            <ul>
+            <ul class="social-footer-a">
                 <li><span>Social Media</span></li>
                 {!!
                    Menu::renderMenuLocation('social-media-menu', [
