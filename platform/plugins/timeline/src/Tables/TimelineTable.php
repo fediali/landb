@@ -66,7 +66,7 @@ class TimelineTable extends TableAbstract
                 return $item->status->toHtml();
             })
             ->editColumn('link', function ($item) {
-                return '<button class="btn btn-icon btn-sm btn-info" onclick="showLink(' . '\'' . route('public.cart.timeline', auth()->user()->id) . '\'' . ')">Get Link</button><p id="prod-time-link"></p><script>function showLink(url){$("p#prod-time-link").text(url)}</script>';
+                return '<button class="btn btn-icon btn-sm btn-info" onclick="showLink(' . '\''.route('public.cart.timeline', auth()->user()->id).'\'' . ',-'.$item->id.')">Get Link</button><p id="prod-time-link-'.$item->id.'"></p><script>function showLink(url, id){$("p#prod-time-link"+id).text(url)}</script>';
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
