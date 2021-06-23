@@ -619,25 +619,5 @@
 
 @stop
 
-<style>
-    .heading {
-        color: #d64635;
-        font-weight: 600;
-    }
-
-    .order-detail {
-        font-size: 20px !important;
-    }
-
-    .img-circle {
-        border-radius: 10px;
-        width: 100%;
-    }
-
-    .table td {
-        padding: 10px 5px !important;
-        font-size: 14px;
-    }
-</style>
 
 
