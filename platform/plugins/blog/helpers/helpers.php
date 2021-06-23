@@ -320,7 +320,7 @@ if (!function_exists('get_customers')) {
     function get_customers($id = 0)
     {
         if ($id) {
-            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', $id)->get();
+            return \Botble\Ecommerce\Models\Customer::where(['salesperson_id' => $id, 'is_text' => 1])->get();
         } else {
             return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
         }
@@ -338,7 +338,7 @@ if (!function_exists('get_chat')) {
                 ->conversations($sid)
                 ->messages
                 ->read();
-            $text = Arr::where($messages, function ($val, $key) use ($number){
+            $text = Arr::where($messages, function ($val, $key) use ($number) {
                 return $val->author !== $number;
             });
 
