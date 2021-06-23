@@ -1,6 +1,9 @@
 @extends('core/base::layouts.master')
 @section('content')
     @php do_action(BASE_ACTION_TOP_FORM_CONTENT_NOTIFICATION, request(), THEME_OPTIONS_MODULE_SCREEN_NAME) @endphp
+    @php
+        $products = get_products_data();
+    @endphp
     <div id="theme-option-header">
         <div class="display_header">
             <h2>{{ trans('packages/theme::theme.theme_options') }}</h2>
@@ -68,11 +71,22 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="home_section_1_description" class="control-label">Descriptions</label>
-                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_1_description" type="text" value="" id="home_section_1_description">
+                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_1_description" type="text" value="{{ setting('theme-landb-home_section_1_description') }}" id="home_section_1_description">
                                         </div>
                                         <div class="form-group">
                                             <label for="home_section_1_link" class="control-label">Link</label>
-                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_1_link" type="text" value="" id="home_section_1_link">
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_1_link" type="text" value="{{ setting('theme-landb-home_section_1_link') }}" id="home_section_1_link">
+                                        </div>
+                                        <div class="form-group form-group-no-margin">
+                                            <label for="home_section_1_link" class="control-label">Products(Max: 2)</label>
+                                            <div class="multi-choices-widget list-item-checkbox">
+                                                    @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                        'categories' => $products,
+                                                        'value'      => json_decode(setting('theme-landb-home_section_1_products')),
+                                                        'currentId'  => null,
+                                                        'name'       => 'home_section_1_products[]'
+                                                    ])
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -91,11 +105,22 @@
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
                                             <label for="home_section_2_heading" class="control-label">Heading</label>
-                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_2_heading" type="text" value="" id="home_section_2_heading">
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_2_heading" type="text" value="{{ setting('theme-landb-home_section_2_heading') }}" id="home_section_2_heading">
                                         </div>
                                         <div class="form-group">
                                             <label for="home_section_2_link" class="control-label">Link</label>
-                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_2_link" type="text" value="" id="home_section_2_link">
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_2_link" type="text" value="{{ setting('theme-landb-home_section_2_link') }}" id="home_section_2_link">
+                                        </div>
+                                        <div class="form-group form-group-no-margin">
+                                            <label for="home_section_2_link" class="control-label">Products(Max: 4)</label>
+                                            <div class="multi-choices-widget list-item-checkbox">
+                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                    'categories' => $products,
+                                                    'value'      => json_decode(setting('theme-landb-home_section_2_products')),
+                                                    'currentId'  => null,
+                                                    'name'       => 'home_section_2_products[]'
+                                                ])
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +139,7 @@
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
                                             <label for="home_section_3_video" class="control-label">Video URL</label>
-                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_3_video" type="text" value="" id="home_section_3_video">
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_3_video" type="text" value="{{ setting('theme-landb-home_section_3_video') }}" id="home_section_3_video">
                                             @include('core/base::forms.partials.images', ['name' => 'home_section_3_video', 'values' => ''])
                                         </div>
                                     </div>
@@ -134,15 +159,26 @@
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
                                             <label for="home_section_4_heading" class="control-label">Heading</label>
-                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_4_heading" type="text" value="" id="home_section_4_heading">
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_4_heading" type="text" value="{{ setting('theme-landb-home_section_4_heading') }}" id="home_section_4_heading">
                                         </div>
                                         <div class="form-group">
                                             <label for="home_section_4_description" class="control-label">Descriptions</label>
-                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_4_description" type="text" value="" id="home_section_4_description">
+                                            <input class="form-control" placeholder="Description text" data-counter="120" name="home_section_4_description" type="text" value="{{ setting('theme-landb-home_section_4_description') }}" id="home_section_4_description">
                                         </div>
                                         <div class="form-group">
                                             <label for="home_section_4_link" class="control-label">Link</label>
-                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_4_link" type="text" value="" id="home_section_4_link">
+                                            <input class="form-control" placeholder="Link" data-counter="120" name="home_section_4_link" type="text" value="{{ setting('theme-landb-home_section_4_link') }}" id="home_section_4_link">
+                                        </div>
+                                        <div class="form-group form-group-no-margin">
+                                            <label for="home_section_4_link" class="control-label">Products(Max: 2)</label>
+                                            <div class="multi-choices-widget list-item-checkbox">
+                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                    'categories' => $products,
+                                                    'value'      => json_decode(setting('theme-landb-home_section_4_products')),
+                                                    'currentId'  => null,
+                                                    'name'       => 'home_section_4_products[]'
+                                                ])
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
