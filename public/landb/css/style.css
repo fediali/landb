@@ -1728,8 +1728,7 @@ input.qtyminus {
 
 .side-img {
     height: 120px;
-    width: 105px;
-    margin-bottom: 10px !important;
+    width: 105px; 
 }
 
 .detail-subheading {
