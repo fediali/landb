@@ -8,10 +8,12 @@ use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
+use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Supports\Avatar;
 use Botble\Chating\Models\ChattingRecord;
 use Botble\Ecommerce\Notifications\CustomerResetPassword;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -39,6 +41,7 @@ class Customer extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
@@ -139,6 +142,14 @@ class Customer extends Authenticatable
             $customer->discounts()->detach();
             Review::where('customer_id', $customer->id)->delete();
             Wishlist::where('customer_id', $customer->id)->delete();
+        });
+
+        static::addGlobalScope('userScope', function (Builder $query) {
+            if (isset(auth()->user()->roles[0])) {
+                if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
+                    $query->where('salesperson_id', auth()->user()->id);
+                }
+            }
         });
     }
 
