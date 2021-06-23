@@ -140,11 +140,20 @@
     </div>
 </section> -->
 <div class="grid-container">
+    @php
+        $product_ids = setting('theme-landb-home_section_5_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(9)->pluck('id')->all()));
+       $product_ids = json_decode($product_ids);
+        $products5 = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->get();
+    @endphp
       <div class="grid">
-        <div class="gridLayer">
-          <div class="gridBlock"></div>
+      @foreach($products5 as $product)
+        <div class="gridLayer @if($loop->iteration == 4) centerPiece @endif">
+          <div class="gridBlock" style="background-image: url('{{ asset('storage/'.@$product->images[0]) }}');">
+              <a href="{!!  generate_product_url('detail', $product->id, $product->product_slug)  !!}"></a>
+          </div>
         </div>
-        <div class="gridLayer">
+      @endforeach
+        {{--<div class="gridLayer">
           <div class="gridBlock"></div>
         </div>
         <div class="gridLayer">
@@ -169,7 +178,7 @@
         </div>
         <div class="gridLayer">
           <div class="gridBlock"></div>
-        </div>
+        </div>--}}
       </div>
     </div>
 <div id="night"></div>
@@ -216,11 +225,11 @@
         .from(".gridLayer", { scale: 3.3333, ease: "none" });
 
       // Images to make it look better, not related to the effect
-      const size = Math.max(innerWidth, innerHeight);
+      /*const size = Math.max(innerWidth, innerHeight);
       gsap.set(".gridBlock", {
         backgroundImage: (i) =>
           `url(https://picsum.photos/${size}/${size}?random=${i})`,
-      });
+      });*/
 
       const bigImg = new Image();
       bigImg.addEventListener("load", function () {
