@@ -184,7 +184,7 @@ class ChatingController extends BaseController
         $customers = get_customers($id);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
+       // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
 //        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
 //
@@ -275,11 +275,10 @@ class ChatingController extends BaseController
 //        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
 //            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
-
-      $d =   $twilio->chat->v2->services("IS9de5ea7ac6e4458085d0f79b8700ac58")
-          ->channels("CH73c31a4fe60f491ebe77523f91b87147")
-          ->delete();
-dd($d);
+//
+//      $d =   $twilio->chat->v2->services("IS9de5ea7ac6e4458085d0f79b8700ac58")
+//                    ->delete();
+//dd($d);
         //Text Message
         //$author = '+13345390661';
         //$body = 'Gand Marwao Gathiye Khaoo';
@@ -338,6 +337,7 @@ dd($d);
 
     public function makeConversation($uniqueName, $number = false, $text = false, $author_number = false)
     {
+
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         try {
             $conversation = $twilio->conversations->v1->conversations($uniqueName)->fetch();
@@ -353,14 +353,16 @@ dd($d);
 
     public function createSMSParticipant($sid, $number, $author_number = false)
     {
+
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $participant = $twilio->conversations->v1
             ->conversations($sid)
             ->participants
             ->create([
                 'messagingBindingAddress'      => $number,
-                'messagingBindingProxyAddress' => $author_number ? $author_number : '+13345390661'
+                'messagingBindingProxyAddress' => $author_number
             ]);
+
         return $participant;
     }
 
