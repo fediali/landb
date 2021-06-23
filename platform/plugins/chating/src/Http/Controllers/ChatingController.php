@@ -209,7 +209,7 @@ class ChatingController extends BaseController
 
         $authUser = $request->user();
         $otherUser = Customer::find(explode('-', $ids)[1]);
-        $customers = Customer::where('id', '<>', $authUser->id)->get();
+        $customers = Customer::where('id', '<>', $authUser->id)->where(['is_text' => 1, 'salesperson_id' => 1])->get();
 
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
@@ -295,7 +295,7 @@ class ChatingController extends BaseController
         //$sid = 'CH286197bbcbf3448a9f89d46e70691a1b';
         //$messages = $this->listMessages($sid);
 
-
+        dd($otherUser->phone, $authUser->twilio_number);
         $conversation = $this->makeConversation($ids, $otherUser->phone, '', $authUser->twilio_number);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
