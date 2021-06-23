@@ -418,16 +418,24 @@ class CustomerController extends BaseController
         $customer = $this->customerRepository->findOrFail($id);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)
-            ->fetch(["type" => ["carrier"]]);
-        if ($phone_number->carrier['type'] == 'mobile') {
-            $is_text['is_text'] = 1;
-            Customer::where('id', $customer->id)->update($is_text);
-            $response->setMessage('Number is valid');
-            return redirect()->back();
+        if ($customer->detail->business_phone) {
+            $start2 = substr($customer->detail->business_phone, 2);
+            if ((int)$start2) {
+                $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
+                if ($phone_number->carrier['type'] == 'mobile') {
+                    $is_text['is_text'] = 1;
+                    Customer::where('id', $customer->id)->update($is_text);
+                    return $response->setMessage('Number is valid');
+                } else {
+                    return $response->setError()->setMessage('Number is not valid');
+                }
+            } else {
+                return $response->setError()->setMessage('Number is not valid');
+            }
         } else {
-            return response()->json(['message' => 'Number is not valid'], 401);
+            return $response->setError()->setMessage('Number is not valid');
         }
+
     }
 
 }
