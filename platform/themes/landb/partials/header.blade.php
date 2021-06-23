@@ -16,7 +16,7 @@
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('landb/css/jquery.fancybox.css') }}"/>
-    <!-- Custom Style Sheet -->  
+    <!-- Custom Style Sheet -->
     <link type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
@@ -55,7 +55,7 @@
 <body>
 <header>
     <div class="topbar">
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+        <p>Welcome To Lucky and Blessed</p>
     </div>
     <div class="pl-5 pr-5">
         <div class="topnav d-flex">
