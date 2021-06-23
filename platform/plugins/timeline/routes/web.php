@@ -14,7 +14,7 @@ Route::group(['namespace' => 'Botble\Timeline\Http\Controllers', 'middleware' =>
             Route::post('update/{id}', [
                 'as'         => 'update',
                 'uses'       => 'TimelineController@update',
-                'permission' => 'timeline.update',
+                'permission' => 'timeline.create',
             ]);
             Route::delete('items/destroy', [
                 'as'         => 'deletes',
