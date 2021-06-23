@@ -320,25 +320,23 @@ if (!function_exists('get_customers')) {
     function get_customers($id = 0)
     {
         if ($id) {
-            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', $id)->get();
+            return \Botble\Ecommerce\Models\Customer::where(['salesperson_id' => $id, 'is_text' => 1])->get();
         } else {
             return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
         }
-
     }
 }
 
 if (!function_exists('get_chat')) {
     function get_chat($sid = 0, $number = 0)
     {
-
         if ($sid) {
             $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
             $messages = $twilio->conversations->v1
                 ->conversations($sid)
                 ->messages
                 ->read();
-            $text = Arr::where($messages, function ($val, $key) use ($number){
+            $text = Arr::where($messages, function ($val, $key) use ($number) {
                 return $val->author !== $number;
             });
 

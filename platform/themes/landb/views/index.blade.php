@@ -41,47 +41,67 @@
 
 
 <section class="browse_collection py-4">
-    <div class="browse_img">
-        <div class="imgframe1 ">
-            <img  class="bone" src="landb/img/browse-img-1.png" alt="">
-            <div class="imgcaption">
-                <a href="#" class="save"><i class="fas fa-save"></i> Save</a>
-                <a href="#" class="search"><i class="fal fa-search"></i></a>
-            </div>
+    @php
+        $product_ids = setting('theme-landb-home_section_2_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(4)->pluck('id')->all()));
+       $product_ids = json_decode($product_ids);
+        $products2 = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->get();
+    @endphp
+    @if(count($products2))
+        <div class="browse_img">
+            <div class="imgframe1 ">
+                {!! image_html_generator(@$products2[0]->images[0], null, null, null, true, 'bone') !!}
+                <div class="imgcaption">
+                    <a href="{!! generate_product_url('detail', $products2[0]->id, $products2[0]->product_slug)  !!}" class="save"><i class="fas fa-save"></i> Save</a>
+                    <a href="{!!  generate_product_url('detail', $products2[0]->id, $products2[0]->product_slug)  !!}" class="search"><i class="fal fa-search"></i></a>
+                </div>
 
-        </div>
-        <div class="imgframe2"><img class="btwo" src="landb/img/browse-img-2.png" alt="">
-            <div class="imgcaption">
-                <a href="#" class="save"><i class="fas fa-save"></i> Save</a>
-                <a href="#" class="search"><i class="fal fa-search"></i></a>
             </div>
+            @if(isset($products2[1]))
+                <div class="imgframe2">
+                    {!! image_html_generator(@$products2[1]->images[0], null, null, null, true, 'btwo') !!}
+                    <div class="imgcaption">
+                        <a href="{!! generate_product_url('detail', $products2[1]->id, $products2[1]->product_slug)  !!}" class="save"><i class="fas fa-save"></i> Save</a>
+                        <a href="{!!  generate_product_url('detail', $products2[1]->id, $products2[1]->product_slug)  !!}" class="search"><i class="fal fa-search"></i></a>
+                    </div>
+                </div>
+            @endif
         </div>
-    </div>
+    @endif
     <div class="b_text">
         <div class="small_h">
             Browse Collection
         </div>
-        <h1 class="revealUp"> <span></span> <small>Jeans</small> <br> Dresses Pants Skirts Shorts Booties </h1>
-        <a href="{{ URL::to('products') }}" class="lookbook_btn">View Everything</a>
+        <h1 class="revealUp"> <span></span>{{ setting('theme-landb-home_section_2_heading', 'Browse Collection') }} </h1>
+        @if(!empty(setting('theme-landb-home_section_2_link')))
+            <a href="{{ setting('theme-landb-home_section_2_link') }}" class="lookbook_btn">View Everything</a>
+        @endif
     </div>
+    @if(count($products2) > 2)
     <div class="browse_img">
         <div class="imgframe3">
-            <img class="bthree" src="landb/img/browse-img-3.png" alt="">
+            {!! image_html_generator(@$products2[2]->images[0], null, null, null, true, 'bthree') !!}
             <div class="imgcaption">
-                <a href="#" class="save"><i class="fas fa-save"></i> Save</a>
-                <a href="#" class="search"><i class="fal fa-search"></i></a>
+                <a href="{!! generate_product_url('detail', $products2[2]->id, $products2[2]->product_slug)  !!}" class="save"><i class="fas fa-save"></i> Save</a>
+                <a href="{!!  generate_product_url('detail', $products2[2]->id, $products2[2]->product_slug)  !!}" class="search"><i class="fal fa-search"></i></a>
             </div>
         </div>
-        <div class="imgframe4"><img class="bfour" src="landb/img/browse-img-4.png" alt="">
-            <div class="imgcaption">
-                <a href="#" class="save"><i class="fas fa-save"></i> Save</a>
-                <a href="#" class="search"><i class="fal fa-search"></i></a>
+        @if(isset($products2[3]))
+            <div class="imgframe4">
+                {!! image_html_generator(@$products2[3]->images[0], null, null, null, true, 'bfour') !!}
+                <div class="imgcaption">
+                    <a href="{!! generate_product_url('detail', $products2[3]->id, $products2[3]->product_slug)  !!}" class="save"><i class="fas fa-save"></i> Save</a>
+                    <a href="{!!  generate_product_url('detail', $products2[3]->id, $products2[3]->product_slug)  !!}" class="search"><i class="fal fa-search"></i></a>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
+    @endif
 </section>
 <section class="parallax_video">
-    <video src="https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/708209935.mp4" autoplay loop playsinline muted></video>
+    @php
+        $video_url = setting('theme-landb-home_section_3_video', 'https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/708209935.mp4');
+    @endphp
+    <video src="{{ (strpos($video_url, 'http') !== false) ? $video_url : 'storage/'.$video_url }}" autoplay loop playsinline muted></video>
     <!-- <img src="landb/img/Video.png" alt=""> -->
 </section>
 @if(count($latest_collection) > 2)
@@ -120,11 +140,20 @@
     </div>
 </section> -->
 <div class="grid-container">
+    @php
+        $product_ids = setting('theme-landb-home_section_5_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(9)->pluck('id')->all()));
+       $product_ids = json_decode($product_ids);
+        $products5 = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->get();
+    @endphp
       <div class="grid">
-        <div class="gridLayer">
-          <div class="gridBlock"></div>
+      @foreach($products5 as $product)
+        <div class="gridLayer @if($loop->iteration == 4) centerPiece @endif">
+          <div class="gridBlock" style="background-image: url('{{ asset('storage/'.@$product->images[0]) }}');">
+              <a href="{!!  generate_product_url('detail', $product->id, $product->product_slug)  !!}"></a>
+          </div>
         </div>
-        <div class="gridLayer">
+      @endforeach
+        {{--<div class="gridLayer">
           <div class="gridBlock"></div>
         </div>
         <div class="gridLayer">
@@ -149,7 +178,7 @@
         </div>
         <div class="gridLayer">
           <div class="gridBlock"></div>
-        </div>
+        </div>--}}
       </div>
     </div>
 <div id="night"></div>
@@ -196,11 +225,11 @@
         .from(".gridLayer", { scale: 3.3333, ease: "none" });
 
       // Images to make it look better, not related to the effect
-      const size = Math.max(innerWidth, innerHeight);
+      /*const size = Math.max(innerWidth, innerHeight);
       gsap.set(".gridBlock", {
         backgroundImage: (i) =>
           `url(https://picsum.photos/${size}/${size}?random=${i})`,
-      });
+      });*/
 
       const bigImg = new Image();
       bigImg.addEventListener("load", function () {

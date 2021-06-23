@@ -79,8 +79,39 @@ class CustomerTable extends TableAbstract
             })
             ->editColumn('is_private', function ($item) {
                 return $item->is_private ? 'Yes' : 'No';
+            })->editColumn('is_text', function ($item) {
+                if ($item->is_text == 1) {
+                    return $html = '<a href="javascript:void(0)" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Order">Verified</a>';
+                } else {
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Verify</a><script>function confirm_start(url){
+                          swal({
+                              title: \'Verify Customer Number?\',
+                              text: "Do you want to verify customer phone number!",
+                              icon: \'info\',
+                              buttons:{
+                                  cancel: {
+                                    text: "Cancel",
+                                    value: null,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                  },
+                                  confirm: {
+                                    text: "Push",
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true
+                                  }
+                                }
+                              }).then((result) => {
+                                  if (result) {
+                                      location.replace(url)
+                                  }
+                              });
+                      }</script>';
+                }
             });
-
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 return $this->getOperations('customer.edit', 'customer.destroy', $item);
@@ -101,6 +132,7 @@ class CustomerTable extends TableAbstract
             'ec_customers.email',
             'ec_customers.avatar',
             'ec_customers.is_private',
+            'ec_customers.is_text',
             'ec_customers.created_at',
         ];
 
@@ -110,14 +142,14 @@ class CustomerTable extends TableAbstract
         $to_date = Carbon::now()->format('Y-m-d');
         $request = request();
         if ($request->has('report_type')) {
-            $report_type = (int) $request->input('report_type');
+            $report_type = (int)$request->input('report_type');
             if ($report_type) {
                 $from_date = Carbon::now()->subDays($report_type)->format('Y-m-d');
                 $to_date = Carbon::now()->format('Y-m-d');
             }
         }
 
-        $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "'.$from_date.'" AND DATE(ec_orders.created_at) <= "'.$to_date.'") AS order_count');
+        $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
         //$query = $query->orderBy('order_count', 'DESC');
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
@@ -129,34 +161,39 @@ class CustomerTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'         => [
+            'id'          => [
                 'name'  => 'ec_customers.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'name'       => [
+            'name'        => [
                 'name'  => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
                 'class' => 'text-left',
             ],
-            'email'      => [
+            'email'       => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
             ],
-            'is_private'      => [
+            'is_private'  => [
                 'name'  => 'ec_customers.is_private',
                 'title' => 'Is Private',
                 'class' => 'text-left',
             ],
-            'order_count'      => [
-                'name'  => 'order_count',
-                'title' => 'Order Count',
+            'is_text'     => [
+                'name'  => 'ec_customers.is_text',
+                'title' => 'Text',
                 'class' => 'text-left',
+            ],
+            'order_count' => [
+                'name'       => 'order_count',
+                'title'      => 'Order Count',
+                'class'      => 'text-left',
                 'searchable' => false
             ],
-            'created_at' => [
+            'created_at'  => [
                 'name'  => 'ec_customers.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
@@ -246,9 +283,9 @@ class CustomerTable extends TableAbstract
     public function renderCustomFilter(): string
     {
         $report_types = [
-            7 => 'Weekly',
-            15 => 'Bi-Weekly',
-            30 => 'Monthly',
+            7   => 'Weekly',
+            15  => 'Bi-Weekly',
+            30  => 'Monthly',
             120 => 'Quarterly',
             180 => 'Six Month',
         ];

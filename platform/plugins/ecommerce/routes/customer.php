@@ -24,6 +24,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'uses'       => 'CustomerController@getListCustomerForSearch',
                 'permission' => ['customers.index', 'orders.index'],
             ]);
+            Route::get('verify-phone/{id}', [
+                'as'         => 'verify-phone',
+                'uses'       => 'CustomerController@verifyphone',
+                'permission' => ['customers.index', 'orders.index'],
+            ]);
             Route::post('update-email/{id}', [
                 'as'         => 'update-email',
                 'uses'       => 'CustomerController@postUpdateEmail',

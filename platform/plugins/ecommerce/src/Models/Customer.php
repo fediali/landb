@@ -52,6 +52,8 @@ class Customer extends Authenticatable
         'login_status',
         'is_private',
         'salesperson_id',
+        'is_text',
+        'salesperson_id',
     ];
     protected $with = [
         'detail'
@@ -191,20 +193,20 @@ class Customer extends Authenticatable
 
     public function shippingAddress()
     {
-        $default =  $this->addresses()->where('type', 'shipping')->where('is_default', 1)->get();
-        if(count($default)){
-          return $this->addresses()->where('type', 'shipping')->where('is_default', 1);
+        $default = $this->addresses()->where('type', 'shipping')->where('is_default', 1)->get();
+        if (count($default)) {
+            return $this->addresses()->where('type', 'shipping')->where('is_default', 1);
         }
-      return $this->addresses()->where('type', 'shipping');
+        return $this->addresses()->where('type', 'shipping');
     }
 
     public function billingAddress()
     {
-      $default =  $this->addresses()->where('type', 'billing')->where('is_default', 1)->get();
-      if(count($default)){
-        return $this->addresses()->where('type', 'billing')->where('is_default', 1);
-      }
-      return $this->addresses()->where('type', 'billing');
+        $default = $this->addresses()->where('type', 'billing')->where('is_default', 1)->get();
+        if (count($default)) {
+            return $this->addresses()->where('type', 'billing')->where('is_default', 1);
+        }
+        return $this->addresses()->where('type', 'billing');
     }
 
     public function wishlist()
@@ -232,6 +234,7 @@ class Customer extends Authenticatable
         }
 
     }
+
     public function card()
     {
         return $this->hasMany(CustomerCard::class, 'customer_id');
