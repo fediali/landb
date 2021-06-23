@@ -21,19 +21,19 @@
                         @foreach($timeline->detail as $detail)
                             <div class="main-form">
                                 <div style="background: #f1f1f1; padding: 15px; margin-bottom: 15px;   border-radius: 10px;" class="form-body">
-                                    <div class="form-group">
-                                        <label for="product_link" class="control-label required cloneItem" aria-required="true">Product Link</label>
-                                        {!! Form::text('product_link[]', $detail->product_link, ['class' => 'form-control', 'placeholder'=>'Product Link' ,'id'=>'product_link']) !!}
-                                        <button
-                                                style="position:absolute; top: -3px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
-                                                class="remove remove-btn" data-toggle="tooltip" data-placement="top"
-                                                title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
-                                        </button>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="product_desc" class="control-label required cloneItem" aria-required="true">Description</label>
-                                        {!! Form::textarea('product_desc[]', $detail->product_desc, ['class' => 'form-control', 'placeholder'=>'Description' ,'id'=>'product_desc']) !!}
-                                    </div>
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="product_link" class="control-label required cloneItem" aria-required="true">Product Link</label>--}}
+{{--                                        {!! Form::text('product_link[]', $detail->product_link, ['class' => 'form-control', 'placeholder'=>'Product Link' ,'id'=>'product_link']) !!}--}}
+{{--                                        <button--}}
+{{--                                                style="position:absolute; top: -3px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"--}}
+{{--                                                class="remove remove-btn" data-toggle="tooltip" data-placement="top"--}}
+{{--                                                title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X--}}
+{{--                                        </button>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="product_desc" class="control-label required cloneItem" aria-required="true">Description</label>--}}
+{{--                                        {!! Form::textarea('product_desc[]', $detail->product_desc, ['class' => 'form-control', 'placeholder'=>'Description' ,'id'=>'product_desc']) !!}--}}
+{{--                                    </div>--}}
                                     <div class="form-group">
                                         <label for="file" class="control-label cloneItem">Select File</label>
                                         @include('core/base::forms.partials.images', ['name' => 'product_image[]', 'values' => [$detail->product_image]])
@@ -46,18 +46,18 @@
                         <div class="main-form">
                             <div style="background: #f1f1f1; padding: 15px; margin-bottom: 15px;   border-radius: 10px;" class="form-body">
                                 <div class="form-group">
-                                    <label for="product_link" class="control-label required cloneItem" aria-required="true">Product Link</label>
-                                    {!! Form::text('product_link[]', null, ['class' => 'form-control', 'placeholder'=>'Product Link' ,'id'=>'product_link']) !!}
+{{--                                    <label for="product_link" class="control-label required cloneItem" aria-required="true">Product Link</label>--}}
+{{--                                    {!! Form::text('product_link[]', null, ['class' => 'form-control', 'placeholder'=>'Product Link' ,'id'=>'product_link']) !!}--}}
                                     <button
                                             style="position:absolute; top: -3px; right:0;background: #d64635;color: #fff;border: none;   border-radius: 3px;"
                                             class="remove remove-btn" data-toggle="tooltip" data-placement="top"
                                             title="Delete"><i clas="fa fa-trash-o" aria-hidden="true"></i>X
                                     </button>
                                 </div>
-                                <div class="form-group">
-                                    <label for="product_desc" class="control-label required cloneItem" aria-required="true">Description</label>
-                                    {!! Form::textarea('product_desc[]', null, ['class' => 'form-control', 'placeholder'=>'Description' ,'id'=>'product_desc']) !!}
-                                </div>
+{{--                                <div class="form-group">--}}
+{{--                                    <label for="product_desc" class="control-label required cloneItem" aria-required="true">Description</label>--}}
+{{--                                    {!! Form::textarea('product_desc[]', null, ['class' => 'form-control', 'placeholder'=>'Description' ,'id'=>'product_desc']) !!}--}}
+{{--                                </div>--}}
                                 <div class="form-group">
                                     <label for="file" class="control-label cloneItem">Select File</label>
                                     @include('core/base::forms.partials.images', ['name' => 'product_image[]', 'values' => ''])

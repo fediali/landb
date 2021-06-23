@@ -63,17 +63,18 @@ class TimelineController extends BaseController
      */
     public function store(TimelineRequest $request, BaseHttpResponse $response)
     {
+
         $timeline = $this->timelineRepository->createOrUpdate($request->only(
             'name',
             'status',
             'date'
         ));
 
-        foreach ($request->product_link as $key => $value) {
+        foreach ($request->product_image as $key => $value) {
             $data = [
                 'product_timeline_id' => $timeline->id,
-                'product_link'        => $request->product_link[$key],
-                'product_desc'        => $request->product_desc[$key],
+//                'product_link'        => $request->product_link[$key],
+//                'product_desc'        => $request->product_desc[$key],
                 'product_image'       => $request->product_image[$key]
             ];
             DB::table('timelines_detail')->insert($data);

@@ -59,8 +59,8 @@ class TimelineTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
-            ->editColumn('created_at', function ($item) {
-                return BaseHelper::formatDate($item->created_at);
+            ->editColumn('date', function ($item) {
+                return BaseHelper::formatDate($item->date);
             })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
@@ -84,6 +84,7 @@ class TimelineTable extends TableAbstract
             'timelines.id',
             'timelines.name',
             'timelines.created_at',
+            'timelines.date',
             'timelines.status',
         ];
 
@@ -108,9 +109,9 @@ class TimelineTable extends TableAbstract
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
-            'created_at' => [
-                'name'  => 'timelines.created_at',
-                'title' => trans('core/base::tables.created_at'),
+            'date' => [
+                'name'  => 'timelines.date',
+                'title' => 'date',
                 'width' => '100px',
             ],
             'status' => [
