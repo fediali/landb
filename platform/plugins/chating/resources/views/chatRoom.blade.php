@@ -89,10 +89,14 @@
                                                 </div>
 
                                                 @if(!$customer->chat->isEmpty())
-                                                    @if(get_chat($customer->chat[0]->message_sid, auth()->user()->twilio_number) > $customer->chat[0]->chat_count)
-                                                        <p class="msg-count">{{get_chat($customer->chat[0]->message_sid,auth()->user()->twilio_number) - $customer->chat[0]->chat_count }}</p>
-                                                    @endif()
-                                                @endisset()
+                                                    @php
+                                                        $chatCnt = get_chat($customer->chat[0]->message_sid, auth()->user()->twilio_number);
+                                                    @endphp
+                                                    @if( $chatCnt > $customer->chat[0]->chat_count )
+                                                        <p class="msg-count">{{$chatCnt - $customer->chat[0]->chat_count }}</p>
+                                                    @endif
+                                                @endisset
+
                                             </div>
                                         </a>
                                     @endforeach
