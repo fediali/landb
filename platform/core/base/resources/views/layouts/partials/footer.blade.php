@@ -453,9 +453,22 @@
             $('.clone').closest('#main').find('.form-body').first().clone().appendTo('.main-form');
         });
 
+        $('.accordion-list-c > li > .answer').hide();
+    
+    $('.accordion-list-c > li').click(function() {
+      if ($(this).hasClass("active-h")) {
+        $(this).removeClass("active-h").find(".answer").slideUp();
+      } else {
+        $(".accordion-list > li.active-h .answer").slideUp();
+        $(".accordion-list > li.active-h").removeClass("active-h");
+        $(this).addClass("active-h").find(".answer").slideDown();
+      }
+      return false;
+    });
+
     });
 
 
 </script>
 
-
+<script src="{{ asset('landb/js/bootstrap.js') }}"></script>

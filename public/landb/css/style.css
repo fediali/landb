@@ -1999,7 +1999,7 @@ input.qtyminus {
 
 .gallery .desc,
 .gallery .full {
-    width: 400px;
+    width: 475px;
     font-size: 12px;
 }
 
@@ -2011,11 +2011,7 @@ input.qtyminus {
     display: block;
     margin-bottom: 10px;
 }
-
-.gallery .full,
-.gallery .full img {
-    width: 85%;
-}
+ 
 
 .gallery .previews a,
 .gallery .full {
