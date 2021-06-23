@@ -428,7 +428,7 @@
                                     <h6>PRIVATE LABEL SIZES</h6>
                                     <div style="display:flex;"> 
                                     @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
-                                    <div style=" margin: 0px 15px;">
+                                    <div style=" margin: 0px 5px;background: #e8e8e8; padding: 10px;width: 65px; border-radius: 5px;">
                                     <label for="name">{{$catSize->name}}</label>
                                     <p>{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}</p>
                                     </div>
