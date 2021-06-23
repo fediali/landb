@@ -50,6 +50,8 @@ class Customer extends Authenticatable
         'login_status',
         'is_private',
         'salesperson_id',
+        'is_text',
+        'salesperson_id',
     ];
     protected $with = [
         'detail'

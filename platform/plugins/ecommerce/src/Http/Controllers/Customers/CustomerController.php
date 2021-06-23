@@ -27,6 +27,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Throwable;
+use Twilio\Rest\Client;
 
 class CustomerController extends BaseController
 {
@@ -108,9 +109,11 @@ class CustomerController extends BaseController
         $card = [];
         $customer->password = null;
         if (!$customer->card->isEmpty()) {
-            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-            list($card, $info) = omni_api($url);
-            $card = json_decode($card);
+            if ($customer->card[0]->customer_omni_id !== null) {
+                $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
+                list($card, $info) = omni_api($url);
+                $card = json_decode($card);
+            }
         }
 
 
@@ -381,31 +384,53 @@ class CustomerController extends BaseController
 
     }
 
-    public function updateCustomerAddress(Request $request){
-      $data = $request->all();
-      $newData = array();
-      foreach ($data as $key => $value){
-        $newData[str_replace('address_', '', $key)] = $value;
-      }
-      $id = $newData['id'];
-      unset($newData['id']);
-      $update = CustomerAddress::updateOrCreate(['id' => $id], $newData);
-      if($update){
-        return response()->json(['message' => 'Address updated successfully'], 200);
-      }else{
-        return response()->json(['message' => 'Server Error'], 500);
-      }
+    public function updateCustomerAddress(Request $request)
+    {
+        $data = $request->all();
+        $newData = array();
+        foreach ($data as $key => $value) {
+            $newData[str_replace('address_', '', $key)] = $value;
+        }
+        $id = $newData['id'];
+        unset($newData['id']);
+        $update = CustomerAddress::updateOrCreate(['id' => $id], $newData);
+        if ($update) {
+            return response()->json(['message' => 'Address updated successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Server Error'], 500);
+        }
     }
 
-    public function deleteAddress(Request $request, BaseHttpResponse $response){
-      $id = $request->get('id');
+    public function deleteAddress(Request $request, BaseHttpResponse $response)
+    {
+        $id = $request->get('id');
 
-      $address = CustomerAddress::find($id);
-      if($address){
-        $address->delete();
-      }
+        $address = CustomerAddress::find($id);
+        if ($address) {
+            $address->delete();
+        }
 
-      return $response->setMessage(trans('core/base::notices.delete_success_message'));
+        return $response->setMessage(trans('core/base::notices.delete_success_message'));
+    }
+
+    public function verifyphone($id, BaseHttpResponse $response)
+    {
+        $customer = $this->customerRepository->findOrFail($id);
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+        $twilio_verify_sid = env('TWILIO_VERIFY_SID');
+//        $phone_number = $twilio->verify->v2->services($twilio_verify_sid)
+//            ->verifications
+//            ->create('+14698450619', "sms");
+        $phone_number = $twilio->lookups->v1->phoneNumbers('+14698450619')
+            ->fetch(["type" => ["carrier"]]);
+        if ($phone_number->carrier['type'] == 'mobile') {
+            $is_text['is_text'] = 1;
+            Customer::where('id', $customer->id)->update($is_text);
+            $response->setMessage('Number is valid');
+            return redirect()->back();
+        } else {
+            return response()->json(['message' => 'Number is not valid'], 401);
+        }
     }
 
 }

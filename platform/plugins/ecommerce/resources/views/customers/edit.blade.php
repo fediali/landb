@@ -49,18 +49,20 @@
                         <div class="clearfix"></div>
 
                         <div class="form-group">
-                            <input class="hrv-checkbox" id="is_private" name="is_private" type="checkbox" value="{{$customer->is_private}}" {{$customer->is_private ? 'checked' : ''}}>
+                            <input class="hrv-checkbox" id="is_private" name="is_private" type="checkbox"
+                                   value="{{$customer->is_private}}" {{$customer->is_private ? 'checked' : ''}}>
                             <label for="is_private" class="control-label">Is Private?</label>
                         </div>
                         <div class="clearfix"></div>
 
                         <div class="form-group">
-                        <select class="input-textbox form-control" name="salesperson_id">
-                            <option value="" selected disabled>Select Salesperson</option>
-                            @foreach(get_salesperson() as $id => $name)
-                                <option value="{{ $id }}" @if(@$customer->salesperson_id == $id || old('hear_us') == $id) selected @endif>{{ $name }}</option>
-                            @endforeach
-                        </select>
+                            <select class="input-textbox form-control" name="salesperson_id">
+                                <option value="" selected disabled>Select Salesperson</option>
+                                @foreach(get_salesperson() as $id => $name)
+                                    <option value="{{ $id }}"
+                                            @if(@$customer->salesperson_id == $id || old('hear_us') == $id) selected @endif>{{ $name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="clearfix"></div>
 
@@ -129,11 +131,13 @@
                     Status:
                     <select name="status">
                         @foreach($options as $key => $option)
-                            <option value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
+                            <option
+                                value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
                         @endforeach
                     </select>
 
-                    <a class="btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View All Orders</a>
+                    <a class="btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View
+                        All Orders</a>
                 </div>
 
             </div>
@@ -147,86 +151,109 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <p class="textbox-label">First Name</p>
-                            <input class="input-textbox form-control @error('first_name') is-invalid @enderror" type="text" name="first_name" value="{{ old('first_name',@$customer->details->first_name) }}"/>
+                            <input class="input-textbox form-control @error('first_name') is-invalid @enderror"
+                                   type="text" name="first_name"
+                                   value="{{ old('first_name',@$customer->details->first_name) }}"/>
                             @error('first_name')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Last Name</p>
-                            <input class="input-textbox form-control @error('last_name') is-invalid @enderror" type="text" name="last_name"  value="{{ old('last_name',@$customer->details->last_name) }}"/>
+                            <input class="input-textbox form-control @error('last_name') is-invalid @enderror"
+                                   type="text" name="last_name"
+                                   value="{{ old('last_name',@$customer->details->last_name) }}"/>
                             @error('last_name')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Business Phone</p>
-                            <input class="input-textbox form-control @error('business_phone') is-invalid @enderror" type="text" name="business_phone" value="{{ old('business_phone', @$customer->details->business_phone )  }}"/>
+                            <input class="input-textbox form-control @error('business_phone') is-invalid @enderror"
+                                   type="text" name="business_phone"
+                                   value="{{ old('business_phone', @$customer->details->business_phone )  }}"/>
                             @error('business_phone')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Company</p>
-                            <input class="input-textbox form-control @error('company') is-invalid @enderror" type="text" name="company" value="{{ old('company', @$customer->details->company) }}"/>
+                            <input class="input-textbox form-control @error('company') is-invalid @enderror" type="text"
+                                   name="company" value="{{ old('company', @$customer->details->company) }}"/>
                             @error('company')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Customer Type</p>
-                            @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
-                                <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}" @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif>
-                                <label class="mr-2" for="vehicle1"> {{ $type }}</label>
-                            @endforeach
+                            @isset($type)
+                                @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
+                                    <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
+                                           @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif>
+                                    <label class="mr-2" for="vehicle1"> {{ $type }}</label>
+                                @endforeach
+                            @endisset
                             @error('customer_type')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Store’s Facebook</p>
-                            <input class="input-textbox form-control" type="text" name="store_facebook" value="{{ old('store_facebook', @$customer->details->store_facebook) }}"/>
+                            <input class="input-textbox form-control" type="text" name="store_facebook"
+                                   value="{{ old('store_facebook', @$customer->details->store_facebook) }}"/>
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Store’s Instagram</p>
-                            <input class="input-textbox form-control" type="text" name="store_instagram" value="{{ old('store_instagram', @$customer->details->store_instagram) }}" />
+                            <input class="input-textbox form-control" type="text" name="store_instagram"
+                                   value="{{ old('store_instagram', @$customer->details->store_instagram) }}"/>
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Store’s Brick & Mortar address</p>
-                            <input class="input-textbox form-control" type="text" name="mortar_address" value="{{ old('mortar_address', @$customer->details->mortar_address) }}" />
+                            <input class="input-textbox form-control" type="text" name="mortar_address"
+                                   value="{{ old('mortar_address', @$customer->details->mortar_address) }}"/>
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Where did they find us from?</p>
                             <select class="input-textbox form-control" name="hear_us">
-                                <option @if(is_null(@$customer->details->hear_us)) selected @endif disabled hidden>Select an Option</option>
+                                <option @if(is_null(@$customer->details->hear_us)) selected @endif disabled hidden>
+                                    Select an Option
+                                </option>
                                 @foreach(\Botble\Ecommerce\Models\Customer::$hearUs as $key => $hearUs)
-                                    <option value="{{ $key }}" @if(@$customer->details->hear_us == $key || old('hear_us') == $key) selected @endif>{{ $hearUs }}</option>
+                                    <option value="{{ $key }}"
+                                            @if(@$customer->details->hear_us == $key || old('hear_us') == $key) selected @endif>{{ $hearUs }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Preffered Way of Communication</p>
                             <select class="input-textbox form-control" name="preferred_communication">
-                                <option @if(is_null(@$customer->details->preferred_communication)) selected @endif disabled hidden>Select an Option</option>
+                                <option @if(is_null(@$customer->details->preferred_communication)) selected
+                                        @endif disabled hidden>Select an Option
+                                </option>
                                 @foreach(\Botble\Ecommerce\Models\Customer::$preferredCommunication as $key => $preferred)
-                                    <option value="{{ $key }}" @if(@$customer->details->preferred_communication == $key || old('preferred_communication') == $key) selected @endif>{{ $preferred }}</option>
+                                    <option value="{{ $key }}"
+                                            @if(@$customer->details->preferred_communication == $key || old('preferred_communication') == $key) selected @endif>{{ $preferred }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Sales Tax ID</p>
-                            <input class="input-textbox form-control @error('sales_tax_id') is-invalid @enderror" type="text" name="sales_tax_id" value="{{ old('sales_tax_id', @$customer->details->sales_tax_id) }}" />
+                            <input class="input-textbox form-control @error('sales_tax_id') is-invalid @enderror"
+                                   type="text" name="sales_tax_id"
+                                   value="{{ old('sales_tax_id', @$customer->details->sales_tax_id) }}"/>
                             @error('sales_tax_id')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-lg-6">
                             <p class="textbox-label">Which shows/events do you attend?</p>
-                            <input class="input-textbox form-control" type="text" name="events_attended" value="{{ old('events_attended' , @$customer->details->events_attended )}}" />
+                            <input class="input-textbox form-control" type="text" name="events_attended"
+                                   value="{{ old('events_attended' , @$customer->details->events_attended )}}"/>
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Comments</p>
-                            <textarea rows="4" name="comments" class="input-textbox form-control">{{ old('comments',@$customer->details->comments) }}</textarea>
+                            <textarea rows="4" name="comments"
+                                      class="input-textbox form-control">{{ old('comments',@$customer->details->comments) }}</textarea>
                         </div>
 
                     </div>
@@ -450,16 +477,16 @@
                         <tbody>
 
                         @if(isset($card))
-                        @foreach($card as $cards)
-                            <tr>
-                                <td>{{$cards->person_name}}</td>
-                                <td>{{$cards->card_exp}}</td>
-                                <td>{{$cards->card_last_four}}</td>
-                                {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                            @foreach($card as $cards)
+                                <tr>
+                                    <td>{{$cards->person_name}}</td>
+                                    <td>{{$cards->card_exp}}</td>
+                                    <td>{{$cards->card_last_four}}</td>
+                                    {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
-                                {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
-                            </tr>
-                        @endforeach
+                                    {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                </tr>
+                            @endforeach
                         @endif
                         </tbody>
                     </table>
@@ -491,40 +518,52 @@
                             <input type="hidden" name="address_id" value="">
                             <div class="col-lg-6">
                                 <p class="textbox-label">First Name</p>
-                                <input class="input-textbox form-control @error('address_first_name') is-invalid @enderror" type="text" name="address_first_name" value=""/>
+                                <input
+                                    class="input-textbox form-control @error('address_first_name') is-invalid @enderror"
+                                    type="text" name="address_first_name" value=""/>
 
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Last Name</p>
-                                <input class="input-textbox form-control @error('address_last_name') is-invalid @enderror" type="text"  name="address_last_name" value=""/>
+                                <input
+                                    class="input-textbox form-control @error('address_last_name') is-invalid @enderror"
+                                    type="text" name="address_last_name" value=""/>
                                 @error('address_last_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Company Name</p>
-                                <input class="input-textbox form-control @error('address_company') is-invalid @enderror" type="text"  name="address_company" value="{{ old('address_company',@$customer->addresses[0]->company) }}"/>
+                                <input class="input-textbox form-control @error('address_company') is-invalid @enderror"
+                                       type="text" name="address_company"
+                                       value="{{ old('address_company',@$customer->addresses[0]->company) }}"/>
                                 @error('address_company')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Mobile</p>
-                                <input class="input-textbox form-control @error('address_phone') is-invalid @enderror" type="text"  name="address_phone" value="{{ old('address_phone',@$customer->addresses[0]->phone) }}"/>
+                                <input class="input-textbox form-control @error('address_phone') is-invalid @enderror"
+                                       type="text" name="address_phone"
+                                       value="{{ old('address_phone',@$customer->addresses[0]->phone) }}"/>
                                 @error('address_phone')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-lg-12">
                                 <p class="textbox-label">Address</p>
-                                <input class="input-textbox form-control @error('address_address') is-invalid @enderror" type="text"  name="address_address" value="{{ old('address_address',@$customer->addresses[0]->address) }}"/>
+                                <input class="input-textbox form-control @error('address_address') is-invalid @enderror"
+                                       type="text" name="address_address"
+                                       value="{{ old('address_address',@$customer->addresses[0]->address) }}"/>
                                 @error('address_address')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">City</p>
-                                <input class="input-textbox form-control @error('address_city') is-invalid @enderror" type="text"  name="address_city" value="{{ old('address_city',@$customer->addresses[0]->city) }}"/>
+                                <input class="input-textbox form-control @error('address_city') is-invalid @enderror"
+                                       type="text" name="address_city"
+                                       value="{{ old('address_city',@$customer->addresses[0]->city) }}"/>
                                 @error('address_city')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -535,7 +574,9 @@
                                     <option></option>
                                 </select>--}}
                                 {{--<input class="input-textbox form-control @error('address_country') is-invalid @enderror" type="text"  name="address_country" value="{{ old('address_country',@$customer->addresses[0]->country) }}"/>--}}
-                                <select class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror" name="address_country">
+                                <select
+                                    class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror"
+                                    name="address_country">
                                     <option selected hidden disabled>Select a Country</option>
                                 </select>
                                 @error('address_country')
@@ -548,7 +589,8 @@
                                     <option></option>
                                 </select>--}}
                                 {{--<input class="input-textbox form-control @error('address_state') is-invalid @enderror" type="text"  name="address_state" value="{{ old('address_state',@$customer->addresses[0]->state) }}"/>--}}
-                                <select class="input-textbox form-control  @error('address_state') is-invalid @enderror" name="address_state">
+                                <select class="input-textbox form-control  @error('address_state') is-invalid @enderror"
+                                        name="address_state">
                                     <option selected hidden disabled>Select a State</option>
                                 </select>
                                 @error('address_state')
@@ -557,7 +599,10 @@
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Zip/Postal Code</p>
-                                <input class="input-textbox form-control @error('address_zip_code') is-invalid @enderror" type="text"  name="address_zip_code" value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
+                                <input
+                                    class="input-textbox form-control @error('address_zip_code') is-invalid @enderror"
+                                    type="text" name="address_zip_code"
+                                    value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
