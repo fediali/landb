@@ -117,7 +117,7 @@
                 </div>
                 <!-- /.row -->
             </div>
-            <div class="" id="DivIdToPrint">
+            <div class="d-none" id="DivIdToPrint">
                 <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
                         margin-top: 15px;">
