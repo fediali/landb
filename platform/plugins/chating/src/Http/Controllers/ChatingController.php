@@ -277,7 +277,7 @@ class ChatingController extends BaseController
 //            ->delete();
 
       $d =   $twilio->chat->v2->services("IS9de5ea7ac6e4458085d0f79b8700ac58")
-          ->channels("CHea46ca6bf03e4475b99d1cb425ea237e")
+          ->channels("CH73c31a4fe60f491ebe77523f91b87147")
           ->delete();
 dd($d);
         //Text Message
