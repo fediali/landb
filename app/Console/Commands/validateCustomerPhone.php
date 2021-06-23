@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\CustomerDetail;
 use Illuminate\Console\Command;
 
 class validateCustomerPhone extends Command
@@ -39,9 +40,22 @@ class validateCustomerPhone extends Command
     public function handle()
     {
         $phones = Customer::select('id', 'phone')->get();
+        $this->validatePhones($phones, 'phone');
+
+        $phones = CustomerDetail::select('id', 'phone')->get();
+        $this->validatePhones($phones, 'phone');
+
+        $phones = CustomerDetail::select('id', 'business_phone')->get();
+        $this->validatePhones($phones, 'business_phone');
+
+        echo 'success';
+    }
+
+    public function validatePhones($phones, $key)
+    {
         foreach ($phones as $phone) {
-            if ($phone->phone) {
-                $newPhone = str_replace('-','', $phone->phone);
+            if ($phone->{$key}) {
+                $newPhone = str_replace('-','', $phone->{$key});
                 $newPhone = str_replace(' ','', $newPhone);
                 $newPhone = str_replace('(','', $newPhone);
                 $newPhone = str_replace(')','', $newPhone);
@@ -54,14 +68,14 @@ class validateCustomerPhone extends Command
                 if (!in_array($start2, ['+1'])) {
                     $start1 = substr($newPhone, 0, 1);
                     if (!in_array($start1, [1])) {
-                        $phone->phone = '+1'.$newPhone;
+                        $phone->{$key} = '+1'.$newPhone;
                     } else {
-                        $phone->phone = '+'.$newPhone;
+                        $phone->{$key} = '+'.$newPhone;
                     }
                 }
                 $phone->save();
             }
         }
-        echo 'success';
     }
+
 }
