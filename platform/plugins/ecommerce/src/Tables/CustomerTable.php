@@ -85,7 +85,7 @@ class CustomerTable extends TableAbstract
                 } else {
                     return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Verify</a><script>function confirm_start(url){
                           swal({
-                              title: \'Verfiy Customer Number?\',
+                              title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
                               icon: \'info\',
                               buttons:{

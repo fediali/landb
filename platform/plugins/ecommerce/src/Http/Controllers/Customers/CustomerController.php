@@ -417,11 +417,8 @@ class CustomerController extends BaseController
     {
         $customer = $this->customerRepository->findOrFail($id);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-        $twilio_verify_sid = env('TWILIO_VERIFY_SID');
-//        $phone_number = $twilio->verify->v2->services($twilio_verify_sid)
-//            ->verifications
-//            ->create('+14698450619', "sms");
-        $phone_number = $twilio->lookups->v1->phoneNumbers('+14698450619')
+
+        $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)
             ->fetch(["type" => ["carrier"]]);
         if ($phone_number->carrier['type'] == 'mobile') {
             $is_text['is_text'] = 1;
