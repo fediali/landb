@@ -117,7 +117,7 @@
                 </div>
                 <!-- /.row -->
             </div>
-            <div class="d-none" id="DivIdToPrint">
+            <div class="" id="DivIdToPrint">
                 <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
                         margin-top: 15px;">
@@ -425,6 +425,15 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                    <h6>PRIVATE LABEL SIZES</h6>
+                                    <div style="display:flex;"> 
+                                    @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
+                                    <div style=" margin: 0px 15px;">
+                                    <label for="name">{{$catSize->name}}</label>
+                                    <p>{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}</p>
+                                    </div>
+                                    @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
