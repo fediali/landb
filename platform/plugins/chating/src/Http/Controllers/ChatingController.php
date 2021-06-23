@@ -209,7 +209,7 @@ class ChatingController extends BaseController
 
         $authUser = $request->user();
         $otherUser = Customer::find(explode('-', $ids)[1]);
-        $customers = Customer::where('id', '<>', $authUser->id)->where(['is_text' => 1, 'salesperson_id' => 1])->get();
+        $customers = Customer::where('id', '<>', $authUser->id)->where(['is_text' => 1, 'salesperson_id' => $authUser->id])->get();
 
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
