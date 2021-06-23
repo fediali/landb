@@ -276,9 +276,9 @@ class ChatingController extends BaseController
 //            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
 //
-      $d =   $twilio->chat->v2->services("IS791f2cbcd4484a3cafda2e2c7200f4d0")
-                    ->delete();
-dd($d);
+//      $d =   $twilio->chat->v2->services("IS791f2cbcd4484a3cafda2e2c7200f4d0")
+//                    ->delete();
+//dd($d);
         //Text Message
         //$author = '+13345390661';
         //$body = 'Gand Marwao Gathiye Khaoo';
