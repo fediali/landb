@@ -296,7 +296,7 @@ class ChatingController extends BaseController
         //$messages = $this->listMessages($sid);
 
 
-        $conversation = $this->makeConversation($ids, $otherUser->phone);
+        $conversation = $this->makeConversation($ids, $otherUser->phone, '', $authUser->twilio_number);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
         $chatting = get_chat($sid, $authUser->twilio_number);
@@ -336,10 +336,8 @@ class ChatingController extends BaseController
         return response()->json(['token' => $token->toJWT()]);
     }
 
-    public function makeConversation($uniqueName, $number = false, $text = false)
+    public function makeConversation($uniqueName, $number = false, $text = false, $author_number = false)
     {
-
-
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         try {
             $conversation = $twilio->conversations->v1->conversations($uniqueName)->fetch();
@@ -348,12 +346,12 @@ class ChatingController extends BaseController
                 "friendlyName" => "Conversation-" . $uniqueName,
                 "uniqueName"   => $uniqueName,
             ]);
-            $this->createSMSParticipant($conversation->sid, $number);
+            $this->createSMSParticipant($conversation->sid, $number, $author_number);
         }
         return $conversation;
     }
 
-    public function createSMSParticipant($sid, $number)
+    public function createSMSParticipant($sid, $number, $author_number = false)
     {
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $participant = $twilio->conversations->v1
@@ -361,7 +359,7 @@ class ChatingController extends BaseController
             ->participants
             ->create([
                 'messagingBindingAddress'      => $number,
-                'messagingBindingProxyAddress' => '+13345390661'
+                'messagingBindingProxyAddress' => $author_number ? $author_number : '+13345390661'
             ]);
         return $participant;
     }

@@ -16,7 +16,7 @@
 
             <div class="row message-body">
                 <div v-for="message in messages" v-bind:key="message.id" class="col-sm-12 message-main-receiver">
-                    <div :class="(message.author !== '+13345390661')? 'receiver':'sender'">
+                    <div :class="(message.author !== authUser.twilio_number || message.author !== '+13345390661')? 'receiver':'sender'">
                         <div class="message-text">
                             {{ message.body }}
                         </div>
@@ -115,7 +115,7 @@ export default {
             let self = this;
             const {data} = await axios.post("/admin/chatings/send-sms", {
                 sid: `${this.authUser.id}-${this.otherUser.id}`,
-                author: '+13345390661', //self.otherUser.phone,
+                author: self.authUser.twilio_number ? self.authUser.twilio_number : '+13345390661', //self.otherUser.phone,
                 body: self.newMessage,
             });
             this.messages = data.messages;
