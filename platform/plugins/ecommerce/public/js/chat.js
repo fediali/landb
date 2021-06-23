@@ -173,7 +173,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context2.next = 3;
                 return axios.post("/admin/chatings/send-sms", {
                   sid: "".concat(_this2.authUser.id, "-").concat(_this2.otherUser.id),
-                  author: '+13345390661',
+                  author: self.authUser.twilio_number ? self.authUser.twilio_number : '+13345390661',
                   //self.otherUser.phone,
                   body: self.newMessage
                 });
@@ -1122,7 +1122,10 @@ var render = function() {
                 "div",
                 {
                   class:
-                    message.author !== "+13345390661" ? "receiver" : "sender"
+                    message.author !== _vm.authUser.twilio_number ||
+                    message.author !== "+13345390661"
+                      ? "receiver"
+                      : "sender"
                 },
                 [
                   _c("div", { staticClass: "message-text" }, [

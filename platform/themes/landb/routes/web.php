@@ -5,6 +5,9 @@
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
     Route::get('/orderr', 'LandbController@orderSuccess');
 
+    Route::get('/product-timeline', 'ProductsController@timeline')
+      ->name('public.cart.timeline');
+
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });

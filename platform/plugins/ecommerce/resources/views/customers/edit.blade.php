@@ -186,13 +186,11 @@
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Customer Type</p>
-                            @isset($type)
                                 @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
                                     <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
-                                           @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif>
+                                          @if(isset($customer->details) && !empty($customer->details->customer_type)) @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif @endif>
                                     <label class="mr-2" for="vehicle1"> {{ $type }}</label>
                                 @endforeach
-                            @endisset
                             @error('customer_type')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -621,25 +619,5 @@
 
 @stop
 
-<style>
-    .heading {
-        color: #d64635;
-        font-weight: 600;
-    }
-
-    .order-detail {
-        font-size: 20px !important;
-    }
-
-    .img-circle {
-        border-radius: 10px;
-        width: 100%;
-    }
-
-    .table td {
-        padding: 10px 5px !important;
-        font-size: 14px;
-    }
-</style>
 
 

@@ -341,11 +341,7 @@ button.toggle-menu.active {
     -webkit-transform: rotate3d(0, 0, 1, 45deg);
     transform: rotate3d(0, 0, 1, 45deg);
 }
-
-.banner {
-    margin: 20px 0;
-}
-
+ 
 .banner img {
     width: 100%;
 }
@@ -3082,7 +3078,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         padding-left: 5px !important;
     }
     .navbar-parent ul {
-        overflow: inherit !important;
+        overflow: scroll !important;
     }
 }
 
@@ -3833,4 +3829,16 @@ input:checked + .slider:before {
 
 :checked+.product-tile__variant {
     background-color: rgba(208,198,187,.7);
+}
+
+header {
+    background-color: #f6f5f7;
+    padding-bottom: 20px !important;
+}
+
+.navbar-parent li {
+    list-style: none;
+    clear: both;
+    display: inline-block; 
+    white-space: nowrap;
 }

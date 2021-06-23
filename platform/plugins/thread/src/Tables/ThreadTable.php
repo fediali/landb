@@ -96,7 +96,8 @@ class ThreadTable extends TableAbstract
                 $html .= '<a href="' . route('thread.details', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Details"><i class="fa fa-eye"></i></a>';
                 $html .= '<a href="' . route('threadsample.show', $item->id) . '" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Thread Sample"><i class="fa fa-paper-plane"></i></a>';
 
-                if (!$item->thread_has_order && auth()->user()->hasPermission('thread.destroy')) {
+                if (auth()->user()->hasPermission('thread.destroy')) {
+//                if (!$item->thread_has_order && auth()->user()->hasPermission('thread.destroy')) {
                     $html .= '<a href="#" class="btn btn-icon btn-sm btn-danger deleteDialog" data-toggle="tooltip" data-section="' . route('thread.destroy', $item->id) . '" role="button" data-original-title="' . trans('core/base::tables.delete_entry') . '" >
                                 <i class="fa fa-trash"></i>
                               </a>';

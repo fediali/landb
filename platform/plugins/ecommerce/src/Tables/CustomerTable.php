@@ -65,7 +65,6 @@ class CustomerTable extends TableAbstract
                 if (!Auth::user()->hasPermission('customer.edit')) {
                     return $item->name;
                 }
-
                 return Html::link(route('customer.edit', $item->id), $item->name);
             })
             ->editColumn('email', function ($item) {
