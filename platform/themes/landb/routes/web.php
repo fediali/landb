@@ -50,7 +50,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/order/status/{id}', 'OrderController@index')
         ->name('public.order.status');
 
-    Route::get('/product-timeline', 'ProductsController@timeline')
+    Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
     Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {

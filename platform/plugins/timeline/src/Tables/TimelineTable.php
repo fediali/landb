@@ -64,6 +64,9 @@ class TimelineTable extends TableAbstract
             })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
+            })
+            ->editColumn('link', function ($item) {
+                return '<button class="btn btn-icon btn-sm btn-info" onclick="showLink(' . '\'' . route('public.cart.timeline', auth()->user()->id) . '\'' . ')">Get Link</button><p id="prod-time-link"></p><script>function showLink(url){$("p#prod-time-link").text(url)}</script>';
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -85,6 +88,7 @@ class TimelineTable extends TableAbstract
             'timelines.name',
             'timelines.created_at',
             'timelines.status',
+            'timelines.status AS link',
         ];
 
         $query = $model->select($select);
@@ -116,6 +120,11 @@ class TimelineTable extends TableAbstract
             'status' => [
                 'name'  => 'timelines.status',
                 'title' => trans('core/base::tables.status'),
+                'width' => '100px',
+            ],
+            'link' => [
+                'name'  => 'timelines.link',
+                'title' => 'Link',
                 'width' => '100px',
             ],
         ];
