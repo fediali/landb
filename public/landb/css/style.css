@@ -3859,3 +3859,12 @@ header {
 #menu .main-nav h5 a {
     font-weight: bold;
 }
+
+
+.navbar-parent ul li.dropdown a  {
+    color: #000000;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: .5rem 1rem;
+}
