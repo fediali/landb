@@ -186,13 +186,11 @@
                         </div>
                         <div class="col-lg-12">
                             <p class="textbox-label">Customer Type</p>
-
                                 @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
                                     <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
                                           @if(isset($customer->details)) @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif @endif>
                                     <label class="mr-2" for="vehicle1"> {{ $type }}</label>
                                 @endforeach
-
                             @error('customer_type')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
