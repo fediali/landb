@@ -46,6 +46,7 @@ class Customer extends Authenticatable
         'phone',
         'dob',
         'status',
+        'login_status',
         'is_private',
         'salesperson_id',
     ];

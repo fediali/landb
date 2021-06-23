@@ -63,23 +63,21 @@ class TimelineController extends BaseController
      */
     public function store(TimelineRequest $request, BaseHttpResponse $response)
     {
-
         $timeline = $this->timelineRepository->createOrUpdate($request->only(
             'name',
             'status',
-            'date',
+            'date'
         ));
+
         foreach ($request->product_link as $key => $value) {
             $data = [
                 'product_timeline_id' => $timeline->id,
                 'product_link'        => $request->product_link[$key],
                 'product_desc'        => $request->product_desc[$key],
                 'product_image'       => $request->product_image[$key]
-
             ];
             DB::table('timelines_detail')->insert($data);
         }
-
 
         event(new CreatedContentEvent(TIMELINE_MODULE_SCREEN_NAME, $request, $timeline));
 
@@ -102,7 +100,7 @@ class TimelineController extends BaseController
         event(new BeforeEditContentEvent($request, $timeline));
 
         page_title()->setTitle(trans('plugins/timeline::timeline.edit') . ' "' . $timeline->name . '"');
-        return view('plugins/timeline::timeline', compact($timeline));
+        return view('plugins/timeline::timeline', compact('timeline'));
 //        return $formBuilder->create(TimelineForm::class, ['model' => $timeline])->renderForm();
     }
 
@@ -116,9 +114,24 @@ class TimelineController extends BaseController
     {
         $timeline = $this->timelineRepository->findOrFail($id);
 
-        $timeline->fill($request->input());
+        $timeline->fill($request->only(
+            'name',
+            'status',
+            'date'
+        ));
 
         $this->timelineRepository->createOrUpdate($timeline);
+
+        DB::table('timelines_detail')->where('product_timeline_id', $timeline->id)->delete();
+        foreach ($request->product_link as $key => $value) {
+            $data = [
+                'product_timeline_id' => $timeline->id,
+                'product_link'        => $request->product_link[$key],
+                'product_desc'        => $request->product_desc[$key],
+                'product_image'       => $request->product_image[$key]
+            ];
+            DB::table('timelines_detail')->insert($data);
+        }
 
         event(new UpdatedContentEvent(TIMELINE_MODULE_SCREEN_NAME, $request, $timeline));
 

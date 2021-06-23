@@ -37,9 +37,9 @@ class TextmessagesForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'class'            => 'form-control',
-                    'data-date-format' => 'd M, yyyy',
+                    // 'data-date-format' => 'd M, Y',
                 ],
-                'value'      => date('m/d/Y h:i:s', strtotime($this->model->schedule_date))
+                'value'      => date('m/d/YTH:i:s', strtotime($this->model->schedule_date))
             ])
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
