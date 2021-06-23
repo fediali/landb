@@ -19,6 +19,7 @@ use Botble\Ecommerce\Http\Requests\CustomerCreateRequest;
 use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
 use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Tables\CustomerTable;
@@ -168,7 +169,8 @@ class CustomerController extends BaseController
         $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
         $data = array_diff_key($data, array_flip($remove));
         $data['customer_type'] = json_encode($data['customer_type']);
-        $customer->details()->update($data);
+        CustomerDetail::updateOrCreate(['customer_id' => $id],$data);
+
         //dd($customer, $request->all());
 
         event(new UpdatedContentEvent(CUSTOMER_MODULE_SCREEN_NAME, $request, $customer));
