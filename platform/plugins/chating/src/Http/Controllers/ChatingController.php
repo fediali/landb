@@ -295,8 +295,8 @@ class ChatingController extends BaseController
         //$sid = 'CH286197bbcbf3448a9f89d46e70691a1b';
         //$messages = $this->listMessages($sid);
 
-        dd($otherUser->detail->business_phone, $authUser->twilio_number);
-        $conversation = $this->makeConversation($ids, $otherUser->phone, '', $authUser->twilio_number);
+
+        $conversation = $this->makeConversation($ids, $otherUser->detail->business_phone, '', $authUser->twilio_number);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
         $chatting = get_chat($sid, $authUser->twilio_number);
