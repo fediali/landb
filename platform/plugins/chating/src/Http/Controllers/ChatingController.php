@@ -184,7 +184,7 @@ class ChatingController extends BaseController
         $customers = get_customers($id);
         //$twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-       // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
+        // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
 //        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
 //
@@ -437,8 +437,15 @@ class ChatingController extends BaseController
 
     public function smsCampaign($text_id)
     {
+        //28, 29
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
+            if ($text->created_by == 28 || $text->created_by ==29 ){
+                dd('s');
+            }
+            else{
+                dd('ff');
+            }
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
