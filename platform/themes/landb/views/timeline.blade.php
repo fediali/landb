@@ -6,9 +6,45 @@
                 <li class="breadcrumb-item active" aria-current="page"><b>Styles of The Day</b></li>
             </ol>
         </nav>
+       
     </div>
+    
 </section>
 <section>
+<div class="row">
+        <div class="col-lg-12 text-center">
+        <ul class="ml-5 mr-5 list-unstyled list-inline product-category-list-container category-mobile-container pleftright5">
+		 
+         <li>
+             <a href="#timeline" class="btn btn-outline-hs-secondary-white btn-sm rounded-corners-big mtopbot5 text-700 ">
+                 Soups
+             </a>
+         </li> 
+         <li>
+             <a class="btn btn-outline-hs-secondary-white btn-sm rounded-corners-big mtopbot5 text-700 ">
+                 Soups
+             </a>
+         </li> 
+         <li>
+             <a class="btn btn-outline-hs-secondary-white btn-sm rounded-corners-big mtopbot5 text-700 ">
+                 Soups
+             </a>
+         </li> 
+         <li>
+             <a class="btn btn-outline-hs-secondary-white btn-sm rounded-corners-big mtopbot5 text-700  ">
+                 Soups
+             </a>
+         </li> 
+         <li>
+             <a class="btn btn-outline-hs-secondary-white btn-sm rounded-corners-big mtopbot5 text-700  ">
+                 Soups
+             </a>
+         </li> 
+     </ul>
+        </div>
+    </div>
+</section>
+<section id="timeline">
     {{--    <div class="row m-0">--}}
     {{--        <div class="col-lg-10"></div>--}}
     {{--        <div class="col-lg-2">--}}

@@ -235,14 +235,15 @@
                        <div class="price">
                            $<span id="price-of-{{$product->id}}">{{ $default->price }}</span>
                        </div>
-                      
+
                    </div>
                </a>
                 <div class="text-center">
-                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" data-id="{{ $product->id }}">ADD TO BAG
+                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" data-id="{{ $product->id }}">ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i>
+
                         </button>
                 </div>
-               
+
                 <div class="product-tile__variants-area welcomeDiv{{ $product->id }}">
                     <div class="product-tile__variants-heading">
                         Select a Size
@@ -373,4 +374,3 @@
         </div>
     </div>
     <!-- Modal Quick View -->
- 
