@@ -445,8 +445,9 @@ class ChatingController extends BaseController
             $customer = Customer::where('is_text', 1)->get();
 
             foreach ($customer as $c) {
-                $uniqueName = '41-' . $c->id;
-                dd($uniqueName ,$c->detail->business_phone,$author, $text->text);
+                $uniqueName = '41-27606';
+//                $uniqueName = '41-' . $c->id;
+//                dd($uniqueName ,$c->detail->business_phone,$author, $text->text);
                 $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
                 $message = $this->createMessage($conversation->sid, $author, $text->text);
             }
