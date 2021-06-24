@@ -235,14 +235,14 @@ function toggle_product_detail(id) {
       var images = sizes = categories = tags = '';
       var product = result.product;
       var variations = result.productVariations;
-      var image = '<img !important;" src="images/default.jpg" />';
+      var image = '<img class="front-img" !important;" src="images/default.jpg" />';
       var image1 = '<img src="images/default.jpg" />';
       if (product.images !== null && product.images.length !== 0) {
         product.images.forEach(function (value, index) {
           images += '<a href="javascript:void(0)" class="selected" data-full="storage/'+ value +'"><img src="storage/'+ value +'" /></a>';
         });
         $('#product-detail-images').html(images);
-        $('#product-detail-image').html('<img src="storage/'+ product.images[0] +'" />');
+        $('#product-detail-image').html('<img class="front-img" src="storage/'+ product.images[0] +'" />');
       }else{
         $('#product-detail-images').html('<a href="javascript:void(0)" class="selected mt-2 side-img" data-full="images/default.jpg">'+image1+'</a>');
         $('#product-detail-image').html(image);

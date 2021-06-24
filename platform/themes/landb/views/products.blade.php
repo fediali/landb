@@ -229,7 +229,7 @@
                    </div>
                </a>
                 <div class="text-center">
-                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" >ADD TO BAG
+                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" >ADD TO BAG&nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i>
                         </button>
                 </div>
                
@@ -253,7 +253,7 @@
                                 <span class="product-tile__variant">L
                     </span>
                                 </label></div>
-                            <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span></button>
+                            <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span>&nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i></button>
                            
                         </div>  
             </div>
