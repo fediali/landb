@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 /*use Botble\Theme\Theme;*/
 
+use App\Models\User;
 use BaseHelper;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
@@ -102,20 +103,20 @@ class ProductsController extends Controller
         ]);
 
 
-      if (!$data['product']) {
-        abort(404);
-      }
-      $data['productVariations'] = $data['product']->variations()->with(['product'])->orderBy('is_default', 'desc')->get();
-      foreach ($data['productVariations'] as $key => $variation){
-        if($variation->product->quantity < 1){
-          $data['productVariations']->forget($key);
+        if (!$data['product']) {
+            abort(404);
         }
-      }
-      //dd($data['product']->variations()->get());
+        $data['productVariations'] = $data['product']->variations()->with(['product'])->orderBy('is_default', 'desc')->get();
+        foreach ($data['productVariations'] as $key => $variation) {
+            if ($variation->product->quantity < 1) {
+                $data['productVariations']->forget($key);
+            }
+        }
+        //dd($data['product']->variations()->get());
         //dd($data['product']);
         if ($request->ajax()) {
-          $values = $data['productVariations']->values();
-          $data['productVariations'] = $values->all();
+            $values = $data['productVariations']->values();
+            $data['productVariations'] = $values->all();
             return response()->json(['product' => $data['product'], 'productVariations' => $data['productVariations']], 200);
         } else {
             return Theme::scope('product', $data)->render();
@@ -124,9 +125,11 @@ class ProductsController extends Controller
 
     public function timeline(Request $request, $id = null)
     {
+        $user = User::where('id', $id)->first();
+
         $tz = Carbon::now('America/Chicago')->toDateString();
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
         $product = Timeline::where('date', $date)->first();
-        return Theme::scope('timeline', ['product' => $product])->render();
+        return Theme::scope('timeline', ['product' => $product, 'user' => $user])->render();
     }
 }
