@@ -441,9 +441,9 @@ class ChatingController extends BaseController
 
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
-            dd($text);
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
+            dd($customer);
             foreach ($customer as $c) {
                 $uniqueName = '41-' . $c->id;
                 $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
