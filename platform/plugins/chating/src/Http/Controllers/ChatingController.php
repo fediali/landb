@@ -444,9 +444,15 @@ class ChatingController extends BaseController
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
-                $uniqueName = '41-' . $c->id;
-                $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
-                $message = $this->createMessage($conversation->sid, $author, $text->text);
+                $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
+                if ($message == null) {
+                    $uniqueName = '41-' . $c->id;
+                    $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
+                    $message = $this->createMessage($conversation->sid, $author, $text->text);
+                    $record['text_id'] = $text->id;
+                    $record['customer_id'] = $c->id;
+                    DB::table('text_record')->insert($record);
+                }
             }
             $status['status'] = BaseStatusEnum::PUBLISHED;
             Textmessages::where('id', $text_id)->update($status);
