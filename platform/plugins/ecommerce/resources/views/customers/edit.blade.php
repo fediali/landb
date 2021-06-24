@@ -291,9 +291,13 @@
                         <label for="country">{{ __('Country') }}:</label>
                         <select name="country" class="form-control selectpicker select-country" data-live-search="true"
                                 id="country">
-                            @foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
+                            {{--@foreach(['' => __('Select country...')] + \Botble\Base\Supports\Helper::countries() as $countryCode => $countryName)
                                 <option value="{{ $countryCode }}"
                                         @if (old('country') == $countryCode) selected @endif>{{ $countryName }}</option>
+                            @endforeach--}}
+                            @foreach(get_countries() as $key => $country)
+                                <option @if(old('country') == $key) selected
+                                @endif value="{{ $key }}">{{ $country }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -301,8 +305,11 @@
 
                     <div class="col-lg-6 mt-2 @if ($errors->has('state')) has-error @endif">
                         <label for="state">{{ __('State') }}:</label>
-                        <input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">
-
+                        {{--<input id="state" type="text" class="form-control" name="state" value="{{ old('state') }}">--}}
+                        <select name="state" class="form-control select-state" data-live-search="true"
+                                id="state">
+                            <option selected hidden disabled>Select a State</option>
+                        </select>
                     </div>
                     {!! Form::error('state', $errors) !!}
 
@@ -337,6 +344,9 @@
                 <label for="is-default">{{ __('Use this address as default') }}</label> -->
                         </div>
                         {!! Form::error('is_default', $errors) !!}
+
+                        <input type="radio" name="type" value="shipping"> Shipping
+                        <input type="radio" name="type" value="billing"> Billing
                     </div>
 
                     <div class="form-group col-lg-6">
@@ -616,7 +626,37 @@
 
         </div>
     </div>
+<script>
+    $(document).ready(function () {
+      $('select[name="country"]').on('change', function () {
+        get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
+      });
 
+    })
+    function get_states(thiss, country, url){
+      $.ajax({
+        type: 'GET',
+        url: url,
+        data: {
+          'country' : country
+        },
+        beforeSend: function () {
+          toggle_loader(true);
+        },
+
+        success: function (result) {
+          thiss.find('option').remove();
+          jQuery.each(result, function (state, index) {
+            thiss.append(new Option(index, state));
+          });
+          toggle_loader(false);
+        },
+        error: function (e) {
+          toggle_loader(false);
+        }
+      })
+    }
+</script>
 @stop
 
 

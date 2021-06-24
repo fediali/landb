@@ -191,7 +191,7 @@
                 ?>
             @foreach($products as $key => $product)
                 @php
-                    $variation_id = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')->where('ep.quantity', '>', 0)->where('ec_product_variations.configurable_product_id', $product->id)->orderBy('ec_product_variations.is_default', 'desc')->pluck('ec_product_variations.product_id')->first();
+                    $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')->where('ep.quantity', '>', 0)->where('ec_product_variations.configurable_product_id', $product->id)->orderBy('ec_product_variations.is_default', 'desc')->select('ec_product_variations.product_id', 'ep.price' )->first();
                 @endphp
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
@@ -206,7 +206,7 @@
                         <a href="javascript:void(0);" onclick="toggle_product_detail('{{ $product->product_slug }}')"><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
-                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $variation_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $variationData->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
                                 <div class="col-lg-4">
                                     <input type='hidden' name='quantity' value='1' class='qty' />
                                 </div>
@@ -223,7 +223,7 @@
                    <div class="caption">
                        <h4>{{ $product->name }}</h4>
                        <div class="price">
-                           ${{ $product->price }}
+                           ${{ $variationData->price }}
                        </div>
                       
                    </div>

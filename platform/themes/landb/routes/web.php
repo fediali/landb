@@ -8,6 +8,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/product-timeline', 'ProductsController@timeline')
       ->name('public.cart.timeline');
 
+    Route::get('/products/{slug?}', 'ProductsController@getDetails')
+      ->name('public.singleProduct');
+
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
@@ -31,9 +34,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
     Route::get('/payment/status', 'CheckoutController@getPayPalStatus')
         ->name('public.paypal_status');
-
-    Route::get('/products/{slug?}', 'ProductsController@getDetails')
-        ->name('public.singleProduct');
 
     Route::get('/product/add/wishlist/{id}', 'WishlistController@addToWishlist')
         ->name('public.add_to_wishlist');
