@@ -440,17 +440,11 @@ class ChatingController extends BaseController
         //28, 29
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
-            if ($text->created_by == 28 || $text->created_by ==29 ){
-                dd('s');
-            }
-            else{
-                dd('ff');
-            }
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
-                $uniqueName = '1-' . $c->id;
-                $conversation = $this->makeConversation($uniqueName, $c->phone);
+                $uniqueName = '41-' . $c->id;
+                $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
                 $message = $this->createMessage($conversation->sid, $author, $text->text);
             }
             $status['status'] = BaseStatusEnum::PUBLISHED;
