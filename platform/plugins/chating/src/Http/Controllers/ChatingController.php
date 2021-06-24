@@ -438,8 +438,10 @@ class ChatingController extends BaseController
     public function smsCampaign($text_id)
     {
         //28, 29
+
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
+            dd($text);
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
