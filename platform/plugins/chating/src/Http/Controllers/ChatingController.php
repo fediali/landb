@@ -440,12 +440,18 @@ class ChatingController extends BaseController
 
     public function smsCampaign($text_id)
     {
-        //28, 29
-
+        if (!is_array($text_id)) {
+            $text_id = [$text_id];
+            $response = new BaseHttpResponse();
+        }
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
             $author = '+13345390661';
-            $customer = Customer::where('is_text', 1)->get();
+            if (in_array($text->created_by, [28, 29])) {
+                $customer = Customer::where('is_text', 1)->get();
+            } else {
+                $customer = Customer::where('is_text', 1)->where('salesperson_id', $text->created_by)->get();
+            }
             foreach ($customer as $c) {
                 try {
                     $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
@@ -454,17 +460,24 @@ class ChatingController extends BaseController
                         $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone, '', $author);
                         $record['text_id'] = $text->id;
                         $record['customer_id'] = $c->id;
+                        $record['status'] = 'Sent';
                         DB::table('text_record')->insert($record);
                         $message = $this->createMessage($conversation->sid, $author, $text->text);
                     }
                 } catch (TwilioException $exception) {
+                    $record['text_id'] = $text->id;
+                    $record['customer_id'] = $c->id;
+                    $record['status'] = $exception->getMessage();
+                    DB::table('text_record')->insert($record);
                     continue;
                 }
             }
             $status['status'] = BaseStatusEnum::PUBLISHED;
-            Textmessages::where('id', $text_id)->update($status);
+            Textmessages::where('id', $row)->update($status);
         }
-
+        if (isset($response)) {
+            return $response->setMessage('successfully send sms.');
+        }
     }
 
     public function listAll()

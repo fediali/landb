@@ -51,7 +51,6 @@ class Customer extends Authenticatable
         'status',
         'login_status',
         'is_private',
-        'salesperson_id',
         'is_text',
         'salesperson_id',
     ];
