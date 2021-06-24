@@ -122,7 +122,7 @@ class ProductsController extends Controller
         }
     }
 
-    public function timeline(Request $request)
+    public function timeline(Request $request, $id = null)
     {
         $tz = Carbon::now('America/Chicago')->toDateString();
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();

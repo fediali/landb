@@ -182,9 +182,9 @@ class ChatingController extends BaseController
         page_title()->setTitle('Chat Room');
         $id = Auth::id();
         $customers = get_customers($id);
-        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+        //$twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
-        $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
+       // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
 //        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
 //
@@ -209,7 +209,7 @@ class ChatingController extends BaseController
 
         $authUser = $request->user();
         $otherUser = Customer::find(explode('-', $ids)[1]);
-        $customers = Customer::where('id', '<>', $authUser->id)->get();
+        $customers = Customer::where('id', '<>', $authUser->id)->where(['is_text' => 1, 'salesperson_id' => $authUser->id])->get();
 
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
 
@@ -275,11 +275,10 @@ class ChatingController extends BaseController
 //        $twilio->chat->v2->services("ISc03e88eff7084c42b74f61b34e750747")
 //            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
-
-//        $twilio->conversations->v1->conversations("CH5cd6cb9ec79f4005b1a060780da974d6")
-//            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
-//            ->delete();
-
+//
+//      $d =   $twilio->chat->v2->services("IS791f2cbcd4484a3cafda2e2c7200f4d0")
+//                    ->delete();
+//dd($d);
         //Text Message
         //$author = '+13345390661';
         //$body = 'Gand Marwao Gathiye Khaoo';
@@ -296,7 +295,7 @@ class ChatingController extends BaseController
         //$messages = $this->listMessages($sid);
 
 
-        $conversation = $this->makeConversation($ids, $otherUser->phone, '', $authUser->twilio_number);
+        $conversation = $this->makeConversation($ids, $otherUser->detail->business_phone, '', $authUser->twilio_number);
         $sid = $conversation->sid;
         $messages = json_encode($this->listMessages($sid));
         $chatting = get_chat($sid, $authUser->twilio_number);
@@ -338,6 +337,7 @@ class ChatingController extends BaseController
 
     public function makeConversation($uniqueName, $number = false, $text = false, $author_number = false)
     {
+
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         try {
             $conversation = $twilio->conversations->v1->conversations($uniqueName)->fetch();
@@ -353,14 +353,16 @@ class ChatingController extends BaseController
 
     public function createSMSParticipant($sid, $number, $author_number = false)
     {
+
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
         $participant = $twilio->conversations->v1
             ->conversations($sid)
             ->participants
             ->create([
                 'messagingBindingAddress'      => $number,
-                'messagingBindingProxyAddress' => $author_number ? $author_number : '+13345390661'
+                'messagingBindingProxyAddress' => $author_number
             ]);
+
         return $participant;
     }
 

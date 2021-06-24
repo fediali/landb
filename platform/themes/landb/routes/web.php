@@ -5,8 +5,10 @@
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
     Route::get('/orderr', 'LandbController@orderSuccess');
 
-    Route::get('/product-timeline', 'ProductsController@timeline')
-      ->name('public.cart.timeline');
+    /*Route::get('/product-timeline', 'ProductsController@timeline')
+      ->name('public.cart.timeline');*/
+    Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
+        ->name('public.cart.timeline');
 
     Route::get('/products/{slug?}', 'ProductsController@getDetails')
       ->name('public.singleProduct');

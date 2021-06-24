@@ -39,7 +39,9 @@
                         <div class="previews">
                         @if(count($product->images))
                             @foreach($product->images as $image)
+                                <a href="javascript:void(0)" data-full="{{ asset('storage/'.$image) }}">
                                 {!! image_html_generator($image, $product->name, null, null, true, ' side-img') !!}
+                                </a>
                             @endforeach
                         @else
                         <a href="javascript:void(0)" class="selected" data-full="{{ asset('images/default.jpg') }}"><img src="{{ asset('images/default.jpg') }}" /></a>
@@ -52,10 +54,8 @@
                             <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a> -->
                         </div>
                         <div class="full text-center">
-                        @if(count($product->images))
-                            @foreach($product->images as $image)
-                                {!! image_html_generator($image, $product->name, null, null, true, 'front-img') !!}
-                            @endforeach
+                        @if(count($product->images))                           
+                                {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
                         @else
                             <img src="{{ asset('images/default.jpg') }}">
                         @endif
