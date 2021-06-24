@@ -64,6 +64,39 @@ class TextmessagesTable extends TableAbstract
             })
             ->editColumn('status', function ($item) {
                 return $item->status;
+            })
+            ->addColumn('resend_sms', function ($item) {
+                $html = '-';
+                if ($item->status == BaseStatusEnum::PUBLISHED) {
+                    $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('chating.smsCampaign', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info">Resend SMS</a><script>function confirm_start(url){
+                          swal({
+                              title: \'Are you sure?\',
+                              text: "Do you want to resend this message to Customers!",
+                              icon: \'info\',
+                              buttons:{
+                                  cancel: {
+                                    text: "Cancel",
+                                    value: null,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                  },
+                                  confirm: {
+                                    text: "Push",
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true
+                                  }
+                                }
+                              }).then((result) => {
+                                  if (result) {
+                                      location.replace(url)
+                                  }
+                              });
+                      }</script>';
+                }
+                return $html;
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -118,6 +151,12 @@ class TextmessagesTable extends TableAbstract
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
             ],
+            'resend_sms'    => [
+                'name'    => 'resend_sms',
+                'title'   => 'Resend SMS',
+                'width'   => '100px',
+                'visible' => (Auth::user()->hasPermission('chating.smsCampaign')) ? true : false,
+            ]
         ];
     }
 
