@@ -447,7 +447,7 @@ class ChatingController extends BaseController
             foreach ($customer as $c) {
                 try {
                     $uniqueName = '41-' . $c->id;
-                    $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
+                    $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone, '', $author);
                     $message = $this->createMessage($conversation->sid, $author, $text->text);
                 } catch (TwilioException $exception) {
                     continue;
