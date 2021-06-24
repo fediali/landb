@@ -3,11 +3,19 @@
     //dd($productVariations);
     $default = 0;
     $default_max = 1;
+    $default_price = $product->price;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
             $default = $variation->product_id;
             $default_max = $variation->product->quantity;
+            $default_price = $variation->product->price;
         }
+    }
+    if($default == 0 && count($productVariations)){
+        $variation = $productVariations->first();
+        $default = $variation->product_id;
+        $default_max = $variation->product->quantity;
+        $default_price = $variation->product->price;
     }
     //dd($default);
 //dd($productVariations);
@@ -67,7 +75,7 @@
         </div>
         <div class="col-lg-6">
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
+            <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row">
             <div class="col-md-6">
@@ -75,7 +83,7 @@
                     class="detail-size">Size</span>
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
-                        {{ $item->title }}{{ (!$loop->last) ? ' ,' : '' }}
+                        {{  @explode('-', $item->title)[0] }} ,
                     @endforeach
                 @endforeach
             </p>
@@ -84,7 +92,7 @@
             <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
             </div>
             </div>
-            
+
             
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))
@@ -94,7 +102,7 @@
                 @endif--}}
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
-                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
+                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{  @explode('-', $item->title)[0] }}</option>
                     @endforeach
                 @endforeach
             </select>
@@ -130,6 +138,7 @@
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
                         <input id="variation-quantity" type='text' name='quantity' value='1' min="1" max="{{ $default_max }}" class='qty'  readonly/>
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
+
                     </div>
                     <div class="col-lg-4">
                         <button class="cart-btn w-100 add-to-cart-button cart-submit" id="variation-submit" data-id="{{ $default }}">Add
@@ -138,6 +147,7 @@
                     </div>
                 </div>
             </form>
+            <p class=""><small><strong class="text-danger"><span id="varition_notice">{{ $default_max }}</span> product(s) in stock!</strong></small></p>
             <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
