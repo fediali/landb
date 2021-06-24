@@ -183,8 +183,10 @@ class ChatingController extends BaseController
         page_title()->setTitle('Chat Room');
         $id = Auth::id();
         $customers = get_customers($id);
-        //$twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+//        $d =   $twilio->chat->v2->services("IS2cb65a60e5734c4b8f9041ae02d91430")
+//            ->delete();
+//        dd($d);
         // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
 //        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
@@ -277,7 +279,7 @@ class ChatingController extends BaseController
 //            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
 //
-//      $d =   $twilio->chat->v2->services("IS791f2cbcd4484a3cafda2e2c7200f4d0")
+//      $d =   $twilio->chat->v2->services("IS2cb65a60e5734c4b8f9041ae02d91430")
 //                    ->delete();
 //dd($d);
         //Text Message
@@ -446,9 +448,15 @@ class ChatingController extends BaseController
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
                 try {
-                    $uniqueName = '41-' . $c->id;
-                    $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone,'',$author);
-                    $message = $this->createMessage($conversation->sid, $author, $text->text);
+                    $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
+                    if ($message == null) {
+                        $uniqueName = '41-' . $c->id;
+                        $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone, '', $author);
+                        $record['text_id'] = $text->id;
+                        $record['customer_id'] = $c->id;
+                        DB::table('text_record')->insert($record);
+                        $message = $this->createMessage($conversation->sid, $author, $text->text);
+                    }
                 } catch (TwilioException $exception) {
                     continue;
                 }
