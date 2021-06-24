@@ -50,9 +50,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/order/status/{id}', 'OrderController@index')
         ->name('public.order.status');
 
-    Route::get('/product-timeline', 'ProductsController@timeline')
-        ->name('public.cart.timeline');
-
     Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
         Route::get('/edit-account', [
             'as'   => 'edit-account',
@@ -91,6 +88,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
         Route::get('/', 'LandbController@getIndex')
             ->name('public.index');
+
+        Route::get('/product-timeline', 'ProductsController@timeline')
+          ->name('public.cart.timeline');
 
         Route::get('/login', 'AuthController@showLoginForm')
             ->name('customer.login');
