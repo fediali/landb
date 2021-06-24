@@ -26,6 +26,7 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Twilio\Exceptions\RestException;
+use Twilio\Exceptions\TwilioException;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
 use Twilio\Rest\Client;
@@ -444,6 +445,13 @@ class ChatingController extends BaseController
             $author = '+13345390661';
             $customer = Customer::where('is_text', 1)->get();
             foreach ($customer as $c) {
+                try {
+                    $uniqueName = '41-' . $c->id;
+                    $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
+                    $message = $this->createMessage($conversation->sid, $author, $text->text);
+                } catch (TwilioException $exception) {
+                    continue;
+                }
                 $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
                 if ($message == null) {
                     $uniqueName = '41-' . $c->id;
