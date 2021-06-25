@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </form>
-            <p class=""><small><strong class="text-danger"><span id="varition_notice">Last {{ $default_max }} in stock!</span></strong></small></p>
+            <p class=""><small><strong class="text-danger"><span id="varition_notice">{{ $default_max }}</span> product(s) in stock!</strong></small></p>
             <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span

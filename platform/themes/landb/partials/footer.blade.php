@@ -160,7 +160,7 @@
       $('#variation-submit').attr('data-id', data.product_id);
       $('#product_price').html(data.product.price);
       $('#variation-quantity').attr('max', data.product.quantity);
-      $('#varition_notice').html('Last '+ data.product.quantity + ' in stock!');
+      $('#varition_notice').html(data.product.quantity);
       $('#variation-quantity').val(1);
     });
 
