@@ -15,6 +15,10 @@ class TextmessagesForm extends FormAbstract
      */
     public function buildForm()
     {
+        $customers = get_customers_by_sales_rep();
+
+        $selectedCustomers = array_map('intval', explode(',', $this->model->customer_ids));
+
         $this
             ->setupModel(new Textmessages)
             ->setValidatorClass(TextmessagesRequest::class)
@@ -48,6 +52,17 @@ class TextmessagesForm extends FormAbstract
                     'class' => 'form-control select-full',
                 ],
                 'choices'    => BaseStatusEnum::$SCHEDULE,
+            ])
+            ->add('customer_ids', 'customSelect', [
+                'label'      => 'Select Customers',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder' => 'Select Customers',
+                    'class'       => 'select-search-full',
+                    'multiple' => 'multiple'
+                ],
+                'choices' => $customers,
+                'default_value' => old('customer_ids', $selectedCustomers),
             ])
             ->setBreakFieldPoint('status');
     }

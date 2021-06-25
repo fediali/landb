@@ -447,10 +447,11 @@ class ChatingController extends BaseController
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
             $author = '+13345390661';
+            $customerIds = explode(',', $text->customer_ids);
             if (in_array($text->created_by, [28, 29])) {
-                $customer = Customer::where('is_text', 1)->get();
+                $customer = Customer::where('is_text', 1)->whereIn('id', $customerIds)->get();
             } else {
-                $customer = Customer::where('is_text', 1)->where('salesperson_id', $text->created_by)->get();
+                $customer = Customer::where('is_text', 1)->where('salesperson_id', $text->created_by)->whereIn('id', $customerIds)->get();
             }
             foreach ($customer as $c) {
                 try {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\InventoryHistory;
+use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Supports\SortItemsWithChildrenHelper;
 use Botble\Blog\Repositories\Interfaces\CategoryInterface;
@@ -268,6 +269,18 @@ if (!function_exists('get_post_formats')) {
 
 
 //Get User By Roles
+if (!function_exists('get_customers_by_sales_rep')) {
+    function get_customers_by_sales_rep()
+    {
+        return \Botble\Ecommerce\Models\Customer::where('salesperson_id', auth()->user()->id)->pluck('name', 'id')->all();
+        /*if (in_array(@auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
+            return \Botble\Ecommerce\Models\Customer::where('salesperson_id', auth()->user()->id)->pluck('name', 'id')->all();
+        } else {
+            return \Botble\Ecommerce\Models\Customer::pluck('name', 'id')->all();
+        }*/
+    }
+}
+
 if (!function_exists('get_designers')) {
     function get_designers()
     {

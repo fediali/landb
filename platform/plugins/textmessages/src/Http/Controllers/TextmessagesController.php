@@ -67,6 +67,12 @@ class TextmessagesController extends BaseController
         $request['created_by'] = auth()->id();
         $request['updated_by'] = auth()->id();
 
+        if (!count($request->customer_ids)) {
+            $request['customer_ids'] = get_customers_by_sales_rep();
+        }
+
+        $request['customer_ids'] = implode(',', $request['customer_ids']);
+
         $textmessages = $this->textmessagesRepository->createOrUpdate($request->input());
 
         event(new CreatedContentEvent(TEXTMESSAGES_MODULE_SCREEN_NAME, $request, $textmessages));
@@ -105,6 +111,13 @@ class TextmessagesController extends BaseController
         $textmessages = $this->textmessagesRepository->findOrFail($id);
 
         $request['updated_by'] = auth()->id();
+
+        if (!count($request->customer_ids)) {
+            $request['customer_ids'] = get_customers_by_sales_rep();
+        }
+
+        $request['customer_ids'] = implode(',', $request['customer_ids']);
+
 
         $textmessages->fill($request->input());
 
