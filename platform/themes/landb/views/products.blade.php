@@ -191,7 +191,12 @@
                 ?>
             @foreach($products as $key => $product)
                 @php
-                    $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')->where('ep.quantity', '>', 0)->where('ec_product_variations.configurable_product_id', $product->id)->orderBy('ec_product_variations.is_default', 'desc')->select('ec_product_variations.product_id', 'ep.price' )->first();
+                    $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')
+                                        ->where('ep.quantity', '>', 0)
+                                        ->where('ec_product_variations.configurable_product_id', $product->id)
+                                        ->orderBy('ec_product_variations.is_default', 'desc')
+                                        ->select('ec_product_variations.product_id', 'ep.price' )
+                                        ->first();
                 @endphp
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
