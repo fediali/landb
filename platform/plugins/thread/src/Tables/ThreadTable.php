@@ -241,7 +241,8 @@ class ThreadTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return parent::bulkActions(); //$this->addDeleteAction(route('thread.deletes'), 'thread.destroy', parent::bulkActions());
+        return $this->addDeleteAction(route('thread.deletes'), 'thread.destroy', parent::bulkActions());
+        //parent::bulkActions();
     }
 
     /**
