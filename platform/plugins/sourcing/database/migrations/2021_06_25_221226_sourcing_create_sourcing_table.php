@@ -12,7 +12,7 @@ class SourcingCreateSourcingTable extends Migration
      */
     public function up()
     {
-        Schema::create('sourcing', function (Blueprint $table) {
+        Schema::create('sourcings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->nullable();
             $table->text('image')->nullable();
@@ -33,6 +33,6 @@ class SourcingCreateSourcingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sourcing');
+        Schema::dropIfExists('sourcings');
     }
 }
