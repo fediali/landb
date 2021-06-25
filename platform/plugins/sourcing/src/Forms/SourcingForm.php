@@ -26,6 +26,16 @@ class SourcingForm extends FormAbstract
                     'placeholder'  => trans('core/base::forms.name_placeholder'),
                     'data-counter' => 120,
                 ],
+            ])->add('notes', 'text', [
+                'label'      => trans('core/base::forms.name'),
+                'label_attr' => ['class' => 'control-label required'],
+                'attr'       => [
+                    'placeholder'  => trans('core/base::forms.name_placeholder'),
+                    'data-counter' => 120,
+                ],
+            ])->add('file', 'mediaImage', [
+                'label'      => 'Select File',
+                'label_attr' => ['class' => 'control-label'],
             ])
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
