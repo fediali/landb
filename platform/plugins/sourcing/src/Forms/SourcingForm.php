@@ -26,7 +26,7 @@ class SourcingForm extends FormAbstract
                     'placeholder'  => trans('core/base::forms.name_placeholder'),
                     'data-counter' => 120,
                 ],
-            ])->add('notes', 'text', [
+            ])->add('notes', 'textarea', [
                 'label'      => 'notes',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
