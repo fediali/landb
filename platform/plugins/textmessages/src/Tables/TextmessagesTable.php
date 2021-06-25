@@ -155,7 +155,7 @@ class TextmessagesTable extends TableAbstract
                 'name'    => 'resend_sms',
                 'title'   => 'Resend SMS',
                 'width'   => '100px',
-                'visible' => (Auth::user()->hasPermission('chating.smsCampaign')) ? true : false,
+                //'visible' => (Auth::user()->hasPermission('chating.smsCampaign')) ? true : false,
             ]
         ];
     }
