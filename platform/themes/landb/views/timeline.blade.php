@@ -21,8 +21,10 @@
                 <div class="container-timeline left {{($loop->iteration % 2 == 0) ? 'right': 'left'}}">
                     <div class="date">
                         {{--                        {{$product->date}}--}}
-                        <a href="https://landbapparel.com/deal-of-the-day/" class=" btn cart-btn ml-2 timeline-addbtn">View the style</a>
-                        <a href="tel:972-243-7860" class="timeline-callbtn btn border-btn ml-2">Call Us</a>
+                        <a href="https://landbapparel.com/deal-of-the-day/" class=" btn cart-btn ml-2 timeline-addbtn">View
+                            the style</a>
+                        <a href="tel:{{($user) ? $user->phone_number: '972-243-7860'}}"
+                           class="timeline-callbtn btn border-btn ml-2">Call Us</a>
                     </div>
                     <div class="content">
                         <img class="w-100" src="{{url('storage/'.$row->product_image)}}"/>

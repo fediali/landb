@@ -169,7 +169,7 @@ class CustomerController extends BaseController
         $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
         $data = array_diff_key($data, array_flip($remove));
         $data['customer_type'] = json_encode($data['customer_type']);
-        CustomerDetail::updateOrCreate(['customer_id' => $id],$data);
+        CustomerDetail::updateOrCreate(['customer_id' => $id], $data);
 
         //dd($customer, $request->all());
 
@@ -423,6 +423,9 @@ class CustomerController extends BaseController
         if ($customer->detail->business_phone) {
             $start2 = substr($customer->detail->business_phone, 2);
             if ((int)$start2) {
+                if(strlen($start2) != 10){
+                    return $response->setError()->setMessage('Number Should be atleast 10 digit');
+                }
                 $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
                 if ($phone_number->carrier['type'] == 'mobile') {
                     $is_text['is_text'] = 1;

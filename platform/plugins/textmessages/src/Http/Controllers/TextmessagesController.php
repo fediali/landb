@@ -64,6 +64,7 @@ class TextmessagesController extends BaseController
     {
         $request['status'] = 'schedule';
         $request['schedule'] = $request->schedule;
+        $request['created_by'] = auth()->id();
 
         $textmessages = $this->textmessagesRepository->createOrUpdate($request->input());
 

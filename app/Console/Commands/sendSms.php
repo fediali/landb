@@ -54,6 +54,7 @@ class sendSms extends Command
         $tz = Carbon::now('America/Chicago')->toDateTimeString();
         $time = Carbon::createFromFormat('Y-m-d H:i:s', $tz)->toDateTimeString();
         $text_message = Textmessages::where('schedule_date', '<', $time)->where('status', BaseStatusEnum::SCHEDULE)->pluck('id')->toArray();
+
         $controller = app(ChatingController::class);
         $d = app()->call([$controller, 'smsCampaign'], ['text_id' => $text_message]);
         return 'Success';

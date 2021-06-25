@@ -25,6 +25,7 @@ class Textmessages extends BaseModel
         'status',
         'text',
         'schedule_date',
+        'created_by',
     ];
 
     /**
