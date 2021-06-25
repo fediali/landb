@@ -15,7 +15,7 @@ class SourcingCreateSourcingTable extends Migration
         Schema::create('sourcings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->nullable();
-            $table->text('image')->nullable();
+            $table->text('file')->nullable();
             $table->text('notes')->nullable();
             $table->string('status', 60)->default('pending');
             $table->integer('business_id')->default(1);

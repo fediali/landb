@@ -27,10 +27,10 @@ class SourcingForm extends FormAbstract
                     'data-counter' => 120,
                 ],
             ])->add('notes', 'text', [
-                'label'      => trans('core/base::forms.name'),
+                'label'      => 'notes',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
-                    'placeholder'  => trans('core/base::forms.name_placeholder'),
+                    'placeholder'  => 'notes',
                     'data-counter' => 120,
                 ],
             ])->add('file', 'mediaImage', [
