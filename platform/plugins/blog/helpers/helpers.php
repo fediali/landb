@@ -272,7 +272,7 @@ if (!function_exists('get_post_formats')) {
 if (!function_exists('get_customers_by_sales_rep')) {
     function get_customers_by_sales_rep()
     {
-        return \Botble\Ecommerce\Models\Customer::where('salesperson_id', auth()->user()->id)->pluck('name', 'id')->all();
+        return \Botble\Ecommerce\Models\Customer::where('salesperson_id', auth()->user()->id)->where('is_text', 1)->pluck('name', 'id')->all();
         /*if (in_array(@auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
             return \Botble\Ecommerce\Models\Customer::where('salesperson_id', auth()->user()->id)->pluck('name', 'id')->all();
         } else {
