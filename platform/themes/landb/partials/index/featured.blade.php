@@ -1,7 +1,7 @@
 <section class="luxurious_wrap">
     <div class="luxurious-text">
-        <h1 class="revealUp">LUXURIOUS <small>and</small> <br> CONTEMPORARY APPEAL <br> <span></span>
-            <small>for</small> EVERY WOMAN </h1>
+        <h1 class="revealUp">{!!  setting('theme-landb-home_main_section_heading' , 'LUXURIOUS <small>and</small> <br> CONTEMPORARY APPEAL <br> <span></span>
+            <small>for</small> EVERY WOMAN') !!} </h1>
 
     </div>
     <div class="owl-carousel">
