@@ -22,6 +22,8 @@ class Sourcing extends BaseModel
      */
     protected $fillable = [
         'name',
+        'file',
+        'notes',
         'status',
     ];
 
