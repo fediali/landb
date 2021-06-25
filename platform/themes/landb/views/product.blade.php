@@ -92,7 +92,7 @@
             <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
             </div>
             </div>
-            
+
             
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))
@@ -138,6 +138,7 @@
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
                         <input id="variation-quantity" type='text' name='quantity' value='1' min="1" max="{{ $default_max }}" class='qty'  readonly/>
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
+
                     </div>
                     <div class="col-lg-4">
                         <button class="cart-btn w-100 add-to-cart-button cart-submit" id="variation-submit" data-id="{{ $default }}">Add
@@ -146,6 +147,7 @@
                     </div>
                 </div>
             </form>
+            <p class=""><small><strong class="text-danger"><span id="varition_notice">Last {{ $default_max }} in stock!</span></strong></small></p>
             <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
