@@ -17,7 +17,7 @@ class TextmessagesForm extends FormAbstract
     {
         $customers = get_customers_by_sales_rep();
 
-        $selectedCustomers = array_map('intval', explode(',', $this->model->customer_ids));
+        $selectedCustomers = array_map('intval', explode(',', @$this->model->customer_ids));
 
         $this
             ->setupModel(new Textmessages)
