@@ -195,8 +195,13 @@
                                         ->where('ep.quantity', '>', 0)
                                         ->where('ec_product_variations.configurable_product_id', $product->id)
                                         ->orderBy('ec_product_variations.is_default', 'desc')
-                                        ->select('ec_product_variations.product_id', 'ep.price' )
-                                        ->first();
+                                        ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
+                                        ->get();
+                    $default = $variationData->first();
+
+                 $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
+                                             ->getVariationsInfo($variationData->pluck('id')->toArray());
+
                 @endphp
                 <div class="listbox mb-3 col-lg-{{$col}}">
                 <div class="img">
@@ -211,7 +216,7 @@
                         <a href="javascript:void(0);" onclick="toggle_product_detail('{{ $product->product_slug }}')"><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
-                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $variationData->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
                                 <div class="col-lg-4">
                                     <input type='hidden' name='quantity' value='1' class='qty' />
                                 </div>
@@ -228,39 +233,40 @@
                    <div class="caption">
                        <h4>{{ $product->name }}</h4>
                        <div class="price">
-                           ${{ $variationData->price }}
+                           $<span id="price-of-{{$product->id}}">{{ $default->price }}</span>
                        </div>
                       
                    </div>
                </a>
                 <div class="text-center">
-                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" >ADD TO BAG
+                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" data-id="{{ $product->id }}">ADD TO BAG
                         </button>
                 </div>
                
-                        <div class="product-tile__variants-area welcomeDiv">
-                            <div class="product-tile__variants-heading">
-                            Select a Size
-                            </div>
-                            <button type="button" class="product-tile__hide-variants">
-                            <span>X</span>
-                            </button>
-                            <div class="product-tile__variants"><label>
-                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738638460" data-title="S" required="">
-                                <span class="product-tile__variant">S
-                    </span>
-                                </label><label>
-                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738572924" data-title="M" required="">
-                                <span class="product-tile__variant">M
-                    </span>
-                                </label><label>
-                                <input class="product-tile__variant-input" type="radio" name="id" value="12199738605692" data-title="L" required="">
-                                <span class="product-tile__variant">L
-                    </span>
-                                </label></div>
-                            <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span></button>
-                           
-                        </div>  
+                <div class="product-tile__variants-area welcomeDiv{{ $product->id }}">
+                    <div class="product-tile__variants-heading">
+                        Select a Size
+                    </div>
+                    <button type="button" class="product-tile__hide-variants" data-id="{{ $product->id }}">
+                        <span>X</span>
+                    </button>
+                    <div class="product-tile__variants"><label>
+                            @foreach($variationData as $variation)
+                                @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
+                                    <input class="product-tile__variant-input" type="radio" name="variation_idd" value="{{ $variation->product_id }}" data-title="{{ $item->title }}" data-parent="{{ $product->id }}" data-price="{{ $variation->price }}" required="">
+                                    <span class="product-tile__variant">{{ @explode('-', $item->title)[0] }}</span>
+                                    </label><label>
+                                @endforeach
+                            @endforeach
+                    </div>
+                    <form id='myform2-{{$product->id}}' class="add_to_cart_form" data-id="{{ $default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                        <div class="col-lg-4">
+                            <input type='hidden' name='quantity' value='1' class='qty' />
+                        </div>
+                        <button type="submit" class="product-tile__add-to-cart" ><span>Add to Bag</span></button>
+                    </form>
+
+                </div>
             </div>
             @endforeach
             @else

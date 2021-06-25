@@ -83,7 +83,7 @@
                     class="detail-size">Size</span>
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
-                        {{ $item->title }}{{ (!$loop->last) ? ' ,' : '' }}
+                        {{  @explode('-', $item->title)[0] }} ,
                     @endforeach
                 @endforeach
             </p>
@@ -102,7 +102,7 @@
                 @endif--}}
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
-                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{ $item->title }}</option>
+                        <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{  @explode('-', $item->title)[0] }}</option>
                     @endforeach
                 @endforeach
             </select>

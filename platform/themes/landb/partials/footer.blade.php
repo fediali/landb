@@ -164,6 +164,11 @@
       $('#variation-quantity').val(1);
     });
 
+    $('.product-tile__variant-input').on('click', function () {
+      $('#myform2-'+$(this).data('parent')).attr('data-id', $(this).val());
+      $('#price-of-'+$(this).data('parent')).html($(this).data('price'));
+    });
+
     $('.set-default').on('change', function () {
       toggle_loader(true);
       var status = 1;
@@ -378,12 +383,13 @@
 
   $(document).ready(function(){ 
  $('.welcomeDiv').hide();
- $('.addTobag').on('click',function(){ 
-     $('.welcomeDiv').toggle();
+ $('.addTobag').on('click',function(){
+   var id = $(this).data('id');
+     $('.welcomeDiv'+id).toggle();
  })  
  $('.product-tile__hide-variants').on('click',function(){
-     
-     $('.welcomeDiv').hide();
+    var id = $(this).data('id');
+     $('.welcomeDiv'+id).hide();
  })  
 })
 
