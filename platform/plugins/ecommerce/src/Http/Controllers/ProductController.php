@@ -122,7 +122,6 @@ class ProductController extends BaseController
      */
     public function create(FormBuilder $formBuilder)
     {
-
         page_title()->setTitle(trans('plugins/ecommerce::products.create'));
 
         Assets::addStyles(['datetimepicker'])
@@ -138,7 +137,6 @@ class ProductController extends BaseController
                 'vendor/core/plugins/ecommerce/libraries/bootstrap-confirmation/bootstrap-confirmation.min.js',
                 'vendor/core/plugins/ecommerce/js/edit-product.js',
             ]);
-
         return $formBuilder->create(ProductForm::class)->renderForm();
     }
 
