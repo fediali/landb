@@ -3,11 +3,19 @@
     //dd($productVariations);
     $default = 0;
     $default_max = 1;
+    $default_price = $product->price;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
             $default = $variation->product_id;
             $default_max = $variation->product->quantity;
+            $default_price = $variation->product->price;
         }
+    }
+    if($default == 0 && count($productVariations)){
+        $variation = $productVariations->first();
+        $default = $variation->product_id;
+        $default_max = $variation->product->quantity;
+        $default_price = $variation->product->price;
     }
     //dd($default);
 //dd($productVariations);
@@ -67,7 +75,7 @@
         </div>
         <div class="col-lg-6">
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$ <span id="product_price">{{ $product->price }}</span></p>
+            <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row">
             <div class="col-md-6">
