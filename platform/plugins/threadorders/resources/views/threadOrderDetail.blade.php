@@ -138,11 +138,19 @@
                     <div class="row">
                         @if($product)
                             @foreach($product->variations as $prod_variation)
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
+                                    <p class="m-0 heading">Product Variations</p>
+                                    <p>
+                                        @foreach($prod_variation->productAttributes as $prod_attr)
+                                            {{$prod_attr->title}}
+                                        @endforeach
+                                    </p>
+                                </div>
+                                <div class="col-lg-2">
                                     <p class="m-0 heading">SKU</p>
                                     <p>{{$prod_variation->product->sku}}</p>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <p class="m-0 heading">UPC</p>
                                     <p>{{$prod_variation->product->upc}}</p>
                                 </div>

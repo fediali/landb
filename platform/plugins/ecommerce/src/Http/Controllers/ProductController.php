@@ -343,8 +343,8 @@ class ProductController extends BaseController
                     if (isset($version['attribute_sets']) && is_array($version['attribute_sets'])) {
                         foreach ($version['attribute_sets'] as $attributeId) {
                             $attribute = $this->productAttributeRepository->findById($attributeId);
-                            if ($attribute) {
-                                // $productRelatedToVariation->sku .= '-' . $attribute->slug;
+                            if ($attribute && !str_contains($productRelatedToVariation->sku, $attribute->slug)) {
+                                $productRelatedToVariation->sku .= '-' . $attribute->slug;
                             }
                         }
                     }
