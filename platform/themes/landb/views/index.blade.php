@@ -35,9 +35,7 @@
     {!! Theme::partial('index/featured', compact('home_featured')) !!}
 @endif
 
-@if(count($latest_collection))
     {!! Theme::partial('index/latest_collection_1', compact('latest_collection')) !!}
-@endif
 
 
 <section class="browse_collection py-4">
@@ -104,10 +102,9 @@
     <video src="{{ (strpos($video_url, 'http') !== false) ? $video_url : 'storage/'.$video_url }}" autoplay loop playsinline muted></video>
     <!-- <img src="landb/img/Video.png" alt=""> -->
 </section>
-@if(count($latest_collection) > 2)
     {!! Theme::partial('index/latest_collection_2', compact('latest_collection')) !!}
-@endif
-@if(count($latest_collection) > 4)
+
+@if(count($latest_collection))
     {!! Theme::partial('index/latest_collection_carousel', compact('latest_collection')) !!}
 @endif
 
