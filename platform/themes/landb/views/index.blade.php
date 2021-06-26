@@ -145,7 +145,7 @@
       <div class="grid">
       @foreach($products5 as $product)
         <div class="gridLayer @if($loop->iteration == 4) centerPiece @endif">
-          <div class="gridBlock" style="background-image: url('{{ asset('storage/'.@$product->images[0]) }}');">
+          <div class="gridBlock" style="background-image: url('{{ !empty(@$product->images[0]) ? asset('storage/'.@$product->images[0]):asset('images/default.jpg') }}');">
               <a href="{!!  generate_product_url('detail', $product->id, $product->product_slug)  !!}"></a>
           </div>
         </div>
