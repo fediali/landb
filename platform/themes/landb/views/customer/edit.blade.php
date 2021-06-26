@@ -727,6 +727,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                                                 <span id="undo-sign" class="fa fa-undo"></span>
                                                 <div id="signature"></div>
                                             @endif
+                                            <input type="hidden" value="" name="purchaser_sign">
                                             @error('purchaser_sign')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
