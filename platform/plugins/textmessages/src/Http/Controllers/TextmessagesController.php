@@ -65,6 +65,7 @@ class TextmessagesController extends BaseController
         $request['status'] = 'schedule';
         $request['schedule'] = $request->schedule;
         $request['created_by'] = auth()->id();
+        $request['updated_by'] = auth()->id();
 
         $textmessages = $this->textmessagesRepository->createOrUpdate($request->input());
 
@@ -102,6 +103,8 @@ class TextmessagesController extends BaseController
     public function update($id, TextmessagesRequest $request, BaseHttpResponse $response)
     {
         $textmessages = $this->textmessagesRepository->findOrFail($id);
+
+        $request['updated_by'] = auth()->id();
 
         $textmessages->fill($request->input());
 

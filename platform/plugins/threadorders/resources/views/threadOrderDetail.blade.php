@@ -96,7 +96,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                     <ul class="accordion-list-c">
-                    @foreach($orderDetail->threadOrderVariations() as $variation)    
+                    @foreach($orderDetail->threadOrderVariations() as $variation)
                     <li>
                         <h3 class="h-a">{{$loop->iteration}}. {{$variation->name}}</h3>
                         <div class="answer">
@@ -124,14 +124,14 @@
                             <p class="m-0 heading">Per Piece Qty</p>
                             <p>{{$variation->per_piece_qty}} {{$variation->unit_name}}</p>
                         </div>
-                        {{--<div class="col-lg-2">
+                        <div class="col-lg-2">
                             <p class="m-0 heading">UPC</p>
                             <p>{{$variation->upc}}</p>
                         </div>
                         <div class="col-lg-12">
                             <p class="m-0 heading">Barcode</p>
                             <p><img src="{{asset('storage/'.$variation->barcode)}}" height="30px"></p>
-                        </div>--}}
+                        </div>
                     </div>
 
                     @php $product = Botble\Ecommerce\Models\Product::where('sku', $variation->sku)->first(); @endphp
@@ -155,7 +155,7 @@
                     </div>
                     </div>
                     </li>
-                    @endforeach 
+                    @endforeach
                     </ul>
                     </div>
                 </div>

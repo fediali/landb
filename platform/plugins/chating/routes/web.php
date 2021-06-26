@@ -19,7 +19,7 @@ Route::group(['namespace' => 'Botble\Chating\Http\Controllers', 'middleware' => 
                 'uses'       => 'ChatingController@chatRoom',
                 'permission' => 'chating.create',
             ]);
-            Route::get('sms-campaign', [
+            Route::get('sms-campaign/{id}', [
                 'as'         => 'smsCampaign',
                 'uses'       => 'ChatingController@smsCampaign',
                 'permission' => 'chating.create',

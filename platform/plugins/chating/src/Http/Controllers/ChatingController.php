@@ -26,6 +26,7 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Twilio\Exceptions\RestException;
+use Twilio\Exceptions\TwilioException;
 use Twilio\Jwt\AccessToken;
 use Twilio\Jwt\Grants\ChatGrant;
 use Twilio\Rest\Client;
@@ -182,8 +183,10 @@ class ChatingController extends BaseController
         page_title()->setTitle('Chat Room');
         $id = Auth::id();
         $customers = get_customers($id);
-        //$twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+//        $d =   $twilio->chat->v2->services("IS2cb65a60e5734c4b8f9041ae02d91430")
+//            ->delete();
+//        dd($d);
         // $conversation = $twilio->conversations->v1->conversations('CH9b2aae73a6724dfc90e66a3eab72efad')->messages->read();
 //        dd($conversation[0]->author);
 //        foreach ($conversation as $record) {
@@ -276,7 +279,7 @@ class ChatingController extends BaseController
 //            ->channels("CH5cd6cb9ec79f4005b1a060780da974d6")
 //            ->delete();
 //
-//      $d =   $twilio->chat->v2->services("IS791f2cbcd4484a3cafda2e2c7200f4d0")
+//      $d =   $twilio->chat->v2->services("IS2cb65a60e5734c4b8f9041ae02d91430")
 //                    ->delete();
 //dd($d);
         //Text Message
@@ -437,21 +440,44 @@ class ChatingController extends BaseController
 
     public function smsCampaign($text_id)
     {
-        //28, 29
-
+        if (!is_array($text_id)) {
+            $text_id = [$text_id];
+            $response = new BaseHttpResponse();
+        }
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
             $author = '+13345390661';
-            $customer = Customer::where('is_text', 1)->get();
+            if (in_array($text->created_by, [28, 29])) {
+                $customer = Customer::where('is_text', 1)->get();
+            } else {
+                $customer = Customer::where('is_text', 1)->where('salesperson_id', $text->created_by)->get();
+            }
             foreach ($customer as $c) {
-                $uniqueName = '41-' . $c->id;
-                $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone);
-                $message = $this->createMessage($conversation->sid, $author, $text->text);
+                try {
+                    $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
+                    if ($message == null) {
+                        $uniqueName = '41-' . $c->id;
+                        $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone, '', $author);
+                        $record['text_id'] = $text->id;
+                        $record['customer_id'] = $c->id;
+                        $record['status'] = 'Sent';
+                        DB::table('text_record')->insert($record);
+                        $message = $this->createMessage($conversation->sid, $author, $text->text);
+                    }
+                } catch (TwilioException $exception) {
+                    $record['text_id'] = $text->id;
+                    $record['customer_id'] = $c->id;
+                    $record['status'] = $exception->getMessage();
+                    DB::table('text_record')->insert($record);
+                    continue;
+                }
             }
             $status['status'] = BaseStatusEnum::PUBLISHED;
-            Textmessages::where('id', $text_id)->update($status);
+            Textmessages::where('id', $row)->update($status);
         }
-
+        if (isset($response)) {
+            return $response->setMessage('successfully send sms.');
+        }
     }
 
     public function listAll()
