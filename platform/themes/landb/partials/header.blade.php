@@ -23,6 +23,7 @@
     <script src="{{ asset('js/barcodeScanner.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">
     <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
+    <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
     <title>LandBAppreal</title>
     <style>
         .loading-overlay {

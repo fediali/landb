@@ -72,7 +72,7 @@ class ProductsRepository{
                 }]);
             })
             ->when($is_featured , function ($query){
-                $query->where($this->model->getTable().'.is_featured', 1);
+                $query->orderBy($this->model->getTable().'.is_featured', 'desc');
             })
             ->when(!is_null($slug) , function ($query) use ($slug){
                 $query->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.key', $slug)->where('slugs.prefix', '=' ,'products');

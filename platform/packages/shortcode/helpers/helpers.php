@@ -51,16 +51,17 @@ if (!function_exists('image_html_generator')) {
      * @param array $attributes
      * @return string
      */
-  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = null)
+  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '')
   {
 
         $html = '<img
             ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
             ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
-            ' . (!is_null($class) ? 'class="' . $class . '"' : '') . '
-            src="' . asset('storage/'.$img). '"
+            src="' . asset('landb/defaultLogo.png'). '"
             alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
+            class="lazyload '.$class.'"
+            data-src="'.(!empty($img) ? $img : asset('images/default.jpg')).'"
             onerror = "this.src=\''. asset('images/default.jpg') .'\'">'
             ;
 

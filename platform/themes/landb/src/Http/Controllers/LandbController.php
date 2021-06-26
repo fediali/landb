@@ -33,7 +33,7 @@ class LandbController extends Controller
   public function getIndex(){
 
     $data = [
-        'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 20, 'array' => true]),
+        'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 15, 'array' => true]),
         'latest_collection'=> $this->productRepo->getProductsByParams(['latest' => true, 'limit' => 20, 'array' => true]),
         'slider' => $this->getHomeSlideshow()
     ];

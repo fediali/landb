@@ -6,7 +6,7 @@
     </div>
     <div class="owl-carousel">
         @foreach($home_featured as $featured)
-            <div>{!! image_html_generator(@$featured->images[0]) !!}</div>
+            <div><a href="{!! generate_product_url('detail', $featured->id, $featured->product_slug)  !!}">{!! image_html_generator(@$featured->images[0]) !!}</a></div>
         @endforeach
 
 
