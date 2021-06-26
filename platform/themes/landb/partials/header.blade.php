@@ -94,7 +94,7 @@
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a href="{{ route('customer.overview') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                        <a href="{{ route('customer.edit-account') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
