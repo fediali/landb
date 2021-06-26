@@ -104,7 +104,7 @@ class CustomerController extends BaseController
     {
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator'])->findOrFail($id);
+        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate'])->findOrFail($id);
         //dd($customer);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
         $card = [];

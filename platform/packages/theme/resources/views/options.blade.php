@@ -56,6 +56,25 @@
                             <div class="flexbox-annotated-section">
                                 <div class="flexbox-annotated-section-annotation">
                                     <div class="annotated-section-title pd-all-20">
+                                        <h2>Home Main Section</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Featured Slider</p>
+                                    </div>
+                                </div>
+
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                        <div class="form-group">
+                                            <label for="home_main_section_heading" class="control-label">Heading</label>
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_main_section_heading" type="text" value="{{ setting('theme-landb-home_main_section_heading') }}" id="home_main_section_heading">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
                                         <h2>Home Section 1</h2>
                                     </div>
                                     <div class="annotated-section-description pd-all-20 p-none-t">
