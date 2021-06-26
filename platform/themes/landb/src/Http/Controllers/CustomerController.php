@@ -160,6 +160,14 @@ class CustomerController extends Controller
 
     $user = auth('customer')->user();
 
+    $cert = $user->taxCertificate()->first();
+
+    if(!$cert){
+      $sign = 'required';
+    }else{
+      $sign = '';
+    }
+
     $validate = $request->validate([
         'purchaser_name' => 'required|max:255',
         'purchaser_phone' => 'required|max:12',
@@ -171,23 +179,27 @@ class CustomerController extends Controller
         'business_description' => 'required',
         'title' => 'required|max:255',
         'date' => 'required',
-        'purchaser_sign' => 'required',
+        'purchaser_sign' => $sign,
     ]);
-
-    $image = $request->purchaser_sign;  // your base64 encoded
-    $image = str_replace('data:image/png;base64,', '', $image);
-    $image = str_replace(' ', '+', $image);
-    $imageName = 'signatures/'.substr(microtime(), 2,7).'.'.'png';
-    /*\File::put(storage_path(). '/' . $imageName, base64_decode($image));*/
-    Storage::disk('public')->put($imageName, base64_decode($image));
-
     $data = $request->all();
+    if(!$cert){
+      $image = $request->purchaser_sign;  // your base64 encoded
+      $image = str_replace('data:image/png;base64,', '', $image);
+      $image = str_replace(' ', '+', $image);
+      $imageName = 'signatures/'.substr(microtime(), 2,7).'.'.'png';
+      /*\File::put(storage_path(). '/' . $imageName, base64_decode($image));*/
+      Storage::disk('public')->put($imageName, base64_decode($image));
+      $data['purchaser_sign'] = 'storage/' . $imageName;
+    }else{
+      unset($data['purchaser_sign']);
+    }
       unset($data['_token']);
 
-      $data['purchaser_sign'] = 'storage/' . $imageName;
+
+     //dd($data);
 
     $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
-
+return $submit;
   }
 
   public function updateStoreLocator($request) {
