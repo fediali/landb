@@ -23,7 +23,6 @@ class UpdatePasswordRequest extends Request
         if (Auth::user()->isSuperUser()) {
             return $rules;
         }
-
         return ['old_password' => 'required|min:6|max:60'] + $rules;
     }
 }

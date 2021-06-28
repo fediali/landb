@@ -63,7 +63,8 @@ class UserController extends BaseController
         UserInterface $userRepository,
         RoleInterface $roleRepository,
         MediaFileInterface $fileRepository
-    ) {
+    )
+    {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
         $this->fileRepository = $fileRepository;
@@ -293,12 +294,8 @@ class UserController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse
      */
-    public function postChangePassword(
-        $id,
-        UpdatePasswordRequest $request,
-        ChangePasswordService $service,
-        BaseHttpResponse $response
-    ) {
+    public function postChangePassword($id, UpdatePasswordRequest $request, ChangePasswordService $service, BaseHttpResponse $response)
+    {
         $request->merge(['id' => $id]);
         $result = $service->execute($request);
 
