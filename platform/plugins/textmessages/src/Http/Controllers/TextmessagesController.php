@@ -108,12 +108,13 @@ class TextmessagesController extends BaseController
      */
     public function update($id, TextmessagesRequest $request, BaseHttpResponse $response)
     {
+
         $textmessages = $this->textmessagesRepository->findOrFail($id);
 
         $request['updated_by'] = auth()->id();
 
         if ($request->customer_ids == null) {
-            $request['customer_ids'] = get_customers_by_sales_rep();
+            $request['customer_ids'] = array_keys(get_customers_by_sales_rep());
         }
 
         $request['customer_ids'] = implode(',', $request['customer_ids']);
