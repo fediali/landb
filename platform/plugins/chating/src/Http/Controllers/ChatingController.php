@@ -2,6 +2,7 @@
 
 namespace Botble\Chating\Http\Controllers;
 
+use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Chating\Http\Requests\ChatingRequest;
@@ -446,7 +447,9 @@ class ChatingController extends BaseController
         }
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
-            $author = '+13345390661';
+            $sales_rep_user = User::where('id', $text->created_by)->first();
+            // $author = '+13345390661';
+            $author = $sales_rep_user->twilio_number ? $sales_rep_user->twilio_number : '+13345390661';
             $customerIds = explode(',', $text->customer_ids);
             if (in_array($text->created_by, [28, 29])) {
                 $customer = Customer::where('is_text', 1)->whereIn('id', $customerIds)->get();
@@ -457,7 +460,7 @@ class ChatingController extends BaseController
                 try {
                     $message = DB::table('text_record')->where(['text_id' => $text->id, 'customer_id' => $c->id])->first();
                     if ($message == null) {
-                        $uniqueName = '41-' . $c->id;
+                        $uniqueName = $sales_rep_user->id . '-' . $c->id;
                         $conversation = $this->makeConversation($uniqueName, $c->detail->business_phone, '', $author);
                         $record['text_id'] = $text->id;
                         $record['customer_id'] = $c->id;
