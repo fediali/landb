@@ -448,6 +448,7 @@ class ChatingController extends BaseController
         foreach ($text_id as $row) {
             $text = $this->textmessageRepository->findOrFail($row);
             $sales_rep_user = User::where('id', $text->created_by)->first();
+            dd($sales_rep_user->twilio_number);
             // $author = '+13345390661';
             $author = ($sales_rep_user->twilio_number) ? $sales_rep_user->twilio_number : '+13345390661';
             $customerIds = explode(',', $text->customer_ids);
