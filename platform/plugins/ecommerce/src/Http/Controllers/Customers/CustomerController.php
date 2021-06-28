@@ -432,6 +432,8 @@ class CustomerController extends BaseController
                     Customer::where('id', $customer->id)->update($is_text);
                     return $response->setMessage('Number is valid');
                 } else {
+                    $is_text['is_text'] = 2;
+                    Customer::where('id', $customer->id)->update($is_text);
                     return $response->setError()->setMessage('Number is not valid');
                 }
             } else {

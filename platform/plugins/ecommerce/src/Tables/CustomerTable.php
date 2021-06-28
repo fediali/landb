@@ -81,7 +81,35 @@ class CustomerTable extends TableAbstract
             })->editColumn('is_text', function ($item) {
                 if ($item->is_text == 1) {
                     return $html = '<a href="javascript:void(0)" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Order">Verified</a>';
-                } else {
+                } else if($item->is_text == 2){
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-danger" data-toggle="tooltip" data-original-title="Order">Un Verified</a><script>function confirm_start(url){
+                          swal({
+                              title: \'Verify Customer Number?\',
+                              text: "Do you want to verify customer phone number!",
+                              icon: \'info\',
+                              buttons:{
+                                  cancel: {
+                                    text: "Cancel",
+                                    value: null,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                  },
+                                  confirm: {
+                                    text: "Push",
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true
+                                  }
+                                }
+                              }).then((result) => {
+                                  if (result) {
+                                      location.replace(url)
+                                  }
+                              });
+                      }</script>';
+                }else {
                     return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Order">Verify</a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
