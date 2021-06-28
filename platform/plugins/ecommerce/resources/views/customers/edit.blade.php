@@ -310,6 +310,11 @@
                         <select name="state" class="form-control select-state" data-live-search="true"
                                 id="state">
                             <option selected hidden disabled>Select a State</option>
+                            @if(!empty(old('country')))
+                                @foreach(get_states(old('country')) as $key => $state)
+                                    <option @if(old('state') == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     {!! Form::error('state', $errors) !!}
