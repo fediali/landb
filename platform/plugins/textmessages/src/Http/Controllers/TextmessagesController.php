@@ -112,7 +112,7 @@ class TextmessagesController extends BaseController
 
         $request['updated_by'] = auth()->id();
 
-        if (!count($request->customer_ids)) {
+        if ($request->customer_ids == null) {
             $request['customer_ids'] = get_customers_by_sales_rep();
         }
 
