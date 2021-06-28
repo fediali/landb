@@ -3905,3 +3905,28 @@ header {
     border-radius: 15px;
     color: #000;
 }
+
+.modal-quickview .gallery .previews {
+    width: 15% !important;
+}
+
+.modal-quickview .gallery .previews img {
+    width: 100% !important;
+}
+.modal-quickview .gallery .full {
+    width: 80% !important;
+}
+
+.modal-quickview .quick-full, .quick-full img {
+width: 100% !important;
+}
+
+@media screen and (min-width: 320px) and (max-width: 991px)
+{
+    .modal-quickview .gallery .quick-full, .gallery .quick-full img {
+        width: 100% !important;
+    }
+    .modal-quickview .gallery .full {
+        width: 70% !important;
+    }
+}
