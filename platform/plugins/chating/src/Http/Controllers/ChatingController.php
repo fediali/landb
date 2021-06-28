@@ -449,7 +449,7 @@ class ChatingController extends BaseController
             $text = $this->textmessageRepository->findOrFail($row);
             $sales_rep_user = User::where('id', $text->created_by)->first();
             // $author = '+13345390661';
-            $author = $sales_rep_user->twilio_number ? $sales_rep_user->twilio_number : '+13345390661';
+            $author = ($sales_rep_user->twilio_number) ? $sales_rep_user->twilio_number : '+13345390661';
             $customerIds = explode(',', $text->customer_ids);
             if (in_array($text->created_by, [28, 29])) {
                 $customer = Customer::where('is_text', 1)->whereIn('id', $customerIds)->get();
