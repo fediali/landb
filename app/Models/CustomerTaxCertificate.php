@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerTaxCertificate extends Model
 {
-    use HasFactory;
     use SoftDeletes;
     protected $table = 'ec_customer_tax_certificate';
     protected $fillable = [
