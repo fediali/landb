@@ -343,8 +343,9 @@
                             <p class="detail-price mb-2" >$ <span  id="product-detail-price">0.0</span></p>
                             <p class="short-description mb-2" id="product-detail-desc"></p>
                             <p class="detail-size-p mb-2"><span class="detail-size">Size</span> <span  id="product-detail-sizes"></span> </p>
-                            <div class="row mt-4">
+                          
                                 <form class="add_to_cart_form"  id="product-detail-form" data-id="" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                                <div class="row mt-4">
                                     <div class="col-lg-6" hidden>
                                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity' />
                                         <input id="product-detail-qty" type='text' name='quantity' value='1' class='qty' readonly />
@@ -353,8 +354,8 @@
                                     <div class="col-lg-6">
                                         <button class="cart-btn w-100 add-to-cart-button cart-submit"  id="product-detail-button" data-id="">Add to cart</button>
                                     </div>
+                                </div>
                                 </form>
-                            </div>
                             <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p"  id="product-detail-sku"></span> </p>
                             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span class="detail-category-p mt-2"  id="product-detail-category"></span> </p>
                             {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p" id="product-detail-tags"></span> </p>--}}
@@ -374,3 +375,4 @@
         </div>
     </div>
     <!-- Modal Quick View -->
+ 
