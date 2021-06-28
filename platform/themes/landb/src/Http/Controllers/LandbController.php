@@ -49,4 +49,38 @@ class LandbController extends Controller
     $data = SimpleSlider::where('key' ,  $this->homeSliderKey)->with(['sliderItems'])->first();
     return $data;
   }
+
+  public function getView($key = null)
+  {
+    if (empty($key)) {
+      return $this->getIndex();
+    }
+
+    $slug = SlugHelper::getSlug($key, '');
+
+    if (!$slug) {
+      abort(404);
+    }
+
+    if (defined('PAGE_MODULE_SCREEN_NAME')) {
+      if ($slug->reference_type == Page::class && BaseHelper::isHomepage($slug->reference_id)) {
+        return redirect()->to('/');
+      }
+    }
+
+    $result = apply_filters(BASE_FILTER_PUBLIC_SINGLE_DATA, $slug);
+
+    if (isset($result['slug']) && $result['slug'] !== $key) {
+      return redirect()->route('public.single', $result['slug']);
+    }
+
+    event(new RenderingSingleEvent($slug));
+//dd($result['data']);
+    if (!empty($result) && is_array($result)) {
+      return Theme::scope($result['view'], $result['data'])->render();
+    }
+
+    abort(404);
+  }
+
 }
