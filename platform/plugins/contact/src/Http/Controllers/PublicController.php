@@ -51,12 +51,11 @@ class PublicController extends Controller
                 ])
                 ->sendUsingTemplate('notice');
 
-            return $response->setMessage(__('Send message successfully!'));
+            /*return $response->setMessage(__('Send message successfully!'));*/
+            return redirect()->back()->with('success', 'Message Sent successfulylly!');
         } catch (Exception $exception) {
             info($exception->getMessage());
-            return $response
-                ->setError()
-                ->setMessage(trans('plugins/contact::contact.email.failed'));
+          return redirect()->back()->with('error', 'Message not Sent!');
         }
     }
 }
