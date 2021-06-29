@@ -109,9 +109,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
 
-        Route::get('{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
-            ->name('public.single');
-
         /*POST ROUTES*/
         Route::post('/login', 'AuthController@login')
             ->name('public.login.post');
@@ -132,4 +129,16 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
       });
 
     });
+});
+
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
+  Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
+
+    Route::get('sitemap.xml', 'LandbController@getSiteMap')
+        ->name('public.sitemap');
+
+    Route::get('{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
+        ->name('public.single');
+
+  });
 });
