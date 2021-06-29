@@ -392,7 +392,8 @@
                                                 </svg>
                                             </div>
                                             <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                <span>{{ trans('plugins/ecommerce::order.delivery') }}</span>
+                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                <span>Shipping</span>
                                             </div>
                                         @else
                                             <div class="flexbox-auto-left">
@@ -402,12 +403,16 @@
                                                 </svg>
                                             </div>
                                             <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                <span>{{ trans('plugins/ecommerce::order.delivery') }}</span>
+                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                <span>Shipping</span>
                                             </div>
                                             <div class="flexbox-auto-left">
                                                 <div class="item">
                                                     <button class="btn btn-primary btn-trigger-shipment"
-                                                            data-target="{{ route('orders.get-shipment-form', $order->id) }}">{{ trans('plugins/ecommerce::order.delivery') }}</button>
+                                                            data-target="{{ route('orders.get-shipment-form', $order->id) }}">
+                                                        {{--{{ trans('plugins/ecommerce::order.delivery') }}--}}
+                                                        Shipping
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endif
