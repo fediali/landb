@@ -659,6 +659,18 @@
                         </div>
 
                         <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <form action="{{ route('orders.edit', $order->id) }}">
+                                    <label class="text-title-field">Tracking No.</label>
+                                    <input class="form-control" name="tracking_no" placeholder="Tracking No." value="{{ $order->tracking_no }}"/>
+                                    <div class="mt10">
+                                        <button type="button" class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="wrapper-content bg-gray-white mb20">
 
 <!-- card -->
                             @if($order->preauth == null)
