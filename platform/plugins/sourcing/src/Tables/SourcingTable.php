@@ -68,7 +68,9 @@ class SourcingTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('sourcing.edit', 'sourcing.destroy', $item);
+
+                $html ='<a href="'. route('sourcing.detail', ['id' => $item->id]) .'" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
+                return  $this->getOperations('sourcing.edit', 'sourcing.destroy', $item, $html );
             })
             ->escapeColumns([])
             ->make(true);

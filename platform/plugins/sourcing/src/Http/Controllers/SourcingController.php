@@ -158,4 +158,10 @@ class SourcingController extends BaseController
 
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
+
+
+    public function show($id){
+      $sourcing = $this->sourcingRepository->findOrFail($id);
+      return view('plugins/sourcing::details', compact('sourcing'));
+    }
 }

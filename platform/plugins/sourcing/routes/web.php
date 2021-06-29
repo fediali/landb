@@ -11,6 +11,11 @@ Route::group(['namespace' => 'Botble\Sourcing\Http\Controllers', 'middleware' =>
                 'uses'       => 'SourcingController@deletes',
                 'permission' => 'sourcing.destroy',
             ]);
+            Route::get('detail/{id}', [
+                'as'         => 'detail',
+                'uses'       => 'SourcingController@show',
+                'permission' => 'sourcing.detail',
+            ]);
         });
     });
 
