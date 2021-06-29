@@ -138,11 +138,16 @@
                                 <div class="heading-avatar-icon">
                                 </div>
                             </div>
-                            <div class="col-sm-8 col-xs-7 heading-name">
+                            <div class="col-sm-10 col-xs-7 heading-name">
                                 <a class="heading-name-meta">
                                 </a>
                             </div>
+                            <div class="col-sm-1 col-xs-1 text-right show-detail heading-dot pull-right">
+                            <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+                            </div>
                         </div>
+
+                        
 
                         <div class="row message" id="conversation">
                             <div class="row message-previous">
@@ -155,6 +160,37 @@
                             </div>
 
                         </div>
+
+                        <div class="side-three">
+                                <div class="row newMessage-heading">
+                                <div class="row newMessage-main">
+                                    <div class="col-sm-2 col-xs-2 detail-back newMessage-back">
+                                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="col-sm-10 col-xs-10 newMessage-title">
+                                    Customer Name
+                                    </div>
+                                </div>
+                                </div>
+    
+
+                            <div class="row compose-sideBar">
+                                <div class="row sideBar-body"> 
+                                    <div class="col-sm-12 col-xs-12 sideBar-main">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12 text-center sideBar-name">
+                                        <span class="name-meta"> Phone Number: <b>+123 456789</b>
+                                        </span>
+                                        <span class="name-meta"> Email: <b>demo@gmail.com</b>
+                                        </span>
+                                        </div> 
+                                    </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                       
+                    </div>
                     </div>
                 </div>
 
@@ -166,7 +202,19 @@
 
 
 @section('javascript')
-    <script>
-
-    </script>
+<script type="text/javascript">
+	$(function(){
+    
+	 $(".show-detail").click(function() {
+      $(".side-three").css({
+        "right": "0"
+      });
+    });
+    $(".detail-back").click(function() {
+      $(".side-three").css({
+        "right": "-100%"
+      });
+    });
+})
+</script>
 @endsection

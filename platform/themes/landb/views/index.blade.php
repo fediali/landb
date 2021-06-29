@@ -136,20 +136,20 @@
         </div>
     </div>
 </section> -->
-<div class="grid-container">
-    @php
+<!-- <div class="grid-container"> -->
+    <!-- @php
         $product_ids = setting('theme-landb-home_section_5_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(9)->pluck('id')->all()));
        $product_ids = json_decode($product_ids);
         $products5 = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->get();
-    @endphp
-      <div class="grid">
+    @endphp -->
+      <!-- <div class="grid">
       @foreach($products5 as $product)
         <div class="gridLayer @if($loop->iteration == 4) centerPiece @endif">
           <div class="gridBlock" style="background-image: url('{{ !empty(@$product->images[0]) ? asset('storage/'.@$product->images[0]):asset('images/default.jpg') }}');">
               <a href="{!!  generate_product_url('detail', $product->id, $product->product_slug)  !!}"></a>
           </div>
         </div>
-      @endforeach
+      @endforeach -->
         {{--<div class="gridLayer">
           <div class="gridBlock"></div>
         </div>
@@ -176,8 +176,8 @@
         <div class="gridLayer">
           <div class="gridBlock"></div>
         </div>--}}
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
 <div id="night"></div>
 <section class="newsletter">
     <div class="container">
