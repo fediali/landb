@@ -396,7 +396,7 @@
 </script>
 <script>
         $(document).ready(function() {
-            $('.fancy-container a').click(function() {
+            $('.fancy-container').on('click', 'a', function() {
                 var largeImage = $(this).attr('data-full');
                 $('.selected').removeClass();
                 $(this).addClass('selected');
