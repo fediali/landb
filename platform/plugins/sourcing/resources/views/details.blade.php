@@ -62,4 +62,93 @@
         </div>
     </div>
 
+    <div class="p-3 bg-white" >
+        <div class="clearfix"></div>
+        <div id="main">
+            <hr><div class="row justify-content-center h-100">
+
+                <div class="col-md-11 col-xl-11 messageboard">
+                    <div class="card">
+                        <div class="card-header msg_head">
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    <img height="70" width="70" src="{{ asset('images/chat-bubble.png') }}" class="user_img">
+                                </div>
+                                <div class="user_info">
+                                    <span>Add Discussion</span>
+                                    <p>{{ count($sourcing->childs) }} Comment(s)</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="card-body msg_card_body">
+
+                            @foreach($sourcing->childs as $comment)
+                                <div class="d-flex justify-content-start mb-4">
+                                    <div class="img_cont_msg">
+                                        <img src="{{ asset('images/chat-bubble.png') }}" class=" user_img_msg">
+                                    </div>
+                                    <div class="msg_cotainer images">
+                                        <h6>{{ $comment->user->first_name.' '.$comment->user->last_name }}</h6>
+                                        <p><strong>Name: </strong>{{ $comment->name }}</p>
+                                        <p><strong>Notes: </strong>{{ $comment->notes }}</p>
+                                      <?php
+                                        $images = json_decode($comment->file);
+                                      ?>
+                                        @foreach($images as $image)
+                                            <img height="100px" width="150px" src="{{ asset('storage/'.$image) }}" style=" object-fit: cover; margin-top: 5px;">
+                                        @endforeach
+                                        <span class="msg_time"><a href="#">{{ $comment->created_at->diffForHumans() }}</a> | &nbsp; <a href="{{ route('sourcing.edit', ['sourcing' => $comment->id]) }}"><i class="fa fa-pen"></i></a> {{--| &nbsp; <a href="{{ route('sourcing.deletes', ['sourcing' => $comment->id]) }}"><i class="fa fa-trash"></i></a>--}}</span>
+                                        <div id="image-viewer">
+                                            <img class="viewer-modal-content" id="full-image">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+                        <div class="card-footer">
+                            <form id="commentForm" method="post" action="{{ route('sourcing.create') }}" enctype="multipart/form-data">
+                                @csrf
+                                <div class="input-group">
+                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                    <input type="hidden" name="parent_id" value="{{ $sourcing->id }}">
+                                    <input type="hidden" name="status" value="published">
+                                    <input id="comment_input" required type="text" name="name" class="form-control type_msg" placeholder="Name here...">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text send_btn"><button type="submit" id="completed-task" class="fabutton"><i class="fa fa-paper-plane"></i></button></span>
+                                    </div>
+                                </div><br>
+                                <textarea id="comment_input" required name="notes" class="form-control type_msg" placeholder="Notes here..."></textarea><br>
+                                @include('core/base::forms.partials.images', ['name' => 'file[]', 'values' => ''])
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .fabutton {
+                    background: none;
+                    padding: 0px;
+                    border: none;
+                }
+                .img_wrp {
+                    display: inline-block;
+                    position: relative;
+                }
+                .close {
+                    margin-left: 5px;
+                    top: 0;
+                    right: 0;
+                }
+            </style>
+
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
 @endsection
