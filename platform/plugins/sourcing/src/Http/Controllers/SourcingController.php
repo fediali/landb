@@ -83,7 +83,10 @@ class SourcingController extends BaseController
     public function edit($id, FormBuilder $formBuilder, Request $request)
     {
         $sourcing = $this->sourcingRepository->findOrFail($id);
-
+//dd(strpos($sourcing->file, '["'));
+        if(strpos($sourcing->file, '["') === false){
+          $sourcing->file = json_encode(explode(',',$sourcing->file));
+        }
         event(new BeforeEditContentEvent($request, $sourcing));
 
         page_title()->setTitle(trans('plugins/sourcing::sourcing.edit') . ' "' . $sourcing->name . '"');
@@ -162,6 +165,9 @@ class SourcingController extends BaseController
 
     public function show($id){
       $sourcing = $this->sourcingRepository->findOrFail($id);
+      if(strpos($sourcing->file, '["') === false){
+        $sourcing->file = json_encode(explode(',',$sourcing->file));
+      }
       return view('plugins/sourcing::details', compact('sourcing'));
     }
 }
