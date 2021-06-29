@@ -58,14 +58,14 @@
                                 </div>
                             </div>
 
-                            <div class="row sideBar">
+                            <div class="row sideBar nav nav-tabs" id="myTab" role="tablist">
                                 @if (!count($customers))
 
                                     <p>No customers</p>
                                 @else
 
                                     @foreach ($customers as $customer)
-
+                                    <div class="nav-item" role="presentation">   
                                         <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}"
                                            class="list-group-item list-group-item-action">
                                             <div
@@ -99,6 +99,7 @@
 
                                             </div>
                                         </a>
+                                     </div>
                                     @endforeach
                                 @endif
 

@@ -1008,6 +1008,7 @@ section.parallax_video video {
     position: relative;
     cursor: pointer;
     background: #ececec;
+    height: 525px;
 }
 
 .shoplisting .listbox .img img {
@@ -3935,4 +3936,45 @@ html {
     scroll-behavior: smooth;
   }
 
+  .demo-area{ 
+    border-radius:8px;
+    padding:20px;
+  }
  
+  
+  .demo-trigger img {
+    max-width: 100%;
+  }
+  
+  .detail {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    margin-left: 0%;
+    float: left;
+    min-height:525px;
+  }
+  
+  @media (max-width: 900px) {
+    
+    .detail, .demo-trigger {
+      float: none;
+    }
+  
+    .demo-trigger {
+      display:block;
+      width:100%;
+      max-width:300px;
+      text-align:center;
+      margin: 0 auto;
+      cursor: zoom-in;
+    }
+  
+    .detail {
+      text-align:center;
+      margin: 0 auto;
+      min-height:0;
+      width:100%;  
+    }
+    
+  }

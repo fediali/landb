@@ -93,6 +93,7 @@
         </div>
     </div>
 </footer>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <script src="{{ asset('landb/js/popper.js') }}"></script>
 <script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
@@ -108,6 +109,19 @@
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script>
+var demoTrigger = document.querySelector('.demo-trigger');
+
+new Drift(demoTrigger, {
+  paneContainer: document.querySelector('.detail'),
+  inlinePane: 900,
+  inlineOffsetY: -85,
+  containInline: true,
+  sourceAttribute: 'href'
+});
+
+new Luminous(demoTrigger);
+</script>
 <script>
   $(document).ready(function() {
     $("#signature").jSignature({
@@ -406,10 +420,10 @@
 
 
             }); // closing the listening on a click
-            $('.full img').on('click', function() {
-                var modalImage = $(this).attr('src');
-                $.fancybox.open(modalImage);
-            });
+            // $('.full img').on('click', function() {
+            //     var modalImage = $(this).attr('src');
+            //     $.fancybox.open(modalImage);
+            // });
         }); //closing our doc ready
     </script>
 

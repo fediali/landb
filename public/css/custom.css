@@ -981,3 +981,6 @@
     cursor: pointer;
   }
   
+  .textbox-label {
+    margin-top: 15px;
+  }
