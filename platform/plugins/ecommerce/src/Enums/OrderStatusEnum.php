@@ -7,6 +7,7 @@ use Html;
 
 /**
  * @method static OrderStatusEnum PENDING()
+ * @method static OrderStatusEnum NEW_ORDER()
  * @method static OrderStatusEnum PROCESSING()
  * @method static OrderStatusEnum DELIVERING()
  * @method static OrderStatusEnum DELIVERED()
@@ -15,6 +16,7 @@ use Html;
  */
 class OrderStatusEnum extends Enum
 {
+    public const NEW_ORDER= 'new';
     public const PENDING = 'pending';
     public const PROCESSING = 'processing';
     public const DELIVERING = 'delivering';
@@ -33,6 +35,9 @@ class OrderStatusEnum extends Enum
     public function toHtml()
     {
         switch ($this->value) {
+            case self::NEW_ORDER:
+                return Html::tag('span', self::NEW_ORDER()->label(), ['class' => 'label-warning status-label'])
+                    ->toHtml();
             case self::PENDING:
                 return Html::tag('span', self::PENDING()->label(), ['class' => 'label-warning status-label'])
                     ->toHtml();

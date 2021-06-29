@@ -242,7 +242,7 @@ class OrderController extends BaseController
             'discount_description' => $request->input('discount_description'),
             'description'          => $request->input('note'),
             'is_confirmed'         => 1,
-            'status'               => OrderStatusEnum::PROCESSING,
+            'status'               => OrderStatusEnum::NEW_ORDER,
             'order_type'           => $request->input('order_type'),
         ]);
 
