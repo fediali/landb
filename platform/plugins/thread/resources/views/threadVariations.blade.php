@@ -16,22 +16,37 @@ $variations = $options['data']['variations'];
                             <div class="col-md-12">
                                 <h6>PRIVATE LABEL SIZES</h6>
                             </div>
-                            @foreach($thread->regular_product_categories()->first()->category_sizes as $catSize)
+
+                            @foreach($thread->regular_product_categories()->get() as $cat)
+                                @foreach($cat->category_sizes as $catSize)
+                                    <div class="col-md-2 mt-3">
+                                        <label for="name">{{$catSize->name}}</label>
+                                        <input type="hidden" name="thread_id" value="{{$thread->id}}" id="pvt-thread-id">
+                                        <input type="hidden" name="product_category_id" value="{{$cat->id}}" id="pvt-prod-cat-id">
+                                        <input type="hidden" name="cat_sizes[]" value="{{$catSize->id}}" id="pvt-cat-sizes">
+                                        <input type="number" name="cat_sizes_qty[]" class="form-control cat_sizes_qty"
+                                               value="{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}"
+                                               placeholder="Enter Qty" required aria-required="true">
+                                    </div>
+                                @endforeach
+                            @endforeach
+
+                            {{--@foreach($thread->product_categories()->first()->category_sizes as $catSize)
                                 <div class="col-md-2 mt-3">
                                     <label for="name">{{$catSize->name}}</label>
                                     <input type="hidden" name="thread_id" value="{{$thread->id}}" id="pvt-thread-id">
                                     <input type="hidden" name="product_category_id"
-                                           value="{{$thread->regular_product_categories()->first()->id}}"
+                                           value="{{$thread->product_categories()->first()->id}}"
                                            id="pvt-prod-cat-id">
                                     <input type="hidden" name="cat_sizes[]" value="{{$catSize->id}}" id="pvt-cat-sizes">
                                     <input type="number" name="cat_sizes_qty[]" class="form-control cat_sizes_qty"
-                                           value="{{get_pvt_cat_size_qty($thread->id,$thread->regular_product_categories()->first()->id,$catSize->id)}}"
+                                           value="{{get_pvt_cat_size_qty($thread->id,$thread->product_categories()->first()->id,$catSize->id)}}"
                                            placeholder="Enter Qty" required aria-required="true">
                                 </div>
-                            @endforeach
+                            @endforeach--}}
+
                             <div class="col-md-2">
-                                <input class="btn btn-success w-100 btn-private" type="button" value="Submit"
-                                       id="pvt-cat-sizes-qty-submit">
+                                <input class="btn btn-success w-100 btn-private" type="button" value="Submit" id="pvt-cat-sizes-qty-submit">
                             </div>
                         </div>
                     </div>
