@@ -55,4 +55,10 @@ class ProductAttribute extends BaseModel
     {
         return (int)$value;
     }
+
+    public function getTitleAttribute($value)
+    {
+        return strtok($value,'-');
+    }
+
 }
