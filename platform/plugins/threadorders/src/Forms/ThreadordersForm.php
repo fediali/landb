@@ -54,7 +54,7 @@ class ThreadordersForm extends FormAbstract
                 'attr'       => [
                     'placeholder'  => 'Select Vendor',
                     'class' => 'select-search-full',
-                    'disabled'
+
                 ],
                 'choices'    => $vendors,
             ])
