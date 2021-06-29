@@ -629,7 +629,7 @@ class ThreadController extends BaseController
 
             foreach ($data['cat_sizes'] as $key => $cat_size) {
                 $postData['category_size_id'] = $cat_size;
-                $postData['qty'] = $data['cat_sizes_qty'][$key];
+                $postData['qty'] = $data['cat_sizes_qty'][$key] ? $data['cat_sizes_qty'][$key] : 0;
                 ThreadPvtCatSizesQty::create($postData);
             }
 

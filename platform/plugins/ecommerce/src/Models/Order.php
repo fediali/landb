@@ -79,6 +79,7 @@ class Order extends BaseModel
         'temp_sales_rep',
         'sales_commission_amount',
         'sales_commission_percent',
+        'tracking_no',
     ];
 
     /**

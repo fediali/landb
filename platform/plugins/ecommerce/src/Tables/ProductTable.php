@@ -63,12 +63,12 @@ class ProductTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            /*->editColumn('name', function ($item) {
+            ->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('products.edit')) {
                     return $item->name;
                 }
                 return Html::link(route('products.edit', $item->id), $item->name);
-            })*/
+            })
             ->editColumn('image', function ($item) {
                 if ($this->request()->input('action') == 'csv') {
                     return RvMedia::getImageUrl($item->image, null, false, RvMedia::getDefaultImage());

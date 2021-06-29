@@ -243,6 +243,15 @@ class Thread extends BaseModel
     }
 
     /**
+     * @return BelongsToMany
+     */
+    public function product_categories()
+    {
+        return $this->belongsToMany(ProductCategory::class, 'categories_threads', 'thread_id', 'product_category_id')
+            ->withPivot('sku', 'category_type', 'product_unit_id', 'per_piece_qty');
+    }
+
+    /**
      * @return BelongsTo
      * @deprecated
      */
