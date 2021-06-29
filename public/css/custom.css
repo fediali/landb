@@ -520,17 +520,30 @@
   .newMessage-heading {
     padding: 10px 16px 10px 15px !important;
     margin: 0 !important;
-    height: 100px;
+    height: 50px;
     width: 100%;
     background-color: #00bfa5;
     z-index: 1001;
   }
   
+  .side-three {
+    padding: 0; 
+    margin-left: auto;
+    height: 100%;
+    width: 50%;
+    z-index: 2;
+    position: absolute;
+    top: 0px;
+    right: -100%;
+    -webkit-transition: left 0.3s ease;
+    transition: left 0.3s ease;
+  
+  }
   .newMessage-main {
-    padding: 10px 16px 0 15px !important;
+    padding:    0px 16px 0 15px !important;
     margin: 0 !important;
     height: 60px;
-    margin-top: 30px !important;
+    margin-top:  0px !important;
     width: 100%;
     z-index: 1001;
     color: #fff;
@@ -539,12 +552,12 @@
   .newMessage-title {
     font-size: 18px;
     font-weight: 700;
-    padding: 10px 5px !important;
+    padding: 3px 5px !important;
   }
   .newMessage-back {
     text-align: center;
     vertical-align: baseline;
-    padding: 12px 5px !important;
+    padding: 5px 5px !important;
     display: block;
     cursor: pointer;
   }
@@ -962,5 +975,9 @@
     margin: 0;
     font-size: 15px;
     letter-spacing: 0.01em; 
+  }
+
+  .detail-back {
+    cursor: pointer;
   }
   
