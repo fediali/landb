@@ -62,8 +62,11 @@
                             <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a> -->
                         </div>
                         <div class="full text-center">
-                        @if(count($product->images))                           
-                                {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
+                        @if(count($product->images))       
+                        <a class="demo-trigger" href={{asset('storage/'.$product->images[0])}}>
+                        {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
+                        </a>            
+                              
                         @else
                             <img src="{{ asset('images/default.jpg') }}">
                         @endif
@@ -71,9 +74,10 @@
                         </div>
                 </div>
                 </div>
-
+              
         </div>
         <div class="col-lg-6">
+        <div class="detail"></div>
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
@@ -539,3 +543,5 @@
       
     </div>
   </div>
+
+  
