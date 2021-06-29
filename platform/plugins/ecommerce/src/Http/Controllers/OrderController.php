@@ -191,20 +191,6 @@ class OrderController extends BaseController
     {
         $condition = [];
         $meta_condition = [];
-        if ($request->input('order_id') && $request->input('order_id') > 0) {
-            $condition = ['id' => $request->input('order_id')];
-            $meta_condition = ['order_id' => $request->input('order_id')];
-
-            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
-            foreach ($order_products as $order_product) {
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $order_product->product_id)
-                    ->where('with_storehouse_management', 1)
-                    ->increment('quantity', $order_product->qty);
-            }
-            OrderProduct::where('order_id', $request->input('order_id'))->delete();
-        }
 
         foreach ($request->input('products', []) as $productItem) {
             $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
@@ -226,6 +212,21 @@ class OrderController extends BaseController
                     return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in this Qty!');
                 }
             }
+        }
+
+        if ($request->input('order_id') && $request->input('order_id') > 0) {
+            $condition = ['id' => $request->input('order_id')];
+            $meta_condition = ['order_id' => $request->input('order_id')];
+
+            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+            foreach ($order_products as $order_product) {
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+            OrderProduct::where('order_id', $request->input('order_id'))->delete();
         }
 
         $request->merge([
