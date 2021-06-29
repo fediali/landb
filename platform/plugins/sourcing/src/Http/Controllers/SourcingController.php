@@ -61,7 +61,10 @@ class SourcingController extends BaseController
      */
     public function store(SourcingRequest $request, BaseHttpResponse $response)
     {
-        $sourcing = $this->sourcingRepository->createOrUpdate($request->input());
+        $data = $request->input();
+        $data['file'] = json_encode($data['file']);
+
+        $sourcing = $this->sourcingRepository->createOrUpdate($data);
 
         event(new CreatedContentEvent(SOURCING_MODULE_SCREEN_NAME, $request, $sourcing));
 

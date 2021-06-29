@@ -15,6 +15,8 @@ class SourcingForm extends FormAbstract
      */
     public function buildForm()
     {
+
+      $sourceId = $this->getModel() ? $this->getModel()->id : null;
         $this
             ->setupModel(new Sourcing)
             ->setValidatorClass(SourcingRequest::class)
@@ -33,9 +35,10 @@ class SourcingForm extends FormAbstract
                     'placeholder'  => 'notes',
                     'data-counter' => 120,
                 ],
-            ])->add('file', 'mediaImage', [
+            ])->add('file[]', 'mediaImages', [
                 'label'      => 'Select File',
                 'label_attr' => ['class' => 'control-label'],
+                'values'     => $sourceId ? $this->getModel()->file : [],
             ])
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
