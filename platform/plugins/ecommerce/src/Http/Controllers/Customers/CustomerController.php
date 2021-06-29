@@ -163,6 +163,7 @@ class CustomerController extends BaseController
         } else {
             $data = $request->except('password');
         }
+        $data['is_private'] = isset($data['is_private']) ? $data['is_private'] : 0;
 
         $customer = $this->customerRepository->createOrUpdate($data, ['id' => $id]);
         $data = $request->all();
