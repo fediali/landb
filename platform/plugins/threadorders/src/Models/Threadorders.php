@@ -190,7 +190,7 @@ class Threadorders extends BaseModel
         return $this->belongsTo(Fabrics::class, 'fabric_id');
     }
 
-    public function threadOrderVariations($type = false)
+    public function threadOrderVariations($type = false, $groupBy = false, $thVarId = false)
     {
         return DB::table('thread_order_variations')
             ->select('thread_order_variations.*', 'ec_product_categories.name AS cat_name', 'vendorproductunits.name AS unit_name', 'printdesigns.file AS design_file')
@@ -198,10 +198,16 @@ class Threadorders extends BaseModel
             ->leftJoin('vendorproductunits', 'vendorproductunits.id', 'thread_order_variations.product_unit_id')
             ->leftJoin('printdesigns', 'printdesigns.id', 'thread_order_variations.print_design_id')
             ->where('thread_order_id', $this->id)
+            ->when($thVarId, function ($q) use ($thVarId) {
+                $q->where('thread_order_variations.thread_variation_id', $thVarId);
+            })
             ->when($type, function ($q) use ($type) {
                 $q->where('category_type', $type);
             })
-            ->orderBy('category_type')
+            ->when($groupBy, function ($q) use ($type) {
+                $q->groupBy('thread_order_variations.thread_variation_id');
+            })
+            ->orderBy('category_type', 'DESC')
             ->get();
     }
 
