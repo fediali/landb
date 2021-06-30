@@ -431,15 +431,24 @@ class CustomerController extends BaseController
                         return $response->setError()->setMessage('Number Should be atleast 10 digit');
                     }
                     $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
-                    if ($phone_number->carrier['type'] == 'mobile') {
-                        $is_text['is_text'] = 1;
-                        Customer::where('id', $customer->id)->update($is_text);
-                        return $response->setMessage('Number is valid');
-                    } else {
-                        $is_text['is_text'] = 2;
-                        Customer::where('id', $customer->id)->update($is_text);
+                    try {
+                        if ($phone_number->carrier['type'] == 'mobile') {
+                            $is_text['is_text'] = 1;
+                            Customer::where('id', $customer->id)->update($is_text);
+                            return $response->setMessage('Number is valid');
+                        } else {
+                            $is_text['is_text'] = 2;
+                            Customer::where('id', $customer->id)->update($is_text);
+                            return $response->setError()->setMessage('Number is not valid');
+                        }
+                    }
+                    catch (Exception $error) {
+                        $result['phone_validation_error'] = 'Number is not valid';
+                        $result['is_text'] = 2;
+                        Customer::where('id', $customer->id)->update($result);
                         return $response->setError()->setMessage('Number is not valid');
                     }
+
                 } else {
                     return $response->setError()->setMessage('Number is not valid');
                 }
