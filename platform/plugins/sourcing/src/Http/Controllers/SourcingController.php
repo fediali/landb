@@ -140,6 +140,10 @@ class SourcingController extends BaseController
 
             event(new DeletedContentEvent(SOURCING_MODULE_SCREEN_NAME, $request, $sourcing));
 
+            if(!$request->ajax()){
+              return redirect()->back()->with('success', trans('core/base::notices.delete_success_message'));
+            }
+
             return $response->setMessage(trans('core/base::notices.delete_success_message'));
         } catch (Exception $exception) {
             return $response
