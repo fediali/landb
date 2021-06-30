@@ -423,29 +423,34 @@ class CustomerController extends BaseController
     {
         $customer = $this->customerRepository->findOrFail($id);
         $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
-
-        if ($customer->detail->business_phone) {
-            $start2 = substr($customer->detail->business_phone, 2);
-            if ((int)$start2) {
-                if (strlen($start2) != 10) {
-                    return $response->setError()->setMessage('Number Should be atleast 10 digit');
-                }
-                $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
-                if ($phone_number->carrier['type'] == 'mobile') {
-                    $is_text['is_text'] = 1;
-                    Customer::where('id', $customer->id)->update($is_text);
-                    return $response->setMessage('Number is valid');
+        try {
+            if ($customer->detail->business_phone) {
+                $start2 = substr($customer->detail->business_phone, 2);
+                if ((int)$start2) {
+                    if (strlen($start2) != 10) {
+                        return $response->setError()->setMessage('Number Should be atleast 10 digit');
+                    }
+                    $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
+                    if ($phone_number->carrier['type'] == 'mobile') {
+                        $is_text['is_text'] = 1;
+                        Customer::where('id', $customer->id)->update($is_text);
+                        return $response->setMessage('Number is valid');
+                    } else {
+                        $is_text['is_text'] = 2;
+                        Customer::where('id', $customer->id)->update($is_text);
+                        return $response->setError()->setMessage('Number is not valid');
+                    }
                 } else {
-                    $is_text['is_text'] = 2;
-                    Customer::where('id', $customer->id)->update($is_text);
                     return $response->setError()->setMessage('Number is not valid');
                 }
-            } else {
-                return $response->setError()->setMessage('Number is not valid');
             }
-        } else {
-            return $response->setError()->setMessage('Number is not valid');
+        } catch (Exception $error) {
+            $result['phone_validation_error'] = 'Customer Phone number missing from profile';
+            $result['is_text'] = 2;
+            Customer::where('id', $customer->id)->update($result);
+            return $response->setError()->setMessage('Customer Phone number missing from profile');
         }
+
 
     }
 
@@ -482,6 +487,7 @@ class CustomerController extends BaseController
                                 }
                             } else {
                                 $result['phone_validation_error'] = 'Number is not valid';
+                                $result['is_text'] = 2;
                                 Customer::where('id', $customer->id)->update($result);
                             }
                         } catch (Exception $error) {

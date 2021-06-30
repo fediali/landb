@@ -110,7 +110,7 @@ class CustomerTable extends TableAbstract
                               });
                       }</script>';
                 } else {
-                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verify Number">Verify</a><script>function confirm_start(url){
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verified Number">Verify</a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
