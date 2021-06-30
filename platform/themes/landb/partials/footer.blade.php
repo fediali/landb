@@ -411,15 +411,14 @@ new Luminous(demoTrigger);
 <script>
 
   $(document).ready(function(){ 
- $('.welcomeDiv').hide();
- $('.addTobag').on('click',function(){
-   var id = $(this).data('id');
-     $('.welcomeDiv'+id).toggle();
- })  
- $('.product-tile__hide-variants').on('click',function(){
-    var id = $(this).data('id');
-     $('.welcomeDiv'+id).hide();
- })  
+    $(".gallery .full").hover(
+  function () {
+    $(".detail-magnify").addClass('detail');
+  }, 
+  function () {
+    $(".detail-magnify").removeClass('detail');
+  }
+  );
 })
 
 </script>
