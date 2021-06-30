@@ -13,7 +13,7 @@
     }
     if($default == 0 && count($productVariations)){
         $variation = $productVariations->first();
-        $default = $variation->product_id;Cha
+        $default = $variation->product_id;
         $default_max = $variation->product->quantity;
         $default_price = $variation->product->price;
     }
