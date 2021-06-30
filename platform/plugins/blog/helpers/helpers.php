@@ -560,11 +560,9 @@ if (!function_exists('quantity_calculate')) {
         $category = ProductCategory::where('id', $id)->first();
         $totalQuantity = 0;
         foreach ($category->category_sizes as $cat) {
-
-            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
+            $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
             $totalQuantity += $quan;
         }
-
         return $totalQuantity;
     }
 }
@@ -885,4 +883,30 @@ if (!function_exists('get_pvt_cat_size_qty')) {
         return \Botble\Thread\Models\ThreadPvtCatSizesQty::where(['thread_id' => $threadId, 'product_category_id' => $prodCatId, 'category_size_id' => $catSizeId])->value('qty');
     }
 }
+
+if (!function_exists('packProdQtyCalculate')) {
+    function packProdQtyCalculate($id)
+    {
+        $category = ProductCategory::where('id', $id)->first();
+        $totalQuantity = 0;
+        foreach ($category->category_sizes as $cat) {
+            $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
+            $totalQuantity += $quan;
+        }
+        return $totalQuantity;
+    }
+}
+
+if (!function_exists('packProdSizes')) {
+    function packProdSizes($id)
+    {
+        $category = ProductCategory::where('id', $id)->first();
+        $sizes = '';
+        foreach ($category->category_sizes as $cat) {
+            $sizes .= $cat->name.'/';
+        }
+        return $sizes;
+    }
+}
+
 //Utils
