@@ -6,6 +6,7 @@ use App\Models\CardPreAuth;
 use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
 use Assets;
+use Botble\ACL\Repositories\Interfaces\UserInterface;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
@@ -42,13 +43,15 @@ class CustomerController extends BaseController
      * @var AddressInterface
      */
     protected $addressRepository;
+    protected $userRepository;
 
     /**
      * @param CustomerInterface $customerRepository
      * @param AddressInterface $addressRepository
      */
-    public function __construct(CustomerInterface $customerRepository, AddressInterface $addressRepository)
+    public function __construct(CustomerInterface $customerRepository, AddressInterface $addressRepository, UserInterface $userRepository)
     {
+        $this->userRepository = $userRepository;
         $this->customerRepository = $customerRepository;
         $this->addressRepository = $addressRepository;
     }
@@ -424,7 +427,7 @@ class CustomerController extends BaseController
         if ($customer->detail->business_phone) {
             $start2 = substr($customer->detail->business_phone, 2);
             if ((int)$start2) {
-                if(strlen($start2) != 10){
+                if (strlen($start2) != 10) {
                     return $response->setError()->setMessage('Number Should be atleast 10 digit');
                 }
                 $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
@@ -444,6 +447,59 @@ class CustomerController extends BaseController
             return $response->setError()->setMessage('Number is not valid');
         }
 
+    }
+
+    public function verifyphonebulk($id, BaseHttpResponse $response)
+    {
+
+        $user = $this->userRepository->findOrFail($id);
+
+        $twilio = new Client(env('TWILIO_AUTH_SID'), env('TWILIO_AUTH_TOKEN'));
+        $customers = Customer::where('salesperson_id', $user->id)->whereIn('is_text', [Customer::VERIFY, Customer::UNVERIFIED])->get();
+
+        if (!$customers->isEmpty()) {
+
+            foreach ($customers as $customer) {
+                $result = [];
+                try {
+                    if ($customer->detail->business_phone) {
+                        $start2 = substr($customer->detail->business_phone, 2);
+                        try {
+                            if ((int)$start2) {
+                                if (strlen($start2) != 10) {
+                                    $result['phone_validation_error'] = 'Phone Number must be 10 digit or Add +1.';
+                                    $result['is_text'] = 2;
+                                    Customer::where('id', $customer->id)->update($result);
+                                    break;
+                                }
+                                $phone_number = $twilio->lookups->v1->phoneNumbers($customer->detail->business_phone)->fetch(["type" => ["carrier"]]);
+                                if ($phone_number->carrier['type'] == 'mobile') {
+                                    $is_text['is_text'] = 1;
+                                    Customer::where('id', $customer->id)->update($is_text);
+                                } else {
+                                    $is_text['is_text'] = 2;
+                                    Customer::where('id', $customer->id)->update($is_text);
+                                }
+                            } else {
+                                $result['phone_validation_error'] = 'Number is not valid';
+                                Customer::where('id', $customer->id)->update($result);
+                            }
+                        } catch (Exception $error) {
+                            continue;
+                        }
+                    }
+                } catch (Exception $error) {
+                    $result['phone_validation_error'] = 'Customer Phone number missing from profile';
+                    $result['is_text'] = 2;
+                    Customer::where('id', $customer->id)->update($result);
+                    continue;
+                }
+
+            }
+        }
+
+
+        return $response->setError()->setMessage('No Customer Found in your list. Only sales rep can verify customers number ');
     }
 
 }
