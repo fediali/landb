@@ -44,14 +44,14 @@
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="inline_block dropdown">
-                                                <a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>
+                                                <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
+                                                <span>{{ currency }}</span><input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 width-20-px min-width-20-px text-center"> x</td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
-                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number"
-                                               min="1" @change="handleChangeQuantity()">
+                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number" min="1" @change="handleChangeQuantity()">
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.price }}
                                         {{ currency }}
@@ -1135,7 +1135,8 @@ export default {
             _.each(this.child_products, function (item) {
                 products.push({
                     id: (item.configurable_product_id ? item.product_id : item.id),
-                    quantity: item.select_qty
+                    quantity: item.select_qty,
+                    sale_price: item.price,
                 });
             });
 
