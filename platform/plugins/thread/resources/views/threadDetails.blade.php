@@ -430,7 +430,7 @@
                                         @foreach($thread->regular_product_categories()->get() as $cat)
                                             @foreach($cat->category_sizes as $catSize)
                                                 <div style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
-                                                    <label for="name">{{$catSize->name}}</label>
+                                                    <label for="name">{{$catSize->full_name}}</label>
                                                     <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
                                                 </div>
                                             @endforeach
