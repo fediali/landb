@@ -165,6 +165,9 @@ class SourcingController extends BaseController
 
     public function show($id){
       $sourcing = $this->sourcingRepository->findOrFail($id);
+      if(strpos($sourcing->file, '["') === false){
+        $sourcing->file = json_encode(explode(',',$sourcing->file));
+      }
       return view('plugins/sourcing::details', compact('sourcing'));
     }
 }
