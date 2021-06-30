@@ -4,6 +4,7 @@ namespace Botble\Sourcing\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Sourcing\Http\Requests\SourcingRequest;
+use Botble\Sourcing\Models\Sourcing;
 use Botble\Sourcing\Repositories\Interfaces\SourcingInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
@@ -62,11 +63,18 @@ class SourcingController extends BaseController
     public function store(SourcingRequest $request, BaseHttpResponse $response)
     {
         $data = $request->input();
-        $data['file'] = json_encode($data['file']);
+        $data['file'] = isset($data['file']) ? json_encode($data['file']) : '[]';
 
         $sourcing = $this->sourcingRepository->createOrUpdate($data);
 
         event(new CreatedContentEvent(SOURCING_MODULE_SCREEN_NAME, $request, $sourcing));
+
+        if(isset($data['parent_id'])){
+          return $response
+              ->setPreviousUrl(route('sourcing.index'))
+              ->setNextUrl(route('sourcing.detail', $data['parent_id']))
+              ->setMessage(trans('core/base::notices.create_success_message'));
+        }
 
         return $response
             ->setPreviousUrl(route('sourcing.index'))
@@ -103,8 +111,10 @@ class SourcingController extends BaseController
     public function update($id, SourcingRequest $request, BaseHttpResponse $response)
     {
         $sourcing = $this->sourcingRepository->findOrFail($id);
+        $data = $request->input();
+        $data['file'] = isset($data['file']) ? json_encode($data['file']) : '[]';
 
-        $sourcing->fill($request->input());
+        $sourcing->fill($data);
 
         $this->sourcingRepository->createOrUpdate($sourcing);
 
@@ -164,7 +174,7 @@ class SourcingController extends BaseController
 
 
     public function show($id){
-      $sourcing = $this->sourcingRepository->findOrFail($id);
+      $sourcing = Sourcing::with(['childs'])->findOrFail($id);
       if(strpos($sourcing->file, '["') === false){
         $sourcing->file = json_encode(explode(',',$sourcing->file));
       }

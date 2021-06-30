@@ -81,7 +81,7 @@ class SourcingTable extends TableAbstract
      */
     public function query()
     {
-        $model = $this->repository->getModel();
+        $model = $this->repository->getModel()->where('parent_id' , 0);
         $select = [
             'sourcings.id',
             'sourcings.name',
