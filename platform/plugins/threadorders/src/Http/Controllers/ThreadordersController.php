@@ -367,17 +367,6 @@ class ThreadordersController extends BaseController
         return $response;
     }
 
-    public function quantityCalculate($id)
-    {
-        $category = $this->productCategoryRepository->findOrFail($id);
-        $totalQuantity = 0;
-        foreach ($category->category_sizes as $cat) {
-            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
-            $totalQuantity += $quan;
-        }
-        return $totalQuantity;
-    }
-
     public function pushToEcommerce($id, BaseHttpResponse $response)
     {
         $threadorder = $this->threadordersRepository->findOrFail($id);
@@ -580,7 +569,7 @@ class ThreadordersController extends BaseController
             foreach ($variations as $key => $variation) {
                 $check = Product::where('sku', $variation->sku)->first();
                 if (!$check) {
-                    $packQuantity = $this->quantityCalculate($variation->product_category_id);
+                    $packQuantity = quantityCalculate($variation->product_category_id);
                     $product = new Product();
                     $product->name = $variation->name;
                     $product->description = $variation->name;

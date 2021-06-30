@@ -1030,6 +1030,13 @@ class ProductController extends BaseController
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
 
+                $variation->packQty = 0;
+                $variation->packSizes = '';
+                if (str_contains($variation->product->sku, 'pack')) {
+                    $variation->packQty = packProdQtyCalculate($variation->product->category_id);
+                    $variation->packSizes = packProdSizes($variation->product->category_id);
+                }
+
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                     $variation->quantity = $variation->product->online_sales_qty;
                 } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {

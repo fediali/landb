@@ -834,6 +834,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7715,6 +7717,23 @@ var render = function() {
                                         ),
                                         0
                                       )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  variant.product.sku.includes("pack")
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "Total Qty : " +
+                                            _vm._s(variant.packQty)
+                                        )
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  variant.product.sku.includes("pack")
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "Sizes : " + _vm._s(variant.packSizes)
+                                        )
+                                      ])
                                     : _vm._e()
                                 ]
                               ),

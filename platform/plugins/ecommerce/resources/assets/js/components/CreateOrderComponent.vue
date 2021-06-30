@@ -40,6 +40,8 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
+                                        <p v-if="variant.product.sku.includes('pack')">Total Qty : {{variant.packQty}}</p>
+                                        <p v-if="variant.product.sku.includes('pack')">Sizes : {{variant.packSizes}}</p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
