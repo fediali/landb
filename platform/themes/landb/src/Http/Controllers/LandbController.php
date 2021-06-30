@@ -70,6 +70,12 @@ class LandbController extends Controller
 
     $result = apply_filters(BASE_FILTER_PUBLIC_SINGLE_DATA, $slug);
 
+    if (isset($result['slug']) && $result['slug'] == 'faqs') {
+      $faq = Theme::partial('short-codes.faqs');
+
+      $result['data']['page']->content = str_replace('[faqs][/faqs]', $faq, $result['data']['page']->content);
+    }
+
     if (isset($result['slug']) && $result['slug'] !== $key) {
       return redirect()->route('public.single', $result['slug']);
     }
