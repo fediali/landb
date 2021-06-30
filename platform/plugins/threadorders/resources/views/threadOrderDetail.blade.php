@@ -86,20 +86,19 @@
                     </div>
                 @endif
             </div>
-
+            @foreach($orderDetail->threadOrderVariations(false, true) as $mainVariation)
             <div class="p-3 mb-3 thread-area">
                 <div class="row">
                     <div class="col-lg-12 ">
-                        <h6 class="mb-1 thread-head"> THREAD VARIATIONS </h6>
+                        <h6 class="mb-1 thread-head"> {{$loop->iteration}}. {{$mainVariation->name}} </h6>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
-                    <ul class="accordion-list-c">
-                    @foreach($orderDetail->threadOrderVariations(false, true) as $mainVariation)
-                        <li>
+                    <div class="col-lg-12"> 
+                    
+                        <!-- <li>
                             <h3 class="h-a">{{$loop->iteration}}. {{$mainVariation->name}}</h3>
-                        </li>
+                        </li> -->
                         @foreach($orderDetail->threadOrderVariations(false, false, $mainVariation->thread_variation_id) as $variation)
                             <ul class="accordion-list-c">
                                 <li>
@@ -169,9 +168,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        @endforeach
-                    @endforeach
-                    </ul>
+                      
                     </div>
                 </div>
                 <br>
@@ -232,7 +229,8 @@
                     </div>
                 @endforeach -->
             </div>
-
+            @endforeach
+                    @endforeach
         </div>
     </div>
 @stop
