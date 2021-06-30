@@ -336,7 +336,7 @@ class OrderController extends BaseController
                     'product_name' => $product->name,
                     'qty'          => Arr::get($productItem, 'quantity', 1),
                     'weight'       => $product->weight,
-                    'price'        => $product->front_sale_price,
+                    'price'        => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
                     'tax_amount'   => 0,
                     'options'      => [],
                 ];
