@@ -77,7 +77,7 @@
 
         </div>
         <div class="col-lg-6">
-        <div class="detail"></div>
+        <div class="detail-magnify"></div>
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
