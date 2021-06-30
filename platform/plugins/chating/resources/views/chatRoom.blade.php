@@ -58,14 +58,14 @@
                                 </div>
                             </div>
 
-                            <div class="row sideBar nav nav-tabs" id="myTab" role="tablist">
+                            <div class="row sideBar">
                                 @if (!count($customers))
 
                                     <p>No customers</p>
                                 @else
 
                                     @foreach ($customers as $customer)
-                                    <div class="nav-item" role="presentation">   
+
                                         <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}"
                                            class="list-group-item list-group-item-action">
                                             <div
@@ -86,7 +86,7 @@
                                 </span>
                                                         </div>
                                                     </div>
-                                                    </div>
+                                                </div>
 
                                                 @if(!$customer->chat->isEmpty())
                                                     @php
@@ -99,9 +99,57 @@
 
                                             </div>
                                         </a>
-                                     </div>
                                     @endforeach
                                 @endif
+
+                                <a onclick="openCity(event, 'London')" 
+                                           class="tablinks list-group-item list-group-item-action">
+                                            <div
+                                                class="row sideBar-body">
+                                                <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                                                    <div class="avatar-icon">
+                                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-9 col-xs-9 sideBar-main">
+                                                    <div class="row">
+                                                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                                <span class="name-meta">London
+                                </span>
+                                                        </div>
+                                                        <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                                <span class="time-meta pull-right">
+                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+ 
+                                            </div>
+                                        </a>
+                                        <a onclick="openCity(event, 'Paris')" 
+                                           class="tablinks list-group-item list-group-item-action">
+                                            <div
+                                                class="row sideBar-body">
+                                                <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                                                    <div class="avatar-icon">
+                                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-9 col-xs-9 sideBar-main">
+                                                    <div class="row">
+                                                        <div class="col-sm-8 col-xs-8 sideBar-name">
+                                <span class="name-meta"> paris
+                                </span>
+                                                        </div>
+                                                        <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
+                                <span class="time-meta pull-right">
+                                </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+ 
+                                            </div>
+                                        </a>
 
                             </div>
 
@@ -133,7 +181,7 @@
                         </div>
                     </div>
 
-                    <div id="myTabContent" class="tab-content col-sm-8 conversation">
+                    <div class="col-sm-8 conversation">
                         <div class="row heading">
                             <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                 <div class="heading-avatar-icon">
@@ -161,7 +209,15 @@
                             </div>
 
                         </div>
+                        <div id="London" class="tabcontent">
+                        <h3>London</h3>
+                        <p>London is the capital city of England.</p>
+                        </div>
 
+                        <div id="Paris" class="tabcontent">
+                        <h3>Paris</h3>
+                        <p>Paris is the capital of France.</p> 
+                        </div>
                         <div class="side-three">
                                 <div class="row newMessage-heading">
                                 <div class="row newMessage-main">
@@ -217,5 +273,20 @@
       });
     });
 })
+</script>
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
 </script>
 @endsection
