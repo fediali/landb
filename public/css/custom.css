@@ -1027,3 +1027,7 @@
     background-color: #e8e8e8;
     border-color: #e8e8e8;
 }
+
+.conversation .tabcontent {
+  display: none;
+}
