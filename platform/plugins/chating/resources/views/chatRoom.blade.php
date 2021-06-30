@@ -86,7 +86,7 @@
                                 </span>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    </div>
 
                                                 @if(!$customer->chat->isEmpty())
                                                     @php
@@ -133,7 +133,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-8 conversation">
+                    <div id="myTabContent" class="tab-content col-sm-8 conversation">
                         <div class="row heading">
                             <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                 <div class="heading-avatar-icon">
