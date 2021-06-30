@@ -164,36 +164,13 @@
                                 </div>
                                 <div class="col-lg-6">
                                 <div class="d-flex">
-                                    <p class="m-0 heading color-white">Barcode <a class="btnbarcode" href="#">Download Barcode</a></p>
+                                    <p class="m-0 heading color-white">Barcode <a download class="btnbarcode" href="{{asset('storage/'.$prod_variation->product->barcode)}}">Download Barcode</a></p>
                                 </div>
                                     <p><img src="{{asset('storage/'.$prod_variation->product->barcode)}}" height="30px"></p>
                                 </div>
                             @endforeach
                         @endif
-                    </div>
-
-                    <div class="row"> 
-                                <div class="col-lg-2">
-                                    <p class="m-0 heading color-white">Product Variations</p>
-                                    <p class="text-center">
-                                     asdasdas
-                                    </p>
-                                </div>
-                                <div class="col-lg-2">
-                                    <p class="m-0 heading color-white">SKU</p>
-                                    <p class="text-center">asdasd</p>
-                                </div>
-                                <div class="col-lg-2">
-                                    <p class="m-0 heading color-white">UPC</p>
-                                    <p class="text-center">asdasd</p>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="d-flex">
-                                    <p class="m-0 heading color-white">Barcode <a class="btnbarcode" href="#">Download Barcode</a></p>
-                                    </div>
-                                    <p><img src="http://revamp.landbw.co/storage/products_barcode/0046000468438.jpg" height="30px"></p>
-                                </div> 
-                    </div>
+                    </div> 
 
                     </div>
                     </li>

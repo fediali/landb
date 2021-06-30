@@ -450,7 +450,6 @@
   .sideBar-body {
     position: relative;
     padding: 10px !important;
-    border-bottom: 1px solid #f7f7f7;
     height: 72px;
     margin: 0 !important;
     cursor: pointer;
@@ -1016,3 +1015,15 @@
     float: right;
     display: inline-block;
   }
+
+  .side-one .heading {
+    background-color: transparent !important;
+  }
+  .conversation .heading {
+    background-color: transparent !important;
+  }
+
+  .side-one a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+    background-color: #e8e8e8;
+    border-color: #e8e8e8;
+}

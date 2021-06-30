@@ -455,13 +455,13 @@
 
         $('.accordion-list-c > li > .answer').hide();
     
-    $('.accordion-list-c > li').click(function() {
-      if ($(this).hasClass("active-h")) {
-        $(this).removeClass("active-h").find(".answer").slideUp();
+    $('.accordion-list-c h3').click(function() {
+      if ($('.accordion-list-c > li').hasClass("active-h")) {
+        $('.accordion-list-c > li').removeClass("active-h").find(".answer").slideUp();
       } else {
         $(".accordion-list > li.active-h .answer").slideUp();
         $(".accordion-list > li.active-h").removeClass("active-h");
-        $(this).addClass("active-h").find(".answer").slideDown();
+        $('.accordion-list-c > li').addClass("active-h").find(".answer").slideDown();
       }
       return false;
     });

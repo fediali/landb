@@ -409,6 +409,21 @@ new Luminous(demoTrigger);
 
 </script>
 <script>
+
+  $(document).ready(function(){ 
+ $('.welcomeDiv').hide();
+ $('.addTobag').on('click',function(){
+   var id = $(this).data('id');
+     $('.welcomeDiv'+id).toggle();
+ })  
+ $('.product-tile__hide-variants').on('click',function(){
+    var id = $(this).data('id');
+     $('.welcomeDiv'+id).hide();
+ })  
+})
+
+</script>
+<script>
         $(document).ready(function() {
             $('.fancy-container').on('click', 'a', function() {
                 var largeImage = $(this).attr('data-full');
