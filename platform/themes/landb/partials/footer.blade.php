@@ -416,6 +416,7 @@ new Luminous(demoTrigger);
                 $(this).addClass('selected');
                 $('.full img').hide();
                 $('.full img').attr('src', largeImage);
+                $('.full a').attr('href', largeImage);
                 $('.full img').fadeIn();
 
 
