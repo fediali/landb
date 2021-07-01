@@ -888,7 +888,8 @@ if (!function_exists('get_pvt_cat_size_qty')) {
 if (!function_exists('packProdQtyCalculate')) {
     function packProdQtyCalculate($id)
     {
-        $category = ProductCategory::where('id', $id)->first();
+//        $category = ProductCategory::where('id', $id)->first();
+        $category = ProductCategory::all();
         $totalQuantity = 0;
         dd($category->category_sizes);
         if (isset($category->category_sizes)) {
