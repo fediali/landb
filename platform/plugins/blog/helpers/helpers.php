@@ -890,10 +890,15 @@ if (!function_exists('packProdQtyCalculate')) {
     {
         $category = ProductCategory::where('id', $id)->first();
         $totalQuantity = 0;
-        foreach ($category->category_sizes as $cat) {
-            $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
-            $totalQuantity += $quan;
+        try {
+            foreach ($category->category_sizes as $cat) {
+                $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
+                $totalQuantity += $quan;
+            }
+        } catch (Exception $error) {
+           echo $error;
         }
+
         return $totalQuantity;
     }
 }
