@@ -430,7 +430,8 @@ if (!function_exists('get_washes')) {
 if (!function_exists('get_category_sizes')) {
     function get_category_sizes()
     {
-        return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('name', 'id')->all();
+        return DB::table('categorysizes')->where('status', 'published')->pluck('name', 'id')->all();
+        //return Botble\Categorysizes\Models\Categorysizes::where('status', 'published')->pluck('full_name', 'id')->all();
     }
 }
 
