@@ -1,13 +1,14 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <div class="p-3 bg-white" >
+    <div class="p-3 bg-white">
         <div class="clearfix"></div>
         <div id="main">
 
             <div class="row">
                 <div class="col-lg-12 text-right">
-                    <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank" class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
+                    <a href="{{url('/admin/threads/details', $orderDetail->thread_id)}}" target="_blank"
+                       class="btn btn-icon btn-sm btn-red pl-4 pr-4">View Tech Pack</a>
                     @if($orderDetail->status == 'completed')
                         @if($orderDetail->thread_order_has_pushed)
                             <a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Pushed</a>
@@ -87,91 +88,92 @@
                 @endif
             </div>
             @foreach($orderDetail->threadOrderVariations(false, true) as $mainVariation)
-            <div class="p-3 mb-3 thread-area">
-                <div class="row">
-                    <div class="col-lg-12 ">
-                        <h6 class="mb-1 thread-head"> {{$loop->iteration}}. {{$mainVariation->name}} </h6>
+                <div class="p-3 mb-3 thread-area">
+                    <div class="row">
+                        <div class="col-lg-12 ">
+                            <h6 class="mb-1 thread-head"> {{$loop->iteration}}. {{$mainVariation->name}} </h6>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12"> 
-                    
                         <!-- <li>
                             <h3 class="h-a">{{$loop->iteration}}. {{$mainVariation->name}}</h3>
                         </li> -->
-                        @foreach($orderDetail->threadOrderVariations(false, false, $mainVariation->thread_variation_id) as $variation)
-                            <ul class="accordion-list-c">
-                                <li>
-                                    <h3 class="h-a">{{ucwords($variation->category_type)}}</h3>
-                                    <div class="answer">
-                                        <div class="row">
-                                            <div class="col-lg-12 mb-3">
-                                                <img class="w-100 mt-3" src="{{ asset('storage/'.strtolower(@$variation->design_file)) }}" height="120" width="120" style="object-fit: cover">
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <p class="m-0 heading">SKU</p>
-                                                <p>{{$variation->sku}}</p>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p class="m-0 heading">Type</p>
-                                                <p>{{$variation->category_type}}</p>
-                                            </div>
-                                            <div class="col-lg-1">
-                                                <p class="m-0 heading">{{$orderDetail->is_pieces ? 'Pieces Qty' : 'Pack Qty'}}</p>
-                                                <p>{{$variation->quantity}}</p>
-                                            </div>
-                                            <div class="col-lg-1">
-                                                <p class="m-0 heading">Cost</p>
-                                                <p>{{$variation->cost}}</p>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p class="m-0 heading">Per Piece Qty</p>
-                                                <p>{{$variation->per_piece_qty}} {{$variation->unit_name}}</p>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p class="m-0 heading">UPC</p>
-                                                <p>{{$variation->upc}}</p>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <p class="m-0 heading">Barcode</p>
-                                                <p><img src="{{asset('storage/'.$variation->barcode)}}" height="30px"></p>
-                                            </div>
-                                        </div>
+                            @foreach($orderDetail->threadOrderVariations(false, false, $mainVariation->thread_variation_id) as $variation)
 
-                                        @php $product = Botble\Ecommerce\Models\Product::where('sku', $variation->sku)->first(); @endphp
-                                        <div class="row">
-                                            @if($product)
-                                                @foreach($product->variations as $prod_variation)
-                                                    <div class="col-lg-2">
-                                                        <p class="m-0 heading">Product Variations</p>
-                                                        <p>
-                                                            @foreach($prod_variation->productAttributes as $prod_attr)
-                                                                {{$prod_attr->title}}
-                                                            @endforeach
-                                                        </p>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <p class="m-0 heading">SKU</p>
-                                                        <p>{{$prod_variation->product->sku}}</p>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <p class="m-0 heading">UPC</p>
-                                                        <p>{{$prod_variation->product->upc}}</p>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <p class="m-0 heading">Barcode</p>
-                                                        <p><img src="{{asset('storage/'.$prod_variation->product->barcode)}}" height="30px"></p>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+                                <ul class="accordion-list-c">
+                                    <li>
+                                        <h3 class="h-a">{{ucwords($variation->category_type)}}</h3>
+                                        <div class="answer">
+                                            <div class="row">
+                                                <div class="col-lg-12 mb-3">
+                                                    <img class="w-100 mt-3"
+                                                         src="{{ asset('storage/'.strtolower(@$variation->design_file)) }}"
+                                                         height="120" width="120" style="object-fit: cover">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <p class="m-0 heading">SKU</p>
+                                                    <p>{{$variation->sku}}</p>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <p class="m-0 heading">Type</p>
+                                                    <p>{{$variation->category_type}}</p>
+                                                </div>
+                                                <div class="col-lg-1">
+                                                    <p class="m-0 heading">{{$orderDetail->is_pieces ? 'Pieces Qty' : 'Pack Qty'}}</p>
+                                                    <p>{{$variation->quantity}}</p>
+                                                </div>
+                                                <div class="col-lg-1">
+                                                    <p class="m-0 heading">Cost</p>
+                                                    <p>{{$variation->cost}}</p>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <p class="m-0 heading">Per Piece Qty</p>
+                                                    <p>{{$variation->per_piece_qty}} {{$variation->unit_name}}</p>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <p class="m-0 heading">UPC</p>
+                                                    <p>{{$variation->upc}}</p>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <p class="m-0 heading">Barcode</p>
+                                                    <p><img src="{{asset('storage/'.$variation->barcode)}}"
+                                                            height="30px"></p>
+                                                </div>
+                                            </div>
+
+                                            @php $product = Botble\Ecommerce\Models\Product::where('sku', $variation->sku)->first(); @endphp
+                                            <div class="row">
+                                                @if($product)
+                                                    @foreach($product->variations as $prod_variation)
+                                                        <div class="col-lg-2">
+                                                            <p class="m-0 heading">Product Variations</p>
+                                                            <p>
+                                                                @foreach($prod_variation->productAttributes as $prod_attr)
+                                                                    {{$prod_attr->title}}
+                                                                @endforeach
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <p class="m-0 heading">SKU</p>
+                                                            <p>{{$prod_variation->product->sku}}</p>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <p class="m-0 heading">UPC</p>
+                                                            <p>{{$prod_variation->product->upc}}</p>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <p class="m-0 heading">Barcode</p>
+                                                            <p>
+                                                                <img
+                                                                    src="{{asset('storage/'.$prod_variation->product->barcode)}}"
+                                                                    height="30px"></p>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                      
-                    </div>
-                </div>
-                <br>
+                                    </li>
+                                </ul>
+                    @endforeach
                 <!-- @foreach($orderDetail->threadOrderVariations() as $variation)
                     <div class="row">
                         <div class="col-lg-12 mb-3">
@@ -206,15 +208,15 @@
                             <p class="m-0 heading">Barcode</p>
                             <p><img src="{{asset('storage/'.$variation->barcode)}}" height="30px"></p>
                         </div>--}}
-                    </div>
+                        </div>
 
-                    @php $product = Botble\Ecommerce\Models\Product::where('sku', $variation->sku)->first(); @endphp
-                    <div class="row">
-                        @if($product)
-                            @foreach($product->variations as $prod_variation)
-                                <div class="col-lg-3">
-                                    <p class="m-0 heading">SKU</p>
-                                    <p>{{$prod_variation->product->sku}}</p>
+@php $product = Botble\Ecommerce\Models\Product::where('sku', $variation->sku)->first(); @endphp
+                        <div class="row">
+@if($product)
+                        @foreach($product->variations as $prod_variation)
+                            <div class="col-lg-3">
+                                <p class="m-0 heading">SKU</p>
+                                <p>{{$prod_variation->product->sku}}</p>
                                 </div>
                                 <div class="col-lg-3">
                                     <p class="m-0 heading">UPC</p>
@@ -225,50 +227,50 @@
                                     <p><img src="{{asset('storage/'.$prod_variation->product->barcode)}}" height="30px"></p>
                                 </div>
                             @endforeach
-                        @endif
-                    </div>
-                @endforeach -->
-            </div>
+                    @endif
+                        </div>
+@endforeach -->
+                </div>
             @endforeach
-                    @endforeach
+            {{--            @endforeach--}}
         </div>
     </div>
 @stop
 
 
 @section('javascript')
-<script>
-    $('a.pushToEcommerce').on('click', () => {
-        let url = "{{route('threadorders.orderItem', $orderDetail->id)}}";
-        confirm_start(url);
-    });
-
-    function confirm_start(url){
-        swal({
-            title: 'Are you sure?',
-            text: "Do you want to push this Order to Ecommerce!",
-            icon: 'info',
-            buttons:{
-                cancel: {
-                    text: "Cancel",
-                    value: null,
-                    visible: true,
-                    className: "",
-                    closeModal: true,
-                },
-                confirm: {
-                    text: "Push",
-                    value: true,
-                    visible: true,
-                    className: "",
-                    closeModal: true
-                }
-            }
-        }).then((result) => {
-            if (result) {
-                location.replace(url)
-            }
+    <script>
+        $('a.pushToEcommerce').on('click', () => {
+            let url = "{{route('threadorders.orderItem', $orderDetail->id)}}";
+            confirm_start(url);
         });
-    }
-</script>
+
+        function confirm_start(url) {
+            swal({
+                title: 'Are you sure?',
+                text: "Do you want to push this Order to Ecommerce!",
+                icon: 'info',
+                buttons: {
+                    cancel: {
+                        text: "Cancel",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Push",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                }
+            }).then((result) => {
+                if (result) {
+                    location.replace(url)
+                }
+            });
+        }
+    </script>
 @endsection
