@@ -25,7 +25,7 @@
                             <img src="{{ asset('images/chat-bubble.png') }}" class=" user_img_msg">
                         </div>
                         <div class="msg_cotainer images">
-                            <h6>{{ $comment->user->first_name.' '.$comment->user->last_name }}</h6>
+                            <h6>{{ !empty(@$comment->user->first_name) ? $comment->user->first_name.' '.$comment->user->last_name : 'No name' }}</h6>
                             <p>{{ $comment->comment }}</p>
                             @if(!is_null($comment->image))
                                 <img height="300px" width="390px" src="{{ asset($comment->image) }}" style=" object-fit: cover; margin-top: 5px;">

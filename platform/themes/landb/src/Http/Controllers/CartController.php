@@ -57,6 +57,9 @@ class CartController extends Controller
         $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
+      if(!count($cart->products)){
+        return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
+      }
         $token = OrderHelper::getOrderSessionToken();
         return Theme::scope('cart', ['cart' => $cart])->render();
     }
@@ -176,5 +179,32 @@ class CartController extends Controller
             'sub_total' => $amount,
             'amount'    => $amount
         ]);
+    }
+
+    public function deleteCartItem($id){
+      $orderProduct = OrderProduct::where('id', $id)->first();
+
+      if($orderProduct){
+        $update = $orderProduct->delete();
+        $this->getOrderAndUpdateAmount();
+        if($update){
+          return redirect()->back()->with('success', 'Cart Item deleted successfully!');
+        }else{
+          return redirect()->back()->with('error', 'Something went wrong!');
+        }
+      }else{
+        return redirect()->back()->with('error', 'Something went wrong!');
+      }
+    }
+
+    public function clearCart(){
+      $orderId = $this->getUserCart();
+      $products = OrderProduct::where('order_id', $orderId)->delete();
+      if($products){
+        $this->getOrderAndUpdateAmount();
+        return redirect()->route('public.products')->with('success', 'Cart cleared successfully!');
+      }else{
+        return redirect()->back()->with('error', 'Something went wrong!');
+      }
     }
 }

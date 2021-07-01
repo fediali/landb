@@ -46,6 +46,12 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/update_cart_quantity', 'CartController@updateCartQuanity')
         ->name('public.cart.update_cart');
 
+    Route::get('/cart/delete/{id}', 'CartController@deleteCartItem')
+        ->name('public.cart.delete_item');
+
+    Route::get('/cart/clear', 'CartController@clearCart')
+        ->name('public.cart.clear');
+
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
 
