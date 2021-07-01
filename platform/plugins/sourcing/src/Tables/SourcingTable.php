@@ -54,7 +54,7 @@ class SourcingTable extends TableAbstract
                 if (!Auth::user()->hasPermission('sourcing.edit')) {
                     return $item->name;
                 }
-                return Html::link(route('sourcing.edit', $item->id), $item->name);
+                return Html::link(route('sourcing.detail', $item->id), $item->name);
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
