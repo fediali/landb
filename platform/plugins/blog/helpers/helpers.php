@@ -296,7 +296,7 @@ if (!function_exists('get_designers_for_thread')) {
     {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
-            ->whereIn('roles.slug', ['designer', 'admin', 'product-developmentquality-control', 'design-manager'])
+            ->whereIn('roles.slug', ['designer', 'admin', 'product-developmentquality-control', 'design-manager', 'private-label'])
             ->pluck('users.username', 'users.id')->all();
     }
 }
@@ -903,7 +903,7 @@ if (!function_exists('packProdSizes')) {
         $category = ProductCategory::where('id', $id)->first();
         $sizes = '';
         foreach ($category->category_sizes as $cat) {
-            $sizes .= $cat->name.'/';
+            $sizes .= $cat->name . '/';
         }
         return $sizes;
     }
