@@ -53,7 +53,9 @@
                 <p class="mt-2"><b class="cart-m-title">Price</b>$ {{ $cartItem->price }}</p>
             </div>
             <div class="col-lg-2 mt-2">
+
                 <form id='myform' method='POST' action='#'>
+                    <a href="{{ route('public.cart.delete_item', ['id' => $cartItem->id]) }}"><i class="fa fa-trash-alt"></i></a></span>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
                     <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' readonly/>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
@@ -61,7 +63,7 @@
             </div>
             <div class="col-lg-2 mt-2 ItemPrice">
                 @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
-                <p class="mt-2"><b class="cart-m-title">Total</b> $ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
+                <p class="mt-2"><b class="cart-m-title">Total</b> $ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</p>
             </div>
         </div> 
     @endforeach
@@ -92,6 +94,10 @@
     </div>
     <hr>--}}
     <div class="row mt-5">
+        <div class="col-lg-1 mt-3 float-right">
+            <a href="{{ route('public.cart.clear') }}" class=" btn cart-btn w-100">Clear Cart</a>
+
+        </div>
         <div class="col-lg-12 mb-3">
             <h3 class="coupon-txt">Coupon Discount</h3>
         </div>
