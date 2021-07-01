@@ -191,20 +191,6 @@ class OrderController extends BaseController
     {
         $condition = [];
         $meta_condition = [];
-        if ($request->input('order_id') && $request->input('order_id') > 0) {
-            $condition = ['id' => $request->input('order_id')];
-            $meta_condition = ['order_id' => $request->input('order_id')];
-
-            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
-            foreach ($order_products as $order_product) {
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $order_product->product_id)
-                    ->where('with_storehouse_management', 1)
-                    ->increment('quantity', $order_product->qty);
-            }
-            OrderProduct::where('order_id', $request->input('order_id'))->delete();
-        }
 
         foreach ($request->input('products', []) as $productItem) {
             $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
@@ -228,6 +214,21 @@ class OrderController extends BaseController
             }
         }
 
+        if ($request->input('order_id') && $request->input('order_id') > 0) {
+            $condition = ['id' => $request->input('order_id')];
+            $meta_condition = ['order_id' => $request->input('order_id')];
+
+            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+            foreach ($order_products as $order_product) {
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+            OrderProduct::where('order_id', $request->input('order_id'))->delete();
+        }
+
         $request->merge([
             'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
             'currency_id'          => get_application_currency_id(),
@@ -242,7 +243,7 @@ class OrderController extends BaseController
             'discount_description' => $request->input('discount_description'),
             'description'          => $request->input('note'),
             'is_confirmed'         => 1,
-            'status'               => OrderStatusEnum::PROCESSING,
+            'status'               => OrderStatusEnum::NEW_ORDER,
             'order_type'           => $request->input('order_type'),
         ]);
 
@@ -335,7 +336,7 @@ class OrderController extends BaseController
                     'product_name' => $product->name,
                     'qty'          => Arr::get($productItem, 'quantity', 1),
                     'weight'       => $product->weight,
-                    'price'        => $product->front_sale_price,
+                    'price'        => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
                     'tax_amount'   => 0,
                     'options'      => [],
                 ];

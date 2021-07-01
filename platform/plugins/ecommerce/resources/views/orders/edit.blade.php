@@ -392,7 +392,8 @@
                                                 </svg>
                                             </div>
                                             <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                <span>{{ trans('plugins/ecommerce::order.delivery') }}</span>
+                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                <span>Shipping</span>
                                             </div>
                                         @else
                                             <div class="flexbox-auto-left">
@@ -402,12 +403,16 @@
                                                 </svg>
                                             </div>
                                             <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                <span>{{ trans('plugins/ecommerce::order.delivery') }}</span>
+                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                <span>Shipping</span>
                                             </div>
                                             <div class="flexbox-auto-left">
                                                 <div class="item">
                                                     <button class="btn btn-primary btn-trigger-shipment"
-                                                            data-target="{{ route('orders.get-shipment-form', $order->id) }}">{{ trans('plugins/ecommerce::order.delivery') }}</button>
+                                                            data-target="{{ route('orders.get-shipment-form', $order->id) }}">
+                                                        {{--{{ trans('plugins/ecommerce::order.delivery') }}--}}
+                                                        Shipping
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endif
@@ -650,6 +655,18 @@
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
+                            </div>
+                        </div>
+
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <form action="{{ route('orders.edit', $order->id) }}">
+                                    <label class="text-title-field">Tracking No.</label>
+                                    <input class="form-control" name="tracking_no" placeholder="Tracking No." value="{{ $order->tracking_no }}"/>
+                                    <div class="mt10">
+                                        <button type="button" class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 

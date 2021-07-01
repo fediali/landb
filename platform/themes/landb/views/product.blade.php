@@ -62,18 +62,22 @@
                             <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a> -->
                         </div>
                         <div class="full text-center">
-                        @if(count($product->images))                           
-                                {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
+                        @if(count($product->images))
+                        <a class="demo-trigger" href={{asset('storage/'.$product->images[0])}}>
+                        {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
+                        </a>
+
                         @else
                             <img src="{{ asset('images/default.jpg') }}">
                         @endif
-                            <!-- first image is viewable to start --> 
+                            <!-- first image is viewable to start -->
                         </div>
                 </div>
                 </div>
 
         </div>
         <div class="col-lg-6">
+        <div class="detail"></div>
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
@@ -93,7 +97,7 @@
             </div>
             </div>
 
-            
+
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))
                     @foreach($product->category->category_sizes as $cat_size)
@@ -191,8 +195,8 @@
             <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
             </div>
             </div>
-            
-            
+
+
             <select class="detail-size-select" id="variation-select">
                 {{--@if(isset($product->category))
                     @foreach($product->category->category_sizes as $cat_size)
@@ -256,7 +260,7 @@
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/snapchat.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/facebook.png') }}"/></a>
                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/Twitter.png') }}"/></a>
-                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a> 
+                <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}"/></a>
             </div>
         </div>-->
     </div>
@@ -437,7 +441,7 @@
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
       <button style="position: absolute; right: 10px;font-size: 38px; font-weight: 200; top: -5px;" type="button" class="close" data-dismiss="modal">&times;</button>
@@ -534,8 +538,10 @@
 </tr>
 </tbody>
 </table>
-        </div> 
+        </div>
       </div>
-      
+
     </div>
   </div>
+
+

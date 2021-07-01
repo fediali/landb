@@ -81,8 +81,8 @@ class CustomerTable extends TableAbstract
             })->editColumn('is_text', function ($item) {
                 if ($item->is_text == 1) {
                     return $html = '<a href="javascript:void(0)" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Verify Number">Verified</a>';
-                } else if($item->is_text == 2){
-                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-danger" data-toggle="tooltip" data-original-title="Verify Number">Un Verified</a><script>function confirm_start(url){
+                } else if ($item->is_text == 2) {
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-danger" data-toggle="tooltip" data-original-title="' . $item->phone_validation_error . '">UnVerified</a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
@@ -109,8 +109,8 @@ class CustomerTable extends TableAbstract
                                   }
                               });
                       }</script>';
-                }else {
-                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verify Number">Verify</a><script>function confirm_start(url){
+                } else {
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verified Number">Verify</a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
@@ -161,6 +161,7 @@ class CustomerTable extends TableAbstract
             'ec_customers.is_private',
             'ec_customers.is_text',
             'ec_customers.created_at',
+            'ec_customers.phone_validation_error',
         ];
 
         $query = $model->select($select);
@@ -235,7 +236,12 @@ class CustomerTable extends TableAbstract
     public function buttons()
     {
         $buttons = $this->addCreateButton(route('customer.create'), 'customer.create');
+        $buttons['verify'] = [
+            'link' => route('customers.verify-phone-bulk', [Auth::id()]),
+            'text' => '<i class="fa fa-check"></i> Verify All Customer'
+        ];
 
+//        dd($buttons, $verify);
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Customer::class);
     }
 

@@ -40,6 +40,11 @@ class Customer extends Authenticatable
      *
      * @var array
      */
+
+    const VERIFIED = 1;
+    const VERIFY = 0;
+    const UNVERIFIED = 2;
+
     protected $fillable = [
         'id',
         'name',
@@ -53,6 +58,7 @@ class Customer extends Authenticatable
         'is_private',
         'is_text',
         'salesperson_id',
+        'phone_validation_error',
     ];
     protected $with = [
         'detail'

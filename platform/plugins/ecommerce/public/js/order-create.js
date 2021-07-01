@@ -1191,7 +1191,8 @@ __webpack_require__.r(__webpack_exports__);
       _.each(this.child_products, function (item) {
         products.push({
           id: item.configurable_product_id ? item.product_id : item.id,
-          quantity: item.select_qty
+          quantity: item.select_qty,
+          sale_price: item.price
         });
       });
 
@@ -7738,19 +7739,37 @@ var render = function() {
                                           staticClass: "inline_block dropdown"
                                         },
                                         [
-                                          _c(
-                                            "a",
-                                            {
-                                              staticClass: "wordwrap hide-print"
-                                            },
-                                            [
-                                              _vm._v(
-                                                _vm._s(variant.price) +
-                                                  " " +
-                                                  _vm._s(_vm.currency)
-                                              )
-                                            ]
-                                          )
+                                          _c("span", [
+                                            _vm._v(_vm._s(_vm.currency))
+                                          ]),
+                                          _c("input", {
+                                            directives: [
+                                              {
+                                                name: "model",
+                                                rawName: "v-model",
+                                                value: variant.price,
+                                                expression: "variant.price"
+                                              }
+                                            ],
+                                            staticClass: "next-input p-none-r",
+                                            attrs: { type: "number", min: "1" },
+                                            domProps: { value: variant.price },
+                                            on: {
+                                              change: function($event) {
+                                                return _vm.handleChangeQuantity()
+                                              },
+                                              input: function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  variant,
+                                                  "price",
+                                                  $event.target.value
+                                                )
+                                              }
+                                            }
+                                          })
                                         ]
                                       )
                                     ]
@@ -8615,7 +8634,15 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Create Order\n                        ")]
+                    [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(
+                            this.order_id ? "Update Order" : "Create Order"
+                          ) +
+                          "\n                        "
+                      )
+                    ]
                   )
                 ]
               )

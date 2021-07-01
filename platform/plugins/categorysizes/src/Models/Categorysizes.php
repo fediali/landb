@@ -33,4 +33,10 @@ class Categorysizes extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    public function getNameAttribute($value)
+    {
+        return strtok($value,'-');
+    }
+
 }

@@ -129,16 +129,16 @@
                                    ];
                     @endphp
                     Status:
-                    <select name="status">
+                    <select name="status" class="w-100">
                         @foreach($options as $key => $option)
                             <option
                                 value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
                         @endforeach
                     </select>
 <hr>
-                    <a class="btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View
+                    <a class="w-100 btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View
                         All Orders</a>
-                    <a class="btn btn-md btn-warning" href="javascript:void(0);" data-toggle="modal" data-target="#certificate_modal">Tax Certificate</a>
+                    <a class="w-100 mt-2 btn btn-md btn-warning" href="javascript:void(0);" data-toggle="modal" data-target="#certificate_modal">Tax Certificate</a>
                 </div>
 
             </div>
@@ -177,7 +177,7 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <p class="textbox-label">Company</p>
                             <input class="input-textbox form-control @error('company') is-invalid @enderror" type="text"
                                    name="company" value="{{ old('company', @$customer->details->company) }}"/>
@@ -186,7 +186,7 @@
                             @enderror
                         </div>
                         <div class="col-lg-12">
-                            <p class="textbox-label">Customer Type</p>
+                            <p class="textbox-label">Customer Type  </p>
                                 @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
                                     <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
                                           @if(isset($customer->details) && !empty($customer->details->customer_type)) @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif @endif>

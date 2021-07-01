@@ -35,7 +35,7 @@
                         </div>
                     </td>
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->sortBy('attribute_set_id') as $key => $item)
-                        <td>{{ $item->title }}</td>
+                        <td>{{ strtok($item->title,'-') }}</td>
                     @endforeach
                     @for($index = 0; $index < ($productAttributeSets->where('is_selected', '<>', null)->count() - $productVariationsInfo->where('variation_id', $variation->id)->count()); $index++)
                         <td>--</td>

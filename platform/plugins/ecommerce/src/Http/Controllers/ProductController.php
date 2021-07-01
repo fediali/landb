@@ -1039,7 +1039,7 @@ class ProductController extends BaseController
                 }
 
                 foreach ($variation->variationItems as &$variationItem) {
-                    $variationItem->attribute_title = $variationItem->attribute->title;
+                    $variationItem->attribute_title = strtok($variationItem->attribute->title,'-');;
                 }
             }
         }

@@ -58,14 +58,14 @@
                                 </div>
                             </div>
 
-                            <div class="row sideBar">
+                            <div class="row sideBar nav nav-tabs" id="myTab" role="tablist">
                                 @if (!count($customers))
 
                                     <p>No customers</p>
                                 @else
 
                                     @foreach ($customers as $customer)
-
+                                    <div class="nav-item" role="presentation">   
                                         <a href="{{ route('chating.messages.chat', [ 'ids' => auth()->user()->id  . '-' . $customer->id ]) }}"
                                            class="list-group-item list-group-item-action">
                                             <div
@@ -86,7 +86,7 @@
                                 </span>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    </div>
 
                                                 @if(!$customer->chat->isEmpty())
                                                     @php
@@ -99,6 +99,7 @@
 
                                             </div>
                                         </a>
+                                     </div>
                                     @endforeach
                                 @endif
 
@@ -132,7 +133,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-8 conversation">
+                    <div id="myTabContent" class="tab-content col-sm-8 conversation">
                         <div class="row heading">
                             <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
                                 <div class="heading-avatar-icon">
