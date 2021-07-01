@@ -117,7 +117,7 @@ class ProductForm extends FormAbstract
             ->add('status', 'customSelect', [
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
-                'choices'    => BaseStatusEnum::labels(),
+                'choices'    => BaseStatusEnum::$PRODUCT,
             ])
             ->add('inventory_history', 'inventory_history', [
                 'label'         => 'Inventory History',

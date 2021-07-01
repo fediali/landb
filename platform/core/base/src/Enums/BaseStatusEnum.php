@@ -22,18 +22,23 @@ class BaseStatusEnum extends Enum
     public const SCHEDULE = 'schedule';
 
 
-    public const HIDDEN = 'hidden';
-    public const ACTIVE = 'active';
-    public const DISABLED = 'disabled';
-    public const PRODUCTION = 'production';
-    public const COMPLETE = 'complete';
-    public const SHIPPED = 'shipped';
+    public const HIDDEN = 'Hidden';
+    public const ACTIVE = 'Active';
+    public const DISABLED = 'Disabled';
+    public const PRODUCTION = 'Production';
+    public const COMPLETE = 'Complete';
+    public const SHIPPED = 'Shipped';
 
     public static $THREADSAMPLE = [
         'pending'    => self::PENDING,
         'production' => self::PRODUCTION,
         'complete'   => self::COMPLETE,
         'shipped'    => self::SHIPPED,
+    ];
+    public static $PRODUCT = [
+        'Active'   => self::ACTIVE,
+        'Hidden'   => self::HIDDEN,
+        'Disabled' => self::DISABLED,
     ];
     public static $SCHEDULE = [
         'schedule'  => self::SCHEDULE,
