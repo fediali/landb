@@ -1014,7 +1014,7 @@
                                         <h6>{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
                                         @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                             <div class="sizediv">
-                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->name }}
+                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
                                             </div>
                                         @endforeach
                                     </div>
@@ -1025,7 +1025,7 @@
                                             <h6>Plus Pack Size Run</h6>
                                             @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                                 <div class="sizediv">
-                                                    {{ $plus_cat->name }}
+                                                    {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
                                                 </div>
                                             @endforeach
                                         </div>
