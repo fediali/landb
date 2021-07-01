@@ -99,7 +99,11 @@
                                         @foreach($images as $image)
                                             <img height="100px" width="150px" src="{{ asset('storage/'.$image) }}" style=" object-fit: cover; margin-top: 5px;">
                                         @endforeach
-                                        <span class="msg_time"><a href="#">{{ $comment->created_at->diffForHumans() }}</a> | &nbsp; <a href="{{ route('sourcing.edit', ['sourcing' => $comment->id]) }}"><i class="fa fa-pen"></i></a> {{--| &nbsp; <a href="{{ route('sourcing.deletes', ['sourcing' => $comment->id]) }}"><i class="fa fa-trash"></i></a>--}}</span>
+                                        <span class="msg_time"><a href="#">{{ $comment->created_at->diffForHumans() }}</a>
+                                            @if(\Illuminate\Support\Facades\Auth::user()->id == $comment->user_id)
+                                            | &nbsp; <a href="{{ route('sourcing.edit', ['sourcing' => $comment->id]) }}"><i class="fa fa-pen"></i></a> | &nbsp; <a href="{{ route('sourcing.delete', ['id' => $comment->id]) }}"><i class="fa fa-trash"></i></a>
+                                            @endif
+                                        </span>
                                         <div id="image-viewer">
                                             <img class="viewer-modal-content" id="full-image">
                                         </div>
