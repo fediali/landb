@@ -56,7 +56,9 @@ class CategorysizesTable extends TableAbstract
                 }
                 return Html::link(route('categorysizes.edit', $item->id), $item->name);
             })
-            ->editColumn('checkbox', function ($item) {
+            ->editColumn('name', function ($item) {
+                return $item->full_name;
+            })->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
             ->editColumn('created_at', function ($item) {
@@ -98,12 +100,12 @@ class CategorysizesTable extends TableAbstract
     public function columns()
     {
         return [
-            'id' => [
+            'id'         => [
                 'name'  => 'categorysizes.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
-            'name' => [
+            'name'       => [
                 'name'  => 'categorysizes.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
@@ -113,7 +115,7 @@ class CategorysizesTable extends TableAbstract
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
-            'status' => [
+            'status'     => [
                 'name'  => 'categorysizes.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
@@ -145,12 +147,12 @@ class CategorysizesTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'categorysizes.name' => [
+            'categorysizes.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
             ],
-            'categorysizes.status' => [
+            'categorysizes.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
                 'choices'  => BaseStatusEnum::labels(),
