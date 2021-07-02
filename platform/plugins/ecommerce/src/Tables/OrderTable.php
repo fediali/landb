@@ -3,20 +3,27 @@
 namespace Botble\Ecommerce\Tables;
 
 use BaseHelper;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
+use Botble\Ecommerce\Models\Discount;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\ProductVariation;
+use Botble\Ecommerce\Models\UserSearch;
+use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
+use Botble\Orderstatuses\Models\Orderstatuses;
+use Botble\Paymentmethods\Models\Paymentmethods;
 use Botble\Table\Abstracts\TableAbstract;
 use EcommerceHelper;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 use Yajra\DataTables\DataTables;
 use Html;
 
 class OrderTable extends TableAbstract
 {
-
     /**
      * @var bool
      */
@@ -26,6 +33,16 @@ class OrderTable extends TableAbstract
      * @var bool
      */
     protected $hasFilter = false;
+
+    /**
+     * @var bool
+     */
+    public $hasCustomFilter = true;
+
+    /**
+     * @var string
+     */
+    protected $customFilterTemplate = 'plugins/ecommerce::orders.filter';
 
     /**
      * OrderTable constructor.
@@ -149,6 +166,54 @@ class OrderTable extends TableAbstract
             $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')
                 ->whereIn('ec_order_product.product_id', $getProdIds)
                 ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
+        }
+        if ($this->request()->has('search_id')) {
+            $search_id = (int)$this->request()->input('search_id');
+            if ($search_id) {
+                $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
+                if (!empty($search_items)) {
+                    $query->when(isset($search_items['company']), function($q) use($search_items) {
+                        $q->leftJoin('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');
+                        $q->where('ec_customer_detail.company', 'LIKE', '%'.$search_items['company'].'%');
+                    });
+                    $query->when(isset($search_items['customer_name']), function($q) use($search_items) {
+                        $q->where('ec_customers.name', 'LIKE', '%'.$search_items['customer_name'].'%');
+                    });
+                    $query->when(isset($search_items['customer_email']), function($q) use($search_items) {
+                        $q->where('ec_customers.email', 'LIKE', '%'.$search_items['customer_email'].'%');
+                    });
+                    $query->when(isset($search_items['order_min_total']), function($q) use($search_items) {
+                        $q->where('ec_orders.sub_total', '>=', $search_items['order_min_total']);
+                    });
+                    $query->when(isset($search_items['order_max_total']), function($q) use($search_items) {
+                        $q->where('ec_orders.sub_total', '<=', $search_items['order_max_total']);
+                    });
+                    if (isset($search_items['order_from_date'])) {
+                        // $from_date = Carbon::createFromDate(strtotime($search_items['order_from_date']))->format('Y-m-d');
+                        $query->whereDate('ec_orders.created_at', '>=', $search_items['order_from_date']);
+                    }
+                    if (isset($search_items['order_to_date'])) {
+                        // $to_date = Carbon::createFromDate(strtotime($search_items['order_to_date']))->format('Y-m-d');
+                        $query->whereDate('ec_orders.created_at', '<=', $search_items['order_to_date']);
+                    }
+                    $query->when(isset($search_items['order_status']), function($q) use($search_items) {
+                        $q->where('ec_orders.status', $search_items['order_status']);
+                    });
+                    $query->when(isset($search_items['payment_method']), function($q) use($search_items) {
+                        $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
+                        $q->where('payments.payment_channel', $search_items['payment_method']);
+                    });
+                    $query->when(isset($search_items['online_order']), function($q) use($search_items) {
+                        $q->where('ec_orders.platform', $search_items['online_order']);
+                    });
+                    $query->when(isset($search_items['mobile_order']), function($q) use($search_items) {
+                        $q->where('ec_orders.platform', $search_items['mobile_order']);
+                    });
+                    $query->when(isset($search_items['coupon_code']), function($q) use($search_items) {
+                        $q->where('ec_orders.coupon_code', $search_items['coupon_code']);
+                    });
+                }
+            }
         }
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
@@ -301,5 +366,26 @@ class OrderTable extends TableAbstract
             'export',
             'reload',
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasCustomFilter(): bool
+    {
+        return $this->hasCustomFilter;
+    }
+
+    /**
+     * @return string
+     * @throws Throwable
+     */
+    public function renderCustomFilter(): string
+    {
+        $searches = UserSearch::where(['search_type' => 'orders', 'status' => 1])->pluck('name', 'id')->all();
+        $data['order_statuses'] = Orderstatuses::where('status', BaseStatusEnum::PUBLISHED)->pluck('name')->all();
+        $data['payment_methods'] = Paymentmethods::where('status', BaseStatusEnum::PUBLISHED)->pluck('name', 'slug')->all();
+        $data['coupon_codes'] = Discount::pluck('title', 'code')->all();
+        return view($this->customFilterTemplate, compact('searches', 'data'))->render();
     }
 }

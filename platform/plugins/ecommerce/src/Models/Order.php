@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 use OrderHelper;
 use App\Models\OrderImport;
 
@@ -52,8 +51,19 @@ class Order extends BaseModel
         self::PRE_ORDER => 'Pre Order',
     ];
 
-    protected
-        $fillable = [
+    const ONLINE = 'online';
+    const SALES = 'sales';
+    const MOBILE = 'mobile';
+    const IMPORT = 'import';
+
+    public static $PLATFORMS = [
+        self::ONLINE    => 'Online Order',
+        self::SALES => 'Sales Rep\'s Order',
+        self::MOBILE => 'Mobile Order',
+        self::IMPORT => 'Imported Order',
+    ];
+
+    protected $fillable = [
         'status',
         'user_id',
         'amount',
@@ -80,13 +90,13 @@ class Order extends BaseModel
         'sales_commission_amount',
         'sales_commission_percent',
         'tracking_no',
+        'platform',
     ];
 
     /**
      * @var string[]
      */
-    protected
-        $casts = [
+    protected $casts = [
         'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
@@ -94,14 +104,12 @@ class Order extends BaseModel
     /**
      * @var array
      */
-    protected
-        $dates = [
+    protected $dates = [
         'created_at',
         'updated_at',
     ];
 
-    protected
-    static function boot()
+    protected static function boot()
     {
         parent::boot();
 
@@ -128,8 +136,7 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public
-    function user()
+    public function user()
     {
         return $this->belongsTo(Customer::class, 'user_id', 'id')->withDefault();
     }
@@ -137,8 +144,7 @@ class Order extends BaseModel
     /**
      * @return mixed
      */
-    public
-    function getUserNameAttribute()
+    public function getUserNameAttribute()
     {
         return $this->user->name;
     }
@@ -146,8 +152,7 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public
-    function address()
+    public function address()
     {
         return $this->hasOne(OrderAddress::class, 'order_id')->withDefault();
     }
@@ -165,8 +170,7 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public
-    function products()
+    public function products()
     {
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
     }
@@ -174,8 +178,7 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public
-    function shipment_verified_products()
+    public function shipment_verified_products()
     {
         return $this->hasMany(OrderProductShipmentVerify::class, 'order_id');
     }
@@ -183,8 +186,7 @@ class Order extends BaseModel
     /**
      * @return HasMany
      */
-    public
-    function histories()
+    public function histories()
     {
         return $this->hasMany(OrderHistory::class, 'order_id')->with(['user', 'order']);
     }
@@ -192,8 +194,7 @@ class Order extends BaseModel
     /**
      * @return array|null|string
      */
-    public
-    function getShippingMethodNameAttribute()
+    public function getShippingMethodNameAttribute()
     {
         return OrderHelper::getShippingMethod(
             $this->attributes['shipping_method'],
@@ -204,8 +205,7 @@ class Order extends BaseModel
     /**
      * @return HasOne
      */
-    public
-    function shipment()
+    public function shipment()
     {
         return $this->hasOne(Shipment::class)->withDefault();
     }
@@ -213,8 +213,7 @@ class Order extends BaseModel
     /**
      * @return BelongsTo
      */
-    public
-    function payment()
+    public function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
     }
