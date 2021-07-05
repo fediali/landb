@@ -81,7 +81,7 @@
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
-            <div class="row">
+            <div class="row mt-3">
             <div class="col-md-6">
             <p class="detail-size-p mb-2"><span
                     class="detail-size">Size</span>
@@ -93,7 +93,7 @@
             </p>
             </div>
             <div class="col-md-6">
-            <p class="detail-size-p mb-2"><a href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal">Size Chart</a></p>
+            <p class="detail-size-p mb-2 font-bold"><a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp; Size Chart</a></p>
             </div>
             </div>
 
