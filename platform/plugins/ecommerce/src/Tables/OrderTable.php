@@ -171,6 +171,7 @@ class OrderTable extends TableAbstract
             $search_id = (int)$this->request()->input('search_id');
             if ($search_id) {
                 $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
+                //dd($search_items);
                 if (!empty($search_items)) {
                     $query->when(isset($search_items['company']), function($q) use($search_items) {
                         $q->leftJoin('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');

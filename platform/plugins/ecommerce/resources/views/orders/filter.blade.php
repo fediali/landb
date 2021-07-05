@@ -16,14 +16,12 @@
                     </svg>
                 </div>
                 <button type="submit" class="btn btn-primary btn-apply">Search</button>
+                <a href="{{ URL::current() }}" class="btn btn-info">{{ trans('core/table::table.reset') }}</a>
                 <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-adv-search">
                     Advance Search
                 </button>
             </div>
         </div>
-        {{--<div style="margin-top: 10px;">
-            <a href="{{ URL::current() }}" class="btn btn-info">{{ trans('core/table::table.reset') }}</a>
-        </div>--}}
     {{ Form::close() }}
 </div>
 
