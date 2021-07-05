@@ -22,6 +22,9 @@
                 </button>
             </div>
         </div>
+        {{--<div style="margin-top: 10px;">
+            <a href="{{ URL::current() }}" class="btn btn-info">{{ trans('core/table::table.reset') }}</a>
+        </div>--}}
     {{ Form::close() }}
 </div>
 
@@ -31,13 +34,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex w-100">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head">Advance Search <span class="variation-name"></span></h4>
+                    <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">X</button>
+                    <h4 class="modal-title text-center w-100 thread-pop-head search-head color-white">Advance Search <span class="variation-name"></span></h4>
                 </div>
             </div>
             {{ Form::open(['method' => 'GET', 'class' => 'filter-form', 'id' => 'adv-search-form']) }}
                 <div class="modal-body">
-                    <div class="col-md-12">
+                    <div class="row">
                         <div class="col-md-4">
                             <label class="font-bold">Company:</label>
                             <input type="text" name="company" class="form-control" value="{{request('company')}}">
@@ -50,7 +53,7 @@
                             <label class="font-bold">Email:</label>
                             <input type="email" name="customer_email" class="form-control" value="{{request('customer_email')}}">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 mt-3">
                             <label class="font-bold">Manager:</label>
                             <input type="text" name="manager" class="form-control" value="{{request('manager')}}">
                         </div>
@@ -64,23 +67,29 @@
                                 <input type="number" name="order_max_total" step="0.1" class="form-control" value="{{request('order_max_total')}}">
                             </div>
                         </div>
+                        </div>
                         <div class="col-md-12">
                             <label class="font-bold">Order Status:</label>
+                            <div>
                             @foreach($data['order_statuses'] as $order_status)
                                 <input type="checkbox" name="order_status" class="form-control" value="{{strtolower($order_status)}}" {{request('order_status') == strtolower($order_status) ? 'checked' : ''}}> {{$order_status}}
                             @endforeach
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <label class="font-bold">Payment Methods:</label>
+                            <div>
                             @foreach($data['payment_methods'] as $key => $payment_method)
                                 <input type="checkbox" name="payment_method" class="form-control" value="{{$key}}" {{request('payment_method') == $key ? 'checked' : ''}}>
                                 {{$payment_method}}
                             @endforeach
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label class="font-bold">Online Orders:</label>
                             <input type="checkbox" name="online_order" class="form-control" value="{{\Botble\Ecommerce\Models\Order::ONLINE}}" {{request('online_order') == \Botble\Ecommerce\Models\Order::ONLINE ? 'checked' : ''}}>
                             {{\Botble\Ecommerce\Models\Order::$PLATFORMS[\Botble\Ecommerce\Models\Order::ONLINE]}}
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label class="mt-4 font-bold">Promotions:</label><br>
