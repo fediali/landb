@@ -55,11 +55,102 @@
     </div>
 </div>
 
+<div class="modal fade" id="merge_customer_modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex w-100">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <h4 class="modal-title text-center w-100 thread-pop-head">Merge Customer <span
+                            class="variation-name"></span></h4>
+                    <div></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form method="post" action="{{route('customers.merge-customer')}}">
+                        @csrf
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="name" class="control-label" aria-required="true">Customer List
+                                </label>
+                                <input type="hidden" value="" name="user_id_one" id="user_id_one">
+                                <select name="user_id_two" id="merge_customer_list"
+                                        class="form-control is-valid select-search-full">
+                                    <option disabled> Select Customer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-apply" type="submit">Merge</button>
+                    </form>
+                    <div class="col-lg-12">
+                        <table class="merge_account">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Operation</th>
+                            </tr>
+                            </thead>
+                            <tbody class="merge_account_body">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
 
 <script>
+
+
     var address = '';
     var customer = '';
     $(document).ready(function () {
+        $('.merge-customer').on('click', function () {
+            $('.merge_account_body').empty();
+            var customer_id = $(this).data('id');
+            $('#user_id_one').val(customer_id);
+            $.ajax({
+                url: "{{ route('customers.get-list-customers-for-select','') }}" + "/" + customer_id,
+                type: 'get',
+                success: function (data) {
+                    $.each(data.data.customer, function (customerID, customerName) {
+                        console.log('asd', customerID, customerName);
+                        html = `<option value="${customerName.id}">
+                            ${customerName.name} - (${customerName.email})
+                        </option>`
+                        $('select#merge_customer_list').append(html);
+                    });
+
+                    $.each(data.data.merge, function (mergeID, mergeAccount) {
+
+                        html = ` <tr>
+                                    <td>${mergeAccount.id}</td>
+                                    <td>${mergeAccount.name}</td>
+                                    <td>${mergeAccount.email}</td>
+                                    <td><a href="{{route('customers.merge-customer-delete','')}}/${mergeAccount.id}" <i class="fa fa-trash"></i></td>
+</tr> `
+                        $('.merge_account_body').append(html);
+                    });
+                },
+                error: function (request, status, error) {
+                    toastr['warning']('No Address', 'Reading Error');
+                }
+            });
+            $('#merge_customer_modal').modal('toggle');
+        });
+
 
         payment_method()
 
@@ -375,6 +466,7 @@
             console.log(data);
         });
 
+
         $('#address_form').on('submit', function (e) {
             e.preventDefault();
             $.ajax({
@@ -445,7 +537,7 @@
 
 <script>
     $(document).ready(function () {
- 
+
         $('#main').on('click', '.remove', function () {
             $('.remove').closest('#main').find('.form-body').not(':first').last().remove();
         });
@@ -454,17 +546,17 @@
         });
 
         $('.accordion-list-c > li > .answer').hide();
-    
-    $('.accordion-list-c h3').click(function() {
-      if ($('.accordion-list-c > li').hasClass("active-h")) {
-        $('.accordion-list-c > li').removeClass("active-h").find(".answer").slideUp();
-      } else {
-        $(".accordion-list > li.active-h .answer").slideUp();
-        $(".accordion-list > li.active-h").removeClass("active-h");
-        $('.accordion-list-c > li').addClass("active-h").find(".answer").slideDown();
-      }
-      return false;
-    });
+
+        $('.accordion-list-c h3').click(function () {
+            if ($('.accordion-list-c > li').hasClass("active-h")) {
+                $('.accordion-list-c > li').removeClass("active-h").find(".answer").slideUp();
+            } else {
+                $(".accordion-list > li.active-h .answer").slideUp();
+                $(".accordion-list > li.active-h").removeClass("active-h");
+                $('.accordion-list-c > li').addClass("active-h").find(".answer").slideDown();
+            }
+            return false;
+        });
 
     });
 

@@ -141,7 +141,8 @@ class CustomerTable extends TableAbstract
             });
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('customer.edit', 'customer.destroy', $item);
+                $html = '<button data-id="' . $item->id . '" class="merge-customer btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Merge"><i class="fa fa-edit"></i></button>';
+                return $this->getOperations('customer.edit', 'customer.destroy', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -175,11 +176,10 @@ class CustomerTable extends TableAbstract
                 $from_date = Carbon::now()->subDays($report_type)->format('Y-m-d');
                 $to_date = Carbon::now()->format('Y-m-d');
             }
-        }
 
+        }
         $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
         //$query = $query->orderBy('order_count', 'DESC');
-
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 

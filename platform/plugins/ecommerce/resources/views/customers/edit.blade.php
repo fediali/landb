@@ -458,7 +458,6 @@
                                 <td>{{($row->type == 'shipping') ? 'Shipping':'Billing'}}</td>
                                 <td>
                                     <a data-row="{{ $row }}" class="toggle-edit-address"><i class="fa fa-edit"></i></a>
-                                    &nbsp;
                                     <a class="delete_address" data-id="{{ $row->id }}"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

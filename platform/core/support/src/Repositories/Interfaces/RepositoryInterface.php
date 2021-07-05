@@ -202,4 +202,8 @@ interface RepositoryInterface
      * @return mixed
      */
     public function firstOrNew(array $condition);
+
+
+
+
 }

@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Http\Controllers\Customers;
 use App\Models\CardPreAuth;
 use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
+use App\Models\MergeAccount;
 use Assets;
 use Botble\ACL\Repositories\Interfaces\UserInterface;
 use Botble\Base\Events\CreatedContentEvent;
@@ -27,6 +28,7 @@ use Botble\Ecommerce\Tables\CustomerTable;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
 use Twilio\Rest\Client;
@@ -233,12 +235,21 @@ class CustomerController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse
      */
-    public function getListCustomerForSelect(BaseHttpResponse $response)
+    public function getListCustomerForSelect($id, BaseHttpResponse $response)
     {
-        $customers = $this->customerRepository
-            ->allBy([], [], ['id', 'name'])
-            ->toArray();
+        if ($id) {
+            $customer = $this->customerRepository
+                ->allBy([], [], ['id', 'name', 'email'])->where('id', '!=', $id)->take(200)->toArray();
+            $account = MergeAccount::where('user_id_one', $id)->pluck('user_id_two');
+            $merge = Customer::whereIn('id', $account)->get()->toArray();
+            $customers['customer'] = $customer;
+            $customers['merge'] = $merge;
 
+        } else {
+            $customers = $this->customerRepository
+                ->allBy([], [], ['id', 'name'])
+                ->toArray();
+        }
         return $response->setData($customers);
     }
 
@@ -441,8 +452,7 @@ class CustomerController extends BaseController
                             Customer::where('id', $customer->id)->update($is_text);
                             return $response->setError()->setMessage('Number is not valid');
                         }
-                    }
-                    catch (Exception $error) {
+                    } catch (Exception $error) {
                         $result['phone_validation_error'] = 'Number is not valid';
                         $result['is_text'] = 2;
                         Customer::where('id', $customer->id)->update($result);
@@ -517,4 +527,20 @@ class CustomerController extends BaseController
         return $response->setError()->setMessage('No Customer Found in your list. Only sales rep can verify customers number ');
     }
 
+    public function mergeCustomer(Request $request, BaseHttpResponse $response)
+    {
+
+        $merge = DB::table('ec_customers_merge')->insert($request->only('user_id_one', 'user_id_two'));
+        if ($merge) {
+            return $response->setMessage('Customer Merge Successfully');
+        } else {
+            return $response->setError()->setMessage('Something Went Wrong');
+        }
+    }
+
+    public function mergeDelete($id, BaseHttpResponse $response)
+    {
+        MergeAccount::where('user_id_two', $id)->delete();
+        return $response->setMessage('Customer Merge Delete Successfully');
+    }
 }

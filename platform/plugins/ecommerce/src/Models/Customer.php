@@ -6,6 +6,7 @@ use App\Models\CustomerAddress;
 use App\Models\CustomerCard;
 use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
+use App\Models\MergeAccount;
 use App\Models\UserCart;
 use App\Models\UserWishlist;
 use Botble\ACL\Models\Role;
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use RvMedia;
 
 /**
@@ -61,7 +63,7 @@ class Customer extends Authenticatable
         'phone_validation_error',
     ];
     protected $with = [
-        'detail'
+        'detail',
     ];
 
     /**
@@ -253,5 +255,10 @@ class Customer extends Authenticatable
     public function chat()
     {
         return $this->hasMany(ChattingRecord::class, 'customer_id');
+    }
+
+    public function merge()
+    {
+        return $this->hasMany(MergeAccount::class, 'user_id_one');
     }
 }

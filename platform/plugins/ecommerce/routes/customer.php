@@ -11,18 +11,28 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'permission' => 'customer.destroy',
             ]);
         });
-
         Route::group(['prefix' => 'customers', 'as' => 'customers.'], function () {
-            Route::get('get-list-customers-for-select', [
+            Route::get('get-list-customers-for-select/{id?}', [
                 'as'         => 'get-list-customers-for-select',
                 'uses'       => 'CustomerController@getListCustomerForSelect',
-                'permission' => 'customers.index',
+                'permission' => 'customer.index',
+            ]);
+
+            Route::get('merge-customer-delete/{id}', [
+                'as'         => 'merge-customer-delete',
+                'uses'       => 'CustomerController@mergeDelete',
+                'permission' => 'customer.index',
             ]);
 
             Route::get('get-list-customers-for-search', [
                 'as'         => 'get-list-customers-for-search',
                 'uses'       => 'CustomerController@getListCustomerForSearch',
                 'permission' => ['customers.index', 'orders.index'],
+            ]);
+            Route::post('merge-customer', [
+                'as'         => 'merge-customer',
+                'uses'       => 'CustomerController@mergeCustomer',
+                'permission' => 'customers.create',
             ]);
             Route::get('verify-phone/{id}', [
                 'as'         => 'verify-phone',
