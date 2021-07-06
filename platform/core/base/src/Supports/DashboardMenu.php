@@ -180,7 +180,7 @@ class DashboardMenu
             }
         }
 
-        /*$menus = collect($links)->sortBy('priority');
+        $menus = collect($links)->sortBy('priority');
 
         foreach ($menus as $menu) {
             $explode = explode('/admin/', $menu['url']);
@@ -212,7 +212,7 @@ class DashboardMenu
                     CustomDashboardMenu::create($dtc);
                 }
             }
-        }*/
+        }
 
         return collect($links)->sortBy('priority');
     }
