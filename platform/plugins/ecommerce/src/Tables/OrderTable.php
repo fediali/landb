@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Tables;
 
+use App\Models\MergeAccount;
 use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
@@ -96,7 +97,7 @@ class OrderTable extends TableAbstract
                 return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
             ->editColumn('salesperson_id', function ($item) {
-                return $item->salesperson? $item->salesperson->getFullName() : 'N/A';
+                return $item->salesperson ? $item->salesperson->getFullName() : 'N/A';
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -115,7 +116,7 @@ class OrderTable extends TableAbstract
                     if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
                         $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
                     }
-                    $html .= '<a href="'.route('orders.edit', $item->id).'" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
+                    $html .= '<a href="' . route('orders.edit', $item->id) . '" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
                 }
                 //orders.edit
                 return $this->getOperations('', 'orders.destroy', $item, $html);
@@ -150,12 +151,17 @@ class OrderTable extends TableAbstract
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
 
-        $order_type = $this->request()->input('order_type',false);
-        $product_id = $this->request()->input('product_id',false);
-        $user_id = $this->request()->input('user_id',false);
+        $order_type = $this->request()->input('order_type', false);
+        $product_id = $this->request()->input('product_id', false);
+        $user_id = $this->request()->input('user_id', false);
 
         if ($user_id) {
-            $query->where('ec_orders.user_id', $user_id);
+            $merge = MergeAccount::where('user_id_one', $user_id)->pluck('user_id_two');
+            if (!$merge->isEmpty()) {
+                $query->whereIn('ec_orders.user_id', $merge->user_id_two)->where('ec_orders.user_id', $user_id);
+            } else {
+                $query->where('ec_orders.user_id', $user_id);
+            }
         }
         if ($order_type && in_array($order_type, [Order::NORMAL, Order::PRE_ORDER])) {
             $query->where('ec_orders.order_type', $order_type);
@@ -172,20 +178,20 @@ class OrderTable extends TableAbstract
             if ($search_id) {
                 $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
                 if (!empty($search_items)) {
-                    $query->when(isset($search_items['company']), function($q) use($search_items) {
+                    $query->when(isset($search_items['company']), function ($q) use ($search_items) {
                         $q->leftJoin('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');
-                        $q->where('ec_customer_detail.company', 'LIKE', '%'.$search_items['company'].'%');
+                        $q->where('ec_customer_detail.company', 'LIKE', '%' . $search_items['company'] . '%');
                     });
-                    $query->when(isset($search_items['customer_name']), function($q) use($search_items) {
-                        $q->where('ec_customers.name', 'LIKE', '%'.$search_items['customer_name'].'%');
+                    $query->when(isset($search_items['customer_name']), function ($q) use ($search_items) {
+                        $q->where('ec_customers.name', 'LIKE', '%' . $search_items['customer_name'] . '%');
                     });
-                    $query->when(isset($search_items['customer_email']), function($q) use($search_items) {
-                        $q->where('ec_customers.email', 'LIKE', '%'.$search_items['customer_email'].'%');
+                    $query->when(isset($search_items['customer_email']), function ($q) use ($search_items) {
+                        $q->where('ec_customers.email', 'LIKE', '%' . $search_items['customer_email'] . '%');
                     });
-                    $query->when(isset($search_items['order_min_total']), function($q) use($search_items) {
+                    $query->when(isset($search_items['order_min_total']), function ($q) use ($search_items) {
                         $q->where('ec_orders.sub_total', '>=', $search_items['order_min_total']);
                     });
-                    $query->when(isset($search_items['order_max_total']), function($q) use($search_items) {
+                    $query->when(isset($search_items['order_max_total']), function ($q) use ($search_items) {
                         $q->where('ec_orders.sub_total', '<=', $search_items['order_max_total']);
                     });
                     if (isset($search_items['order_from_date'])) {
@@ -196,20 +202,20 @@ class OrderTable extends TableAbstract
                         // $to_date = Carbon::createFromDate(strtotime($search_items['order_to_date']))->format('Y-m-d');
                         $query->whereDate('ec_orders.created_at', '<=', $search_items['order_to_date']);
                     }
-                    $query->when(isset($search_items['order_status']), function($q) use($search_items) {
+                    $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
                         $q->where('ec_orders.status', $search_items['order_status']);
                     });
-                    $query->when(isset($search_items['payment_method']), function($q) use($search_items) {
+                    $query->when(isset($search_items['payment_method']), function ($q) use ($search_items) {
                         $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
                         $q->where('payments.payment_channel', $search_items['payment_method']);
                     });
-                    $query->when(isset($search_items['online_order']), function($q) use($search_items) {
+                    $query->when(isset($search_items['online_order']), function ($q) use ($search_items) {
                         $q->where('ec_orders.platform', $search_items['online_order']);
                     });
-                    $query->when(isset($search_items['mobile_order']), function($q) use($search_items) {
+                    $query->when(isset($search_items['mobile_order']), function ($q) use ($search_items) {
                         $q->where('ec_orders.platform', $search_items['mobile_order']);
                     });
-                    $query->when(isset($search_items['coupon_code']), function($q) use($search_items) {
+                    $query->when(isset($search_items['coupon_code']), function ($q) use ($search_items) {
                         $q->where('ec_orders.coupon_code', $search_items['coupon_code']);
                     });
                 }
@@ -225,13 +231,13 @@ class OrderTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'      => [
+            'id'             => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'user_id' => [
+            'user_id'        => [
                 'name'  => 'ec_orders.user_id',
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
@@ -241,7 +247,7 @@ class OrderTable extends TableAbstract
                 'title' => 'Salesperson',
                 'class' => 'text-left',
             ],
-            'amount'  => [
+            'amount'         => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
                 'class' => 'text-center',
@@ -277,7 +283,7 @@ class OrderTable extends TableAbstract
                 'title' => trans('core/base::tables.status'),
                 'class' => 'text-center',
             ],
-            'order_type'    => [
+            'order_type'      => [
                 'name'  => 'ec_orders.order_type',
                 'title' => 'Order Type',
                 'class' => 'text-center',

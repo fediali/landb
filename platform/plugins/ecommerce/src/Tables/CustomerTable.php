@@ -138,6 +138,9 @@ class CustomerTable extends TableAbstract
                               });
                       }</script>';
                 }
+            })->editColumn('order_count', function ($item) {
+                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
+
             });
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
@@ -176,10 +179,10 @@ class CustomerTable extends TableAbstract
                 $from_date = Carbon::now()->subDays($report_type)->format('Y-m-d');
                 $to_date = Carbon::now()->format('Y-m-d');
             }
-
         }
         $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
-        //$query = $query->orderBy('order_count', 'DESC');
+
+        //$query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
