@@ -512,6 +512,12 @@
             $('input[name=address_city]').val(data.city);
             $('input[name=address_zip_code]').val(data.zip_code);
 
+            if(data.type === 'shipping'){
+              $('input[id=shipping_type]').attr('checked' , 'checked');
+            }else{
+              $('input[id=billing_type]').attr('checked' , 'checked');
+            }
+
             get_countries($('select[name="address_country"]'), data.country);
             get_states($('select[name="address_state"]'), data.country, data.state);
 
