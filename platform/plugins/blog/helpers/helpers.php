@@ -888,16 +888,21 @@ if (!function_exists('get_pvt_cat_size_qty')) {
 if (!function_exists('packProdQtyCalculate')) {
     function packProdQtyCalculate($id)
     {
+
 //        $category = ProductCategory::where('id', $id)->first();
         $category = ProductCategory::all();
         $totalQuantity = 0;
-        dd($category->category_sizes);
-        if (isset($category->category_sizes)) {
-            foreach ($category->category_sizes as $cat) {
-                $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
-                $totalQuantity += $quan;
+        try {
+            if ($category->category_sizes) {
+                foreach ($category->category_sizes as $cat) {
+                    $quan = substr($cat->full_name, strpos($cat->full_name, "-") + 1);
+                    $totalQuantity += $quan;
+                }
             }
+        } catch (Exception $er) {
+            $totalQuantity = 0;
         }
+
         return $totalQuantity;
     }
 }
@@ -907,11 +912,17 @@ if (!function_exists('packProdSizes')) {
     {
         $category = ProductCategory::where('id', $id)->first();
         $sizes = '';
-        foreach ($category->category_sizes as $cat) {
-            $sizes .= $cat->name . '/';
+        try {
+            foreach ($category->category_sizes as $cat) {
+                $sizes .= $cat->name . '/';
+            }
+        } catch (Exception $error) {
+            $sizes = 'No name';
         }
+
         return $sizes;
     }
 }
+
 
 //Utils

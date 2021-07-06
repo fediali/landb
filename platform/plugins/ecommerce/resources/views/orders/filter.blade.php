@@ -22,15 +22,12 @@
                 </button>
             </div>
         </div>
-        {{--<div style="margin-top: 10px;">
-            <a href="{{ URL::current() }}" class="btn btn-info">{{ trans('core/table::table.reset') }}</a>
-        </div>--}}
     {{ Form::close() }}
 </div>
 
 
 <div class="modal fade in" id="modal-adv-search" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex w-100">
@@ -41,56 +38,74 @@
             {{ Form::open(['method' => 'GET', 'class' => 'filter-form', 'id' => 'adv-search-form']) }}
                 <div class="modal-body">
                     <div class="row">
+
                         <div class="col-md-4">
                             <label class="font-bold">Company:</label>
                             <input type="text" name="company" class="form-control" value="{{request('company')}}">
                         </div>
+
                         <div class="col-md-4">
                             <label class="font-bold">Customer:</label>
                             <input type="text" name="customer_name" class="form-control" value="{{request('customer_name')}}">
                         </div>
+
                         <div class="col-md-4">
                             <label class="font-bold">Email:</label>
                             <input type="email" name="customer_email" class="form-control" value="{{request('customer_email')}}">
                         </div>
+
                         <div class="col-md-4 mt-3">
                             <label class="font-bold">Manager:</label>
                             <input type="text" name="manager" class="form-control" value="{{request('manager')}}">
                         </div>
-                        <div class="col-md-4">
+
+                        <div class="col-md-4 mt-3">
                             <label class="font-bold">Total ($):</label>
-                            <div class="col-md-6">
-                                <input type="number" name="order_min_total" step="0.1" class="form-control" value="{{request('order_min_total')}}">
+                            <div class="d-flex">
+                                <div class="col-md-6 pl-0">
+                                    <input type="number" name="order_min_total" step="0.1" class="form-control" value="{{request('order_min_total')}}">
+                                </div>
+                                --
+                                <div class="col-md-6 pr-0">
+                                    <input type="number" name="order_max_total" step="0.1" class="form-control" value="{{request('order_max_total')}}">
+                                </div>
                             </div>
-                            --
-                            <div class="col-md-6">
-                                <input type="number" name="order_max_total" step="0.1" class="form-control" value="{{request('order_max_total')}}">
-                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                        <div class="w-100 c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+                        <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+                        <input type="text" autocomplete="off" name="" placeholder="Select" class="w-100 c-datepicker-data-input only-date" value="">
                         </div>
                         </div>
                         <div class="col-md-12">
                             <label class="font-bold">Order Status:</label>
                             <div>
                             @foreach($data['order_statuses'] as $order_status)
-                                <input type="checkbox" name="order_status" class="form-control" value="{{strtolower($order_status)}}" {{request('order_status') == strtolower($order_status) ? 'checked' : ''}}> {{$order_status}}
+                                <div style="display:inline-flex" class="chk-orders">
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="order_status" class="form-control" value="{{strtolower($order_status)}}" {{request('order_status') == strtolower($order_status) ? 'checked' : ''}}> <p class="mr-1">{{$order_status}}</p>
+                                </div>
                             @endforeach
                             </div>
                         </div>
+
                         <div class="col-md-12">
                             <label class="font-bold">Payment Methods:</label>
                             <div>
                             @foreach($data['payment_methods'] as $key => $payment_method)
-                                <input type="checkbox" name="payment_method" class="form-control" value="{{$key}}" {{request('payment_method') == $key ? 'checked' : ''}}>
-                                {{$payment_method}}
+                                <div style="display:inline-flex" >
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="payment_method" class="form-control" value="{{$key}}" {{request('payment_method') == $key ? 'checked' : ''}}> <p class="mr-1">{{$payment_method}}</p>
+                                </div>
                             @endforeach
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="font-bold">Online Orders:</label>
-                            <input type="checkbox" name="online_order" class="form-control" value="{{\Botble\Ecommerce\Models\Order::ONLINE}}" {{request('online_order') == \Botble\Ecommerce\Models\Order::ONLINE ? 'checked' : ''}}>
-                            {{\Botble\Ecommerce\Models\Order::$PLATFORMS[\Botble\Ecommerce\Models\Order::ONLINE]}}
+
+                        <div class="col-md-12">
+                            <div class="d-flex">
+                                <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="online_order" class="form-control" value="{{\Botble\Ecommerce\Models\Order::ONLINE}}" {{request('online_order') == \Botble\Ecommerce\Models\Order::ONLINE ? 'checked' : ''}}>
+                                {{\Botble\Ecommerce\Models\Order::$PLATFORMS[\Botble\Ecommerce\Models\Order::ONLINE]}}
                             </div>
                         </div>
+
                         <div class="col-md-4">
                             <label class="mt-4 font-bold">Promotions:</label><br>
                             <select class="form-control" name="coupon_code" style="width: 100%">
@@ -100,14 +115,24 @@
                                 @endforeach
                             </select>
                         </div>
+
+                    </div>
+                    <div class="d-flex mb-3 mt-3">
+                    <div class="d-flex adv-input">
+                    <input type="text" name="search_name" class="form-control mr-2" id="search-name">
+                    <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
+                    </div>
+                    <div class="text-right adv-input">
+                    <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Search"> 
+                    </div>
+                  
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Search">
-                    <input type="text" name="search_name" class="form-control" id="search-name">
-                    <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
-                </div>
+
+              
+                    
+
             {{ Form::close() }}
         </div>
     </div>

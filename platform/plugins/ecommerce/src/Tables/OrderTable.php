@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Tables;
 
+use App\Models\MergeAccount;
 use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Enums\OrderStatusEnum;
@@ -96,7 +97,7 @@ class OrderTable extends TableAbstract
                 return Html::link(route('customer.edit', $item->user_id), $item->user->name);
             })
             ->editColumn('salesperson_id', function ($item) {
-                return $item->salesperson? $item->salesperson->getFullName() : 'N/A';
+                return $item->salesperson ? $item->salesperson->getFullName() : 'N/A';
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -115,7 +116,7 @@ class OrderTable extends TableAbstract
                     if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
                         $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
                     }
-                    $html .= '<a href="'.route('orders.edit', $item->id).'" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
+                    $html .= '<a href="' . route('orders.edit', $item->id) . '" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
                 }
                 //orders.edit
                 return $this->getOperations('', 'orders.destroy', $item, $html);
@@ -150,12 +151,17 @@ class OrderTable extends TableAbstract
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
 
-        $order_type = $this->request()->input('order_type',false);
-        $product_id = $this->request()->input('product_id',false);
-        $user_id = $this->request()->input('user_id',false);
+        $order_type = $this->request()->input('order_type', false);
+        $product_id = $this->request()->input('product_id', false);
+        $user_id = $this->request()->input('user_id', false);
 
         if ($user_id) {
-            $query->where('ec_orders.user_id', $user_id);
+            $merge = MergeAccount::where('user_id_one', $user_id)->pluck('user_id_two');
+            if (!$merge->isEmpty()) {
+                $query->whereIn('ec_orders.user_id', $merge)->orWhere('ec_orders.user_id', $user_id);
+            } else {
+                $query->where('ec_orders.user_id', $user_id);
+            }
         }
         if ($order_type && in_array($order_type, [Order::NORMAL, Order::PRE_ORDER])) {
             $query->where('ec_orders.order_type', $order_type);
@@ -230,13 +236,13 @@ class OrderTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'      => [
+            'id'             => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'user_id' => [
+            'user_id'        => [
                 'name'  => 'ec_orders.user_id',
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
@@ -246,7 +252,7 @@ class OrderTable extends TableAbstract
                 'title' => 'Salesperson',
                 'class' => 'text-left',
             ],
-            'amount'  => [
+            'amount'         => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
                 'class' => 'text-center',
@@ -282,7 +288,7 @@ class OrderTable extends TableAbstract
                 'title' => trans('core/base::tables.status'),
                 'class' => 'text-center',
             ],
-            'order_type'    => [
+            'order_type'      => [
                 'name'  => 'ec_orders.order_type',
                 'title' => 'Order Type',
                 'class' => 'text-center',
