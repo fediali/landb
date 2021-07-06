@@ -97,7 +97,7 @@
     <div class="row mt-5">
         <div class="col-lg-10"></div>
         <div class="col-lg-2 mt-3 float-right">
-            <a href="{{ route('public.cart.clear') }}" class=" btn cart-btn w-100">Clear Cart</a>
+            <a href="{{ route('public.cart.clear') }}" class=" btn cart-btn w-100">Empty Cart</a>
 
         </div>
         <div class="col-lg-12 mb-3">
