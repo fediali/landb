@@ -63,7 +63,7 @@
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head">Merge Customer <span
+                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">Merge Customer <span
                             class="variation-name"></span></h4>
                     <div></div>
                 </div>
