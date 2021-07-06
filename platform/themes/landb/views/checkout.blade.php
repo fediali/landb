@@ -358,30 +358,47 @@
                               <div class="card-payment" style="display: @if (setting('default_payment_method') != \Botble\Payment\Enums\PaymentMethodEnum::OMNI_PAYMENT) none @endif">
                                   <div class="col-lg-12">
                                       <h4 class="profile-light-txt mt-4 mb-4">Payment information</h4>
+                                      <div class="dropdown bootstrap-select card_list">
+                                          <select class="form-control selectpicker card_list" id="card_id" name="card_list" tabindex="-98">
+                                              <option disabled hidden selected >Select a Card</option>
+                                              @foreach($cards as $key => $card)
+                                                  <option value="{{ $key }}">{{ $card }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                      <input type="hidden" name="payment_id" class="payment_id" value="0">
                                   </div>
-                                  <div class="group row m-0">
-                                      <label class="col-lg-12">
-                                          <div id="card-element" class="field">
-                                              <span>Card</span>
-                                              <div id="fattjs-number" style="height: 35px"></div>
-                                              <span class="mt-2">CVV</span>
-                                              <div id="fattjs-cvv" style="height: 35px"></div>
+                                  <div id="add_card">
+                                      <hr>
+                                      <div class="group row m-0">
+                                          <label class="col-lg-12">
+                                              <div id="card-element" class="field">
+                                                  <span>Card</span>
+                                                  <div id="fattjs-number" style="height: 35px"></div>
+                                                  <span class="mt-2">CVV</span>
+                                                  <div id="fattjs-cvv" style="height: 35px"></div>
+                                              </div>
+                                          </label>
+                                      </div>
+                                      <div class="row m-0">
+                                          <div class="col-lg-3">
+                                              <input name="month" type="number" size="3" maxlength="2" placeholder="MM"
+                                                     class="form-control month">
                                           </div>
-                                      </label>
-                                  </div>
-                                  <div class="row m-0">
-                                      <div class="col-lg-3">
-                                          <input name="month" type="number" size="3" maxlength="2" placeholder="MM"
-                                                 class="form-control month">
+                                          <p class="mt-2"> / </p>
+                                          <div class="col-lg-3">
+                                              <input name="year" type="number" size="5" maxlength="4" placeholder="YYYY"
+                                                     class="form-control year">
+                                          </div>
                                       </div>
-                                      <p class="mt-2"> / </p>
-                                      <div class="col-lg-3">
-                                          <input name="year" type="number" size="5" maxlength="4" placeholder="YYYY"
-                                                 class="form-control year">
+                                      <div class="col-lg-3 mt-5">
+                                          <button class=" btn cart-btn w-100" id="tokenizebutton">Pay Now</button>
                                       </div>
                                   </div>
-                                  <div class="col-lg-3 mt-5">
-                                      <button class=" btn cart-btn w-100" id="tokenizebutton">Pay Now</button>
+                                  <div id="add_payment" style="display: none;">
+                                      <div class="col-lg-5 mt-5">
+                                          <button class=" btn cart-btn w-100" type="submit">Pay Now</button>
+                                      </div>
                                   </div>
                                   {{--<div class="outcome">
                                   <div class="error"></div>
