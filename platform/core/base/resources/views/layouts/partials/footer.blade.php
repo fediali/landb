@@ -113,9 +113,10 @@
 
 <script>
     $(document).ready(function () {
+        getCustomer();
         var address = '';
         var customer = '';
-        $(document).on('click','.merge-customer', function () {
+        $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
             $('#user_id_one').val(customer_id);
@@ -292,11 +293,13 @@
     }
 
     function getCustomer() {
+        console.log($('#customer_id').val());
         $.ajax({
             url: "{{ route('customers.get-customer','') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 customer = data;
+                console.log(customer.data.detail.first_name);
             },
             error: function (request, status, error) {
                 toastr['warning']('No Customer', 'Reading Error');
