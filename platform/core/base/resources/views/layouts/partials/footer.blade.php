@@ -70,23 +70,25 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <form method="post" action="{{route('customers.merge-customer')}}">
+                    <div class="col-lg-12">
+                        <form method="post" action="{{route('customers.merge-customer')}}">
                         @csrf
-                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="name" class="control-label" aria-required="true">Customer List
                                 </label>
                                 <input type="hidden" value="" name="user_id_one" id="user_id_one">
+                                <div class="d-flex">
                                 <select name="user_id_two" id="merge_customer_list"
                                         class="form-control is-valid select-search-full">
                                     <option disabled> Select Customer</option>
                                 </select>
+                               <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
+                                </div> 
                             </div>
-                        </div>
-                        <button class="btn btn-primary btn-apply" type="submit">Merge</button>
-                    </form>
-                    <div class="col-lg-12">
-                        <table class="merge_account">
+                        </form>
+                    </div>
+                    <div class="col-lg-12 mb-3">
+                        <table class="table merge_account">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -109,7 +111,54 @@
 
     </div>
 </div>
+<div class="modal fade" id="modal_split_order" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th> </th>
+                <th>Quantity</th>
+                <th>Quantity Moved</th>
+            </tr>
+            </thead>
+            <tbody class="">
+                <tr>
+                    <td>
+                        <div>
+                            <img src="" />
+                            <div> 
+                                <p class="split-head">Essential Black</p>
+                                <p class="split-code">CODE: ES11</p>
+                                <p class="split-opt">Options:</p>
+                                <p class="split-size">SIZE: 2(S)</p>
+                                <a class="split-link" href="#">landbapparel.com</a>
+                            </div>
+                        </div>  
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
 
+        </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 <script>
 

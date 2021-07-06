@@ -1076,3 +1076,19 @@
   justify-content: center !important;
   align-items: center !important;
 }
+
+#modal_split_order .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+#modal_split_order {
+  z-index: 100000;
+}
+
+#modal_split_order .close {
+  position: absolute;
+    top: -4px;
+}
