@@ -182,43 +182,43 @@ class DashboardMenu
 
         $menus = collect($links)->sortBy('priority');
 
-        /*foreach ($menus as $menu) {
-            $check = CustomDashboardMenu::where('menu_id', $menu['id'])->first();
-            if (!$check) {
-                $explode = explode('/admin/', $menu['url']);
-                $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
-                $dt = [
-                    'menu_id' => $menu['id'],
-                    'priority' => $menu['priority'],
-                    'name' => $menu['name'],
-                    'icon' => $menu['icon'],
-                    'url' => $last_word,
-                    'permissions' => json_encode($menu['permissions']),
-                    'status' => 1,
-                ];
-                CustomDashboardMenu::create($dt);
-                if (count($menu['children'])) {
-                    foreach ($menu['children'] as $child) {
-                        $checkC = CustomDashboardMenu::where('menu_id', $child['id'])->first();
-                        if (!$checkC) {
-                            $explode = explode('/admin/', $child['url']);
-                            $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
-                            $dtc = [
-                                'menu_id' => $child['id'],
-                                'priority' => $child['priority'],
-                                'parent_id' => $child['parent_id'],
-                                'name' => $child['name'],
-                                'icon' => $child['icon'],
-                                'url' => $last_word,
-                                'permissions' => json_encode($child['permissions']),
-                                'status' => 1,
-                            ];
-                            CustomDashboardMenu::create($dtc);
-                        }
-                    }
-                }
-            }
-        }*/
+//        foreach ($menus as $menu) {
+//            $check = CustomDashboardMenu::where('menu_id', $menu['id'])->first();
+//            if (!$check) {
+//                $explode = explode('/admin/', $menu['url']);
+//                $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
+//                $dt = [
+//                    'menu_id' => $menu['id'],
+//                    'priority' => $menu['priority'],
+//                    'name' => $menu['name'],
+//                    'icon' => $menu['icon'],
+//                    'url' => $last_word,
+//                    'permissions' => json_encode($menu['permissions']),
+//                    'status' => 1,
+//                ];
+//                CustomDashboardMenu::create($dt);
+//                if (count($menu['children'])) {
+//                    foreach ($menu['children'] as $child) {
+//                        $checkC = CustomDashboardMenu::where('menu_id', $child['id'])->first();
+//                        if (!$checkC) {
+//                            $explode = explode('/admin/', $child['url']);
+//                            $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
+//                            $dtc = [
+//                                'menu_id' => $child['id'],
+//                                'priority' => $child['priority'],
+//                                'parent_id' => $child['parent_id'],
+//                                'name' => $child['name'],
+//                                'icon' => $child['icon'],
+//                                'url' => $last_word,
+//                                'permissions' => json_encode($child['permissions']),
+//                                'status' => 1,
+//                            ];
+//                            CustomDashboardMenu::create($dtc);
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         return collect($links)->sortBy('priority');
     }
