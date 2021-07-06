@@ -55,11 +55,12 @@
             <div class="col-lg-2 mt-2">
 
                 <form id='myform' method='POST' action='#'>
-                    <a href="{{ route('public.cart.delete_item', ['id' => $cartItem->id]) }}"><i class="fa fa-trash-alt"></i></a></span>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
                     <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' readonly/>
                     <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
                 </form>
+                <a class="text-center d-block mt-2" href="{{ route('public.cart.delete_item', ['id' => $cartItem->id]) }}"><i class="fa fa-trash-alt color-black"></i></a></span>
+
             </div>
             <div class="col-lg-2 mt-2 ItemPrice">
                 @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
@@ -94,7 +95,8 @@
     </div>
     <hr>--}}
     <div class="row mt-5">
-        <div class="col-lg-1 mt-3 float-right">
+        <div class="col-lg-10"></div>
+        <div class="col-lg-2 mt-3 float-right">
             <a href="{{ route('public.cart.clear') }}" class=" btn cart-btn w-100">Clear Cart</a>
 
         </div>

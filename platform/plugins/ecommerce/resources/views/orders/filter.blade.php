@@ -71,7 +71,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-md-4 mb-3">
+                        <div class="w-100 c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+                        <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+                        <input type="text" autocomplete="off" name="" placeholder="Select" class="w-100 c-datepicker-data-input only-date" value="">
+                        </div>
+                        </div>
                         <div class="col-md-12">
                             <label class="font-bold">Order Status:</label>
                             <div>

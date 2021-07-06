@@ -616,5 +616,31 @@
 
 
 </script>
+<script type="text/javascript">
 
+$(function(){ 
+
+    $('.J-datepicker-day').datePicker({
+      hasShortcut: true,
+      format:'MM-DD-YYYY HH:mm:ss', 
+      language: 'en',
+      shortcutOptions: [{
+        name: 'Today',
+        day: '0'
+      }, {
+        name: 'Yesterday',
+        day: '-1'
+      }, {
+        name: 'One week ago',
+        day: '-7'
+      }]
+    });
+  
+    
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="{{ asset('landb/js/datepicker.all.js') }}"></script> 
+
+<script src="{{ asset('landb/js/datepicker.en.js') }}" ></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
