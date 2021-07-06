@@ -1031,3 +1031,18 @@
 .conversation .tabcontent {
   display: none;
 }
+
+.search-head {
+  justify-content: center;
+  align-items: center;
+  display: inherit;
+  font-size: 15px !important;
+}
+
+.chk-orders .hrv-checkbox:checked:before, input[type=checkbox]:not(.hrv-checkbox):checked:before {
+  top: 13px !important;
+}
+
+#modal-adv-search {
+  z-index: 100000;
+}

@@ -29,6 +29,8 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\OrderProductShipmentVerify;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\UserSearch;
+use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderAddressInterface;
@@ -1829,4 +1831,28 @@ class OrderController extends BaseController
         }
     }
 
+
+    public function saveAdvanceSearch(Request $request)
+    {
+        $params = $request->all();
+
+        $searchData = ['user_id' => auth()->user()->id, 'search_type' => 'orders', 'name' => $params['search_name'], 'status' => 1];
+        $search = UserSearch::create($searchData);
+        $searchItems = [];
+        unset($params['search_name']);
+        foreach ($params as $key => $value) {
+            if ($value) {
+                $searchItems[] = ['user_search_id' => $search->id, 'key' => $key, 'value' => $value];
+            }
+        }
+        if (!empty($searchItems)) {
+            UserSearchItem::insert($searchItems);
+        }
+
+        if ($search) {
+            return response()->json(['status' => 'success'], 200);
+        } else {
+            return response()->json(['status' => 'error'], 500);
+        }
+    }
 }
