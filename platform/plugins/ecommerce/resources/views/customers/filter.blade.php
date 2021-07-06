@@ -48,14 +48,12 @@
 
                     <div class="col-md-4">
                         <label class="font-bold">Customer:</label>
-                        <input type="text" name="customer_name" class="form-control"
-                               value="{{request('customer_name')}}">
+                        <input type="text" name="customer_name" class="form-control" value="{{request('customer_name')}}">
                     </div>
 
                     <div class="col-md-4">
                         <label class="font-bold">Email:</label>
-                        <input type="email" name="customer_email" class="form-control"
-                               value="{{request('customer_email')}}">
+                        <input type="email" name="customer_email" class="form-control" value="{{request('customer_email')}}">
                     </div>
 
                     <div class="col-md-4 mt-3">
@@ -66,7 +64,7 @@
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Status:</label>
                         <div class="ui-select-wrapper">
-                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$PRODUCT,  null, ['class' => 'form-control ui-select']) !!}
+                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  null, ['class' => 'form-control ui-select']) !!}
                         </div>
                     </div>
 
@@ -105,41 +103,21 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <div class="d-flex">
-                        <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="online_order"
-                               class="form-control"
-                               value="{{\Botble\Ecommerce\Models\Order::ONLINE}}" {{request('online_order') == \Botble\Ecommerce\Models\Order::ONLINE ? 'checked' : ''}}>
-                        {{\Botble\Ecommerce\Models\Order::$PLATFORMS[\Botble\Ecommerce\Models\Order::ONLINE]}}
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="mt-4 font-bold">Promotions:</label><br>
-                    <select class="form-control" name="coupon_code" style="width: 100%">
-                        <option selected="selected" value="" disabled="">Select Promotion</option>
-                        @foreach($data['coupon_codes'] as $key => $coupon_code)
-                            <option
-                                value="{{ $key }}" {{request('coupon_code') == $key ? 'selected' : ''}}>{{ $key }}</option>
-                        @endforeach
-                    </select>
-                </div>
                 <div class="col-md-4">
                     <label class="mt-4 font-bold">Order Report:</label><br>
-                    {{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}
+                    {{--{{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}--}}
                     <div class="ui-select-wrapper">
                         <select name="report_type" class="ui-select">
                             <option value="">Select Report Type</option>
                             @foreach($report_types as $key => $value)
-                                <option
-                                    value="{{ $key }}" {{request('report_type') == $key ? 'selected' : ''}}>{{ $value }}</option>
+                                <option value="{{ $key }}" {{request('report_type') == $key ? 'selected' : ''}}>{{ $value }}</option>
                             @endforeach
                         </select>
                         <svg class="svg-next-icon svg-next-icon-size-16">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
                         </svg>
                     </div>
-                    {{ Form::close() }}
+                    {{--{{ Form::close() }}--}}
                 </div>
 
             </div>
@@ -149,8 +127,7 @@
                     <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
                 </div>
                 <div class="text-right adv-input">
-                    <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close
-                    </button>
+                    <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary" value="Search">
                 </div>
 
@@ -179,7 +156,7 @@
                     location.reload();
                 },
                 error: function (request, status, error) {
-                    location.reload();
+                    //location.reload();
                     toastr['warning']('Something went wrong.', 'Validation Error');
                 }
             });

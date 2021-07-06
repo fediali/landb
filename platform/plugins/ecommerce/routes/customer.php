@@ -37,7 +37,7 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
 
             Route::post('save-advance-search', [
                 'as'         => 'save.advance.search',
-                'uses'       => 'OrderController@saveAdvanceSearch',
+                'uses'       => 'CustomerController@saveAdvanceSearch',
                 'permission' => 'customers.create',
             ]);
 
