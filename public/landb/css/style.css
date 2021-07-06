@@ -1927,6 +1927,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .breadcrumb_wrap { 
+        height: auto !important;
+      }
     .detail-magnify {
         display: none !important;
     }
@@ -3995,3 +3998,4 @@ html {
   .shoplisting .col-lg-custom-5 .img {
     height: 328px !important;
   }
+
