@@ -158,7 +158,7 @@ class OrderTable extends TableAbstract
         if ($user_id) {
             $merge = MergeAccount::where('user_id_one', $user_id)->pluck('user_id_two');
             if (!$merge->isEmpty()) {
-                $query->whereIn('ec_orders.user_id', $merge->user_id_two)->where('ec_orders.user_id', $user_id);
+                $query->whereIn('ec_orders.user_id', $merge)->orWhere('ec_orders.user_id', $user_id);
             } else {
                 $query->where('ec_orders.user_id', $user_id);
             }

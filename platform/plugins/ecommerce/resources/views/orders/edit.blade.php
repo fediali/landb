@@ -655,6 +655,7 @@
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
+                                <button type="button" class="btn btn-outline-danger">Split Order</button>
                             </div>
                         </div>
 

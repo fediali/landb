@@ -113,7 +113,7 @@ class ProductTable extends TableAbstract
                 return BaseHelper::formatDate($item->oos_date);
             })
             ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
+                return strtoupper($item->status);
             })
             ->editColumn('quantity', function ($item) {
                 $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
