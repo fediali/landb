@@ -74,9 +74,9 @@ class CheckoutController extends Controller
     $url = (env("OMNI_URL") . "customer/" . $user->card[0]->customer_omni_id . "/payment-method");
     list($card, $info) = omni_api($url);
     $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
-    /*dd($cards);*/
+
 //dd($user);
-    return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();
+    return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token, 'cards' => $cards])->render();
   }
 
   public function getUserCart(){
@@ -206,7 +206,7 @@ class CheckoutController extends Controller
   public function charge(Request $request)
   {
     $data = [
-        'payment_method' => $request->payment_method,
+        'payment_method_id' => $request->payment_id,
         'meta'              => [
             'reference' => $request->order_id,
             'tax'       => 0,

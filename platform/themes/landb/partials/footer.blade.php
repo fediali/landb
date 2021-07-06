@@ -384,9 +384,9 @@ new Luminous(demoTrigger);
         'customer_id': customer_id,
       },
       success: function (data) {
-        console.log(data)
+        //console.log('data:'+data)
         toastr['success']('Card has been added Successfully', 'Thanks!');
-
+        $('.payment_id').val(result.id);
         $('#checkout-main-form').submit();
       },
       error: function (request, status, error) {
@@ -394,6 +394,18 @@ new Luminous(demoTrigger);
       }
     });
   }
+
+  $('.card_list').on('change', function () {
+    var card = $("select.card_list option:selected").val();
+    $('.payment_id').val(card);
+    if (card == 0) {
+      $('#add_card').show();
+      $('#add_payment').hide();
+    } else {
+      $('#add_card').hide();
+      $('#add_payment').show();
+    }
+  })
 
   $(document).ready(function(){ 
  $('.welcomeDiv').hide();
