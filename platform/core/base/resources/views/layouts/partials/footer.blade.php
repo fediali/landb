@@ -112,48 +112,52 @@
     </div>
 </div>
 <div class="modal fade" id="modal_split_order" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
     
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
+            <div class="d-flex w-100">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                <h4 class="modal-title text-center w-100 thread-pop-head color-white">Split Order#112544<span
+                        class="variation-name"></span></h4>
+            </div>
         </div>
         <div class="modal-body">
         <table class="table">
             <thead>
             <tr>
                 <th>Product</th>
-                <th> </th>
-                <th>Quantity</th>
-                <th>Quantity Moved</th>
+                <th class="text-center"> Quantity</th>
+                <th></th>
+                <th class="text-center">Quantity Moved</th>
             </tr>
             </thead>
             <tbody class="">
                 <tr>
                     <td>
-                        <div>
-                            <img src="" />
-                            <div> 
-                                <p class="split-head">Essential Black</p>
+                        <div class="d-flex">
+                            <img class="split-img" src="http://revamp.landbw.co/images/default.jpg" />
+                            <div class="ml-3"> 
+                                <p class="split-head m-0">Essential Black</p>
                                 <p class="split-code">CODE: ES11</p>
-                                <p class="split-opt">Options:</p>
-                                <p class="split-size">SIZE: 2(S)</p>
+                                <p class="split-opt m-0"><b>Options:</b></p>
+                                <p class="split-size"><b>SIZE:</b> 2(S)</p>
                                 <a class="split-link" href="#">landbapparel.com</a>
                             </div>
                         </div>  
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
+                    <td class="text-center"><button class="btn-default split-btn">--></button></td>
+                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
                 </tr>
             </tbody>
 
         </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
         </div>
       </div>
       

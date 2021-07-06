@@ -1092,3 +1092,22 @@
   position: absolute;
     top: -4px;
 }
+
+.split-link {
+  color: #a7a7a7;
+}
+
+.split-btn {
+  border-radius: 5px !important;
+  height: 28px !important;
+  border-color: #cacaca !important;
+}
+
+.split-img {
+  height: 70px;
+}
+
+.split-input {
+  text-align: center;
+  border: none;
+}
