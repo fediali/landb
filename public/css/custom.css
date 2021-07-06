@@ -1046,3 +1046,49 @@
 #modal-adv-search {
   z-index: 100000;
 }
+#modal-adv-search .close {
+  position: absolute;
+    top: -4px;
+}
+
+#modal-adv-search .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.adv-input {
+  width: 50%;
+}
+
+#merge_customer_modal .close {
+  position: absolute;
+    top: -4px;
+}
+
+#merge_customer_modal {
+  z-index: 100000;
+}
+
+
+#merge_customer_modal .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+#modal_split_order .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+#modal_split_order {
+  z-index: 100000;
+}
+
+#modal_split_order .close {
+  position: absolute;
+    top: -4px;
+}
