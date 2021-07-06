@@ -113,7 +113,7 @@
 
 <script>
     $(document).ready(function () {
-        getCustomer();
+
         var address = '';
         var customer = '';
         $(document).on('click', '.merge-customer', function () {
