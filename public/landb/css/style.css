@@ -1940,7 +1940,7 @@ input.qtyminus {
     }
     .gallery .full,
     .gallery .full img {
-        width: 70% !important;
+        width: 59% !important;
     }
     .mbtb-pl-1 {
         padding-left: .25rem!important;
@@ -3977,4 +3977,8 @@ html {
       width:100%;  
     }
     
+  }
+
+  .demo-trigger img {
+    cursor: zoom-in !important;
   }

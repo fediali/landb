@@ -1039,7 +1039,7 @@
   font-size: 15px !important;
 }
 
-.chk-orders .hrv-checkbox:checked:before, input[type=checkbox]:not(.hrv-checkbox):checked:before {
+#modal-adv-search input:checked:before {
   top: 13px !important;
 }
 
