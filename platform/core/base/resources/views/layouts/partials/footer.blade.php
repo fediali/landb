@@ -112,11 +112,9 @@
 
 
 <script>
-
-
-    var address = '';
-    var customer = '';
     $(document).ready(function () {
+        var address = '';
+        var customer = '';
         $(document).on('click','.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
