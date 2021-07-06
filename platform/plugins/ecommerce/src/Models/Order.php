@@ -221,8 +221,7 @@ class Order extends BaseModel
     /**
      * @return bool
      */
-    public
-    function canBeCanceled()
+    public function canBeCanceled()
     {
         return in_array($this->status, [OrderStatusEnum::PENDING, OrderStatusEnum::PROCESSING]);
     }
