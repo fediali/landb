@@ -117,7 +117,7 @@
     var address = '';
     var customer = '';
     $(document).ready(function () {
-        $('.merge-customer').on('click', function () {
+        $(document).on('click','.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
             $('#user_id_one').val(customer_id);
