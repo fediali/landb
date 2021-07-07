@@ -303,4 +303,4 @@ $(document).ready(function () {
     $(".customer_type").prop('checked', false);
     $(this).prop('checked', true);
   });
-})*/
+})*/ 

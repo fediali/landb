@@ -1112,12 +1112,13 @@
   border: none;
 }
 
-.c-datepicker-date-picker {
+.c-datepicker-picker {
   z-index: 100000 !important; 
 }
 
-.c-datepicker-date-picker__header {
+.c-datepicker-date-range-picker__header {
   margin: 1px 12px 0px 12px !important;
+  font-size: 13px !important;
 }
 
 .c-datepicker-date-table th {
@@ -1136,11 +1137,12 @@
 .c-datepicker-input--small .c-datepicker-input__inner {
   height: 23px !important; 
 }
-
-.c-datepicker-date-editor {
-  margin-top: 45px !important;
-}
+ 
 
 .c-datepicker-single-editor .c-datepicker-data-input {
   width: 95% !important;
+}
+
+.c-datepicker-date-range-picker-panel__wrap { 
+  padding: 0px 10px !important;
 }
