@@ -1927,6 +1927,15 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .breadcrumb_wrap { 
+        height: auto !important;
+      }
+    .detail-magnify {
+        display: none !important;
+    }
+    .detail {
+        display: none !important;
+    }
     .category-mobile-container {
         display: flex;
         overflow-x: scroll;
@@ -3982,3 +3991,11 @@ html {
   .demo-trigger img {
     cursor: zoom-in !important;
   }
+
+  .shoplisting .col-lg-3 .img {
+    height: 380px !important;
+  }
+  .shoplisting .col-lg-custom-5 .img {
+    height: 328px !important;
+  }
+ 

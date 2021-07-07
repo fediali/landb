@@ -1111,3 +1111,38 @@
   text-align: center;
   border: none;
 }
+
+.c-datepicker-picker {
+  z-index: 100000 !important; 
+}
+
+.c-datepicker-date-range-picker__header {
+  margin: 1px 12px 0px 12px !important;
+  font-size: 13px !important;
+}
+
+.c-datepicker-date-table th {
+  padding: 0px 5px !important;
+}
+
+
+.c-datepicker-date-table td { 
+  padding: 0px 0 !important;
+}
+
+.c-datepicker-date-table td div { 
+  padding: 0px 0 !important; 
+}
+
+.c-datepicker-input--small .c-datepicker-input__inner {
+  height: 23px !important; 
+}
+ 
+
+.c-datepicker-single-editor .c-datepicker-data-input {
+  width: 95% !important;
+}
+
+.c-datepicker-date-range-picker-panel__wrap { 
+  padding: 0px 10px !important;
+}
