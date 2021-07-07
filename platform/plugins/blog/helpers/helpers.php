@@ -889,8 +889,8 @@ if (!function_exists('packProdQtyCalculate')) {
     function packProdQtyCalculate($id)
     {
 
-//        $category = ProductCategory::where('id', $id)->first();
-        $category = ProductCategory::all();
+        $category = ProductCategory::where('id', $id)->first();
+        //$category = ProductCategory::all();
         $totalQuantity = 0;
         try {
             if ($category->category_sizes) {
