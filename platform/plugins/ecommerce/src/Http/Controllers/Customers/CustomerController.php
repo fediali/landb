@@ -550,7 +550,7 @@ class CustomerController extends BaseController
     {
         $params = $request->all();
 
-        $searchData = ['user_id' => auth()->user()->id, 'search_type' => 'orders', 'name' => $params['search_name'], 'status' => 1];
+        $searchData = ['user_id' => auth()->user()->id, 'search_type' => 'customers', 'name' => $params['search_name'], 'status' => 1];
         $search = UserSearch::create($searchData);
         $searchItems = [];
         unset($params['search_name']);
