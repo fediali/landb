@@ -84,7 +84,7 @@ class ProductsController extends Controller
 
         $condition = [
             'ec_products.id'     => $slug->reference_id,
-            'ec_products.status' => BaseStatusEnum::PUBLISHED,
+            'ec_products.status' => BaseStatusEnum::$PRODUCT['Active'],
         ];
 
         if (Auth::check() && request()->input('preview')) {
@@ -101,7 +101,6 @@ class ProductsController extends Controller
                 'tags.slugable',
             ],
         ]);
-
 
         if (!$data['product']) {
             abort(404);
