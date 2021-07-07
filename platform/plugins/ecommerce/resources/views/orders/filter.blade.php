@@ -71,10 +71,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                        <div class="w-100 c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+                        <div class="col-md-12 mb-3">
+                        <label class="font-bold mb-0">Date:</label>
+                        <div class="w-100 c-datepicker-date-editor  J-datepicker-range-day">
                         <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
-                        <input type="text" autocomplete="off" name="" placeholder="Select" class="w-100 c-datepicker-data-input only-date" value="">
+                        <input placeholder="Start" name="" style="width:48% !important;" class="c-datepicker-data-input only-date" value="">
+                        <span class="c-datepicker-range-separator">-</span>
+                        <input placeholder="End" name="" style="width:48% !important;" class="c-datepicker-data-input only-date" value="">
                         </div>
                         </div>
                         <div class="col-md-12">

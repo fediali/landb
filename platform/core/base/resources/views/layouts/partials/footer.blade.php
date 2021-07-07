@@ -512,12 +512,6 @@
             $('input[name=address_city]').val(data.city);
             $('input[name=address_zip_code]').val(data.zip_code);
 
-            if(data.type === 'shipping'){
-              $('input[id=shipping_type]').attr('checked' , 'checked');
-            }else{
-              $('input[id=billing_type]').attr('checked' , 'checked');
-            }
-
             get_countries($('select[name="address_country"]'), data.country);
             get_states($('select[name="address_state"]'), data.country, data.state);
 
@@ -625,25 +619,109 @@
 <script type="text/javascript">
 
 $(function(){ 
-
-    $('.J-datepicker-day').datePicker({
-      hasShortcut: true,
-      format:'MM-DD-YYYY HH:mm:ss', 
-      language: 'en',
-      shortcutOptions: [{
+    var DATAPICKERAPI = {  
+      rangeShortcutOption1: [{
+        name: 'Last week',
+        day: '-7,0'
+      }, {
+        name: 'Last Month',
+        day: '-30,0'
+      }, {
+        name: 'Last Three Months',
+        day: '-90, 0'
+      }],
+      singleShortcutOptions1: [{
         name: 'Today',
-        day: '0'
+        day: '0',
+        time: '00:00:00'
       }, {
         name: 'Yesterday',
-        day: '-1'
+        day: '-1',
+        time: '00:00:00'
       }, {
-        name: 'One week ago',
+        name: 'One Week Ago',
         day: '-7'
       }]
-    });
-  
-    
-});
+    };
+      $('.J-datepicker').datePicker({
+        hasShortcut:true,
+        language: 'en',
+        format: 'MM-DD-YYYY',
+        min:'2018-01-01 04:00:00',
+        max:'2029-10-29 20:59:59',
+        shortcutOptions:[{
+          name: 'Today',
+          day: '0'
+        }, {
+          name: 'Yesterday',
+          day: '-1',
+          time: '00:00:00'
+        }, {
+          name: 'One Week Ago',
+          day: '-7'
+        }],
+        hide:function(){
+          console.info(this)
+        }
+      });
+
+
+      $('.J-datepicker-day').datePicker({
+        hasShortcut: true,
+        language: 'en',
+        format: 'MM-DD-YYYY',
+        shortcutOptions: [{
+          name: 'Today',
+          day: '0'
+        }, {
+          name: 'Yesterday',
+          day: '-1'
+        }, {
+          name: 'One week ago',
+          day: '-7'
+        }]
+      });
+
+
+      $('.J-datepicker-range-day').datePicker({
+        hasShortcut: true,
+        language: 'en',
+        format: 'MM-DD-YYYY',
+        isRange: true,
+        shortcutOptions: DATAPICKERAPI.rangeShortcutOption1
+      });
+
+
+      $('.J-datepicker-range').datePicker({
+        hasShortcut: true,
+        language: 'en',
+        format: 'MM-DD-YYYY',
+        min: '2018-01-01 06:00:00',
+        max: '2029-04-29 20:59:59',
+        isRange: true,
+        shortcutOptions: [{
+          name: 'Yesterday',
+          day: '-1,-1',
+          time: '00:00:00,23:59:59'
+        },{
+          name: 'Last Week',
+          day: '-7,0',
+          time:'00:00:00,'
+        }, {
+          name: 'Last Month',
+          day: '-30,0',
+          time: '00:00:00,'
+        }, {
+          name: 'Last Three Months',
+          day: '-90, 0',
+          time: '00:00:00,'
+        }],
+        hide: function (type) {
+          console.info(this.$input.eq(0).val(), this.$input.eq(1).val());
+          console.info('Type:',type)
+        }
+      }); 
+  });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="{{ asset('landb/js/datepicker.all.js') }}"></script> 
