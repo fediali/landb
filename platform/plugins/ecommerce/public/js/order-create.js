@@ -7723,7 +7723,7 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Qty : " +
+                                          "Total Pieces : " +
                                             _vm._s(variant.packQty)
                                         )
                                       ])
