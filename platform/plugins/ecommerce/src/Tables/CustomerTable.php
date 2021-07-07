@@ -287,7 +287,6 @@ class CustomerTable extends TableAbstract
             'text' => '<i class="fa fa-check"></i> Verify All Customer'
         ];
 
-//        dd($buttons, $verify);
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Customer::class);
     }
 

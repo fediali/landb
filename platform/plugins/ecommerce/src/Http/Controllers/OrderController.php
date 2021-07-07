@@ -1832,11 +1832,11 @@ class OrderController extends BaseController
     }
 
 
-    public function saveAdvanceSearch(Request $request)
+    public function saveAdvanceSearch($type, Request $request)
     {
         $params = $request->all();
 
-        $searchData = ['user_id' => auth()->user()->id, 'search_type' => 'orders', 'name' => $params['search_name'], 'status' => 1];
+        $searchData = ['user_id' => auth()->user()->id, 'search_type' => $type, 'name' => $params['search_name'], 'status' => 1];
         $search = UserSearch::create($searchData);
         $searchItems = [];
         unset($params['search_name']);
