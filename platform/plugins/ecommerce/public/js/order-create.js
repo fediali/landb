@@ -7756,13 +7756,18 @@ var render = function() {
                                     [
                                       _c(
                                         "div",
-                                        {
-                                          staticClass: "inline_block dropdown"
-                                        },
+                                        { staticClass: "d-flex dropdown" },
                                         [
-                                          _c("span", [
-                                            _vm._v(_vm._s(_vm.currency))
-                                          ]),
+                                          _c(
+                                            "span",
+                                            {
+                                              staticStyle: {
+                                                "margin-top": "8px !important",
+                                                "margin-right": "5px !important"
+                                              }
+                                            },
+                                            [_vm._v(_vm._s(_vm.currency))]
+                                          ),
                                           _c("input", {
                                             directives: [
                                               {
@@ -7849,7 +7854,8 @@ var render = function() {
                                 "td",
                                 {
                                   staticClass:
-                                    "pl5 p-r5 width-100-px min-width-100-px text-center"
+                                    "pl5 p-r5 width-100-px min-width-100-px text-center",
+                                  staticStyle: { width: "75px" }
                                 },
                                 [
                                   _vm._v(
