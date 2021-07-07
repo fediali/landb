@@ -127,14 +127,14 @@
                     </div>
                     <div class="text-right adv-input">
                     <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Search"> 
+                    <input type="submit" class="btn btn-primary" value="Search">
                     </div>
-                  
+
                     </div>
                 </div>
 
-              
-                    
+
+
 
             {{ Form::close() }}
         </div>
@@ -150,7 +150,7 @@
                 return;
             }
             $.ajax({
-                url: '{{ route('orders.save.advance.search') }}',
+                url: '{{ route('orders.save.advance.search','orders') }}',
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {

@@ -140,11 +140,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             ]);
 
 
-            Route::post('save-advance-search', [
+            Route::post('save-advance-search/{type}', [
                 'as'         => 'save.advance.search',
                 'uses'       => 'OrderController@saveAdvanceSearch',
                 'permission' => 'orders.create',
             ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {

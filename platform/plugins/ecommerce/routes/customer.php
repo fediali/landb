@@ -35,12 +35,6 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'permission' => 'customers.create',
             ]);
 
-            Route::post('save-advance-search', [
-                'as'         => 'save.advance.search',
-                'uses'       => 'CustomerController@saveAdvanceSearch',
-                'permission' => 'customers.create',
-            ]);
-
             Route::get('verify-phone/{id}', [
                 'as'         => 'verify-phone',
                 'uses'       => 'CustomerController@verifyphone',
