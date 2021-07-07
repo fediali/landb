@@ -2,6 +2,7 @@
 namespace Theme\Landb\Repositories;
 
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Slug\Models\Slug;
@@ -65,7 +66,7 @@ class ProductsRepository{
         ->join('ec_product_variations as epv' , 'epv.configurable_product_id' , 'ec_products.id')
         ->join('ec_products as ep' , 'epv.product_id', 'ep.id')
         ->where('ep.quantity', '>', 0)
-        ->where($this->model->getTable().'.status', 'published')
+        ->where($this->model->getTable().'.status', BaseStatusEnum::$PRODUCT['Active'])
             ->when($category , function ($query){
                 $query->with(['category' => function($que){
                   $que->with('category_sizes');
@@ -84,7 +85,8 @@ class ProductsRepository{
                 $query->limit($limit);
             })
             ->when(!is_null($category_id) , function ($query) use ($category_id){
-                $query->where('category_id', $category_id);
+               /* $query->where($this->model->getTable().'.category_id', $category_id);*/
+                 $query->join('ec_product_category_product as epcp', 'epcp.product_id' , $this->model->getTable().'.id')->where('epcp.category_id', $category_id);
             })
             ->when(!is_null($tag_id) , function ($query) use ($tag_id){
                 $query->join('ec_product_tag_product as ptag', 'ptag.product_id','ec_products.id')->where('tag_id', $tag_id);
@@ -116,7 +118,6 @@ class ProductsRepository{
       }else{
         $data = $data->get();
       }
-      //dd($data);
     return $data;
   }
 
