@@ -70,6 +70,11 @@ class CheckoutController extends Controller
     }
 
     $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress', 'addresses'])->first();
+
+    $url = (env("OMNI_URL") . "customer/" . $user->card[0]->customer_omni_id . "/payment-method");
+    list($card, $info) = omni_api($url);
+    $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+    /*dd($cards);*/
 //dd($user);
     return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token])->render();
   }

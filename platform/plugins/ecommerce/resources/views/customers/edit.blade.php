@@ -620,6 +620,20 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="col-lg-6">
+                                <p class="textbox-label">Type</p>
+                                <input
+                                    class="input-textbox form-control"
+                                    type="radio" name="address_type"
+                                    placeholder="Shipping" id="shipping_type" value="shipping"/> Shipping
+                                <input
+                                    class="input-textbox form-control"
+                                    type="radio" name="address_type"
+                                    placeholder="Billing"  id="billing_type" value="billling"/> Billing
+                                @error('address_zip_code')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
