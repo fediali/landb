@@ -219,6 +219,23 @@ class CustomerTable extends TableAbstract
             $query->when(isset($search_items['status']), function ($q) use ($search_items) {
                 $q->where('ec_customers.status', $search_items['status']);
             });
+            $query->when(isset($search_items['last_order']), function ($q) use ($search_items) {
+                $q->join('ec_orders', 'ec_orders.user_id', 'ec_customers.id');
+                $q->whereDate('ec_orders.created_at', '>=', date('Y-m-d', strtotime($search_items['last_order'])));
+            });
+            $query->when(isset($search_items['last_visit']), function ($q) use ($search_items) {
+                $q->whereDate('ec_customers.last_visit', '>=', date('Y-m-d', strtotime($search_items['last_visit'])));
+            });
+            $query->when(isset($search_items['spend']), function ($q) use ($search_items) {
+                $q->join('ec_orders', 'ec_orders.user_id', 'ec_customers.id');
+                $q->where('ec_orders.amount', '>=', $search_items['spend']);
+            });
+            $query->when(isset($search_items['no_sales_rep']), function ($q) use ($search_items) {
+                $q->where('ec_customers.salesperson_id', 0);
+            });
+            $query->when(isset($search_items['merged_account']), function ($q) use ($search_items) {
+                $q->join('ec_customers_merge', 'ec_customers_merge.user_id_one', 'ec_customers.id');
+            });
             $query->when(isset($search_items['report_type']), function ($q) use ($search_items) {
                 $from_date = Carbon::now()->subDays($search_items['report_type'])->format('Y-m-d');
                 $to_date = Carbon::now()->format('Y-m-d');
