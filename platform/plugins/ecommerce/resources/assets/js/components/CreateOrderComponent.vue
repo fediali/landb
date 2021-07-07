@@ -224,17 +224,24 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <!--<td>
                                             <a href="#" v-b-modal.add-shipping class="hover-underline">
-                                                <span v-if="!child_is_selected_shipping"><i
-                                                    class="fa fa-plus-circle"></i> {{ __('Add shipping fee') }}</span>
+                                                <span v-if="!child_is_selected_shipping">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                    {{ __('Add shipping fee') }}
+                                                </span>
                                                 <span v-if="child_is_selected_shipping">{{ __('Shipping') }}</span>
                                             </a>
-                                            <p class="mb0 font-size-12px" v-if="child_shipping_method_name">{{
-                                                    child_shipping_method_name
-                                                }}</p>
-                                        </td>
-                                        <td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>
+                                            <p class="mb0 font-size-12px" v-if="child_shipping_method_name">
+                                                {{child_shipping_method_name }}
+                                            </p>
+                                        </td><td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>-->
+                                        <span>
+                                            <i class="fa fa-plus-circle"></i>
+                                            {{ __('Add shipping fee') }}
+                                        </span>
+                                        <input class="next-input p-none-r" v-model="child_shipping_amount" type="number" min="1">
+                                        <td class="pl10">{{ child_shipping_amount | formatPrice }} {{ currency }}</td>
                                     </tr>
                                     <tr class="text-no-bold">
                                         <td>{{ __('Total amount') }}</td>
