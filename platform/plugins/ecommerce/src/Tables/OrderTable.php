@@ -203,11 +203,11 @@ class OrderTable extends TableAbstract
             });
             if (isset($search_items['order_from_date'])) {
                 // $from_date = Carbon::createFromDate(strtotime($search_items['order_from_date']))->format('Y-m-d');
-                $query->whereDate('ec_orders.created_at', '>=', $search_items['order_from_date']);
+                $query->whereDate('ec_orders.created_at', '>=', Carbon::createFromFormat('m-d-Y', $search_items['order_from_date'])->format('Y-m-d'));
             }
             if (isset($search_items['order_to_date'])) {
                 // $to_date = Carbon::createFromDate(strtotime($search_items['order_to_date']))->format('Y-m-d');
-                $query->whereDate('ec_orders.created_at', '<=', $search_items['order_to_date']);
+                $query->whereDate('ec_orders.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d'));
             }
             $query->when(isset($search_items['order_status']), function($q) use($search_items) {
                 $q->where('ec_orders.status', $search_items['order_status']);

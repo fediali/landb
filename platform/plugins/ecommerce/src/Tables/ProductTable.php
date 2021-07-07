@@ -275,7 +275,7 @@ class ProductTable extends TableAbstract
                 if ($search_items['prod_type'] == 'regular') {
                     $q->where('ec_products.quantity', '>=', 0);
                 } else if ($search_items['prod_type'] == 'pre_order') {
-                    
+
                 } else if ($search_items['prod_type'] == 're_order') {
 
                 }
