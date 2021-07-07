@@ -203,23 +203,23 @@ class CustomerTable extends TableAbstract
         }
 
         if (!empty($search_items)) {
-            $query->when(isset($search_items['company']), function($q) use($search_items) {
+            $query->when(isset($search_items['company']), function ($q) use ($search_items) {
                 $q->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');
-                $q->where('ec_customer_detail.company', 'LIKE', '%'.$search_items['company'].'%');
+                $q->where('ec_customer_detail.company', 'LIKE', '%' . $search_items['company'] . '%');
             });
-            $query->when(isset($search_items['customer_name']), function($q) use($search_items) {
-                $q->where('ec_customers.name', 'LIKE', '%'.$search_items['customer_name'].'%');
+            $query->when(isset($search_items['customer_name']), function ($q) use ($search_items) {
+                $q->where('ec_customers.name', 'LIKE', '%' . $search_items['customer_name'] . '%');
             });
-            $query->when(isset($search_items['customer_email']), function($q) use($search_items) {
-                $q->where('ec_customers.email', 'LIKE', '%'.$search_items['customer_email'].'%');
+            $query->when(isset($search_items['customer_email']), function ($q) use ($search_items) {
+                $q->where('ec_customers.email', 'LIKE', '%' . $search_items['customer_email'] . '%');
             });
-            $query->when(isset($search_items['manager']), function($q) use($search_items) {
-                $q->where('ec_customers.name', 'LIKE', '%'.$search_items['manager'].'%');
+            $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
+                $q->where('ec_customers.name', 'LIKE', '%' . $search_items['manager'] . '%');
             });
-            $query->when(isset($search_items['status']), function($q) use($search_items) {
+            $query->when(isset($search_items['status']), function ($q) use ($search_items) {
                 $q->where('ec_customers.status', $search_items['status']);
             });
-            $query->when(isset($search_items['report_type']), function($q) use($search_items) {
+            $query->when(isset($search_items['report_type']), function ($q) use ($search_items) {
                 $from_date = Carbon::now()->subDays($search_items['report_type'])->format('Y-m-d');
                 $to_date = Carbon::now()->format('Y-m-d');
                 $q->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
@@ -282,6 +282,7 @@ class CustomerTable extends TableAbstract
     public function buttons()
     {
         $buttons = $this->addCreateButton(route('customer.create'), 'customer.create');
+
         $buttons['verify'] = [
             'link' => route('customers.verify-phone-bulk', [Auth::id()]),
             'text' => '<i class="fa fa-check"></i> Verify All Customer'
@@ -369,7 +370,7 @@ class CustomerTable extends TableAbstract
             120 => 'Quarterly',
             180 => 'Six Month',
         ];
-        return view($this->customFilterTemplate, compact('report_types','searches'))->render();
+        return view($this->customFilterTemplate, compact('report_types', 'searches'))->render();
     }
 
 }

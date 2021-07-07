@@ -80,6 +80,11 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'as'   => 'edit-account-post',
             'uses' => 'CustomerController@update'
         ]);
+
+        Route::post('create-customer-payment', [
+            'as'         => 'create-customer-payment',
+            'uses'       => 'CustomerController@postCustomerCard'
+        ]);
     });
 });
 Theme::routes();

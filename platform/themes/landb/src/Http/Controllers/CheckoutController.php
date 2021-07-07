@@ -75,7 +75,6 @@ class CheckoutController extends Controller
       $url = (env("OMNI_URL") . "customer/" . $user->card[0]->customer_omni_id . "/payment-method");
       list($card, $info) = omni_api($url);
       $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
-      dd($cards);
     }else{
       $cards = collect()->push('Add New Card');
     }
