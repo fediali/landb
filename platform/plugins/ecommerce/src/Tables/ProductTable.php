@@ -348,6 +348,8 @@ class ProductTable extends TableAbstract
                 'name'  => 'ec_products.single_qty',
                 'title' => 'Single Qty',
                 'class' => 'text-left',
+                'searchable' => false,
+                'orderable' => false,
             ],
             'product_type'  => [
                 'name'  => 'ec_products.product_type',
@@ -365,16 +367,22 @@ class ProductTable extends TableAbstract
                 'title' => 'Pre-order Qty',
                 'width' => '100px',
                 'class' => 'text-center',
+                'searchable' => false,
+                'orderable' => false,
             ],
             'reorder_qty'   => [
                 'name'  => 'ec_products.reorder_qty',
                 'title' => 'Re-order Qty',
                 'class' => 'text-center',
+                'searchable' => false,
+                'orderable' => false,
             ],
             'sold_qty'      => [
                 'name'  => 'ec_products.sold_qty',
                 'title' => 'Sold Qty',
                 'class' => 'text-center',
+                'searchable' => false,
+                'orderable' => false,
             ],
             'created_at'    => [
                 'name'  => 'ec_products.created_at',

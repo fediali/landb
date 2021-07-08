@@ -127,9 +127,12 @@ class ThreadordersTable extends TableAbstract
             'threadorders.order_status',
             'threadorders.created_at',
             'threadorders.status',
+            'categories_threads.sku',
         ];
 
-        $query = $model->select($select);
+        $query = $model->select($select)
+            ->join('threads', 'threadorders.thread_id', 'threads.id')->join('categories_threads', 'threads.id', 'categories_threads.thread_id')
+            ->groupBy('threadorders.id');
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
@@ -144,10 +147,9 @@ class ThreadordersTable extends TableAbstract
                 'name'  => 'threadorders.thread_id',
                 'title' => 'Thread ID',
                 'width' => '20px',
-
             ],
             'sku'          => [
-                'name'  => 'threadorders.thread.categories_threads.sku',
+                'name'  => 'categories_threads.sku',
                 'title' => 'SKU',
                 'class' => 'text-left',
             ],
@@ -172,7 +174,7 @@ class ThreadordersTable extends TableAbstract
                 'width' => '100px',
             ],
             'ecommerce'    => [
-                'name'    => 'Ecommerce',
+                'name'    => 'threadorders.status',
                 'title'   => 'Ecommerce',
                 'width'   => '100px',
                 'visible' => (Auth::user()->hasPermission('threadorders.pushEcommerce')) ? true : false,
