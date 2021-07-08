@@ -3,8 +3,9 @@
         <a href="{{ $menu['url'] }}" class="nav-link nav-toggle">
             <i class="{{ $menu['icon'] }}"></i>
             <span class="title">
-                {{ !is_array(trans($menu['name'])) ? trans($menu['name']) : null }}
-                {!! apply_filters(BASE_FILTER_APPEND_MENU_NAME, null, $menu['id']) !!}</span>
+                {{ !is_array(trans($menu['name'])) ? trans($menu['name']) : $menu['name'] }}
+                {!! apply_filters(BASE_FILTER_APPEND_MENU_NAME, null, $menu['id']) !!}
+            </span>
             @if (isset($menu['children']) && count($menu['children'])) <span class="arrow @if ($menu['active']) open @endif"></span> @endif
         </a>
         @if (isset($menu['children']) && count($menu['children']))
@@ -13,8 +14,10 @@
                     <li class="nav-item @if ($item['active']) active @endif" id="{{ $item['id'] }}">
                         <a href="{{ $item['url'] }}" class="nav-link">
                             <i class="{{ $item['icon'] }}"></i>
-                            {{ trans($item['name']) }}
-                            {!! apply_filters(BASE_FILTER_APPEND_MENU_NAME, null, $item['id']) !!}</span>
+                            <span class="title">
+                                {{ trans($item['name']) }}
+                                {!! apply_filters(BASE_FILTER_APPEND_MENU_NAME, null, $item['id']) !!}
+                            </span>
                         </a>
                     </li>
                 @endforeach

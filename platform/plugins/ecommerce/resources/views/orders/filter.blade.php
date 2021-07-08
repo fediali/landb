@@ -27,7 +27,7 @@
 
 
 <div class="modal fade in" id="modal-adv-search" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex w-100">
@@ -71,7 +71,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-md-4 mb-3">
+                        <div class="w-100 c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+                        <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+                        <input type="text" autocomplete="off" name="" placeholder="Select" class="w-100 c-datepicker-data-input only-date" value="">
+                        </div>
+                        </div>
                         <div class="col-md-12">
                             <label class="font-bold">Order Status:</label>
                             <div>
@@ -112,14 +117,21 @@
                         </div>
 
                     </div>
+                    <div class="d-flex mb-3 mt-3">
+                    <div class="d-flex adv-input">
+                    <input type="text" name="search_name" class="form-control mr-2" id="search-name">
+                    <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
+                    </div>
+                    <div class="text-right adv-input">
+                    <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Search"> 
+                    </div>
+                  
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Search">
-                    <input type="text" name="search_name" class="form-control" id="search-name">
-                    <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
-                </div>
+              
+                    
 
             {{ Form::close() }}
         </div>

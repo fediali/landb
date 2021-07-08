@@ -1046,3 +1046,101 @@
 #modal-adv-search {
   z-index: 100000;
 }
+#modal-adv-search .close {
+  position: absolute;
+    top: -4px;
+}
+
+#modal-adv-search .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.adv-input {
+  width: 50%;
+}
+
+#merge_customer_modal .close {
+  position: absolute;
+    top: -4px;
+}
+
+#merge_customer_modal {
+  z-index: 100000;
+}
+
+
+#merge_customer_modal .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+#modal_split_order .modal-header {
+  height: 38px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+#modal_split_order {
+  z-index: 100000;
+}
+
+#modal_split_order .close {
+  position: absolute;
+    top: -4px;
+}
+
+.split-link {
+  color: #a7a7a7;
+}
+
+.split-btn {
+  border-radius: 5px !important;
+  height: 28px !important;
+  border-color: #cacaca !important;
+}
+
+.split-img {
+  height: 70px;
+}
+
+.split-input {
+  text-align: center;
+  border: none;
+}
+
+.c-datepicker-date-picker {
+  z-index: 100000 !important; 
+}
+
+.c-datepicker-date-picker__header {
+  margin: 1px 12px 0px 12px !important;
+}
+
+.c-datepicker-date-table th {
+  padding: 0px 5px !important;
+}
+
+
+.c-datepicker-date-table td { 
+  padding: 0px 0 !important;
+}
+
+.c-datepicker-date-table td div { 
+  padding: 0px 0 !important; 
+}
+
+.c-datepicker-input--small .c-datepicker-input__inner {
+  height: 23px !important; 
+}
+
+.c-datepicker-date-editor {
+  margin-top: 45px !important;
+}
+
+.c-datepicker-single-editor .c-datepicker-data-input {
+  width: 95% !important;
+}

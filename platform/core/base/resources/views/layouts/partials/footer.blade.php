@@ -63,30 +63,32 @@
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head">Merge Customer <span
+                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">Merge Customer <span
                             class="variation-name"></span></h4>
                     <div></div>
                 </div>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <form method="post" action="{{route('customers.merge-customer')}}">
+                    <div class="col-lg-12">
+                        <form method="post" action="{{route('customers.merge-customer')}}">
                         @csrf
-                        <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="name" class="control-label" aria-required="true">Customer List
                                 </label>
                                 <input type="hidden" value="" name="user_id_one" id="user_id_one">
+                                <div class="d-flex">
                                 <select name="user_id_two" id="merge_customer_list"
                                         class="form-control is-valid select-search-full">
                                     <option disabled> Select Customer</option>
                                 </select>
+                               <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
+                                </div> 
                             </div>
-                        </div>
-                        <button class="btn btn-primary btn-apply" type="submit">Merge</button>
-                    </form>
-                    <div class="col-lg-12">
-                        <table class="merge_account">
+                        </form>
+                    </div>
+                    <div class="col-lg-12 mb-3">
+                        <table class="table merge_account">
                             <thead>
                             <tr>
                                 <th>ID</th>
@@ -109,13 +111,65 @@
 
     </div>
 </div>
+<div class="modal fade" id="modal_split_order" role="dialog">
+    <div class="modal-dialog modal-lg">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="d-flex w-100">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                <h4 class="modal-title text-center w-100 thread-pop-head color-white">Split Order#112544<span
+                        class="variation-name"></span></h4>
+            </div>
+        </div>
+        <div class="modal-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th class="text-center"> Quantity</th>
+                <th></th>
+                <th class="text-center">Quantity Moved</th>
+            </tr>
+            </thead>
+            <tbody class="">
+                <tr>
+                    <td>
+                        <div class="d-flex">
+                            <img class="split-img" src="http://revamp.landbw.co/images/default.jpg" />
+                            <div class="ml-3"> 
+                                <p class="split-head m-0">Essential Black</p>
+                                <p class="split-code">CODE: ES11</p>
+                                <p class="split-opt m-0"><b>Options:</b></p>
+                                <p class="split-size"><b>SIZE:</b> 2(S)</p>
+                                <a class="split-link" href="#">landbapparel.com</a>
+                            </div>
+                        </div>  
+                    </td>
+                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
+                    <td class="text-center"><button class="btn-default split-btn">--></button></td>
+                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
+                </tr>
+            </tbody>
 
+        </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 
 <script>
     $(document).ready(function () {
+
         var address = '';
         var customer = '';
-        $(document).on('click','.merge-customer', function () {
+        $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
             $('#user_id_one').val(customer_id);
@@ -292,11 +346,13 @@
     }
 
     function getCustomer() {
+        console.log($('#customer_id').val());
         $.ajax({
             url: "{{ route('customers.get-customer','') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 customer = data;
+                console.log(customer.data.detail.first_name);
             },
             error: function (request, status, error) {
                 toastr['warning']('No Customer', 'Reading Error');
@@ -566,5 +622,31 @@
 
 
 </script>
+<script type="text/javascript">
 
+$(function(){ 
+
+    $('.J-datepicker-day').datePicker({
+      hasShortcut: true,
+      format:'MM-DD-YYYY HH:mm:ss', 
+      language: 'en',
+      shortcutOptions: [{
+        name: 'Today',
+        day: '0'
+      }, {
+        name: 'Yesterday',
+        day: '-1'
+      }, {
+        name: 'One week ago',
+        day: '-7'
+      }]
+    });
+  
+    
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="{{ asset('landb/js/datepicker.all.js') }}"></script> 
+
+<script src="{{ asset('landb/js/datepicker.en.js') }}" ></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>

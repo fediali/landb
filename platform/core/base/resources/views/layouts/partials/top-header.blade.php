@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset('landb/css/datepicker.css') }}">  
 <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
 <div class="page-header navbar navbar-static-top">
     <div class="page-header-inner">

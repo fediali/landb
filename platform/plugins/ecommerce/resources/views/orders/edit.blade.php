@@ -655,17 +655,20 @@
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
-                                <button type="button" class="btn btn-outline-danger">Split Order</button>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#modal_split_order">Split Order</button>
                             </div>
                         </div>
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <input type="hidden" id="customer_id" value="{{$order->user_id}}">
                                 <form action="{{ route('orders.edit', $order->id) }}">
                                     <label class="text-title-field">Tracking No.</label>
-                                    <input class="form-control" name="tracking_no" placeholder="Tracking No." value="{{ $order->tracking_no }}"/>
+                                    <input class="form-control" name="tracking_no" placeholder="Tracking No."
+                                           value="{{ $order->tracking_no }}"/>
                                     <div class="mt10">
-                                        <button type="button" class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
+                                        <button type="button"
+                                                class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
                                     </div>
                                 </form>
                             </div>
@@ -673,12 +676,13 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
 
-<!-- card -->
+                            <!-- card -->
                             @if($order->preauth == null)
-                            <div class="row m-0 pt-4 bg-white">
-                                <div class="col-lg-12 ">
-                                <span class="mb-2">Card</span>
-                                {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!} </div>
+                                <div class="row m-0 pt-4 bg-white">
+                                    <div class="col-lg-12 ">
+                                        <span class="mb-2">Card</span>
+                                        {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                    </div>
                                 </div>
 
                                 <div class="add_card bg-white">
@@ -719,20 +723,21 @@
                                     {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
                                     <div class="row m-0">
                                         <div class="col-lg-6">
-                                        <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
+                                            <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="row m-0">
                                         <div class="col-lg-12">
-                                        <div class="outcome">
-                                        <div class="error"></div>
-                                        <div class="success">
-                                            Successful! The ID is
-                                            <span class="token"></span>
-                                        </div>
-                                        <div class="loader" style="margin: auto">
-                                        </div>
-                                    </div>
+                                            <div class="outcome">
+                                                <div class="error"></div>
+                                                <div class="success">
+                                                    Successful! The ID is
+                                                    <span class="token"></span>
+                                                </div>
+                                                <div class="loader" style="margin: auto">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -783,7 +788,12 @@
             </div>
         </div>
     </div>
-
+    <script>
+        setTimeout(function () {
+            getCustomer();
+        },200);
+        
+    </script>
 
     {!! Form::modalAction('resend-order-confirmation-email-modal', trans('plugins/ecommerce::order.resend_order_confirmation'), 'info', trans('plugins/ecommerce::order.resend_order_confirmation_description', ['email' => $order->user->id ? $order->user->email : $order->address->email]), 'confirm-resend-confirmation-email-button', trans('plugins/ecommerce::order.send')) !!}
     {!! Form::modalAction('cancel-shipment-modal', trans('plugins/ecommerce::order.cancel_shipping_confirmation'), 'info', trans('plugins/ecommerce::order.cancel_shipping_confirmation_description'), 'confirm-cancel-shipment-button', trans('plugins/ecommerce::order.confirm')) !!}
