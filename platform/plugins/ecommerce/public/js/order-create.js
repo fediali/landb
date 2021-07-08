@@ -843,7 +843,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -894,12 +893,6 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": function _default() {
         return [];
-      }
-    },
-    sel_order_type: {
-      type: String,
-      "default": function _default() {
-        return 'normal';
       }
     },
     customer_address: {
@@ -983,6 +976,12 @@ __webpack_require__.r(__webpack_exports__);
         return 'cod';
       }
     },
+    order_type: {
+      type: String,
+      "default": function _default() {
+        return 'normal';
+      }
+    },
     currency: {
       type: String,
       "default": function _default() {
@@ -1006,7 +1005,7 @@ __webpack_require__.r(__webpack_exports__);
       hidden_product_search_panel: true,
       loading: false,
       note: null,
-      order_type: 'normal',
+      // order_type: 'normal',
       customers: {
         data: []
       },
@@ -7629,22 +7628,13 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _vm._l(_vm.order_types, function(value, index) {
-                    return _c(
-                      "option",
-                      {
-                        domProps: {
-                          value: index,
-                          selected: index === _vm.sel_order_type
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(value) +
-                            "\n                        "
-                        )
-                      ]
-                    )
+                    return _c("option", { domProps: { value: index } }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(value) +
+                          "\n                        "
+                      )
+                    ])
                   })
                 ],
                 2

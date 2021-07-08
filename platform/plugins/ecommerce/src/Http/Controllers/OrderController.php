@@ -276,7 +276,7 @@ class OrderController extends BaseController
             $payment = $this->paymentRepository->createOrUpdate([
                 'amount'          => $order->amount,
                 'currency'        => get_application_currency()->title,
-                'payment_channel' => $order->payment->payment_channel,
+                'payment_channel' => $request->input('payment_method'), //$order->payment->payment_channel,
                 'status'          => $request->input('payment_status', PaymentStatusEnum::PENDING),
                 'payment_type'    => 'confirm',
                 'order_id'        => $order->id,

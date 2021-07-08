@@ -12,8 +12,7 @@
                         <label class="text-title-field">Select Order Type</label>
                         <select class="form-control" id="order-type" v-model="order_type">
                             <option value="" :disabled="true" :selected="true">Select Order Type</option>
-                            <option v-for="(value, index) in order_types" :value="index"
-                                    :selected="index === sel_order_type">
+                            <option v-for="(value, index) in order_types" :value="index">
                                 {{ value }}
                             </option>
                         </select>
@@ -869,10 +868,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        sel_order_type: {
-            type: String,
-            default: () => 'normal',
-        },
         customer_address: {
             type: Object,
             default: () => ({
@@ -930,6 +925,10 @@ export default {
             type: String,
             default: () => 'cod',
         },
+        order_type: {
+            type: String,
+            default: () => 'normal',
+        },
         currency: {
             type: String,
             default: () => null,
@@ -949,7 +948,7 @@ export default {
             hidden_product_search_panel: true,
             loading: false,
             note: null,
-            order_type: 'normal',
+            // order_type: 'normal',
             customers: {
                 data: [],
             },
