@@ -59,7 +59,6 @@
                                             }
                                         @endphp
                                         @if ($product)
-
                                             <tr class="border-bottom">
                                                 <td class="order-border text-center p-small">
                                                     <i class="fa fa-truck"></i>
