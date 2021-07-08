@@ -71,6 +71,12 @@ class ThemeController extends BaseController
 
             ThemeOption::setOption($key, $value);
         }
+        ThemeOption::setOption('home_main_section_status', isset($request->home_main_section_status) ? 1 : 0);
+        ThemeOption::setOption('home_section_1_status', isset($request->home_section_1_status) ? 1 : 0);
+        ThemeOption::setOption('home_section_2_status', isset($request->home_section_2_status) ? 1 : 0);
+        ThemeOption::setOption('home_section_3_status', isset($request->home_section_3_status) ? 1 : 0);
+        ThemeOption::setOption('home_section_4_status', isset($request->home_section_4_status) ? 1 : 0);
+        ThemeOption::setOption('home_section_5_status', isset($request->home_section_5_status) ? 1 : 0);
 
         ThemeOption::saveOptions();
 
