@@ -185,6 +185,7 @@ class ThreadTable extends TableAbstract
             'pp_sample'           => [
                 'name'  => 'threads.pp_sample',
                 'title' => 'PP Sample',
+                'width'      => '100px',
                 'class' => 'no-sort text-left',
             ], 'thread_status'    => [
                 'name'  => 'threads.thread_status',
