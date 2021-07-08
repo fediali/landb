@@ -37,7 +37,7 @@
 
                                             $product = get_products([
                                                 'condition' => [
-                                                    'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
+                                                  //  'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                     'ec_products.id' => $orderProduct->product_id,
                                                 ],
                                                 'take' => 1,
