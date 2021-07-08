@@ -11,7 +11,8 @@
                 :customer_id="{{ $order->user_id }}"
                 :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
                 :payment_methods="{{ json_encode(get_payment_methods()) }}"
-                :sel_order_type="{{$order->order_type}}"
+                :order_type="{{$order->order_type}}"
+                {{--:payment_method="{{$order->payment->payment_channel}}"--}}
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
                 :customer_address="{{ $customerAddress }}"
                 :sub_amount="{{ $order->amount }}"
