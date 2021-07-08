@@ -67,7 +67,6 @@ class ShipmentController extends BaseController
             ->addScriptsDirectly('vendor/core/plugins/ecommerce/js/shipment.js');
 
         $shipment = $this->shipmentRepository->findOrFail($id);
-//        dd($shipment);
         page_title()->setTitle(trans('plugins/ecommerce::shipping.edit_shipping', ['code' => get_shipment_code($id)]));
 
         return view('plugins/ecommerce::shipments.edit', compact('shipment'));
