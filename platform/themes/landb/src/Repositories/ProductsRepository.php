@@ -67,6 +67,7 @@ class ProductsRepository{
         ->join('ec_products as ep' , 'epv.product_id', 'ep.id')
         ->where('ep.quantity', '>', 0)
         ->where($this->model->getTable().'.status', BaseStatusEnum::$PRODUCT['Active'])
+        ->orWhere($this->model->getTable().'.status', 'published')
             ->when($category , function ($query){
                 $query->with(['category' => function($que){
                   $que->with('category_sizes');
