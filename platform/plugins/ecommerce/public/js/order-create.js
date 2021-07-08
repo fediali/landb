@@ -837,6 +837,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -8555,51 +8562,41 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("tr", [
-                          _c("td", [
-                            _c(
-                              "a",
-                              {
-                                directives: [
-                                  {
-                                    name: "b-modal",
-                                    rawName: "v-b-modal.add-shipping",
-                                    modifiers: { "add-shipping": true }
-                                  }
-                                ],
-                                staticClass: "hover-underline",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                !_vm.child_is_selected_shipping
-                                  ? _c("span", [
-                                      _c("i", {
-                                        staticClass: "fa fa-plus-circle"
-                                      }),
-                                      _vm._v(
-                                        " " + _vm._s(_vm.__("Add shipping fee"))
-                                      )
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.child_is_selected_shipping
-                                  ? _c("span", [
-                                      _vm._v(_vm._s(_vm.__("Shipping")))
-                                    ])
-                                  : _vm._e()
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _vm.child_shipping_method_name
-                              ? _c("p", { staticClass: "mb0 font-size-12px" }, [
-                                  _vm._v(_vm._s(_vm.child_shipping_method_name))
-                                ])
-                              : _vm._e()
+                          _c("span", [
+                            _c("i", { staticClass: "fa fa-plus-circle" }),
+                            _vm._v(
+                              "\n                                        " +
+                                _vm._s(_vm.__("Add shipping fee")) +
+                                "\n                                    "
+                            )
                           ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.child_shipping_amount,
+                                expression: "child_shipping_amount"
+                              }
+                            ],
+                            staticClass: "next-input p-none-r",
+                            attrs: { type: "number", min: "1" },
+                            domProps: { value: _vm.child_shipping_amount },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.child_shipping_amount = $event.target.value
+                              }
+                            }
+                          }),
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
                               _vm._s(
-                                _vm._f("formatPrice")(_vm.shipping_amount)
+                                _vm._f("formatPrice")(_vm.child_shipping_amount)
                               ) +
                                 " " +
                                 _vm._s(_vm.currency)
