@@ -99,12 +99,13 @@
                                         <div class="form-group form-group-no-margin">
                                             <label for="home_section_1_link" class="control-label">Products(Max: 2)</label>
                                             <div class="multi-choices-widget list-item-checkbox">
-                                                    @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                    {{--@include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
                                                         'categories' => $products,
                                                         'value'      => json_decode(setting('theme-landb-home_section_1_products')),
                                                         'currentId'  => null,
                                                         'name'       => 'home_section_1_products[]'
-                                                    ])
+                                                    ])--}}
+                                                {!! Form::customSelect("home_section_1_products[]", $products, json_decode(setting('theme-landb-home_section_1_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -133,12 +134,13 @@
                                         <div class="form-group form-group-no-margin">
                                             <label for="home_section_2_link" class="control-label">Products(Max: 4)</label>
                                             <div class="multi-choices-widget list-item-checkbox">
-                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                {{--@include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
                                                     'categories' => $products,
                                                     'value'      => json_decode(setting('theme-landb-home_section_2_products')),
                                                     'currentId'  => null,
                                                     'name'       => 'home_section_2_products[]'
-                                                ])
+                                                ])--}}
+                                                {!! Form::customSelect("home_section_2_products[]", $products, json_decode(setting('theme-landb-home_section_2_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -191,12 +193,13 @@
                                         <div class="form-group form-group-no-margin">
                                             <label for="home_section_4_link" class="control-label">Products(Max: 2)</label>
                                             <div class="multi-choices-widget list-item-checkbox">
-                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                               {{-- @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
                                                     'categories' => $products,
                                                     'value'      => json_decode(setting('theme-landb-home_section_4_products')),
                                                     'currentId'  => null,
                                                     'name'       => 'home_section_4_products[]'
-                                                ])
+                                                ])--}}
+                                                {!! Form::customSelect("home_section_4_products[]", $products, json_decode(setting('theme-landb-home_section_4_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -217,12 +220,19 @@
                                         <div class="form-group form-group-no-margin">
                                             <label for="home_section_5_products" class="control-label">Products(Max: 9)</label>
                                             <div class="multi-choices-widget list-item-checkbox">
-                                                @include('plugins/ecommerce::product-categories.partials.categories-checkbox-option-line', [
+                                                {{--@include('core/base::forms.fields.multi-check-list', [
                                                     'categories' => $products,
                                                     'value'      => json_decode(setting('theme-landb-home_section_5_products')),
                                                     'currentId'  => null,
                                                     'name'       => 'home_section_5_products[]'
-                                                ])
+                                                ]
+                                                )--}}
+                                                {{--<select class="select-search-full ui-select ui-select select2-hidden-accessible" multiple="" id="home_section_5_products[]" name="home_section_5_products[]" tabindex="-1" aria-hidden="true">
+                                                    @foreach($products as $product)
+                                                        <option value="{{ $product->id }}" @if (in_array($product->id,  json_decode(setting('theme-landb-home_section_5_products')))) checked="checked" @endif>{{ $product->name }}</option>
+                                                    @endforeach
+                                                </select>--}}
+                                                {!! Form::customSelect("home_section_5_products[]", $products, json_decode(setting('theme-landb-home_section_5_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                             </div>
                                         </div>
                                     </div>

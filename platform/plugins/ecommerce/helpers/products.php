@@ -428,6 +428,6 @@ if (!function_exists('get_products_data')) {
      */
     function get_products_data()
     {
-        return Product::where('status', 'published')->select('name', 'id')->get();
+        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->pluck('name', 'id');
     }
 }
