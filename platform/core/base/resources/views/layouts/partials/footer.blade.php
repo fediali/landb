@@ -83,7 +83,7 @@
                                     <option disabled> Select Customer</option>
                                 </select>
                                <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
-                                </div> 
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -111,58 +111,7 @@
 
     </div>
 </div>
-<div class="modal fade" id="modal_split_order" role="dialog">
-    <div class="modal-dialog modal-lg">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-            <div class="d-flex w-100">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                <h4 class="modal-title text-center w-100 thread-pop-head color-white">Split Order#112544<span
-                        class="variation-name"></span></h4>
-            </div>
-        </div>
-        <div class="modal-body">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Product</th>
-                <th class="text-center"> Quantity</th>
-                <th></th>
-                <th class="text-center">Quantity Moved</th>
-            </tr>
-            </thead>
-            <tbody class="">
-                <tr>
-                    <td>
-                        <div class="d-flex">
-                            <img class="split-img" src="http://revamp.landbw.co/images/default.jpg" />
-                            <div class="ml-3"> 
-                                <p class="split-head m-0">Essential Black</p>
-                                <p class="split-code">CODE: ES11</p>
-                                <p class="split-opt m-0"><b>Options:</b></p>
-                                <p class="split-size"><b>SIZE:</b> 2(S)</p>
-                                <a class="split-link" href="#">landbapparel.com</a>
-                            </div>
-                        </div>  
-                    </td>
-                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
-                    <td class="text-center"><button class="btn-default split-btn">--></button></td>
-                    <td class="text-center"> <input type="text" value="1" class="split-input" /></td>
-                </tr>
-            </tbody>
 
-        </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
 
 <script>
     $(document).ready(function () {
@@ -618,8 +567,8 @@
 </script>
 <script type="text/javascript">
 
-$(function(){ 
-    var DATAPICKERAPI = {  
+$(function(){
+    var DATAPICKERAPI = {
       rangeShortcutOption1: [{
         name: 'Last week',
         day: '-7,0'
@@ -720,11 +669,11 @@ $(function(){
           console.info(this.$input.eq(0).val(), this.$input.eq(1).val());
           console.info('Type:',type)
         }
-      }); 
+      });
   });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-<script src="{{ asset('landb/js/datepicker.all.js') }}"></script> 
+<script src="{{ asset('landb/js/datepicker.all.js') }}"></script>
 
 <script src="{{ asset('landb/js/datepicker.en.js') }}" ></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
