@@ -800,52 +800,79 @@
                     </div>
                 </div>
 
-                <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th class="text-center"> Quantity</th>
-                            <th></th>
-                            <th class="text-center">Quantity Moved</th>
-                        </tr>
-                        </thead>
-                        <tbody class="">
-                        @foreach ($order->products as $orderProduct)
-                        @endforeach
-                        <tr>
-                            <td>
-                                <div class="d-flex">
-                                    <img class="split-img" src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
-                                    <div class="ml-3">
-                                        <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
-                                        <p class="split-code">SKU: {{ $product->sku }}</p>
-                                        {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
-                                        @php $attributes = get_product_attributes($product->id) @endphp
-                                        @if (!empty($attributes))
-                                            @foreach ($attributes as $attribute)
-                                                {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
-                                                @if (!$loop->last), @endif
-                                            @endforeach
-                                        @endif
-                                        {{--<a class="split-link" href="#">landbapparel.com</a>--}}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center"> <input type="number" step="1" value="{{ $orderProduct->qty }}" class="split-input" /></td>
-                            <td class="text-center"><button class="btn-default split-btn">--></button></td>
-                            <td class="text-center"> <input type="number" step="1" max="{{ $orderProduct->qty }}" value="0" class="split-input" /></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success" data-dismiss="modal">Save</button>
-                </div>
-
+                <form method="post" action="{{route('orders.split.order', $order->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-center"> Quantity</th>
+                                <th></th>
+                                <th class="text-center">Quantity Moved</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                                @foreach ($order->products as $orderProduct)
+                                    @php
+                                        $product = get_products([
+                                            'condition' => [
+                                                'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::PUBLISHED,
+                                                'ec_products.id' => $orderProduct->product_id,
+                                            ],
+                                            'take' => 1,
+                                            'select' => [
+                                                'ec_products.id',
+                                                'ec_products.images',
+                                                'ec_products.name',
+                                                'ec_products.price',
+                                                'ec_products.sale_price',
+                                                'ec_products.sale_type',
+                                                'ec_products.start_date',
+                                                'ec_products.end_date',
+                                                'ec_products.sku',
+                                                'ec_products.is_variation',
+                                            ],
+                                        ]);
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <img class="split-img" src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
+                                                <div class="ml-3">
+                                                    <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
+                                                    <p class="split-code">SKU: {{ $product->sku }}</p>
+                                                    {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
+                                                    @php $attributes = get_product_attributes($product->id) @endphp
+                                                    @if (!empty($attributes))
+                                                        @foreach ($attributes as $attribute)
+                                                            {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                            @if (!$loop->last), @endif
+                                                        @endforeach
+                                                    @endif
+                                                    {{--<a class="split-link" href="#">landbapparel.com</a>--}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="order_prod[{{$product->id}}]" type="number" step="1" value="{{ $orderProduct->qty }}" class="split-input" />
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn-default split-btn">--></button>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="order_prod_move[{{$product->id}}]" type="number" step="1" max="{{ $orderProduct->qty }}" value="0" class="split-input2" />
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -854,6 +881,14 @@
         setTimeout(function () {
             getCustomer();
         },200);
+
+        $(document).ready(function () {
+            $('body').on('click', 'button.split-btn', function () {
+                let qty = $('input.split-input').val();
+                $('input.split-input2').val(qty);
+                $('input.split-input').val(0);
+            });
+        });
     </script>
 
     {!! Form::modalAction('resend-order-confirmation-email-modal', trans('plugins/ecommerce::order.resend_order_confirmation'), 'info', trans('plugins/ecommerce::order.resend_order_confirmation_description', ['email' => $order->user->id ? $order->user->email : $order->address->email]), 'confirm-resend-confirmation-email-button', trans('plugins/ecommerce::order.send')) !!}
