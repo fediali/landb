@@ -40,14 +40,15 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Qty : {{variant.packQty}}</p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Pieces : {{variant.packQty}}</p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">Sizes : {{variant.packSizes}}</p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
                                                 <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
-                                                <span style=" margin-top: 8px !important; margin-right: 5px !important;">{{ currency }}</span><input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
+                                                <span style=" margin-top: 8px !important; margin-right: 5px !important;">{{ currency }}</span>
+                                                <input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
                                             </div>
                                         </div>
                                     </td>
@@ -55,7 +56,7 @@
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
                                         <input class="next-input p-none-r" v-model="variant.select_qty" type="number" min="1" @change="handleChangeQuantity()">
                                     </td>
-                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.price }}
+                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.select_qty * variant.price }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">

@@ -64,23 +64,23 @@
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Status:</label>
                         <div class="ui-select-wrapper">
-                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  null, ['class' => 'form-control ui-select']) !!}
+                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select']) !!}
                         </div>
                     </div>
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Last Order:</label>
-                        <input type="text" name="last_order" class="form-control" value="{{request('last_order')}}">
+                        <input type="date" name="last_order" class="form-control" value="{{request('last_order')}}">
                     </div>
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Last Visit:</label>
-                        <input type="text" name="last_visit" class="form-control" value="{{request('last_visit')}}">
+                        <input type="date" name="last_visit" class="form-control" value="{{request('last_visit')}}">
                     </div>
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Spend:</label>
-                        <input type="text" name="spend" class="form-control" value="{{request('spend')}}">
+                        <input type="number" name="spend" class="form-control" step="0.1" value="{{request('spend')}}">
                     </div>
                 </div>
 
@@ -88,16 +88,12 @@
                     <div class="d-flex">
                         <div class="col-md-4">
                             <label class="font-bold">No Sales Rep:</label>
-                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="no_sales_rep"
-                                   class="form-control"
-                                   value="">
+                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="no_sales_rep" class="form-control" value="1" {{request('no_sales_rep') == 1 ? 'checked' : ''}}>
                             <p class="mr-1"></p>
                         </div>
                         <div class="col-md-4 ">
                             <label class="font-bold">Merged Account:</label>
-                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="merged_account"
-                                   class="form-control"
-                                   value="">
+                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="merged_account" class="form-control" value="1" {{request('merged_account') == 1 ? 'checked' : ''}}>
                             <p class="mr-1"></p>
                         </div>
                     </div>
@@ -149,7 +145,7 @@
                 return;
             }
             $.ajax({
-                url: '{{ route('customers.save.advance.search') }}',
+                url: '{{ route('orders.save.advance.search','customers') }}',
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {
