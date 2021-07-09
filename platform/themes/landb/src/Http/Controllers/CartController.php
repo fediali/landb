@@ -88,7 +88,7 @@ class CartController extends Controller
         if (!$check) {
             $cart = Order::create([
                 'user_id'         => auth('customer')->user()->id,
-                'salesperson_id'  => auth('customer')->user()->salesperson,
+                'salesperson_id'  => auth('customer')->user()->salesperson(),
                 'amount'          => 0,
                 'sub_total'       => 0,
                 'is_finished'     => 0,
