@@ -1855,4 +1855,11 @@ class OrderController extends BaseController
             return response()->json(['status' => 'error'], 500);
         }
     }
+
+    public function splitOrder($id, Request $request)
+    {
+        $params = $request->all();
+        dd($params);
+    }
+
 }
