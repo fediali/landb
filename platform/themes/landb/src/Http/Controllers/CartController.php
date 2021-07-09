@@ -47,19 +47,19 @@ class CartController extends Controller
 
     public function getIndex(Request $request)
     {
-      if($request->has('discard')){
-        if($request->discard == 'true'){
-          if($request->has('item')){
-            OrderProduct::find($request->item)->delete();
-          }
+        if ($request->has('discard')) {
+            if ($request->discard == 'true') {
+                if ($request->has('item')) {
+                    OrderProduct::find($request->item)->delete();
+                }
+            }
         }
-      }
         $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
-      if(!count($cart->products)){
-        return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
-      }
+        if (!count($cart->products)) {
+            return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
+        }
         $token = OrderHelper::getOrderSessionToken();
         return Theme::scope('cart', ['cart' => $cart])->render();
     }
@@ -68,7 +68,7 @@ class CartController extends Controller
     {
         $data = $request->all();
         $product = Product::find($data['product_id']);
-    if($product && $product->quantity >= $data['quantity']){
+        if ($product && $product->quantity >= $data['quantity']) {
             $cart_status = $this->createCartItem($data, $product);
             //dd($cart_status);
             if (empty($cart_status)) {
@@ -77,7 +77,7 @@ class CartController extends Controller
                 return response()->json(['message' => $cart_status], 500);
             }
         } else {
-      return response()->json(['message' => 'Required quantity is currently out of stock!'], 403);
+            return response()->json(['message' => 'Required quantity is currently out of stock!'], 403);
         }
     }
 
@@ -88,6 +88,7 @@ class CartController extends Controller
         if (!$check) {
             $cart = Order::create([
                 'user_id'         => auth('customer')->user()->id,
+                'salesperson_id'  => auth('customer')->user()->salesperson,
                 'amount'          => 0,
                 'sub_total'       => 0,
                 'is_finished'     => 0,
@@ -108,9 +109,9 @@ class CartController extends Controller
         $cartId = $this->getUserCart();
         $checkCart = OrderProduct::where('order_id', $cartId)->where('product_id', $product->id)->first();
         if ($checkCart) {
-          if($product->quantity < $checkCart->qty+$data['quantity'] ){
-            return 'Required quantity is currently out of stock!';
-          }
+            if ($product->quantity < $checkCart->qty + $data['quantity']) {
+                return 'Required quantity is currently out of stock!';
+            }
             $update = $checkCart->update(['qty' => $checkCart->qty + $data['quantity']]);
             if ($update) {
                 /*update_product_quantity($product->id, $data['quantity'], 'inc');*/
@@ -139,27 +140,27 @@ class CartController extends Controller
     {
         $data = $request->all();
         if (!empty($data['id'])) {
-      $orderProduct = OrderProduct::where('id', $data['id'])->first();
-      $product = Product::find($orderProduct->product_id);
-      if($product){
-        if($data['action'] == 'inc' && $product->quantity < $orderProduct->qty+1){
-          return response()->json(['message' => 'Product is out of stock'], 403);
-        }
-            if ($data['quantity'] == 0) {
-                $update = $orderProduct->delete();
+            $orderProduct = OrderProduct::where('id', $data['id'])->first();
+            $product = Product::find($orderProduct->product_id);
+            if ($product) {
+                if ($data['action'] == 'inc' && $product->quantity < $orderProduct->qty + 1) {
+                    return response()->json(['message' => 'Product is out of stock'], 403);
+                }
+                if ($data['quantity'] == 0) {
+                    $update = $orderProduct->delete();
+                } else {
+                    $update = $orderProduct->update(['qty' => $data['quantity']]);
+                    $this->getOrderAndUpdateAmount();
+                }
+                if ($update) {
+                    /*update_product_quantity($orderProduct->product_id, 1, $data['action']);*/
+                    return response()->json(['message' => 'Cart Updated successfully'], 200);
+                } else {
+                    return response()->json(['message' => 'Server Error'], 500);
+                }
             } else {
-                $update = $orderProduct->update(['qty' => $data['quantity']]);
-                $this->getOrderAndUpdateAmount();
+                return response()->json(['message' => 'Product not Found'], 500);
             }
-            if ($update) {
-                /*update_product_quantity($orderProduct->product_id, 1, $data['action']);*/
-                return response()->json(['message' => 'Cart Updated successfully'], 200);
-            } else {
-                return response()->json(['message' => 'Server Error'], 500);
-            }
-      }else{
-        return response()->json(['message' => 'Product not Found'], 500);
-      }
         } else {
             return response()->json(['message' => 'Cart Item not found'], 404);
         }
@@ -181,30 +182,32 @@ class CartController extends Controller
         ]);
     }
 
-    public function deleteCartItem($id){
-      $orderProduct = OrderProduct::where('id', $id)->first();
+    public function deleteCartItem($id)
+    {
+        $orderProduct = OrderProduct::where('id', $id)->first();
 
-      if($orderProduct){
-        $update = $orderProduct->delete();
-        $this->getOrderAndUpdateAmount();
-        if($update){
-          return redirect()->back()->with('success', 'Cart Item deleted successfully!');
-        }else{
-          return redirect()->back()->with('error', 'Something went wrong!');
+        if ($orderProduct) {
+            $update = $orderProduct->delete();
+            $this->getOrderAndUpdateAmount();
+            if ($update) {
+                return redirect()->back()->with('success', 'Cart Item deleted successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Something went wrong!');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong!');
         }
-      }else{
-        return redirect()->back()->with('error', 'Something went wrong!');
-      }
     }
 
-    public function clearCart(){
-      $orderId = $this->getUserCart();
-      $products = OrderProduct::where('order_id', $orderId)->delete();
-      if($products){
-        $this->getOrderAndUpdateAmount();
-        return redirect()->route('public.products')->with('success', 'Cart cleared successfully!');
-      }else{
-        return redirect()->back()->with('error', 'Something went wrong!');
-      }
+    public function clearCart()
+    {
+        $orderId = $this->getUserCart();
+        $products = OrderProduct::where('order_id', $orderId)->delete();
+        if ($products) {
+            $this->getOrderAndUpdateAmount();
+            return redirect()->route('public.products')->with('success', 'Cart cleared successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
     }
 }
