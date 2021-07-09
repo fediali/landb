@@ -114,9 +114,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/products', 'ProductsController@getIndex')
             ->name('public.products');
 
-        Route::get(SlugHelper::getPrefix(ProductCategory::class, 'product-categories') . '/{slug}', 'ProductsController@productsByCategory')
-            ->name('public.productsByCategory');
-
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
 
@@ -148,8 +145,12 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('sitemap.xml', 'LandbController@getSiteMap')
         ->name('public.sitemap');
 
-    Route::get('{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
+    Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
         ->name('public.single');
+
+    Route::get('/{slug?}', 'ProductsController@productsByCategory')
+        ->name('public.productsByCategory');
+
 
   });
 });
