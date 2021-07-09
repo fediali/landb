@@ -61,7 +61,7 @@
                                     <div class="annotated-section-description pd-all-20 p-none-t">
                                         <p class="color-note">Featured Slider</p>
                                     </div>
-                                </div>
+                                </div><input type="checkbox" name="home_main_section_status" value="1" {!! (setting('theme-landb-home_main_section_status') == 1) ? 'checked': 1 !!}>
 
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
@@ -81,7 +81,7 @@
                                         <p class="color-note">Latest Collections Placements</p>
                                     </div>
                                 </div>
-
+                                <input type="checkbox" name="home_section_1_status" value="1" {!! (setting('theme-landb-home_section_1_status') == 1) ? 'checked': 1 !!}>
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
@@ -119,7 +119,7 @@
                                         <p class="color-note">Browse Collections Placements</p>
                                     </div>
                                 </div>
-
+                                <input type="checkbox" name="home_section_2_status" value="1" {!! (setting('theme-landb-home_section_2_status') == 1) ? 'checked': 1 !!}>
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
@@ -153,7 +153,7 @@
                                         <p class="color-note">Video Placement</p>
                                     </div>
                                 </div>
-
+                                <input type="checkbox" name="home_section_3_status" value="1"  {!! (setting('theme-landb-home_section_3_status') == 1) ? 'checked': 1 !!}>
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
@@ -173,7 +173,7 @@
                                         <p class="color-note">Latest Collections Placements</p>
                                     </div>
                                 </div>
-
+                                <input type="checkbox" name="home_section_4_status" value="1"  {!! (setting('theme-landb-home_section_4_status') == 1) ? 'checked': 1 !!}>
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
@@ -211,7 +211,7 @@
                                         <p class="color-note">Products gallery Placements</p>
                                     </div>
                                 </div>
-
+                                <input type="checkbox" name="home_section_5_status" value="1"  {!! (setting('theme-landb-home_section_5_status') == 1) ? 'checked': 1 !!}>
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group form-group-no-margin">
