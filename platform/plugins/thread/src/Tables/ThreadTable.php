@@ -5,9 +5,12 @@ namespace Botble\Thread\Tables;
 use Auth;
 use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Ecommerce\Models\UserSearch;
+use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use Botble\Thread\Models\Thread;
 use Html;
@@ -25,6 +28,11 @@ class ThreadTable extends TableAbstract
      * @var bool
      */
     protected $hasFilter = true;
+
+    public $hasCustomFilter = true;
+
+    protected $customFilterTemplate = 'plugins/thread::filter';
+
 
     /**
      * ThreadTable constructor.
@@ -140,6 +148,34 @@ class ThreadTable extends TableAbstract
             ->where('categories_threads.category_type', Thread::REGULAR)
             ->select($select);
 
+        if ($this->request()->has('search_id')) {
+            $search_id = (int)$this->request()->input('search_id');
+            if ($search_id) {
+                $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
+            }
+        }
+
+        if (empty($search_items)) {
+            $search_items = $this->request()->all();
+        }
+        if (!empty($search_items)) {
+            $query->when(isset($search_items['status']), function ($q) use ($search_items) {
+                $q->where('threads.status', $search_items['status']);
+            });
+            $query->when(isset($search_items['thread_status']), function ($q) use ($search_items) {
+                $q->where('threads.thread_status', $search_items['thread_status']);
+            });
+            $query->when(isset($search_items['vendor']), function ($q) use ($search_items) {
+                $q->where('threads.vendor_id', $search_items['vendor']);
+            });
+            $query->when(isset($search_items['designer']), function ($q) use ($search_items) {
+                $q->where('threads.designer_id', $search_items['designer']);
+            });
+            $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
+                $q->where('threads.order_status', $search_items['order_status']);
+            });
+
+        }
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -185,7 +221,7 @@ class ThreadTable extends TableAbstract
             'pp_sample'           => [
                 'name'  => 'threads.pp_sample',
                 'title' => 'PP Sample',
-                'width'      => '100px',
+                'width' => '100px',
                 'class' => 'no-sort text-left',
             ], 'thread_status'    => [
                 'name'  => 'threads.thread_status',
@@ -283,4 +319,13 @@ class ThreadTable extends TableAbstract
     {
         return $this->getBulkChanges();
     }
+
+    public function renderCustomFilter(): string
+    {
+        $searches = UserSearch::where(['search_type' => 'threads', 'status' => 1])->pluck('name', 'id')->all();
+        $vendor = get_vendors();
+        $designer = get_designers();
+        return view($this->customFilterTemplate, compact('searches', 'vendor', 'designer'))->render();
+    }
+
 }

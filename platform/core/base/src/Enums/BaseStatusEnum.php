@@ -56,6 +56,11 @@ class BaseStatusEnum extends Enum
         'A' => self::ACTIVE,
         'D' => self::DISABLED,
     ];
+    public static $THREAD = [
+        self::PENDING   => self::PENDING,
+        self::DRAFT   => self::DRAFT,
+        self::PUBLISHED   => self::PUBLISHED,
+    ];
     public static $CUSTOMER = [
         self::PENDING   => self::PENDING,
         self::DRAFT   => self::DRAFT,

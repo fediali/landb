@@ -6,6 +6,12 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
 
         Route::group(['prefix' => 'threads', 'as' => 'thread.'], function () {
             Route::resource('', 'ThreadController')->parameters(['' => 'thread']);
+
+            Route::post('save-advance-search/{type}', [
+                'as'         => 'save.advance.search',
+                'uses'       => 'ThreadController@saveAdvanceSearch',
+                'permission' => 'thread.create',
+            ]);
             Route::post('addPPsample', [
                 'as'         => 'addPPsample',
                 'uses'       => 'ThreadController@variationPPSample',
