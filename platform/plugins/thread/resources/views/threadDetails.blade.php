@@ -161,11 +161,9 @@
                                 @endforeach
                             </div>
                         </td>
-                        <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
-                            class="p-0">
-
-
-                            @if(!empty($options['data']['plus_cat']))
+                        @if(!empty($options['data']['plus_cat']))
+                            <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
+                                class="p-0">
                                 <div class="regpack">
                                     <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                         Plus Pack Size Run</h6>
@@ -175,9 +173,8 @@
                                         </div>
                                     @endforeach
                                 </div>
-
-                            @endif
-                        </td>
+                            </td>
+                        @endif
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
                             <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;">
                                 PP Sample Due Date <br>
@@ -288,8 +285,6 @@
                   font-size: 16px;
                   text-transform: uppercase;
                   margin: 0; font-family: 'Raleway', sans-serif;">Style</h4>
-
-
                             @if(!is_null($thread->spec_files))
                                 @if(count($thread->spec_files))
                                     <div style=" max-width: 1000px;
@@ -1043,18 +1038,20 @@
                                         @endforeach
                                     </div>
                                 </td>
-                                @if(!empty($options['data']['plus_cat']))
-                                    <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
+                                <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
+                                    @if(!empty($options['data']['plus_cat']))
                                         <div class="regpack">
-                                            <h6>Plus Pack Size Run</h6>
+                                            <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                                Plus Pack Size Run</h6>
                                             @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                                 <div class="sizediv">
                                                     {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
                                                 </div>
                                             @endforeach
                                         </div>
-                                    </td>
-                                @endif
+
+                                    @endif
+                                </td>
                                 <td style="width: 13%;" rowspan="1" colspan="2">
                                     <p class="font-bold font-12">PP Sample Due Date <br>
                                         <span
