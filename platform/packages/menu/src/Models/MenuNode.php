@@ -64,7 +64,7 @@ class MenuNode extends BaseModel
     public function getUrlAttribute($value)
     {
         if ($value) {
-            return apply_filters(MENU_FILTER_NODE_URL, $value);
+            return str_replace('product-categories/', '',  apply_filters(MENU_FILTER_NODE_URL, $value));
         }
 
         if (!$this->reference_type) {
