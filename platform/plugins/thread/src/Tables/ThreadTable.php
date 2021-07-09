@@ -324,7 +324,7 @@ class ThreadTable extends TableAbstract
     {
         $searches = UserSearch::where(['search_type' => 'threads', 'status' => 1])->pluck('name', 'id')->all();
         $vendor = get_vendors();
-        $designer = get_designers();
+        $designer = get_designers_for_thread();
         return view($this->customFilterTemplate, compact('searches', 'vendor', 'designer'))->render();
     }
 
