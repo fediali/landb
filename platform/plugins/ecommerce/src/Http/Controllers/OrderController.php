@@ -1831,7 +1831,6 @@ class OrderController extends BaseController
         }
     }
 
-
     public function saveAdvanceSearch($type, Request $request)
     {
         $params = $request->all();
@@ -1856,10 +1855,94 @@ class OrderController extends BaseController
         }
     }
 
-    public function splitOrder($id, Request $request)
+    public function splitOrder($id, Request $request, BaseHttpResponse $response)
     {
         $params = $request->all();
-        dd($params);
+
+        $order = $this->orderRepository->findById($id);
+
+        /*************** Validation Start ****************/
+        $checkProd = false;
+        $products = $order->products->pluck('qty', 'product_id')->all();
+        foreach($products as $productId => $quantity) {
+            foreach ($params['order_prod_move'] as $prodId => $qty) {
+                if ($productId == $prodId && (int)$qty > $quantity) {
+                    return $response->setCode(406)->setError()->setMessage('Product Qty is not available!');
+                }
+                if ($productId == $prodId) {
+                    $checkProd = true;
+                }
+            }
+        }
+
+        if (!$checkProd) {
+            return $response->setCode(406)->setError()->setMessage('Product is not available!');
+        }
+        /*************** Validation End ****************/
+
+
+        /*************** Replication Start ****************/
+        $orderData = $order->replicate();
+        $orderData->order_type = Order::PRE_ORDER;
+        $new_order = $this->orderRepository->createOrUpdate($orderData);
+
+        $paymentData = $order->payment->replicate();
+        $paymentData->order_id = $new_order->id;
+        $payment = $this->paymentRepository->createOrUpdate($paymentData);
+
+        $new_order->payment_id = $payment->id;
+        $new_order->save();
+
+        $histories = $order->histories;
+        foreach($histories as $history) {
+            $historyData = $history->replicate();
+            $historyData->order_id = $new_order->id;
+            $this->orderHistoryRepository->createOrUpdate($historyData);
+        }
+
+        $addressData = $order->address->replicate();
+        $addressData->order_id = $new_order->id;
+        $this->orderAddressRepository->createOrUpdate($addressData);
+
+        $products = $order->products;
+        foreach($products as $product) {
+            foreach ($params['order_prod_move'] as $prodId => $qty) {
+                if ($product->product_id == $prodId && (int)$qty <= $product->qty) {
+                    $productData = $product->replicate();
+                    $productData->order_id = $new_order->id;
+                    $productData->qty = (int)$qty;
+                    $this->orderProductRepository->createOrUpdate($productData);
+
+                    $product->qty -= (int)$qty;
+                    $product->save();
+                }
+            }
+        }
+
+        $this->updateOrderTotal($order);
+        $this->updateOrderTotal($new_order);
+
+        /*************** Replication End ****************/
+
+        return $response->setData($new_order)->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    public function updateOrderTotal($orderObj)
+    {
+        $orderTotal = 0;
+        $products = $orderObj->products;
+        foreach($products as $product) {
+            $orderTotal += $product->qty * $product->price;
+        }
+
+        $orderObj->sub_total = $orderTotal;
+
+        $orderTotal += $orderObj->shipping_amount;
+        $orderTotal -= $orderObj->discount_amount;
+
+        $orderObj->amount = $orderTotal;
+
+        $orderObj->save();
     }
 
 }

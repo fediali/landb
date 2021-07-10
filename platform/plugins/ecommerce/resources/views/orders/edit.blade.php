@@ -57,7 +57,7 @@
                                             @php
                                                 $product = get_products([
                                                     'condition' => [
-                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::PUBLISHED,
+                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                         'ec_products.id' => $orderProduct->product_id,
                                                     ],
                                                     'take' => 1,
@@ -817,7 +817,7 @@
                                     @php
                                         $product = get_products([
                                             'condition' => [
-                                                'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::PUBLISHED,
+                                                'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                 'ec_products.id' => $orderProduct->product_id,
                                             ],
                                             'take' => 1,
@@ -838,7 +838,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex">
-                                                <img class="split-img" src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
+                                                <img class="split-img" src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
                                                 <div class="ml-3">
                                                     <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
                                                     <p class="split-code">SKU: {{ $product->sku }}</p>
@@ -855,13 +855,13 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <input name="order_prod[{{$product->id}}]" type="number" step="1" value="{{ $orderProduct->qty }}" class="split-input" />
+                                            <input name="order_prod[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="{{ $orderProduct->qty }}" data-prod-id="{{$product->id}}" data-prod-qty="{{$orderProduct->qty}}" id="split-input-{{$product->id}}" class="split-input" />
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn-default split-btn">--></button>
+                                            <button type="button" class="btn-default split-btn" data-prod-id="{{$product->id}}">--></button>
                                         </td>
                                         <td class="text-center">
-                                            <input name="order_prod_move[{{$product->id}}]" type="number" step="1" max="{{ $orderProduct->qty }}" value="0" class="split-input2" />
+                                            <input name="order_prod_move[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="0" data-prod-id="{{$product->id}}" id="split-input2-{{$product->id}}" class="split-input2" />
                                         </td>
                                     </tr>
                                 @endforeach
@@ -884,10 +884,21 @@
 
         $(document).ready(function () {
             $('body').on('click', 'button.split-btn', function () {
-                let qty = $('input.split-input').val();
-                $('input.split-input2').val(qty);
-                $('input.split-input').val(0);
+                let prodId = $(this).data('prod-id');
+                let input = 'input#split-input-'+prodId;
+                let maxQty = $(input).data('prod-qty');
+                let qty = $(input).val();
+                $('input#split-input2-'+prodId).val(qty);
+                $(input).val(maxQty - qty);
             });
+            /*$('body').on('change', 'input.split-input', function () {
+                let prodId = $(this).data('prod-id');
+                let input = 'input#split-input-'+prodId;
+                let maxQty = $(input).data('prod-qty');
+            });
+            $('body').on('change', 'input.split-input2', function () {
+                let prodId = $(this).data('prod-id');
+            });*/
         });
     </script>
 
