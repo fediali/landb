@@ -12,7 +12,7 @@ class ChatingCreateChatingTable extends Migration
      */
     public function up()
     {
-        /*Schema::create('chatings', function (Blueprint $table) {
+        Schema::create('chatings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
             $table->string('status', 60)->default('published');
@@ -21,7 +21,7 @@ class ChatingCreateChatingTable extends Migration
             $table->integer('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
-        });*/
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class ChatingCreateChatingTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('chatings');
+        Schema::dropIfExists('chatings');
     }
 }
