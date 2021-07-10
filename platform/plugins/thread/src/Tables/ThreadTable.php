@@ -14,8 +14,6 @@ use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use Botble\Thread\Models\Thread;
 use Html;
-
-
 class ThreadTable extends TableAbstract
 {
 
@@ -322,7 +320,8 @@ class ThreadTable extends TableAbstract
 
     public function renderCustomFilter(): string
     {
-        $searches = UserSearch::where(['search_type' => 'threads', 'status' => 1])->pluck('name', 'id')->all();
+        $user = \Illuminate\Support\Facades\Auth::id();
+        $searches = UserSearch::where(['search_type' => 'threads', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
         $vendor = get_vendors();
         $designer = get_designers_for_thread();
         return view($this->customFilterTemplate, compact('searches', 'vendor', 'designer'))->render();
