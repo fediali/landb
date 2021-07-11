@@ -125,6 +125,10 @@ class ProductForm extends FormAbstract
                 'default_value' => false,
                 'id'            => $productId ? $productId : 0
             ])
+            ->add('creation_date', 'date', [
+                'label' => 'Creation date',
+                'label_attr'    => ['class' => 'control-label'],
+            ])
             ->add('is_featured', 'onOff', [
                 'label'         => trans('core/base::forms.is_featured'),
                 'label_attr'    => ['class' => 'control-label'],

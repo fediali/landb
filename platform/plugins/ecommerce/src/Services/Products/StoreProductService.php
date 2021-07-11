@@ -59,6 +59,7 @@ class StoreProductService
                 'wide_unit',
                 'height_unit',
                 'weight_unit',
+                'creation_date'
             ]);
         }
 

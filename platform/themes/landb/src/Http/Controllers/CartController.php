@@ -207,4 +207,13 @@ class CartController extends Controller
         return redirect()->back()->with('error', 'Something went wrong!');
       }
     }
+
+    public function checkIfPreOrder($productId){
+      $product = Product::where($this->model->getTable().'.id', $productId)
+                  ->join('ec_product_tag_product as eptp', 'eptp.product_id',$this->model->getTable().'.id')
+                  ->where('tag_id', 3)->first();
+
+      if($product){ return true; }
+      else{ return false; }
+    }
 }
