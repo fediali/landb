@@ -31,7 +31,11 @@ class MenuNode extends BaseModel
         'css_class',
         'target',
         'has_child',
+        'plugin_id',
+        'permissions',
     ];
+
+    protected $with = ['children'];
 
     /**
      * @return BelongsTo
@@ -47,6 +51,11 @@ class MenuNode extends BaseModel
     public function child()
     {
         return $this->hasMany(MenuNode::class, 'parent_id')->orderBy('position');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(MenuNode::class, 'parent_id', 'id')->orderBy('position');
     }
 
     /**

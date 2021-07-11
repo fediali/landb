@@ -26,6 +26,7 @@ class Menu extends BaseModel
         'name',
         'slug',
         'status',
+        'dashboard_menu',
     ];
 
     /**
