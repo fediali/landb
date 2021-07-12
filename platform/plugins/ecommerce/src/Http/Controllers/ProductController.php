@@ -1030,7 +1030,7 @@ class ProductController extends BaseController
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
 
-                if ($variation->status == BaseStatusEnum::ACTIVE) {
+                if ($variation->product->status == BaseStatusEnum::ACTIVE) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
