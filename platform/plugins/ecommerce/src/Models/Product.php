@@ -75,6 +75,7 @@ class Product extends BaseModel
         'new_label',
         'usa_made',
         'ptype',
+        'creation_date'
     ];
 
     /**
