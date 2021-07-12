@@ -1018,7 +1018,7 @@ class ProductController extends BaseController
                 'ec_product_variations.id')
             ->simplePaginate(5);
 
-        foreach ($availableProducts as &$availableProduct) {
+        foreach ($availableProducts as $pk => &$availableProduct) {
             /**
              * @var Product $availableProduct
              */
@@ -1057,6 +1057,11 @@ class ProductController extends BaseController
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = strtok($variationItem->attribute->title,'-');;
                 }
+            }
+
+            if (!count($availableProduct->variations)) {
+                unset($availableProducts[$pk]);
+                continue;
             }
         }
         return $response->setData($availableProducts);
