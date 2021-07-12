@@ -1003,7 +1003,7 @@ class ProductController extends BaseController
             ->when($excludeOOS == true, function ($q) {
                 $q->where('quantity', '>', 0);
             })
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
                 $q->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
@@ -1026,9 +1026,14 @@ class ProductController extends BaseController
                 false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
-            foreach ($availableProduct->variations as &$variation) {
+            foreach ($availableProduct->variations as $k => &$variation) {
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
+
+                if ($variation->is_out_of_stock && $excludeOOS) {
+                    unset($availableProduct->variations[$k]);
+                    continue;
+                }
 
                 $variation->packQty = 0;
                 $variation->packSizes = '';

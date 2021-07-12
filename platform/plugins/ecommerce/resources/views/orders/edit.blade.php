@@ -9,8 +9,7 @@
                             <div class="ui-banner ui-banner--status-warning">
                                 <div class="ui-banner__ribbon">
                                     <svg class="svg-next-icon svg-next-icon-size-20">
-                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                             xlink:href="#alert-circle"></use>
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#alert-circle"></use>
                                     </svg>
                                 </div>
                                 <div class="ui-banner__content">
@@ -30,22 +29,21 @@
                             <div class="pd-all-20">
                                 <div class="flexbox-grid-default">
                                     <div class="flexbox-auto-right mr5">
-                                        <label
-                                            class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.order_information') }} {{ get_order_code($order->id) }}</label>
+                                        <label class="title-product-main text-no-bold">
+                                            {{ trans('plugins/ecommerce::order.order_information') }}
+                                            {{ get_order_code($order->id) }}
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="mt20">
                                     @if ($order->shipment->id)
-                                        <svg
-                                            class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="#next-orders"></use>
+                                        <svg class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-orders"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @else
                                         <svg class="svg-next-icon svg-next-icon-size-16 svg-next-icon-gray">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="#next-order-unfulfilled-16"></use>
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-order-unfulfilled-16"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @endif
@@ -59,7 +57,7 @@
                                             @php
                                                 $product = get_products([
                                                     'condition' => [
-                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::PUBLISHED,
+                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                         'ec_products.id' => $orderProduct->product_id,
                                                     ],
                                                     'take' => 1,
@@ -117,8 +115,10 @@
                                                     @if (!empty($orderProduct->options) && is_array($orderProduct->options))
                                                         @foreach($orderProduct->options as $option)
                                                             @if (!empty($option['key']) && !empty($option['value']))
-                                                                <p class="mb-0"><small>{{ $option['key'] }}:
-                                                                        <strong> {{ $option['value'] }}</strong></small>
+                                                                <p class="mb-0">
+                                                                    <small>{{ $option['key'] }}:
+                                                                        <strong> {{ $option['value'] }}</strong>
+                                                                    </small>
                                                                 </p>
                                                             @endif
                                                         @endforeach
@@ -128,13 +128,14 @@
                                                     @if ($order->shipment->id)
                                                         <ul class="unstyled">
                                                             <li class="simple-note">
-                                                                <a><span>{{ $orderProduct->qty }}</span><span
-                                                                        class="text-lowercase"> {{ trans('plugins/ecommerce::order.completed') }}</span></a>
+                                                                <a>
+                                                                    <span>{{ $orderProduct->qty }}</span>
+                                                                    <span class="text-lowercase"> {{ trans('plugins/ecommerce::order.completed') }}</span>
+                                                                </a>
                                                                 <ul class="dom-switch-target line-item-properties small">
                                                                     <li class="ws-nm">
                                                                         <span class="bull">↳</span>
-                                                                        <span
-                                                                            class="black">{{ trans('plugins/ecommerce::order.shipping') }} </span>
+                                                                        <span class="black">{{ trans('plugins/ecommerce::order.shipping') }} </span>
                                                                         <a class="text-underline bold-light"
                                                                            target="_blank"
                                                                            title="{{ $order->shipping_method_name }}"
@@ -142,10 +143,8 @@
                                                                     </li>
                                                                     <li class="ws-nm">
                                                                         <span class="bull">↳</span>
-                                                                        <span
-                                                                            class="black">{{ trans('plugins/ecommerce::order.warehouse') }}</span>
-                                                                        <span
-                                                                            class="bold-light">{{ $order->shipment->store->name ?? $defaultStore->name }}</span>
+                                                                        <span class="black">{{ trans('plugins/ecommerce::order.warehouse') }}</span>
+                                                                        <span class="bold-light">{{ $order->shipment->store->name ?? $defaultStore->name }}</span>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -170,9 +169,7 @@
                             </div>
                             <div class="pd-all-20 p-none-t">
                                 <div class="flexbox-grid-default block-rps-768">
-                                    <div class="flexbox-auto-right p-r5">
-
-                                    </div>
+                                    <div class="flexbox-auto-right p-r5"></div>
                                     <div class="flexbox-auto-right pl5">
                                         <div class="table-wrap">
                                             <table class="table-normal table-none-border table-color-gray-text">
@@ -788,11 +785,121 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal_split_order" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="d-flex w-100">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                        <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                            Split Order#{{$order->id}}
+                            <span class="variation-name"></span>
+                        </h4>
+                    </div>
+                </div>
+
+                <form method="post" action="{{route('orders.split.order', $order->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-center"> Quantity</th>
+                                <th></th>
+                                <th class="text-center">Quantity Moved</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                                @foreach ($order->products as $orderProduct)
+                                    @php
+                                        $product = get_products([
+                                            'condition' => [
+                                                'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
+                                                'ec_products.id' => $orderProduct->product_id,
+                                            ],
+                                            'take' => 1,
+                                            'select' => [
+                                                'ec_products.id',
+                                                'ec_products.images',
+                                                'ec_products.name',
+                                                'ec_products.price',
+                                                'ec_products.sale_price',
+                                                'ec_products.sale_type',
+                                                'ec_products.start_date',
+                                                'ec_products.end_date',
+                                                'ec_products.sku',
+                                                'ec_products.is_variation',
+                                            ],
+                                        ]);
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <img class="split-img" src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
+                                                <div class="ml-3">
+                                                    <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
+                                                    <p class="split-code">SKU: {{ $product->sku }}</p>
+                                                    {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
+                                                    @php $attributes = get_product_attributes($product->id) @endphp
+                                                    @if (!empty($attributes))
+                                                        @foreach ($attributes as $attribute)
+                                                            {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                            @if (!$loop->last), @endif
+                                                        @endforeach
+                                                    @endif
+                                                    {{--<a class="split-link" href="#">landbapparel.com</a>--}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="order_prod[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="{{ $orderProduct->qty }}" data-prod-id="{{$product->id}}" data-prod-qty="{{$orderProduct->qty}}" id="split-input-{{$product->id}}" class="split-input" />
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn-default split-btn" data-prod-id="{{$product->id}}">--></button>
+                                        </td>
+                                        <td class="text-center">
+                                            <input name="order_prod_move[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="0" data-prod-id="{{$product->id}}" id="split-input2-{{$product->id}}" class="split-input2" />
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         setTimeout(function () {
             getCustomer();
         },200);
-        
+
+        $(document).ready(function () {
+            $('body').on('click', 'button.split-btn', function () {
+                let prodId = $(this).data('prod-id');
+                let input = 'input#split-input-'+prodId;
+                let maxQty = $(input).data('prod-qty');
+                let qty = $(input).val();
+                $('input#split-input2-'+prodId).val(qty);
+                $(input).val(maxQty - qty);
+            });
+            /*$('body').on('change', 'input.split-input', function () {
+                let prodId = $(this).data('prod-id');
+                let input = 'input#split-input-'+prodId;
+                let maxQty = $(input).data('prod-qty');
+            });
+            $('body').on('change', 'input.split-input2', function () {
+                let prodId = $(this).data('prod-id');
+            });*/
+        });
     </script>
 
     {!! Form::modalAction('resend-order-confirmation-email-modal', trans('plugins/ecommerce::order.resend_order_confirmation'), 'info', trans('plugins/ecommerce::order.resend_order_confirmation_description', ['email' => $order->user->id ? $order->user->email : $order->address->email]), 'confirm-resend-confirmation-email-button', trans('plugins/ecommerce::order.send')) !!}

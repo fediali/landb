@@ -4,6 +4,7 @@ namespace Theme\Landb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\CustomerCard;
 use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use Botble\ACL\Traits\AuthenticatesUsers;
@@ -93,7 +94,6 @@ class CustomerController extends Controller
         $user->fill([
             'password' => Hash::make($request->new_password)
         ])->save();
-        dd('saved');
       }
     }
     $validateAccount = $this->accountValidator($request);
@@ -348,5 +348,41 @@ if(isset($data['set_default'])){
     if($update){
       CustomerAddress::where('id' , $id)->update(['is_default' => $status]);
     }
+  }
+
+  public function postCustomerCard(Request $request)
+  {
+    $request['customer_omni_id'] = $request->customer_data['customer_id'];
+    $request['customer_data'] = json_encode($request->customer_data);
+    $card = CustomerCard::create($request->all());
+    $customer = json_decode($request->customer_data);
+    $data = [
+        'payment_method_id' => $customer->id,
+        'meta'              => [
+            'reference' => 'Card Validation',
+            'tax'       => 0,
+            'subtotal'  => 1,
+            'lineItems' => []
+        ],
+        'total'             => 1,
+        'pre_auth'          => 1
+    ];
+    $url = (env("OMNI_URL") . "charge/");
+    list($response, $info) = omni_api($url, $data, 'POST');
+
+    $status = $info['http_code'];
+
+    if (floatval($status) == 200) {
+      $response = json_decode($response, true);
+    } else {
+      $errors = [
+          422 => 'The transaction didn\'t reach a gateway',
+          400 => 'The transaction didn\'t reach a gateway but there weren\'t validation errors',
+          401 => 'The account is not yet activated or ready to process payments.',
+          500 => 'Unknown issue - Please contact Fattmerchant'
+      ];
+      return $errors;
+    }
+    return $card;
   }
 }

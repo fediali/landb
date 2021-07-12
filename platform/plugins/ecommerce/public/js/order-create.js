@@ -836,6 +836,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -886,12 +893,6 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": function _default() {
         return [];
-      }
-    },
-    sel_order_type: {
-      type: String,
-      "default": function _default() {
-        return 'normal';
       }
     },
     customer_address: {
@@ -975,6 +976,12 @@ __webpack_require__.r(__webpack_exports__);
         return 'cod';
       }
     },
+    order_type: {
+      type: String,
+      "default": function _default() {
+        return 'normal';
+      }
+    },
     currency: {
       type: String,
       "default": function _default() {
@@ -998,7 +1005,7 @@ __webpack_require__.r(__webpack_exports__);
       hidden_product_search_panel: true,
       loading: false,
       note: null,
-      order_type: 'normal',
+      // order_type: 'normal',
       customers: {
         data: []
       },
@@ -7621,22 +7628,13 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _vm._l(_vm.order_types, function(value, index) {
-                    return _c(
-                      "option",
-                      {
-                        domProps: {
-                          value: index,
-                          selected: index === _vm.sel_order_type
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(value) +
-                            "\n                        "
-                        )
-                      ]
-                    )
+                    return _c("option", { domProps: { value: index } }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(value) +
+                          "\n                        "
+                      )
+                    ])
                   })
                 ],
                 2
@@ -7723,7 +7721,7 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Qty : " +
+                                          "Total Pieces : " +
                                             _vm._s(variant.packQty)
                                         )
                                       ])
@@ -7768,6 +7766,7 @@ var render = function() {
                                             },
                                             [_vm._v(_vm._s(_vm.currency))]
                                           ),
+                                          _vm._v(" "),
                                           _c("input", {
                                             directives: [
                                               {
@@ -7859,7 +7858,7 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    _vm._s(variant.price) +
+                                    _vm._s(variant.select_qty * variant.price) +
                                       "\n                                    " +
                                       _vm._s(_vm.currency) +
                                       "\n                                "
@@ -8553,51 +8552,41 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("tr", [
-                          _c("td", [
-                            _c(
-                              "a",
-                              {
-                                directives: [
-                                  {
-                                    name: "b-modal",
-                                    rawName: "v-b-modal.add-shipping",
-                                    modifiers: { "add-shipping": true }
-                                  }
-                                ],
-                                staticClass: "hover-underline",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                !_vm.child_is_selected_shipping
-                                  ? _c("span", [
-                                      _c("i", {
-                                        staticClass: "fa fa-plus-circle"
-                                      }),
-                                      _vm._v(
-                                        " " + _vm._s(_vm.__("Add shipping fee"))
-                                      )
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.child_is_selected_shipping
-                                  ? _c("span", [
-                                      _vm._v(_vm._s(_vm.__("Shipping")))
-                                    ])
-                                  : _vm._e()
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _vm.child_shipping_method_name
-                              ? _c("p", { staticClass: "mb0 font-size-12px" }, [
-                                  _vm._v(_vm._s(_vm.child_shipping_method_name))
-                                ])
-                              : _vm._e()
+                          _c("span", [
+                            _c("i", { staticClass: "fa fa-plus-circle" }),
+                            _vm._v(
+                              "\n                                        " +
+                                _vm._s(_vm.__("Add shipping fee")) +
+                                "\n                                    "
+                            )
                           ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.child_shipping_amount,
+                                expression: "child_shipping_amount"
+                              }
+                            ],
+                            staticClass: "next-input p-none-r",
+                            attrs: { type: "number", min: "1" },
+                            domProps: { value: _vm.child_shipping_amount },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.child_shipping_amount = $event.target.value
+                              }
+                            }
+                          }),
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
                               _vm._s(
-                                _vm._f("formatPrice")(_vm.shipping_amount)
+                                _vm._f("formatPrice")(_vm.child_shipping_amount)
                               ) +
                                 " " +
                                 _vm._s(_vm.currency)

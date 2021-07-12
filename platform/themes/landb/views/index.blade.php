@@ -249,14 +249,15 @@
 <div class="logocenter text-center">
     <img class="revealUp"src="landb/img/lucky&blessed_logo_sign_Black 1.png" alt="">
 </div>
-@if(count($home_featured))
+@if(count($home_featured) && setting('theme-landb-home_main_section_status') == 1)
     {!! Theme::partial('index/featured', compact('home_featured')) !!}
 @endif
 
+@if(setting('theme-landb-home_section_1_status') == 1)
     {!! Theme::partial('index/latest_collection_1', compact('latest_collection')) !!}
-
-
-<section class="browse_collection py-4">
+@endif
+@if(setting('theme-landb-home_section_2_status') == 1)
+    <section class="browse_collection py-4">
     @php
         $product_ids = setting('theme-landb-home_section_2_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(4)->pluck('id')->all()));
        $product_ids = json_decode($product_ids);
@@ -313,16 +314,20 @@
     </div>
     @endif
 </section>
-<section class="parallax_video">
+@endif
+@if(setting('theme-landb-home_section_3_status') == 1)
+    <section class="parallax_video">
     @php
         $video_url = setting('theme-landb-home_section_3_video', 'https://css-tricks-post-videos.s3.us-east-1.amazonaws.com/708209935.mp4');
     @endphp
     <video src="{{ (strpos($video_url, 'http') !== false) ? $video_url : 'storage/'.$video_url }}" autoplay loop playsinline muted></video>
     <!-- <img src="landb/img/Video.png" alt=""> -->
 </section>
+@endif
+@if(setting('theme-landb-home_section_4_status') == 1)
     {!! Theme::partial('index/latest_collection_2', compact('latest_collection')) !!}
-
-@if(count($latest_collection))
+@endif
+@if(count($latest_collection) && setting('theme-landb-home_section_5_status') == 1)
     {!! Theme::partial('index/latest_collection_carousel', compact('latest_collection')) !!}
 @endif
 

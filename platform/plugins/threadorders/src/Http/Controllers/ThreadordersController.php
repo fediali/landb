@@ -600,10 +600,16 @@ class ThreadordersController extends BaseController
                         $product->categories()->sync([$variation->product_category_id]);
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
+
+                        $permalink = Str::slug($product->name);
+                        $check = Slug::where('key', $permalink)->first();
+                        if ($check) {
+                            $permalink .= '_'.time();
+                        }
                         Slug::create([
                             'reference_type' => Product::class,
                             'reference_id'   => $product->id,
-                            'key'            => Str::slug($product->name),
+                            'key'            => $permalink,
                             'prefix'         => SlugHelper::getPrefix(Product::class),
                         ]);
 

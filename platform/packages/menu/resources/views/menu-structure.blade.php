@@ -5,7 +5,9 @@
         <div class="col-md-4">
             <div class="panel-group" id="accordion">
 
-                @php do_action(MENU_ACTION_SIDEBAR_OPTIONS) @endphp
+                @if(!$menu->dashboard_menu)
+                    @php do_action(MENU_ACTION_SIDEBAR_OPTIONS) @endphp
+                @endif
 
                 <div class="widget meta-boxes">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseCustomLink">
@@ -67,6 +69,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="col-md-8">
@@ -87,7 +90,7 @@
                              ])
                         !!}
                     </div>
-                    @if (defined('THEME_MODULE_SCREEN_NAME'))
+                    @if (defined('THEME_MODULE_SCREEN_NAME') && !$menu->dashboard_menu)
                         <hr>
                         <h3>{{ trans('packages/menu::menu.menu_settings') }}</h3>
                         <div class="row">

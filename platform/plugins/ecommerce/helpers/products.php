@@ -30,7 +30,7 @@ if (!function_exists('get_products')) {
     {
         $params = array_merge([
             'condition' => [
-                'ec_products.status'       => BaseStatusEnum::PUBLISHED,
+                'ec_products.status'       => BaseStatusEnum::ACTIVE,
                 'ec_products.is_variation' => 0,
             ],
             'order_by'  => [
@@ -428,6 +428,6 @@ if (!function_exists('get_products_data')) {
      */
     function get_products_data()
     {
-        return Product::where('status', 'published')->select('name', 'id')->get();
+        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->pluck('name', 'id');
     }
 }

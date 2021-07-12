@@ -1,5 +1,6 @@
 @php
     $prefix = apply_filters(FILTER_SLUG_PREFIX, $prefix);
+    $prefix = str_replace('product-categories', '', $prefix);
     $value = $value ? $value : old('slug');
     $endingURL = config('core.base.general.public_single_ending_url');
     $previewURL = str_replace('--slug--', $value, url($prefix) . '/' . config('packages.slug.general.pattern')) . $endingURL . (Auth::user() && $preview ? '?preview=true' : '');

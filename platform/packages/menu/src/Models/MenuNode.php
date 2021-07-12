@@ -31,7 +31,11 @@ class MenuNode extends BaseModel
         'css_class',
         'target',
         'has_child',
+        'plugin_id',
+        'permissions',
     ];
+
+    protected $with = ['children'];
 
     /**
      * @return BelongsTo
@@ -49,6 +53,11 @@ class MenuNode extends BaseModel
         return $this->hasMany(MenuNode::class, 'parent_id')->orderBy('position');
     }
 
+    public function children()
+    {
+        return $this->hasMany(MenuNode::class, 'parent_id', 'id')->orderBy('position');
+    }
+
     /**
      * @return BelongsTo
      */
@@ -64,7 +73,7 @@ class MenuNode extends BaseModel
     public function getUrlAttribute($value)
     {
         if ($value) {
-            return apply_filters(MENU_FILTER_NODE_URL, $value);
+            return str_replace('product-categories/', '',  apply_filters(MENU_FILTER_NODE_URL, $value));
         }
 
         if (!$this->reference_type) {

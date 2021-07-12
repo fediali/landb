@@ -86,7 +86,7 @@ nav.navbar {
 }
 
 .navbar-parent ul {
-    display: inherit;
+    display: grid;
 }
 
 .navbar-parent ul li.nav-item a.nav-link {
@@ -354,7 +354,7 @@ button.toggle-menu.active {
     -webkit-transform: rotate3d(0, 0, 1, 45deg);
     transform: rotate3d(0, 0, 1, 45deg);
 }
- 
+
 .banner img {
     width: 100%;
 }
@@ -1082,7 +1082,7 @@ section.parallax_video video {
 .shoplisting .listbox .caption h4 {
     font-size: 20px;
     font-weight: 600;
-    margin: 15px;    
+    margin: 15px;
     color: #000;
     min-height: 50px;
 }
@@ -1732,7 +1732,7 @@ input.qtyminus {
 
 .side-img {
     height: 120px;
-    width: 105px; 
+    width: 105px;
 }
 
 .detail-subheading {
@@ -1930,7 +1930,7 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
-    .breadcrumb_wrap { 
+    .breadcrumb_wrap {
         height: auto !important;
       }
     .detail-magnify {
@@ -2038,7 +2038,7 @@ input.qtyminus {
     display: block;
     margin-bottom: 10px;
 }
- 
+
 
 .gallery .previews a,
 .gallery .full {
@@ -2812,7 +2812,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 /* LOGIN CSS END */
 
 
-.mainslide .carousel-indicators li { 
+.mainslide .carousel-indicators li {
     background-color: #000000 !important; }
 
 .mainslide .carousel-control-prev-icon {
@@ -2828,19 +2828,19 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 
 .center img {
-    width: 90% !important; 
-    margin: auto !important; 
+    width: 90% !important;
+    margin: auto !important;
     transition: 2s !important;
 
-} 
+}
 
 .explore_seasonal .owl-item>div {
     height: auto !important;
 }
 
 .explore_seasonal .owl-item>div img {
-    width: 70% ; 
-    margin: auto !important; 
+    width: 70% ;
+    margin: auto !important;
 
     transition: 2s !important;
 
@@ -2848,7 +2848,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 .mainslide .carousel-control-next, .carousel-control-prev {
-    width: 6% !important; 
+    width: 6% !important;
 }
 
 
@@ -3063,8 +3063,8 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     position: absolute;
 }
 /****** GALLERY ANIMATION CSS END *******/
- 
- 
+
+
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .grid-container {
         height: 1420vh !important;
@@ -3100,8 +3100,8 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
   }
 
-  @media screen and (min-width: 320px) and (max-width: 767px) { 
-    .navbar-parent ul li.nav-item a.nav-link { 
+  @media screen and (min-width: 320px) and (max-width: 767px) {
+    .navbar-parent ul li.nav-item a.nav-link {
         padding: 5px !important;
     }
     header .container {
@@ -3114,27 +3114,27 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 
 
-@media screen and (min-width: 320px) and (max-width: 991px) { 
-    #register-form { 
+@media screen and (min-width: 320px) and (max-width: 991px) {
+    #register-form {
         padding-left: 15px;
         padding-right: 15px;
-    } 
-    #login-form { 
+    }
+    #login-form {
         padding-left: 15px;
         padding-right: 15px;
-    } 
+    }
 
-    .tab-content { 
+    .tab-content {
         padding-left: 15px;
         padding-right: 15px;
-    } 
-    .nav-tabs { 
+    }
+    .nav-tabs {
         padding-left: 15px;
         padding-right: 15px;
-    } 
+    }
     .shoplisting .listbox .img .imgoverlay {
         opacity: 1 !important;
-    } 
+    }
     .ItemPrice {
         text-align: center !important;
     }
@@ -3165,7 +3165,7 @@ height: 70px;
     color: #000 !important;
 }
 
-.list-group-item .active{ 
+.list-group-item .active{
     font-weight: 600;
     color: #e91e63 !important;
 }
@@ -3312,12 +3312,12 @@ table.shop_table tr th {
 }
 }
 
-@media screen and (min-width: 768px) and (max-width: 991px) { 
+@media screen and (min-width: 768px) and (max-width: 991px) {
     .shipping-checkbox-area input[type="radio"] {
         width: 25px !important;
         height: 25px;
     }
-   
+
 }
 
 @media screen and (min-width: 992px) and (max-width: 1024px) {
@@ -3325,8 +3325,8 @@ table.shop_table tr th {
         width:60%;
     }
 }
-  
-@media screen and (min-width: 320px) and (max-width: 991px) { 
+
+@media screen and (min-width: 320px) and (max-width: 991px) {
 .tabcontent {
     width: 100% !important;
 }
@@ -3335,20 +3335,20 @@ table.shop_table tr th {
 }
 .grid-container {
     display: none !important;
-} 
+}
 
 .shipping-checkbox-area p {
     width: 100% !important;
 }
 .shipping-checkbox-area div {
     display: flex !important;
-} 
+}
 
 #menu .main-nav {
     display: block !important;
 }
 nav.main-nav .nav-col {
-    min-width: 100% !important; 
+    min-width: 100% !important;
     width: 100% !important;
     margin-bottom: 30px !important;
 }
@@ -3358,17 +3358,17 @@ nav.main-nav .nav-col {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
-    .banner img { 
-        height: 200px; 
+    .banner img {
+        height: 200px;
     }
  }
 @media screen and (min-width: 768px) and (max-width: 991px) {
-    .banner img { 
-        height: 300px; 
+    .banner img {
+        height: 300px;
     }
  }
 
- 
+
 #myOverlay {
     z-index: 10000 !important;
 }
@@ -3376,7 +3376,7 @@ nav.main-nav .nav-col {
 
 
 /************* TIMELINE CSS START *************/
- 
+
 .timeline {
     position: relative;
     width: 100%;
@@ -3384,7 +3384,7 @@ nav.main-nav .nav-col {
     margin: 0 auto;
     padding: 15px 0;
   }
-  
+
   .timeline::after {
     content: '';
     position: absolute;
@@ -3395,22 +3395,22 @@ nav.main-nav .nav-col {
     left: 50%;
     margin-left: -1px;
   }
-  
+
   .container-timeline {
     padding: 15px 30px;
     position: relative;
     background: inherit;
     width: 50%;
   }
-  
+
   .container-timeline.left {
     left: 0;
   }
-  
+
   .container-timeline.right {
     left: 50%;
   }
-  
+
   .container-timeline::after {
     content: '';
     position: absolute;
@@ -3423,25 +3423,25 @@ nav.main-nav .nav-col {
     border-radius: 16px;
     z-index: 1;
   }
-  
+
   .container-timeline.right::after {
     left: -8px;
   }
-  
+
   .container-timeline::before {
     content: '';
     position: absolute;
     width: 50px;
     height: 2px;
     top: calc(50% - 1px);
-    right: 8px; 
+    right: 8px;
     z-index: 1;
   }
-  
+
   .container-timeline.right::before {
     left: 8px;
   }
-  
+
   .container-timeline .date {
     position: absolute;
     display: inline-block;
@@ -3454,7 +3454,7 @@ nav.main-nav .nav-col {
     letter-spacing: 1px;
     z-index: 1;
   }
-  
+
   .container-timeline.left .date {
     right: -590px;
     width: 100%;
@@ -3471,7 +3471,7 @@ nav.main-nav .nav-col {
     width: 85%;
   }
   .container-timeline.right .date .timeline-callbtn{
-    width: 85%; 
+    width: 85%;
     MARGIN-TOP: 10PX;
     margin-left: -60px;
   }
@@ -3479,7 +3479,7 @@ nav.main-nav .nav-col {
     left: -590px;
     width: 100%;
   }
-  
+
   .container-timeline .icon {
     position: absolute;
     display: inline-block;
@@ -3495,77 +3495,77 @@ nav.main-nav .nav-col {
     color: #000;
     z-index: 1;
   }
-  
+
   .container-timeline.left .icon {
     right: 56px;
   }
-  
+
   .container-timeline.right .icon {
     left: 56px;
   }
-  
-  .container-timeline .content { 
+
+  .container-timeline .content {
     position: relative;
     border-radius: 10px 10px 10px 10px;
 }
 
-  
-  .container-timeline.right .content { 
+
+  .container-timeline.right .content {
     border-radius: 10px 10px 10px 10px;
   }
-  
+
   .container-timeline .content h2 {
     margin: 10px 0 10px 0;
     font-size: 18px;
     font-weight: 600;
     color: #000000;
   }
-  
+
   .container-timeline .content p {
     margin: 0;
     font-size: 16px;
     line-height: 22px;
     color: #000000;
   }
-  
+
   @media (max-width: 767.98px) {
     .timeline::after {
       left: 23px;
     }
-  
+
     .container-timeline {
       width: 100%;
       padding-left: 40px;
       padding-right: 30px;
     }
-  
+
     .container-timeline.right {
       left: 0%;
     }
-  
-    .container-timeline.left::after, 
+
+    .container-timeline.left::after,
     .container-timeline.right::after {
       left: 15px;
     }
-  
+
     .container-timeline.left::before,
     .container-timeline.right::before {
       left: 30px;
       border-color: transparent #006E51 transparent transparent;
     }
-  
+
     .container-timeline.left .date,
     .container-timeline.right .date {
       right: auto;
       left: 15px;
     }
-  
+
     .container-timeline.left .icon,
     .container-timeline.right .icon {
       right: auto;
       left: 78px;
     }
-  
+
     .container-timeline.left .content,
     .container-timeline.right .content {
       padding: 30px 30px 30px 90px;
@@ -3573,12 +3573,12 @@ nav.main-nav .nav-col {
 
     }
   }
-  
+
 @media screen and (min-width: 320px) and (max-width: 991px) {
-    .container-timeline.left .date { 
+    .container-timeline.left .date {
         width: 100%;
     }
-    .container-timeline.right .date { 
+    .container-timeline.right .date {
         width: 100%;
     }
     .container-timeline .date {
@@ -3587,16 +3587,16 @@ nav.main-nav .nav-col {
     .container-timeline.left .date .timeline-addbtn{
         width: 100%;
         margin-left: 0px !important;
-    } 
+    }
       .container-timeline.left .date .timeline-callbtn{
-        width: 100%; 
+        width: 100%;
         margin-left: 0px !important;
       }
       .container-timeline.right .date .timeline-addbtn{
         width: 100%;
       }
       .container-timeline.right .date .timeline-callbtn{
-        width: 100%;  
+        width: 100%;
         margin-left: 0px !important;
       }
       .mobile-date {
@@ -3613,7 +3613,7 @@ nav.main-nav .nav-col {
         margin: auto !important;
     }
 }
-  
+
 
 .dropdown-toggle::after {
     display: none !important;
@@ -3635,10 +3635,10 @@ nav.main-nav .nav-col {
     color: #fff;
     height: 50px;
 }
- 
+
 #Datepickk .d-table{
     display: contents !important;
-} 
+}
 
 #Datepickk .d-calendar {
     max-height: 430px !important;
@@ -3653,15 +3653,15 @@ nav.main-nav .nav-col {
 }
 
 #Datepickk .d-header i#d-previous:after {
-    border-right: 7px solid #000000 !important; 
+    border-right: 7px solid #000000 !important;
 }
 
 #Datepickk .d-header i#d-next:after {
-    border-left: 7px solid #000000 !important; 
+    border-left: 7px solid #000000 !important;
 }
 
-#Datepickk .d-header { 
-    background-color: #000000 !important; 
+#Datepickk .d-header {
+    background-color: #000000 !important;
 }
 /************** CALENDER END START****************/
 
@@ -3753,7 +3753,7 @@ input:checked + .slider:before {
     .size-chart td {
         padding: 10px 20px;
         text-align: center;
-    } 
+    }
 }
 
 .size-chart td {
@@ -3771,7 +3771,7 @@ input:checked + .slider:before {
     position: absolute;
     right: 0px;
     z-index: 10;
-    width: 92%; 
+    width: 92%;
     margin: auto;
     display:none;
 }
@@ -3870,7 +3870,7 @@ header {
 .navbar-parent li {
     list-style: none;
     clear: both;
-    display: inline-block; 
+    display: inline-block;
     white-space: nowrap;
 }
 
@@ -3886,7 +3886,7 @@ header {
     display: block;
     padding: .5rem 1rem;
 }
- 
+
 .product-category-list-container {
     margin: 0 auto;
 }
@@ -3948,16 +3948,16 @@ html {
     scroll-behavior: smooth;
   }
 
-  .demo-area{ 
+  .demo-area{
     border-radius:8px;
     padding:20px;
   }
- 
-  
+
+
   .demo-trigger img {
     max-width: 100%;
   }
-  
+
   .detail {
     position: absolute;
     z-index: 10;
@@ -3966,13 +3966,13 @@ html {
     float: left;
     min-height:525px;
   }
-  
+
   @media (max-width: 900px) {
-    
+
     .detail, .demo-trigger {
       float: none;
     }
-  
+
     .demo-trigger {
       display:block;
       width:100%;
@@ -3981,14 +3981,14 @@ html {
       margin: 0 auto;
       cursor: zoom-in;
     }
-  
+
     .detail {
       text-align:center;
       margin: 0 auto;
       min-height:0;
-      width:100%;  
+      width:100%;
     }
-    
+
   }
 
   .demo-trigger img {

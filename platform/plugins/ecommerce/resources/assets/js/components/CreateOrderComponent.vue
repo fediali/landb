@@ -12,8 +12,7 @@
                         <label class="text-title-field">Select Order Type</label>
                         <select class="form-control" id="order-type" v-model="order_type">
                             <option value="" :disabled="true" :selected="true">Select Order Type</option>
-                            <option v-for="(value, index) in order_types" :value="index"
-                                    :selected="index === sel_order_type">
+                            <option v-for="(value, index) in order_types" :value="index">
                                 {{ value }}
                             </option>
                         </select>
@@ -40,14 +39,15 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Qty : {{variant.packQty}}</p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Pieces : {{variant.packQty}}</p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">Sizes : {{variant.packSizes}}</p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
                                                 <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
-                                                <span style=" margin-top: 8px !important; margin-right: 5px !important;">{{ currency }}</span><input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
+                                                <span style=" margin-top: 8px !important; margin-right: 5px !important;">{{ currency }}</span>
+                                                <input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
                                             </div>
                                         </div>
                                     </td>
@@ -55,7 +55,7 @@
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
                                         <input class="next-input p-none-r" v-model="variant.select_qty" type="number" min="1" @change="handleChangeQuantity()">
                                     </td>
-                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.price }}
+                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.select_qty * variant.price }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
@@ -223,17 +223,24 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <!--<td>
                                             <a href="#" v-b-modal.add-shipping class="hover-underline">
-                                                <span v-if="!child_is_selected_shipping"><i
-                                                    class="fa fa-plus-circle"></i> {{ __('Add shipping fee') }}</span>
+                                                <span v-if="!child_is_selected_shipping">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                    {{ __('Add shipping fee') }}
+                                                </span>
                                                 <span v-if="child_is_selected_shipping">{{ __('Shipping') }}</span>
                                             </a>
-                                            <p class="mb0 font-size-12px" v-if="child_shipping_method_name">{{
-                                                    child_shipping_method_name
-                                                }}</p>
-                                        </td>
-                                        <td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>
+                                            <p class="mb0 font-size-12px" v-if="child_shipping_method_name">
+                                                {{child_shipping_method_name }}
+                                            </p>
+                                        </td><td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>-->
+                                        <span>
+                                            <i class="fa fa-plus-circle"></i>
+                                            {{ __('Add shipping fee') }}
+                                        </span>
+                                        <input class="next-input p-none-r" v-model="child_shipping_amount" type="number" min="1">
+                                        <td class="pl10">{{ child_shipping_amount | formatPrice }} {{ currency }}</td>
                                     </tr>
                                     <tr class="text-no-bold">
                                         <td>{{ __('Total amount') }}</td>
@@ -861,10 +868,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        sel_order_type: {
-            type: String,
-            default: () => 'normal',
-        },
         customer_address: {
             type: Object,
             default: () => ({
@@ -922,6 +925,10 @@ export default {
             type: String,
             default: () => 'cod',
         },
+        order_type: {
+            type: String,
+            default: () => 'normal',
+        },
         currency: {
             type: String,
             default: () => null,
@@ -941,7 +948,7 @@ export default {
             hidden_product_search_panel: true,
             loading: false,
             note: null,
-            order_type: 'normal',
+            // order_type: 'normal',
             customers: {
                 data: [],
             },

@@ -18,6 +18,7 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Supports\EcommerceHelper;
 use Botble\Page\Models\Page;
@@ -60,7 +61,6 @@ class CheckoutController extends Controller
     $cart = $cart = Order::where('id', $this->getUserCart())->with(['products' => function($query){
               $query->with(['product']);
             }])->first();
-
     foreach ($cart->products as $cartProduct){
       if($cartProduct->product->quantity < 1){
         return redirect()->route('public.cart_index', ['discard' => 'true', 'item' => $cartProduct->id])->with('error', '"'.$cartProduct->product->name. '" is out of stock and is removed from cart!');
@@ -75,7 +75,6 @@ class CheckoutController extends Controller
       $url = (env("OMNI_URL") . "customer/" . $user->card[0]->customer_omni_id . "/payment-method");
       list($card, $info) = omni_api($url);
       $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
-      dd($cards);
     }else{
       $cards = collect()->push('Add New Card');
     }
@@ -134,6 +133,7 @@ class CheckoutController extends Controller
 
         $checkoutUrl = $this->payPalService->execute($request);
         if ($checkoutUrl) {
+          $this->checkIfPreOrder($order->id);
           return redirect($checkoutUrl);
         }
         $data['error'] = true;
@@ -146,6 +146,7 @@ class CheckoutController extends Controller
           $chargeId = $this->omniPaymentService->execute($request);
           $payment = Payment::where('charge_id' , $chargeId)->first();
           //dd($payment);
+          $this->checkIfPreOrder($order->id);
           $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);
           return redirect()->route('public.order.success', ['id' => $payment->order_id]);
         }
@@ -277,6 +278,55 @@ class CheckoutController extends Controller
           'zip_code' => $billing[0]->zip_code,
       ]);
     }
+  }
+
+  public function checkIfPreOrder($id){
+    $order = Order::find($id)->with('products')->first();
+    $preOrderId = null;
+    $orderTotal = 0;
+    foreach ($order->products as $product){
+      $check = $this->checkIfProductPreOrder($product->product_id);
+      if($check){
+        if(is_null($preOrderId)){
+          $token = OrderHelper::getOrderSessionToken();
+          $preOrder = Order::create([
+              'user_id'         => auth('customer')->user()->id,
+              'amount'          => 0,
+              'sub_total'       => 0,
+              'is_finished'     => 0,
+              'token'           => $token,
+              'tax_amount'      => 0,
+              'discount_amount' => 0,
+              'shipping_amount' => 0,
+              'currency_id'     => 1,
+              'status'          => 'pre-order',
+              'parent_order'    => $id
+          ]);
+          $preOrderId = $preOrder->id;
+          //dd($check, $preOrderId);
+        }
+        $orderTotal = $orderTotal + $product->price;
+        OrderProduct::find($product->id)->update(['order_id' => $preOrderId]);
+      }
+    }
+
+    if(!is_null($preOrderId)){
+      Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal,'is_finished' => 1]);
+      $current = Order::find($id);
+      $current->update(['amount' => $current->amount - $orderTotal]);
+    }
+
+  }
+
+  public function checkIfProductPreOrder($productId){
+    $product = ProductVariation::where('ec_product_variations.product_id', $productId)
+                ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_product_variations.configurable_product_id')
+                ->where('tag_id', 3)->first();
+    /*$product = Product::where('ec_products.id', 21)
+        ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_products.id')
+        ->where('tag_id', 3)->first();*/
+    if($product){ return true; }
+    else       { return false; }
   }
 
 }

@@ -376,7 +376,7 @@ new Luminous(demoTrigger);
   function functionAddCard(result, customer_id) {
     console.log('addingCard', result);
     $.ajax({
-      url: '{{ route('customers.create-customer-payment') }}',
+      url: '{{ route('customer.create-customer-payment') }}',
       type: 'post',
       data: {
         '_token': '{{ csrf_token() }}',

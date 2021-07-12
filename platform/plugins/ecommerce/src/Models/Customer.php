@@ -61,6 +61,7 @@ class Customer extends Authenticatable
         'is_text',
         'salesperson_id',
         'phone_validation_error',
+        'last_visit',
     ];
     protected $with = [
         'detail',
@@ -234,6 +235,22 @@ class Customer extends Authenticatable
     public function pendingOrderId()
     {
         $cart = $this->pendingOrder();
+        if ($cart) {
+            return $cart->id;
+        } else {
+            return null;
+        }
+
+    }
+
+    public function pendingPreOrder()
+    {
+        return $this->orders()->where('user_id', $this->id)->where('is_finished', 0)->first();
+    }
+
+    public function pendingPreOrderId()
+    {
+        $cart = $this->pendingPreOrder();
         if ($cart) {
             return $cart->id;
         } else {

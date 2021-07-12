@@ -7,19 +7,19 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::get('edit/{id}', [
                 'as'         => 'edit',
                 'uses'       => 'ShipmentController@edit',
-                'permission' => 'ecommerce.orders.edit',
+                'permission' => 'orders.edit',
             ]);
 
             Route::post('update-status/{id}', [
                 'as'         => 'update-status',
                 'uses'       => 'ShipmentController@postUpdateStatus',
-                'permission' => 'ecommerce.orders.edit',
+                'permission' => 'orders.edit',
             ]);
 
             Route::post('update-cod-status/{id}', [
                 'as'         => 'update-cod-status',
                 'uses'       => 'ShipmentController@postUpdateCodStatus',
-                'permission' => 'ecommerce.orders.edit',
+                'permission' => 'orders.edit',
             ]);
         });
     });
