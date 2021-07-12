@@ -1030,14 +1030,14 @@ class ProductController extends BaseController
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
 
-                if ($variation->product->status != BaseStatusEnum::ACTIVE) {
+                /*if ($variation->product->status != BaseStatusEnum::ACTIVE) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
                 if ($variation->quantity < 1 && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
-                }
+                }*/
 
                 $variation->packQty = 0;
                 $variation->packSizes = '';
@@ -1059,10 +1059,10 @@ class ProductController extends BaseController
                 }
             }
 
-            if (!count($availableProduct->variations)) {
+            /*if (!count($availableProducts[$pk]->variations)) {
                 unset($availableProducts[$pk]);
                 continue;
-            }
+            }*/
         }
         return $response->setData($availableProducts);
     }
