@@ -85,7 +85,7 @@ nav.navbar {
 }
 
 .navbar-parent ul {
-    display: inherit;
+    display: grid;
 }
 
 .navbar-parent ul li.nav-item a.nav-link {
