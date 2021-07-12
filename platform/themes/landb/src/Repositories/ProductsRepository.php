@@ -6,6 +6,7 @@ use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Slug\Models\Slug;
+use Carbon\Carbon;
 
 class ProductsRepository{
   private $model;
@@ -84,9 +85,14 @@ class ProductsRepository{
             ->when(!is_null($limit) , function ($query) use ($limit){
                 $query->limit($limit);
             })
-            ->when(!is_null($category_id) , function ($query) use ($category_id){
+            ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals'])) , function ($query) use ($category_id){
                /* $query->where($this->model->getTable().'.category_id', $category_id);*/
                  $query->join('ec_product_category_product as epcp', 'epcp.product_id' , $this->model->getTable().'.id')->where('epcp.category_id', $category_id);
+            })
+            ->when((!is_null($category_id) && in_array($category_slug, ['new-arrival', 'new-arrivals'])) , function ($query) use ($category_id){
+               /* $query->where($this->model->getTable().'.category_id', $category_id);*/
+               $date = Carbon::today()->subWeek();
+                 $query->where($this->model->getTable().'.creation_date', '>=', $date);
             })
             ->when(!is_null($tag_id) , function ($query) use ($tag_id){
                 $query->join('ec_product_tag_product as ptag', 'ptag.product_id','ec_products.id')->where('tag_id', $tag_id);

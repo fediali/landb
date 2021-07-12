@@ -243,6 +243,22 @@ class Customer extends Authenticatable
 
     }
 
+    public function pendingPreOrder()
+    {
+        return $this->orders()->where('user_id', $this->id)->where('is_finished', 0)->first();
+    }
+
+    public function pendingPreOrderId()
+    {
+        $cart = $this->pendingPreOrder();
+        if ($cart) {
+            return $cart->id;
+        } else {
+            return null;
+        }
+
+    }
+
     public function card()
     {
         return $this->hasMany(CustomerCard::class, 'customer_id');

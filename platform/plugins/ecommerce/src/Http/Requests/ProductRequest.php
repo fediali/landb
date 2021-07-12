@@ -19,6 +19,7 @@ class ProductRequest extends Request
             'price'      => 'numeric|nullable',
             'start_date' => 'date|nullable|required_if:sale_type,1',
             'end_date'   => 'date|nullable|after:' . ($this->input('start_date') ?? now()->toDateTimeString()),
+            'creation_date' => 'required'
         ];
     }
 
