@@ -53,6 +53,14 @@ class OrderProduct extends BaseModel
         return $this->belongsTo(Product::class)->withDefault();
     }
 
+    /**
+     * @return BelongsTo
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class)->withDefault();
+    }
+
     public function getShipmentVerifiedAttribute()
     {
         $check = OrderProductShipmentVerify::where(['order_id' => $this->order_id, 'product_id' => $this->product_id])->value('is_verified');

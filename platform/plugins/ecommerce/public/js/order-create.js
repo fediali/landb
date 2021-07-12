@@ -1005,7 +1005,7 @@ __webpack_require__.r(__webpack_exports__);
       hidden_product_search_panel: true,
       loading: false,
       note: null,
-      // order_type: 'normal',
+      // order_type: this.orderType,
       customers: {
         data: []
       },

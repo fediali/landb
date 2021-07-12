@@ -220,14 +220,19 @@ class OrderController extends BaseController
             $condition = ['id' => $request->input('order_id')];
             $meta_condition = ['order_id' => $request->input('order_id')];
 
-            $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
-            foreach ($order_products as $order_product) {
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $order_product->product_id)
-                    ->where('with_storehouse_management', 1)
-                    ->increment('quantity', $order_product->qty);
+            $order = Order::where('id', $request->input('order_id'))->first();
+
+            if ($order->order_type != Order::PRE_ORDER) {
+                $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+                foreach ($order_products as $order_product) {
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $order_product->product_id)
+                        ->where('with_storehouse_management', 1)
+                        ->increment('quantity', $order_product->qty);
+                }
             }
+
             OrderProduct::where('order_id', $request->input('order_id'))->delete();
         }
 
