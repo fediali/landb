@@ -66,7 +66,7 @@
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Status:</label>
                         <div class="ui-select-wrapper">
-                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select','Placeholder'=>'Select Status']) !!}
+                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select','placeholder'=>'Select Status']) !!}
                         </div>
                     </div>
 
