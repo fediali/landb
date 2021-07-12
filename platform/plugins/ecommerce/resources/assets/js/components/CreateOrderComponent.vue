@@ -1153,7 +1153,7 @@ export default {
                 .post(route('orders.create'), {
                     products: products,
                     payment_status: paid ? 'completed' : 'pending',
-                    payment_method: this.child_payment_method,
+                    payment_method: this.payment_method,
                     shipping_method: this.child_shipping_method,
                     shipping_option: this.child_shipping_option,
                     shipping_amount: this.child_shipping_amount,
