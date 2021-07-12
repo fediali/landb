@@ -100,12 +100,11 @@
     return ScanditSDK.BarcodePicker.create(document.getElementById("scandit-barcode-picker"), {
       // enable some common symbologies
       scanSettings: new ScanditSDK.ScanSettings({
-        enabledSymbologies: ["code39"] ,
-        playSoundOnScan: true,
-        vibrateOnScan: true,
-        accessCamera: true,
-
+        enabledSymbologies: ["code39"]
       }),
+      playSoundOnScan: true,
+      vibrateOnScan: true,
+      accessCamera: true
     });
   })
   .then((barcodePicker) => {
