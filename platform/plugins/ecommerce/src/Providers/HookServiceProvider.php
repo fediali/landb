@@ -152,7 +152,7 @@ class HookServiceProvider extends ServiceProvider
      * @return string
      * @throws BindingResolutionException
      */
-    public function getPendingOrders($number, $menuId)
+    public function getPendingOrders($number = 0, $menuId ='cms-plugins-ecommerce')
     {
         if (Auth::user()->hasPermission('orders.index')) {
             if (in_array($menuId, ['cms-plugins-ecommerce', 'cms-plugins-ecommerce-order'])) {

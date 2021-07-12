@@ -60,7 +60,7 @@ class HookServiceProvider extends ServiceProvider
      * @return string
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function getUnreadCount($number, $menuId)
+    public function getUnreadCount($number = 0, $menuId ='cms-plugins-contact')
     {
         if ($menuId == 'cms-plugins-contact') {
             $unread = count($this->setUnreadContacts());
