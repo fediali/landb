@@ -672,7 +672,7 @@
                                                                 <div
                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $fit }}</label>
-                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #000;   color: #fff;
     cursor: default;  opacity: 1.65 !important;" type="checkbox" type="checkbox"
                                                                            disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                 </div>
