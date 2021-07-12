@@ -304,3 +304,32 @@ $(document).ready(function () {
     $(this).prop('checked', true);
   });
 })*/ 
+
+$(document).ready(function(){
+
+  function dp_scroll_text(){ 
+      $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide");
+      $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide");
+      $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
+      $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
+      $('#vslider1').attr("src", "http://local.landb.com/landb/img/pr2.png");
+      $('#vslider2').attr("src", "http://local.landb.com/landb/img/pr2.png");
+      $('#vslider3').attr("src", "http://local.landb.com/landb/img/pr2.png");
+      $('#vslider4').attr("src", "http://local.landb.com/landb/img/pr2.png");
+      $('#vslider5').attr("src", "http://local.landb.com/landb/img/pr2.png");
+      $('#vslider6').attr("src", "http://local.landb.com/landb/img/pr2.png");
+
+
+      $.each($('.dp-run-script'), function (index, runscript) {
+      index++;
+      $(runscript).addClass('dp-animate-' + index );
+      });
+  }
+
+  setInterval(function(){ 
+      dp_scroll_text()
+  }, 5000);
+  
+
+
+  });

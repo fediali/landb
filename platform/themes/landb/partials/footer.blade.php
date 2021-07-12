@@ -1,4 +1,4 @@
-<section class="needhelp">
+<!-- <section class="needhelp">
     <div class="container">
         <div class="row">
             <div class="col-md-4">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <footer class="footer_sec">
     <div class="container">
         <div class="row">
@@ -423,6 +423,16 @@ new Luminous(demoTrigger);
 <script>
 
   $(document).ready(function(){ 
+   
+  $(".search-custom").on('click',function(){
+    $("#top-sear").show();
+  });
+
+  $(".tp-close-btn").on('click',function(){
+    alert("ssd");
+    $("#top-sear").hide().attr("#top-sear");
+  });
+
     $(".gallery .full").hover(
   function () {
     $(".detail-magnify").addClass('detail');
