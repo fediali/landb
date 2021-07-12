@@ -125,29 +125,29 @@ class DashboardMenu
      */
     public function getAll(): Collection
     {
-        $custom_menus = CustomDashboardMenu::where('status', 1)->whereNull('parent_id')->get()->toArray();
+        /*$custom_menus = CustomDashboardMenu::where('status', 1)->whereNull('parent_id')->get()->toArray();
         $new_menus = [];
         foreach ($custom_menus as $custom_menu) {
             $new_menus[$custom_menu['id']] = $custom_menu;
         }
-        $this->links = $new_menus;
+        $this->links = $new_menus;*/
 
-//        $custom_menus = MenuNode::where('menu_id', 6)->where('parent_id', 0)->get()->toArray();
-//        $new_menus = [];
-//        foreach ($custom_menus as $custom_menu) {
-//            $url =  $custom_menu['url'] != '/' ? url('/admin', $custom_menu['url']) : url('/admin');
-//
-//            $new_menus[$custom_menu['plugin_id']]['id'] = $custom_menu['plugin_id'];
-//            $new_menus[$custom_menu['plugin_id']]['priority'] = $custom_menu['position'];
-//            $new_menus[$custom_menu['plugin_id']]['parent_id'] = null;
-//            $new_menus[$custom_menu['plugin_id']]['name'] = $custom_menu['title'];
-//            $new_menus[$custom_menu['plugin_id']]['icon'] = $custom_menu['icon_font'];
-//            $new_menus[$custom_menu['plugin_id']]['url'] = urldecode($url);
-//            $new_menus[$custom_menu['plugin_id']]['permissions'] = json_decode($custom_menu['permissions']);
-//            $new_menus[$custom_menu['plugin_id']]['active'] = false;
-//            $new_menus[$custom_menu['plugin_id']]['children'] = count($custom_menu['children']) ? $this->setDashboardMenu($custom_menu['plugin_id'], $custom_menu['children']) : [];
-//        }
-//        $this->links = $new_menus;
+        $custom_menus = MenuNode::where('menu_id', 6)->where('parent_id', 0)->get()->toArray();
+        $new_menus = [];
+        foreach ($custom_menus as $custom_menu) {
+            $url =  $custom_menu['url'] != '/' ? url('/admin', $custom_menu['url']) : url('/admin');
+
+            $new_menus[$custom_menu['plugin_id']]['id'] = $custom_menu['plugin_id'];
+            $new_menus[$custom_menu['plugin_id']]['priority'] = $custom_menu['position'];
+            $new_menus[$custom_menu['plugin_id']]['parent_id'] = null;
+            $new_menus[$custom_menu['plugin_id']]['name'] = $custom_menu['title'];
+            $new_menus[$custom_menu['plugin_id']]['icon'] = $custom_menu['icon_font'];
+            $new_menus[$custom_menu['plugin_id']]['url'] = urldecode($url);
+            $new_menus[$custom_menu['plugin_id']]['permissions'] = json_decode($custom_menu['permissions']);
+            $new_menus[$custom_menu['plugin_id']]['active'] = false;
+            $new_menus[$custom_menu['plugin_id']]['children'] = count($custom_menu['children']) ? $this->setDashboardMenu($custom_menu['plugin_id'], $custom_menu['children']) : [];
+        }
+        $this->links = $new_menus;
         // dd($this->links);
 
 
@@ -202,7 +202,7 @@ class DashboardMenu
         $menus = collect($links)->sortBy('priority');
 
 
-        foreach ($menus as $menu) {
+        /*foreach ($menus as $menu) {
             $check = CustomDashboardMenu::where('menu_id', $menu['id'])->first();
             if (!$check) {
                 $explode = explode('/admin/', $menu['url']);
@@ -238,49 +238,49 @@ class DashboardMenu
                     }
                 }
             }
-        }
+        }*/
 
 
-//        foreach ($menus as $menu) {
-//            $check = MenuNode::where('plugin_id', $menu['id'])->first();
-//            if (!$check) {
-//                $explode = explode('/admin/', $menu['url']);
-//                $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
-//                $dt = [
-//                    'menu_id' => 6,
-//                    'plugin_id' => $menu['id'],
-//                    'position' => $menu['priority'],
-//                    'title' => !is_array(trans($menu['name'])) ? trans($menu['name']) : $menu['name'],
-//                    'icon_font' => $menu['icon'],
-//                    'url' => $last_word,
-//                    'permissions' => json_encode($menu['permissions']),
-//                    'has_child' => count($menu['children']) ? 1 : 0,
-//                    //'status' => 1,
-//                ];
-//                $parentMenu = MenuNode::create($dt);
-//                if (count($menu['children'])) {
-//                    foreach ($menu['children'] as $child) {
-//                        $checkC = MenuNode::where('plugin_id', $child['id'])->first();
-//                        if (!$checkC) {
-//                            $explode = explode('/admin/', $child['url']);
-//                            $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
-//                            $dtc = [
-//                                'menu_id' => 6,
-//                                'plugin_id' => $child['id'],
-//                                'position' => $child['priority'],
-//                                'parent_id' => $parentMenu->id,
-//                                'title' => !is_array(trans($child['name'])) ? trans($child['name']) : $child['name'],
-//                                'icon_font' => $child['icon'],
-//                                'url' => $last_word,
-//                                'permissions' => json_encode($child['permissions']),
-//                                //'status' => 1,
-//                            ];
-//                            MenuNode::create($dtc);
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        /*foreach ($menus as $menu) {
+            $check = MenuNode::where('plugin_id', $menu['id'])->first();
+            if (!$check) {
+                $explode = explode('/admin/', $menu['url']);
+                $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
+                $dt = [
+                    'menu_id' => 6,
+                    'plugin_id' => $menu['id'],
+                    'position' => $menu['priority'],
+                    'title' => !is_array(trans($menu['name'])) ? trans($menu['name']) : $menu['name'],
+                    'icon_font' => $menu['icon'],
+                    'url' => $last_word,
+                    'permissions' => json_encode($menu['permissions']),
+                    'has_child' => count($menu['children']) ? 1 : 0,
+                    //'status' => 1,
+                ];
+                $parentMenu = MenuNode::create($dt);
+                if (count($menu['children'])) {
+                    foreach ($menu['children'] as $child) {
+                        $checkC = MenuNode::where('plugin_id', $child['id'])->first();
+                        if (!$checkC) {
+                            $explode = explode('/admin/', $child['url']);
+                            $last_word = isset($explode[1]) && !in_array($explode[1], ['admin', '#']) ? $explode[1] : '/';
+                            $dtc = [
+                                'menu_id' => 6,
+                                'plugin_id' => $child['id'],
+                                'position' => $child['priority'],
+                                'parent_id' => $parentMenu->id,
+                                'title' => !is_array(trans($child['name'])) ? trans($child['name']) : $child['name'],
+                                'icon_font' => $child['icon'],
+                                'url' => $last_word,
+                                'permissions' => json_encode($child['permissions']),
+                                //'status' => 1,
+                            ];
+                            MenuNode::create($dtc);
+                        }
+                    }
+                }
+            }
+        }*/
 
 
         return $menus;
