@@ -189,7 +189,7 @@
         function payment_method() {
             var payment_method = $("select.method option:selected").val();
 
-            if (payment_method == 'omni-pay') {
+            if (payment_method == 'omni') {
                 $('.card-area').show();
             } else {
                 $('.card-area').hide();
