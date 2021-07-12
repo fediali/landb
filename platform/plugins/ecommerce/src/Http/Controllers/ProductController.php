@@ -1034,7 +1034,7 @@ class ProductController extends BaseController
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
-                if ($variation->is_out_of_stock && $excludeOOS) {
+                if ($variation->quantity < 1 && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
