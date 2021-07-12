@@ -498,7 +498,8 @@
                                 class="p-0">
                                 <div class="regpack">
                                     <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
-                                        Plus Pack Size</h6>@foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                        Plus Pack
+                                        Size</h6>@foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                         <div class="sizediv">
                                             {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
                                         </div>
@@ -694,7 +695,7 @@
                                                                 <div
                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $rise }}</label>
-                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #000;   color: #fff;
     cursor: default;  opacity: 1.65 !important;" type="checkbox"
                                                                            disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
                                                                 </div>
