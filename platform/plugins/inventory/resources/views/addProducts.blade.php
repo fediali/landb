@@ -105,7 +105,7 @@
     return ScanditSDK.BarcodePicker.create(document.getElementById("scandit-barcode-picker"), {
       // enable some common symbologies
       scanSettings: new ScanditSDK.ScanSettings({
-        enabledSymbologies: ["code39"]
+        enabledSymbologies: ["code39", "code128", "ean8", "ean13", "upca", "upce", "code93"]
       }),
       playSoundOnScan: true,
       vibrateOnScan: true,
@@ -118,13 +118,14 @@
     });
   })
   .then((barcodePicker) => {
-   /* barcodePicker.on("processFrame", (result) => {
-
-  });*/
     // barcodePicker is ready here, show a message every time a barcode is scanned
     barcodePicker.on("scan", (scanResult) => {
       console.log(scanResult.barcodes[0].data)
         $('#scannerInput').val(scanResult.barcodes[0].data);
+          $('#scannerInput').addClass('loading');
+          $('#product-error').hide();
+          $('#scannerInput').removeClass('is-invalid');
+          get_product_by_barcode(scanResult.barcodes[0].data,$('#scannerInput'));
   });
   });
 
