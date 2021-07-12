@@ -676,6 +676,7 @@
                                                                     <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
     cursor: default;  opacity: 1.65 !important;" type="checkbox" type="checkbox"
                                                                            disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
+                                                                           <img src="'. asset('images/checked.png') .'" alt="">
                                                                 </div>
                                                             @endforeach
                                                         </div>
