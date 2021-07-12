@@ -171,6 +171,8 @@ class ThreadTable extends TableAbstract
             });
             $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
                 $q->where('threads.order_status', $search_items['order_status']);
+            }); $query->when(isset($search_items['pp_sample']), function ($q) use ($search_items) {
+                $q->where('threads.pp_sample', $search_items['pp_sample']);
             });
 
         }
