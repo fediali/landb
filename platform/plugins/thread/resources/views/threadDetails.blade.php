@@ -662,7 +662,7 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
@@ -684,7 +684,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
