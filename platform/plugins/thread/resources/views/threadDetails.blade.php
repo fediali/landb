@@ -498,8 +498,7 @@
                                 class="p-0">
                                 <div class="regpack">
                                     <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
-                                        Plus Pack Size</h6>
-                                    @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                        Plus Pack Size</h6>@foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                         <div class="sizediv">
                                             {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
                                         </div>
