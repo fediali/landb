@@ -105,7 +105,7 @@
     return ScanditSDK.BarcodePicker.create(document.getElementById("scandit-barcode-picker"), {
       // enable some common symbologies
       scanSettings: new ScanditSDK.ScanSettings({
-        enabledSymbologies: ["code39", "code128"]
+        enabledSymbologies: ["code39", "code128", "ean8", "ean13", "upca", "upce", "code93"]
       }),
       playSoundOnScan: true,
       vibrateOnScan: true,
