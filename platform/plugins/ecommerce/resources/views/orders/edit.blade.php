@@ -841,7 +841,7 @@
                                                 <img class="split-img" src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
                                                 <div class="ml-3">
                                                     <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
-                                                    <p class="split-code">SKU: {{ $product->sku }}</p>
+                                                    <p class="split-code">SKU: {{ @$product->sku }}</p>
                                                     {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
                                                     @php $attributes = get_product_attributes($product->id) @endphp
                                                     @if (!empty($attributes))
