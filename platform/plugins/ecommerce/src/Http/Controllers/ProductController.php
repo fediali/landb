@@ -1018,7 +1018,7 @@ class ProductController extends BaseController
                 'ec_product_variations.id')
             ->simplePaginate(5);
 
-        foreach ($availableProducts as &$availableProduct) {
+        foreach ($availableProducts as $pk => &$availableProduct) {
             /**
              * @var Product $availableProduct
              */
@@ -1029,15 +1029,6 @@ class ProductController extends BaseController
             foreach ($availableProduct->variations as $k => &$variation) {
                 $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
-
-                if ($variation->product->status == BaseStatusEnum::ACTIVE) {
-                    unset($availableProduct->variations[$k]);
-                    continue;
-                }
-                if ($variation->is_out_of_stock && $excludeOOS) {
-                    unset($availableProduct->variations[$k]);
-                    continue;
-                }
 
                 $variation->packQty = 0;
                 $variation->packSizes = '';
@@ -1057,6 +1048,20 @@ class ProductController extends BaseController
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = strtok($variationItem->attribute->title,'-');;
                 }
+
+                if ($variation->product->status != BaseStatusEnum::ACTIVE) {
+                    unset($availableProduct->variations[$k]);
+                    continue;
+                }
+                if ($variation->quantity < 1 && $excludeOOS) {
+                    unset($availableProduct->variations[$k]);
+                    continue;
+                }
+            }
+
+            if (!count($availableProducts[$pk]->variations)) {
+                unset($availableProducts[$pk]);
+                continue;
             }
         }
         return $response->setData($availableProducts);
