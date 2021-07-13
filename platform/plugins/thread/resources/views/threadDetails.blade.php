@@ -117,6 +117,7 @@
                 </div>
                 <!-- /.row -->
             </div>
+            {{--            Normal Print--}}
             <div class="d-none" id="DivIdToPrint">
                 <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
@@ -155,23 +156,25 @@
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
                                 @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                     <div class="sizediv">
-                                        {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->name }}
+                                        {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
                                     </div>
                                 @endforeach
                             </div>
                         </td>
-                        <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
-                            class="p-0">
-                            <div class="regpack">
-                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
-                                    Plus Pack Size Run</h6>
-                                {{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
-                                <div class="sizediv">
-                                    {{--                                        {{ isset($plus_cat->name) }}--}}
+                        @if(!empty($options['data']['plus_cat']))
+                            <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
+                                class="p-0">
+                                <div class="regpack">
+                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                        Plus Pack Size</h6>
+                                    @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                        <div class="sizediv">
+                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->name }}
+                                        </div>
+                                    @endforeach
                                 </div>
-                                {{--                                @endforeach--}}
-                            </div>
-                        </td>
+                            </td>
+                        @endif
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
                             <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;">
                                 PP Sample Due Date <br>
@@ -282,8 +285,6 @@
                   font-size: 16px;
                   text-transform: uppercase;
                   margin: 0; font-family: 'Raleway', sans-serif;">Style</h4>
-
-
                             @if(!is_null($thread->spec_files))
                                 @if(count($thread->spec_files))
                                     <div style=" max-width: 1000px;
@@ -425,23 +426,27 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <h6>PRIVATE LABEL SIZES</h6>
-                                    <div style="display:flex;">
-                                        @foreach($thread->regular_product_categories()->get() as $cat)
-                                            @foreach($cat->category_sizes as $catSize)
-                                                <div style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
-                                                    <label for="name">{{$catSize->full_name}}</label>
-                                                    <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
-                                                </div>
+                                    @if($thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE)
+                                        <h6>PRIVATE LABEL SIZES</h6>
+                                        <div style="display:flex;">
+                                            @foreach($thread->regular_product_categories()->get() as $cat)
+                                                @foreach($cat->category_sizes as $catSize)
+                                                    <div
+                                                        style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
+                                                        <label for="name">{{$catSize->full_name}}</label>
+                                                        <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
+                                                    </div>
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endif()
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{--            Denim Print --}}
             <div class="d-none" id="DivDenimToPrint">
                 <table style="border: 1px solid #333;
                         border-collapse: collapse; border-spacing: 0;    width: 100%;
@@ -485,18 +490,25 @@
                                 @endforeach
                             </div>
                         </td>
-                        <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
-                            class="p-0">
-                            <div class="regpack">
-                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
-                                    Plus Pack Size Run</h6>
-                                {{--                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)--}}
-                                <div class="sizediv">
-                                    {{--                                        {{ isset($plus_cat->name) }}--}}
+
+
+                        @if(!empty($options['data']['plus_cat']))
+
+                            <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
+                                class="p-0">
+                                <div class="regpack">
+                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                        Plus Pack
+                                        Size</h6>@foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                        <div class="sizediv">
+                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
+                                        </div>
+                                    @endforeach
                                 </div>
-                                {{--                                @endforeach--}}
-                            </div>
-                        </td>
+                            </td>
+
+                        @endif
+
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
                             <p style="font-size: 12px !important; font-weight: 600; font-family: 'Raleway', sans-serif;margin: 0px;">
                                 PP Sample Due Date <br>
@@ -650,7 +662,7 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
@@ -661,7 +673,7 @@
                                                                 <div
                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $fit }}</label>
-                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
     cursor: default;  opacity: 1.65 !important;" type="checkbox" type="checkbox"
                                                                            disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                 </div>
@@ -672,7 +684,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: 'Raleway', sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex; justify-content: space-between;">
@@ -683,7 +695,7 @@
                                                                 <div
                                                                     style=" font-weight: 600; font-family: 'Raleway', sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $rise }}</label>
-                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #dddddd;   color: #999999;
+                                                                    <input style=" font-weight: 600; font-family: 'Raleway', sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
     cursor: default;  opacity: 1.65 !important;" type="checkbox"
                                                                            disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
                                                                 </div>
@@ -862,6 +874,20 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                    @if($thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE)
+                                        <h6>PRIVATE LABEL SIZES</h6>
+                                        <div style="display:flex;">
+                                            @foreach($thread->regular_product_categories()->get() as $cat)
+                                                @foreach($cat->category_sizes as $catSize)
+                                                    <div
+                                                        style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
+                                                        <label for="name">{{$catSize->full_name}}</label>
+                                                        <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
+                                        </div>
+                                @endif()
                                 <!-- <table style="border: 1px solid #333;
                         border-collapse: collapse;
                         height: 100%;border-spacing: 0;    width: 100%;
@@ -1019,18 +1045,20 @@
                                         @endforeach
                                     </div>
                                 </td>
-                                @if(!empty($options['data']['plus_cat']))
-                                    <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
+                                <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
+                                    @if(!empty($options['data']['plus_cat']))
                                         <div class="regpack">
-                                            <h6>Plus Pack Size Run</h6>
+                                            <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                                Plus Pack Size Run</h6>
                                             @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
                                                 <div class="sizediv">
                                                     {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
                                                 </div>
                                             @endforeach
                                         </div>
-                                    </td>
-                                @endif
+
+                                    @endif
+                                </td>
                                 <td style="width: 13%;" rowspan="1" colspan="2">
                                     <p class="font-bold font-12">PP Sample Due Date <br>
                                         <span
@@ -1827,12 +1855,12 @@
         newWin.document.open();
 
         newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
-
-        newWin.document.close();
-
-        setTimeout(function () {
-            newWin.close();
-        }, 10);
+        //
+        // newWin.document.close();
+        //
+        // setTimeout(function () {
+        //     newWin.close();
+        // }, 10);
 
     }
 
@@ -1846,11 +1874,11 @@
 
         newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
 
-        newWin.document.close();
-
-        setTimeout(function () {
-            newWin.close();
-        }, 10);
+        // newWin.document.close();
+        //
+        // setTimeout(function () {
+        //     newWin.close();
+        // }, 10);
 
     }
 

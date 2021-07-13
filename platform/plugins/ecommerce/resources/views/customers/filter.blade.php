@@ -48,12 +48,14 @@
 
                     <div class="col-md-4">
                         <label class="font-bold">Customer:</label>
-                        <input type="text" name="customer_name" class="form-control" value="{{request('customer_name')}}">
+                        <input type="text" name="customer_name" class="form-control"
+                               value="{{request('customer_name')}}">
                     </div>
 
                     <div class="col-md-4">
                         <label class="font-bold">Email:</label>
-                        <input type="email" name="customer_email" class="form-control" value="{{request('customer_email')}}">
+                        <input type="email" name="customer_email" class="form-control"
+                               value="{{request('customer_email')}}">
                     </div>
 
                     <div class="col-md-4 mt-3">
@@ -64,7 +66,7 @@
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Status:</label>
                         <div class="ui-select-wrapper">
-                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select']) !!}
+                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select','placeholder'=>'Select Status']) !!}
                         </div>
                     </div>
 
@@ -88,12 +90,14 @@
                     <div class="d-flex">
                         <div class="col-md-4">
                             <label class="font-bold">No Sales Rep:</label>
-                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="no_sales_rep" class="form-control" value="1" {{request('no_sales_rep') == 1 ? 'checked' : ''}}>
+                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="no_sales_rep"
+                                   class="form-control" value="1" {{request('no_sales_rep') == 1 ? 'checked' : ''}}>
                             <p class="mr-1"></p>
                         </div>
                         <div class="col-md-4 ">
                             <label class="font-bold">Merged Account:</label>
-                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="merged_account" class="form-control" value="1" {{request('merged_account') == 1 ? 'checked' : ''}}>
+                            <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="merged_account"
+                                   class="form-control" value="1" {{request('merged_account') == 1 ? 'checked' : ''}}>
                             <p class="mr-1"></p>
                         </div>
                     </div>
@@ -106,7 +110,8 @@
                         <select name="report_type" class="ui-select">
                             <option value="">Select Report Type</option>
                             @foreach($report_types as $key => $value)
-                                <option value="{{ $key }}" {{request('report_type') == $key ? 'selected' : ''}}>{{ $value }}</option>
+                                <option
+                                    value="{{ $key }}" {{request('report_type') == $key ? 'selected' : ''}}>{{ $value }}</option>
                             @endforeach
                         </select>
                         <svg class="svg-next-icon svg-next-icon-size-16">
@@ -133,7 +138,6 @@
 
         {{ Form::close() }}
     </div>
-</div>
 </div>
 
 

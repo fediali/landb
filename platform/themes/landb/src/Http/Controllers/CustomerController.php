@@ -94,7 +94,6 @@ class CustomerController extends Controller
         $user->fill([
             'password' => Hash::make($request->new_password)
         ])->save();
-        dd('saved');
       }
     }
     $validateAccount = $this->accountValidator($request);

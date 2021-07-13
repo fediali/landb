@@ -22,6 +22,7 @@ class BaseStatusEnum extends Enum
     public const SCHEDULE = 'schedule';
 
 
+    public const VERIFIED = 'verified';
     public const HIDDEN = 'Hidden';
     public const ACTIVE = 'Active';
     public const DISABLED = 'Disabled';
@@ -56,10 +57,15 @@ class BaseStatusEnum extends Enum
         'A' => self::ACTIVE,
         'D' => self::DISABLED,
     ];
-    public static $CUSTOMER = [
+    public static $THREAD = [
         self::PENDING   => self::PENDING,
         self::DRAFT   => self::DRAFT,
         self::PUBLISHED   => self::PUBLISHED,
+    ];
+    public static $CUSTOMER = [
+        self::PENDING   => self::PENDING,
+        self::DRAFT   => self::DRAFT,
+        self::VERIFIED   => self::VERIFIED,
     ];
 
     /**

@@ -1003,7 +1003,7 @@ class ProductController extends BaseController
             ->when($excludeOOS == true, function ($q) {
                 $q->where('quantity', '>', 0);
             })
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
                 $q->where('name', 'LIKE', '%' . $request->input('keyword') . '%');

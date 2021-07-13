@@ -30,7 +30,7 @@ if (!function_exists('get_products')) {
     {
         $params = array_merge([
             'condition' => [
-                'ec_products.status'       => BaseStatusEnum::PUBLISHED,
+                'ec_products.status'       => BaseStatusEnum::ACTIVE,
                 'ec_products.is_variation' => 0,
             ],
             'order_by'  => [

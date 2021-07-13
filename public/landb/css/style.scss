@@ -85,7 +85,7 @@ nav.navbar {
 }
 
 .navbar-parent ul {
-    display: inherit;
+    display: grid;
 }
 
 .navbar-parent ul li.nav-item a.nav-link {
@@ -209,7 +209,7 @@ nav.navbar {
     display: block;
     font-size: 13px;
     font-weight: 500;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 #menu .main-nav a:first {
@@ -1052,7 +1052,7 @@ section.parallax_video video {
 .shoplisting .listbox .caption h4 {
     font-size: 20px;
     font-weight: 600;
-    margin: 15px;    
+    margin: 15px;
     color: #000;
     min-height: 50px;
 }
@@ -1722,9 +1722,9 @@ input.qtyminus {
 
 .tabs-product li .active {
     border: 1px solid #191919;
-    opacity: 1; 
+    opacity: 1;
     background: #fdfdfd;
-    padding: 5px 5px; 
+    padding: 5px 5px;
 }
 
 .description-p {

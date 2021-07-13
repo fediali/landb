@@ -256,22 +256,22 @@ class ProductTable extends TableAbstract
         }
 
         if (!empty($search_items)) {
-            $query->when(isset($search_items['product_min_price']), function($q) use($search_items) {
+            $query->when(isset($search_items['product_min_price']), function ($q) use ($search_items) {
                 $q->where('ec_products.price', '>=', $search_items['product_min_price']);
             });
-            $query->when(isset($search_items['product_max_price']), function($q) use($search_items) {
+            $query->when(isset($search_items['product_max_price']), function ($q) use ($search_items) {
                 $q->where('ec_products.price', '<=', $search_items['product_max_price']);
             });
-            $query->when(isset($search_items['prod_sec']), function($q) use($search_items) {
-                $q->where('ec_products.warehouse_sec', 'LIKE', '%'.$search_items['prod_sec'].'%');
+            $query->when(isset($search_items['prod_sec']), function ($q) use ($search_items) {
+                $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
-            $query->when(isset($search_items['prod_status']), function($q) use($search_items) {
+            $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
                 $q->where('ec_products.status', $search_items['prod_status']);
             });
-            $query->when(isset($search_items['prod_category']), function($q) use($search_items) {
+            $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
             });
-            $query->when(isset($search_items['prod_type']), function($q) use($search_items) {
+            $query->when(isset($search_items['prod_type']), function ($q) use ($search_items) {
                 if ($search_items['prod_type'] == 'regular') {
                     $q->where('ec_products.quantity', '>=', 0);
                 } else if ($search_items['prod_type'] == 'pre_order') {
@@ -280,7 +280,7 @@ class ProductTable extends TableAbstract
 
                 }
             });
-            $query->when(isset($search_items['show_products']), function($q) use($search_items) {
+            $query->when(isset($search_items['show_products']), function ($q) use ($search_items) {
                 if ($search_items['show_products'] == 'with_images') {
                     $q->where('ec_products.images', '!=', '[]');
                 } else if ($search_items['show_products'] == 'without_images') {
@@ -345,9 +345,11 @@ class ProductTable extends TableAbstract
                 'class' => 'text-left',
             ],
             'single_qty'    => [
-                'name'  => 'ec_products.single_qty',
-                'title' => 'Single Qty',
-                'class' => 'text-left',
+                'name'       => 'ec_products.single_qty',
+                'title'      => 'Single Qty',
+                'class'      => 'text-left',
+                'searchable' => false,
+                'orderable'  => false,
             ],
             'product_type'  => [
                 'name'  => 'ec_products.product_type',
@@ -361,20 +363,26 @@ class ProductTable extends TableAbstract
                 'class' => 'text-center',
             ],*/
             'order_qty'     => [
-                'name'  => 'ec_products.order_qty',
-                'title' => 'Pre-order Qty',
-                'width' => '100px',
-                'class' => 'text-center',
+                'name'       => 'ec_products.order_qty',
+                'title'      => 'Pre-order Qty',
+                'width'      => '100px',
+                'class'      => 'text-center',
+                'searchable' => false,
+                'orderable'  => false,
             ],
             'reorder_qty'   => [
-                'name'  => 'ec_products.reorder_qty',
-                'title' => 'Re-order Qty',
-                'class' => 'text-center',
+                'name'       => 'ec_products.reorder_qty',
+                'title'      => 'Re-order Qty',
+                'class'      => 'text-center',
+                'searchable' => false,
+                'orderable'  => false,
             ],
             'sold_qty'      => [
-                'name'  => 'ec_products.sold_qty',
-                'title' => 'Sold Qty',
-                'class' => 'text-center',
+                'name'       => 'ec_products.sold_qty',
+                'title'      => 'Sold Qty',
+                'class'      => 'text-center',
+                'searchable' => false,
+                'orderable'  => false,
             ],
             'created_at'    => [
                 'name'  => 'ec_products.created_at',
@@ -488,7 +496,8 @@ class ProductTable extends TableAbstract
      */
     public function renderCustomFilter(): string
     {
-        $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->pluck('name', 'id')->all();
+        $user = Auth::id();
+        $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
         $data['prod_categories'] = ProductCategory::where('status', BaseStatusEnum::PUBLISHED)->pluck('name', 'id')->all();
         $data['prod_types'] = ['regular' => 'Regular', 'pre_order' => 'Pre-Order', 're_order' => 'Re-Order'];
         $data['show_products'] = ['all' => 'All', 'with_images' => 'With Images', 'without_images' => 'Without Images'];

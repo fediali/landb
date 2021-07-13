@@ -378,7 +378,8 @@ class CustomerTable extends TableAbstract
      */
     public function renderCustomFilter(): string
     {
-        $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->pluck('name', 'id')->all();
+        $user = Auth::id();
+        $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
 
         $report_types = [
             7   => 'Weekly',
