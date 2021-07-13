@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use Botble\Thread\Models\Thread;
 use Html;
+
 class ThreadTable extends TableAbstract
 {
 
@@ -169,9 +170,10 @@ class ThreadTable extends TableAbstract
             $query->when(isset($search_items['designer']), function ($q) use ($search_items) {
                 $q->where('threads.designer_id', $search_items['designer']);
             });
-            $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
-                $q->where('threads.order_status', $search_items['order_status']);
-            }); $query->when(isset($search_items['pp_sample']), function ($q) use ($search_items) {
+            $query->when(isset($search_items['ready']), function ($q) use ($search_items) {
+                $q->where('threads.ready', $search_items['ready']);
+            });
+            $query->when(isset($search_items['pp_sample']), function ($q) use ($search_items) {
                 $q->where('threads.pp_sample', $search_items['pp_sample']);
             });
 
