@@ -1,8 +1,13 @@
 
 <br><hr style="border-top: 2px solid #eee;"><h2>Products</h2>
-<div id="scandit-barcode-picker"></div>
+<div id="scandit-barcode-picker"style="display: none;"></div>
 <div class="form-group">
-    <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
+    <div class="input-group">
+        <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
+        <div class="input-group-prepend">
+            <div class="input-group-text" title="Scan barcode using camera" onclick="$('.radial-progress').click();"><i class="fa fa-barcode"></i></div>
+        </div>
+    </div>
     <span id="product-error" class="invalid-feedback"></span>
 </div>
 <div class="table-responsive">
