@@ -9,6 +9,7 @@ use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Printdesigns\Models\Printdesigns;
@@ -669,8 +670,7 @@ class ThreadController extends BaseController
             }
         }*/
         $offset = $request->get('offset', 0);
-        $limit = $request->get('limit', 10);
-
+        $limit = $request->get('limit', 5);
 
         ini_set('memory_limit', '256M');
 
@@ -678,9 +678,60 @@ class ThreadController extends BaseController
         $rises = get_rises();
 
         $threads = Thread::offset($offset)->limit($limit)->get();
-        $data = ['threads' => $threads, 'rises' => $rises, 'fits' => $fits];
-        $pdf = PDF::loadview('plugins/thread::techPack', $data);
-        return $pdf->download('sku.pdf');
+
+        foreach ($threads as $thread) {
+            $selectedRegCat = $selectedPluCat = $reg_cat = $plus_cat = null;
+            $reg_sku = $plus_sku = '';
+
+            $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+            $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+
+            if (!empty($selectedRegCat->product_category_id)) {
+                $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat->product_category_id);
+            }
+            if (!empty($selectedPluCat->product_category_id)) {
+                $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat->product_category_id);
+            }
+
+            $reg_sku = @$selectedRegCat->sku;
+            $plus_sku = @$selectedPluCat->sku;
+
+            $variations = get_thread_variations($thread->id);
+
+            $data = ['thread' => $thread, 'rises' => $rises, 'fits' => $fits, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat, 'reg_sku' => $reg_sku, 'plus_sku' => $plus_sku, 'variations' => $variations];
+
+            $pdf = PDF::loadview('plugins/thread::techPack', $data);
+
+            $pdf->setPaper('letter', 'landscape');
+
+            //save the file to the server
+            $output = $pdf->output();
+            // file_put_contents("pdf/$reg_sku.pdf", $output);
+            Storage::put('tech-packs/'.$reg_sku.'.pdf', $output);
+        }
+
+        /*Storage::disk('local')->makeDirectory('tobedownload',$mode=0775); // zip store here
+        $zip_file=storage_path('app/tobedownload/TechPacks.zip');
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $path = storage_path('tech-packs'); // path to your pdf files
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        foreach ($files as $name => $file)
+        {
+            // We're skipping all subfolders
+            if (!$file->isDir()) {
+                $filePath     = $file->getRealPath();
+                // extracting filename with substr/strlen
+                $relativePath = substr($filePath, strlen($path) + 1);
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        $zip->close();
+        $headers = array('Content-Type'=>'application/octet-stream',);
+        $zip_new_name = "TechPacks-".date("y-m-d-h-i-s").".zip";
+        return response()->download($zip_file,$zip_new_name,$headers);*/
+
+        return redirect('admin/threads');
     }
 
 }

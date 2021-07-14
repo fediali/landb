@@ -267,7 +267,7 @@ class ThreadTable extends TableAbstract
         $buttons = $this->addCreateButton(route('thread.create'), 'thread.create');
 
         $buttons['download'] = [
-            'link' => route('thread.download.tech.pack', ['offset' => 0, 'limit' => 15]),
+            'link' => route('thread.download.tech.pack', ['offset' => 0, 'limit' => 5]),
             'text' => '<i class="fa fa-download"></i> Download Tech Pack(s)'
         ];
 
