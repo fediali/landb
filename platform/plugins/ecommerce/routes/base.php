@@ -12,12 +12,14 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             'uses' => 'EcommerceController@getSettings',
         ]);
 
+
+
+
         Route::post('settings', [
             'as'         => 'ecommerce.settings.post',
             'uses'       => 'EcommerceController@postSettings',
             'permission' => 'ecommerce.settings',
         ]);
-
         Route::get('ajax/countries', [
             'as'         => 'ajax.countries.list',
             'uses'       => 'EcommerceController@ajaxGetCountries',

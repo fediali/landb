@@ -72,6 +72,7 @@ class OrderTable extends TableAbstract
             ->eloquent($this->query())
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
+
             })
             ->editColumn('order_type', function ($item) {
                 return $item->order_type_html;

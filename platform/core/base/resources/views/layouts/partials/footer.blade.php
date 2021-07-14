@@ -240,6 +240,7 @@
     $(document).on('click', '.credit_card', function () {
         $('select#billing_address').empty();
         var baddress = [];
+
         var customer_id = $('#customer_id').val();
         if (typeof customer_id === "undefined") {
             $('.card_customer_select').show();
