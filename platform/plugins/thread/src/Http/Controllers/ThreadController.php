@@ -713,11 +713,10 @@ class ThreadController extends BaseController
             Storage::put('tech-packs/'.$reg_sku.'.pdf', $output);
         }
 
-        Storage::makeDirectory('tobedownload',$mode=644); // zip store here
-        $zip_file=storage_path('app/public/tobedownload/TechPacks.zip');
+        // Storage::makeDirectory('to-be-download',$mode=0775); // zip store here
+        $zip_file='TechPacks.zip';
         $zip = new ZipArchive();
         $zip->open($zip_file, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
-        //dd($zip);
         $path = public_path('storage/tech-packs'); // path to your pdf files
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         foreach ($files as $name => $file)
@@ -727,11 +726,8 @@ class ThreadController extends BaseController
                 $filePath     = $file->getRealPath();
                 // extracting filename with substr/strlen
                 $relativePath = substr($filePath, strlen($path) + 1);
-                //$zip->addFile($filePath, $relativePath);
-                //dd($filePath);
                 if (file_exists($filePath)) {
-                    // dd($filePath);
-                    $zip->addFile($filePath) or die ("ERROR: Could not add the file $relativePath");
+                    $zip->addFile($filePath, $relativePath) or die ("ERROR: Could not add the file $relativePath");
                 } else {
                     die("File $filePath doesnt exit");
                 }
@@ -740,9 +736,7 @@ class ThreadController extends BaseController
         $zip->close();
         $headers = array('Content-Type'=>'application/octet-stream',);
         $zip_new_name = "TechPacks-".date("y-m-d-h-i-s").".zip";
-        return response()->download($zip_file,$zip_new_name,$headers);
-
-        // return redirect('admin/threads');
+        return response()->download($zip_file, $zip_new_name, $headers);
     }
 
 }
