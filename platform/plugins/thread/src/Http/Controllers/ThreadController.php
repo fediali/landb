@@ -704,10 +704,12 @@ class ThreadController extends BaseController
 
             $pdf->setPaper('letter', 'landscape');
 
+            return $pdf->download($reg_sku.'.pdf');
+
             //save the file to the server
-            $output = $pdf->output();
+            //$output = $pdf->output();
             // file_put_contents("pdf/$reg_sku.pdf", $output);
-            Storage::put('tech-packs/'.$reg_sku.'.pdf', $output);
+            //Storage::put('tech-packs/'.$reg_sku.'.pdf', $output);
         }
 
         /*Storage::disk('local')->makeDirectory('tobedownload',$mode=0775); // zip store here
