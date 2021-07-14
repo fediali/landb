@@ -427,7 +427,6 @@
 
 </script>
 
-
 {{--CUSTOMER ADDRESS MODAL--}}
 <script>
     $(document).ready(function () {
@@ -538,7 +537,6 @@
     }
 </script>
 
-
 <script>
     $(document).ready(function () {
 
@@ -563,11 +561,9 @@
         });
 
     });
-
-
 </script>
-<script type="text/javascript">
 
+<script type="text/javascript">
 $(function(){
     var DATAPICKERAPI = {
       rangeShortcutOption1: [{
@@ -673,6 +669,7 @@ $(function(){
       });
   });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="{{ asset('landb/js/datepicker.all.js') }}"></script>
 

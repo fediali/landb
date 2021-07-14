@@ -2,17 +2,13 @@
 
 namespace Botble\Thread\Http\Controllers;
 
-use App\Events\NotifyManager;
+
 use App\Models\ThreadVariationPPSample;
-use App\Models\ThreadVariationTrim;
-use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
-use Botble\Ecommerce\Models\Product;
-use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Printdesigns\Models\Printdesigns;
@@ -23,7 +19,6 @@ use Botble\Thread\Models\ThreadPvtCatSizesQty;
 use Botble\Thread\Models\ThreadSpecFile;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Botble\Thread\Tables\ThreadTable;
@@ -36,9 +31,8 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use PDF;
 
 class ThreadController extends BaseController
 {
@@ -664,4 +658,29 @@ class ThreadController extends BaseController
             return response()->json(['status' => 'error'], 500);
         }
     }
+
+    public function downloadTechPack(Request $request)
+    {
+        /*$params = $request->get('ids', null);
+        if (isset($params['ids'])) {
+            $ids = explode(',', $params['ids']);
+            if (count($ids)) {
+
+            }
+        }*/
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 10);
+
+
+        ini_set('memory_limit', '256M');
+
+        $fits = get_fits();
+        $rises = get_rises();
+
+        $threads = Thread::offset($offset)->limit($limit)->get();
+        $data = ['threads' => $threads, 'rises' => $rises, 'fits' => $fits];
+        $pdf = PDF::loadview('plugins/thread::techPack', $data);
+        return $pdf->download('sku.pdf');
+    }
+
 }
