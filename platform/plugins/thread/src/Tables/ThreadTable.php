@@ -134,6 +134,7 @@ class ThreadTable extends TableAbstract
             'threads.status',
             'threads.ready',
             'threads.is_denim',
+            'threads.order_status',
             'threads.thread_status',
         ];
 
@@ -219,6 +220,10 @@ class ThreadTable extends TableAbstract
                 'title' => 'Denim',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
+            ], 'order_status'     => [
+                'name'  => 'Order Status',
+                'title' => 'Order Status',
+                'class' => 'no-sort text-left',
             ],
             'pp_sample'           => [
                 'name'  => 'threads.pp_sample',

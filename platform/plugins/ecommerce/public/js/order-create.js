@@ -843,6 +843,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1082,6 +1092,15 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (res) {
           Botble.handleError(res.response.data);
         });
+      }
+    },
+    handleSearchCustomer: function handleSearchCustomer(value) {
+      if (value !== this.customer_keyword) {
+        var context = this;
+        this.customer_keyword = value;
+        setTimeout(function () {
+          context.loadListCustomersForSearch(1, true);
+        }, 500);
       }
     },
     loadListProductsAndVariations: function loadListProductsAndVariations() {
@@ -7721,7 +7740,7 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Pieces : " +
+                                          "Total Pieces :\n                                        " +
                                             _vm._s(variant.packQty)
                                         )
                                       ])
@@ -7731,7 +7750,8 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Sizes : " + _vm._s(variant.packSizes)
+                                          "Sizes :\n                                        " +
+                                            _vm._s(variant.packSizes)
                                         )
                                       ])
                                     : _vm._e()
@@ -7858,7 +7878,10 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    _vm._s(variant.select_qty * variant.price) +
+                                    "\n                                    " +
+                                      _vm._s(
+                                        variant.select_qty * variant.price
+                                      ) +
                                       "\n                                    " +
                                       _vm._s(_vm.currency) +
                                       "\n                                "
@@ -8695,7 +8718,7 @@ var render = function() {
                               return _vm.loadListCustomersForSearch()
                             },
                             keyup: function($event) {
-                              return _vm.loadListCustomersForSearch(
+                              return _vm.handleSearchCustomer(
                                 $event.target.value
                               )
                             }

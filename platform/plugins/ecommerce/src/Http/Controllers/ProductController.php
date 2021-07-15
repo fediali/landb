@@ -872,7 +872,7 @@ class ProductController extends BaseController
         $availableProducts = $this->productRepository
             ->advancedGet([
                 'condition' => [
-                    'status' => BaseStatusEnum::PUBLISHED,
+                    'status' => BaseStatusEnum::ACTIVE,
                     ['is_variation', '<>', 1],
                     ['id', '<>', $id],
                     ['name', 'LIKE', '%' . $request->input('keyword') . '%'],
