@@ -220,8 +220,9 @@ class ThreadTable extends TableAbstract
                 'title' => 'Denim',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
-            ], 'order_status'     => [
-                'name'  => 'Order Status',
+            ],
+            'order_status'     => [
+                'name'  => 'threads.order_status',
                 'title' => 'Order Status',
                 'class' => 'no-sort text-left',
             ],
