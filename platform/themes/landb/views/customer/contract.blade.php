@@ -136,21 +136,21 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                    <input class="mt-1 mr-2 checkk" id="check1" type="checkbox" value=" ">
                                     <label class="mr-2 tax-checkbox-label" for="vehicle1"> The taxable items described above, or on the attached order or invoice, will be resold, rented or leased by me within the geographical limits of the United States of America, its territories and possessions or within the geographical limits of the United Mexican States, in their present form or attached to other taxable items to be sold.</label>
                                 </div>
 
                             </div>
                             <div class="col-lg-12">
                                 <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                    <input class="mt-1 mr-2 checkk"  id="check2" type="checkbox" value=" ">
                                     <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that if I make any use of the items in other retention, demonstration or display while holding them for sale, lease or rental, I must pay sales tax on the the items at the time of use based upon either the purchase price or the fair market rental value for the period of time used.</label>
                                 </div>
 
                             </div>
                             <div class="col-lg-12">
                                 <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                    <input class="mt-1 mr-2 checkk" id="check3" type="checkbox" value=" ">
                                     <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that it is a criminal offense to give a resale certificate to the seller for taxable items that i know, at the time of purchase, are purchased for use rather than for the purpose of resale, lease or rental, and depending on the amount of tax evaded, the offence may range from a Class C misdemeanor to a felony of the second degree.</label>
                                 </div>
 
@@ -201,7 +201,7 @@
                         <div class="row mt-4">
                         <div class="col-lg-5"></div>
                         <div class="col-lg-2">
-                            <input type="submit" class="btn border-btn w-100" value="Submit" >
+                            <input type="submit" class="btn border-btn w-100 tax-submit-btn" value="Submit" disabled>
                         </div>
                         <div class="col-lg-5"></div>
                     </div>

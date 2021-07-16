@@ -1,3 +1,11 @@
+$(document).ready(function () {
+    $('.checkk').click(function(){
+        if($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true){
+            $('.tax-submit-btn').attr('disabled', false)
+        }
+    });
+});
+
 $('.toggle-menu').click(function () {
     $(this).toggleClass('active');
     $('#menu').toggleClass('open');
