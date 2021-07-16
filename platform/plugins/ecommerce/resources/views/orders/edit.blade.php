@@ -670,8 +670,8 @@
                                 </form>
                             </div>
                         </div>
-
-                        <div class="wrapper-content bg-gray-white mb20">
+                        @if($order->payment->payment_channel->label() == 'omni_payment')
+                            <div class="wrapper-content bg-gray-white mb20">
 
                             <!-- card -->
                             @if($order->preauth == null)
@@ -689,7 +689,7 @@
                                             <label class="col-lg-12 ">
                                                 <span class="mb-2">Billing Address</span>
                                                 {!!
-                                        Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                                        Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),(!is_null($order->billingAddress) ? $order->billingAddress->id  : null) ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
                                         ])
                                     !!}
                                             </label>
@@ -780,6 +780,23 @@
                             @endif()
 
                         </div>
+                        @elseif($order->payment->payment_channel->label() == 'paypal')
+                            <div class="wrapper-content bg-gray-white mb20">
+                                <div class="row m-0 pt-4 bg-white">
+                                    <div class="col-lg-12 ">
+                                        <strong class="mb-2">Paid with Paypal</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif($order->payment->payment_channel->label() == 'cod')
+                            <div class="wrapper-content bg-gray-white mb20">
+                                <div class="row m-0 pt-4 bg-white">
+                                    <div class="col-lg-12 ">
+                                        <strong class="mb-2">Cash on delivery</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -439,7 +439,9 @@ class OrderController extends BaseController
             list($card, $info) = omni_api($url);
             $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
         }
-
+        if(isset($_GET['debug'])){
+          dd($order,$cards);
+        }
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
 
