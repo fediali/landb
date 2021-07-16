@@ -12,8 +12,7 @@
     <div class="card-area wrapper-content mb20">
         <div>
             <div class="wrapper-content bg-gray-white mb20">
-                <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse"
-                        data-target="#demo">
+                <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse" data-target="#demo">
                     Credit Card
                 </button>
                 <div id="demo" class="bg-white collapse in">

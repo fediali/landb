@@ -189,7 +189,7 @@
         function payment_method() {
             var payment_method = $("select.method option:selected").val();
 
-            if (payment_method == 'omni-pay') {
+            if (payment_method == 'omni') {
                 $('.card-area').show();
             } else {
                 $('.card-area').hide();
@@ -240,6 +240,7 @@
     $(document).on('click', '.credit_card', function () {
         $('select#billing_address').empty();
         var baddress = [];
+
         var customer_id = $('#customer_id').val();
         if (typeof customer_id === "undefined") {
             $('.card_customer_select').show();
@@ -426,7 +427,6 @@
 
 </script>
 
-
 {{--CUSTOMER ADDRESS MODAL--}}
 <script>
     $(document).ready(function () {
@@ -537,7 +537,6 @@
     }
 </script>
 
-
 <script>
     $(document).ready(function () {
 
@@ -562,11 +561,9 @@
         });
 
     });
-
-
 </script>
-<script type="text/javascript">
 
+<script type="text/javascript">
 $(function(){
     var DATAPICKERAPI = {
       rangeShortcutOption1: [{
@@ -672,6 +669,7 @@ $(function(){
       });
   });
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="{{ asset('landb/js/datepicker.all.js') }}"></script>
 

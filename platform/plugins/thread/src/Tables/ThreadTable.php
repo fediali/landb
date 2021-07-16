@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 use Botble\Thread\Models\Thread;
 use Html;
+
 class ThreadTable extends TableAbstract
 {
 
@@ -133,6 +134,7 @@ class ThreadTable extends TableAbstract
             'threads.status',
             'threads.ready',
             'threads.is_denim',
+            'threads.order_status',
             'threads.thread_status',
         ];
 
@@ -169,9 +171,10 @@ class ThreadTable extends TableAbstract
             $query->when(isset($search_items['designer']), function ($q) use ($search_items) {
                 $q->where('threads.designer_id', $search_items['designer']);
             });
-            $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
-                $q->where('threads.order_status', $search_items['order_status']);
-            }); $query->when(isset($search_items['pp_sample']), function ($q) use ($search_items) {
+            $query->when(isset($search_items['ready']), function ($q) use ($search_items) {
+                $q->where('threads.ready', $search_items['ready']);
+            });
+            $query->when(isset($search_items['pp_sample']), function ($q) use ($search_items) {
                 $q->where('threads.pp_sample', $search_items['pp_sample']);
             });
 
@@ -217,6 +220,10 @@ class ThreadTable extends TableAbstract
                 'title' => 'Denim',
                 'class' => 'no-sort text-left',
                 //'orderable' => false,
+            ], 'order_status'     => [
+                'name'  => 'Order Status',
+                'title' => 'Order Status',
+                'class' => 'no-sort text-left',
             ],
             'pp_sample'           => [
                 'name'  => 'threads.pp_sample',
@@ -263,6 +270,11 @@ class ThreadTable extends TableAbstract
     public function buttons()
     {
         $buttons = $this->addCreateButton(route('thread.create'), 'thread.create');
+
+        $buttons['download'] = [
+            'link' => route('thread.download.tech.pack', ['offset' => 0, 'limit' => 5]),
+            'text' => '<i class="fa fa-download"></i> Download Tech Pack(s)'
+        ];
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Thread::class);
     }

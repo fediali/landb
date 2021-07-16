@@ -68,10 +68,11 @@ button:focus {
 }
 
 .topnav ul li a {
-    font-size: 16px;
+    font-size: 14px;
     color: #000000;
     margin-left: 15px;
     font-weight: 500;
+    text-transform: uppercase;
 }
 
 nav.navbar {
@@ -84,7 +85,7 @@ nav.navbar {
     align-items: center;
 }
 
-.navbar-parent ul {
+#menu .main-nav ul {
     display: grid;
 }
 
@@ -92,6 +93,7 @@ nav.navbar {
     color: #000000;
     font-size: 13px;
     font-weight: 600;
+    text-transform: uppercase;
 }
 
 #menu {
@@ -909,7 +911,7 @@ a.lookbook_btn:hover:after {
 }
 
 section.parallax_video video {
-    width: 100vw;
+    width: 100%;
 }
 
 .breadcrumb_wrap {
@@ -1253,6 +1255,7 @@ section.parallax_video video {
 @media (max-width: 991px) {
     .navbar-brand img {
         width: 100%;
+        height: auto !important;
     }
     h1 {
         font-size: 40px;
@@ -1927,6 +1930,20 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .navbar-parent ul {
+        overflow-x: scroll !important;
+        display: flex !important;
+        margin-right: 10px !important;
+    }
+    #menu nav.footer-nav ul {
+        overflow: hidden !important;
+    }
+    .menu-footer {
+        position: relative !important; 
+    }
+    #menu .main-nav ul {
+        overflow: hidden !important;
+    }
     .breadcrumb_wrap {
         height: auto !important;
       }
@@ -3093,7 +3110,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 
 .navbar-brand img {
-    height: 55px !important;
+    height: 70px !important;
 
   }
 
@@ -3105,9 +3122,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         padding-right: 5px !important;
         padding-left: 5px !important;
     }
-    .navbar-parent ul {
-        overflow: scroll !important;
-    }
+    
 }
 
 
@@ -3998,3 +4013,222 @@ html {
   .shoplisting .col-lg-custom-5 .img {
     height: 328px !important;
   }
+ 
+  .d-grid {
+      display: grid !important;
+  }
+
+  .m-auto {
+      margin: auto !important;
+  }
+
+  .top-search {
+    background: #fff;
+    padding: 8px;
+    position: absolute;
+    right: 90px;
+    top: 105px;
+    box-shadow: -1px 2px 5px 1px rgba(0,0,0,0.52);
+    -webkit-box-shadow: -1px 2px 5px 1px rgba(0,0,0,0.52);
+    -moz-box-shadow: -1px 2px 5px 1px rgba(0,0,0,0.52);
+    display: none;
+  }
+
+  .tp-search-btn {
+    background: none;
+    border: none;
+    border-right: 1px solid #000;
+  }
+
+  .tp-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 100000;
+  }
+
+  .search-inp {
+    border: none;
+  }
+
+  .main-search {
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+  }
+  
+  .just-head {
+    font-size: 45px;
+    font-weight: 600;
+  }
+
+  .hey-text {
+    font-weight: 800;
+    font-size: 70px;
+  }
+
+  .pro-text {
+    font-weight: 800;
+    font-size: 35px;
+    margin-top: 150px;
+  }
+
+  .t-one {
+    width:20%;
+  }
+
+  .t-two {
+    width:17%;
+}
+
+.t-three {
+    width:26%; 
+}
+
+.t-four {
+    width:17%;  
+}
+
+.t-five {
+    width:20%; 
+}
+
+.slider-t-main {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.slidert-slim-img {
+    height: 275px;
+}
+
+.slidert-left-img {
+    height: 370px;
+    margin-top: 40%;
+}
+
+.txt-slider-container ul, li {
+    padding: 0;
+    margin: 25px 0px;
+    list-style: none;
+    text-align: center;
+    font-size:40px;
+}
+
+.txt-slider-container {
+    height: 350px;
+    line-height: 30px; 
+    overflow: Hidden;
+    padding: 5px 0;
+    margin: 30px auto;
+}
+
+
+
+ /*Author: Dipesh Thapa*/
+ .dp-scroll-wrapper{
+    position: relative;
+    width: 100%;
+    top: 100px;
+    left: 0;
+    margin-left: 0;
+    z-index: 9999;
+}
+.dp-scroll-text p {
+    margin: 0px;
+    font-size: 50px;
+    text-align: center;
+    color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    opacity: 0;
+    margin-top: 0;
+    text-transform: capitalize;
+}
+.dp-scroll-text {
+    height: 350px;
+} 
+.dp-scroll-text :nth-child(1){
+    opacity: 1; transform: translate(0%, 0%) matrix(1, 0, 0, 1, 0, 0) ; 
+     font-size: 30px;
+}
+.dp-scroll-text :nth-child(2){
+    opacity: 0.75; transform: translate(0%, 100%) matrix(0.9, 0, 0, 0.9, 0, 0) ;  
+     font-size: 40px;
+}
+.dp-scroll-text :nth-child(3){
+    opacity: 0.5; transform: translate(0%, 200%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ; 
+}
+.dp-scroll-text :nth-child(4){
+    opacity: 0.25; transform: translate(0%, 300%) matrix(0.7, 0, 0, 0.7, 0, 0) scale(0.7, 0.7) ; 
+}
+.dp-scroll-text :nth-child(5){
+    opacity: 0; transform: translate(0%, 400%) matrix(0.5, 0, 0, 0.5, 0, 0) ; 
+}
+.dp-animate-hide,
+.dp-animate-1,
+.dp-animate-2,
+.dp-animate-3,
+.dp-animate-4{
+ opacity: 1;
+ animation-duration: 2s;
+ animation-fill-mode: both;
+ animation-timing-function: linear;
+}
+.dp-scroll-text .dp-animate-hide{
+    animation-name: movehide;
+   
+}
+.dp-scroll-text .dp-animate-1{
+    animation-name:move1;
+          }
+.dp-scroll-text .dp-animate-2{
+    animation-name:move2;
+     
+}
+.dp-scroll-text .dp-animate-3{
+    animation-name:move3;
+   
+}
+.dp-scroll-text .dp-animate-4{
+    animation-name:move4;
+    
+}
+@keyframes movehide {
+ 100% { 
+    opacity: 0; transform: translate(0%, -165%) matrix(1.2, 0, 0, 1.2, 0, 0);
+     }
+}
+@keyframes move1 {
+ 100% { 
+    opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);
+     }
+}
+ @keyframes move2 {
+ 100% { 
+    opacity: 0.75; transform: translate(0%, 100%) matrix(0.9, 0, 0, 0.9, 0, 0);  
+     }
+}
+ @keyframes move3 {
+ 100% { 
+    opacity: 0.5; transform: translate(0%, 200%) matrix(0.7, 0, 0, 0.7, 0, 0);
+     }
+}
+@keyframes move4 {
+ 100% { 
+    opacity: 0.25; transform: translate(0%, 300%) matrix(0.5, 0, 0, 0.5, 0, 0);
+     }
+}
+.author {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    color: #fff;
+}
+
+.author a {
+    color: #fff;
+    text-decoration: none;
+}

@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="font-bold">Ready To Order:</label>
-                        {!! Form::select('order_status', \Botble\Thread\Models\Thread::$READY,  request('order_status'), ['class' => 'form-control ui-select', 'style="background-color: #fff !important;"', 'placeholder' => 'Select Order Status']) !!}
+                        {!! Form::select('ready', \Botble\Thread\Models\Thread::$READY,  request('ready'), ['class' => 'form-control ui-select', 'style="background-color: #fff !important;"', 'placeholder' => 'Select Order Status']) !!}
                     </div>
                     <div class="col-md-4">
                         <label class="font-bold">PP Sample:</label>

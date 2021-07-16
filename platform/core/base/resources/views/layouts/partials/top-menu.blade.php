@@ -1,6 +1,11 @@
 <div class="top-menu">
     <ul class="nav navbar-nav float-right">
         @auth
+            <li>
+                <form method="get" action="{{route('orders.quick-search')}}">
+                    <input type="text" name="quick_search">
+                </form>
+            </li>
             @if (BaseHelper::getAdminPrefix() != '')
                 <li class="dropdown">
                     <a class="dropdown-toggle dropdown-header-name" style="padding-right: 10px" href="{{ url('/') }}"

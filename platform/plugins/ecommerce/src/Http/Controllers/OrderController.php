@@ -1952,4 +1952,14 @@ class OrderController extends BaseController
         $orderObj->save();
     }
 
+    public function quicksearch(Request $request, BaseHttpResponse $response)
+    {
+        dd($request->all());
+        $order = $this->orderRepository->findOrFail($request->quicksearch);
+        if ($order) {
+//            redirect(route('order'))
+        }
+        return $response->setData(Helper::countries());
+    }
+
 }

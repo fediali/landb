@@ -58,8 +58,10 @@
     <div class="topbar">
         <p>Welcome To Lucky and Blessed</p>
     </div>
-    <div class="pl-5 pr-5">
-        <div class="topnav d-flex">
+    <div class="pl-3 pr-3">
+      <p class="text-right m-0">Welcome, <b>Ryan</b></p> 
+        <div class="topnav d-flex pt-2">
+         
             <ul>
                 <li>
                     <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>972-243-7860
@@ -68,8 +70,17 @@
                 </li>
             </ul>
             <ul class="d-flex">
-                <li>
-                    <a href="#" onclick="openSearch()"><i class="fal fa-search"></i></a>
+                <li class="search-custom">
+                    <a href="#"><i class="fal fa-search"></i></a>
+                    <div id="top-sear" class="top-search">
+                      <form action="#">
+                        <div class="d-flex main-search">
+                        <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." name="search">
+                        <button class="tp-search-btn" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        <span class="tp-close-btn pl-2"><i class="fa fa-times" aria-hidden="true"></i></span>
+                        </div> 
+                      </form>
+                    </div>
                 </li>
                 <li>
                     <a href="{{ route('public.cart_index') }}"><i class="fal fa-shopping-cart"></i></a>
@@ -98,15 +109,22 @@
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
+                        <a href="{{ route('customer.login') }}">Sign Up</a>
                     @endauth
 
                 </li>
             </ul>
         </div>
-        <nav class="navbar ">
+        <nav class="navbar d-block">
+          <div class="row">
+            <div class="col-lg-12 text-center">
             <a class="navbar-brand" href="{{ route('public.index') }}"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
-            <div class=" navbar-parent d-flex">
+            </div> 
+          </div>
+          <div class="row">
+            <div class="col-lg-12 d-grid text-center mt-3">
+            <div class="d-flex navbar-parent m-auto">
                 {!!
                     Menu::renderMenuLocation('main-menu', [
                         'options' => [],
@@ -127,10 +145,14 @@
                     !!}
                 </div>
             </div>
+            </div> 
+          </div>
+
+           
         </nav>
     </div>
 </header>
-<div class="loading-overlay">
+<!-- <div class="loading-overlay">
     <span class="fas fa-spinner fa-3x fa-spin"></span>
 </div>
 
@@ -142,9 +164,9 @@
       <button type="submit"><i class="fa fa-search"></i></button>
     </form>
   </div>
-</div>
+</div> -->
 
-<style>
+<!-- <style>
 * {
   box-sizing: border-box;
 }
@@ -209,10 +231,10 @@
 .overlay button:hover {
   background: #bbb;
 }
-</style>
+</style> -->
 <script src="{{ asset('landb/js/flipbook.js') }}"></script>
 
-<script>
+<!-- <script>
 function openSearch() {
   document.getElementById("myOverlay").style.display = "block";
 }
@@ -220,4 +242,15 @@ function openSearch() {
 function closeSearch() {
   document.getElementById("myOverlay").style.display = "none";
 }
+</script> -->
+
+<script> 
+// function openSearch() {
+//   document.getElementById("top-sear").style.display = "block";
+// }
+
+// function closeSearch() {
+//   document.getElementById("top-sear").style.display = "flex";
+// } 
+
 </script>

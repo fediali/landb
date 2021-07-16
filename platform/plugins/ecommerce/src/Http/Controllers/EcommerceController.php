@@ -10,9 +10,11 @@ use Botble\Ecommerce\Http\Requests\StoreLocatorRequest;
 use Botble\Ecommerce\Http\Requests\UpdatePrimaryStoreRequest;
 use Botble\Ecommerce\Http\Requests\UpdateSettingsRequest;
 use Botble\Ecommerce\Repositories\Interfaces\CurrencyInterface;
+use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Repositories\Interfaces\StoreLocatorInterface;
 use Botble\Ecommerce\Services\StoreCurrenciesService;
 use Botble\Setting\Supports\SettingStore;
+use Botble\Support\Http\Requests\Request;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
@@ -30,15 +32,17 @@ class EcommerceController extends BaseController
      * @var CurrencyInterface
      */
     protected $currencyRepository;
+    protected $orderRepository;
 
     /**
      * EcommerceController constructor.
      * @param StoreLocatorInterface $storeLocatorRepository
      * @param CurrencyInterface $currencyRepository
      */
-    public function __construct(StoreLocatorInterface $storeLocatorRepository, CurrencyInterface $currencyRepository)
+    public function __construct(StoreLocatorInterface $storeLocatorRepository, CurrencyInterface $currencyRepository, OrderInterface $orderRepository)
     {
         $this->storeLocatorRepository = $storeLocatorRepository;
+        $this->orderRepository = $orderRepository;
         $this->currencyRepository = $currencyRepository;
     }
 
@@ -82,7 +86,8 @@ class EcommerceController extends BaseController
         BaseHttpResponse $response,
         StoreCurrenciesService $service,
         SettingStore $settingStore
-    ) {
+    )
+    {
         foreach ($request->except(['_token', 'currencies', 'deleted_currencies']) as $settingKey => $settingValue) {
             $settingStore->set(config('plugins.ecommerce.general.prefix') . $settingKey, $settingValue);
         }
@@ -144,7 +149,8 @@ class EcommerceController extends BaseController
         StoreLocatorRequest $request,
         BaseHttpResponse $response,
         SettingStore $settingStore
-    ) {
+    )
+    {
         $request->merge([
             'is_shipping_location' => $request->has('is_shipping_location'),
         ]);
@@ -226,4 +232,6 @@ class EcommerceController extends BaseController
     {
         return $response->setData(Helper::countries());
     }
+
+
 }

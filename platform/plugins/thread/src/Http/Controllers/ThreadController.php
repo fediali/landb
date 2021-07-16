@@ -2,16 +2,13 @@
 
 namespace Botble\Thread\Http\Controllers;
 
-use App\Events\NotifyManager;
+
 use App\Models\ThreadVariationPPSample;
-use App\Models\ThreadVariationTrim;
-use App\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use App\Models\ThreadComment;
 use App\Models\ThreadVariation;
 use App\Models\VariationFabric;
 use Botble\Base\Events\BeforeEditContentEvent;
-use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
@@ -23,7 +20,6 @@ use Botble\Thread\Models\ThreadPvtCatSizesQty;
 use Botble\Thread\Models\ThreadSpecFile;
 use Botble\Thread\Repositories\Interfaces\ThreadInterface;
 use Botble\Base\Http\Controllers\BaseController;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Botble\Thread\Tables\ThreadTable;
@@ -36,9 +32,9 @@ use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use PDF;
+use ZipArchive;
 
 class ThreadController extends BaseController
 {
@@ -664,4 +660,83 @@ class ThreadController extends BaseController
             return response()->json(['status' => 'error'], 500);
         }
     }
+
+    public function downloadTechPack(Request $request)
+    {
+        /*$params = $request->get('ids', null);
+        if (isset($params['ids'])) {
+            $ids = explode(',', $params['ids']);
+            if (count($ids)) {
+
+            }
+        }*/
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 5);
+
+        ini_set('memory_limit', '256M');
+
+        $fits = get_fits();
+        $rises = get_rises();
+
+        $threads = Thread::offset($offset)->limit($limit)->get();
+
+        foreach ($threads as $thread) {
+            $selectedRegCat = $selectedPluCat = $reg_cat = $plus_cat = null;
+            $reg_sku = $plus_sku = '';
+
+            $selectedRegCat = $thread->regular_product_categories()->first(['product_category_id', 'sku']);
+            $selectedPluCat = $thread->plus_product_categories()->first(['product_category_id', 'sku']);
+
+            if (!empty($selectedRegCat->product_category_id)) {
+                $reg_cat = ProductCategory::with('category_sizes')->find($selectedRegCat->product_category_id);
+            }
+            if (!empty($selectedPluCat->product_category_id)) {
+                $plus_cat = ProductCategory::with('category_sizes')->find($selectedPluCat->product_category_id);
+            }
+
+            $reg_sku = @$selectedRegCat->sku;
+            $plus_sku = @$selectedPluCat->sku;
+
+            $variations = get_thread_variations($thread->id);
+
+            $data = ['thread' => $thread, 'rises' => $rises, 'fits' => $fits, 'reg_cat' => $reg_cat, 'plus_cat' => $plus_cat, 'reg_sku' => $reg_sku, 'plus_sku' => $plus_sku, 'variations' => $variations];
+
+            $pdf = PDF::loadview('plugins/thread::techPack', $data);
+
+            $pdf->setPaper('letter', 'landscape');
+
+            // return $pdf->download($reg_sku.'.pdf');
+
+            //save the file to the server
+            $output = $pdf->output();
+            // file_put_contents("pdf/$reg_sku.pdf", $output);
+            Storage::put('tech-packs/'.$reg_sku.'.pdf', $output);
+        }
+
+        // Storage::makeDirectory('to-be-download',$mode=0775); // zip store here
+        $zip_file='TechPacks.zip';
+        $zip = new ZipArchive();
+        $zip->open($zip_file, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+        $path = public_path('storage/tech-packs'); // path to your pdf files
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        foreach ($files as $name => $file)
+        {
+            // We're skipping all subfolders
+            if (!$file->isDir()) {
+                $filePath     = $file->getRealPath();
+                // extracting filename with substr/strlen
+                $relativePath = substr($filePath, strlen($path) + 1);
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, $relativePath) or die ("ERROR: Could not add the file $relativePath");
+                } else {
+                    die("File $filePath doesnt exit");
+                }
+            }
+        }
+        $zip->close();
+        $headers = array('Content-Type'=>'application/octet-stream',);
+        $zip_new_name = "TechPacks-".date("y-m-d-h-i-s").".zip";
+        return response()->download($zip_file, $zip_new_name, $headers);
+    }
+
 }

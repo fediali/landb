@@ -843,6 +843,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1084,6 +1094,15 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
+    handleSearchCustomer: function handleSearchCustomer(value) {
+      if (value !== this.customer_keyword) {
+        var context = this;
+        this.customer_keyword = value;
+        setTimeout(function () {
+          context.loadListCustomersForSearch(1, true);
+        }, 500);
+      }
+    },
     loadListProductsAndVariations: function loadListProductsAndVariations() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -1208,7 +1227,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(route('orders.create'), {
         products: products,
         payment_status: paid ? 'completed' : 'pending',
-        payment_method: this.child_payment_method,
+        payment_method: this.payment_method,
         shipping_method: this.child_shipping_method,
         shipping_option: this.child_shipping_option,
         shipping_amount: this.child_shipping_amount,
@@ -7721,7 +7740,7 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Pieces : " +
+                                          "Total Pieces :\n                                        " +
                                             _vm._s(variant.packQty)
                                         )
                                       ])
@@ -7731,7 +7750,8 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Sizes : " + _vm._s(variant.packSizes)
+                                          "Sizes :\n                                        " +
+                                            _vm._s(variant.packSizes)
                                         )
                                       ])
                                     : _vm._e()
@@ -7858,7 +7878,10 @@ var render = function() {
                                 },
                                 [
                                   _vm._v(
-                                    _vm._s(variant.select_qty * variant.price) +
+                                    "\n                                    " +
+                                      _vm._s(
+                                        variant.select_qty * variant.price
+                                      ) +
                                       "\n                                    " +
                                       _vm._s(_vm.currency) +
                                       "\n                                "
@@ -8695,7 +8718,7 @@ var render = function() {
                               return _vm.loadListCustomersForSearch()
                             },
                             keyup: function($event) {
-                              return _vm.loadListCustomersForSearch(
+                              return _vm.handleSearchCustomer(
                                 $event.target.value
                               )
                             }

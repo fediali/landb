@@ -108,6 +108,12 @@ Route::group(['namespace' => 'Botble\Thread\Http\Controllers', 'middleware' => [
                 'permission' => 'thread.create',
             ]);
 
+            Route::get('download-tech-pack', [
+                'as'         => 'download.tech.pack',
+                'uses'       => 'ThreadController@downloadTechPack',
+                'permission' => 'thread.details',
+            ]);
+
         });
     });
 

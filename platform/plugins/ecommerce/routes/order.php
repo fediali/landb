@@ -15,6 +15,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@charge',
                 'permission' => 'orders.create',
             ]);
+
+            Route::get('quick-search', [
+                'as'         => 'quick-search',
+                'uses'       => 'OrderController@quicksearch',
+                'permission' => 'orders.index',
+            ]);
             Route::post('capture', [
                 'as'         => 'capture',
                 'uses'       => 'OrderController@capture',

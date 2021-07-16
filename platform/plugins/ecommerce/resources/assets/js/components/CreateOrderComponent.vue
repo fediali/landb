@@ -39,23 +39,31 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Pieces : {{variant.packQty}}</p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Sizes : {{variant.packSizes}}</p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Pieces :
+                                            {{ variant.packQty }}</p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Sizes :
+                                            {{ variant.packSizes }}</p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
                                                 <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
-                                                <span style=" margin-top: 8px !important; margin-right: 5px !important;">{{ currency }}</span>
-                                                <input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
+                                                <span
+                                                    style=" margin-top: 8px !important; margin-right: 5px !important;">{{
+                                                        currency
+                                                    }}</span>
+                                                <input class="next-input p-none-r" v-model="variant.price" type="number"
+                                                       min="1" @change="handleChangeQuantity()">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 width-20-px min-width-20-px text-center"> x</td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
-                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number" min="1" @change="handleChangeQuantity()">
+                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number"
+                                               min="1" @change="handleChangeQuantity()">
                                     </td>
-                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">{{ variant.select_qty * variant.price }}
+                                    <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">
+                                        {{ variant.select_qty * variant.price }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
@@ -239,7 +247,8 @@
                                             <i class="fa fa-plus-circle"></i>
                                             {{ __('Add shipping fee') }}
                                         </span>
-                                        <input class="next-input p-none-r" v-model="child_shipping_amount" type="number" min="1">
+                                        <input class="next-input p-none-r" v-model="child_shipping_amount" type="number"
+                                               min="1">
                                         <td class="pl10">{{ child_shipping_amount | formatPrice }} {{ currency }}</td>
                                     </tr>
                                     <tr class="text-no-bold">
@@ -268,8 +277,9 @@
                             <!--<button class="btn btn-primary" v-b-modal.make-paid :disabled="!child_product_ids.length">{{ __('Paid') }}</button>-->
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
                             <!--<input type="hidden" v-model="child_payment_method" value="cod">-->
-                            <button class="btn btn-primary ml15" @click="createOrder($event)" :disabled="!child_product_ids.length || child_total_amount === 0">
-                                {{this.order_id ? 'Update Order' : 'Create Order'}}
+                            <button class="btn btn-primary ml15" @click="createOrder($event)"
+                                    :disabled="!child_product_ids.length || child_total_amount === 0">
+                                {{ this.order_id ? 'Update Order' : 'Create Order' }}
                             </button>
                         </div>
                     </div>
@@ -291,7 +301,7 @@
                                 <div>
                                     <input type="text" class="next-input textbox-advancesearch customer"
                                            @click="loadListCustomersForSearch()"
-                                           @keyup="loadListCustomersForSearch($event.target.value)"
+                                           @keyup="handleSearchCustomer($event.target.value)"
                                            placeholder="Search or create a new customer">
                                 </div>
                                 <div class="panel panel-default"
@@ -1027,6 +1037,15 @@ export default {
                     });
             }
         },
+        handleSearchCustomer: function (value) {
+            if (value !== this.customer_keyword) {
+                let context = this;
+                this.customer_keyword = value;
+                setTimeout(() => {
+                    context.loadListCustomersForSearch(1, true);
+                }, 500);
+            }
+        },
         loadListProductsAndVariations: function (page = 1, force = false) {
             let context = this;
             context.hidden_product_search_panel = false;
@@ -1153,7 +1172,7 @@ export default {
                 .post(route('orders.create'), {
                     products: products,
                     payment_status: paid ? 'completed' : 'pending',
-                    payment_method: this.child_payment_method,
+                    payment_method: this.payment_method,
                     shipping_method: this.child_shipping_method,
                     shipping_option: this.child_shipping_option,
                     shipping_amount: this.child_shipping_amount,
