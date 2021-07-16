@@ -1,7 +1,7 @@
 <section class="ml-5 mr-5 mt-3">
         <div class="row">
         <div class="col-lg-9">
-            <img src="./img/Logo.png" />
+            <img src="{{ asset('landb/img/Logo.png') }}" />
         </div>
         <div class="col-lg-3">
             <p>
@@ -145,8 +145,12 @@
                         <p class="cart-product-name mt-2 mb-2">{{ $order_product->product->name }}</p>
                         <p class="cart-product-code mb-2">CODE: {{ $order_product->product->sku }}</p>
                         @php $sizes = get_category_sizes_by_id($order_product->product->category_id); @endphp
-                        @if(!empty($sizes->category_sizes))
-                            <p class="cart-product-size">SIZE: @foreach($sizes->category_sizes as $size) {{ @$size->name }} {!! ($loop->last) ? '':',' !!} @endforeach</p>
+                        @php
+                            $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
+
+                        @endphp
+                        @if($variation)
+                            <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
                         @endif
                     </div>
                 </div>
@@ -171,11 +175,11 @@
         <hr>
 
         <hr style="border: 2px solid;">
-        <div class="row">
+        {{--<div class="row">
             <div class="col-lg-12">
                 <p class="cart-product-name mt-2 mb-2">Gift Certificate</p>
             </div>
-        </div>
+        </div>--}}
         <div class="row">
             <div class="col-lg-6 col-6">
                 <p class="mt-2">Subtotal</p>
