@@ -72,6 +72,8 @@ class OrderTable extends TableAbstract
             ->eloquent($this->query())
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
+            })->editColumn('id', function ($item) {
+                return $html = '<a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a> <i class="">online</i>';
 
             })
             ->editColumn('order_type', function ($item) {
@@ -139,6 +141,7 @@ class OrderTable extends TableAbstract
             'ec_orders.user_id',
             'ec_orders.created_at',
             'ec_orders.amount',
+            'ec_orders.platform',
             'ec_orders.tax_amount',
             'ec_orders.currency_id',
             'ec_orders.shipping_amount',
