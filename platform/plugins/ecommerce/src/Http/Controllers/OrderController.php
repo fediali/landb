@@ -440,7 +440,7 @@ class OrderController extends BaseController
             $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
         }
         if(isset($_GET['debug'])){
-          dd($order,$cards);
+          dd($order,$cards,$order->payment);
         }
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
     }
