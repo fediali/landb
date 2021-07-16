@@ -788,7 +788,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @elseif($order->payment->payment_channel->label() == 'cod')
+                        @else
                             <div class="wrapper-content bg-gray-white mb20">
                                 <div class="row m-0 pt-4 bg-white">
                                     <div class="col-lg-12 ">
