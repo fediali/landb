@@ -73,9 +73,7 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })->editColumn('id', function ($item) {
-                $html = '<a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>'. ($item->platform == 'online') ? '<i class="">online</i>' : '';
-                return $html;
-
+                return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a> <i class="badge bg-success ml-1">online</i></div>';
 
             })
             ->editColumn('order_type', function ($item) {
