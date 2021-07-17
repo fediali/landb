@@ -282,6 +282,11 @@
                                                 <textarea class="ui-text-area textarea-auto-height" name="description"
                                                           rows="3"
                                                           placeholder="{{ trans('plugins/ecommerce::order.add_note') }}">{{ $order->description }}</textarea>
+                                                <label
+                                                    class="text-title-field">Customer Notes</label>
+                                                <textarea class="ui-text-area textarea-auto-height" name="notes"
+                                                          rows="3"
+                                                          placeholder="Customer Notes">{{ $order->notes }}</textarea>
                                                 <div class="mt10">
                                                     <button type="button"
                                                             class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
