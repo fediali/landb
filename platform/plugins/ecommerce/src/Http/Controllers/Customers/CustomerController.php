@@ -370,7 +370,7 @@ class CustomerController extends BaseController
             'total'             => 1,
             'pre_auth'          => 1
         ];
-        $url = (env("OMNI_URL") . "charge/");
+        $url = (env(" ") . "charge/");
         list($response, $info) = omni_api($url, $data, 'POST');
 
         $status = $info['http_code'];
