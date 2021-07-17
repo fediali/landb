@@ -92,7 +92,8 @@ class Order extends BaseModel
         'tracking_no',
         'platform',
         'parent_order',
-        'notes'
+        'notes',
+        'po_number'
     ];
 
     /**

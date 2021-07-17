@@ -668,6 +668,9 @@
                                     <label class="text-title-field">Tracking No.</label>
                                     <input class="form-control" name="tracking_no" placeholder="Tracking No."
                                            value="{{ $order->tracking_no }}"/>
+                                    <label class="text-title-field">PO No.</label>
+                                    <input class="form-control" name="po_number" placeholder="PO No."
+                                           value="{{ $order->po_number }}"/>
                                     <div class="mt10">
                                         <button type="button"
                                                 class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
