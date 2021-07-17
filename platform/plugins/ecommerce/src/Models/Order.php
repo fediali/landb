@@ -91,7 +91,8 @@ class Order extends BaseModel
         'sales_commission_percent',
         'tracking_no',
         'platform',
-        'parent_order'
+        'parent_order',
+        'notes'
     ];
 
     /**

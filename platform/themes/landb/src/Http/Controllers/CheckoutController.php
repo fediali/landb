@@ -111,6 +111,8 @@ class CheckoutController extends Controller
 
     $order = Order::with('products')->find($request->input('order_id'));
 
+    $order->update(['notes' => $request->notes]);
+
     if(!isset(auth('customer')->user()->shippingAddress[0])){
       return redirect()->route('public.cart_index')->with('error', 'Shipping Address Not found!');
     }

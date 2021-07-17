@@ -97,7 +97,7 @@
                <div class="pd-all-10-20 p-none-t">
                   <div class="row">
                      <div class="col-sm-6">
-                        <div class="form-group"><label for="txt-note" class="text-title-field">Note</label> <textarea id="txt-note" rows="2" placeholder="Note for order..." class="ui-text-area textarea-auto-height"></textarea></div>
+                        <div class="form-group"><label for="txt-note" class="text-title-field">Note</label> <textarea id="txt-note" name="notes" rows="2" placeholder="Note for order..." class="ui-text-area textarea-auto-height"></textarea></div>
                      </div>
                      <div class="col-sm-6">
                         <div class="table-wrap">

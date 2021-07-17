@@ -483,14 +483,14 @@
 
                                     </div>
                                 </div>
-                                <p class="cout-note  mt-3">Coupon Discount</p>
+                                <p class="cout-note  mt-3">Notes</p>
                                 <div class="row mt-2">
-                                    <div class="col-lg-8 col-8 pr-0">
-                                        <input type="text" placeholder="Gift certificate or coupon code" class="cart-coupon-input" />
+                                    <div class="col-lg-12 col-12 pr-0">
+                                        <textarea type="text" rows="3" form="checkout-main-form" name="notes" placeholder="Notes to be attached witht the order" class="cart-coupon-input">{{ $cart->notes }}</textarea>
                                     </div>
-                                    <div class="col-lg-4 col-4 pl-0">
-                                        <a href="#" class=" btn cart-btn w-100">Apply</a>
-                                    </div>
+                                    {{--<div class="col-lg-4 col-4 pl-0">
+                                        <a href="#" class=" btn cart-btn w-100">Save</a>
+                                    </div>--}}
                                     <div></div>
 
                                 </div>
