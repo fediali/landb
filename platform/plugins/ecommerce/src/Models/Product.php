@@ -85,7 +85,8 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
-        'product_slug'
+        'product_slug',
+        'sold_qty'
     ];
 
     /**
@@ -617,6 +618,6 @@ class Product extends BaseModel
           ->whereIn('product_id', $getProdIds)
           ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
           ->sum('qty');
-      return $soldQty;
+      return ($soldQty > 0) ? $soldQty: 0;
     }
 }
