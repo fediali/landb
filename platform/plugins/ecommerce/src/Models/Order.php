@@ -253,4 +253,14 @@ class Order extends BaseModel
         return $this->belongsTo(User::class, 'salesperson_id');
     }
 
+    public function previousOrder(){
+      return Order::where('id', '<', $this->id)->max('id');
+    }
+
+    public function nextOrder(){
+      return Order::where('id', '>', $this->id)->min('id');
+    }
+
+
+
 }
