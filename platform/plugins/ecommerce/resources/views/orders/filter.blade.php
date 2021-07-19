@@ -62,6 +62,10 @@
                         <label class="font-bold">Manager:</label>
                         <input type="text" name="manager" class="form-control" value="{{request('manager')}}">
                     </div>
+                    <div class="col-md-4 mt-3">
+                        <label class="font-bold">Type:</label>
+                        {!! Form::select('order_type', \Botble\Ecommerce\Models\Order::$ORDER_TYPES,  request('order_type'), ['class' => 'form-control','placeholder'=>'Select Status']) !!}
+                    </div>
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Total ($):</label>

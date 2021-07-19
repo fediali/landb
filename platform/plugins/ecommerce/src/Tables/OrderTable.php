@@ -73,7 +73,7 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })->editColumn('id', function ($item) {
-                return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a> <i class="badge bg-success ml-1">online</i></div>';
+                return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '</div>');
 
             })
             ->editColumn('order_type', function ($item) {
@@ -147,6 +147,7 @@ class OrderTable extends TableAbstract
             'ec_orders.shipping_amount',
             'ec_orders.payment_id',
             'ec_orders.salesperson_id',
+            'ec_orders.order_type',
         ];
 
         $query = $model
@@ -215,6 +216,9 @@ class OrderTable extends TableAbstract
             }
             $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
                 $q->where('ec_orders.status', $search_items['order_status']);
+            });
+            $query->when(isset($search_items['order_type']), function ($q) use ($search_items) {
+                $q->where('ec_orders.order_type', $search_items['order_type']);
             });
             $query->when(isset($search_items['payment_method']), function ($q) use ($search_items) {
                 $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
