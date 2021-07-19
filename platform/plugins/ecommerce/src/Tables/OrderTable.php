@@ -233,6 +233,9 @@ class OrderTable extends TableAbstract
             $query->when(isset($search_items['coupon_code']), function ($q) use ($search_items) {
                 $q->where('ec_orders.coupon_code', $search_items['coupon_code']);
             });
+            $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
+                $q->where('ec_orders.salesperson_id', $search_items['manager']);
+            });
         }
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
