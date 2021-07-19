@@ -9,8 +9,7 @@
                             <div class="ui-banner ui-banner--status-warning">
                                 <div class="ui-banner__ribbon">
                                     <svg class="svg-next-icon svg-next-icon-size-20">
-                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                             xlink:href="#alert-circle"></use>
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#alert-circle"></use>
                                     </svg>
                                 </div>
                                 <div class="ui-banner__content">
