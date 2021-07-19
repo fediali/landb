@@ -581,14 +581,14 @@
                     <div class="ui-layout__item">
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                              <?php
-                              $next = $order->nextOrder();
-                              $previous = $order->previousOrder();
-                              ?>
-                                <a href="{{ !is_null($previous) ? route('orders.edit', ['id' => $previous]) : 'javascript:void(0);' }}"
-                                     class="btn btn-default" {{ is_null($previous) ? 'disabled' : '' }}>Previous Order</a>&nbsp;
-                                <a href="{{ !is_null($next) ? route('orders.edit', ['id' => $next]) : 'javascript:void(0);' }}"
-                                     class="btn btn-default" {{ is_null($next) ? 'disabled' : '' }}>Next Order</a>&nbsp;
+                                <?php
+                                $next = $order->nextOrder();
+                                $previous = $order->previousOrder();
+                                ?>
+                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default" {{ is_null($previous) ? 'disabled' : '' }}>Previous Order</a>&nbsp;
+                                <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default" {{ is_null($next) ? 'disabled' : '' }}>Next Order</a>&nbsp;
                             </div>
                         </div>
                         <div class="wrapper-content mb20">
@@ -672,23 +672,25 @@
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
-                                   class="btn btn-warning">{{ trans('plugins/ecommerce::order.edit') }}</a>&nbsp;
+                                   class="btn btn-warning">Edit Order</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
                                    class="btn btn-info">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
-                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#modal_split_order">Split Order
-                                </button>
+
                             </div>
                         </div>
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#modal_split_order">Split Order
+                                </button>
+
                                 <input class="form-control" type="text" id="salesperson_id"
-                                       value="{{$order->salesperson->username}}"
+                                       value="{{@$order->salesperson->username}}"
                                        disabled>
                                 <i class="fa fa-plus" data-toggle="modal"
                                    data-target="#salesrep"></i>
