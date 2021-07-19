@@ -147,6 +147,8 @@ class CustomerTable extends TableAbstract
             })->editColumn('order_count', function ($item) {
                 return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
 
+            })->editColumn('spend', function ($item) {
+                return $item->spend();
             });
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
@@ -281,6 +283,12 @@ class CustomerTable extends TableAbstract
             'order_count' => [
                 'name'       => 'order_count',
                 'title'      => 'Order Count',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'spend' => [
+                'name'       => 'spend',
+                'title'      => 'Spend',
                 'class'      => 'text-left',
                 'searchable' => false
             ],

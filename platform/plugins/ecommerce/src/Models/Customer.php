@@ -65,6 +65,7 @@ class Customer extends Authenticatable
     ];
     protected $with = [
         'detail',
+
     ];
 
     /**
@@ -277,5 +278,11 @@ class Customer extends Authenticatable
     public function merge()
     {
         return $this->hasMany(MergeAccount::class, 'user_id_one');
+    }
+
+    public function spend()
+    {
+        $spend = $this->orders()->where('user_id', $this->id)->sum('amount');
+        return $spend;
     }
 }
