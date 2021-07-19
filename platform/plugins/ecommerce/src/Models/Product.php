@@ -8,6 +8,7 @@ use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
+use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -84,7 +85,8 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
-        'product_slug'
+        'product_slug',
+        'sold_qty'
     ];
 
     /**
@@ -607,5 +609,15 @@ class Product extends BaseModel
 
     public function inventory_history(){
       return $this->hasMany(InventoryHistory::class, 'parent_product_id');
+    }
+
+    public function getSoldQtyAttribute(){
+      $getProdIds = ProductVariation::where('configurable_product_id', $this->id)->pluck('product_id')->all();
+      $getProdIds[] = $this->id;
+      $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+          ->whereIn('product_id', $getProdIds)
+          ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+          ->sum('qty');
+      return ($soldQty > 0) ? $soldQty: 0;
     }
 }

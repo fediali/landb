@@ -196,6 +196,11 @@
                                           placeholder="Note for order..." v-model="note"></textarea>
                             </div>
                             <div class="form-group">
+                                <label class="text-title-field" for="customer-notes">{{ __('Customer Note') }}</label>
+                                <textarea class="ui-text-area textarea-auto-height" id="customer-notes" rows="2"
+                                          placeholder="Customer Notes..." v-model="customer_notes"></textarea>
+                            </div>
+                            <div class="form-group">
                                 <label class="text-title-field">Select Payment Method</label>
                                 <select name="method" class="form-control method" v-model="payment_method">
                                     <option value="" :disabled="true" :selected="true">Select Payment Method</option>
@@ -958,6 +963,7 @@ export default {
             hidden_product_search_panel: true,
             loading: false,
             note: null,
+            customer_notes: null,
             // order_type: this.orderType,
             customers: {
                 data: [],
@@ -1182,6 +1188,7 @@ export default {
                     customer_id: this.child_customer_id,
                     order_id: this.order_id,
                     note: this.note,
+                    customer_notes: this.customer_notes,
                     order_type: this.order_type,
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,

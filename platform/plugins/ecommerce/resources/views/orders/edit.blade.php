@@ -290,6 +290,11 @@
                                                 <textarea class="ui-text-area textarea-auto-height" name="description"
                                                           rows="3"
                                                           placeholder="{{ trans('plugins/ecommerce::order.add_note') }}">{{ $order->description }}</textarea>
+                                                <label
+                                                    class="text-title-field">Customer Notes</label>
+                                                <textarea class="ui-text-area textarea-auto-height" name="notes"
+                                                          rows="3"
+                                                          placeholder="Customer Notes">{{ $order->notes }}</textarea>
                                                 <div class="mt10">
                                                     <button type="button"
                                                             class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
@@ -574,6 +579,18 @@
                 </div>
                 <div class="flexbox-layout-section-secondary mt20">
                     <div class="ui-layout__item">
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                              <?php
+                              $next = $order->nextOrder();
+                              $previous = $order->previousOrder();
+                              ?>
+                                <a href="{{ !is_null($previous) ? route('orders.edit', ['id' => $previous]) : 'javascript:void(0);' }}"
+                                     class="btn btn-default" {{ is_null($previous) ? 'disabled' : '' }}>Previous Order</a>&nbsp;
+                                <a href="{{ !is_null($next) ? route('orders.edit', ['id' => $next]) : 'javascript:void(0);' }}"
+                                     class="btn btn-default" {{ is_null($next) ? 'disabled' : '' }}>Next Order</a>&nbsp;
+                            </div>
+                        </div>
                         <div class="wrapper-content mb20">
                             <div class="next-card-section p-none-b">
                                 <div class="flexbox-grid-default flexbox-align-items-center">
@@ -654,6 +671,8 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
+                                   class="btn btn-warning">{{ trans('plugins/ecommerce::order.edit') }}</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
                                    class="btn btn-info">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
@@ -679,6 +698,9 @@
                                     <label class="text-title-field">Tracking No.</label>
                                     <input class="form-control" name="tracking_no" placeholder="Tracking No."
                                            value="{{ $order->tracking_no }}"/>
+                                    <label class="text-title-field">PO No.</label>
+                                    <input class="form-control" name="po_number" placeholder="PO No."
+                                           value="{{ $order->po_number }}"/>
                                     <div class="mt10">
                                         <button type="button"
                                                 class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>

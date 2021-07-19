@@ -173,15 +173,9 @@ class ProductTable extends TableAbstract
                 return $html;
             })
             ->editColumn('sold_qty', function ($item) {
-                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
-                $getProdIds[] = $item->id;
-                $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
-                    ->whereIn('product_id', $getProdIds)
-                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
-                    ->sum('qty');
-                $html = '&mdash;';
-                if ($soldQty) {
-                    $html = '<a href="' . route('orders.index', ['product_id' => $item->id]) . '"><span>' . $soldQty . '</span></a>';
+                $html = 0;
+                if ($item->sold_qty) {
+                    $html = '<a href="' . route('orders.index', ['product_id' => $item->id]) . '"><span>' . $item->sold_qty . '</span></a>';
                 }
                 return $html;
             })
@@ -349,7 +343,7 @@ class ProductTable extends TableAbstract
                 'title'      => 'Single Qty',
                 'class'      => 'text-left',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'product_type'  => [
                 'name'  => 'ec_products.product_type',
@@ -368,21 +362,21 @@ class ProductTable extends TableAbstract
                 'width'      => '100px',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'reorder_qty'   => [
                 'name'       => 'ec_products.reorder_qty',
                 'title'      => 'Re-order Qty',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'sold_qty'      => [
                 'name'       => 'ec_products.sold_qty',
                 'title'      => 'Sold Qty',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'created_at'    => [
                 'name'  => 'ec_products.created_at',
