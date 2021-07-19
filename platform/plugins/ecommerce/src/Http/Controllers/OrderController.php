@@ -435,15 +435,17 @@ class OrderController extends BaseController
             '0' => 'Add New Card'
         ];
         $defaultStore = get_primary_store_locator();
+        $salesRep = get_salesperson();
+//        dd($salesRep);
         if (!$order->user->card->isEmpty()) {
             $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
             list($card, $info) = omni_api($url);
             $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
         }
-        if(isset($_GET['debug'])){
-          dd($order,$cards,$order->payment);
+        if (isset($_GET['debug'])) {
+            dd($order, $cards, $order->payment);
         }
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
     }
 
 
@@ -1023,7 +1025,6 @@ class OrderController extends BaseController
      */
     public function editOrder($id, Request $request, BaseHttpResponse $response)
     {
-
         if (!$id) {
             return $response
                 ->setError()
@@ -1872,7 +1873,7 @@ class OrderController extends BaseController
         /*************** Validation Start ****************/
         $checkProd = false;
         $products = $order->products->pluck('qty', 'product_id')->all();
-        foreach($products as $productId => $quantity) {
+        foreach ($products as $productId => $quantity) {
             foreach ($params['order_prod_move'] as $prodId => $qty) {
                 if ($productId == $prodId && (int)$qty > $quantity) {
                     return $response->setCode(406)->setError()->setMessage('Product Qty is not available!');
@@ -1902,7 +1903,7 @@ class OrderController extends BaseController
         $new_order->save();
 
         $histories = $order->histories;
-        foreach($histories as $history) {
+        foreach ($histories as $history) {
             $historyData = $history->replicate();
             $historyData->order_id = $new_order->id;
             $this->orderHistoryRepository->createOrUpdate($historyData);
@@ -1913,7 +1914,7 @@ class OrderController extends BaseController
         $this->orderAddressRepository->createOrUpdate($addressData);
 
         $products = $order->products;
-        foreach($products as $product) {
+        foreach ($products as $product) {
             foreach ($params['order_prod_move'] as $prodId => $qty) {
                 if ($product->product_id == $prodId && (int)$qty <= $product->qty) {
                     $productData = $product->replicate();
@@ -1939,7 +1940,7 @@ class OrderController extends BaseController
     {
         $orderTotal = 0;
         $products = $orderObj->products;
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $orderTotal += $product->qty * $product->price;
         }
 
@@ -1961,6 +1962,13 @@ class OrderController extends BaseController
 //            redirect(route('order'))
         }
         return $response->setData(Helper::countries());
+    }
+
+    public function salesRepupdate($id, Request $request, BaseHttpResponse $response)
+    {
+        $rep['salesperson_id'] = $request->salesperson_id;
+        $order = Order::where('id', $id)->update($rep);
+        return $response->setData($order)->setMessage('Sales Rep Updated Sucessfully');
     }
 
 }

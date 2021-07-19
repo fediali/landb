@@ -9,7 +9,8 @@
                             <div class="ui-banner ui-banner--status-warning">
                                 <div class="ui-banner__ribbon">
                                     <svg class="svg-next-icon svg-next-icon-size-20">
-                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#alert-circle"></use>
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                             xlink:href="#alert-circle"></use>
                                     </svg>
                                 </div>
                                 <div class="ui-banner__content">
@@ -663,6 +664,12 @@
                                             <span
                                                 class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
                                         </li>
+<br>
+                                        <li class="ws-nm">
+                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                                    data-target="#modal_split_order">Split Order
+                                            </button>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -684,9 +691,6 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#modal_split_order">Split Order
-                                </button>
 
                                 <input class="form-control" type="text" id="salesperson_id"
                                        value="{{@$order->salesperson->username}}"
@@ -932,6 +936,33 @@
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="salesrep" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="d-flex w-100">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                        <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                            Sales Rep {{$order->salesperson->username}}
+                        </h4>
+                    </div>
+                </div>
+
+                <form method="post" action="{{route('orders.sales-rep', $order->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        {!! Form::select('salesperson_id', $salesRep, $order->salesperson_id, ['class' => 'form-control','placeholder'=>'Select Sales Rep']) !!}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>

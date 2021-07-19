@@ -72,17 +72,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <form method="post" action="{{route('customers.merge-customer')}}">
-                        @csrf
+                            @csrf
                             <div class="form-group">
                                 <label for="name" class="control-label" aria-required="true">Customer List
                                 </label>
                                 <input type="hidden" value="" name="user_id_one" id="user_id_one">
                                 <div class="d-flex">
-                                <select name="user_id_two" id="merge_customer_list"
-                                        class="form-control is-valid select-search-full">
-                                    <option disabled> Select Customer</option>
-                                </select>
-                               <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
+                                    <select name="user_id_two" id="merge_customer_list"
+                                            class="form-control is-valid select-search-full">
+                                        <option disabled> Select Customer</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
                                 </div>
                             </div>
                         </form>
@@ -202,7 +202,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
+    var fattJs = new FattJs('LandB-Apparel-772ad4c6040b', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
@@ -242,6 +242,7 @@
         var baddress = [];
 
         var customer_id = $('#customer_id').val();
+        console.log(customer_id, 'sssss');
         if (typeof customer_id === "undefined") {
             $('.card_customer_select').show();
             $('.card_fields').hide();
@@ -564,135 +565,135 @@
 </script>
 
 <script type="text/javascript">
-$(function(){
-    var DATAPICKERAPI = {
-      rangeShortcutOption1: [{
-        name: 'Last week',
-        day: '-7,0'
-      }, {
-        name: 'Last Month',
-        day: '-30,0'
-      }, {
-        name: 'Last Three Months',
-        day: '-90, 0'
-      }],
-      singleShortcutOptions1: [{
-        name: 'Today',
-        day: '0',
-        time: '00:00:00'
-      }, {
-        name: 'Yesterday',
-        day: '-1',
-        time: '00:00:00'
-      }, {
-        name: 'One Week Ago',
-        day: '-7'
-      }]
-    };
-      $('.J-datepicker').datePicker({
-        hasShortcut:true,
-        language: 'en',
-        format: 'MM-DD-YYYY',
-        min:'2018-01-01 04:00:00',
-        max:'2029-10-29 20:59:59',
-        shortcutOptions:[{
-          name: 'Today',
-          day: '0'
-        }, {
-          name: 'Yesterday',
-          day: '-1',
-          time: '00:00:00'
-        }, {
-          name: 'One Week Ago',
-          day: '-7'
-        }],
-        hide:function(){
-          console.info(this)
-        }
-      });
+    $(function () {
+        var DATAPICKERAPI = {
+            rangeShortcutOption1: [{
+                name: 'Last week',
+                day: '-7,0'
+            }, {
+                name: 'Last Month',
+                day: '-30,0'
+            }, {
+                name: 'Last Three Months',
+                day: '-90, 0'
+            }],
+            singleShortcutOptions1: [{
+                name: 'Today',
+                day: '0',
+                time: '00:00:00'
+            }, {
+                name: 'Yesterday',
+                day: '-1',
+                time: '00:00:00'
+            }, {
+                name: 'One Week Ago',
+                day: '-7'
+            }]
+        };
+        $('.J-datepicker').datePicker({
+            hasShortcut: true,
+            language: 'en',
+            format: 'MM-DD-YYYY',
+            min: '2018-01-01 04:00:00',
+            max: '2029-10-29 20:59:59',
+            shortcutOptions: [{
+                name: 'Today',
+                day: '0'
+            }, {
+                name: 'Yesterday',
+                day: '-1',
+                time: '00:00:00'
+            }, {
+                name: 'One Week Ago',
+                day: '-7'
+            }],
+            hide: function () {
+                console.info(this)
+            }
+        });
 
 
-      $('.J-datepicker-day').datePicker({
-        hasShortcut: true,
-        language: 'en',
-        format: 'MM-DD-YYYY',
-        shortcutOptions: [{
-          name: 'Today',
-          day: '0'
-        }, {
-          name: 'Yesterday',
-          day: '-1'
-        }, {
-          name: 'One week ago',
-          day: '-7'
-        }]
-      });
+        $('.J-datepicker-day').datePicker({
+            hasShortcut: true,
+            language: 'en',
+            format: 'MM-DD-YYYY',
+            shortcutOptions: [{
+                name: 'Today',
+                day: '0'
+            }, {
+                name: 'Yesterday',
+                day: '-1'
+            }, {
+                name: 'One week ago',
+                day: '-7'
+            }]
+        });
 
 
-      $('.J-datepicker-range-day').datePicker({
-        hasShortcut: true,
-        language: 'en',
-        format: 'MM-DD-YYYY',
-        isRange: true,
-        shortcutOptions: DATAPICKERAPI.rangeShortcutOption1
-      });
+        $('.J-datepicker-range-day').datePicker({
+            hasShortcut: true,
+            language: 'en',
+            format: 'MM-DD-YYYY',
+            isRange: true,
+            shortcutOptions: DATAPICKERAPI.rangeShortcutOption1
+        });
 
 
-      $('.J-datepicker-range').datePicker({
-        hasShortcut: true,
-        language: 'en',
-        format: 'MM-DD-YYYY',
-        min: '2018-01-01 06:00:00',
-        max: '2029-04-29 20:59:59',
-        isRange: true,
-        shortcutOptions: [{
-          name: 'Yesterday',
-          day: '-1,-1',
-          time: '00:00:00,23:59:59'
-        },{
-          name: 'Last Week',
-          day: '-7,0',
-          time:'00:00:00,'
-        }, {
-          name: 'Last Month',
-          day: '-30,0',
-          time: '00:00:00,'
-        }, {
-          name: 'Last Three Months',
-          day: '-90, 0',
-          time: '00:00:00,'
-        }],
-        hide: function (type) {
-          console.info(this.$input.eq(0).val(), this.$input.eq(1).val());
-          console.info('Type:',type)
-        }
-      });
-  });
+        $('.J-datepicker-range').datePicker({
+            hasShortcut: true,
+            language: 'en',
+            format: 'MM-DD-YYYY',
+            min: '2018-01-01 06:00:00',
+            max: '2029-04-29 20:59:59',
+            isRange: true,
+            shortcutOptions: [{
+                name: 'Yesterday',
+                day: '-1,-1',
+                time: '00:00:00,23:59:59'
+            }, {
+                name: 'Last Week',
+                day: '-7,0',
+                time: '00:00:00,'
+            }, {
+                name: 'Last Month',
+                day: '-30,0',
+                time: '00:00:00,'
+            }, {
+                name: 'Last Three Months',
+                day: '-90, 0',
+                time: '00:00:00,'
+            }],
+            hide: function (type) {
+                console.info(this.$input.eq(0).val(), this.$input.eq(1).val());
+                console.info('Type:', type)
+            }
+        });
+    });
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="{{ asset('landb/js/datepicker.all.js') }}"></script>
 
-<script src="{{ asset('landb/js/datepicker.en.js') }}" ></script>
+<script src="{{ asset('landb/js/datepicker.en.js') }}"></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
 
 <script>
     $(document).ready(function () {
-      $('select[name="table-users_length"]').append(new Option("100", "100"));
+        $('select[name="table-users_length"]').append(new Option("100", "100"));
     });
     var isSubmitting = false
 
     $(document).ready(function () {
-      $('form').submit(function(){
-        isSubmitting = true
-      })
+        $('form').submit(function () {
+            isSubmitting = true
+        })
 
-      $('form').data('initial-state', $('form').serialize());
+        $('form').data('initial-state', $('form').serialize());
 
-      $(window).on('beforeunload', function() {
-        if (!isSubmitting && $('form').serialize() != $('form').data('initial-state')){
-          return 'You have unsaved changes which will not be saved.'
-        }
-      });
+        $(window).on('beforeunload', function () {
+            if (!isSubmitting && $('form').serialize() != $('form').data('initial-state')) {
+                return 'You have unsaved changes which will not be saved.'
+            }
+        });
     })
 </script>
