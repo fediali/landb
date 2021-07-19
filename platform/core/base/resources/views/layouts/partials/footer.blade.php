@@ -679,5 +679,20 @@ $(function(){
 <script>
     $(document).ready(function () {
       $('select[name="table-users_length"]').append(new Option("100", "100"));
+    });
+    var isSubmitting = false
+
+    $(document).ready(function () {
+      $('form').submit(function(){
+        isSubmitting = true
+      })
+
+      $('form').data('initial-state', $('form').serialize());
+
+      $(window).on('beforeunload', function() {
+        if (!isSubmitting && $('form').serialize() != $('form').data('initial-state')){
+          return 'You have unsaved changes which will not be saved.'
+        }
+      });
     })
 </script>
