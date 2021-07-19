@@ -675,3 +675,9 @@ $(function(){
 
 <script src="{{ asset('landb/js/datepicker.en.js') }}" ></script>
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+      $('select[name="table-users_length"]').append(new Option("100", "100"));
+    })
+</script>
