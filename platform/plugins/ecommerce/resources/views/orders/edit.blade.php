@@ -571,7 +571,7 @@
                 </div>
                 <div class="flexbox-layout-section-secondary mt20">
                     <div class="ui-layout__item">
-                        <div class="wrapper-content bg-gray-white mb20">
+                        <div class="wrapper-content bg-white mb20">
                             <div class="pd-all-20">
                               <?php
                               $next = $order->nextOrder();
@@ -664,7 +664,7 @@
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
-                                   class="btn btn-warning">{{ trans('plugins/ecommerce::order.edit') }}</a>&nbsp;
+                                   class="btn btn-warning">Edit</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
                                    class="btn btn-info">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
