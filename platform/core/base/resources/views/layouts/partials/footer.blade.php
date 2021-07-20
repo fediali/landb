@@ -679,7 +679,7 @@
 
 <script>
     $(document).ready(function () {
-        $('select[name="table-users_length"]').append(new Option("100", "100"));
+        $('.dt-length-style > select').append(new Option("100", "100"));
     });
     var isSubmitting = false
 
