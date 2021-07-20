@@ -121,6 +121,14 @@ class ProductTable extends TableAbstract
             ->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
             })
+            ->editColumn('in_cart', function ($item) {
+              $data = $item->inCart();
+              if(count($data['order_ids'])){
+                return '<a href="'. route('orders.incomplete-list', ['order_ids' =>  json_encode($data['order_ids'])]) .'">'.$data['sum'].'</a>';
+              }else{
+                return !is_null($data['sum']) ? $data['sum'] : '-';
+              }
+            })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -374,6 +382,13 @@ class ProductTable extends TableAbstract
             'sold_qty'      => [
                 'name'       => 'ec_products.sold_qty',
                 'title'      => 'Sold Qty',
+                'class'      => 'text-center',
+                'searchable' => false,
+                'sortable'   => false
+            ],
+            'in_cart'      => [
+                'name'       => 'in_cart',
+                'title'      => 'In cart',
                 'class'      => 'text-center',
                 'searchable' => false,
                 'sortable'   => false

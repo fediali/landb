@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class Product extends BaseModel
 {
@@ -619,5 +620,22 @@ class Product extends BaseModel
           ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
           ->sum('qty');
       return ($soldQty > 0) ? $soldQty: 0;
+    }
+
+    public function inCart(){
+      $variations = $this->variations()->pluck('product_id');
+      $orders = Order::where('ec_orders.is_finished', 0)->join('ec_order_product as ecp', 'ecp.order_id', 'ec_orders.id')->whereIn('ecp.product_id', $variations);
+
+      $order_ids = $orders->select('ec_orders.*')->groupBy('ec_orders.id')->pluck('ec_orders.id');
+      $sumdata = $orders->select(DB::raw('sum(ecp.qty) as sum'))->get();
+      $sum = 0;
+      foreach ($sumdata as $data){
+        $sum = $sum + $data->sum;
+      }
+
+      return [
+          'order_ids' => $order_ids,
+          'sum'       => $sum
+      ];
     }
 }
