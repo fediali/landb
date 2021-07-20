@@ -285,4 +285,20 @@ class Customer extends Authenticatable
         $spend = $this->orders()->where('user_id', $this->id)->sum('amount');
         return $spend;
     }
+
+    public function abandonedProducts()
+    {
+        $abandoned = $this->pendingOrder();
+        $abandoned  = !is_null($abandoned) ? $abandoned->products()->sum('qty') : 0;
+        return [
+            'abandoned' => $abandoned,
+            'order_id' => $this->pendingOrderId()
+        ];
+    }
+
+    public function latestOrder(){
+      $date =  $this->orders()->where('is_finished' , 1)->latest()->pluck('created_at')->first();
+      $date = !is_null($date) ? date('m/d/y', strtotime($date)) : '-';
+      return $date;
+    }
 }

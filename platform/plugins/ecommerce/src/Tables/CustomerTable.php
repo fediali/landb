@@ -146,9 +146,32 @@ class CustomerTable extends TableAbstract
                 }
             })->editColumn('order_count', function ($item) {
                 return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
-
             })->editColumn('spend', function ($item) {
                 return $item->spend();
+            })->editColumn('abandoned', function ($item) {
+              $data = $item->abandonedProducts();
+              if(!is_null($data['order_id'])){
+                return '<a href="'.route('orders.incomplete-list', ['order_id' => $data['order_id']]).'">'.$data['abandoned'].'</a>';
+              }else{
+                return $data['abandoned'];
+              }
+
+            })->editColumn('validation', function ($item) {
+              $html = '<span class="badge badge-default">'.$item->status.'</span>';
+                if($item->status == BaseStatusEnum::$CUSTOMERS['verified']){
+                  $html = '<span class="badge badge-success">'.BaseStatusEnum::$CUSTOMERS['verified'].'</span>';
+                }
+                elseif($item->status == BaseStatusEnum::$CUSTOMERS['pending']){
+                  $html = '<span class="badge badge-warning">'.BaseStatusEnum::$CUSTOMERS['pending'].'</span>';
+                }
+                elseif($item->status == BaseStatusEnum::$CUSTOMERS['declined']){
+                  $html = '<span class="badge badge-danger">'.BaseStatusEnum::$CUSTOMERS['declined'].'</span>';
+                }
+                return $html;
+            })->editColumn('last_order', function ($item) {
+              return $item->latestOrder();
+            })->editColumn('last_visit', function ($item) {
+              return !is_null($item->last_visit) ? date('m/d/y', strtotime($item->last_visit)) : '-';
             });
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
@@ -173,6 +196,8 @@ class CustomerTable extends TableAbstract
             'ec_customers.is_private',
             'ec_customers.is_text',
             'ec_customers.created_at',
+            'ec_customers.status',
+            'ec_customers.last_visit',
             'ec_customers.phone_validation_error',
         ];
 
@@ -289,6 +314,30 @@ class CustomerTable extends TableAbstract
             'spend' => [
                 'name'       => 'spend',
                 'title'      => 'Spend',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'abandoned' => [
+                'name'       => 'abandoned',
+                'title'      => 'Abandoned',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'validation' => [
+                'name'       => 'validation',
+                'title'      => 'Validation',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'last_order' => [
+                'name'       => 'last_order',
+                'title'      => 'Last order',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'last_visit' => [
+                'name'       => 'last_visit',
+                'title'      => 'Last visit',
                 'class'      => 'text-left',
                 'searchable' => false
             ],

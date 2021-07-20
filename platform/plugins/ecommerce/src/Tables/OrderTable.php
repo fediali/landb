@@ -158,6 +158,7 @@ class OrderTable extends TableAbstract
 
         $order_type = $this->request()->input('order_type', false);
         $product_id = $this->request()->input('product_id', false);
+        $order_id = $this->request()->input('order_id', false);
         $user_id = $this->request()->input('user_id', false);
 
         if ($user_id) {
@@ -177,6 +178,9 @@ class OrderTable extends TableAbstract
             $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')
                 ->whereIn('ec_order_product.product_id', $getProdIds)
                 ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
+        }
+        if($order_id){
+          $query->where('ec_orders.id', $order_id);
         }
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');

@@ -5,6 +5,7 @@ namespace Theme\Landb\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -84,6 +85,7 @@ class AuthController extends Controller
     }
 
     if ($this->attemptLogin($request)) {
+
       return $this->sendLoginResponse($request);
     }
 
@@ -140,5 +142,10 @@ class AuthController extends Controller
     session()->flash('message', 'Your account is created');
 
     return redirect()->route('login');
+  }
+
+  protected function authenticated(Request $request, $user)
+  {
+    $user->update(['last_visit' => Carbon::now()]);
   }
 }
