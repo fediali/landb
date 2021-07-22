@@ -74,8 +74,9 @@ class CustomerTable extends TableAbstract
                 return Html::link(route('customer.edit', $item->id), $item->name);
             })
             ->editColumn('salesperson_id', function ($item) {
-                if ($item->salesperson_id > 0) {
-                    return $item->salesperson_id;
+                if ($item->salesperson_id) {
+                    return isset($item->salesperson) ? $item->salesperson->username : 'N/A';
+//                    return $item->salesperson->username;
                 } else {
                     return 'N/A';
                 }
@@ -247,7 +248,7 @@ class CustomerTable extends TableAbstract
                 $q->where('ec_customers.email', 'LIKE', '%' . $search_items['customer_email'] . '%');
             });
             $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
-                $q->where('ec_customers.name', 'LIKE', '%' . $search_items['manager'] . '%');
+                $q->where('ec_customers.salesperson_id',  $search_items['manager']);
             });
             $query->when(isset($search_items['status']), function ($q) use ($search_items) {
                 $q->where('ec_customers.status', $search_items['status']);
