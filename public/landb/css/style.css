@@ -1917,6 +1917,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 2200px) {
+    .navbar-brand img {
+        margin-top: -50px;
+    }
     .mt-w {
         margin-top: 45px;
     }
@@ -4059,6 +4062,7 @@ html {
   .just-head {
     font-size: 45px;
     font-weight: 600;
+    font-family: 'Northhead';
   }
 
   .hey-text {
@@ -4108,7 +4112,7 @@ html {
 
 .txt-slider-container ul, li {
     padding: 0;
-    margin: 25px 0px;
+    margin: 0px 0px;
     list-style: none;
     text-align: center;
     font-size:40px;
@@ -4231,4 +4235,15 @@ html {
 .author a {
     color: #fff;
     text-decoration: none;
+}
+
+ 
+  @font-face {
+    font-family: "Northhead";
+    src: url(https://revamp.landbw.co/public/fonts/Northead.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Madeglin";
+    src: url(https://revamp.landbw.co/public/fonts/MagdelinAlt-Regular.otf) format("truetype");
 }

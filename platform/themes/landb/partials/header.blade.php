@@ -60,7 +60,7 @@
     </div>
     <div class="pl-3 pr-3">
       <p class="text-right m-0">Welcome, <b>Ryan</b></p> 
-        <div class="topnav d-flex pt-2">
+        <div class="topnav d-flex pb-0 pt-2">
          
             <ul>
                 <li>
@@ -123,7 +123,7 @@
             </div> 
           </div>
           <div class="row">
-            <div class="col-lg-12 d-grid text-center mt-3">
+            <div class="col-lg-12 d-grid text-center">
             <div class="d-flex navbar-parent m-auto">
                 {!!
                     Menu::renderMenuLocation('main-menu', [
