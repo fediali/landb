@@ -163,7 +163,7 @@ class ProductController extends BaseController
         StoreProductTagService $storeProductTagService
     )
     {
-        dd($request->all());
+
         $product = $this->productRepository->getModel();
 
         $product = $service->execute($request, $product);
