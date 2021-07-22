@@ -54,7 +54,7 @@
 
                         <div class="col-md-4">
                             <label class="mt-4 font-bold">Search in Category:</label><br>
-                            <select class="form-control" name="prod_category" style="width: 100%">
+                            <select class="form-control select-search-full" name="prod_category" style="width: 100%">
                                 <option selected="selected" value="" disabled="">Select Category</option>
                                 @foreach($data['prod_categories'] as $key => $prod_category)
                                     <option value="{{ $key }}" {{request('prod_category') == $key ? 'selected' : ''}}>{{ $prod_category }}</option>

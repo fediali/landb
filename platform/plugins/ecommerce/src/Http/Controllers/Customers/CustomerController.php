@@ -264,8 +264,13 @@ class CustomerController extends BaseController
     {
         $customers = $this->customerRepository
             ->getModel()
-            ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
-            ->simplePaginate(5);
+            ->whereHas('detail', function ($query) use ($request) {
+                return $query->where('business_phone', 'LIKE', '%' . $request->input('keyword') . '%')
+                    ->orWhere('name', 'LIKE', '%' . $request->input('keyword') . '%')
+                    ->orWhere('email', 'LIKE', '%' . $request->input('keyword') . '%')
+                    ->orWhere('company', 'LIKE', '%' . $request->input('keyword') . '%');
+            })
+            ->simplePaginate(15);
 
         foreach ($customers as &$customer) {
             $customer->avatar_url = (string)$customer->avatar_url;

@@ -1,9 +1,40 @@
 $(document).ready(function () {
-    $('.checkk').click(function(){
-        if($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true){
+    var tag = jQuery.parseJSON($('#tag').val());
+    console.log(tag, 'asd');
+    $.each(tag, function (key, value) {
+        if (value.value == 'Pre-Order') {
+            $('.eta_pre_product').closest('.widget').show();
+        } else {
+            $('.eta_pre_product').closest('.widget').hide();
+        }
+    });
+    $('.checkk').click(function () {
+        if ($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true) {
             $('.tax-submit-btn').attr('disabled', false)
         }
     });
+
+    $('#tag').on('change', function () {
+        tag = jQuery.parseJSON($('#tag').val());
+        console.log(tag)
+        $.each(tag, function (key, value) {
+            console.log(value)
+            if (value.value == 'Pre-Order') {
+                $('.eta_pre_product').closest('.widget').show();
+            }
+        })
+    })
+    $('.tagify__tag__removeBtn').on('click', function () {
+        tag = jQuery.parseJSON($('#tag').val());
+        $.each(tag, function (key, value) {
+            if (value.value == 'Pre-Order') {
+                $('.eta_pre_product').closest('.widget').show();
+            } else {
+                $('.eta_pre_product').closest('.widget').hide();
+            }
+        })
+
+    })
 });
 
 $('.toggle-menu').click(function () {

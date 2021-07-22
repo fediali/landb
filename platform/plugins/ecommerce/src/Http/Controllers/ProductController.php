@@ -163,6 +163,7 @@ class ProductController extends BaseController
         StoreProductTagService $storeProductTagService
     )
     {
+        dd($request->all());
         $product = $this->productRepository->getModel();
 
         $product = $service->execute($request, $product);
@@ -1046,7 +1047,7 @@ class ProductController extends BaseController
                 }
 
                 foreach ($variation->variationItems as &$variationItem) {
-                    $variationItem->attribute_title = strtok($variationItem->attribute->title,'-');;
+                    $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
                 }
 
                 if ($variation->product->status != BaseStatusEnum::ACTIVE) {
