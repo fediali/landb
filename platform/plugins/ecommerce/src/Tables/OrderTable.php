@@ -219,7 +219,7 @@ class OrderTable extends TableAbstract
                 $query->whereDate('ec_orders.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d'));
             }
             $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
-                $q->where('ec_orders.status', $search_items['order_status']);
+                $q->whereIn('ec_orders.status', $search_items['order_status']);
             });
             $query->when(isset($search_items['order_type']), function ($q) use ($search_items) {
                 $q->where('ec_orders.order_type', $search_items['order_type']);
