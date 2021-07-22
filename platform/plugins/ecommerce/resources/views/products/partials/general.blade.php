@@ -42,6 +42,21 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="text-title-field">
+                <span>Cost Price</span>
+            </label>
+            <div class="next-input--stylized">
+                <span
+                    class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
+                <input name="cost_price"
+                       class="next-input input-mask-number sale-price next-input--invisible"
+                       value="{{ old('cost_price', $product ? $product->cost_price : ($originalProduct->cost_price ?? null)) }}"
+                       type="text">
+            </div>
+        </div>
+    </div>
     <div class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
         <div class="form-group">
             <label class="text-title-field">{{ trans('plugins/ecommerce::products.form.date.start') }}</label>

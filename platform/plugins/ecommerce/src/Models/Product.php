@@ -78,6 +78,7 @@ class Product extends BaseModel
         'usa_made',
         'ptype',
         'eta_pre_product',
+        'cost_price',
         'creation_date'
     ];
 
