@@ -27,18 +27,19 @@
         </a>
         </div>
 </div>
-<div class="row mt-5 mb-5">
+<div class="row mt-5 mb-3">
     <div class="col-lg-2"></div>
     <div class="col-lg-8 text-center">
-        <h2>
+        <h2 class="font-north western-txt">
             Western Wholesale Clothing For Everyone
         </h2>
-        <p class="mt-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,</p>
+        <p class="mt-2 font-madeg ft-20">At Lucky & Blessed, we believe that everyone deserves to have stylish clothing at an affordable price. We are a Texas-based lifestyle brand and we are rooted in the latest trends in western wholesale clothing, including, comfort fashion, boho, and, of course, cowgirl!
+</p>
     </div>
     <div class="col-lg-2"></div>
 </div>
 <section>
-<div class="row mt-5 mb-5">
+<div class="row mt-2 mb-5">
     <div class="col-lg-12">
         <h2 class="text-center just-head">
             This Just In
@@ -134,7 +135,7 @@
 </section>
     <div class="row">
         <div class="col-lg-12">
-        <h4 class="text-center"> BROWSE COLLECTION </h4> 
+        <h4 class="text-center font-quiche mb-2"> BROWSE COLLECTION </h4> 
         </div>
     </div> 
     <div class="d-flex slider-t-main">
@@ -183,7 +184,7 @@
     <div class="col-md-6"></div>
     <div class="col-md-6"> 
            
-            <p class="mt-3">
+            <p class="mt-3 font-madeg ft-20">
             We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide fashion-forward, comfortable styles that give a nod to the American west. We are confident our clothing, accessories, and home goods will satisfy the needs of fiercely independent, unique customers of all ages, shapes, and sizes. We pride ourselves on collections that include luxe denim, bold custom vintage prints with artistic lace, and rich, on-trend hues. 
  <br />
             Most importantly, we value the creative, exceptional retailers across the US and internationally that put our brand in the hands of those customers. L&B is a western apparel wholesale distributor that is passionate about developing authentic products that will help your business stand out. We promise to provide excellent customer service and accountability. We are partners in your success.
@@ -222,7 +223,7 @@
     </div>
     <div class="col-md-6"> 
         <h1 class="revealUp pro-text" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Products </h1> 
-            <p class="mt-3">
+            <p class="mt-3 font-madeg ft-20">
             Our main offering is western wholesale clothing, of course, but we pride ourselves in providing a creative, quality range of products to cover the western lifestyle. We have accessories, handbags, and home products in addition to our clothing line, which features women’s denim, dresses, outerwear, loungewear, and more in regular and plus sizes. We also offer an extensive kid’s line of clothes. 
             </p>
     </div>
@@ -231,12 +232,12 @@
 </section>
 <div class="row">
     <div class="col-lg-12">
-    <h1 class="revealUp pro-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1> 
+    <h1 class="mt-5 revealUp pro-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1> 
  <img src="{{ asset('landb/img/pr4.png') }}" alt="Product image" loading="lazy" class="mt-2 w-100 lazyloaded" >
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
-        <p class="text-center mt-2">
+        <p class="text-center mt-2 font-madeg ft-20">
         L&B is passionate about developing creative, quality western wholesale boutique clothing that will help your business stand out. We are a family-owned business, which extends to our team and our customers. We promise to provide excellent customer service and accountability.<br /> 
         You will find that all our products are inclusive of all ages, shapes, and sizes. We believe in celebrating diversity by providing our clients with clothing solutions that work for everyone. We believe that every person who wears our garments should feel comfortable and stylish.  
         </p>
