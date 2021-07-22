@@ -109,6 +109,7 @@
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script src="{{ asset('landb/js/custom.js') }}"></script>
 <script>
 var demoTrigger = document.querySelector('.demo-trigger');
 
