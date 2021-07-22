@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="font-bold">SEC:</label>
+                            <label class="mt-4 font-bold">SEC:</label>
                             <input type="text" name="prod_sec" class="form-control" value="{{request('prod_sec')}}">
                         </div>
 

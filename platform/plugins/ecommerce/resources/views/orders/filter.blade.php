@@ -60,8 +60,7 @@
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Manager:</label>
-{{--                        <input type="text" name="manager" class="form-control" value="{{request('manager')}}">--}}
-                        {!! Form::select('manager', get_salesperson(),  request('manager'), ['class' => 'form-control','placeholder'=>'Select Manager']) !!}
+                        {!! Form::select('manager', get_salesperson(),  request('manager'), ['class' => 'form-control select-search-full','placeholder'=>'Select Manager']) !!}
                     </div>
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Type:</label>

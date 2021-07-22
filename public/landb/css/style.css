@@ -4163,11 +4163,11 @@ html {
      font-size: 30px;
 }
 .dp-scroll-text :nth-child(2){
-    opacity: 0.75; transform: translate(0%, 100%) matrix(0.9, 0, 0, 0.9, 0, 0) ;  
-     font-size: 70px;
+    opacity: 0.75; transform: translate(0%, 50%) matrix(0.10, 0, 0, 0.10, 0, 0) ;  
+     font-size: 50px;
 }
 .dp-scroll-text :nth-child(3){
-    opacity: 0.5; transform: translate(0%, 200%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ; 
+    opacity: 0.5; transform: translate(0%, 150%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ; 
 }
 .dp-scroll-text :nth-child(4){
     opacity: 0.25; transform: translate(0%, 300%) matrix(0.7, 0, 0, 0.7, 0, 0) scale(0.7, 0.7) ; 
@@ -4191,6 +4191,7 @@ html {
 }
 .dp-scroll-text .dp-animate-1{
     animation-name:move1;
+  
           }
 .dp-scroll-text .dp-animate-2{
     animation-name:move2;

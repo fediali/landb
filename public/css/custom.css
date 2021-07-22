@@ -1146,3 +1146,7 @@
 .c-datepicker-date-range-picker-panel__wrap { 
   padding: 0px 10px !important;
 }
+
+.mt-quick-search {
+  margin-top: 15px;
+}
