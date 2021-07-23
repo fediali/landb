@@ -9,6 +9,7 @@ use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
 use Botble\ACL\Models\Role;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
@@ -1278,10 +1279,14 @@ class OrderController extends BaseController
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
-            $spec_file_name = time() . rand(1, 100) . '.' . $type;
-            $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
+            $move = $request->file('file')->move(public_path('storage/importorders'), $request->file('file')->getClientOriginalName());
             $order = Excel::toCollection(new OrderImportFile(), $move);
-
+            $filecheck = OrderImportUpload::where('file', $move)->first();
+            if ($filecheck != null) {
+                return $response
+                    ->setError()
+                    ->setMessage('File Already Exist');
+            }
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
@@ -1337,7 +1342,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['style_no'])->first();
+                        $product = Product::where(['sku' => $row['style_no'], 'status' => BaseStatusEnum::ACTIVE])->first();
 
                         if ($product) {
                             //count pack quantity for product
@@ -1473,7 +1478,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['style'])->first();
+                        $product = Product::where(['status' => BaseStatusEnum::ACTIVE, 'sku' => $row['style']])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1552,6 +1557,7 @@ class OrderController extends BaseController
                     }
                 }
             } else {
+
                 foreach ($order as $od) {
 
                     foreach ($od as $row) {
@@ -1560,6 +1566,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
 
                         $customer = Customer::where(['phone' => $row['phonenumber']])->first();
                         if ($customer == null) {
@@ -1604,7 +1611,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['styleno'])->first();
+                        $product = Product::where(['sku' => $row['styleno'], 'status' => BaseStatusEnum::ACTIVE])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1645,6 +1652,7 @@ class OrderController extends BaseController
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
+
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;

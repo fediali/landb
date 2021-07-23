@@ -41,7 +41,7 @@ class BaseStatusEnum extends Enum
         'Active'   => self::ACTIVE,
         'Hidden'   => self::HIDDEN,
         'Disabled' => self::DISABLED,
-        'Published' => self::PUBLISHED,
+        //'Published' => self::PUBLISHED,
     ];
     public static $SCHEDULE = [
         'schedule'  => self::SCHEDULE,
