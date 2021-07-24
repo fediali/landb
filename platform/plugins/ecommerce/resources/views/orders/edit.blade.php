@@ -663,13 +663,7 @@
                                         <li class="ws-nm">
                                             <span
                                                 class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
-                                        </li>
-<br>
-                                        <li class="ws-nm">
-                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                    data-target="#modal_split_order">Split Order
-                                            </button>
-                                        </li>
+                                        </li> 
                                     </ul>
                                 </div>
                             </div>
@@ -677,6 +671,9 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#modal_split_order">Split Order
+                                </button>
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
                                    class="btn btn-warning">Edit Order</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
@@ -691,13 +688,13 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-
+                                <div class="d-flex"> 
                                 <input class="form-control" type="text" id="salesperson_id"
                                        value="{{@$order->salesperson->username}}"
                                        disabled>
-                                <i class="fa fa-plus" data-toggle="modal"
+                                <i style="padding: 10px; background: #bbb;" class="fa fa-plus" data-toggle="modal"
                                    data-target="#salesrep"></i>
-
+                                </div> 
                                 <input type="hidden" id="customer_id" value="{{$order->user_id}}">
                                 <form action="{{ route('orders.edit', $order->id) }}">
                                     <label class="text-title-field">Tracking No.</label>

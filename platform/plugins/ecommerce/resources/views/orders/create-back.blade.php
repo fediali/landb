@@ -6,12 +6,8 @@
             :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
             :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
             :payment_methods="{{ json_encode(get_payment_methods()) }}">
-        </create-order>
-    </div>
-
-    <div class="card-area wrapper-content mb20">
-        <div>
-            <div class="wrapper-content bg-gray-white mb20">
+        </create-order> 
+            <div style="width: 20%; float: right;" class="wrapper-content bg-gray-white mb20">
                 <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse" data-target="#demo">
                     Credit Card
                 </button>
@@ -89,8 +85,11 @@
                         <button type="submit" class="btn btn-info">Create Payment</button>
                     </form>
                 </div>-->
-            </div>
-        </div>
+            </div> 
+    </div>
+
+    <div class="card-area wrapper-content mb20">
+        
     </div>
 
 @stop

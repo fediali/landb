@@ -86,24 +86,25 @@
                         <input type="number" name="spend" class="form-control" step="0.1" value="{{request('spend')}}">
                     </div>
                 </div>
-
-                <div class="col-md-12">
-                    <div class="d-flex">
-                        <div class="col-md-4">
-                            <label class="font-bold">No Sales Rep:</label>
+                <div class="row">
+                        <div class="col-md-4 mt-3">
+                            <div class="d-flex">
                             <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="no_sales_rep"
                                    class="form-control" value="1" {{request('no_sales_rep') == 1 ? 'checked' : ''}}>
+                            <label class="font-bold">No Sales Rep:</label>
+                            </div>
+                          
                             <p class="mr-1"></p>
                         </div>
-                        <div class="col-md-4 ">
-                            <label class="font-bold">Merged Account:</label>
+                        <div class="col-md-4 mt-3">
+                        <div class="d-flex">
                             <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="merged_account"
                                    class="form-control" value="1" {{request('merged_account') == 1 ? 'checked' : ''}}>
-                            <p class="mr-1"></p>
+                        <label class="font-bold">Merged Account:</label>
+                        <p class="mr-1"></p>
+                        </div> 
                         </div>
-                    </div>
-                </div>
-
+                </div>  
                 <div class="col-md-4">
                     <label class="mt-4 font-bold">Order Report:</label><br>
                     {{--{{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}--}}

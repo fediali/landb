@@ -4030,6 +4030,7 @@ html {
 
   .top-search {
     background: #fff;
+    z-index: 9999;
     padding: 8px;
     position: absolute;
     right: 90px;
@@ -4297,3 +4298,15 @@ html {
     text-align: left !important;
     font-size: 17px !important;
   }
+
+  #myModal {
+      z-index: 9999;
+  }
+
+  #menu img {
+      height: 65px;
+  }
+
+  #menu .menu-footer ul li { 
+    font-size: 20px !important;
+}

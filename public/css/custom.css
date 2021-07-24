@@ -1044,7 +1044,7 @@
 }
 
 #modal-adv-search {
-  z-index: 100000;
+  z-index: 9999;
 }
 #modal-adv-search .close {
   position: absolute;
