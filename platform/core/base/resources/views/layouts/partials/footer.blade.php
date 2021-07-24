@@ -114,10 +114,12 @@
 
 
 <script>
+
+    var address = '';
+    var customer = '';
+
     $(document).ready(function () {
 
-        var address = '';
-        var customer = '';
         $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
@@ -152,12 +154,12 @@
             $('#merge_customer_modal').modal('toggle');
         });
 
-
-        payment_method()
+        payment_method();
 
         $('.method').on('change', function () {
             payment_method();
-        })
+        });
+
         var card = $("select.card_list option:selected").val();
         $('.payment_id').val(card);
         if (card == 0) {
@@ -237,6 +239,7 @@
         tokenizeButton.disabled = billing === 'Select Address';
         console.log(message);
     });
+
     $(document).on('click', '.credit_card', function () {
         $('select#billing_address').empty();
         var baddress = [];
@@ -248,8 +251,9 @@
         } else {
             $('.card_customer_select').hide();
             $('.card_fields').show();
+
             $.ajax({
-                url: "{{ route('customers.get-customer-addresses','') }}" + "/" + customer_id,
+                url: "{{ url('/admin/customers/get-customer-addresses') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
                     $.each(data.data, function (addressID, address) {
@@ -259,34 +263,32 @@
                                 text: address.address
                             };
                             console.log(address);
-                            html = `<option value="${address.id}">
-                                ${address.address}
-                            </option>`
+                            let html = `<option value="${address.id}"> ${address.address} </option>`;
                             $('select#billing_address').append(html);
                         }
-
                     });
+
+                    getCustomer();
+                    getCards();
+                    getbillingadress();
+
                 },
                 error: function (request, status, error) {
                     toastr['warning']('No Address', 'Reading Error');
                 }
             });
-            setTimeout(function () {
-                getbillingadress();
-                getCustomer();
-                getCards();
-            }, 500);
         }
-
     });
 
     function getbillingadress() {
+        console.log($("#billing_address option:selected").val(), "===");
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
         $.ajax({
-            url: "{{ route('customers.get-addresses','') }}" + "/" + $("#billing_address option:selected").val(),
+            url: "{{ url('/admin/customers/get-addresses') }}" + "/" + $("#billing_address option:selected").val(),
             type: 'get',
             success: function (data) {
+                console.log(data, "=========");
                 address = data;
             },
             error: function (request, status, error) {
@@ -298,7 +300,7 @@
     function getCustomer() {
         console.log($('#customer_id').val());
         $.ajax({
-            url: "{{ route('customers.get-customer','') }}" + "/" + $('#customer_id').val(),
+            url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 customer = data;
@@ -314,7 +316,7 @@
         var htmls = '';
         $('#card_id').empty();
         $.ajax({
-            url: "{{ route('customers.get-cards','') }}" + "/" + $('#customer_id').val(),
+            url: "{{ url('/admin/customers/get-cards') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 if (data.data !== 0) {
@@ -370,6 +372,7 @@
         loaderElement.classList.add('visible');
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
+        console.log('customer address', address)
         var extraDetails = {
             firstname: customer.data.detail.first_name,
             lastname: customer.data.detail.last_name,
@@ -378,15 +381,15 @@
             month: month,
             year: year,
             phone: customer.data.detail.phone,
-            address_1: address.data.address,
-            address_city: address.data.city,
-            address_state: address.data.state,
-            address_zip: address.data.zip_code,
-            address_country: address.data.country,
+            address_1: address.data?.address,
+            address_city: address.data?.city,
+            address_state: address.data?.state,
+            address_zip: address.data?.zip_code,
+            address_country: address.data?.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
         };
-        console.log(extraDetails)
+        //console.log(extraDetails)
         // call tokenize api
         fattJs.tokenize(extraDetails).then((result) => {
             console.log(result);
@@ -396,8 +399,7 @@
                 functionAddCard(result, customer.data.id);
             }
             loaderElement.classList.remove('visible');
-        })
-            .catch(err => {
+        }).catch(err => {
                 console.log(err)
                 errorElement.textContent = err.message;
                 errorElement.classList.add('visible');
