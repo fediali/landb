@@ -8,6 +8,7 @@ use Botble\ACL\Models\User;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
 use Botble\Base\Traits\EnumCastable;
+use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class Product extends BaseModel
 {
@@ -75,6 +77,8 @@ class Product extends BaseModel
         'new_label',
         'usa_made',
         'ptype',
+        'eta_pre_product',
+        'cost_price',
         'creation_date'
     ];
 
@@ -84,7 +88,8 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
-        'product_slug'
+        'product_slug',
+        'sold_qty'
     ];
 
     /**
@@ -141,6 +146,7 @@ class Product extends BaseModel
             'category_id'
         );
     }
+
     /**
      * @return BelongsToMany
      */
@@ -447,7 +453,7 @@ class Product extends BaseModel
      */
     public function getProductSlugAttribute()
     {
-        $slug = $this->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.reference_id', $this->id)->where('slugs.prefix', '=' ,'products')->pluck('key')->first();
+        $slug = $this->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.reference_id', $this->id)->where('slugs.prefix', '=', 'products')->pluck('key')->first();
         return $slug;
     }
 
@@ -605,7 +611,37 @@ class Product extends BaseModel
             ->notExpired();
     }
 
-    public function inventory_history(){
-      return $this->hasMany(InventoryHistory::class, 'parent_product_id');
+    public function inventory_history()
+    {
+        return $this->hasMany(InventoryHistory::class, 'parent_product_id');
+    }
+
+    public function getSoldQtyAttribute()
+    {
+        $getProdIds = ProductVariation::where('configurable_product_id', $this->id)->pluck('product_id')->all();
+        $getProdIds[] = $this->id;
+        $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+            ->whereIn('product_id', $getProdIds)
+            ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+            ->sum('qty');
+        return ($soldQty > 0) ? $soldQty : 0;
+    }
+
+    public function inCart()
+    {
+        $variations = $this->variations()->pluck('product_id');
+        $orders = Order::where('ec_orders.is_finished', 0)->join('ec_order_product as ecp', 'ecp.order_id', 'ec_orders.id')->whereIn('ecp.product_id', $variations);
+
+        $order_ids = $orders->select('ec_orders.*')->groupBy('ec_orders.id')->pluck('ec_orders.id');
+        $sumdata = $orders->select(DB::raw('sum(ecp.qty) as sum'))->get();
+        $sum = 0;
+        foreach ($sumdata as $data) {
+            $sum = $sum + $data->sum;
+        }
+
+        return [
+            'order_ids' => $order_ids,
+            'sum'       => $sum
+        ];
     }
 }

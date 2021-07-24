@@ -1,9 +1,9 @@
 <div class="top-menu">
     <ul class="nav navbar-nav float-right">
         @auth
-            <li>
+            <li class="dropdown">
                 <form method="get" action="{{route('orders.quick-search')}}">
-                    <input type="text" name="quick_search">
+                    <input type="text" class="mt-quick-search" name="quick_search">
                 </form>
             </li>
             @if (BaseHelper::getAdminPrefix() != '')

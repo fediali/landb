@@ -104,11 +104,12 @@
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
-<script src="{{ asset('landb/js/custom.js') }}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script src="{{ asset('landb/js/custom.js') }}"></script>
 <script>
 var demoTrigger = document.querySelector('.demo-trigger');
 
@@ -407,23 +408,23 @@ new Luminous(demoTrigger);
     }
   })
 
-  $(document).ready(function(){ 
+  $(document).ready(function(){
  $('.welcomeDiv').hide();
  $('.addTobag').on('click',function(){
    var id = $(this).data('id');
      $('.welcomeDiv'+id).toggle();
- })  
+ })
  $('.product-tile__hide-variants').on('click',function(){
     var id = $(this).data('id');
      $('.welcomeDiv'+id).hide();
- })  
+ })
 })
 
 </script>
 <script>
 
-  $(document).ready(function(){ 
-   
+  $(document).ready(function(){
+
   $(".search-custom").on('click',function(){
     $("#top-sear").show();
   });
@@ -436,7 +437,7 @@ new Luminous(demoTrigger);
     $(".gallery .full").hover(
   function () {
     $(".detail-magnify").addClass('detail');
-  }, 
+  },
   function () {
     $(".detail-magnify").removeClass('detail');
   }
@@ -472,7 +473,7 @@ new Luminous(demoTrigger);
     <script>
       toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
-@endif 
+@endif
 </body>
 
 </html>

@@ -60,7 +60,11 @@
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Manager:</label>
-                        <input type="text" name="manager" class="form-control" value="{{request('manager')}}">
+                        {!! Form::select('manager', get_salesperson(),  request('manager'), ['class' => 'form-control select-search-full','placeholder'=>'Select Manager']) !!}
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <label class="font-bold">Type:</label>
+                        {!! Form::select('order_type', \Botble\Ecommerce\Models\Order::$ORDER_TYPES,  request('order_type'), ['class' => 'form-control','placeholder'=>'Select Status']) !!}
                     </div>
 
                     <div class="col-md-4 mt-3">
@@ -91,7 +95,7 @@
                         <div>
                             @foreach($data['order_statuses'] as $order_status)
                                 <div style="display:inline-flex" class="chk-orders">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="order_status" class="form-control" value="{{strtolower($order_status)}}" {{request('order_status') == strtolower($order_status) ? 'checked' : ''}}>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="order_status[]" class="form-control" value="{{strtolower($order_status)}}" {{request('order_status') == strtolower($order_status) ? 'checked' : ''}}>
                                     <p class="mr-1">{{$order_status}}</p>
                                 </div>
                             @endforeach

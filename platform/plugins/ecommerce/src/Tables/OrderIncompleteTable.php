@@ -104,6 +104,16 @@ class OrderIncompleteTable extends OrderTable
             ->with(['user'])
             ->where('ec_orders.is_finished', 0);
 
+        $order_id = $this->request()->input('order_id', false);
+        $order_ids = $this->request()->input('order_ids', false);
+
+        if($order_id){
+          $query->where('ec_orders.id', $order_id);
+        }
+        if($order_ids){
+          $query->whereIn('ec_orders.id', json_decode($order_ids));
+        }
+
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 

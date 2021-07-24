@@ -28,7 +28,7 @@ class ProductForm extends FormAbstract
      */
     public function buildForm()
     {
-      $this->formHelper->addCustomField('inventory_history', InventoryHistoryDetail::class);
+        $this->formHelper->addCustomField('inventory_history', InventoryHistoryDetail::class);
         $selectedCategories = [];
         if ($this->getModel()) {
             $selectedCategories = $this->getModel()->categories()->pluck('category_id')->all();
@@ -126,8 +126,9 @@ class ProductForm extends FormAbstract
                 'id'            => $productId ? $productId : 0
             ])
             ->add('creation_date', 'date', [
-                'label' => 'Creation date',
-                'label_attr'    => ['class' => 'control-label'],
+                'label'      => 'Creation date',
+                'label_attr' => ['class' => 'control-label'],
+                'default_value' => now(),
             ])
             ->add('is_featured', 'onOff', [
                 'label'         => trans('core/base::forms.is_featured'),
@@ -173,8 +174,16 @@ class ProductForm extends FormAbstract
                     'placeholder' => trans('plugins/ecommerce::products.form.write_some_tags'),
                     'data-url'    => route('product-tag.all'),
                 ],
+            ])->add('eta_pre_product', 'date', [
+                'label'      => 'ETA',
+                'label_attr' => ['class' => 'control-label eta_pre_product'],
+                'attr'       => [
+                    'class' => 'eta_pre_product',
+                ],
+
             ])
             ->setBreakFieldPoint('status');
+
 
         if (empty($productVariations) || $productVariations->isEmpty()) {
             $this

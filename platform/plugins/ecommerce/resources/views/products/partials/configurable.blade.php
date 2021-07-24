@@ -1,9 +1,9 @@
 <div id="product-variations-wrapper">
-    {{--<div class="variation-actions">
-        <a href="#" class="btn-trigger-select-product-attributes" data-target="{{ route('products.store-related-attributes', $product->id) }}">{{ trans('plugins/ecommerce::products.edit_attribute') }}</a>
+    <div class="variation-actions">
+{{--        <a href="#" class="btn-trigger-select-product-attributes" data-target="{{ route('products.store-related-attributes', $product->id) }}">{{ trans('plugins/ecommerce::products.edit_attribute') }}</a>--}}
         <a href="#" class="btn-trigger-add-new-product-variation" data-target="{{ route('products.add-version', $product->id) }}">{{ trans('plugins/ecommerce::products.add_new_variation') }}</a>
-        <a href="#" class="btn-trigger-generate-all-versions" data-target="{{ route('products.generate-all-versions', $product->id) }}">{{ trans('plugins/ecommerce::products.generate_all_variations') }}</a>
-    </div>--}}
+{{--        <a href="#" class="btn-trigger-generate-all-versions" data-target="{{ route('products.generate-all-versions', $product->id) }}">{{ trans('plugins/ecommerce::products.generate_all_variations') }}</a>--}}
+    </div>
     @if (!$productVariations->isEmpty())
         <table class="table table-hover-variants">
             <thead>
@@ -16,6 +16,7 @@
                     <th>{{ $attributeSet->title }}</th>
                 @endforeach
                 <th>{{ trans('plugins/ecommerce::products.form.price') }}</th>
+                <th>Cost</th>
                 <th>Qty</th>
                 <th>SKU</th>
                 <th>UPC</th>
@@ -31,7 +32,9 @@
                 <tr>
                     <td>
                         <div class="wrap-img-product">
-                            <img src="{{ RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" alt="{{ trans('plugins/ecommerce::products.form.image')  }}">
+                            <img
+                                src="{{ RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"
+                                alt="{{ trans('plugins/ecommerce::products.form.image')  }}">
                         </div>
                     </td>
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->sortBy('attribute_set_id') as $key => $item)
@@ -53,6 +56,7 @@
                             @endif
                         @endif
                     </td>
+                    <td>{{$variation->product->cost_price}}</td>
                     <td>{{$variation->product->quantity}}</td>
                     <td>{{$variation->product->sku}}</td>
                     <td>{{$variation->product->upc}}</td>
@@ -66,8 +70,8 @@
                     </td>
                     <td style="width: 180px;" class="text-center">
                         <a href="#" class="btn btn-info btn-trigger-edit-product-version"
-                                data-target="{{ route('products.update-version', [$variation->id]) }}"
-                                data-load-form="{{ route('products.get-version-form', [$variation->id]) }}"
+                           data-target="{{ route('products.update-version', [$variation->id]) }}"
+                           data-load-form="{{ route('products.get-version-form', [$variation->id]) }}"
                         >{{ trans('plugins/ecommerce::products.edit_variation_item') }}</a>
                         <a href="#" data-target="{{ route('products.delete-version', [$variation->id]) }}"
                            class="btn-trigger-delete-version btn btn-danger">{{ trans('plugins/ecommerce::products.delete') }}</a>

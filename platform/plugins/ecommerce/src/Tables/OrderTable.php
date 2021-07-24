@@ -72,6 +72,8 @@ class OrderTable extends TableAbstract
             ->eloquent($this->query())
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
+            })->editColumn('id', function ($item) {
+                return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '</div>');
 
             })
             ->editColumn('order_type', function ($item) {
@@ -114,7 +116,7 @@ class OrderTable extends TableAbstract
             ->addColumn('operations', function ($item) {
                 $html = '';
                 if (Auth::user()->hasPermission('orders.edit')) {
-                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED])) {
+                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED, 'shipping complete' ])) {
                         $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
                     }
                     $html .= '<a href="' . route('orders.edit', $item->id) . '" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
@@ -139,11 +141,13 @@ class OrderTable extends TableAbstract
             'ec_orders.user_id',
             'ec_orders.created_at',
             'ec_orders.amount',
+            'ec_orders.platform',
             'ec_orders.tax_amount',
             'ec_orders.currency_id',
             'ec_orders.shipping_amount',
             'ec_orders.payment_id',
             'ec_orders.salesperson_id',
+            'ec_orders.order_type',
         ];
 
         $query = $model
@@ -154,6 +158,7 @@ class OrderTable extends TableAbstract
 
         $order_type = $this->request()->input('order_type', false);
         $product_id = $this->request()->input('product_id', false);
+        $order_id = $this->request()->input('order_id', false);
         $user_id = $this->request()->input('user_id', false);
 
         if ($user_id) {
@@ -173,6 +178,9 @@ class OrderTable extends TableAbstract
             $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')
                 ->whereIn('ec_order_product.product_id', $getProdIds)
                 ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
+        }
+        if($order_id){
+          $query->where('ec_orders.id', $order_id);
         }
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
@@ -211,7 +219,10 @@ class OrderTable extends TableAbstract
                 $query->whereDate('ec_orders.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d'));
             }
             $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
-                $q->where('ec_orders.status', $search_items['order_status']);
+                $q->whereIn('ec_orders.status', $search_items['order_status']);
+            });
+            $query->when(isset($search_items['order_type']), function ($q) use ($search_items) {
+                $q->where('ec_orders.order_type', $search_items['order_type']);
             });
             $query->when(isset($search_items['payment_method']), function ($q) use ($search_items) {
                 $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
@@ -225,6 +236,9 @@ class OrderTable extends TableAbstract
             });
             $query->when(isset($search_items['coupon_code']), function ($q) use ($search_items) {
                 $q->where('ec_orders.coupon_code', $search_items['coupon_code']);
+            });
+            $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
+                $q->where('ec_orders.salesperson_id', $search_items['manager']);
             });
         }
 

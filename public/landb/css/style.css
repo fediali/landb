@@ -1917,6 +1917,12 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 2200px) {
+    .western-txt {
+        font-size: 44px !important;
+    }
+    .navbar-brand img {
+        margin-top: -50px;
+    }
     .mt-w {
         margin-top: 45px;
     }
@@ -4057,19 +4063,20 @@ html {
   }
   
   .just-head {
-    font-size: 45px;
-    font-weight: 600;
+    font-size: 60px;
+    font-family: 'NorthHead';
   }
 
   .hey-text {
-    font-weight: 800;
     font-size: 70px;
+    font-family: 'NorthHead';
   }
 
   .pro-text {
-    font-weight: 800;
-    font-size: 35px;
+    font-size: 45px;
     margin-top: 150px;
+    font-family: 'NorthHead';
+
   }
 
   .t-one {
@@ -4108,7 +4115,7 @@ html {
 
 .txt-slider-container ul, li {
     padding: 0;
-    margin: 25px 0px;
+    margin: 0px 0px;
     list-style: none;
     text-align: center;
     font-size:40px;
@@ -4135,7 +4142,7 @@ html {
 }
 .dp-scroll-text p {
     margin: 0px;
-    font-size: 50px;
+    font-size: 65px;
     text-align: center;
     color: #000;
     position: absolute;
@@ -4146,6 +4153,7 @@ html {
     opacity: 0;
     margin-top: 0;
     text-transform: capitalize;
+    font-family: "Northhead" !important; 
 }
 .dp-scroll-text {
     height: 350px;
@@ -4155,11 +4163,11 @@ html {
      font-size: 30px;
 }
 .dp-scroll-text :nth-child(2){
-    opacity: 0.75; transform: translate(0%, 100%) matrix(0.9, 0, 0, 0.9, 0, 0) ;  
-     font-size: 40px;
+    opacity: 0.75; transform: translate(0%, 50%) matrix(0.10, 0, 0, 0.10, 0, 0) ;  
+     font-size: 50px;
 }
 .dp-scroll-text :nth-child(3){
-    opacity: 0.5; transform: translate(0%, 200%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ; 
+    opacity: 0.5; transform: translate(0%, 150%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ; 
 }
 .dp-scroll-text :nth-child(4){
     opacity: 0.25; transform: translate(0%, 300%) matrix(0.7, 0, 0, 0.7, 0, 0) scale(0.7, 0.7) ; 
@@ -4173,7 +4181,7 @@ html {
 .dp-animate-3,
 .dp-animate-4{
  opacity: 1;
- animation-duration: 2s;
+ animation-duration: 1s;
  animation-fill-mode: both;
  animation-timing-function: linear;
 }
@@ -4183,6 +4191,7 @@ html {
 }
 .dp-scroll-text .dp-animate-1{
     animation-name:move1;
+  
           }
 .dp-scroll-text .dp-animate-2{
     animation-name:move2;
@@ -4232,3 +4241,59 @@ html {
     color: #fff;
     text-decoration: none;
 }
+
+ 
+  /* @font-face {
+    font-family: "Northhead";
+    src: url(//revamp.landbw.co/public/fonts/Northead.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Madeglin";
+    src: url(//revamp.landbw.co/public/fonts/MagdelinAlt-Regular.otf) format("truetype");
+} */
+
+@font-face {
+    font-family: "Northhead";
+    src: url("../fonts/Northead.otf") format("otf"), url("../fonts/Northead.ttf") format("truetype");
+  }
+  
+@font-face {
+    font-family: "Madeglin";
+    src: url("../fonts/MagdelinAlt-Regular.otf") format("truetype");
+  }
+ 
+  @font-face {
+    font-family: "Boulden";
+    src: url("../fonts/BouldenRegular.otf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Quiche";
+    src: url("../fonts/QuicheFlare-Regular.otf") format("truetype");
+  }
+
+  .font-north {
+    font-family: "Northhead" !important; 
+  }
+
+  .font-madeg {
+    font-family: "Madeglin" !important; 
+  }
+
+  .font-boulden {
+    font-family: "Boulden" !important; 
+  }
+
+  .font-quiche {
+    font-family: "Quiche" !important; 
+  }
+
+  .ft-20 {
+    font-size: 20px !important;
+  }
+
+  .footer_sec ul li{
+    text-align: left !important;
+    font-size: 17px !important;
+  }

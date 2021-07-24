@@ -9,7 +9,8 @@
                             <div class="ui-banner ui-banner--status-warning">
                                 <div class="ui-banner__ribbon">
                                     <svg class="svg-next-icon svg-next-icon-size-20">
-                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#alert-circle"></use>
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                             xlink:href="#alert-circle"></use>
                                     </svg>
                                 </div>
                                 <div class="ui-banner__content">
@@ -37,13 +38,16 @@
                                 </div>
                                 <div class="mt20">
                                     @if ($order->shipment->id)
-                                        <svg class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-orders"></use>
+                                        <svg
+                                            class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="#next-orders"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @else
                                         <svg class="svg-next-icon svg-next-icon-size-16 svg-next-icon-gray">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-order-unfulfilled-16"></use>
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="#next-order-unfulfilled-16"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @endif
@@ -130,12 +134,14 @@
                                                             <li class="simple-note">
                                                                 <a>
                                                                     <span>{{ $orderProduct->qty }}</span>
-                                                                    <span class="text-lowercase"> {{ trans('plugins/ecommerce::order.completed') }}</span>
+                                                                    <span
+                                                                        class="text-lowercase"> {{ trans('plugins/ecommerce::order.completed') }}</span>
                                                                 </a>
                                                                 <ul class="dom-switch-target line-item-properties small">
                                                                     <li class="ws-nm">
                                                                         <span class="bull">↳</span>
-                                                                        <span class="black">{{ trans('plugins/ecommerce::order.shipping') }} </span>
+                                                                        <span
+                                                                            class="black">{{ trans('plugins/ecommerce::order.shipping') }} </span>
                                                                         <a class="text-underline bold-light"
                                                                            target="_blank"
                                                                            title="{{ $order->shipping_method_name }}"
@@ -143,8 +149,10 @@
                                                                     </li>
                                                                     <li class="ws-nm">
                                                                         <span class="bull">↳</span>
-                                                                        <span class="black">{{ trans('plugins/ecommerce::order.warehouse') }}</span>
-                                                                        <span class="bold-light">{{ $order->shipment->store->name ?? $defaultStore->name }}</span>
+                                                                        <span
+                                                                            class="black">{{ trans('plugins/ecommerce::order.warehouse') }}</span>
+                                                                        <span
+                                                                            class="bold-light">{{ $order->shipment->store->name ?? $defaultStore->name }}</span>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -282,6 +290,11 @@
                                                 <textarea class="ui-text-area textarea-auto-height" name="description"
                                                           rows="3"
                                                           placeholder="{{ trans('plugins/ecommerce::order.add_note') }}">{{ $order->description }}</textarea>
+                                                <label
+                                                    class="text-title-field">Customer Notes</label>
+                                                <textarea class="ui-text-area textarea-auto-height" name="notes"
+                                                          rows="3"
+                                                          placeholder="Customer Notes">{{ $order->notes }}</textarea>
                                                 <div class="mt10">
                                                     <button type="button"
                                                             class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
@@ -566,6 +579,18 @@
                 </div>
                 <div class="flexbox-layout-section-secondary mt20">
                     <div class="ui-layout__item">
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <?php
+                                $next = $order->nextOrder();
+                                $previous = $order->previousOrder();
+                                ?>
+                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default" {{ is_null($previous) ? 'disabled' : '' }}>Previous Order</a>&nbsp;
+                                <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default" {{ is_null($next) ? 'disabled' : '' }}>Next Order</a>&nbsp;
+                            </div>
+                        </div>
                         <div class="wrapper-content mb20">
                             <div class="next-card-section p-none-b">
                                 <div class="flexbox-grid-default flexbox-align-items-center">
@@ -639,6 +664,12 @@
                                             <span
                                                 class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
                                         </li>
+<br>
+                                        <li class="ws-nm">
+                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                                    data-target="#modal_split_order">Split Order
+                                            </button>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -646,23 +677,35 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
+                                   class="btn btn-warning">Edit Order</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
                                    class="btn btn-info">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
                                     <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
-                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#modal_split_order">Split Order</button>
+
                             </div>
                         </div>
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+
+                                <input class="form-control" type="text" id="salesperson_id"
+                                       value="{{@$order->salesperson->username}}"
+                                       disabled>
+                                <i class="fa fa-plus" data-toggle="modal"
+                                   data-target="#salesrep"></i>
+
                                 <input type="hidden" id="customer_id" value="{{$order->user_id}}">
                                 <form action="{{ route('orders.edit', $order->id) }}">
                                     <label class="text-title-field">Tracking No.</label>
                                     <input class="form-control" name="tracking_no" placeholder="Tracking No."
                                            value="{{ $order->tracking_no }}"/>
+                                    <label class="text-title-field">PO No.</label>
+                                    <input class="form-control" name="po_number" placeholder="PO No."
+                                           value="{{ $order->po_number }}"/>
                                     <div class="mt10">
                                         <button type="button"
                                                 class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
@@ -673,113 +716,114 @@
                         @if($order->payment->payment_channel->label() == 'omni_payment')
                             <div class="wrapper-content bg-gray-white mb20">
 
-                            <!-- card -->
-                            @if($order->preauth == null)
-                                <div class="row m-0 pt-4 bg-white">
-                                    <div class="col-lg-12 ">
-                                        <span class="mb-2">Card</span>
-                                        {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                <!-- card -->
+                                @if($order->preauth == null)
+                                    <div class="row m-0 pt-4 bg-white">
+                                        <div class="col-lg-12 ">
+                                            <span class="mb-2">Card</span>
+                                            {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="add_card bg-white">
+                                    <div class="add_card bg-white">
 
-                                    <div class="row group m-0 pt-4 ">
-                                        @isset($order->user->billingAddress)
-                                            <label class="col-lg-12 ">
-                                                <span class="mb-2">Billing Address</span>
-                                                {!!
-                                        Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),(!is_null($order->billingAddress) ? $order->billingAddress->id  : null) ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
-                                        ])
-                                    !!}
+                                        <div class="row group m-0 pt-4 ">
+                                            @isset($order->user->billingAddress)
+                                                <label class="col-lg-12 ">
+                                                    <span class="mb-2">Billing Address</span>
+                                                    {!!
+                                            Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),(!is_null($order->billingAddress) ? $order->billingAddress->id  : null) ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
+                                            ])
+                                        !!}
+                                                </label>
+                                            @endisset
+                                        </div>
+
+                                        <div class="group row m-0">
+                                            <label class="col-lg-12">
+                                                <div id="card-element" class="field">
+                                                    <span>Card</span>
+                                                    <div id="fattjs-number" style="height: 35px"></div>
+                                                    <span class="mt-2">CVV</span>
+                                                    <div id="fattjs-cvv" style="height: 35px"></div>
+                                                </div>
                                             </label>
-                                        @endisset
-                                    </div>
-
-                                    <div class="group row m-0">
-                                        <label class="col-lg-12">
-                                            <div id="card-element" class="field">
-                                                <span>Card</span>
-                                                <div id="fattjs-number" style="height: 35px"></div>
-                                                <span class="mt-2">CVV</span>
-                                                <div id="fattjs-cvv" style="height: 35px"></div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="col-lg-3">
+                                                <input name="month" size="3" maxlength="2" placeholder="MM"
+                                                       class="form-control month">
                                             </div>
-                                        </label>
-                                    </div>
-                                    <div class="row m-0">
-                                        <div class="col-lg-3">
-                                            <input name="month" size="3" maxlength="2" placeholder="MM"
-                                                   class="form-control month">
+                                            <p class="mt-2"> / </p>
+                                            <div class="col-lg-3">
+                                                <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                                       class="form-control year">
+                                            </div>
                                         </div>
-                                        <p class="mt-2"> / </p>
-                                        <div class="col-lg-3">
-                                            <input name="year" size="5" maxlength="4" placeholder="YYYY"
-                                                   class="form-control year">
+                                        {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                                        <div class="row m-0">
+                                            <div class="col-lg-6">
+                                                <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
-                                    <div class="row m-0">
-                                        <div class="col-lg-6">
-                                            <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="row m-0">
-                                        <div class="col-lg-12">
-                                            <div class="outcome">
-                                                <div class="error"></div>
-                                                <div class="success">
-                                                    Successful! The ID is
-                                                    <span class="token"></span>
-                                                </div>
-                                                <div class="loader" style="margin: auto">
+                                        <div class="row m-0">
+                                            <div class="col-lg-12">
+                                                <div class="outcome">
+                                                    <div class="error"></div>
+                                                    <div class="success">
+                                                        Successful! The ID is
+                                                        <span class="token"></span>
+                                                    </div>
+                                                    <div class="loader" style="margin: auto">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                </div>
-                                <div class="pd-all-20 bg-white">
-                                    <form action="{{route('orders.charge')}}" method="POST">
-                                        @csrf
-                                        <input type="hidden" value="" name="payment_id" class="payment_id">
-                                        <input type="hidden" value="{{$order->id}}" name="order_id" class="order_id">
-                                        <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
-                                        <input type="hidden" value="{{$order->amount}}" name="amount">
-                                        <button type="submit" class="btn btn-info">Create Payment</button>
-                                    </form>
-                                </div>
-                            @elseif($order->preauth->status == 0)
-                                <div class="capture_card">
-
-                                    <div class="row group">
 
                                     </div>
+                                    <div class="pd-all-20 bg-white">
+                                        <form action="{{route('orders.charge')}}" method="POST">
+                                            @csrf
+                                            <input type="hidden" value="" name="payment_id" class="payment_id">
+                                            <input type="hidden" value="{{$order->id}}" name="order_id"
+                                                   class="order_id">
+                                            <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
+                                            <input type="hidden" value="{{$order->amount}}" name="amount">
+                                            <button type="submit" class="btn btn-info">Create Payment</button>
+                                        </form>
+                                    </div>
+                                @elseif($order->preauth->status == 0)
+                                    <div class="capture_card">
 
-                                    <div class="group row">
+                                        <div class="row group">
+
+                                        </div>
+
+                                        <div class="group row">
+
+                                        </div>
+
 
                                     </div>
+                                    <div class="pd-all-20">
+                                        <form action="{{route('orders.capture')}}" method="POST">
+                                            @csrf
 
+                                            <input type="hidden" value="{{$order->preauth->transaction_id}}"
+                                                   name="transaction_id">
+                                            <input type="hidden" value="{{$order->amount}}" name="amount">
+                                            <label class="col-lg-12">Transaction ID
+                                                : {{$order->preauth->transaction_id}}</label>
+                                            <button type="submit" class="btn btn-info">Capture Payment</button>
+                                        </form>
+                                    </div>
 
-                                </div>
-                                <div class="pd-all-20">
-                                    <form action="{{route('orders.capture')}}" method="POST">
-                                        @csrf
+                                @else
+                                    <button class="btn btn-info">Captured</button>
+                                @endif()
 
-                                        <input type="hidden" value="{{$order->preauth->transaction_id}}"
-                                               name="transaction_id">
-                                        <input type="hidden" value="{{$order->amount}}" name="amount">
-                                        <label class="col-lg-12">Transaction ID
-                                            : {{$order->preauth->transaction_id}}</label>
-                                        <button type="submit" class="btn btn-info">Capture Payment</button>
-                                    </form>
-                                </div>
-
-                            @else
-                                <button class="btn btn-info">Captured</button>
-                            @endif()
-
-                        </div>
+                            </div>
                         @elseif($order->payment->payment_channel->label() == 'paypal')
                             <div class="wrapper-content bg-gray-white mb20">
                                 <div class="row m-0 pt-4 bg-white">
@@ -830,60 +874,95 @@
                             </tr>
                             </thead>
                             <tbody class="">
-                                @foreach ($order->products as $orderProduct)
-                                    @php
-                                        $product = get_products([
-                                            'condition' => [
-                                                'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
-                                                'ec_products.id' => $orderProduct->product_id,
-                                            ],
-                                            'take' => 1,
-                                            'select' => [
-                                                'ec_products.id',
-                                                'ec_products.images',
-                                                'ec_products.name',
-                                                'ec_products.price',
-                                                'ec_products.sale_price',
-                                                'ec_products.sale_type',
-                                                'ec_products.start_date',
-                                                'ec_products.end_date',
-                                                'ec_products.sku',
-                                                'ec_products.is_variation',
-                                            ],
-                                        ]);
-                                    @endphp
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="split-img" src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" />
-                                                <div class="ml-3">
-                                                    <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
-                                                    <p class="split-code">SKU: {{ @$product->sku }}</p>
-                                                    {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
-                                                    @php $attributes = get_product_attributes($product->id) @endphp
-                                                    @if (!empty($attributes))
-                                                        @foreach ($attributes as $attribute)
-                                                            {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
-                                                            @if (!$loop->last), @endif
-                                                        @endforeach
-                                                    @endif
-                                                    {{--<a class="split-link" href="#">landbapparel.com</a>--}}
-                                                </div>
+                            @foreach ($order->products as $orderProduct)
+                                @php
+                                    $product = get_products([
+                                        'condition' => [
+                                            'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
+                                            'ec_products.id' => $orderProduct->product_id,
+                                        ],
+                                        'take' => 1,
+                                        'select' => [
+                                            'ec_products.id',
+                                            'ec_products.images',
+                                            'ec_products.name',
+                                            'ec_products.price',
+                                            'ec_products.sale_price',
+                                            'ec_products.sale_type',
+                                            'ec_products.start_date',
+                                            'ec_products.end_date',
+                                            'ec_products.sku',
+                                            'ec_products.is_variation',
+                                        ],
+                                    ]);
+                                @endphp
+                                <tr>
+                                    <td>
+                                        <div class="d-flex">
+                                            <img class="split-img"
+                                                 src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"/>
+                                            <div class="ml-3">
+                                                <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
+                                                <p class="split-code">SKU: {{ @$product->sku }}</p>
+                                                {{--<p class="split-opt m-0"><b>Options:</b></p>--}}
+                                                @php $attributes = get_product_attributes($product->id) @endphp
+                                                @if (!empty($attributes))
+                                                    @foreach ($attributes as $attribute)
+                                                        {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                        @if (!$loop->last), @endif
+                                                    @endforeach
+                                                @endif
+                                                {{--<a class="split-link" href="#">landbapparel.com</a>--}}
                                             </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <input name="order_prod[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="{{ $orderProduct->qty }}" data-prod-id="{{$product->id}}" data-prod-qty="{{$orderProduct->qty}}" id="split-input-{{$product->id}}" class="split-input" />
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn-default split-btn" data-prod-id="{{$product->id}}">--></button>
-                                        </td>
-                                        <td class="text-center">
-                                            <input name="order_prod_move[{{$product->id}}]" type="number" step="1" min="0" max="{{ $orderProduct->qty }}" value="0" data-prod-id="{{$product->id}}" id="split-input2-{{$product->id}}" class="split-input2" />
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <input name="order_prod[{{$product->id}}]" type="number" step="1" min="0"
+                                               max="{{ $orderProduct->qty }}" value="{{ $orderProduct->qty }}"
+                                               data-prod-id="{{$product->id}}" data-prod-qty="{{$orderProduct->qty}}"
+                                               id="split-input-{{$product->id}}" class="split-input"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn-default split-btn"
+                                                data-prod-id="{{$product->id}}">-->
+                                        </button>
+                                    </td>
+                                    <td class="text-center">
+                                        <input name="order_prod_move[{{$product->id}}]" type="number" step="1" min="0"
+                                               max="{{ $orderProduct->qty }}" value="0" data-prod-id="{{$product->id}}"
+                                               id="split-input2-{{$product->id}}" class="split-input2"/>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="salesrep" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="d-flex w-100">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                        <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                            Sales Rep {{@$order->salesperson->username}}
+                        </h4>
+                    </div>
+                </div>
+
+                <form method="post" action="{{route('orders.sales-rep', $order->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        {!! Form::select('salesperson_id', $salesRep, $order->salesperson_id, ['class' => 'form-control','placeholder'=>'Select Sales Rep']) !!}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
@@ -897,15 +976,15 @@
     <script>
         setTimeout(function () {
             getCustomer();
-        },200);
+        }, 200);
 
         $(document).ready(function () {
             $('body').on('click', 'button.split-btn', function () {
                 let prodId = $(this).data('prod-id');
-                let input = 'input#split-input-'+prodId;
+                let input = 'input#split-input-' + prodId;
                 let maxQty = $(input).data('prod-qty');
                 let qty = $(input).val();
-                $('input#split-input2-'+prodId).val(qty);
+                $('input#split-input2-' + prodId).val(qty);
                 $(input).val(maxQty - qty);
             });
             /*$('body').on('change', 'input.split-input', function () {

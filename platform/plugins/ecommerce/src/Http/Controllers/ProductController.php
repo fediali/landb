@@ -163,6 +163,7 @@ class ProductController extends BaseController
         StoreProductTagService $storeProductTagService
     )
     {
+
         $product = $this->productRepository->getModel();
 
         $product = $service->execute($request, $product);
@@ -701,9 +702,8 @@ class ProductController extends BaseController
                     ->setError()
                     ->setMessage(trans('plugins/ecommerce::products.form.variation_existed'));
             }
-
+            isset($request->quantity) ? $request->quantity : $request['quantity'] = 0;
             $this->postSaveAllVersions([$result['variation']->id => $request->input()], $productVariation, $id, $response);
-
             return $response->setMessage(trans('plugins/ecommerce::products.form.added_variation_success'));
         }
 
@@ -768,12 +768,13 @@ class ProductController extends BaseController
         BaseHttpResponse $response
     )
     {
+
         $variation = $productVariation->findOrFail($id);
 
         $addedAttributes = $request->input('attribute_sets', []);
 
         if ($addedAttributes && !empty($addedAttributes) && is_array($addedAttributes)) {
-
+            dd($addedAttributes);
             $result = $productVariation->getVariationByAttributesOrCreate($variation->configurable_product_id, $addedAttributes);
 
             if (!$result['created'] && $result['variation']->id !== $variation->id) {
@@ -1046,7 +1047,7 @@ class ProductController extends BaseController
                 }
 
                 foreach ($variation->variationItems as &$variationItem) {
-                    $variationItem->attribute_title = strtok($variationItem->attribute->title,'-');;
+                    $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
                 }
 
                 if ($variation->product->status != BaseStatusEnum::ACTIVE) {

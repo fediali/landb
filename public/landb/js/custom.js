@@ -1,3 +1,42 @@
+$(document).ready(function () {
+    var tag = jQuery.parseJSON($('#tag').val());
+    console.log(tag, 'asd');
+    $.each(tag, function (key, value) {
+        if (value.value == 'Pre-Order') {
+            $('.eta_pre_product').closest('.widget').show();
+        } else {
+            $('.eta_pre_product').closest('.widget').hide();
+        }
+    });
+    $('.checkk').click(function () {
+        if ($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true) {
+            $('.tax-submit-btn').attr('disabled', false)
+        }
+    });
+
+    $('#tag').on('change', function () {
+        tag = jQuery.parseJSON($('#tag').val());
+        console.log(tag)
+        $.each(tag, function (key, value) {
+            console.log(value)
+            if (value.value == 'Pre-Order') {
+                $('.eta_pre_product').closest('.widget').show();
+            }
+        })
+    })
+    $('.tagify__tag__removeBtn').on('click', function () {
+        tag = jQuery.parseJSON($('#tag').val());
+        $.each(tag, function (key, value) {
+            if (value.value == 'Pre-Order') {
+                $('.eta_pre_product').closest('.widget').show();
+            } else {
+                $('.eta_pre_product').closest('.widget').hide();
+            }
+        })
+
+    })
+});
+
 $('.toggle-menu').click(function () {
     $(this).toggleClass('active');
     $('#menu').toggleClass('open');
@@ -309,7 +348,7 @@ $(document).ready(function () {
 
     function dp_scroll_text() {
         $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide");
-        $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide");
+        $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1");
         $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
         $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
         $('#vslider1').attr("src", "http://revamp.landbw.co/landb/img/pr2.png");

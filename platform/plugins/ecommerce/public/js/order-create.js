@@ -853,6 +853,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1015,6 +1020,7 @@ __webpack_require__.r(__webpack_exports__);
       hidden_product_search_panel: true,
       loading: false,
       note: null,
+      customer_notes: null,
       // order_type: this.orderType,
       customers: {
         data: []
@@ -1237,6 +1243,7 @@ __webpack_require__.r(__webpack_exports__);
         customer_id: this.child_customer_id,
         order_id: this.order_id,
         note: this.note,
+        customer_notes: this.customer_notes,
         order_type: this.order_type,
         amount: this.child_sub_amount,
         customer_address: this.child_customer_address,
@@ -8424,6 +8431,43 @@ var render = function() {
                           return
                         }
                         _vm.note = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "text-title-field",
+                      attrs: { for: "customer-notes" }
+                    },
+                    [_vm._v(_vm._s(_vm.__("Customer Note")))]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.customer_notes,
+                        expression: "customer_notes"
+                      }
+                    ],
+                    staticClass: "ui-text-area textarea-auto-height",
+                    attrs: {
+                      id: "customer-notes",
+                      rows: "2",
+                      placeholder: "Customer Notes..."
+                    },
+                    domProps: { value: _vm.customer_notes },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.customer_notes = $event.target.value
                       }
                     }
                   })

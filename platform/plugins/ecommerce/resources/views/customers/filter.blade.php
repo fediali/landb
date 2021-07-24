@@ -60,7 +60,8 @@
 
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Manager:</label>
-                        <input type="text" name="manager" class="form-control" value="{{request('manager')}}">
+                        {!! Form::select('manager', get_salesperson(),  request('manager'), ['class' => 'form-control','placeholder'=>'Select Manager']) !!}
+{{--                        <input type="text" name="manager" class="form-control" value="{{request('manager')}}">--}}
                     </div>
 
                     <div class="col-md-4 mt-3">

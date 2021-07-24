@@ -73,6 +73,14 @@ class CustomerTable extends TableAbstract
                 }
                 return Html::link(route('customer.edit', $item->id), $item->name);
             })
+            ->editColumn('salesperson_id', function ($item) {
+                if ($item->salesperson_id) {
+                    return isset($item->salesperson) ? $item->salesperson->username : 'N/A';
+//                    return $item->salesperson->username;
+                } else {
+                    return 'N/A';
+                }
+            })
             ->editColumn('email', function ($item) {
                 return $item->email;
             })
@@ -146,7 +154,30 @@ class CustomerTable extends TableAbstract
                 }
             })->editColumn('order_count', function ($item) {
                 return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
+            })->editColumn('spend', function ($item) {
+                return $item->spend();
+            })->editColumn('abandoned', function ($item) {
+                $data = $item->abandonedProducts();
+                if (!is_null($data['order_id'])) {
+                    return '<a href="' . route('orders.incomplete-list', ['order_id' => $data['order_id']]) . '">' . $data['abandoned'] . '</a>';
+                } else {
+                    return $data['abandoned'];
+                }
 
+            })->editColumn('validation', function ($item) {
+                $html = '<span class="badge badge-default">' . $item->status . '</span>';
+                if ($item->status == BaseStatusEnum::$CUSTOMERS['verified']) {
+                    $html = '<span class="badge badge-success">' . BaseStatusEnum::$CUSTOMERS['verified'] . '</span>';
+                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['pending']) {
+                    $html = '<span class="badge badge-warning">' . BaseStatusEnum::$CUSTOMERS['pending'] . '</span>';
+                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['declined']) {
+                    $html = '<span class="badge badge-danger">' . BaseStatusEnum::$CUSTOMERS['declined'] . '</span>';
+                }
+                return $html;
+            })->editColumn('last_order', function ($item) {
+                return $item->latestOrder();
+            })->editColumn('last_visit', function ($item) {
+                return !is_null($item->last_visit) ? date('m/d/y', strtotime($item->last_visit)) : '-';
             });
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
@@ -166,11 +197,14 @@ class CustomerTable extends TableAbstract
         $select = [
             'ec_customers.id',
             'ec_customers.name',
+            'ec_customers.salesperson_id',
             'ec_customers.email',
             'ec_customers.avatar',
             'ec_customers.is_private',
             'ec_customers.is_text',
             'ec_customers.created_at',
+            'ec_customers.status',
+            'ec_customers.last_visit',
             'ec_customers.phone_validation_error',
         ];
 
@@ -214,7 +248,7 @@ class CustomerTable extends TableAbstract
                 $q->where('ec_customers.email', 'LIKE', '%' . $search_items['customer_email'] . '%');
             });
             $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
-                $q->where('ec_customers.name', 'LIKE', '%' . $search_items['manager'] . '%');
+                $q->where('ec_customers.salesperson_id',  $search_items['manager']);
             });
             $query->when(isset($search_items['status']), function ($q) use ($search_items) {
                 $q->where('ec_customers.status', $search_items['status']);
@@ -252,39 +286,75 @@ class CustomerTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'          => [
+            'id'             => [
                 'name'  => 'ec_customers.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'name'        => [
+            'salesperson_id' => [
+                'name'  => 'ec_customers.salesperson_id',
+                'title' => 'Rep',
+                'width' => '20px',
+                'class' => 'text-left',
+            ],
+            'name'           => [
                 'name'  => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
                 'class' => 'text-left',
             ],
-            'email'       => [
+            'email'          => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
             ],
-            'is_private'  => [
+            'is_private'     => [
                 'name'  => 'ec_customers.is_private',
                 'title' => 'Is Private',
                 'class' => 'text-left',
             ],
-            'is_text'     => [
+            'is_text'        => [
                 'name'  => 'ec_customers.is_text',
                 'title' => 'Text',
                 'class' => 'text-left',
             ],
-            'order_count' => [
+            'order_count'    => [
                 'name'       => 'order_count',
                 'title'      => 'Order Count',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'created_at'  => [
+            'spend'          => [
+                'name'       => 'spend',
+                'title'      => 'Spend',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'abandoned'      => [
+                'name'       => 'abandoned',
+                'title'      => 'Abandoned',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'validation'     => [
+                'name'       => 'validation',
+                'title'      => 'Validation',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'last_order'     => [
+                'name'       => 'last_order',
+                'title'      => 'Last order',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'last_visit'     => [
+                'name'       => 'last_visit',
+                'title'      => 'Last visit',
+                'class'      => 'text-left',
+                'searchable' => false
+            ],
+            'created_at'     => [
                 'name'  => 'ec_customers.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
@@ -322,20 +392,25 @@ class CustomerTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            /*'ec_customers.name'       => [
-                'title'    => trans('core/base::tables.name'),
-                'type'     => 'text',
-                'validate' => 'required|max:120',
+//            'ec_customers.name'       => [
+//                'title'    => trans('core/base::tables.name'),
+//                'type'     => 'text',
+//                'validate' => 'required|max:120',
+//            ],
+//            'ec_customers.email'      => [
+//                'title'    => trans('core/base::tables.email'),
+//                'type'     => 'text',
+//                'validate' => 'required|max:120',
+//            ],
+//            'ec_customers.created_at' => [
+//                'title' => trans('core/base::tables.created_at'),
+//                'type'  => 'date',
+//            ],
+            'ec_customers.salesperson_id' => [
+                'title'   => 'Sales Rep',
+                'type'    => 'select',
+                'choices' => get_salesperson(),
             ],
-            'ec_customers.email'      => [
-                'title'    => trans('core/base::tables.email'),
-                'type'     => 'text',
-                'validate' => 'required|max:120',
-            ],
-            'ec_customers.created_at' => [
-                'title' => trans('core/base::tables.created_at'),
-                'type'  => 'date',
-            ],*/
         ];
     }
 

@@ -121,6 +121,14 @@ class ProductTable extends TableAbstract
             ->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
             })
+            ->editColumn('in_cart', function ($item) {
+              $data = $item->inCart();
+              if(count($data['order_ids'])){
+                return '<a href="'. route('orders.incomplete-list', ['order_ids' =>  json_encode($data['order_ids'])]) .'">'.$data['sum'].'</a>';
+              }else{
+                return !is_null($data['sum']) ? $data['sum'] : '-';
+              }
+            })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -173,15 +181,9 @@ class ProductTable extends TableAbstract
                 return $html;
             })
             ->editColumn('sold_qty', function ($item) {
-                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
-                $getProdIds[] = $item->id;
-                $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
-                    ->whereIn('product_id', $getProdIds)
-                    ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
-                    ->sum('qty');
-                $html = '&mdash;';
-                if ($soldQty) {
-                    $html = '<a href="' . route('orders.index', ['product_id' => $item->id]) . '"><span>' . $soldQty . '</span></a>';
+                $html = 0;
+                if ($item->sold_qty) {
+                    $html = '<a href="' . route('orders.index', ['product_id' => $item->id]) . '"><span>' . $item->sold_qty . '</span></a>';
                 }
                 return $html;
             })
@@ -349,7 +351,7 @@ class ProductTable extends TableAbstract
                 'title'      => 'Single Qty',
                 'class'      => 'text-left',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'product_type'  => [
                 'name'  => 'ec_products.product_type',
@@ -368,21 +370,28 @@ class ProductTable extends TableAbstract
                 'width'      => '100px',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'reorder_qty'   => [
                 'name'       => 'ec_products.reorder_qty',
                 'title'      => 'Re-order Qty',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
             ],
             'sold_qty'      => [
                 'name'       => 'ec_products.sold_qty',
                 'title'      => 'Sold Qty',
                 'class'      => 'text-center',
                 'searchable' => false,
-                'orderable'  => false,
+                'sortable'   => false
+            ],
+            'in_cart'      => [
+                'name'       => 'in_cart',
+                'title'      => 'In cart',
+                'class'      => 'text-center',
+                'searchable' => false,
+                'sortable'   => false
             ],
             'created_at'    => [
                 'name'  => 'ec_products.created_at',
@@ -443,16 +452,19 @@ class ProductTable extends TableAbstract
                 'type'     => 'number',
                 'validate' => 'required|min:0',
             ],
-            'ec_products.status'     => [
-                'title'    => trans('core/base::tables.status'),
-                'type'     => 'select',
-                'choices'  => BaseStatusEnum::labels(),
-                'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
-            ],
+
             'ec_products.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
             ],*/
+
+            'ec_products.status'     => [
+                'title'    => trans('core/base::tables.status'),
+                'type'     => 'select',
+                'choices'  => BaseStatusEnum::$PRODUCT,
+                'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
+            ],
+
         ];
     }
 

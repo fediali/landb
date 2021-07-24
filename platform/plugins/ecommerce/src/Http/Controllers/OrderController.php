@@ -9,6 +9,7 @@ use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
 use Botble\ACL\Models\Role;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
@@ -252,6 +253,7 @@ class OrderController extends BaseController
             'is_confirmed'         => 1,
             'status'               => OrderStatusEnum::NEW_ORDER,
             'order_type'           => $request->input('order_type'),
+            'notes'                => $request->input('customer_notes')
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
@@ -434,15 +436,17 @@ class OrderController extends BaseController
             '0' => 'Add New Card'
         ];
         $defaultStore = get_primary_store_locator();
+        $salesRep = get_salesperson();
+//        dd($salesRep);
         if (!$order->user->card->isEmpty()) {
             $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
             list($card, $info) = omni_api($url);
             $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
         }
-        if(isset($_GET['debug'])){
-          dd($order,$cards,$order->payment);
+        if (isset($_GET['debug'])) {
+            dd($order, $cards, $order->payment);
         }
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards'));
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
     }
 
 
@@ -1022,7 +1026,6 @@ class OrderController extends BaseController
      */
     public function editOrder($id, Request $request, BaseHttpResponse $response)
     {
-
         if (!$id) {
             return $response
                 ->setError()
@@ -1276,10 +1279,14 @@ class OrderController extends BaseController
         if ($request->hasfile('file')) {
             $type = strtolower($request['file']->getClientOriginalExtension());
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
-            $spec_file_name = time() . rand(1, 100) . '.' . $type;
-            $move = $request->file('file')->move(public_path('storage/importorders'), $spec_file_name);
+            $move = $request->file('file')->move(public_path('storage/importorders'), $request->file('file')->getClientOriginalName());
             $order = Excel::toCollection(new OrderImportFile(), $move);
-
+            $filecheck = OrderImportUpload::where('file', $move)->first();
+            if ($filecheck != null) {
+                return $response
+                    ->setError()
+                    ->setMessage('File Already Exist');
+            }
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
@@ -1335,7 +1342,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['style_no'])->first();
+                        $product = Product::where(['sku' => $row['style_no'], 'status' => BaseStatusEnum::ACTIVE])->first();
 
                         if ($product) {
                             //count pack quantity for product
@@ -1471,7 +1478,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['style'])->first();
+                        $product = Product::where(['status' => BaseStatusEnum::ACTIVE, 'sku' => $row['style']])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1550,6 +1557,7 @@ class OrderController extends BaseController
                     }
                 }
             } else {
+
                 foreach ($order as $od) {
 
                     foreach ($od as $row) {
@@ -1558,6 +1566,7 @@ class OrderController extends BaseController
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
+
 
                         $customer = Customer::where(['phone' => $row['phonenumber']])->first();
                         if ($customer == null) {
@@ -1602,7 +1611,7 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where('sku', $row['styleno'])->first();
+                        $product = Product::where(['sku' => $row['styleno'], 'status' => BaseStatusEnum::ACTIVE])->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1643,6 +1652,7 @@ class OrderController extends BaseController
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
+
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
@@ -1871,7 +1881,7 @@ class OrderController extends BaseController
         /*************** Validation Start ****************/
         $checkProd = false;
         $products = $order->products->pluck('qty', 'product_id')->all();
-        foreach($products as $productId => $quantity) {
+        foreach ($products as $productId => $quantity) {
             foreach ($params['order_prod_move'] as $prodId => $qty) {
                 if ($productId == $prodId && (int)$qty > $quantity) {
                     return $response->setCode(406)->setError()->setMessage('Product Qty is not available!');
@@ -1901,7 +1911,7 @@ class OrderController extends BaseController
         $new_order->save();
 
         $histories = $order->histories;
-        foreach($histories as $history) {
+        foreach ($histories as $history) {
             $historyData = $history->replicate();
             $historyData->order_id = $new_order->id;
             $this->orderHistoryRepository->createOrUpdate($historyData);
@@ -1912,7 +1922,7 @@ class OrderController extends BaseController
         $this->orderAddressRepository->createOrUpdate($addressData);
 
         $products = $order->products;
-        foreach($products as $product) {
+        foreach ($products as $product) {
             foreach ($params['order_prod_move'] as $prodId => $qty) {
                 if ($product->product_id == $prodId && (int)$qty <= $product->qty) {
                     $productData = $product->replicate();
@@ -1938,7 +1948,7 @@ class OrderController extends BaseController
     {
         $orderTotal = 0;
         $products = $orderObj->products;
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $orderTotal += $product->qty * $product->price;
         }
 
@@ -1960,6 +1970,13 @@ class OrderController extends BaseController
 //            redirect(route('order'))
         }
         return $response->setData(Helper::countries());
+    }
+
+    public function salesRepupdate($id, Request $request, BaseHttpResponse $response)
+    {
+        $rep['salesperson_id'] = $request->salesperson_id;
+        $order = Order::where('id', $id)->update($rep);
+        return $response->setData($order)->setMessage('Sales Rep Updated Sucessfully');
     }
 
 }
