@@ -12,7 +12,7 @@
             <ul class="sub-menu @if (!$menu['active']) hidden-ul @endif">
                 @foreach ($menu['children'] as $item)
                     <li class="nav-item @if ($item['active']) active @endif" id="{{ $item['id'] }}">
-                        <a href="{{ $item['url'] }}" class="nav-link">
+                        <a href="{{ $item['url'] }}" class="nav-link nav-toggle">
                             <i class="{{ $item['icon'] }}"></i>
                             <span class="title">
                                 {{ trans($item['name']) }}
@@ -24,7 +24,7 @@
                             <ul class="sub-menu @if (!$item['active']) hidden-ul @endif">
                                 @foreach ($item['children'] as $item2)
                                     <li class="nav-item @if ($item2['active']) active @endif" id="{{ $item2['id'] }}">
-                                        <a href="{{ $item2['url'] }}" class="nav-link">
+                                        <a href="{{ $item2['url'] }}" class="nav-link nav-toggle">
                                             <i class="{{ $item2['icon'] }}"></i>
                                             <span class="title">
                                                 {{ trans($item2['name']) }}
@@ -36,7 +36,7 @@
                                             <ul class="sub-menu @if (!$item2['active']) hidden-ul @endif">
                                                 @foreach ($item2['children'] as $item3)
                                                     <li class="nav-item @if ($item3['active']) active @endif" id="{{ $item3['id'] }}">
-                                                        <a href="{{ $item3['url'] }}" class="nav-link">
+                                                        <a href="{{ $item3['url'] }}" class="nav-link nav-toggle">
                                                             <i class="{{ $item3['icon'] }}"></i>
                                                             <span class="title">
                                                                 {{ trans($item2['name']) }}
