@@ -43,6 +43,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.edit',
             ]);
 
+            Route::get('order/reciept/{orders}', [
+                'as'         => 'printReceipt',
+                'uses'       => 'OrderController@printReceipt',
+                'permission' => 'orders.edit',
+            ]);
+
             Route::get('reorder', [
                 'as'         => 'reorder',
                 'uses'       => 'OrderController@getReorder',

@@ -1979,4 +1979,17 @@ class OrderController extends BaseController
         return $response->setData($order)->setMessage('Sales Rep Updated Sucessfully');
     }
 
+    public function printReceipt($orders){
+      $list = Order::whereIn('id', json_decode($orders))->with(['payment', 'shippingAddress', 'billingAddress', 'products' => function($query){
+        $query->with(['product']);
+      }])->get();
+      $orderHtml = '';
+      foreach ($list as $order){
+        $orderHtml .= view('plugins/ecommerce::orders.partials.orderReceipt', ['order' => $order]);
+      }
+
+      return view('plugins/ecommerce::orders.receiptList', ['orderHtml' => $orderHtml]);
+
+    }
+
 }

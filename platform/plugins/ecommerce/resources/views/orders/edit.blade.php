@@ -674,6 +674,8 @@
                                  <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                         data-target="#modal_split_order">Split Order
                                 </button>
+                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
+                                   class="btn btn-success">Print Order</a>&nbsp;
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
                                    class="btn btn-warning">Edit Order</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"

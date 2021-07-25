@@ -67,7 +67,7 @@
             <div class="col-lg-4">
                 <div class="p-3">
                 <h3>
-                    <b>BILL TO</b>
+                    <b>SHIP TO</b>
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
