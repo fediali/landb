@@ -452,16 +452,19 @@ class ProductTable extends TableAbstract
                 'type'     => 'number',
                 'validate' => 'required|min:0',
             ],
-            'ec_products.status'     => [
-                'title'    => trans('core/base::tables.status'),
-                'type'     => 'select',
-                'choices'  => BaseStatusEnum::labels(),
-                'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
-            ],
+
             'ec_products.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
             ],*/
+
+            'ec_products.status'     => [
+                'title'    => trans('core/base::tables.status'),
+                'type'     => 'select',
+                'choices'  => BaseStatusEnum::$PRODUCT,
+                'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
+            ],
+
         ];
     }
 

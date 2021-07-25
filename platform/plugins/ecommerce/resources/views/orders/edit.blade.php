@@ -951,7 +951,7 @@
                     <div class="d-flex w-100">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                         <h4 class="modal-title text-center w-100 thread-pop-head color-white">
-                            Sales Rep {{$order->salesperson->username}}
+                            Sales Rep {{@$order->salesperson->username}}
                         </h4>
                     </div>
                 </div>
