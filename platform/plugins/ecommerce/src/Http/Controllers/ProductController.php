@@ -1028,7 +1028,7 @@ class ProductController extends BaseController
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
             foreach ($availableProduct->variations as $k => &$variation) {
-                $variation->price = $variation->product->front_sale_price;
+                $variation->per_piece_price = $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
 
                 $variation->packQty = 0;
@@ -1036,6 +1036,7 @@ class ProductController extends BaseController
                 if (str_contains($variation->product->sku, 'pack')) {
                     $variation->packQty = packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
+                    $variation->per_piece_price = $variation->price / $variation->packQty;
                 }
 
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {

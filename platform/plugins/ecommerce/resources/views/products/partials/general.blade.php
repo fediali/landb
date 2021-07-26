@@ -4,12 +4,12 @@
            class="detect-schedule hidden"
            name="sale_type">
 
-    {{--<div class="col-md-4">
+    <div class="col-md-4">
         <div class="form-group @if ($errors->has('sku')) has-error @endif">
             <label class="text-title-field">{{ trans('plugins/ecommerce::products.sku') }}</label>
-            {!! Form::text('sku', old('sku', $product ? $product->sku : null), ['class' => 'next-input', 'id' => 'sku', 'data-counter' => 30, 'readOnly']) !!}
+            {!! Form::text('sku', old('sku', $product ? $product->sku : null), ['class' => 'next-input', 'id' => 'sku', 'data-counter' => 30/*, 'readOnly'*/]) !!}
         </div>
-    </div>--}}
+    </div>
 
     <div class="col-md-4">
         <div class="form-group">
