@@ -401,11 +401,11 @@
             }
             loaderElement.classList.remove('visible');
         }).catch(err => {
-                console.log(err)
-                errorElement.textContent = err.message;
-                errorElement.classList.add('visible');
-                loaderElement.classList.remove('visible');
-            });
+            console.log(err)
+            errorElement.textContent = err.message;
+            errorElement.classList.add('visible');
+            loaderElement.classList.remove('visible');
+        });
     });
 
     function functionAddCard(result, customer_id) {
@@ -453,6 +453,7 @@
 
         });
         $('.toggle-edit-address').on('click', function (e) {
+
             var data = $(this).data('row');
 
             $('input[name=address_id]').val(data.id);
