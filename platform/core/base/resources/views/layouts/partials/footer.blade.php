@@ -374,6 +374,7 @@
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
         console.log('customer address', address)
+
         var extraDetails = {
             firstname: customer.data.detail.first_name,
             lastname: customer.data.detail.last_name,
@@ -420,6 +421,7 @@
             },
             success: function (data) {
                 console.log(data)
+                getCards();
             },
             error: function (request, status, error) {
                 toastr['warning']('Notification Unreadable', 'Reading Error');

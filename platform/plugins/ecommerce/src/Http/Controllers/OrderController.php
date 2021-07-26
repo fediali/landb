@@ -253,7 +253,8 @@ class OrderController extends BaseController
             'is_confirmed'         => 1,
             'status'               => OrderStatusEnum::NEW_ORDER,
             'order_type'           => $request->input('order_type'),
-            'notes'                => $request->input('customer_notes')
+            'notes'                => $request->input('customer_notes'),
+            'order_card'           => $request->input('order_card')
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
@@ -313,6 +314,7 @@ class OrderController extends BaseController
 
             if ($request->input('customer_address.name')) {
                 $this->orderAddressRepository->createOrUpdate([
+                    'customer_address_id' => $request->input('customer_address.id'),
                     'name'     => $request->input('customer_address.name'),
                     'phone'    => $request->input('customer_address.phone'),
                     'email'    => $request->input('customer_address.email'),
@@ -321,7 +323,7 @@ class OrderController extends BaseController
                     'zip_code' => $request->input('customer_address.zip_code'),
                     'country'  => $request->input('customer_address.country'),
                     'address'  => $request->input('customer_address.address'),
-                    'order_id' => $order->id,
+                    'order_id' => $order->id
                 ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
@@ -330,6 +332,20 @@ class OrderController extends BaseController
                     'phone'    => $customer->phone,
                     'email'    => $customer->email,
                     'order_id' => $order->id,
+                ], $meta_condition);
+            } elseif ($request->input('billing_address')) {
+                $address = $this->addressRepository->findById($request->input('billing_address'));
+                $this->orderAddressRepository->createOrUpdate([
+                    'customer_address_id' => $address->id,
+                    'name'     => $address->name,
+                    'phone'    => $address->phone,
+                    'email'    => $address->email,
+                    'state'    => $address->state,
+                    'city'     => $address->city,
+                    'zip_code' => $address->zip_code,
+                    'country'  => $address->country,
+                    'address'  => $address->address,
+                    'order_id' => $order->id
                 ], $meta_condition);
             }
 
@@ -432,20 +448,26 @@ class OrderController extends BaseController
                 $weight += $product->weight;
             }
         }
+
         $cards = [
             '0' => 'Add New Card'
         ];
         $defaultStore = get_primary_store_locator();
         $salesRep = get_salesperson();
-//        dd($salesRep);
+
         if (!$order->user->card->isEmpty()) {
-            $url = (env("OMNI_URL") . "customer/" . $order->user->card[0]->customer_omni_id . "/payment-method");
-            list($card, $info) = omni_api($url);
-            $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+            if ($omniId) {
+                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+                list($card, $info) = omni_api($url);
+                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+            }
         }
+
         if (isset($_GET['debug'])) {
             dd($order, $cards, $order->payment);
         }
+
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
     }
 
