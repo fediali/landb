@@ -7,7 +7,7 @@
             :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
             :payment_methods="{{ json_encode(get_payment_methods()) }}">
         </create-order> 
-            <div style="width: 20%; float: right;" class="wrapper-content bg-gray-white mb20">
+            <div style="width: 35%; float: right;" class="wrapper-content bg-gray-white mb20">
                 <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse" data-target="#demo">
                     Credit Card
                 </button>

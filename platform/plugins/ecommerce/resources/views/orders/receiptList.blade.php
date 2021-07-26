@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <div class="container" id="printReceipt">
+    <div style="margin-left: 20px; margin-right: 20px;" id="printReceipt">
         {!! $orderHtml !!}
     </div>
 </body>

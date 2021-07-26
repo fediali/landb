@@ -1504,8 +1504,7 @@ section.parallax_video video {
     color: #000000;
 }
 
-.detail-price {
-    font-family: Saol Display;
+.detail-price { 
     font-style: normal;
     font-weight: normal;
     font-size: 25px;
@@ -1585,7 +1584,6 @@ section.parallax_video video {
 }
 
 .detail-basic {
-    font-family: Saol Display;
     font-style: normal;
     font-weight: normal;
     font-size: 17px;
@@ -1603,7 +1601,6 @@ section.parallax_video video {
 }
 
 .detail-category {
-    font-family: Saol Display;
     font-style: normal;
     font-weight: normal;
     font-size: 17px;
@@ -1621,7 +1618,6 @@ section.parallax_video video {
 }
 
 .detail-tag {
-    font-family: Saol Display;
     font-style: normal;
     font-weight: normal;
     font-size: 17px;
@@ -1808,7 +1804,6 @@ input.qtyminus {
 }
 
 .review-name {
-    font-family: Saol Display;
     font-style: normal;
     font-weight: normal;
     font-size: 22px;
@@ -1917,6 +1912,20 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 2200px) {
+    .previews {
+        width: 15% !important; 
+    }
+    .previews img {
+        width: 100% !important; 
+    }
+    
+    .full {  
+        width: 80% !important;
+    }
+    
+    .full img {  
+        width: 100% !important;  
+    }
     .western-txt {
         font-size: 44px !important;
     }
@@ -2529,13 +2538,11 @@ div.circTxt {
 
 div.circTxt p {
     font-size: 3.5rem;
-    font-family: Saol Display;
     font-weight: normal;
 }
 
 div.circTxt2 p {
     font-size: 3.5rem;
-    font-family: Saol Display;
     font-weight: normal;
 }
 
@@ -4310,3 +4317,8 @@ html {
   #menu .menu-footer ul li { 
     font-size: 20px !important;
 }
+
+.breadcrumb-item {
+    font-size: 1rem !important;
+}
+
