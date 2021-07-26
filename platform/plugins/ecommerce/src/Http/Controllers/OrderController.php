@@ -1294,6 +1294,7 @@ class OrderController extends BaseController
             if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+
                         if (!isset($row['po'])) {
                             return $response
                                 ->setError()
@@ -1336,14 +1337,17 @@ class OrderController extends BaseController
                             $saddress['name'] = $row['shipping_contact_name'];
 
                             $shipping = Address::create($saddress);
-
                         }
 
                         $orderQuantity = 0;
                         $checkProdQty = false;
-                        //Finding Product For Order
-                        $product = Product::where(['sku' => $row['style_no'], 'status' => BaseStatusEnum::ACTIVE])->first();
 
+                        //Finding Product For Order
+                        $prodSKU = $row['style_no'];
+                        if (!str_contains($prodSKU,'pack-all')) {
+                            $prodSKU .= '-pack-all';
+                        }
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1384,14 +1388,13 @@ class OrderController extends BaseController
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
-
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
                             $detail['price'] = intval(str_replace('$', '', $row['sub_total'])) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
-                            $importOrder = OrderProduct::create($detail);
+                            $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else if ($product) {
                             $iorder['user_id'] = $customer->id;
@@ -1399,7 +1402,12 @@ class OrderController extends BaseController
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['discount_amount'] = 0;
+                            $iorder['shipping_amount'] = 0;
+                            $iorder['tax_amount'] = 0;
+                            $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1414,17 +1422,60 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['order_date'];
                                     $orderInfo['type'] = Order::LASHOWROOM;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
-
-                                    $upload_id = OrderImport::create($orderInfo);
+                                    OrderImport::create($orderInfo);
                                 }
                             }
-
                         }
+
+
+                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                            $this->productRepository
+                                ->getModel()
+                                ->where('id', $product->id)
+                                ->where('with_storehouse_management', 1)
+                                ->where('quantity', '>', 0)
+                                ->decrement('quantity', $orderQuantity);
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('online_sales_qty', '>', 0)
+                                    ->decrement('online_sales_qty', $orderQuantity);
+                            }
+                            if (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('in_person_sales_qty', '>', 0)
+                                    ->decrement('in_person_sales_qty', $orderQuantity);
+                            }
+
+                            $productN = $this->productRepository->findById($product->id);
+                            set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+                        }
+
+                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                            $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
+                            $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                                ->where('product_id', $product->id)
+                                ->where('order_type', Order::PRE_ORDER)
+                                ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                                ->sum('qty');
+
+                            if ($preOrderQty >= $pre_order_max_qty) {
+                                generate_notification('pre_order_max_qty', $product);
+                            }
+                        }
+
                     }
                 }
             } elseif ($request->market_place == Order::ORANGESHINE) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+
                         if (!isset($row['invoice'])) {
                             return $response
                                 ->setError()
@@ -1472,13 +1523,16 @@ class OrderController extends BaseController
                             $saddress['name'] = $row['shipping_company_name'];
                             $baddress['type'] = 'shipping';
                             $shipping = Address::create($saddress);
-
                         }
 
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where(['status' => BaseStatusEnum::ACTIVE, 'sku' => $row['style']])->first();
+                        $prodSKU = $row['style'];
+                        if (!str_contains($prodSKU,'pack-all')) {
+                            $prodSKU .= '-pack-all';
+                        }
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1525,7 +1579,7 @@ class OrderController extends BaseController
                             $detail['price'] = str_replace('$', '', $row['sub_total']) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
-                            $importOrder = OrderProduct::create($detail);
+                            $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else if ($product) {
                             $iorder['user_id'] = $customer->id;
@@ -1533,7 +1587,12 @@ class OrderController extends BaseController
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['discount_amount'] = 0;
+                            $iorder['shipping_amount'] = 0;
+                            $iorder['tax_amount'] = 0;
+                            $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1548,25 +1607,65 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['order_date'];
                                     $orderInfo['type'] = Order::ORANGESHINE;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
-
-                                    $upload_id = OrderImport::create($orderInfo);
+                                    OrderImport::create($orderInfo);
                                 }
                             }
-
                         }
+
+
+                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                            $this->productRepository
+                                ->getModel()
+                                ->where('id', $product->id)
+                                ->where('with_storehouse_management', 1)
+                                ->where('quantity', '>', 0)
+                                ->decrement('quantity', $orderQuantity);
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('online_sales_qty', '>', 0)
+                                    ->decrement('online_sales_qty', $orderQuantity);
+                            }
+                            if (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('in_person_sales_qty', '>', 0)
+                                    ->decrement('in_person_sales_qty', $orderQuantity);
+                            }
+
+                            $productN = $this->productRepository->findById($product->id);
+                            set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+                        }
+
+                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                            $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
+                            $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                                ->where('product_id', $product->id)
+                                ->where('order_type', Order::PRE_ORDER)
+                                ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                                ->sum('qty');
+
+                            if ($preOrderQty >= $pre_order_max_qty) {
+                                generate_notification('pre_order_max_qty', $product);
+                            }
+                        }
+
                     }
                 }
             } else {
-
                 foreach ($order as $od) {
-
                     foreach ($od as $row) {
+
                         if (!isset($row['ponumber'])) {
                             return $response
                                 ->setError()
                                 ->setMessage('Wrong File Selected');
                         }
-
 
                         $customer = Customer::where(['phone' => $row['phonenumber']])->first();
                         if ($customer == null) {
@@ -1611,7 +1710,11 @@ class OrderController extends BaseController
                         $orderQuantity = 0;
                         $checkProdQty = false;
                         //Finding Product For Order
-                        $product = Product::where(['sku' => $row['styleno'], 'status' => BaseStatusEnum::ACTIVE])->first();
+                        $prodSKU = $row['styleno'];
+                        if (!str_contains($prodSKU,'pack-all')) {
+                            $prodSKU .= '-pack-all';
+                        }
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
                             $pack = quantityCalculate($product['category_id']);
@@ -1659,15 +1762,20 @@ class OrderController extends BaseController
                             $detail['price'] = str_replace('$', '', $row['subtotal']) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
-                            $importOrder = OrderProduct::create($detail);
+                            $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else if ($product) {
                             $iorder['user_id'] = $customer->id;
-                            $iorder['amount'] = str_replace('$', '', $row['totalamount']);;
+                            $iorder['amount'] = $iorder['sub_total'] = str_replace('$', '', $row['totalamount']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
+                            $iorder['discount_amount'] = 0;
+                            $iorder['shipping_amount'] = 0;
+                            $iorder['tax_amount'] = 0;
+                            $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $detail['order_id'] = $importOrder->id;
@@ -1682,11 +1790,54 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['orderdate'];
                                     $orderInfo['type'] = Order::FASHIONGO;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
-                                    $upload_id = OrderImport::create($orderInfo);
+                                    OrderImport::create($orderInfo);
                                 }
                             }
-
                         }
+
+
+                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                            $this->productRepository
+                                ->getModel()
+                                ->where('id', $product->id)
+                                ->where('with_storehouse_management', 1)
+                                ->where('quantity', '>', 0)
+                                ->decrement('quantity', $orderQuantity);
+
+                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('online_sales_qty', '>', 0)
+                                    ->decrement('online_sales_qty', $orderQuantity);
+                            }
+                            if (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                                $this->productRepository
+                                    ->getModel()
+                                    ->where('id', $product->id)
+                                    ->where('with_storehouse_management', 1)
+                                    ->where('in_person_sales_qty', '>', 0)
+                                    ->decrement('in_person_sales_qty', $orderQuantity);
+                            }
+
+                            $productN = $this->productRepository->findById($product->id);
+                            set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+                        }
+
+                        if ($product && $orderProduct->order->order_type == Order::PRE_ORDER) {
+                            $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
+                            $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                                ->where('product_id', $product->id)
+                                ->where('order_type', Order::PRE_ORDER)
+                                ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
+                                ->sum('qty');
+
+                            if ($preOrderQty >= $pre_order_max_qty) {
+                                generate_notification('pre_order_max_qty', $product);
+                            }
+                        }
+
                     }
                 }
             }
