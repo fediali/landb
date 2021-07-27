@@ -365,6 +365,11 @@ class OrderTable extends TableAbstract
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
             ],*/
+            'ec_orders.id' => [
+                'title' => 'Print',
+                'type' => 'select',
+                'choices'  => ['print_now' => 'Print Now!'],
+            ],
         ];
     }
 

@@ -177,10 +177,12 @@
             </h3>
         </div>
     </div>
+    <hr>
     <div class="row mt-3">
         <div class="col-lg-12 col-12">
             <p class="mt-2"> For return policy please visit landapparel.com/faq.html
             </p>
         </div>
     </div>
+    <hr>
 </section>
