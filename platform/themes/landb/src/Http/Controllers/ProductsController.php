@@ -98,7 +98,7 @@ class ProductsController extends Controller
                 'defaultProductAttributes',
                 'slugable',
                 'tags',
-                'tags.slugable',
+                'tags.slugable'
             ],
         ]);
 

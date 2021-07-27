@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-3"></div>
         <div class="col-lg-6">
-            <form id="register-form" method="post" action="{{ route('public.register.post') }}">
+            <form id="register-form" method="post" action="{{ route('public.register.post') }}" enctype="multipart/form-data">
             @csrf
             <h2 class="mt-5 mb-4 text-center signin-head">SIGN UP</h2>
 
@@ -272,7 +272,13 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-12">
+                    <p class="textbox-label">Document (if any)</p>
+                    <input class="input-textbox form-control @error('document') is-invalid @enderror" type="file"  name="document" />
+                    @error('document')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
                 <div class="col-lg-12 mt-5 mb-5">
                     <input type="submit" form="register-form" class="btn cart-btn w-100" value="Sign Up"/>
                 </div>

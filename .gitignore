@@ -19,6 +19,7 @@ _ide_helper_models.php
 /storage/app/backup
 /storage/cache_keys.json
 /public/storage
+/public/customer-doc
 
 __MACOSX
 /.phpintel
