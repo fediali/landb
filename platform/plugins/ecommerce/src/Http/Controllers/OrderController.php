@@ -1132,6 +1132,21 @@ class OrderController extends BaseController
         $order->editing_started_at = Carbon::now();
         $order->save();
 
+
+        $cards = [
+            '0' => 'Add New Card'
+        ];
+
+        if (!$order->user->card->isEmpty()) {
+            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+            if ($omniId) {
+                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+                list($card, $info) = omni_api($url);
+                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+            }
+        }
+
+
         return view('plugins/ecommerce::orders.reorder', compact(
             'order',
             'products',
@@ -1139,7 +1154,8 @@ class OrderController extends BaseController
             'customer',
             'customerAddresses',
             'customerAddress',
-            'customerOrderNumbers'
+            'customerOrderNumbers',
+            'cards'
         ));
     }
 

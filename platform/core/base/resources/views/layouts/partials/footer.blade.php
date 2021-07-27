@@ -240,7 +240,19 @@
         console.log(message);
     });
 
-    $(document).on('click', '.credit_card', function () {
+    $(document).on('click', 'a#remove-customer', function () {
+        $('#card_id').empty().html("<option value='0'> Add New Card</option>");
+        $('#card_id').selectpicker("refresh");
+        $('#billing_address').empty();
+        $('#billing_address').selectpicker("refresh");
+        $('.add_card').show();
+    });
+
+    $(document).on('click', '.credit_card, ul.select-customer', function () {
+        selectCard();
+    });
+
+    function selectCard() {
         $('select#billing_address').empty();
         var baddress = [];
 
@@ -268,6 +280,7 @@
                             $('select#billing_address').append(html);
                         }
                     });
+                    $('#billing_address').selectpicker("refresh");
 
                     getCustomer();
                     getCards();
@@ -279,7 +292,7 @@
                 }
             });
         }
-    });
+    }
 
     function getbillingadress() {
         console.log($("#billing_address option:selected").val(), "===");
@@ -335,6 +348,7 @@
                 }
                 htmls += "<option value='0'> Add New Card</option>";
                 $('#card_id').html(htmls);
+                $('#card_id').selectpicker("refresh");
                 var card = $("select.card_list option:selected").val();
                 $('.payment_id').val(card);
                 if (card == 0) {

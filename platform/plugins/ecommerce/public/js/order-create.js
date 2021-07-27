@@ -858,7 +858,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -8894,7 +8893,7 @@ var render = function() {
                                       expression: "!loading"
                                     }
                                   ],
-                                  staticClass: "clearfix"
+                                  staticClass: "clearfix select-customer"
                                 },
                                 [
                                   _vm._l(_vm.customers.data, function(
@@ -9161,9 +9160,10 @@ var render = function() {
                         {
                           attrs: {
                             href: "#",
+                            id: "remove-customer",
                             "data-toggle": "tooltip",
                             "data-placement": "top",
-                            title: "Xóa khách hàng"
+                            title: "Delete customer"
                           },
                           on: {
                             click: function($event) {
