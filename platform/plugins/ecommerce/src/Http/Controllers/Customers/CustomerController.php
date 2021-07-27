@@ -299,9 +299,15 @@ class CustomerController extends BaseController
      */
     public function getCustomerAddresses($id, BaseHttpResponse $response)
     {
-        $addresses = $this->addressRepository->allBy([
-            'customer_id' => $id,
-        ]);
+//        $addresses = $this->addressRepository->allBy([
+//            'customer_id' => $id,
+//        ]);
+        $addresses = CustomerAddress::where('customer_id', $id)
+                ->whereNotNull('state')
+                ->whereNotNull('city')
+                ->whereNotNull('zip_code')
+                ->whereNotNull('country')
+                ->whereNotNull('address')->get();
 
         return $response->setData($addresses);
     }
