@@ -721,7 +721,7 @@
                                     <div class="row m-0 pt-4 bg-white">
                                         <div class="col-lg-12 ">
                                             <span class="mb-2">Card</span>
-                                            {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                            {!!Form::select('card_list', $cards, @$order->order_card, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
                                         </div>
                                     </div>
 
@@ -731,7 +731,7 @@
                                             @isset($order->user->billingAddress)
                                                 <label class="col-lg-12 ">
                                                     <span class="mb-2">Billing Address</span>
-                                                    {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), $order->shippingAddress->id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
+                                                    {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
                                                 </label>
                                             @endisset
                                         </div>

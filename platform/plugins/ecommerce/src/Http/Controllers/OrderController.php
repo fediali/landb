@@ -333,7 +333,9 @@ class OrderController extends BaseController
                     'email'    => $customer->email,
                     'order_id' => $order->id,
                 ], $meta_condition);
-            } elseif ($request->input('billing_address')) {
+            }
+
+            if ($request->input('billing_address')) {
                 $address = $this->addressRepository->findById($request->input('billing_address'));
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $address->id,
@@ -345,7 +347,8 @@ class OrderController extends BaseController
                     'zip_code' => $address->zip_code,
                     'country'  => $address->country,
                     'address'  => $address->address,
-                    'order_id' => $order->id
+                    'order_id' => $order->id,
+                    'type' => 'billing',
                 ], $meta_condition);
             }
 
