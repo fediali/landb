@@ -858,6 +858,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7747,8 +7748,9 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Pieces :\n                                        " +
-                                            _vm._s(variant.packQty)
+                                          "\n                                        Total Pieces : " +
+                                            _vm._s(variant.packQty) +
+                                            "\n                                    "
                                         )
                                       ])
                                     : _vm._e(),
@@ -7757,8 +7759,9 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Sizes :\n                                        " +
-                                            _vm._s(variant.packSizes)
+                                          "\n                                        Sizes : " +
+                                            _vm._s(variant.packSizes) +
+                                            "\n                                    "
                                         )
                                       ])
                                     : _vm._e()
@@ -8143,6 +8146,23 @@ var render = function() {
                                                     )
                                                   ])
                                                 ])
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            product_item.product &&
+                                            product_item.product.sku.includes(
+                                              "pack"
+                                            )
+                                              ? _c("span", [
+                                                  _c("small", [
+                                                    _vm._v(
+                                                      " (" +
+                                                        _vm._s(
+                                                          product_item.per_piece_price
+                                                        ) +
+                                                        " per piece price) "
+                                                    )
+                                                  ])
+                                                ])
                                               : _vm._e()
                                           ])
                                         : _vm._e()
@@ -8191,11 +8211,11 @@ var render = function() {
                                                           ) {
                                                             return _c("span", [
                                                               _vm._v(
-                                                                "\n                                                                    " +
+                                                                "\n                                                                " +
                                                                   _vm._s(
                                                                     productItem.attribute_title
                                                                   ) +
-                                                                  "\n                                                                    "
+                                                                  "\n                                                                "
                                                               ),
                                                               index !==
                                                               variation
@@ -8262,6 +8282,23 @@ var render = function() {
                                                                     )
                                                                   ) +
                                                                   ")"
+                                                              )
+                                                            ])
+                                                          ])
+                                                        : _vm._e(),
+                                                      _vm._v(" "),
+                                                      variation.product &&
+                                                      variation.product.sku.includes(
+                                                        "pack"
+                                                      )
+                                                        ? _c("span", [
+                                                            _c("small", [
+                                                              _vm._v(
+                                                                " (" +
+                                                                  _vm._s(
+                                                                    variation.per_piece_price
+                                                                  ) +
+                                                                  " per piece price) "
                                                               )
                                                             ])
                                                           ])

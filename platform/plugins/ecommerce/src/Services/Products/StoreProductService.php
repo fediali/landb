@@ -63,6 +63,7 @@ class StoreProductService
             ]);
         }
 
+        $data['eta_pre_product'] = date('Y-m-d', strtotime($data['eta_pre_product']));
         $product->fill($data);
 
         if (!$hasVariation || $forceUpdateAll) {

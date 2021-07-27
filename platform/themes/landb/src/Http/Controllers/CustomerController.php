@@ -368,6 +368,7 @@ if(isset($data['set_default'])){
         'pre_auth'          => 1
     ];
     $url = (env("OMNI_URL") . "charge/");
+
     list($response, $info) = omni_api($url, $data, 'POST');
 
     $status = $info['http_code'];

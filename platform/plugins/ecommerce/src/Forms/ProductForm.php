@@ -174,13 +174,30 @@ class ProductForm extends FormAbstract
                     'placeholder' => trans('plugins/ecommerce::products.form.write_some_tags'),
                     'data-url'    => route('product-tag.all'),
                 ],
-            ])->add('eta_pre_product', 'date', [
+            ])
+            /*->add('eta_pre_product', 'date', [
                 'label'      => 'ETA',
                 'label_attr' => ['class' => 'control-label eta_pre_product'],
                 'attr'       => [
                     'class' => 'eta_pre_product',
                 ],
-
+            ])*/
+            ->add('eta_pre_product', 'text', [
+                'label'         => 'ETA',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'            => 'form-control datepicker',
+                    'data-date-format' => 'd M, yyyy',
+                ],
+                'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value'         => $this->model->eta_pre_product ? date('d M, Y', strtotime($this->model->eta_pre_product)) : now(config('app.timezone'))->format('d M, Y')
+            ])
+            ->add('prod_pieces', 'number', [
+                'label'      => 'Pack Product Pieces',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Pack Product Pieces',
+                ],
             ])
             ->setBreakFieldPoint('status');
 

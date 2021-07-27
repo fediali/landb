@@ -364,6 +364,7 @@ class CustomerController extends BaseController
         $request['customer_data'] = json_encode($request->customer_data);
         $card = CustomerCard::create($request->all());
         $customer = json_decode($request->customer_data);
+
         $data = [
             'payment_method_id' => $customer->id,
             'meta'              => [
@@ -375,7 +376,9 @@ class CustomerController extends BaseController
             'total'             => 1,
             'pre_auth'          => 1
         ];
-        $url = (env(" ") . "charge/");
+
+        $url = (env('OMNI_URL') . "charge");
+
         list($response, $info) = omni_api($url, $data, 'POST');
 
         $status = $info['http_code'];
@@ -397,15 +400,16 @@ class CustomerController extends BaseController
     public function getCustomerCard($id, BaseHttpResponse $response)
     {
         $customer = $this->customerRepository->findOrFail($id);
+        $cards = 0;
         if (count($customer->card) > 0) {
-            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-            list($card, $info) = omni_api($url);
-            $cards = collect(json_decode($card));
-        } else {
-            $cards = 0;
+            $omniId = $customer->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+            if ($omniId) {
+                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+                list($card, $info) = omni_api($url);
+                $cards = collect(json_decode($card));
+            }
         }
         return $response->setData($cards);
-
     }
 
     public function updateCustomerAddress(Request $request)
