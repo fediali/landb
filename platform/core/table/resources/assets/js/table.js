@@ -440,6 +440,9 @@
                         class: _self.data('class-item')
                     },
                     success: data => {
+                        if (typeof data.data.redirectUrl !== 'undefined') {
+                            window.open(data.data.redirectUrl, '_blank');
+                          }
                         if (data.error) {
                             Botble.showError(data.message);
                         } else {
