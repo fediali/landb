@@ -156,7 +156,7 @@
 
         payment_method();
 
-        $('.method').on('change', function () {
+        $(document).on('change', '.method', function () {
             payment_method();
         });
 
@@ -191,7 +191,7 @@
         function payment_method() {
             var payment_method = $("select.method option:selected").val();
 
-            if (payment_method == 'omni') {
+            if (payment_method === 'omni-payment') {
                 $('.card-area').show();
             } else {
                 $('.card-area').hide();
@@ -204,7 +204,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-772ad4c6040b', {
+    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
@@ -298,8 +298,14 @@
         });
     }
 
+    $(document).on('change', '#billing_address', function () {
+        getbillingadress();
+    });
+
     function getCustomer() {
         console.log($('#customer_id').val());
+
+
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
             type: 'get',
@@ -361,7 +367,7 @@
     });
 
     $('button#tokenizebutton').on('click', () => {
-        console.log('working')
+
         var month = $('.month').val();
         var year = $('.year').val();
         successElement = document.querySelector('.success');
