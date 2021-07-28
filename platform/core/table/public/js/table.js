@@ -433,6 +433,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               if (typeof data.data.redirectUrl !== 'undefined') {
                 window.open(data.data.redirectUrl, '_blank');
               }
+
               if (data.error) {
                 Botble.showError(data.message);
               } else {

@@ -1194,6 +1194,7 @@ export default {
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,
                     order_card: $("select.card_list option:selected").val(),
+                    billing_address: $("select#billing_address option:selected").val(),
                 })
                 .then(res => {
                     let data = res.data.data;
