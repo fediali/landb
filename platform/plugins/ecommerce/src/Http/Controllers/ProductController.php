@@ -1121,7 +1121,7 @@ class ProductController extends BaseController
 
     public function updateColors($id, $ids)
     {
-        if(count($ids)) {
+        if($ids) {
             foreach ($ids as $colorId) {
                 $product = Product::find($colorId);
                 $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
