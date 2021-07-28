@@ -48,6 +48,7 @@ class ImportProduct implements ToModel, WithHeadingRow
                 $product = new Product();
                 $product->id = $row['product_id'];
                 $product->name = $row['product'];
+                $product->warehouse_sec = @$row['bin'];
                 if ($row['full_description']) {
                     $product->description = $row['full_description'];
                 }
