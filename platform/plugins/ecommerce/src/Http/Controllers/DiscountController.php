@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
@@ -104,6 +105,15 @@ class DiscountController extends BaseController
         $discount = $this->discountRepository->createOrUpdate($request->input());
 
         if ($discount) {
+            $productCategories = $request->input('product_categories');
+            if ($productCategories) {
+                if (!is_array($productCategories)) {
+                    // $productCategories = [$productCategories];
+                    $products = DB::table('ec_product_category_product')->where('category_id', $productCategories)->pluck('product_id')->all();
+                    $discount->products()->attach($products);
+                }
+            }
+
             $productCollections = $request->input('product_collections');
             if ($productCollections) {
                 if (!is_array($productCollections)) {
