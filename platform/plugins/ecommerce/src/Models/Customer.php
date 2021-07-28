@@ -62,6 +62,7 @@ class Customer extends Authenticatable
         'salesperson_id',
         'phone_validation_error',
         'last_visit',
+        'document'
     ];
     protected $with = [
         'detail',

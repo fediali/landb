@@ -9,6 +9,7 @@ use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Response;
 use SeoHelper;
@@ -97,12 +98,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+      $doc_url = null;
+      $request = request();
+      if($request->hasFile('document')){
+        $document = $request->file('document');
+        $docSaveAsName = "doc-" .substr(microtime(), 12, 10).'.'.$document->getClientOriginalExtension();
+        $upload_path = 'customer-doc/';
+        $doc_url = $upload_path . $docSaveAsName;
+        $success = $document->move($upload_path, $docSaveAsName);
+      }
+
         $customer = $this->customerRepository->create([
             'name'        => $data['first_name'].' '.$data['last_name'],
             'email'       => $data['email'],
             'password'    => bcrypt($data['password']),
             'first_name'  => $data['first_name'],
             'last_name'   => $data['last_name'],
+            'document'    => $doc_url
         ]);
         if($customer){
           $cutomer_details = CustomerDetail::create([
@@ -198,5 +210,10 @@ class RegisterController extends Controller
   protected function redirectTo()
   {
     return route('customer.contract-form'); // return dynamicaly generated URL.
+  }
+
+  protected function registered(Request $request, $user)
+  {
+    //
   }
 }
