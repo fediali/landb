@@ -98,6 +98,7 @@ class Order extends BaseModel
         'platform',
         'parent_order',
         'notes',
+        'transaction_error',
         'po_number'
     ];
 

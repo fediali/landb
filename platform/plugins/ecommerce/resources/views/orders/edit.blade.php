@@ -800,13 +800,46 @@
                                             <input type="hidden" value="{{$order->preauth->transaction_id}}"
                                                    name="transaction_id">
                                             <input type="hidden" value="{{$order->amount}}" name="amount">
-                                            <label class="col-lg-12">Transaction ID
-                                                : {{$order->preauth->transaction_id}}</label>
+                                            <label class="col-lg-12"> <strong>Transaction ID
+                                                    : </strong>{{$order->preauth->transaction_id}}</label>
                                             <button type="submit" class="btn btn-info">Capture Payment</button>
                                         </form>
                                     </div>
                                 @else
-                                    <button class="btn btn-info">Captured</button>
+                                    <div class="wrapper-content bg-gray-white mb20">
+                                        <div class="pd-all-20">
+                                            <div class="p-b10">
+                                                <strong>Payment Status</strong>
+                                                <ul class="p-sm-r mb-0">
+                                                    <li class="ws-nm">
+                                                        <span class="ww-bw text-no-bold">
+                                                            <button class="btn btn-info">Captured</button>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                @endif
+
+                                @if($order->status == 'Declined')
+                                    <div class="wrapper-content bg-gray-white mb20">
+                                        <div class="pd-all-20">
+                                            <div class="p-b10">
+                                                <strong>Declined Reason</strong>
+                                                <ul class="p-sm-r mb-0">
+                                                    <li class="ws-nm">
+                                            <span
+                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 @endif
 
                             </div>

@@ -463,7 +463,8 @@
         })
 
         $('.address-country').on('change', function () {
-            // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
+
+            get_states($('select[name="address_state"]'), this.value);
         });
 
         $('.delete_address').on('click', function (e) {
@@ -474,7 +475,7 @@
             }
 
         });
-        $('.toggle-edit-address').on('click', function (e) {
+        $(document).on('click', '.toggle-edit-address', function (e) {
 
             var data = $(this).data('row');
 
@@ -492,7 +493,7 @@
 
 
             $('#edit_address').modal('toggle');
-            console.log(data);
+            console.log(data, 'ss');
         });
 
 
@@ -527,6 +528,7 @@
 
             success: function (result) {
                 thiss.find('option').remove();
+                console.log('s');
                 jQuery.each(result, function (index, state) {
                     if (index === old) {
                         thiss.append(new Option(state, index, null, true));
