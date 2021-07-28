@@ -76,10 +76,9 @@
                             <div class="ui-select-wrapper inline_block mb5 min-width-150-px" style="margin-right: 10px;"
                                  @change="handleChangeTarget()">
                                 <select id="select-offers" class="ui-select" name="target" v-model="target">
-                                    <option value="all-orders" v-if="type_option !== 'same-price'">{{ __('All orders') }}
-                                    </option>
-                                    <option value="amount-minimum-order" v-if="type_option !== 'same-price'">{{ __('Order amount from')}}
-                                    </option>
+                                    <option value="category">Category</option>
+                                    <option value="all-orders" v-if="type_option !== 'same-price'">{{ __('All orders') }}</option>
+                                    <option value="amount-minimum-order" v-if="type_option !== 'same-price'">{{ __('Order amount from')}}</option>
                                     <option value="group-products">{{ __('Product collection')}}</option>
                                     <option value="specific-product">{{ __('Product')}}</option>
                                     <option value="customer" v-if="type_option !== 'same-price'">{{ __('Customer')}}</option>
@@ -89,6 +88,18 @@
                                     <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
                                 </svg>
                             </div>
+
+                            <div class="inline mb5" id="div-select-category" v-if="target === 'category' && type_option !== 'shipping'" style="margin-right: 10px;">
+                                <div class="ui-select-wrapper" style="min-width: 200px;">
+                                    <select name="product_categories" class="ui-select" v-model="product_category_id">
+                                        <option v-for="product_category in product_categories" v-bind:value="product_category.id">{{ product_category.name }}</option>
+                                    </select>
+                                    <svg class="svg-next-icon svg-next-icon-size-16">
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
+                                    </svg>
+                                </div>
+                            </div>
+
                             <div class="inline mb5" id="div-select-collection"
                                  v-if="target === 'group-products' && type_option !== 'shipping'"
                                  style="margin-right: 10px;">
@@ -106,6 +117,7 @@
                                     </svg>
                                 </div>
                             </div>
+
                             <div class="inline mb5" id="div-select-product"
                                  v-if="target === 'specific-product' && type_option !== 'shipping'"
                                  style="margin-right: 10px;">
@@ -392,7 +404,9 @@
                 variant_ids: [],
                 hidden_product_search_panel: true,
                 product_collection_id: null,
+                product_category_id: null,
                 product_collections: [],
+                product_categories: [],
                 discount_on: 'per-order',
                 min_order_price: null,
                 product_quantity: 1,
@@ -510,6 +524,9 @@
             handleChangeTarget: function () {
                 let context = this;
                 switch (context.target) {
+                    case 'category':
+                        context.getListProductCategories();
+                        break;
                     case 'group-products':
                         context.getListProductCollections();
                         break;
@@ -525,6 +542,23 @@
                         context.product_id = null;
                         context.variant_ids = [];
                         break;
+                }
+            },
+            getListProductCategories: function () {
+                let context = this;
+                if (_.isEmpty(context.product_categories)) {
+                    context.loading = true;
+                    axios.get(route('product-categories.get-list-product-categories-for-select'))
+                        .then(res => {
+                            context.product_categories = res.data.data;
+                            if (!_.isEmpty(res.data.data)) {
+                                context.product_category_id = _.first(res.data.data).id;
+                            }
+                            context.loading = false;
+                        })
+                        .catch(res => {
+                            Botble.handleError(res.response.data);
+                        });
                 }
             },
             getListProductCollections: function () {

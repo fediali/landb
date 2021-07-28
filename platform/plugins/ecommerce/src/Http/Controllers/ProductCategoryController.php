@@ -154,4 +154,20 @@ class ProductCategoryController extends BaseController
 
         return $response->setMessage(trans('core/base::notices.delete_success_message'));
     }
+
+    /**
+     * @param BaseHttpResponse $response
+     * @return mixed
+     */
+    public function getListForSelect(BaseHttpResponse $response)
+    {
+        $productCategories = $this->productCategoryRepository
+            ->getModel()
+            ->select(['id', 'name'])
+            ->get()
+            ->toArray();
+
+        return $response->setData($productCategories);
+    }
+
 }
