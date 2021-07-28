@@ -313,6 +313,7 @@ function toggle_product_detail(id) {
 }
 
 function get_states(thiss, country, url) {
+    console.log(url)
     $.ajax({
         type: 'GET',
         url: url,
@@ -320,7 +321,7 @@ function get_states(thiss, country, url) {
             'country': country
         },
         beforeSend: function () {
-            toggle_loader(true);
+            //toggle_loader(true);
         },
 
         success: function (result) {
@@ -328,10 +329,10 @@ function get_states(thiss, country, url) {
             jQuery.each(result, function (state, index) {
                 thiss.append(new Option(index, state));
             });
-            toggle_loader(false);
+            // toggle_loader(false);
         },
         error: function (e) {
-            toggle_loader(false);
+            // toggle_loader(false);
         }
     })
 }

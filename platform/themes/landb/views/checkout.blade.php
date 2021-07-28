@@ -434,8 +434,14 @@
                                 <a style="font-size:14px" href="javascript:void(0);" onclick="change_tab('shipping-tab')" class="mt-5">Change</a>
 
                                     </div>
+                                   
                                 </div>
                                 <hr>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input class="input-shipping" type="text" />
+                                    </div>
+                                    </div>
                                 <div class="row">
                                     <div class="col-lg-7 col-7">
                                 <p class="cout-note  mt-5">Billing Address</p>

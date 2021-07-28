@@ -168,7 +168,7 @@ class ProductController extends BaseController
 
         $product = $service->execute($request, $product);
         $storeProductTagService->execute($request, $product);
-
+        $this->updateColors($product->id, $product->color_products);
         /*$addedAttributes = $request->input('added_attributes', []);
 
         if ($request->input('is_added_attributes') == 1 && $addedAttributes) {
@@ -514,7 +514,7 @@ class ProductController extends BaseController
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
         }
-
+        $this->updateColors($product->id, $product->color_products);
         return $response
             ->setPreviousUrl(route('products.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
@@ -1117,5 +1117,16 @@ class ProductController extends BaseController
         }
 
         return $response->setMessage('Product Demand Added Successfully!');
+    }
+
+    public function updateColors($id, $ids){
+      foreach ($ids as $colorId){
+        $product = Product::find($colorId);
+        $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+        if(!in_array($id, $product_colors)){
+          array_push($product_colors, $id);
+        }
+        $product->update(['color_products'=> $product_colors]);
+      }
     }
 }

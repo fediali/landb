@@ -315,15 +315,15 @@ class OrderController extends BaseController
             if ($request->input('customer_address.name')) {
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_address.id'),
-                    'name'     => $request->input('customer_address.name'),
-                    'phone'    => $request->input('customer_address.phone'),
-                    'email'    => $request->input('customer_address.email'),
-                    'state'    => $request->input('customer_address.state'),
-                    'city'     => $request->input('customer_address.city'),
-                    'zip_code' => $request->input('customer_address.zip_code'),
-                    'country'  => $request->input('customer_address.country'),
-                    'address'  => $request->input('customer_address.address'),
-                    'order_id' => $order->id
+                    'name'                => $request->input('customer_address.name'),
+                    'phone'               => $request->input('customer_address.phone'),
+                    'email'               => $request->input('customer_address.email'),
+                    'state'               => $request->input('customer_address.state'),
+                    'city'                => $request->input('customer_address.city'),
+                    'zip_code'            => $request->input('customer_address.zip_code'),
+                    'country'             => $request->input('customer_address.country'),
+                    'address'             => $request->input('customer_address.address'),
+                    'order_id'            => $order->id
                 ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
@@ -339,16 +339,16 @@ class OrderController extends BaseController
                 $address = $this->addressRepository->findById($request->input('billing_address'));
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $address->id,
-                    'name'     => $address->name,
-                    'phone'    => $address->phone,
-                    'email'    => $address->email,
-                    'state'    => $address->state,
-                    'city'     => $address->city,
-                    'zip_code' => $address->zip_code,
-                    'country'  => $address->country,
-                    'address'  => $address->address,
-                    'order_id' => $order->id,
-                    'type' => 'billing',
+                    'name'                => $address->name,
+                    'phone'               => $address->phone,
+                    'email'               => $address->email,
+                    'state'               => $address->state,
+                    'city'                => $address->city,
+                    'zip_code'            => $address->zip_code,
+                    'country'             => $address->country,
+                    'address'             => $address->address,
+                    'order_id'            => $order->id,
+                    'type'                => 'billing',
                 ], $meta_condition);
             }
 
@@ -1385,7 +1385,7 @@ class OrderController extends BaseController
 
                         //Finding Product For Order
                         $prodSKU = $row['style_no'];
-                        if (!str_contains($prodSKU,'pack-all')) {
+                        if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
@@ -1570,7 +1570,7 @@ class OrderController extends BaseController
                         $checkProdQty = false;
                         //Finding Product For Order
                         $prodSKU = $row['style'];
-                        if (!str_contains($prodSKU,'pack-all')) {
+                        if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
@@ -1752,7 +1752,7 @@ class OrderController extends BaseController
                         $checkProdQty = false;
                         //Finding Product For Order
                         $prodSKU = $row['styleno'];
-                        if (!str_contains($prodSKU,'pack-all')) {
+                        if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
@@ -1892,6 +1892,7 @@ class OrderController extends BaseController
 
     public function charge(Request $request)
     {
+
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta'              => [
@@ -1922,7 +1923,12 @@ class OrderController extends BaseController
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
-            return $errors;
+            $response = json_decode($response, true);
+            $status = [];
+            $status['transaction_error'] = $response['message'];
+            $status['status'] = 'Declined';
+            Order::where('id', $request->order_id)->update($status);
+            return back();
         }
 
         //$response->setMessage('Payment Successfully');
@@ -2171,16 +2177,17 @@ class OrderController extends BaseController
         return $response->setData($order)->setMessage('Sales Rep Updated Sucessfully');
     }
 
-    public function printReceipt($orders){
-      $list = Order::whereIn('id', json_decode($orders))->with(['payment', 'shippingAddress', 'billingAddress', 'products' => function($query){
-        $query->with(['product']);
-      }])->get();
-      $orderHtml = '';
-      foreach ($list as $order){
-        $orderHtml .= view('plugins/ecommerce::orders.partials.orderReceipt', ['order' => $order]);
-      }
+    public function printReceipt($orders)
+    {
+        $list = Order::whereIn('id', json_decode($orders))->with(['payment', 'shippingAddress', 'billingAddress', 'products' => function ($query) {
+            $query->with(['product']);
+        }])->get();
+        $orderHtml = '';
+        foreach ($list as $order) {
+            $orderHtml .= view('plugins/ecommerce::orders.partials.orderReceipt', ['order' => $order]);
+        }
 
-      return view('plugins/ecommerce::orders.receiptList', ['orderHtml' => $orderHtml]);
+        return view('plugins/ecommerce::orders.receiptList', ['orderHtml' => $orderHtml]);
 
     }
 
