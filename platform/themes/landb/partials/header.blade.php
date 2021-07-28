@@ -124,7 +124,7 @@
             </div> 
           </div>
           <div class="row">
-            <div class="col-lg-12 d-grid text-center">
+            <div class="col-lg-12 d-grid text-center header-col">
             <div class="d-flex navbar-parent m-auto">
                 {!!
                     Menu::renderMenuLocation('main-menu', [

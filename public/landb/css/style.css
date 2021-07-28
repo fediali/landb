@@ -1,6 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap");
 @import url(//db.onlinewebfonts.com/c/4c4c08af466e9ad071b6d69cf44093df?family=Saol+Display+Regular);
+
+html {
+    overflow-x: hidden;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -1945,6 +1950,44 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .navbar-brand img {
+        width: 65% !important;
+        margin: 15px 0px;
+    }
+    .add_to_cart_form .col-lg-4 {
+        padding-right: 0px !important;
+        padding-left: 0px !important;
+    }
+    .add_to_cart_form .cart-btn {
+        margin-top: 15px !important;
+    }
+    .previews img {
+        width: 100% !important;
+    }
+    .header-col {
+        display: block !important;
+    }
+    .slider-t-main {
+        display: block !important;
+    }
+    .t-one {
+        width: 100% !important;
+    }
+    .t-two {
+        width: 100% !important;
+    }
+    .t-three {
+        width: 100% !important;
+    }
+    .t-four {
+        width: 100% !important;
+    }
+    .t-five {
+        width: 100% !important;
+    }
+    .dp-scroll-text {
+        height: 600px !important;
+    }
     .navbar-parent ul {
         overflow-x: scroll !important;
         display: flex !important;
@@ -4028,7 +4071,7 @@ html {
   }
  
   .d-grid {
-      display: grid !important;
+      display: grid;
   }
 
   .m-auto {
@@ -4322,3 +4365,10 @@ html {
     font-size: 1rem !important;
 }
 
+.input-shipping {
+        background: #FFFFFF;
+    border: 1.19979px solid #B4B4B4;
+    box-sizing: border-box;
+    padding: 8.5px;
+    width: 100%;
+}
