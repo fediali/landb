@@ -426,8 +426,12 @@ if (!function_exists('get_products_data')) {
      * @param int $setId
      * @return array
      */
-    function get_products_data()
+    function get_products_data($not_id = null)
     {
-        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->pluck('name', 'id');
+        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])
+            ->when(!is_null($not_id), function ($query) use($not_id){
+              $query->where('id', '!=', $not_id);
+            })
+            ->pluck('name', 'id');
     }
 }

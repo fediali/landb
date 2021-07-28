@@ -50,6 +50,7 @@ class ProductForm extends FormAbstract
 
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
+        $products = get_products_data($this->getModel()->id);
 
         $productVariations = [];
         $productVariationsInfo = [];
@@ -118,6 +119,17 @@ class ProductForm extends FormAbstract
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
                 'choices'    => BaseStatusEnum::$PRODUCT,
+            ])
+            ->add('color_print', 'mediaImages', [
+                'label'         => 'Color Print',
+                'label_attr'    => ['class' => 'control-label'],
+                'values'     => $productId ? $this->getModel()->color_print : '',
+            ])
+            ->add('color_products[]', 'multiCheckList', [
+                'label'         => 'Color Products',
+                'label_attr'    => ['class' => 'control-label'],
+                'choices'       => $products,
+                'value'     => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
             ])
             ->add('inventory_history', 'inventory_history', [
                 'label'         => 'Inventory History',

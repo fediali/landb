@@ -80,7 +80,9 @@ class Product extends BaseModel
         'ptype',
         'eta_pre_product',
         'cost_price',
-        'creation_date'
+        'creation_date',
+        'color_print',
+        'color_products'
     ];
 
     /**
@@ -644,5 +646,9 @@ class Product extends BaseModel
             'order_ids' => $order_ids,
             'sum'       => $sum
         ];
+    }
+
+    public function product_colors(){
+      return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
     }
 }

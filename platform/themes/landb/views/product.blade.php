@@ -23,6 +23,7 @@
           ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
 
+
 //dd($productVariationsInfo, $productVariations);
 @endphp
 
@@ -111,14 +112,18 @@
                 @endforeach
             </select>
 
-           {{-- <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span>
+            <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
             <div class="color-area mt-2">
-                <label class="container-check">
-                    <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container-check">
+                @foreach($product->product_colors() as $color)
+                    <label class="container-check">
+                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
+                            {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
+                            {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
+                        </a>
+                    </label>
+                @endforeach
+                {{--<label class="container-check">
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
@@ -133,8 +138,8 @@
                 <label class="container-check">
                     <input type="checkbox">
                     <span class="checkmark"></span>
-                </label>
-            </div>--}}
+                </label>--}}
+            </div>
             <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
                 <div class="row m-0 mt-4">
