@@ -1950,6 +1950,22 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .slidert-left-img {
+        height: 525px !important;
+    }
+    .slidert-slim-img {
+        height: 525px !important;
+    }
+    .previews{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+    .gallery .previews a:hover, .gallery .previews a.selected {
+        width: 24% !important;
+    }
+    #menu .menu-footer ul li {
+        font-size: 15px !important;
+    }
     .navbar-brand img {
         width: 65% !important;
         margin: 15px 0px;
@@ -1988,7 +2004,7 @@ input.qtyminus {
     .dp-scroll-text {
         height: 600px !important;
     }
-    .navbar-parent ul {
+    .header-col .navbar-parent ul {
         overflow-x: scroll !important;
         display: flex !important;
         margin-right: 10px !important;
@@ -2024,7 +2040,7 @@ input.qtyminus {
     }
     .gallery .full,
     .gallery .full img {
-        width: 59% !important;
+        width: 100% !important;
     }
     .mbtb-pl-1 {
         padding-left: .25rem!important;

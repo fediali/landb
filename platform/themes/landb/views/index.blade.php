@@ -44,7 +44,7 @@
         <h2 class="text-center just-head">
             This Just In
         </h2> 
-        <div class="shoplisting ml-4 mr-4">
+        <div class="shoplisting detail-shoplist ml-4 mr-4">
                 <div class="listbox">
                 <a href="#"> 
                     <div class="img">
