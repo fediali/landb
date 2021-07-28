@@ -44,7 +44,7 @@ class importCustomers extends Command
      */
     public function handle()
     {
-        $file = public_path('lnb-customers.xlsx');
+        $file = public_path('lnb-customers-3000.xlsx');
         Excel::import(new \App\Imports\ImportCustomers(), $file);
         echo 'success';
     }
