@@ -51,7 +51,7 @@ class importProducts extends Command
      */
     public function handle()
     {
-        $file = public_path('lnb-products.xlsx');
+        $file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);
         echo 'success';
     }
