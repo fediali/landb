@@ -57,11 +57,11 @@
                                 <div class="table-wrap">
                                     <table class="table-order table-divided">
                                         <tbody>
+                                        {{--'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,--}}
                                         @foreach ($order->products as $orderProduct)
                                             @php
                                                 $product = get_products([
                                                     'condition' => [
-                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                         'ec_products.id' => $orderProduct->product_id,
                                                     ],
                                                     'take' => 1,
@@ -893,11 +893,11 @@
                             </tr>
                             </thead>
                             <tbody class="">
+                            {{--'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,--}}
                             @foreach ($order->products as $orderProduct)
                                 @php
                                     $product = get_products([
                                         'condition' => [
-                                            'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                             'ec_products.id' => $orderProduct->product_id,
                                         ],
                                         'take' => 1,

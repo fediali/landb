@@ -254,7 +254,8 @@ class OrderController extends BaseController
             'status'               => OrderStatusEnum::NEW_ORDER,
             'order_type'           => $request->input('order_type'),
             'notes'                => $request->input('customer_notes'),
-            'order_card'           => $request->input('order_card')
+            'order_card'           => $request->input('order_card'),
+            'platform'             => 'back-office'
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
