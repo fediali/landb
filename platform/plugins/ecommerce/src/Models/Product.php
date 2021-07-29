@@ -143,6 +143,7 @@ class Product extends BaseModel
      */
     public function categories()
     {
+
         return $this->belongsToMany(
             ProductCategory::class,
             'ec_product_category_product',
@@ -649,7 +650,8 @@ class Product extends BaseModel
         ];
     }
 
-    public function product_colors(){
-      return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
+    public function product_colors()
+    {
+        return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
     }
 }
