@@ -20,6 +20,7 @@ use File;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use SlugHelper;
 
 class importProducts extends Command
 {
