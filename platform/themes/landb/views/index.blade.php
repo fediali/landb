@@ -100,7 +100,8 @@
     @endif
 </section>
 @php
-    $products2 = get_latest_products(6, $products1->pluck('id'));
+//dd($products1->pluck('id')->toArray());
+    $products2 = get_latest_products(6, $products1->pluck('id')->toArray());
         $categories = \Botble\Ecommerce\Models\ProductCategory::
             orderBy('order', 'ASC')
             ->orderBy('created_at', 'DESC')
