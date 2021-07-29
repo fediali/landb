@@ -430,7 +430,6 @@ new Luminous(demoTrigger);
   });
 
   $(".tp-close-btn").on('click',function(){
-    alert("ssd");
     $("#top-sear").hide().attr("#top-sear");
   });
 

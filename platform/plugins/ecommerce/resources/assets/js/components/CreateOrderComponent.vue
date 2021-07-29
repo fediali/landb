@@ -39,10 +39,12 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Total Pieces :
-                                            {{ variant.packQty }}</p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">Sizes :
-                                            {{ variant.packSizes }}</p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                            Total Pieces : {{ variant.packQty }}
+                                        </p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                            Sizes : {{ variant.packSizes }}
+                                        </p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
@@ -108,18 +110,18 @@
                                                          :src="product_item.image_url"
                                                          :title="product_item.name" :alt="product_item.name">
                                                 </div>
-                                                <label class="inline_block ml10 mt10 ws-nm"
-                                                       style="width:calc(100% - 50px);">
+                                                <label class="inline_block ml10 mt10 ws-nm" style="width:calc(100% - 50px);">
                                                     {{ product_item.name }} ({{ product_item.sku }})
                                                     <span v-if="!product_item.variations.length">
-                                                        <span v-if="product_item.is_out_of_stock"
-                                                              class="text-danger"><small>&nbsp;({{
-                                                                __('Out of stock')
-                                                            }})</small></span>
-                                                        <span
-                                                            v-if="!product_item.is_out_of_stock && product_item.quantity > 0"><small>&nbsp;({{
-                                                                product_item.quantity
-                                                            }} {{ __('product(s) available') }})</small></span>
+                                                        <span v-if="product_item.is_out_of_stock" class="text-danger">
+                                                            <small>&nbsp;({{__('Out of stock')}})</small>
+                                                        </span>
+                                                        <span v-if="!product_item.is_out_of_stock && product_item.quantity > 0">
+                                                            <small>&nbsp;({{product_item.quantity}} {{ __('product(s) available') }})</small>
+                                                        </span>
+                                                        <span v-if="product_item.product && product_item.product.sku.includes('pack')">
+                                                            <small>&nbsp;({{ product_item.per_piece_price }} per piece price) </small>
+                                                        </span>
                                                     </span>
                                                 </label>
                                                 <div v-if="product_item.variations.length">
@@ -130,22 +132,21 @@
                                                             @click="selectProductVariant(product_item, variation)"
                                                             v-if="variation.variation_items.length">
                                                             <a class="color_green float-left">
-                                                                    <span
-                                                                        v-for="(productItem, index) in variation.variation_items">
-                                                                        {{ productItem.attribute_title }}
-                                                                        <span
-                                                                            v-if="index !== variation.variation_items.length - 1">/</span>
-                                                                    </span>
+                                                                <span v-for="(productItem, index) in variation.variation_items">
+                                                                    {{ productItem.attribute_title }}
+                                                                    <span v-if="index !== variation.variation_items.length - 1">/</span>
+                                                                </span>
                                                             </a>
                                                             <span>&nbsp;({{ variation.product.sku }})</span>
-                                                            <span v-if="variation.is_out_of_stock"
-                                                                  class="text-danger"><small>&nbsp;({{
-                                                                    __('Out of stock')
-                                                                }})</small></span>
-                                                            <span
-                                                                v-if="!variation.is_out_of_stock && variation.quantity > 0"><small>&nbsp;({{
-                                                                    variation.quantity
-                                                                }} {{ __('product(s) available') }})</small></span>
+                                                            <span v-if="variation.is_out_of_stock" class="text-danger">
+                                                                <small>&nbsp;({{__('Out of stock')}})</small>
+                                                            </span>
+                                                            <span v-if="!variation.is_out_of_stock && variation.quantity > 0">
+                                                                <small>&nbsp;({{variation.quantity}} {{ __('product(s) available') }})</small>
+                                                            </span>
+                                                            <span v-if="variation.product && variation.product.sku.includes('pack')">
+                                                                <small>&nbsp;({{ variation.per_piece_price }} per piece price) </small>
+                                                            </span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -328,7 +329,7 @@
                                             <div class="has-loading" v-show="loading">
                                                 <i class="fa fa-spinner fa-spin"></i>
                                             </div>
-                                            <ul class="clearfix" v-show="!loading">
+                                            <ul class="clearfix select-customer" v-show="!loading">
                                                 <li class="row" v-for="customer in customers.data"
                                                     @click="selectCustomer(customer)">
                                                     <div class="flexbox-grid-default flexbox-align-items-center">
@@ -398,8 +399,7 @@
                                 <label class="title-product-main">{{ __('Customer') }}</label>
                             </div>
                             <div class="flexbox-auto-left">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Xóa khách hàng"
-                                   @click="removeCustomer()">
+                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top" title="Delete customer" @click="removeCustomer()">
                                     <svg class="svg-next-icon svg-next-icon-size-12">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                     </svg>
@@ -1193,6 +1193,7 @@ export default {
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,
                     order_card: $("select.card_list option:selected").val(),
+                    billing_address: $("select#billing_address option:selected").val(),
                 })
                 .then(res => {
                     let data = res.data.data;

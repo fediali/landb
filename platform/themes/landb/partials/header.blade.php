@@ -72,7 +72,9 @@
             <ul class="d-flex">
                 <li class="search-custom">
                     <a href="#"><i class="fal fa-search"></i></a>
-                    <div id="top-sear" class="top-search">
+                    
+                </li>
+                <div id="top-sear" class="top-search">
                       <form action="#">
                         <div class="d-flex main-search">
                         <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." name="search">
@@ -81,7 +83,6 @@
                         </div> 
                       </form>
                     </div>
-                </li>
                 <li>
                     <a href="{{ route('public.cart_index') }}"><i class="fal fa-shopping-cart"></i></a>
                 </li>
@@ -123,7 +124,7 @@
             </div> 
           </div>
           <div class="row">
-            <div class="col-lg-12 d-grid text-center">
+            <div class="col-lg-12 d-grid text-center header-col">
             <div class="d-flex navbar-parent m-auto">
                 {!!
                     Menu::renderMenuLocation('main-menu', [

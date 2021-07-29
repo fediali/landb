@@ -232,10 +232,12 @@
     border: #d64635;
     border-radius: 0;
 }
-.card-area {
-    width: 24.5%;
-    margin-top: -10px;
-    margin-left: 20px;
+.card-area  {
+  width: 25%;
+  margin-top: -10px;
+  margin-left: 20px;
+  right: 50px;
+  position: absolute;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -1044,7 +1046,7 @@
 }
 
 #modal-adv-search {
-  z-index: 100000;
+  z-index: 9999;
 }
 #modal-adv-search .close {
   position: absolute;

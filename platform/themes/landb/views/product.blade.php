@@ -23,6 +23,7 @@
           ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
 
+
 //dd($productVariationsInfo, $productVariations);
 @endphp
 
@@ -111,14 +112,18 @@
                 @endforeach
             </select>
 
-           {{-- <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;<span class="detail-color-text-p">Peach</span>
+            <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
             <div class="color-area mt-2">
-                <label class="container-check">
-                    <input type="checkbox" checked="checked">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container-check">
+                @foreach($product->product_colors() as $color)
+                    <label class="container-check">
+                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
+                            {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
+                            {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
+                        </a>
+                    </label>
+                @endforeach
+                {{--<label class="container-check">
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
@@ -133,8 +138,8 @@
                 <label class="container-check">
                     <input type="checkbox">
                     <span class="checkmark"></span>
-                </label>
-            </div>--}}
+                </label>--}}
+            </div>
             <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
                 <div class="row m-0 mt-4">
@@ -438,7 +443,7 @@
     </div>
 </section>
 
-<!-- Modal -->
+<!-- Modal Size Chart Kids -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -446,96 +451,88 @@
       <div class="modal-content">
       <button style="position: absolute; right: 10px;font-size: 38px; font-weight: 200; top: -5px;" type="button" class="close" data-dismiss="modal">&times;</button>
         <div class="modal-body size-chart mt-4">
+        <h3 class="text-center mb-3">SIZE CHART FOR KIDS</h3>
         <table>
 <tbody>
 <tr tabindex="0">
-<td>SIZE</td>
-<td>XS</td>
-<td>S</td>
-<td>M</td>
-<td>L</td>
-<td>XL</td>
+<td class="text-left pl-2">SIZE CHART FOR KIDS</td>
+<td>(4/5) XS</td>
+<td>(6/7) S</td>
+<td>(8/9) M</td>
+<td>(10/11) L</td>
+<td>(12/14) XL</td> 
 </tr>
+ 
 <tr tabindex="0">
-<td>US/CAN</td>
-<td>1</td>
-<td>3, 5</td>
-<td>7, 9</td>
-<td>11, 13</td>
-<td>15</td>
-</tr>
+<td class="text-left pl-2">BACK </td>
+<td>10 5/8</td>
+<td>11 1/4</td>
+<td>11 7/8</td>
+<td>12 1/2</td>
+<td>13 1/8</td>
+</tr> 
 <tr tabindex="0">
-<td>Bust (in)</td>
-<td>31-33</td>
-<td>33-35</td>
-<td>35-37</td>
-<td>37-39</td>
-<td>39-41</td>
+<td class="text-left pl-2">BUST</td>
+<td>13 1/2</td>
+<td>14 1/2</td>
+<td>15 1/2</td>
+<td>16 1/2</td>
+<td>17 1/2</td>
 </tr>
+ 
 <tr tabindex="0">
-<td>Waist (in)</td>
-<td>24-25</td>
-<td>26-27</td>
-<td>28-29</td>
-<td>30-31</td>
-<td>32</td>
+<td class="text-left pl-2">WAIST </td>
+<td>19  20 1/2</td>
+<td>22</td>
+<td>23 1/2</td>
+<td>25</td>
+<td>26 1/2  28</td>
 </tr>
+ 
 <tr tabindex="0">
-<td>Hips (in)</td>
-<td>33-34</td>
-<td>35-36</td>
-<td>37-38</td>
-<td>39-40</td>
-<td>41</td>
+<td class="text-left pl-2">WAIST (AVERAGE)</td>
+<td>19 1/4</td>
+<td>22</td>
+<td>23 1/2</td>
+<td>25</td>
+<td>27 1/4</td>
 </tr>
+ 
 <tr tabindex="0">
-<td>UK</td>
-<td>2, 4</td>
-<td>6, 8</td>
-<td>10, 12</td>
-<td>14, 16</td>
-<td>18</td>
-</tr>
+<td class="text-left pl-2">TOP LENGTH</td>
+<td>17 1/4</td>
+<td>18 1/4</td>
+<td>19 1/4</td>
+<td>20 1/4</td>
+<td>21 1/4</td>
+</tr> 
+
 <tr tabindex="0">
-<td>EU</td>
-<td>32, 34</td>
-<td>36, 38</td>
-<td>40, 42</td>
-<td>44, 46</td>
-<td>48</td>
+<td class="text-left pl-2">SLEEVE LENGTH </td>
+<td>6 1/4</td>
+<td>6 1/2</td>
+<td>6 3/4</td>
+<td>7</td>
+<td>7 1/4</td>
 </tr>
+ 
 <tr tabindex="0">
-<td>AUS</td>
-<td>2, 4</td>
-<td>6, 8</td>
-<td>10, 12</td>
-<td>14, 16</td>
-<td>18</td>
-</tr>
+<td class="text-left pl-2">SLEEVE WRIST OPENING</td>
+<td>5 1/2</td>
+<td>5 3/4</td>
+<td>6 </td>
+<td>6 1/4</td>
+<td>6 1/2</td>
+</tr> 
 <tr tabindex="0">
-<td>Bust (cm)</td>
-<td>78-83</td>
-<td>83-89</td>
-<td>89-94</td>
-<td>94-99</td>
-<td>99-104</td>
+<td class="text-left pl-2">SHOULDERS</td>
+<td>2 5/8</td>
+<td>2 3/4</td>
+<td>2 7/8</td>
+<td>3 </td>
+<td>3 1/8</td>
 </tr>
-<tr tabindex="0">
-<td>Waist (cm)</td>
-<td>60-65</td>
-<td>65-70</td>
-<td>70-75</td>
-<td>75-80</td>
-<td>80-85</td>
-</tr>
-<tr tabindex="0">
-<td>Hips (cm)</td>
-<td>83-88</td>
-<td>88-93</td>
-<td>93-98</td>
-<td>98-103</td>
-<td>103-108</td>
-</tr>
+ 
 </tbody>
 </table>
         </div>
@@ -543,5 +540,174 @@
 
     </div>
   </div>
+
+  <!-- Modal Size Chart Women Tops -->
+<div class="modal fade" id="sizeWomenTopsModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+      <button style="position: absolute; right: 10px;font-size: 38px; font-weight: 200; top: -5px;" type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-body size-chart mt-4">
+        <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S TOPS</h3>
+        <table>
+<tbody>
+<tr tabindex="0"> 
+<td class="text-left pl-2">SIZE</td>
+<td>S</td>
+<td>M</td>
+<td>L</td>
+<td>XL</td>
+<td>2XL</td> 
+<td>3XL</td> 
+</tr> 
+<tr tabindex="0">
+<td class="text-left pl-2">BUST </td>
+<td>8 1/2</td>
+<td>9</td>
+<td>9 1/2</td>
+<td>9 3/4</td>
+<td>10</td>
+<td>10 1/4</td>
+</tr>  
+<tr tabindex="0">
+<td class="text-left pl-2">WAIST</td>
+<td>7 1/2</td>
+<td>8</td>
+<td>8 1/2</td>
+<td>9 </td>
+<td>9 1/2</td>
+<td>10</td>
+</tr>
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">HIPS (STRAIGHT) </td>
+<td>9</td>
+<td>9 1/2</td>
+<td>10</td>
+<td>10 1/2</td>
+<td>11</td>
+<td>11 1/2</td>
+</tr>
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">LENGTH (CAMI)</td>
+<td>24 3/4</td>
+<td>25 1/2</td>
+<td>26 1/4</td>
+<td>27</td>
+<td>27 3/4</td>
+<td>28 1/2</td>
+</tr> 
+ 
+</tbody>
+</table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Modal Size Chart Women -->
+<div class="modal fade" id="sizeWomenModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+      <button style="position: absolute; right: 10px;font-size: 38px; font-weight: 200; top: -5px;" type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-body size-chart mt-4">
+        <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S</h3>
+        <table>
+<tbody>
+<tr tabindex="0">  
+<td class="text-left pl-2">SIZE</td>
+<td>WAIST SIZE</td>
+<td>HIP</td>
+<td>THIGH</td> 
+</tr> 
+<tr tabindex="0"> 
+<td class="text-left pl-2">2</td>
+<td>27 - 27 1/2"</td>
+<td>31 - 32"</td>
+<td>18 - 19"</td> 
+</tr>   
+<tr tabindex="0">
+<td class="text-left pl-2">4</td>
+<td>28 - 28 1/2"</td>
+<td>32 - 33"</td>
+<td>19 - 20"</td> 
+</tr>
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">6 </td>
+<td>29 - 29 1/2"</td>
+<td>33 - 34"</td>
+<td>20 - 21"</td> 
+</tr> 
+<tr tabindex="0">
+<td class="text-left pl-2">8</td>
+<td>30 30 1/2"</td>
+<td>34 - 35"</td>
+<td>20 1/2 - 21 1/2"</td> 
+</tr> 
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">10</td>
+<td>31 - 31 1/2"</td>
+<td>35 - 36"</td>
+<td>21 1/2 - 22 1/2"</td> 
+</tr> 
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">12</td>
+<td>32 - 32 1/2"</td>
+<td>36 - 37"</td>
+<td>21 1/2 - 22 1/2"</td> 
+</tr> 
+
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">14</td>
+<td>34 - 34 1/2"</td>
+<td>37 - 38"</td>
+<td>22 1/2 - 23 1/2"</td> 
+</tr> 
+  
+<tr tabindex="0">
+<td class="text-left pl-2">16 </td>
+<td>36 - 36 1/2"</td>
+<td>38 - 39"</td>
+<td>23 1/2 - 24 1/2"</td> 
+</tr>  
+<tr tabindex="0">
+<td class="text-left pl-2">18</td>
+<td>38 - 38 1/2"</td>
+<td>40 - 41"</td>
+<td>24 1/2 - 25 1/2"</td> 
+</tr> 
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">20</td>
+<td>40 - 40 1/2"</td>
+<td>42 - 43"</td>
+<td>25 - 26"</td> 
+</tr> 
+ 
+<tr tabindex="0">
+<td class="text-left pl-2">22</td>
+<td>42 - 42  1/2"</td>
+<td>44 - 45"</td>
+<td>26 1/2 - 27 1/2"</td> 
+</tr> 
+ 
+</tbody>
+</table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 
 

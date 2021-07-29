@@ -168,7 +168,7 @@ class ProductController extends BaseController
 
         $product = $service->execute($request, $product);
         $storeProductTagService->execute($request, $product);
-
+        $this->updateColors($product->id, $product->color_products);
         /*$addedAttributes = $request->input('added_attributes', []);
 
         if ($request->input('is_added_attributes') == 1 && $addedAttributes) {
@@ -203,7 +203,7 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id'  => $item,
+                    'id' => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
@@ -509,12 +509,12 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id'  => $item,
+                    'id' => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
         }
-
+        $this->updateColors($product->id, $product->color_products);
         return $response
             ->setPreviousUrl(route('products.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
@@ -878,14 +878,14 @@ class ProductController extends BaseController
                     ['id', '<>', $id],
                     ['name', 'LIKE', '%' . $request->input('keyword') . '%'],
                 ],
-                'select'    => [
+                'select' => [
                     'id',
                     'name',
                     'images',
                 ],
-                'paginate'  => [
-                    'per_page'      => 5,
-                    'type'          => 'simplePaginate',
+                'paginate' => [
+                    'per_page' => 5,
+                    'type' => 'simplePaginate',
                     'current_paged' => (int)$request->input('page', 1),
                 ],
             ]);
@@ -1028,7 +1028,7 @@ class ProductController extends BaseController
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
             foreach ($availableProduct->variations as $k => &$variation) {
-                $variation->price = $variation->product->front_sale_price;
+                $variation->per_piece_price = $variation->price = $variation->product->front_sale_price;
                 $variation->is_out_of_stock = $variation->product->isOutOfStock();
 
                 $variation->packQty = 0;
@@ -1036,6 +1036,7 @@ class ProductController extends BaseController
                 if (str_contains($variation->product->sku, 'pack')) {
                     $variation->packQty = packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
+                    $variation->per_piece_price = $variation->price / $variation->packQty;
                 }
 
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
@@ -1116,5 +1117,19 @@ class ProductController extends BaseController
         }
 
         return $response->setMessage('Product Demand Added Successfully!');
+    }
+
+    public function updateColors($id, $ids)
+    {
+        if($ids) {
+            foreach ($ids as $colorId) {
+                $product = Product::find($colorId);
+                $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+                if (!in_array($id, $product_colors)) {
+                    array_push($product_colors, $id);
+                }
+                $product->update(['color_products' => $product_colors]);
+            }
+        }
     }
 }

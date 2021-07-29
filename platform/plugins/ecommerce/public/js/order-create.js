@@ -1247,7 +1247,8 @@ __webpack_require__.r(__webpack_exports__);
         order_type: this.order_type,
         amount: this.child_sub_amount,
         customer_address: this.child_customer_address,
-        order_card: $("select.card_list option:selected").val()
+        order_card: $("select.card_list option:selected").val(),
+        billing_address: $("select#billing_address option:selected").val()
       }).then(function (res) {
         var data = res.data.data;
 
@@ -7747,8 +7748,9 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Total Pieces :\n                                        " +
-                                            _vm._s(variant.packQty)
+                                          "\n                                        Total Pieces : " +
+                                            _vm._s(variant.packQty) +
+                                            "\n                                    "
                                         )
                                       ])
                                     : _vm._e(),
@@ -7757,8 +7759,9 @@ var render = function() {
                                   variant.product.sku.includes("pack")
                                     ? _c("p", [
                                         _vm._v(
-                                          "Sizes :\n                                        " +
-                                            _vm._s(variant.packSizes)
+                                          "\n                                        Sizes : " +
+                                            _vm._s(variant.packSizes) +
+                                            "\n                                    "
                                         )
                                       ])
                                     : _vm._e()
@@ -8143,6 +8146,23 @@ var render = function() {
                                                     )
                                                   ])
                                                 ])
+                                              : _vm._e(),
+                                            _vm._v(" "),
+                                            product_item.product &&
+                                            product_item.product.sku.includes(
+                                              "pack"
+                                            )
+                                              ? _c("span", [
+                                                  _c("small", [
+                                                    _vm._v(
+                                                      " (" +
+                                                        _vm._s(
+                                                          product_item.per_piece_price
+                                                        ) +
+                                                        " per piece price) "
+                                                    )
+                                                  ])
+                                                ])
                                               : _vm._e()
                                           ])
                                         : _vm._e()
@@ -8191,11 +8211,11 @@ var render = function() {
                                                           ) {
                                                             return _c("span", [
                                                               _vm._v(
-                                                                "\n                                                                    " +
+                                                                "\n                                                                " +
                                                                   _vm._s(
                                                                     productItem.attribute_title
                                                                   ) +
-                                                                  "\n                                                                    "
+                                                                  "\n                                                                "
                                                               ),
                                                               index !==
                                                               variation
@@ -8262,6 +8282,23 @@ var render = function() {
                                                                     )
                                                                   ) +
                                                                   ")"
+                                                              )
+                                                            ])
+                                                          ])
+                                                        : _vm._e(),
+                                                      _vm._v(" "),
+                                                      variation.product &&
+                                                      variation.product.sku.includes(
+                                                        "pack"
+                                                      )
+                                                        ? _c("span", [
+                                                            _c("small", [
+                                                              _vm._v(
+                                                                " (" +
+                                                                  _vm._s(
+                                                                    variation.per_piece_price
+                                                                  ) +
+                                                                  " per piece price) "
                                                               )
                                                             ])
                                                           ])
@@ -8856,7 +8893,7 @@ var render = function() {
                                       expression: "!loading"
                                     }
                                   ],
-                                  staticClass: "clearfix"
+                                  staticClass: "clearfix select-customer"
                                 },
                                 [
                                   _vm._l(_vm.customers.data, function(
@@ -9123,9 +9160,10 @@ var render = function() {
                         {
                           attrs: {
                             href: "#",
+                            id: "remove-customer",
                             "data-toggle": "tooltip",
                             "data-placement": "top",
-                            title: "Xóa khách hàng"
+                            title: "Delete customer"
                           },
                           on: {
                             click: function($event) {

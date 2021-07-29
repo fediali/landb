@@ -213,7 +213,7 @@
                     <span>Restock</span>
 
                     <div class="imgoverlay">
-                        <a href="javascript:void(0);" onclick="toggle_product_detail('{{ $product->product_slug }}')"><i class="far fa-eye"></i></a>
+                        <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}" ><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())
                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
                             <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ $default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>

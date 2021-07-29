@@ -57,11 +57,11 @@
                                 <div class="table-wrap">
                                     <table class="table-order table-divided">
                                         <tbody>
+                                        {{--'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,--}}
                                         @foreach ($order->products as $orderProduct)
                                             @php
                                                 $product = get_products([
                                                     'condition' => [
-                                                        'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                                         'ec_products.id' => $orderProduct->product_id,
                                                     ],
                                                     'take' => 1,
@@ -607,8 +607,8 @@
                             </div>
                             <div class="next-card-section border-none-t">
                                 <div class="mb5">
-                                    <strong
-                                        class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong>
+                                    <a href=" {{route('customer.edit', $order->user->id)}}"> <strong
+                                            class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong></a>
                                 </div>
                                 @if ($order->user->id)
                                     <div>
@@ -664,12 +664,6 @@
                                             <span
                                                 class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
                                         </li>
-<br>
-                                        <li class="ws-nm">
-                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                    data-target="#modal_split_order">Split Order
-                                            </button>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -677,6 +671,11 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#modal_split_order">Split Order
+                                </button>
+                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
+                                   class="btn btn-success">Print Order</a>&nbsp;
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
                                    class="btn btn-warning">Edit Order</a>&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
@@ -691,13 +690,13 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-
-                                <input class="form-control" type="text" id="salesperson_id"
-                                       value="{{@$order->salesperson->username}}"
-                                       disabled>
-                                <i class="fa fa-plus" data-toggle="modal"
-                                   data-target="#salesrep"></i>
-
+                                <div class="d-flex">
+                                    <input class="form-control" type="text" id="salesperson_id"
+                                           value="{{@$order->salesperson->username}}"
+                                           disabled>
+                                    <i style="padding: 10px; background: #bbb;" class="fa fa-plus" data-toggle="modal"
+                                       data-target="#salesrep"></i>
+                                </div>
                                 <input type="hidden" id="customer_id" value="{{$order->user_id}}">
                                 <form action="{{ route('orders.edit', $order->id) }}">
                                     <label class="text-title-field">Tracking No.</label>
@@ -713,7 +712,8 @@
                                 </form>
                             </div>
                         </div>
-                        @if($order->payment->payment_channel->label() == 'omni_payment')
+
+                        @if($order->payment->payment_channel->label() == 'omni-payment')
                             <div class="wrapper-content bg-gray-white mb20">
 
                                 <!-- card -->
@@ -721,7 +721,7 @@
                                     <div class="row m-0 pt-4 bg-white">
                                         <div class="col-lg-12 ">
                                             <span class="mb-2">Card</span>
-                                            {!!Form::select('card_list', $cards, null, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                            {!!Form::select('card_list', $cards, @$order->order_card, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
                                         </div>
                                     </div>
 
@@ -731,10 +731,7 @@
                                             @isset($order->user->billingAddress)
                                                 <label class="col-lg-12 ">
                                                     <span class="mb-2">Billing Address</span>
-                                                    {!!
-                                            Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'),(!is_null($order->billingAddress) ? $order->billingAddress->id  : null) ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
-                                            ])
-                                        !!}
+                                                    {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
                                                 </label>
                                             @endisset
                                         </div>
@@ -760,10 +757,11 @@
                                                        class="form-control year">
                                             </div>
                                         </div>
-                                        {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                                        {{--<button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
                                         <div class="row m-0">
                                             <div class="col-lg-6">
-                                                <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card
+                                                <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit
+                                                    Card
                                                 </button>
                                             </div>
                                         </div>
@@ -775,12 +773,10 @@
                                                         Successful! The ID is
                                                         <span class="token"></span>
                                                     </div>
-                                                    <div class="loader" style="margin: auto">
-                                                    </div>
+                                                    <div class="loader" style="margin: auto"></div>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="pd-all-20 bg-white">
                                         <form action="{{route('orders.charge')}}" method="POST">
@@ -795,33 +791,56 @@
                                     </div>
                                 @elseif($order->preauth->status == 0)
                                     <div class="capture_card">
-
-                                        <div class="row group">
-
-                                        </div>
-
-                                        <div class="group row">
-
-                                        </div>
-
-
+                                        <div class="row group"></div>
+                                        <div class="group row"></div>
                                     </div>
                                     <div class="pd-all-20">
                                         <form action="{{route('orders.capture')}}" method="POST">
                                             @csrf
-
                                             <input type="hidden" value="{{$order->preauth->transaction_id}}"
                                                    name="transaction_id">
                                             <input type="hidden" value="{{$order->amount}}" name="amount">
-                                            <label class="col-lg-12">Transaction ID
-                                                : {{$order->preauth->transaction_id}}</label>
+                                            <label class="col-lg-12"> <strong>Transaction ID
+                                                    : </strong>{{$order->preauth->transaction_id}}</label>
                                             <button type="submit" class="btn btn-info">Capture Payment</button>
                                         </form>
                                     </div>
-
                                 @else
-                                    <button class="btn btn-info">Captured</button>
-                                @endif()
+                                    <div class="wrapper-content bg-gray-white mb20">
+                                        <div class="pd-all-20">
+                                            <div class="p-b10">
+                                                <strong>Payment Status</strong>
+                                                <ul class="p-sm-r mb-0">
+                                                    <li class="ws-nm">
+                                                        <span class="ww-bw text-no-bold">
+                                                            <button class="btn btn-info">Captured</button>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                @endif
+
+                                @if($order->status == 'Declined')
+                                    <div class="wrapper-content bg-gray-white mb20">
+                                        <div class="pd-all-20">
+                                            <div class="p-b10">
+                                                <strong>Declined Reason</strong>
+                                                <ul class="p-sm-r mb-0">
+                                                    <li class="ws-nm">
+                                            <span
+                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                @endif
 
                             </div>
                         @elseif($order->payment->payment_channel->label() == 'paypal')
@@ -874,11 +893,11 @@
                             </tr>
                             </thead>
                             <tbody class="">
+                            {{--'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,--}}
                             @foreach ($order->products as $orderProduct)
                                 @php
                                     $product = get_products([
                                         'condition' => [
-                                            'ec_products.status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE,
                                             'ec_products.id' => $orderProduct->product_id,
                                         ],
                                         'take' => 1,
@@ -976,6 +995,7 @@
     <script>
         setTimeout(function () {
             getCustomer();
+            getbillingadress();
         }, 200);
 
         $(document).ready(function () {

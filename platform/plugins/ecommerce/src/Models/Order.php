@@ -51,6 +51,11 @@ class Order extends BaseModel
         self::PRE_ORDER => 'Pre Order',
     ];
 
+    public static $IMPORT_ORDER_TYPES = [
+        'New'         => self::NORMAL,
+        'Backordered' => self::PRE_ORDER,
+    ];
+
     const ONLINE = 'online';
     const SALES = 'sales';
     const MOBILE = 'mobile';
@@ -93,6 +98,7 @@ class Order extends BaseModel
         'platform',
         'parent_order',
         'notes',
+        'transaction_error',
         'po_number'
     ];
 

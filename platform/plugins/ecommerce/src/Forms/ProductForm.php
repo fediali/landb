@@ -47,15 +47,16 @@ class ProductForm extends FormAbstract
         }
 
         $productId = $this->getModel() ? $this->getModel()->id : null;
-
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
+
 
         $productVariations = [];
         $productVariationsInfo = [];
         $productsRelatedToVariation = [];
 
         if ($this->getModel()) {
+            $products = get_products_data($this->getModel()->id);
             $productVariations = app(ProductVariationInterface::class)->allBy([
                 'configurable_product_id' => $this->getModel()->id,
             ]);
@@ -64,6 +65,8 @@ class ProductForm extends FormAbstract
                 ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
             $productsRelatedToVariation = app(ProductInterface::class)->getProductVariations($productId);
+        }else{
+          $products = get_products_data();
         }
 
         $tags = null;
@@ -118,6 +121,17 @@ class ProductForm extends FormAbstract
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
                 'choices'    => BaseStatusEnum::$PRODUCT,
+            ])
+            ->add('color_print', 'mediaImages', [
+                'label'         => 'Color Print',
+                'label_attr'    => ['class' => 'control-label'],
+                'values'     => $productId ? $this->getModel()->color_print : '',
+            ])
+            ->add('color_products[]', 'multiCheckList', [
+                'label'         => 'Color Products',
+                'label_attr'    => ['class' => 'control-label'],
+                'choices'       => $products,
+                'value'     => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
             ])
             ->add('inventory_history', 'inventory_history', [
                 'label'         => 'Inventory History',
@@ -174,13 +188,30 @@ class ProductForm extends FormAbstract
                     'placeholder' => trans('plugins/ecommerce::products.form.write_some_tags'),
                     'data-url'    => route('product-tag.all'),
                 ],
-            ])->add('eta_pre_product', 'date', [
+            ])
+            /*->add('eta_pre_product', 'date', [
                 'label'      => 'ETA',
                 'label_attr' => ['class' => 'control-label eta_pre_product'],
                 'attr'       => [
                     'class' => 'eta_pre_product',
                 ],
-
+            ])*/
+            ->add('eta_pre_product', 'text', [
+                'label'         => 'ETA',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'            => 'form-control datepicker',
+                    'data-date-format' => 'd M, yyyy',
+                ],
+                'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value'         => $this->model->eta_pre_product ? date('d M, Y', strtotime($this->model->eta_pre_product)) : now(config('app.timezone'))->format('d M, Y')
+            ])
+            ->add('prod_pieces', 'number', [
+                'label'      => 'Pack Product Pieces',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder'  => 'Pack Product Pieces',
+                ],
             ])
             ->setBreakFieldPoint('status');
 

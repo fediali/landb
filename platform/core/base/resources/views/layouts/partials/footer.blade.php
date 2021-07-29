@@ -114,10 +114,12 @@
 
 
 <script>
+
+    var address = '';
+    var customer = '';
+
     $(document).ready(function () {
 
-        var address = '';
-        var customer = '';
         $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
             var customer_id = $(this).data('id');
@@ -152,12 +154,12 @@
             $('#merge_customer_modal').modal('toggle');
         });
 
+        payment_method();
 
-        payment_method()
-
-        $('.method').on('change', function () {
+        $(document).on('change', '.method', function () {
             payment_method();
-        })
+        });
+
         var card = $("select.card_list option:selected").val();
         $('.payment_id').val(card);
         if (card == 0) {
@@ -189,7 +191,7 @@
         function payment_method() {
             var payment_method = $("select.method option:selected").val();
 
-            if (payment_method == 'omni') {
+            if (payment_method == 'omni-payment') {
                 $('.card-area').show();
             } else {
                 $('.card-area').hide();
@@ -202,7 +204,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-772ad4c6040b', {
+    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
@@ -237,7 +239,20 @@
         tokenizeButton.disabled = billing === 'Select Address';
         console.log(message);
     });
-    $(document).on('click', '.credit_card', function () {
+
+    $(document).on('click', 'a#remove-customer', function () {
+        $('#card_id').empty().html("<option value='0'> Add New Card</option>");
+        $('#card_id').selectpicker("refresh");
+        $('#billing_address').empty();
+        $('#billing_address').selectpicker("refresh");
+        $('.add_card').show();
+    });
+
+    $(document).on('click', '.credit_card, ul.select-customer', function () {
+        selectCard();
+    });
+
+    function selectCard() {
         $('select#billing_address').empty();
         var baddress = [];
 
@@ -249,8 +264,9 @@
         } else {
             $('.card_customer_select').hide();
             $('.card_fields').show();
+
             $.ajax({
-                url: "{{ route('customers.get-customer-addresses','') }}" + "/" + customer_id,
+                url: "{{ url('/admin/customers/get-customer-addresses') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
                     $.each(data.data, function (addressID, address) {
@@ -260,34 +276,33 @@
                                 text: address.address
                             };
                             console.log(address);
-                            html = `<option value="${address.id}">
-                                ${address.address}
-                            </option>`
+                            let html = `<option value="${address.id}"> ${address.address} </option>`;
                             $('select#billing_address').append(html);
                         }
-
                     });
+                    $('#billing_address').selectpicker("refresh");
+
+                    getCustomer();
+                    getCards();
+                    getbillingadress();
+
                 },
                 error: function (request, status, error) {
                     toastr['warning']('No Address', 'Reading Error');
                 }
             });
-            setTimeout(function () {
-                getbillingadress();
-                getCustomer();
-                getCards();
-            }, 500);
         }
-
-    });
+    }
 
     function getbillingadress() {
+        console.log($("#billing_address option:selected").val(), "===");
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
         $.ajax({
-            url: "{{ route('customers.get-addresses','') }}" + "/" + $("#billing_address option:selected").val(),
+            url: "{{ url('/admin/customers/get-addresses') }}" + "/" + $("#billing_address option:selected").val(),
             type: 'get',
             success: function (data) {
+                console.log(data, "=========");
                 address = data;
             },
             error: function (request, status, error) {
@@ -296,10 +311,16 @@
         });
     }
 
+    $(document).on('change', '#billing_address', function () {
+        getbillingadress();
+    });
+
     function getCustomer() {
         console.log($('#customer_id').val());
+
+
         $.ajax({
-            url: "{{ route('customers.get-customer','') }}" + "/" + $('#customer_id').val(),
+            url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 customer = data;
@@ -315,7 +336,7 @@
         var htmls = '';
         $('#card_id').empty();
         $.ajax({
-            url: "{{ route('customers.get-cards','') }}" + "/" + $('#customer_id').val(),
+            url: "{{ url('/admin/customers/get-cards') }}" + "/" + $('#customer_id').val(),
             type: 'get',
             success: function (data) {
                 if (data.data !== 0) {
@@ -327,6 +348,7 @@
                 }
                 htmls += "<option value='0'> Add New Card</option>";
                 $('#card_id').html(htmls);
+                $('#card_id').selectpicker("refresh");
                 var card = $("select.card_list option:selected").val();
                 $('.payment_id').val(card);
                 if (card == 0) {
@@ -359,7 +381,7 @@
     });
 
     $('button#tokenizebutton').on('click', () => {
-        console.log('working')
+
         var month = $('.month').val();
         var year = $('.year').val();
         successElement = document.querySelector('.success');
@@ -371,6 +393,8 @@
         loaderElement.classList.add('visible');
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
+        console.log('customer address', address)
+
         var extraDetails = {
             firstname: customer.data.detail.first_name,
             lastname: customer.data.detail.last_name,
@@ -379,15 +403,15 @@
             month: month,
             year: year,
             phone: customer.data.detail.phone,
-            address_1: address.data.address,
-            address_city: address.data.city,
-            address_state: address.data.state,
-            address_zip: address.data.zip_code,
-            address_country: address.data.country,
+            address_1: address.data?.address,
+            address_city: address.data?.city,
+            address_state: address.data?.state,
+            address_zip: address.data?.zip_code,
+            address_country: address.data?.country,
             url: "https://omni.fattmerchant.com/#/bill/",
             validate: false,
         };
-        console.log(extraDetails)
+        //console.log(extraDetails)
         // call tokenize api
         fattJs.tokenize(extraDetails).then((result) => {
             console.log(result);
@@ -397,13 +421,12 @@
                 functionAddCard(result, customer.data.id);
             }
             loaderElement.classList.remove('visible');
-        })
-            .catch(err => {
-                console.log(err)
-                errorElement.textContent = err.message;
-                errorElement.classList.add('visible');
-                loaderElement.classList.remove('visible');
-            });
+        }).catch(err => {
+            console.log(err)
+            errorElement.textContent = err.message;
+            errorElement.classList.add('visible');
+            loaderElement.classList.remove('visible');
+        });
     });
 
     function functionAddCard(result, customer_id) {
@@ -418,6 +441,7 @@
             },
             success: function (data) {
                 console.log(data)
+                getCards();
             },
             error: function (request, status, error) {
                 toastr['warning']('Notification Unreadable', 'Reading Error');
@@ -439,7 +463,8 @@
         })
 
         $('.address-country').on('change', function () {
-            // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
+
+            get_states($('select[name="address_state"]'), this.value);
         });
 
         $('.delete_address').on('click', function (e) {
@@ -450,7 +475,8 @@
             }
 
         });
-        $('.toggle-edit-address').on('click', function (e) {
+        $(document).on('click', '.toggle-edit-address', function (e) {
+
             var data = $(this).data('row');
 
             $('input[name=address_id]').val(data.id);
@@ -467,7 +493,7 @@
 
 
             $('#edit_address').modal('toggle');
-            console.log(data);
+            console.log(data, 'ss');
         });
 
 
@@ -502,6 +528,7 @@
 
             success: function (result) {
                 thiss.find('option').remove();
+                console.log('s');
                 jQuery.each(result, function (index, state) {
                     if (index === old) {
                         thiss.append(new Option(state, index, null, true));
