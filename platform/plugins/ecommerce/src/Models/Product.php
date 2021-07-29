@@ -83,7 +83,8 @@ class Product extends BaseModel
         'cost_price',
         'creation_date',
         'color_print',
-        'color_products'
+        'color_products',
+        'sizes',
     ];
 
     /**

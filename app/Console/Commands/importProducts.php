@@ -100,6 +100,7 @@ class importProducts extends Command
                     $product->creation_date = date('Y-m-d', strtotime($row['timestamp']));
                     $product->sku = $row['product_code'];
                     $product->prod_pieces = $row['min_qty'];
+                    $product->sizes = $row['variant_name'];
                     $product->category_id = $category->id;
                     $product->quantity = 0;
 
