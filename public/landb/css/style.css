@@ -1950,6 +1950,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .detail-shoplist {
+        display: block !important;
+    }
     .slidert-left-img {
         height: 525px !important;
     }
@@ -2017,6 +2020,7 @@ input.qtyminus {
     }
     #menu .main-nav ul {
         overflow: hidden !important;
+        display: grid !important;
     }
     .breadcrumb_wrap {
         height: auto !important;
