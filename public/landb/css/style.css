@@ -218,7 +218,7 @@ nav.navbar {
 
 .menu-footer {
     position: fixed;
-    bottom: 50px;
+    bottom: 25px;
 }
 
 #menu .main-nav a {
@@ -1018,6 +1018,18 @@ section.parallax_video video {
     height: 525px;
 }
 
+.home-overlap .overlap {
+    left: 75px !important; 
+    width: 38% !important;
+}
+
+.home-listing .listbox .img {
+    height: 468px !important;
+}
+.detail-listing .listbox .img {
+    height: 450px !important;
+}
+
 .shoplisting .listbox .img img {
     width: 100%;
     object-fit: contain;
@@ -1730,11 +1742,7 @@ input.qtyminus {
 .front-img {
     width: 100%;
 }
-
-.side-img {
-    height: 120px;
-    width: 105px;
-}
+ 
 
 .detail-subheading {
     font-family: Raleway;
@@ -1950,6 +1958,13 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    
+    .breadcrumb { 
+        padding: .75rem 0rem !important;
+    }
+    .breadcrumb-item {
+        font-size: 12px !important;
+    }
     .detail-shoplist {
         display: block !important;
     }
@@ -1962,6 +1977,7 @@ input.qtyminus {
     .previews{
         display: flex !important;
         justify-content: space-between !important;
+        width: 25%;
     }
     .gallery .previews a:hover, .gallery .previews a.selected {
         width: 24% !important;
@@ -2014,6 +2030,8 @@ input.qtyminus {
     }
     #menu nav.footer-nav ul {
         overflow: hidden !important;
+        display: inline-block !IMPORTANT;
+        WIDTH: 100%;
     }
     .menu-footer {
         position: relative !important; 
@@ -3156,12 +3174,26 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .previews{ 
+        position: absolute;
+        bottom: -165px;
+    }
+    .detail-h1 {
+        padding-top: 135px !important;
+    }
     .grid-container {
         height: 1420vh !important;
     }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+    .previews{ 
+        position: absolute;
+        bottom: -310px;
+    }
+    .detail-h1 {
+        padding-top: 280px !important;
+    }
     .grid-container {
         height: 1200vh !important;
     }
@@ -3447,12 +3479,12 @@ nav.main-nav .nav-col {
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
     .banner img {
-        height: 200px;
+        height: auto;
     }
  }
 @media screen and (min-width: 768px) and (max-width: 991px) {
     .banner img {
-        height: 300px;
+        height: auto;
     }
  }
 
@@ -4064,7 +4096,6 @@ html {
     .demo-trigger {
       display:block;
       width:100%;
-      max-width:300px;
       text-align:center;
       margin: 0 auto;
       cursor: zoom-in;
@@ -4378,11 +4409,11 @@ html {
   }
 
   #menu .menu-footer ul li { 
-    font-size: 20px !important;
+    font-size: 15px !important;
 }
 
 .breadcrumb-item {
-    font-size: 1rem !important;
+    font-size: 1rem;
 }
 
 .input-shipping {
