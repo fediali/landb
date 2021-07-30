@@ -449,7 +449,7 @@ if (!function_exists('get_latest_products')) {
         return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->where('quantity', '>' , 0)
             ->orderBy('creation_date', 'desc')
             ->when(!is_null($not_id), function ($query) use($not_id){
-              $query->where('id', '!=', $not_id);
+              $query->whereNotIn('id', $not_id);
             })
             ->limit($limit)->get();
     }
