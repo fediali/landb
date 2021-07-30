@@ -58,8 +58,8 @@
                     {{--                        <td></td>--}}
                     {{--                    @endif--}}
 
-                    @if($product->warehouse_sec == null ||$product->warehouse_sec->isEmpty())
-                        <td>sss</td>
+                    @if($product->warehouse_sec == null)
+                        <td></td>
                     @else
                         <td>{{ $product->warehouse_sec }}</td>
                     @endif()
