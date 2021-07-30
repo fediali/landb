@@ -1,3 +1,11 @@
+<link media="all" type="text/css" rel="stylesheet" href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
+<script src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
+<script>
+    setTimeout(()=>{
+        $(".editable").editable();
+    }, 200);
+</script>
+
 <div id="product-variations-wrapper">
     <div class="variation-actions">
 {{--        <a href="#" class="btn-trigger-select-product-attributes" data-target="{{ route('products.store-related-attributes', $product->id) }}">{{ trans('plugins/ecommerce::products.edit_attribute') }}</a>--}}
@@ -21,6 +29,7 @@
                 <th>SKU</th>
                 <th>UPC</th>
                 <th>{{ trans('plugins/ecommerce::products.form.is_default') }}</th>
+                <th>Status</th>
                 <th class="text-center">{{ trans('plugins/ecommerce::products.form.action') }}</th>
             </tr>
             </thead>
@@ -67,6 +76,39 @@
                                    name="variation_default_id"
                                    value="{{ $variation->id }}">
                         </label>
+                    </td>
+                    <td>
+                        {{--@if($variation->product->status == \Botble\Base\Enums\BaseStatusEnum::ACTIVE)
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::HIDDEN]) }}"
+                               class="btn btn-xs btn-warning">{{ \Botble\Base\Enums\BaseStatusEnum::HIDDEN }}</a>
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::DISABLED]) }}"
+                               class="btn btn-xs btn-danger">{{ \Botble\Base\Enums\BaseStatusEnum::DISABLED }}</a>
+
+                        @elseif($variation->product->status == \Botble\Base\Enums\BaseStatusEnum::HIDDEN)
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE]) }}"
+                               class="btn btn-xs btn-success">{{ \Botble\Base\Enums\BaseStatusEnum::ACTIVE }}</a>
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::DISABLED]) }}"
+                               class="btn btn-xs btn-danger">{{ \Botble\Base\Enums\BaseStatusEnum::DISABLED }}</a>
+
+                        @elseif($variation->product->status == \Botble\Base\Enums\BaseStatusEnum::DISABLED)
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::HIDDEN]) }}"
+                               class="btn btn-xs btn-warning">{{ \Botble\Base\Enums\BaseStatusEnum::HIDDEN }}</a>
+                            <a href="{{ route('products.updateVariationStatus', ['id' => $variation->product->id, 'status' => \Botble\Base\Enums\BaseStatusEnum::ACTIVE]) }}"
+                               class="btn btn-xs btn-success">{{ \Botble\Base\Enums\BaseStatusEnum::ACTIVE }}</a>
+                        @endif--}}
+                        {{--{!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$PRODUCT,  $variation->product->status, ['class' => 'form-control', 'placeholder'=>'Select Status']) !!}--}}
+
+                        <a data-type="select"
+                           data-source="{{ json_encode(\Botble\Base\Enums\BaseStatusEnum::$PRODUCT) }}"
+                           data-pk="{{ $variation->product->id }}"
+                           data-url="{{ route('products.changeStatus') }}"
+                           data-value="{{ $variation->product->status }}"
+                           data-title="Change Status"
+                           class="editable"
+                           href="#">
+                            {{ $variation->product->status }}
+                        </a>
+
                     </td>
                     <td style="width: 180px;" class="text-center">
                         <a href="#" class="btn btn-info btn-trigger-edit-product-version"

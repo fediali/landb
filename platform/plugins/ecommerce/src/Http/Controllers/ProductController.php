@@ -1134,4 +1134,25 @@ class ProductController extends BaseController
             }
         }
     }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $product->fill($requestData);
+
+        $this->productRepository->createOrUpdate($product);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $product));
+
+        return $response;
+    }
+
 }
