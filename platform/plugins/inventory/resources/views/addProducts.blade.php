@@ -247,9 +247,9 @@
                                 //dlt_btn = '';
 
                                 if (product.warehouse_sec !=="") {
-                                    warehouse = ' <td>' + product.warehouse_sec + '</td>\n'
+                                    warehouse = ' <td>' + product.warehouse_sec + '</td>\n';
                                 } else {
-                                    warehouse = '<td><input type="text" name="warehouse_sec"></td>\n'
+                                    warehouse = '<td><input type="text" name="warehouse_sec"></td>\n';
                                 }
 
                                 // warehouse = '<td>'+product.warehouse_sec+'</td>\n';
