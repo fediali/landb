@@ -428,10 +428,29 @@ if (!function_exists('get_products_data')) {
      */
     function get_products_data($not_id = null)
     {
-        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])
+        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->where('quantity', '>' , 0)
             ->when(!is_null($not_id), function ($query) use($not_id){
               $query->where('id', '!=', $not_id);
             })
             ->pluck('name', 'id');
+    }
+}
+
+
+if (!function_exists('get_latest_products')) {
+    /**
+     * Get list attributes by set id of product
+     * @param Product $product
+     * @param int $setId
+     * @return array
+     */
+    function get_latest_products($limit= 10, $not_id = null)
+    {
+        return Product::where('status', BaseStatusEnum::$PRODUCT['Active'])->where('quantity', '>' , 0)
+            ->orderBy('creation_date', 'desc')
+            ->when(!is_null($not_id), function ($query) use($not_id){
+              $query->where('id', '!=', $not_id);
+            })
+            ->limit($limit)->get();
     }
 }
