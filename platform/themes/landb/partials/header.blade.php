@@ -59,8 +59,8 @@
         <p>Welcome To Lucky and Blessed</p>
     </div>
     <div class="pl-3 pr-3">
-      <p class="text-right m-0">Welcome, <b>@if(auth('customer')->user())
-                  <a href="{{ route('customer.edit-account') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+      <p class="text-right m-0"><b>@if(auth('customer')->user())
+                  Welcome, <a href="{{ route('customer.edit-account') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                           class="fa fa-sign-out"></i></a> @endif()</b></p>
         <div class="topnav d-flex pb-0 pt-2">
 

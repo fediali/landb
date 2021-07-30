@@ -42,7 +42,7 @@
         <div class="row mt-2 mb-5">
             <div class="col-lg-12">
                 <h2 class="text-center just-head">
-                    This Just In
+                    New Arrivals
                 </h2>
                 <div class="shoplisting detail-shoplist ml-4 mr-4">
                     @php
