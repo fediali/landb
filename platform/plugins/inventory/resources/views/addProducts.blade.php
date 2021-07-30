@@ -3,10 +3,11 @@
 <div id="scandit-barcode-picker" style="display: none;"></div>
 <div class="form-group">
     <div class="input-group">
-        <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list">
+        <input class="form-control" id="scannerInput" type="text" placeholder="Scan Barcode to add product to list" required>
         <div class="input-group-prepend">
-            <div class="input-group-text" title="Scan barcode using camera" onclick="$('.radial-progress').click();"><i
-                    class="fa fa-barcode"></i></div>
+            <div class="input-group-text" title="Scan barcode using camera" onclick="$('.radial-progress').click();">
+                <i class="fa fa-barcode"></i>
+            </div>
         </div>
     </div>
     <span id="product-error" class="invalid-feedback"></span>
@@ -17,7 +18,7 @@
         <tr>
             <th scope="col">Image</th>
             <th scope="col">SKU</th>
-            {{--        <th scope="col">Barcode</th>--}}
+            {{--<th scope="col">Barcode</th>--}}
             <th scope="col">Sec</th>
             <th scope="col">Name</th>
             <th scope="col">E-commerce Qty</th>
@@ -37,45 +38,44 @@
 
                     @if(!$product->is_variation)
                         <td class=" text-center column-key-image">
-                            <a href="" title=""><img
-                                    src="{{ URL::to('storage') }}/{{@json_decode($product->pimages)[0]}}"
+                            <a href="" title="">
+                                <img src="{{ URL::to('storage') }}/{{@json_decode($product->pimages)[0]}}"
                                     onerror="this.src='{{ asset('images/lucky&blessed_logo_sign_Black 1.png') }}'"
-                                    width="50"></a>
+                                    width="50">
+                            </a>
                         </td>
                     @else
                         <td></td>
                     @endif
 
-                    <td>{{ $product->sku }}<input type="hidden" name="sku_{{ $loop->iteration-1 }}"
-                                                  value="{{ $product->sku }}"><input type="hidden"
-                                                                                     name="product_id_{{ $loop->iteration-1 }}"
-                                                                                     value="{{ $product->pid }}"></td>
+                    <td>{{ $product->sku }}
+                        <input type="hidden" name="sku_{{ $loop->iteration-1 }}" value="{{ $product->sku }}">
+                        <input type="hidden" name="product_id_{{ $loop->iteration-1 }}" value="{{ $product->pid }}">
+                    </td>
 
                     {{--@if(!$product->is_variation)--}}
-                    {{--                    @if($product->barcode)--}}
-                    {{--                        <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>--}}
-                    {{--                    @else--}}
-                    {{--                        <td></td>--}}
-                    {{--                    @endif--}}
+                    {{--@if($product->barcode)--}}
+                    {{--    <td><img src="{{asset('storage/'.$product->barcode)}}" width="100%" height="30px"><input type="hidden" name="barcode_{{ $loop->iteration-1 }}" value="{{ $product->barcode }}"></td>--}}
+                    {{--@else--}}
+                    {{--    <td></td>--}}
+                    {{--@endif--}}
 
-                    @if($product->warehouse_sec == null)
-                        <td></td>
-                    @else
-                        <td>{{ $product->warehouse_sec }}</td>
-                    @endif()
+                    <td>{{ $product->warehouse_sec }}</td>
 
                     <td>{{ $product->pname }}</td>
 
                     @if($product->is_variation)
-                        <td>{{ $product->pquantity }}<input type="hidden" name="quantity_{{ $loop->iteration-1 }}"
-                                                            value="{{ $product->pquantity }}"></td>
+                        <td>{{ $product->pquantity }}
+                            <input type="hidden" name="quantity_{{ $loop->iteration-1 }}" value="{{ $product->pquantity }}">
+                        </td>
                     @else
                         <td></td>
                     @endif
 
                     @if(!$product->is_variation)
-                        <td>{{ $product->ordered_qty }}<input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}"
-                                                              value="{{ $product->ordered_qty }}"></td>
+                        <td>{{ $product->ordered_qty }}
+                            <input type="hidden" name="ordered_qty_{{ $loop->iteration-1 }}" value="{{ $product->ordered_qty }}">
+                        </td>
                         <td>{{ $product->price }}</td>
                         {{--<td>{{ $product->sale_price }}</td>--}}
                     @else
@@ -87,10 +87,12 @@
                     <td>{{ $product->private_label ? 'Yes' : 'No' }}</td>
 
                     @if($product->is_variation)
-                        <td><input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}"
+                        <td>
+                            <input style="width: 60px; text-align:center" name="received_qty_{{ $loop->iteration-1 }}"
                                    id="received_qty_{{ $product->pid }}"
                                    class="input-micro input-both-amount input_main"
-                                   value="{{ $product->received_qty }}"></td>
+                                   value="{{ $product->received_qty }}">
+                        </td>
                     @else
                         <td></td>
                     @endif
@@ -122,34 +124,32 @@
 
     ScanditSDK.configure("{{ env('SCANDIT_BARCODE_KEY') }}", {
         engineLocation: "https://cdn.jsdelivr.net/npm/scandit-sdk@5.x/build/",
-    })
-        .then(() => {
-            return ScanditSDK.BarcodePicker.create(document.getElementById("scandit-barcode-picker"), {
-                // enable some common symbologies
-                scanSettings: new ScanditSDK.ScanSettings({
-                    enabledSymbologies: ["code39", "code128", "ean8", "ean13", "upca", "upce", "code93"]
-                }),
-                playSoundOnScan: true,
-                vibrateOnScan: true,
-                accessCamera: true,
-                camera: {
-                    cameraType: 'back'
-                },
-                enablePinchToZoom: true,
-                enableTapToFocus: true
-            });
-        })
-        .then((barcodePicker) => {
-            // barcodePicker is ready here, show a message every time a barcode is scanned
-            barcodePicker.on("scan", (scanResult) => {
-                console.log(scanResult.barcodes[0].data)
-                $('#scannerInput').val(scanResult.barcodes[0].data);
-                $('#scannerInput').addClass('loading');
-                $('#product-error').hide();
-                $('#scannerInput').removeClass('is-invalid');
-                get_product_by_barcode(scanResult.barcodes[0].data, $('#scannerInput'));
-            });
+    }).then(() => {
+        return ScanditSDK.BarcodePicker.create(document.getElementById("scandit-barcode-picker"), {
+            // enable some common symbologies
+            scanSettings: new ScanditSDK.ScanSettings({
+                enabledSymbologies: ["code39", "code128", "ean8", "ean13", "upca", "upce", "code93"]
+            }),
+            playSoundOnScan: true,
+            vibrateOnScan: true,
+            accessCamera: true,
+            camera: {
+                cameraType: 'back'
+            },
+            enablePinchToZoom: true,
+            enableTapToFocus: true
         });
+    }).then((barcodePicker) => {
+        // barcodePicker is ready here, show a message every time a barcode is scanned
+        barcodePicker.on("scan", (scanResult) => {
+            console.log(scanResult.barcodes[0].data)
+            $('#scannerInput').val(scanResult.barcodes[0].data);
+            $('#scannerInput').addClass('loading');
+            $('#product-error').hide();
+            $('#scannerInput').removeClass('is-invalid');
+            get_product_by_barcode(scanResult.barcodes[0].data, $('#scannerInput'));
+        });
+    });
 
     $(document).scannerDetection({
         //https://github.com/kabachello/jQuery-Scanner-Detection
@@ -171,15 +171,17 @@
         var input = document.getElementById("scannerInput");
         // Execute a function when the user releases a key on the keyboard
         input.addEventListener("keyup", function (event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                var $t = $(event.currentTarget);
-                $t.addClass('loading');
-                $('#product-error').hide();
-                $('#scannerInput').removeClass('is-invalid');
-                get_product_by_barcode(this.value, $t);
+            if (input.val()) {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    var $t = $(event.currentTarget);
+                    $t.addClass('loading');
+                    $('#product-error').hide();
+                    $('#scannerInput').removeClass('is-invalid');
+                    get_product_by_barcode(this.value, $t);
+                }
             }
         });
         var form = document.getElementsByTagName("form");
@@ -188,6 +190,11 @@
                 event.preventDefault();
             }
         })
+        $("form").bind("keypress", function (e) {
+            if (e.keyCode == 13) {
+                return false;
+            }
+        });
     });
 
     function get_product_by_barcode(barcode, loader) {
@@ -213,9 +220,9 @@
                         });
                         if (exist) {
                             var current = $('#received_qty_' + product.id).val();
-                            $('#received_qty_' + product.id).val(++current);
+                            $('#received_qty_' + product.id).val(/*++current*/1);
                             var current2 = $('#loose_qty_' + product.id).val();
-                            $('#loose_qty_' + product.id).val(++current2);
+                            $('#loose_qty_' + product.id).val(/*++current2*/1);
                         } else {
 
                             let m_img = '<a href="#"><img src="{{ asset('storage') }}/' + product.images[0] + '" width="50"></a>';
@@ -246,7 +253,7 @@
                                 product.quantity = '';
                                 //dlt_btn = '';
 
-                                if (product.warehouse_sec !== "" || product.warehouse_sec !== null) {
+                                if (product.warehouse_sec) {
                                     warehouse = ' <td>' + product.warehouse_sec + '</td>\n';
                                 } else {
                                     warehouse = '<td><input type="text" name="warehouse_sec"></td>\n';
