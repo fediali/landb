@@ -104,7 +104,11 @@
 </section>
 @php
 //dd($products1->pluck('id')->toArray());
-    $products2 = get_latest_products(6, $products1->pluck('id')->toArray());
+    $not_in = null;
+    if(count($products1)){
+     $not_in = $products1->pluck('id')->toArray();
+    }
+    $products2 = get_latest_products(6, $not_in);
         $categories = \Botble\Ecommerce\Models\ProductCategory::
             orderBy('order', 'ASC')
             ->orderBy('created_at', 'DESC')
