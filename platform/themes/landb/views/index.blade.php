@@ -58,9 +58,6 @@
                                                 ->get();
                             $default = $variationData->first();
 
-                         $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
-                                                     ->getVariationsInfo($variationData->pluck('id')->toArray());
-
                         @endphp
                             <div class="listbox">
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
@@ -88,8 +85,14 @@
                                     <div class="price">
                                         ${{ $product->price }}
                                     </div>
+                                    <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ @$default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                                        <div class="col-lg-4">
+                                            <input type='hidden' name='quantity' value='1' class='qty' />
+                                        </div>
+                                        <a style="padding: 12px 20px;" class="mt-2 w-auto addTobag product-tile__add-to-cart" id="cart-icon-{{$product->id}}" onclick="$('#myform-{{$product->id}}').trigger('submit');" href="javascript:void(0);">ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                                    </form>{{--
                                     <button style="padding: 12px 20px;" class="mt-2 w-auto addTobag product-tile__add-to-cart"  >ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-                                    </button>
+                                    </button>--}}
                                 </div>
                                 </a>
                             </div>

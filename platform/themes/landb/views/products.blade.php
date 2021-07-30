@@ -239,12 +239,18 @@
                    </div>
                </a>
                 <div class="text-center">
-                <button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" data-id="{{ $product->id }}">ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i>
+                {{--<button style="padding: 12px 20px;" class="w-100 addTobag product-tile__add-to-cart" data-id="{{ $product->id }}">ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right"></i>
 
-                        </button>
+                        </button>--}}
+                    <form id='myform2-{{$product->id}}' class="add_to_cart_form" data-id="{{ $default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                        <div class="col-lg-4">
+                            <input type='hidden' name='quantity' value='1' class='qty' />
+                        </div>
+                        <button type="submit" class="product-tile__add-to-cart" ><span>Add to Bag</span></button>
+                    </form>
                 </div>
 
-                <div class="product-tile__variants-area welcomeDiv{{ $product->id }}">
+                {{--<div class="product-tile__variants-area welcomeDiv{{ $product->id }}">
                     <div class="product-tile__variants-heading">
                         Select a Size
                     </div>
@@ -267,7 +273,7 @@
                         <button type="submit" class="product-tile__add-to-cart" ><span>Add to Bag</span></button>
                     </form>
 
-                </div>
+                </div>--}}
             </div>
             @endforeach
             @else
