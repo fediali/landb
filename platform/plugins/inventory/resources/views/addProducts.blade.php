@@ -246,7 +246,7 @@
                                 product.quantity = '';
                                 //dlt_btn = '';
 
-                                if (product.warehouse_sec !=="") {
+                                if (product.warehouse_sec !== "" || product.warehouse_sec !== null) {
                                     warehouse = ' <td>' + product.warehouse_sec + '</td>\n';
                                 } else {
                                     warehouse = '<td><input type="text" name="warehouse_sec"></td>\n';
