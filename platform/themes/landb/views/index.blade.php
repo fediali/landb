@@ -44,7 +44,7 @@
                 <h2 class="text-center just-head">
                     New Arrivals
                 </h2>
-                <div class="shoplisting detail-shoplist ml-4 mr-4">
+                <div class="shoplisting home-listing detail-shoplist ml-4 mr-4">
                     @php
                         $products1 = get_latest_products(4);
                     @endphp
@@ -182,7 +182,8 @@
                 </p>
         </div>
         <div class="col-md-6">
-        {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!}
+        <!-- {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!} -->
+        <img class="w-100" src="{{ asset('landb/img/product.jpg') }}" />
         </div>
     </div>
     </div>
@@ -195,7 +196,7 @@
     <div class="row">
         <div class="col-md-6">
 
-        <div class="collection_img">
+        <div class="collection_img home-overlap">
         <div class="collec-imgbox">
             {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[0], null, null, null, true, 'ls-is-cached') !!}
         <div class="imgcaption">

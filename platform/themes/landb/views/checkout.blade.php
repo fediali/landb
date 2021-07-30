@@ -439,7 +439,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <input class="input-shipping" type="text" />
+                                     <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
                                     </div>
                                     </div>
                                 <div class="row">
@@ -453,6 +453,11 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                     <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
+                                    </div>
+                                    </div>
                                 <p class="cout-note  mt-5">Your Order</p>
                                 <hr>
                                 <p class="note-product mt-3">Product</p>
