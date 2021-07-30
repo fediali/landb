@@ -34,6 +34,7 @@ class Product extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'description',
         'content',
@@ -82,7 +83,8 @@ class Product extends BaseModel
         'cost_price',
         'creation_date',
         'color_print',
-        'color_products'
+        'color_products',
+        'sizes',
     ];
 
     /**
@@ -142,6 +144,7 @@ class Product extends BaseModel
      */
     public function categories()
     {
+
         return $this->belongsToMany(
             ProductCategory::class,
             'ec_product_category_product',
@@ -648,7 +651,8 @@ class Product extends BaseModel
         ];
     }
 
-    public function product_colors(){
-      return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
+    public function product_colors()
+    {
+        return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
     }
 }

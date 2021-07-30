@@ -377,6 +377,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // let moment = require('moment');
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -407,7 +419,9 @@ __webpack_require__.r(__webpack_exports__);
       variant_ids: [],
       hidden_product_search_panel: true,
       product_collection_id: null,
+      product_category_id: null,
       product_collections: [],
+      product_categories: [],
       discount_on: 'per-order',
       min_order_price: null,
       product_quantity: 1,
@@ -528,6 +542,10 @@ __webpack_require__.r(__webpack_exports__);
       var context = this;
 
       switch (context.target) {
+        case 'category':
+          context.getListProductCategories();
+          break;
+
         case 'group-products':
           context.getListProductCollections();
           break;
@@ -546,6 +564,24 @@ __webpack_require__.r(__webpack_exports__);
           context.product_id = null;
           context.variant_ids = [];
           break;
+      }
+    },
+    getListProductCategories: function getListProductCategories() {
+      var context = this;
+
+      if (_.isEmpty(context.product_categories)) {
+        context.loading = true;
+        axios.get(route('product-categories.get-list-product-categories-for-select')).then(function (res) {
+          context.product_categories = res.data.data;
+
+          if (!_.isEmpty(res.data.data)) {
+            context.product_category_id = _.first(res.data.data).id;
+          }
+
+          context.loading = false;
+        })["catch"](function (res) {
+          Botble.handleError(res.response.data);
+        });
       }
     },
     getListProductCollections: function getListProductCollections() {
@@ -1300,12 +1336,13 @@ var render = function() {
                           }
                         },
                         [
+                          _c("option", { attrs: { value: "category" } }, [
+                            _vm._v("Category")
+                          ]),
+                          _vm._v(" "),
                           _vm.type_option !== "same-price"
                             ? _c("option", { attrs: { value: "all-orders" } }, [
-                                _vm._v(
-                                  _vm._s(_vm.__("All orders")) +
-                                    "\n                                "
-                                )
+                                _vm._v(_vm._s(_vm.__("All orders")))
                               ])
                             : _vm._e(),
                           _vm._v(" "),
@@ -1313,12 +1350,7 @@ var render = function() {
                             ? _c(
                                 "option",
                                 { attrs: { value: "amount-minimum-order" } },
-                                [
-                                  _vm._v(
-                                    _vm._s(_vm.__("Order amount from")) +
-                                      "\n                                "
-                                  )
-                                ]
+                                [_vm._v(_vm._s(_vm.__("Order amount from")))]
                               )
                             : _vm._e(),
                           _vm._v(" "),
@@ -1360,6 +1392,91 @@ var render = function() {
                       )
                     ]
                   ),
+                  _vm._v(" "),
+                  _vm.target === "category" && _vm.type_option !== "shipping"
+                    ? _c(
+                        "div",
+                        {
+                          staticClass: "inline mb5",
+                          staticStyle: { "margin-right": "10px" },
+                          attrs: { id: "div-select-category" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "ui-select-wrapper",
+                              staticStyle: { "min-width": "200px" }
+                            },
+                            [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.product_category_id,
+                                      expression: "product_category_id"
+                                    }
+                                  ],
+                                  staticClass: "ui-select",
+                                  attrs: { name: "product_categories" },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.product_category_id = $event.target
+                                        .multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    }
+                                  }
+                                },
+                                _vm._l(_vm.product_categories, function(
+                                  product_category
+                                ) {
+                                  return _c(
+                                    "option",
+                                    {
+                                      domProps: { value: product_category.id }
+                                    },
+                                    [_vm._v(_vm._s(product_category.name))]
+                                  )
+                                }),
+                                0
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "svg",
+                                {
+                                  staticClass:
+                                    "svg-next-icon svg-next-icon-size-16"
+                                },
+                                [
+                                  _c("use", {
+                                    attrs: {
+                                      "xmlns:xlink":
+                                        "http://www.w3.org/1999/xlink",
+                                      "xlink:href": "#select-chevron"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _vm.target === "group-products" &&
                   _vm.type_option !== "shipping"

@@ -1,4 +1,5 @@
 @extends('core/base::layouts.master')
+
 @section('content')
     <div class="max-width-1200" id="main-order">
         <create-order
@@ -34,6 +35,99 @@
                 :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}">
         </create-order>
     </div>
+
+    @if($order->payment->payment_channel->label() == 'omni-payment')
+        <div class="wrapper-content bg-gray-white mb20">
+
+            <!-- card -->
+            @if($order->preauth == null)
+                <div class="row m-0 pt-4 bg-white">
+                    <div class="col-lg-12 ">
+                        <span class="mb-2">Card</span>
+                        {!!Form::select('card_list', $cards, @$order->order_card, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                    </div>
+                </div>
+
+                <div class="add_card bg-white">
+
+                    <div class="row group m-0 pt-4 ">
+                        @isset($order->user->billingAddress)
+                            <label class="col-lg-12 ">
+                                <span class="mb-2">Billing Address</span>
+                                {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
+                            </label>
+                        @endisset
+                    </div>
+
+                    <div class="group row m-0">
+                        <label class="col-lg-12">
+                            <div id="card-element" class="field">
+                                <span>Card</span>
+                                <div id="fattjs-number" style="height: 35px"></div>
+                                <span class="mt-2">CVV</span>
+                                <div id="fattjs-cvv" style="height: 35px"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="row m-0">
+                        <div class="col-lg-3">
+                            <input name="month" size="3" maxlength="2" placeholder="MM"
+                                   class="form-control month">
+                        </div>
+                        <p class="mt-2"> / </p>
+                        <div class="col-lg-3">
+                            <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                   class="form-control year">
+                        </div>
+                    </div>
+                    {{--<button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                    <div class="row m-0">
+                        <div class="col-lg-6">
+                            <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit
+                                Card
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row m-0">
+                        <div class="col-lg-12">
+                            <div class="outcome">
+                                <div class="error"></div>
+                                <div class="success">
+                                    Successful! The ID is
+                                    <span class="token"></span>
+                                </div>
+                                <div class="loader" style="margin: auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+    @elseif($order->payment->payment_channel->label() == 'paypal')
+        <div class="wrapper-content bg-gray-white mb20">
+            <div class="row m-0 pt-4 bg-white">
+                <div class="col-lg-12 ">
+                    <strong class="mb-2">Paid with Paypal</strong>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="wrapper-content bg-gray-white mb20">
+            <div class="row m-0 pt-4 bg-white">
+                <div class="col-lg-12 ">
+                    <strong class="mb-2">Cash on delivery</strong>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <script>
+        setTimeout(function () {
+            getCustomer();
+            getbillingadress();
+        }, 200);
+    </script>
 @stop
 
 @push('header')

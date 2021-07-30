@@ -203,7 +203,7 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id'  => $item,
+                    'id' => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
@@ -509,7 +509,7 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id'  => $item,
+                    'id' => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
@@ -878,14 +878,14 @@ class ProductController extends BaseController
                     ['id', '<>', $id],
                     ['name', 'LIKE', '%' . $request->input('keyword') . '%'],
                 ],
-                'select'    => [
+                'select' => [
                     'id',
                     'name',
                     'images',
                 ],
-                'paginate'  => [
-                    'per_page'      => 5,
-                    'type'          => 'simplePaginate',
+                'paginate' => [
+                    'per_page' => 5,
+                    'type' => 'simplePaginate',
                     'current_paged' => (int)$request->input('page', 1),
                 ],
             ]);
@@ -1119,14 +1119,17 @@ class ProductController extends BaseController
         return $response->setMessage('Product Demand Added Successfully!');
     }
 
-    public function updateColors($id, $ids){
-      foreach ($ids as $colorId){
-        $product = Product::find($colorId);
-        $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
-        if(!in_array($id, $product_colors)){
-          array_push($product_colors, $id);
+    public function updateColors($id, $ids)
+    {
+        if($ids) {
+            foreach ($ids as $colorId) {
+                $product = Product::find($colorId);
+                $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+                if (!in_array($id, $product_colors)) {
+                    array_push($product_colors, $id);
+                }
+                $product->update(['color_products' => $product_colors]);
+            }
         }
-        $product->update(['color_products'=> $product_colors]);
-      }
     }
 }

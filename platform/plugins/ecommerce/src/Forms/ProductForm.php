@@ -47,7 +47,6 @@ class ProductForm extends FormAbstract
         }
 
         $productId = $this->getModel() ? $this->getModel()->id : null;
-
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
 

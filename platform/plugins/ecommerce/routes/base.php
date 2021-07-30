@@ -12,14 +12,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             'uses' => 'EcommerceController@getSettings',
         ]);
 
-
-
-
         Route::post('settings', [
             'as'         => 'ecommerce.settings.post',
             'uses'       => 'EcommerceController@postSettings',
             'permission' => 'ecommerce.settings',
         ]);
+
         Route::get('ajax/countries', [
             'as'         => 'ajax.countries.list',
             'uses'       => 'EcommerceController@ajaxGetCountries',
@@ -182,6 +180,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'as'         => 'deletes',
                 'uses'       => 'ProductCategoryController@deletes',
                 'permission' => 'product-categories.destroy',
+            ]);
+
+            Route::get('get-list-product-categories-for-select', [
+                'as'         => 'get-list-product-categories-for-select',
+                'uses'       => 'ProductCategoryController@getListForSelect',
+                'permission' => 'product-categories.index',
             ]);
         });
 

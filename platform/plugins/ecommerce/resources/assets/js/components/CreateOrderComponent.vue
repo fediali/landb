@@ -329,7 +329,7 @@
                                             <div class="has-loading" v-show="loading">
                                                 <i class="fa fa-spinner fa-spin"></i>
                                             </div>
-                                            <ul class="clearfix" v-show="!loading">
+                                            <ul class="clearfix select-customer" v-show="!loading">
                                                 <li class="row" v-for="customer in customers.data"
                                                     @click="selectCustomer(customer)">
                                                     <div class="flexbox-grid-default flexbox-align-items-center">
@@ -399,8 +399,7 @@
                                 <label class="title-product-main">{{ __('Customer') }}</label>
                             </div>
                             <div class="flexbox-auto-left">
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Xóa khách hàng"
-                                   @click="removeCustomer()">
+                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top" title="Delete customer" @click="removeCustomer()">
                                     <svg class="svg-next-icon svg-next-icon-size-12">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                     </svg>

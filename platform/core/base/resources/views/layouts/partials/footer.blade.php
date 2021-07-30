@@ -156,7 +156,7 @@
 
         payment_method();
 
-        $('.method').on('change', function () {
+        $(document).on('change', '.method', function () {
             payment_method();
         });
 
@@ -191,7 +191,7 @@
         function payment_method() {
             var payment_method = $("select.method option:selected").val();
 
-            if (payment_method == 'omni') {
+            if (payment_method == 'omni-payment') {
                 $('.card-area').show();
             } else {
                 $('.card-area').hide();
@@ -204,7 +204,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-772ad4c6040b', {
+    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
@@ -240,7 +240,19 @@
         console.log(message);
     });
 
-    $(document).on('click', '.credit_card', function () {
+    $(document).on('click', 'a#remove-customer', function () {
+        $('#card_id').empty().html("<option value='0'> Add New Card</option>");
+        $('#card_id').selectpicker("refresh");
+        $('#billing_address').empty();
+        $('#billing_address').selectpicker("refresh");
+        $('.add_card').show();
+    });
+
+    $(document).on('click', '.credit_card, ul.select-customer', function () {
+        selectCard();
+    });
+
+    function selectCard() {
         $('select#billing_address').empty();
         var baddress = [];
 
@@ -268,6 +280,7 @@
                             $('select#billing_address').append(html);
                         }
                     });
+                    $('#billing_address').selectpicker("refresh");
 
                     getCustomer();
                     getCards();
@@ -279,7 +292,7 @@
                 }
             });
         }
-    });
+    }
 
     function getbillingadress() {
         console.log($("#billing_address option:selected").val(), "===");
@@ -298,8 +311,14 @@
         });
     }
 
+    $(document).on('change', '#billing_address', function () {
+        getbillingadress();
+    });
+
     function getCustomer() {
         console.log($('#customer_id').val());
+
+
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
             type: 'get',
@@ -329,6 +348,7 @@
                 }
                 htmls += "<option value='0'> Add New Card</option>";
                 $('#card_id').html(htmls);
+                $('#card_id').selectpicker("refresh");
                 var card = $("select.card_list option:selected").val();
                 $('.payment_id').val(card);
                 if (card == 0) {
@@ -361,7 +381,7 @@
     });
 
     $('button#tokenizebutton').on('click', () => {
-        console.log('working')
+
         var month = $('.month').val();
         var year = $('.year').val();
         successElement = document.querySelector('.success');
@@ -443,7 +463,8 @@
         })
 
         $('.address-country').on('change', function () {
-            // get_states($('select[name="address_state"]'), this.value, '{{--{{ route('ajax.getStates') }}--}}');
+
+            get_states($('select[name="address_state"]'), this.value);
         });
 
         $('.delete_address').on('click', function (e) {
@@ -454,7 +475,7 @@
             }
 
         });
-        $('.toggle-edit-address').on('click', function (e) {
+        $(document).on('click', '.toggle-edit-address', function (e) {
 
             var data = $(this).data('row');
 
@@ -472,7 +493,7 @@
 
 
             $('#edit_address').modal('toggle');
-            console.log(data);
+            console.log(data, 'ss');
         });
 
 
@@ -507,6 +528,7 @@
 
             success: function (result) {
                 thiss.find('option').remove();
+                console.log('s');
                 jQuery.each(result, function (index, state) {
                     if (index === old) {
                         thiss.append(new Option(state, index, null, true));

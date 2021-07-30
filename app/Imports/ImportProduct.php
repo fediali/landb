@@ -32,7 +32,7 @@ class ImportProduct implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        if ($row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
+        if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
             $category = ProductCategory::where('name', $row['category'])->first();
             if (!$category && $row['category'] && $row['parent_id']) {
@@ -42,12 +42,13 @@ class ImportProduct implements ToModel, WithHeadingRow
                 $category->save();
             }
 
-
             $check = Product::where('sku', $row['product_code'])->first();
-            if (!$check) {
-                $packQuantity = $this->quantityCalculate($category->id);
+            if (!$check && $category) {
+                $packQuantity = quantityCalculate($category->id);
                 $product = new Product();
+                $product->id = $row['product_id'];
                 $product->name = $row['product'];
+                $product->warehouse_sec = @$row['bin'];
                 if ($row['full_description']) {
                     $product->description = $row['full_description'];
                 }
@@ -58,18 +59,29 @@ class ImportProduct implements ToModel, WithHeadingRow
                     $product->status = BaseStatusEnum::$STATUSES[$row['status']];
                 }
                 $product->sku = $row['product_code'];
+                $product->prod_pieces = $row['min_qty'];
                 $product->category_id = $category->id;
                 $product->quantity = 0;
 
                 $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
 
                 $product->price = 0;
+                $singlePrice = 0;
                 if ($row['price']) {
+                    if ($product->prod_pieces) {
+                        $packQuantity = $product->prod_pieces;
+                    }
                     $extras = ($row['price'] * $packQuantity) * $percentage / 100;
-                    $packPrice = $row['price'] * $packQuantity + $extras;
+                    $packPrice = $row['price'] * $packQuantity;
                     $single = $row['price'] * $percentage / 100;
-                    $singlePrice = $row['price'] + $single;
+                    $singlePrice = $row['price'];
                     $product->price = $packPrice;
+
+//                    $extras = ($row['price'] * $packQuantity) * $percentage / 100;
+//                    $packPrice = $row['price'] * $packQuantity + $extras;
+//                    $single = $row['price'] * $percentage / 100;
+//                    $singlePrice = $row['price'] + $single;
+//                    $product->price = $packPrice;
                 }
                 // $product->sale_price = $variation->cost + $extras;
 
@@ -80,7 +92,9 @@ class ImportProduct implements ToModel, WithHeadingRow
 
                 if ($row['upc_pack']) {
                     $product->upc = $row['upc_pack'];
-                    $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+                    try {
+                        $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+                    } catch (\ErrorException $exception) {}
                 }
 
                 if ($row['restock']) {
@@ -148,9 +162,12 @@ class ImportProduct implements ToModel, WithHeadingRow
                                     $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                     $packAllProd = Product::where('id', $prodId)->first();
 
-                                    $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
-                                    $packAllProd->upc = $barcodePackAll['upc'];
-                                    $packAllProd->barcode = $barcodePackAll['barcode'];
+                                    try {
+                                        $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                        $packAllProd->upc = $barcodePackAll['upc'];
+                                        $packAllProd->barcode = $barcodePackAll['barcode'];
+                                    } catch (\ErrorException $exception) {}
+
                                     $packAllProd->private_label = $product->private_label;
                                     $packAllProd->restock = $product->restock;
                                     $packAllProd->new_label = $product->new_label;
@@ -214,17 +231,9 @@ class ImportProduct implements ToModel, WithHeadingRow
                 }
 
             }
-        }
-    }
 
-    public function quantityCalculate($id)
-    {
-        $category = $this->productCategoryRepository->findOrFail($id);
-        $totalQuantity = 0;
-        foreach ($category->category_sizes as $cat) {
-            $quan = substr($cat->name, strpos($cat->name, "-") + 1);
-            $totalQuantity += $quan;
+            //echo $check ? $check->sku : $row['product_code'].'\n';
+            echo isset($product) ? $product->sku : '--no--'.'====';
         }
-        return $totalQuantity;
     }
 }
