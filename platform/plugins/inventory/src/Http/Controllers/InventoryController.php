@@ -242,7 +242,7 @@ class InventoryController extends BaseController
         if ($products && count($products) > 1) {
             return response()->json(['products' => $products, 'status' => 'success'], 200);
         } else {
-            $getProdIdByUPC = Product::where('upc', $request->get('barcode'))->value('id');
+            $getProdIdByUPC = Product::where('upc',"LIKE", "%" . $request->get('barcode') . "%")->value('id');
             $getChildIds = ProductVariation::where('configurable_product_id', $getProdIdByUPC)->pluck('product_id')->all();
             $getChildIds[] = $getProdIdByUPC;
 

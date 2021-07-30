@@ -8,7 +8,7 @@
                 <li data-target="#demo" data-slide-to="{{ $loop->iteration-1 }}" class="{{ ($loop->first) ? 'active': '' }}"></li>
             @endforeach
         </ul>
-        
+
         <!-- The slideshow -->
         <div class="carousel-inner">
             @foreach($slider->sliderItems as $item)
@@ -17,7 +17,7 @@
                 </a>
             @endforeach
         </div>
-        
+
         <!-- Left and right controls -->
         <a class="carousel-control-prev" href="#demo" data-slide="prev">
             <span class="carousel-control-prev-icon"></span>
@@ -161,7 +161,7 @@
                   {!! image_html_generator(@$products2[5]->images[5], null, null, null, true, 'w-100 slidert-left-img') !!}
               </a>
           </div>
-        </div> 
+        </div>
     </div>
     @endif
 @if(setting('theme-landb-home_section_2_status') == 1)
@@ -228,19 +228,19 @@
 
 <div class="row">
     <div class="col-lg-12">
-    <h1 class="mt-5 revealUp pro-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1> 
+    <h1 class="mt-5 revealUp pro-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1>
  <img src="{{ asset('landb/img/pr4.png') }}" alt="Product image" loading="lazy" class="mt-2 w-100 lazyloaded" >
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
         <p class="text-center mt-2 font-madeg ft-20">
-        L&B is passionate about developing creative, quality western wholesale boutique clothing that will help your business stand out. We are a family-owned business, which extends to our team and our customers. We promise to provide excellent customer service and accountability.<br /> 
-        You will find that all our products are inclusive of all ages, shapes, and sizes. We believe in celebrating diversity by providing our clients with clothing solutions that work for everyone. We believe that every person who wears our garments should feel comfortable and stylish.  
+        L&B is passionate about developing creative, quality western wholesale boutique clothing that will help your business stand out. We are a family-owned business, which extends to our team and our customers. We promise to provide excellent customer service and accountability.<br />
+        You will find that all our products are inclusive of all ages, shapes, and sizes. We believe in celebrating diversity by providing our clients with clothing solutions that work for everyone. We believe that every person who wears our garments should feel comfortable and stylish.
         </p>
         </div>
         <div class="col-lg-1"></div>
     </div>
-  
+
     </div>
 </div>
 @endif
@@ -433,7 +433,7 @@
             pin: ".grid",
             anticipatePin: 1,
           },
-          
+
         })
         .set(".gridBlock:not(.centerBlock)", { autoAlpha: 0 })
         .to(
@@ -470,4 +470,3 @@
 })
 });
     </script>
- 
