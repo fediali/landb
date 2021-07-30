@@ -114,9 +114,9 @@ class importProducts extends Command
                             $packQuantity = $product->prod_pieces;
                         }
                         $extras = ($row['price'] * $packQuantity) * $percentage / 100;
-                        $packPrice = $row['price'] * $packQuantity + $extras;
+                        $packPrice = $row['price'] * $packQuantity ;
                         $single = $row['price'] * $percentage / 100;
-                        $singlePrice = $row['price'] + $single;
+                        $singlePrice = $row['price'];
                         $product->price = $packPrice;
                     }
                     // $product->sale_price = $variation->cost + $extras;

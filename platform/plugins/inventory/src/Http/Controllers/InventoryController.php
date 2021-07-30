@@ -74,6 +74,7 @@ class InventoryController extends BaseController
         $data = $request->input();
         $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['created_by'] = Auth::user()->id;
+        $data['warehouse_sec'] = @$request->warehouse_sec;
         $inventory = $this->inventoryRepository->createOrUpdate($data);
 
         if ($inventory) {
@@ -225,13 +226,13 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+        $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
             'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
             //->leftJoin('inventory_history', 'inventory_history.parent_product_id', 'ec_products.id')
             //->whereNull('inventory_history.inventory_id')
             //->where('ec_products.barcode', $request->get('barcode'))
-            ->where('ec_products.sku', 'LIKE', $request->get('barcode').'%')
+            ->where('ec_products.sku', 'LIKE', $request->get('barcode') . '%')
             //->orWhere('ec_products.upc', $request->get('barcode'))
             //->orWhere('ec_products.barcode', $request->get('barcode'))
             //->orWhere('parent_sku', $request->get('barcode'))
@@ -241,11 +242,11 @@ class InventoryController extends BaseController
         if ($products && count($products) > 1) {
             return response()->json(['products' => $products, 'status' => 'success'], 200);
         } else {
-            $getProdIdByUPC = Product::where('upc', $request->get('barcode'))->value('id');
+            $getProdIdByUPC = Product::where('upc',"LIKE", "%" . $request->get('barcode') . "%")->value('id');
             $getChildIds = ProductVariation::where('configurable_product_id', $getProdIdByUPC)->pluck('product_id')->all();
             $getChildIds[] = $getProdIdByUPC;
 
-            $products = Product::select('ec_products.id', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
                 'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
                 ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
                 ->whereIn('ec_products.id', $getChildIds)
@@ -280,7 +281,7 @@ class InventoryController extends BaseController
                             $qtyOS = 0;
                             $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
                             if ($getOSPercentage) {
-                                $getOSPercentage = $getOSPercentage/100;
+                                $getOSPercentage = $getOSPercentage / 100;
                                 $qtyOS = round($getOSPercentage * $inv_product->received_qty);
                                 $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
                             }
@@ -288,7 +289,7 @@ class InventoryController extends BaseController
                             $qtyIS = 0;
                             $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
                             if ($getISPercentage) {
-                                $getISPercentage = $getISPercentage/100;
+                                $getISPercentage = $getISPercentage / 100;
                                 $qtyIS = round($getISPercentage * $inv_product->received_qty);
                                 $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
                             }
@@ -298,22 +299,22 @@ class InventoryController extends BaseController
                                 $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                                 $logParam = [
                                     'parent_product_id' => $getParentProdId,
-                                    'product_id' => $product->id,
-                                    'sku' => $product->sku,
-                                    'quantity' => $inv_product->received_qty,
-                                    'new_stock' => $product->quantity,
-                                    'old_stock' => $old_stock,
-                                    'created_by' => Auth::user()->id,
-                                    'inventory_id' => $inventory->id,
-                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                    'product_id'        => $product->id,
+                                    'sku'               => $product->sku,
+                                    'quantity'          => $inv_product->received_qty,
+                                    'new_stock'         => $product->quantity,
+                                    'old_stock'         => $old_stock,
+                                    'created_by'        => Auth::user()->id,
+                                    'inventory_id'      => $inventory->id,
+                                    'reference'         => InventoryHistory::PROD_STOCK_ADD
                                 ];
                                 log_product_history($logParam);
 
                                 QtyAllotmentHistory::create([
-                                    'product_id' => $product->id,
-                                    'online_sales_qty' => $qtyOS,
+                                    'product_id'          => $product->id,
+                                    'online_sales_qty'    => $qtyOS,
                                     'in_person_sales_qty' => $qtyIS,
-                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                    'reference'           => InventoryHistory::PROD_STOCK_ADD
                                 ]);
 
                             }
@@ -343,20 +344,20 @@ class InventoryController extends BaseController
         $error = null;
 
         $getProdIds = ProductVariation::where('configurable_product_id', $prod_id)->pluck('product_id')->all();
-        $getProdIds[] = (int) $prod_id;
+        $getProdIds[] = (int)$prod_id;
 
         $inventory = Inventory::with([
-            'products' => function($q) use($getProdIds) {
+            'products' => function ($q) use ($getProdIds) {
                 $q->whereIn('product_id', $getProdIds);
             }
-            ])
+        ])
             ->where('id', $inv_id)
             ->first();
 
         if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
-                    $product = Product::where('sku', $inv_product->sku)/*->where('is_variation', 1)*/->first();
+                    $product = Product::where('sku', $inv_product->sku)/*->where('is_variation', 1)*/ ->first();
                     if ($product) {
                         if ($inv_product->is_released) {
                             $error = 'some products already released in this inventory!';
@@ -369,7 +370,7 @@ class InventoryController extends BaseController
                             $qtyOS = 0;
                             $getOSPercentage = Role::where('slug', Role::ONLINE_SALES)->value('qty_allotment_percentage');
                             if ($getOSPercentage) {
-                                $getOSPercentage = $getOSPercentage/100;
+                                $getOSPercentage = $getOSPercentage / 100;
                                 $qtyOS = round($getOSPercentage * $inv_product->received_qty);
                                 $product->online_sales_qty = $product->online_sales_qty + $qtyOS;
                             }
@@ -377,7 +378,7 @@ class InventoryController extends BaseController
                             $qtyIS = 0;
                             $getISPercentage = Role::where('slug', Role::IN_PERSON_SALES)->value('qty_allotment_percentage');
                             if ($getISPercentage) {
-                                $getISPercentage = $getISPercentage/100;
+                                $getISPercentage = $getISPercentage / 100;
                                 $qtyIS = round($getISPercentage * $inv_product->received_qty);
                                 $product->in_person_sales_qty = $product->in_person_sales_qty + $qtyIS;
                             }
@@ -387,22 +388,22 @@ class InventoryController extends BaseController
                                 $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                                 $logParam = [
                                     'parent_product_id' => $getParentProdId,
-                                    'product_id' => $product->id,
-                                    'sku' => $product->sku,
-                                    'quantity' => $inv_product->received_qty,
-                                    'new_stock' => $product->quantity,
-                                    'old_stock' => $old_stock,
-                                    'created_by' => Auth::user()->id,
-                                    'inventory_id' => $inventory->id,
-                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                    'product_id'        => $product->id,
+                                    'sku'               => $product->sku,
+                                    'quantity'          => $inv_product->received_qty,
+                                    'new_stock'         => $product->quantity,
+                                    'old_stock'         => $old_stock,
+                                    'created_by'        => Auth::user()->id,
+                                    'inventory_id'      => $inventory->id,
+                                    'reference'         => InventoryHistory::PROD_STOCK_ADD
                                 ];
                                 log_product_history($logParam);
 
                                 QtyAllotmentHistory::create([
-                                    'product_id' => $product->id,
-                                    'online_sales_qty' => $qtyOS,
+                                    'product_id'          => $product->id,
+                                    'online_sales_qty'    => $qtyOS,
                                     'in_person_sales_qty' => $qtyIS,
-                                    'reference' => InventoryHistory::PROD_STOCK_ADD
+                                    'reference'           => InventoryHistory::PROD_STOCK_ADD
                                 ]);
 
                             }

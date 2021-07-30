@@ -15,7 +15,8 @@
         <div class="form-group">
             <label class="text-title-field">{{ trans('plugins/ecommerce::products.form.price') }}</label>
             <div class="next-input--stylized">
-                <span class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
+                <span
+                    class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
                 <input name="price"
                        class="next-input input-mask-number regular-price next-input--invisible"
                        step="any"
@@ -24,6 +25,24 @@
             </div>
         </div>
     </div>
+    @if(@\Illuminate\Support\Facades\Auth::user()->roles[0]->slug == 'warehouse')
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="text-title-field">Quantity</label>
+
+            <div class="next-input--stylized">
+                <span
+                    class="next-input-add-on next-input__add-on--before"><i class="fa fa-transgender"></i></span>
+
+                <input name="quantity"
+                       class="next-input input-mask-number regular-price next-input--invisible"
+                       step="any"
+                       value="{{ old('quantity', $product ? $product->quantity : 0) }}"
+                       type="text">
+            </div>
+        </div>
+    </div>
+    @endif()
     <div class="col-md-4">
         <div class="form-group">
             <label class="text-title-field">
@@ -34,7 +53,8 @@
                    class="turn-off-schedule @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">{{ trans('plugins/ecommerce::products.form.cancel') }}</a>
             </label>
             <div class="next-input--stylized">
-                <span class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
+                <span
+                    class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
                 <input name="sale_price"
                        class="next-input input-mask-number sale-price next-input--invisible"
                        value="{{ old('sale_price', $product ? $product->sale_price : ($originalProduct->sale_price ?? null)) }}"
@@ -57,7 +77,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
+    <div
+        class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
         <div class="form-group">
             <label class="text-title-field">{{ trans('plugins/ecommerce::products.form.date.start') }}</label>
             <input name="start_date"
@@ -66,7 +87,8 @@
                    type="text">
         </div>
     </div>
-    <div class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
+    <div
+        class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
         <div class="form-group">
             <label class="text-title-field">{{ trans('plugins/ecommerce::products.form.date.end') }}</label>
             <input name="end_date"
@@ -112,37 +134,48 @@
     <div class="row">
         <div class="col-md-3 col-md-6">
             <div class="form-group">
-                <label>{{ trans('plugins/ecommerce::products.form.shipping.weight') }} ({{ ecommerce_weight_unit() }})</label>
+                <label>{{ trans('plugins/ecommerce::products.form.shipping.weight') }} ({{ ecommerce_weight_unit() }}
+                    )</label>
                 <div class="next-input--stylized">
                     <span class="next-input-add-on next-input__add-on--before">{{ ecommerce_weight_unit() }}</span>
-                    <input type="text" class="next-input input-mask-number next-input--invisible" name="weight" value="{{ old('weight', $product ? $product->weight : ($originalProduct->weight ?? 0)) }}">
+                    <input type="text" class="next-input input-mask-number next-input--invisible" name="weight"
+                           value="{{ old('weight', $product ? $product->weight : ($originalProduct->weight ?? 0)) }}">
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-md-6">
             <div class="form-group">
-                <label>{{ trans('plugins/ecommerce::products.form.shipping.length') }} ({{ ecommerce_width_height_unit() }})</label>
+                <label>{{ trans('plugins/ecommerce::products.form.shipping.length') }}
+                    ({{ ecommerce_width_height_unit() }})</label>
                 <div class="next-input--stylized">
-                    <span class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
-                    <input type="text" class="next-input input-mask-number next-input--invisible" name="length" value="{{ old('length', $product ? $product->length : ($originalProduct->length ?? 0)) }}">
+                    <span
+                        class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
+                    <input type="text" class="next-input input-mask-number next-input--invisible" name="length"
+                           value="{{ old('length', $product ? $product->length : ($originalProduct->length ?? 0)) }}">
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-md-6">
             <div class="form-group">
-                <label>{{ trans('plugins/ecommerce::products.form.shipping.wide') }} ({{ ecommerce_width_height_unit() }})</label>
+                <label>{{ trans('plugins/ecommerce::products.form.shipping.wide') }}
+                    ({{ ecommerce_width_height_unit() }})</label>
                 <div class="next-input--stylized">
-                    <span class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
-                    <input type="text" class="next-input input-mask-number next-input--invisible" name="wide" value="{{ old('wide', $product ? $product->wide : ($originalProduct->wide ?? 0)) }}">
+                    <span
+                        class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
+                    <input type="text" class="next-input input-mask-number next-input--invisible" name="wide"
+                           value="{{ old('wide', $product ? $product->wide : ($originalProduct->wide ?? 0)) }}">
                 </div>
             </div>
         </div>
         <div class="col-md-3 col-md-6">
             <div class="form-group">
-                <label>{{ trans('plugins/ecommerce::products.form.shipping.height') }} ({{ ecommerce_width_height_unit() }})</label>
+                <label>{{ trans('plugins/ecommerce::products.form.shipping.height') }}
+                    ({{ ecommerce_width_height_unit() }})</label>
                 <div class="next-input--stylized">
-                    <span class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
-                    <input type="text" class="next-input input-mask-number next-input--invisible" name="height" value="{{ old('height', $product ? $product->height : ($originalProduct->height ?? 0)) }}" />
+                    <span
+                        class="next-input-add-on next-input__add-on--before">{{ ecommerce_width_height_unit() }}</span>
+                    <input type="text" class="next-input input-mask-number next-input--invisible" name="height"
+                           value="{{ old('height', $product ? $product->height : ($originalProduct->height ?? 0)) }}"/>
                 </div>
             </div>
         </div>

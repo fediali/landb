@@ -47,16 +47,16 @@ class ProductForm extends FormAbstract
         }
 
         $productId = $this->getModel() ? $this->getModel()->id : null;
-
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
-        $products = get_products_data($this->getModel()->id);
+
 
         $productVariations = [];
         $productVariationsInfo = [];
         $productsRelatedToVariation = [];
 
         if ($this->getModel()) {
+            $products = get_products_data($this->getModel()->id);
             $productVariations = app(ProductVariationInterface::class)->allBy([
                 'configurable_product_id' => $this->getModel()->id,
             ]);
@@ -65,6 +65,8 @@ class ProductForm extends FormAbstract
                 ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
             $productsRelatedToVariation = app(ProductInterface::class)->getProductVariations($productId);
+        }else{
+          $products = get_products_data();
         }
 
         $tags = null;

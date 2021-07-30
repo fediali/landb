@@ -84,14 +84,14 @@
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
             <div class="col-md-6">
-            <p class="detail-size-p mb-2"><span
+            {{--<p class="detail-size-p mb-2"><span
                     class="detail-size">Size</span>
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
                         {{  @explode('-', $item->title)[0] }} ,
                     @endforeach
                 @endforeach
-            </p>
+            </p>--}}
             </div>
             <div class="col-md-6">
             <p class="detail-size-p mb-2 font-bold"><a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal" data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp; Size Chart</a></p>
@@ -99,18 +99,18 @@
             </div>
 
 
-            <select class="detail-size-select" id="variation-select">
-                {{--@if(isset($product->category))
+           {{-- <select class="detail-size-select" id="variation-select">
+                --}}{{--@if(isset($product->category))
                     @foreach($product->category->category_sizes as $cat_size)
                         <option value="{{ $cat_size->id }}"> {{ $cat_size->name }} </option>
                     @endforeach
-                @endif--}}
+                @endif--}}{{--
                 @foreach($productVariations as $variation)
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->where('attribute_set_id', 2) as $key => $item)
                         <option value="{{ json_encode($variation) }}" @if($variation->is_default == 1) selected @endif>{{  @explode('-', $item->title)[0] }}</option>
                     @endforeach
                 @endforeach
-            </select>
+            </select>--}}
 
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
