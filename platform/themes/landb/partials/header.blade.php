@@ -59,9 +59,9 @@
         <p>Welcome To Lucky and Blessed</p>
     </div>
     <div class="pl-3 pr-3">
-      <p class="text-right m-0">Welcome, <b>Ryan</b></p> 
+{{--      <p class="text-right m-0">Welcome, <b>Ryan</b></p>--}}
         <div class="topnav d-flex pb-0 pt-2">
-         
+
             <ul>
                 <li>
                     <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>972-243-7860
@@ -72,7 +72,7 @@
             <ul class="d-flex">
                 <li class="search-custom">
                     <a href="#"><i class="fal fa-search"></i></a>
-                    
+
                 </li>
                 <div id="top-sear" class="top-search">
                       <form action="#">
@@ -80,7 +80,7 @@
                         <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." name="search">
                         <button class="tp-search-btn" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                         <span class="tp-close-btn pl-2"><i class="fa fa-times" aria-hidden="true"></i></span>
-                        </div> 
+                        </div>
                       </form>
                     </div>
                 <li>
@@ -106,7 +106,7 @@
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a href="{{ route('customer.edit-account') }}">{{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                        <a href="{{ route('customer.edit-account') }}">Welcome, {{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
@@ -121,7 +121,7 @@
             <div class="col-lg-12 text-center">
             <a class="navbar-brand" href="{{ route('public.index') }}"> <img src="{{ asset('landb/img/Logo.png') }}" alt=""> </a>
 
-            </div> 
+            </div>
           </div>
           <div class="row">
             <div class="col-lg-12 d-grid text-center header-col">
@@ -146,10 +146,10 @@
                     !!}
                 </div>
             </div>
-            </div> 
+            </div>
           </div>
 
-           
+
         </nav>
     </div>
 </header>
@@ -245,13 +245,13 @@ function closeSearch() {
 }
 </script> -->
 
-<script> 
+<script>
 // function openSearch() {
 //   document.getElementById("top-sear").style.display = "block";
 // }
 
 // function closeSearch() {
 //   document.getElementById("top-sear").style.display = "flex";
-// } 
+// }
 
 </script>

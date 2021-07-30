@@ -25,12 +25,15 @@
             </div>
         </div>
     </div>
+    @if(@\Illuminate\Support\Facades\Auth::user()->roles[0]->slug == 'warehouse')
     <div class="col-md-4">
         <div class="form-group">
             <label class="text-title-field">Quantity</label>
+
             <div class="next-input--stylized">
                 <span
                     class="next-input-add-on next-input__add-on--before"><i class="fa fa-transgender"></i></span>
+
                 <input name="quantity"
                        class="next-input input-mask-number regular-price next-input--invisible"
                        step="any"
@@ -39,6 +42,7 @@
             </div>
         </div>
     </div>
+    @endif()
     <div class="col-md-4">
         <div class="form-group">
             <label class="text-title-field">
