@@ -1036,7 +1036,9 @@ class ProductController extends BaseController
                 if (str_contains($variation->product->sku, 'pack')) {
                     $variation->packQty = packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
-                    $variation->per_piece_price = $variation->price / $variation->packQty;
+                    if ($variation->packQty) {
+                        $variation->per_piece_price = $variation->price / $variation->packQty;
+                    }
                 }
 
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
