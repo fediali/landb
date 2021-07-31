@@ -309,16 +309,21 @@ class ProductTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'            => [
-                'name'  => 'ec_products.id',
-                'title' => trans('core/base::tables.id'),
-                'width' => '20px',
-            ],
+//            'id'            => [
+//                'name'  => 'ec_products.id',
+//                'title' => trans('core/base::tables.id'),
+//                'width' => '20px',
+//            ],
             'image'         => [
                 'name'  => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),
                 'width' => '100px',
                 'class' => 'text-center',
+            ],
+            'sku'           => [
+                'name'  => 'ec_products.sku',
+                'title' => trans('plugins/ecommerce::products.sku'),
+                'class' => 'text-left',
             ],
             'name'          => [
                 'name'  => 'ec_products.name',
@@ -330,11 +335,7 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
-            'sku'           => [
-                'name'  => 'ec_products.sku',
-                'title' => trans('plugins/ecommerce::products.sku'),
-                'class' => 'text-left',
-            ],
+
             'warehouse_sec' => [
                 'name'  => 'ec_products.warehouse_sec',
                 'title' => 'SEC',
