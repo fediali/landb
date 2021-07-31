@@ -59,7 +59,7 @@
         <p>Welcome To Lucky and Blessed</p>
     </div>
     <div class="pl-3 pr-3">
-      <p class="text-right m-0">Welcome, <b>Ryan</b></p> 
+      <p class="text-right m-0">Welcome, <b>{!! auth('customer')->user() ? ucfirst(auth('customer')->user()->name) : 'Guest' !!}</b></p>
         <div class="topnav d-flex pb-0 pt-2">
          
             <ul>
