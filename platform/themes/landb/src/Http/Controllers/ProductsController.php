@@ -55,6 +55,10 @@ class ProductsController extends Controller
 
     public function productsByCategory($category)
     {
+      $slug = SlugHelper::getSlug($category, '');
+      if ($slug) {
+        return redirect()->route('public.single', $category);
+      }
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
         ];
@@ -65,12 +69,12 @@ class ProductsController extends Controller
     public function getDetails($slug, Request $request)
     {
 
-        /*$data = [
-            'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
-        ];
-        if(!$data['product']){
-          abort('404');
-        }*/
+      /*$data = [
+          'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
+      ];
+      if(!$data['product']){
+        abort('404');
+      }*/
 
         $slug = $this->slugRepository->getFirstBy([
             'key'            => $slug,
