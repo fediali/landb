@@ -5,6 +5,7 @@ namespace Theme\Landb\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
+use Botble\Ecommerce\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
@@ -14,138 +15,175 @@ use SeoHelper;
 use Symfony\Component\HttpFoundation\Response;
 use Theme;
 use URL;
+
 /*use Botble\Theme\Http\Controllers\PublicController;*/
 
 class AuthController extends Controller
 {
-  use AuthenticatesUsers, LogoutGuardTrait;
+    use AuthenticatesUsers, LogoutGuardTrait;
 
-  /**
-   * Where to redirect users after login / registration.
-   *
-   * @var string
-   */
-  /*public $redirectTo;*/
+    /**
+     * Where to redirect users after login / registration.
+     *
+     * @var string
+     */
+    /*public $redirectTo;*/
 
-  /**
-   * Create a new controller instance.
-   */
-  public function __construct()
-  {
-    $this->middleware('customer.guest', ['except' => 'logout']);
-    session(['url.intended' => URL::previous()]);
-    $this->redirectTo = session()->get('url.intended');
-  }
-
-  public function showLoginForm()
-  {
-    SeoHelper::setTitle(__('Login'));
-
-    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
-
-    return Theme::scope('auth.login', [], 'plugins/ecommerce::themes.customers.login')->render();
-  }
-
-  public function showRegisterForm()
-  {
-    SeoHelper::setTitle(__('Register'));
-
-    Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
-
-    return Theme::scope('auth.register', [], 'plugins/ecommerce::themes.customers.register')->render();
-  }
-
-  /**
-   * Get the guard to be used during authentication.
-   *
-   * @return StatefulGuard
-   */
-  protected function guard()
-  {
-    return auth('customer');
-  }
-
-  /**
-   * @param Request $request
-   * @return Response|void
-   * @throws ValidationException
-   * @throws ValidationException
-   */
-  public function login(Request $request)
-  {
-    $this->validateLogin($request);
-
-    // If the class is using the ThrottlesLogins trait, we can automatically throttle
-    // the login attempts for this application. We'll key this by the username and
-    // the IP address of the client making these requests into this application.
-    if ($this->hasTooManyLoginAttempts($request)) {
-      $this->fireLockoutEvent($request);
-
-      $this->sendLockoutResponse($request);
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('customer.guest', ['except' => 'logout']);
+        session(['url.intended' => URL::previous()]);
+        $this->redirectTo = session()->get('url.intended');
     }
 
-    if ($this->attemptLogin($request)) {
+    public function showLoginForm()
+    {
+        SeoHelper::setTitle(__('Login'));
 
-      return $this->sendLoginResponse($request);
+        Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
+
+        return Theme::scope('auth.login', [], 'plugins/ecommerce::themes.customers.login')->render();
     }
 
-    // If the login attempt was unsuccessful we will increment the number of attempts
-    // to login and redirect the user back to the login form. Of course, when this
-    // user surpasses their maximum number of attempts they will get locked out.
-    $this->incrementLoginAttempts($request);
+    public function showRegisterForm()
+    {
+        SeoHelper::setTitle(__('Register'));
 
-    return $this->sendFailedLoginResponse($request);
-  }
+        Theme::breadcrumb()->add(__('Home'), url('/'))->add(__('Login'), route('customer.login'));
 
-  /**
-   * Log the user out of the application.
-   *
-   * @param Request $request
-   * @return RedirectResponse
-   */
-  public function logout(Request $request)
-  {
-    $activeGuards = 0;
-    $this->guard()->logout();
-
-    foreach (config('auth.guards', []) as $guard => $guardConfig) {
-      if ($guardConfig['driver'] !== 'session') {
-        continue;
-      }
-      if ($this->isActiveGuard($request, $guard)) {
-        $activeGuards++;
-      }
+        return Theme::scope('auth.register', [], 'plugins/ecommerce::themes.customers.register')->render();
     }
 
-    if (!$activeGuards) {
-      $request->session()->flush();
-      $request->session()->regenerate();
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return StatefulGuard
+     */
+    protected function guard()
+    {
+        return auth('customer');
     }
 
-    return $this->loggedOut($request) ?: redirect('/');
-  }
+    public function checkOldLoginCredentials($email, $password)
+    {
+        $post_data = array(
+            'email' => $email,
+            'password' => $password,
+        );
 
-  public function process_signup(Request $request)
-  {
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required',
-        'password' => 'required'
-    ]);
+        // $post_data = json_encode($data);
 
-    $user = User::create([
-        'name' => trim($request->input('name')),
-        'email' => strtolower($request->input('email')),
-        'password' => bcrypt($request->input('password')),
-    ]);
+        // Prepare new cURL resource
+        $crl = curl_init('http://dev.landbw.co/api/usertoken');
+        curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($crl, CURLINFO_HEADER_OUT, true);
+        // Set HTTP Header for POST request
+        curl_setopt($crl, CURLOPT_HTTPHEADER, array('Authorization: Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg=='));
+        curl_setopt($crl, CURLOPT_POST, true);
+        curl_setopt($crl, CURLOPT_POSTFIELDS, http_build_query($post_data));
 
-    session()->flash('message', 'Your account is created');
+        // Submit the POST request
+        $result = curl_exec($crl);
 
-    return redirect()->route('login');
-  }
+        dd($result);
 
-  protected function authenticated(Request $request, $user)
-  {
-    $user->update(['last_visit' => Carbon::now()]);
-  }
+        // handle curl error
+        if ($result === false) {
+        } else {
+        }
+        // Close cURL session handle
+        curl_close($crl);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response|void
+     * @throws ValidationException
+     * @throws ValidationException
+     */
+    public function login(Request $request)
+    {
+        $checkOld = Customer::where('email', $request->get('email'))->value('old_customer');
+        if ($checkOld) {
+            $res = $this->checkOldLoginCredentials($request->get('email'), $request->get('password'));
+        }
+
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function logout(Request $request)
+    {
+        $activeGuards = 0;
+        $this->guard()->logout();
+
+        foreach (config('auth.guards', []) as $guard => $guardConfig) {
+            if ($guardConfig['driver'] !== 'session') {
+                continue;
+            }
+            if ($this->isActiveGuard($request, $guard)) {
+                $activeGuards++;
+            }
+        }
+
+        if (!$activeGuards) {
+            $request->session()->flush();
+            $request->session()->regenerate();
+        }
+
+        return $this->loggedOut($request) ?: redirect('/');
+    }
+
+    public function process_signup(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        $user = User::create([
+            'name' => trim($request->input('name')),
+            'email' => strtolower($request->input('email')),
+            'password' => bcrypt($request->input('password')),
+        ]);
+
+        session()->flash('message', 'Your account is created');
+
+        return redirect()->route('login');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        $user->update(['last_visit' => Carbon::now()]);
+    }
 }
