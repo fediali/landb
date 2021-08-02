@@ -94,7 +94,7 @@ class AuthController extends Controller
         // Close cURL session handle
         curl_close($crl);
 
-        return $result;
+        return $result != false ? json_decode($result) : false;
     }
 
     /**
