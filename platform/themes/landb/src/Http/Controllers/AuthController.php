@@ -70,15 +70,15 @@ class AuthController extends Controller
     public function checkOldLoginCredentials($email, $password)
     {
         $post_data = array(
-            'email'    => $email,
+            'email' => $email,
             'password' => $password,
         );
+        $post_data = json_encode($post_data);
 
         $header = array(
             'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
             'Content-Type: application/json'
         );
-         $post_data = json_encode($post_data);
 
         // Prepare new cURL resource
         $crl = curl_init('http://dev.landbw.co/api/usertoken');
@@ -92,14 +92,10 @@ class AuthController extends Controller
         // Submit the POST request
         $result = curl_exec($crl);
 
-        dd($result);
-
-        // handle curl error
-        if ($result === false) {
-        } else {
-        }
         // Close cURL session handle
         curl_close($crl);
+
+        return $result;
     }
 
     /**
@@ -110,9 +106,16 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $checkOld = Customer::where('email', $request->get('email'))->value('old_customer');
+        $email = $request->get('email');
+        $password = $request->get('password');
+        $checkOld = Customer::where('email', $email)->value('old_customer');
         if ($checkOld) {
-            $res = $this->checkOldLoginCredentials($request->get('email'), $request->get('password'));
+            $res = $this->checkOldLoginCredentials($email, $password);
+            if ($res && isset($res->token)) {
+                $pwd = bcrypt($password);
+                Customer::where('email', $email)->update(['old_customer' => 0, 'password' => $pwd]);
+                $request->password = $pwd;
+            }
         }
 
         $this->validateLogin($request);
@@ -170,14 +173,14 @@ class AuthController extends Controller
     public function process_signup(Request $request)
     {
         $request->validate([
-            'name'     => 'required',
-            'email'    => 'required',
+            'name' => 'required',
+            'email' => 'required',
             'password' => 'required'
         ]);
 
         $user = User::create([
-            'name'     => trim($request->input('name')),
-            'email'    => strtolower($request->input('email')),
+            'name' => trim($request->input('name')),
+            'email' => strtolower($request->input('email')),
             'password' => bcrypt($request->input('password')),
         ]);
 
