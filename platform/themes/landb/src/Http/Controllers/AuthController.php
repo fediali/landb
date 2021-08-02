@@ -112,7 +112,6 @@ class AuthController extends Controller
 
         if ($checkOld) {
             $res = $this->checkOldLoginCredentials($email, $password);
-            dd($res && $res->token);
             if ($res && isset($res->token)) {
                 dd('s');
                 $pwd = bcrypt($password);
