@@ -113,7 +113,6 @@ class AuthController extends Controller
         if ($checkOld) {
             $res = $this->checkOldLoginCredentials($email, $password);
             if ($res && isset($res->token)) {
-                dd('s');
                 $pwd = bcrypt($password);
                 Customer::where('email', $email)->update(['old_customer' => 0, 'password' => $pwd]);
                 $request->password = $pwd;
