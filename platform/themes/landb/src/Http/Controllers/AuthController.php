@@ -70,7 +70,7 @@ class AuthController extends Controller
     public function checkOldLoginCredentials($email, $password)
     {
         $post_data = array(
-            'email' => $email,
+            'email'    => $email,
             'password' => $password,
         );
         $post_data = json_encode($post_data);
@@ -91,7 +91,7 @@ class AuthController extends Controller
 
         // Submit the POST request
         $result = curl_exec($crl);
-
+        dd($result);
         // Close cURL session handle
         curl_close($crl);
 
@@ -110,7 +110,7 @@ class AuthController extends Controller
         $password = $request->get('password');
 
         $checkOld = Customer::where('email', $email)->value('old_customer');
-        dd($checkOld);
+
         if ($checkOld) {
             $res = $this->checkOldLoginCredentials($email, $password);
             if ($res && isset($res->token)) {
@@ -175,14 +175,14 @@ class AuthController extends Controller
     public function process_signup(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+            'name'     => 'required',
+            'email'    => 'required',
             'password' => 'required'
         ]);
 
         $user = User::create([
-            'name' => trim($request->input('name')),
-            'email' => strtolower($request->input('email')),
+            'name'     => trim($request->input('name')),
+            'email'    => strtolower($request->input('email')),
             'password' => bcrypt($request->input('password')),
         ]);
 
