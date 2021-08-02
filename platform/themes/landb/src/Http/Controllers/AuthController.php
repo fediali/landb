@@ -70,20 +70,27 @@ class AuthController extends Controller
     public function checkOldLoginCredentials($email, $password)
     {
         $post_data = array(
-            'email' => $email,
-            'password' => $password,
+            'email'    => 'info@mediagate.com',
+            'password' => 'lnb2022',
         );
 
-        // $post_data = json_encode($data);
+        $header = array(
+            'Authorization' => 'Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
+            //'Content-Type' => 'application/json'
+        );
+         $post_data = json_encode($post_data);
 
         // Prepare new cURL resource
         $crl = curl_init('http://dev.landbw.co/api/usertoken');
         curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($crl, CURLINFO_HEADER_OUT, true);
         // Set HTTP Header for POST request
-        curl_setopt($crl, CURLOPT_HTTPHEADER, array('Authorization: Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg=='));
+        curl_setopt($crl, CURLOPT_HTTPHEADER, array(
+            'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
+            'Content-Type: application/json'
+        ));
         curl_setopt($crl, CURLOPT_POST, true);
-        curl_setopt($crl, CURLOPT_POSTFIELDS, http_build_query($post_data));
+        curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
 
         // Submit the POST request
         $result = curl_exec($crl);
@@ -166,14 +173,14 @@ class AuthController extends Controller
     public function process_signup(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+            'name'     => 'required',
+            'email'    => 'required',
             'password' => 'required'
         ]);
 
         $user = User::create([
-            'name' => trim($request->input('name')),
-            'email' => strtolower($request->input('email')),
+            'name'     => trim($request->input('name')),
+            'email'    => strtolower($request->input('email')),
             'password' => bcrypt($request->input('password')),
         ]);
 
