@@ -70,13 +70,13 @@ class AuthController extends Controller
     public function checkOldLoginCredentials($email, $password)
     {
         $post_data = array(
-            'email'    => 'info@mediagate.com',
-            'password' => 'lnb2022',
+            'email'    => $email,
+            'password' => $password,
         );
 
         $header = array(
-            'Authorization' => 'Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
-            //'Content-Type' => 'application/json'
+            'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
+            'Content-Type: application/json'
         );
          $post_data = json_encode($post_data);
 
@@ -85,10 +85,7 @@ class AuthController extends Controller
         curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($crl, CURLINFO_HEADER_OUT, true);
         // Set HTTP Header for POST request
-        curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-            'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
-            'Content-Type: application/json'
-        ));
+        curl_setopt($crl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($crl, CURLOPT_POST, true);
         curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
 
