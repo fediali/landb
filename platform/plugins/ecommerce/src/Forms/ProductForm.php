@@ -160,11 +160,11 @@ class ProductForm extends FormAbstract
                 'choices'    => get_product_categories_with_children(),
                 'value'      => old('categories', $selectedCategories),
             ])
-            ->add('brand_id', 'customSelect', [
-                'label'      => trans('plugins/ecommerce::products.form.brand'),
-                'label_attr' => ['class' => 'control-label'],
-                'choices'    => $brands,
-            ])
+//            ->add('brand_id', 'customSelect', [
+//                'label'      => trans('plugins/ecommerce::products.form.brand'),
+//                'label_attr' => ['class' => 'control-label'],
+//                'choices'    => $brands,
+//            ])
             ->add('product_collections[]', 'multiCheckList', [
                 'label'      => trans('plugins/ecommerce::products.form.label'),
                 'label_attr' => ['class' => 'control-label'],
@@ -172,17 +172,17 @@ class ProductForm extends FormAbstract
                 'value'      => old('product_collections', $selectedProductCollections),
             ]);
 
-        if (EcommerceHelper::isTaxEnabled()) {
-            $taxes = app(TaxInterface::class)->pluck('title', 'id');
-
-            $taxes = [0 => trans('plugins/ecommerce::tax.select_tax')] + $taxes;
-
-            $this->add('tax_id', 'customSelect', [
-                'label'      => trans('plugins/ecommerce::products.form.tax'),
-                'label_attr' => ['class' => 'control-label'],
-                'choices'    => $taxes,
-            ]);
-        }
+//        if (EcommerceHelper::isTaxEnabled()) {
+//            $taxes = app(TaxInterface::class)->pluck('title', 'id');
+//
+//            $taxes = [0 => trans('plugins/ecommerce::tax.select_tax')] + $taxes;
+//
+//            $this->add('tax_id', 'customSelect', [
+//                'label'      => trans('plugins/ecommerce::products.form.tax'),
+//                'label_attr' => ['class' => 'control-label'],
+//                'choices'    => $taxes,
+//            ]);
+//        }
 
         $this
             ->add('tag', 'tags', [
