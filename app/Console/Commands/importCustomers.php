@@ -66,11 +66,11 @@ class importCustomers extends Command
                         'name' => $row['firstname'].' '.$row['lastname'],
                         'password' => $row['password'],
                         'avatar' => $row['profile_image'],
-                        'phone' => $row['phone'],
+                        'phone' => $row['user_phone'],
                         'first_name' => $row['firstname'],
                         'last_name' => $row['lastname'],
                         'salesperson_id' => $row['srep_id'],
-                        'login_status' => $row['status'],
+                        'login_status' => $row['user_status'],
                     ];
                     Customer::create($customerData);
 
