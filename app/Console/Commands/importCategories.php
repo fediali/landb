@@ -41,7 +41,7 @@ class importCategories extends Command
      */
     public function handle()
     {
-        /*$getCategories = DB::table('hw_categories')
+        $getCategories = DB::table('hw_categories')
             ->select('hw_categories.category_id', 'hw_category_descriptions.category', 'hw_categories.parent_id', 'hw_category_descriptions.description', 'hw_categories.status', 'hw_categories.position')
             ->join('hw_category_descriptions', 'hw_categories.category_id', '=','hw_category_descriptions.category_id')
             ->get();
@@ -59,7 +59,7 @@ class importCategories extends Command
                 'updated_at' => Carbon::now(),
             ];
             DB::table('ec_product_categories')->insert($data);
-        }*/
+        }
 
         /*$getCategorySizes = DB::table('category_sizes')->orderBy('id')->get();
 
@@ -98,8 +98,8 @@ class importCategories extends Command
             DB::table('printdesigns')->insert($data);
         }*/
 
-        $file = public_path('designer_cat_count.xlsx');
-        Excel::import(new DesignerCatCount(), $file);
+//        $file = public_path('designer_cat_count.xlsx');
+//        Excel::import(new DesignerCatCount(), $file);
         echo 'success';
 
     }

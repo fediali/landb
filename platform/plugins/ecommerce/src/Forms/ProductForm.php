@@ -139,10 +139,15 @@ class ProductForm extends FormAbstract
                 'default_value' => false,
                 'id'            => $productId ? $productId : 0
             ])
-            ->add('creation_date', 'date', [
-                'label'      => 'Creation date',
-                'label_attr' => ['class' => 'control-label'],
-                'default_value' => now(),
+            ->add('creation_date', 'text', [
+                'label'         => 'Creation date',
+                'label_attr'    => ['class' => 'control-label'],
+                'attr'          => [
+                    'class'            => 'form-control datepicker',
+                    'data-date-format' => 'd M, yyyy',
+                ],
+                'default_value' => now(config('app.timezone'))->format('d M, Y'),
+                'value'         => $this->model->creation_date ? date('d M, Y', strtotime($this->model->creation_date)) : now(config('app.timezone'))->format('d M, Y')
             ])
             ->add('is_featured', 'onOff', [
                 'label'         => trans('core/base::forms.is_featured'),

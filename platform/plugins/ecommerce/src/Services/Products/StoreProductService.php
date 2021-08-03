@@ -59,11 +59,11 @@ class StoreProductService
                 'wide_unit',
                 'height_unit',
                 'weight_unit',
-                'creation_date'
             ]);
         }
 
         $data['eta_pre_product'] = date('Y-m-d', strtotime($data['eta_pre_product']));
+        $data['creation_date'] = date('Y-m-d', strtotime($data['creation_date']));
         $product->fill($data);
 
         if (!$hasVariation || $forceUpdateAll) {

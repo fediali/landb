@@ -125,6 +125,13 @@ new Luminous(demoTrigger);
 </script>
 <script>
   $(document).ready(function() {
+
+    $('.checkk').on('click', function () {
+     /* console.log($('#check1').prop("checked")+ ' : asdadad')*/
+      if ($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true) {
+        $('.tax-submit-btn').attr('disabled', false)
+      }
+    });
     $("#signature").jSignature({
       // line width
       lineWidth:2,

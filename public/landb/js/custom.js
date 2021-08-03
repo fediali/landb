@@ -8,11 +8,7 @@ $(document).ready(function () {
             $('.eta_pre_product').closest('.widget').hide();
         }
     });
-    $('.checkk').click(function () {
-        if ($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true) {
-            $('.tax-submit-btn').attr('disabled', false)
-        }
-    });
+
 
     $('#tag').on('change', function () {
         tag = jQuery.parseJSON($('#tag').val());
