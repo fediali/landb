@@ -822,11 +822,16 @@
                                         <div class="col-lg-7">
                                             <p class="textbox-label">Purchaser Sign </p>
                                             @if(!empty(@$customer->taxCertificate->purchaser_sign))
-                                                <img class="img-responsive" src="{{ asset($customer->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @if(str_contains($customer->taxCertificate->purchaser_sign, 'data:image/png;base64'))
+                                                    <img class="img-responsive" src="{{ ($customer->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @else
+                                                    <img class="img-responsive" src="{{ asset($customer->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @endif
                                             @else
                                                 <span id="undo-sign" class="fa fa-undo"></span>
                                                 <div id="signature"></div>
                                             @endif
+
                                         </div>
                                         <input type="hidden" value="" name="purchaser_sign">
                                         @error('purchaser_sign')
