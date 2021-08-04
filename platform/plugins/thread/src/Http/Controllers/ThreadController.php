@@ -229,10 +229,10 @@ class ThreadController extends BaseController
             }
         }
 
-        $thread->regular_product_categories()->sync([
-            $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
-            $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
-        ]);
+//        $thread->regular_product_categories()->sync([
+//            $requestData['regular_category_id'] => ['category_type' => Thread::REGULAR, 'sku' => $reg_sku, 'product_unit_id' => $requestData['regular_product_unit_id'], 'per_piece_qty' => $requestData['regular_per_piece_qty']],
+//            $requestData['plus_category_id']    => ['category_type' => Thread::PLUS, 'sku' => $plu_sku, 'product_unit_id' => $requestData['plus_product_unit_id'], 'per_piece_qty' => $requestData['plus_per_piece_qty']]
+//        ]);
 
         generate_notification('thread_updated', $thread);
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $thread));

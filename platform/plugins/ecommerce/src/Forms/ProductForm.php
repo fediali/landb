@@ -15,6 +15,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ProductAttributeInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductAttributeSetInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductCollectionInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
+use Botble\Ecommerce\Repositories\Interfaces\ProductLabelInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface;
 use Botble\Ecommerce\Repositories\Interfaces\TaxInterface;
@@ -41,12 +42,18 @@ class ProductForm extends FormAbstract
 
         $productCollections = app(ProductCollectionInterface::class)->pluck('name', 'id');
 
+
         $selectedProductCollections = [];
         if ($this->getModel()) {
             $selectedProductCollections = $this->getModel()->productCollections()->pluck('product_collection_id')
                 ->all();
         }
-
+        $productLabels = app(ProductLabelInterface::class)->pluck('name', 'id');
+        $selectedProductLabels = [];
+        if ($this->getModel()) {
+            $selectedProductLabels = $this->getModel()->productLabels()->pluck('product_label_id')
+                ->all();
+        }
         $productId = $this->getModel() ? $this->getModel()->id : null;
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
@@ -126,7 +133,7 @@ class ProductForm extends FormAbstract
                 'label'      => 'Out of Stock Date',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'class' => 'form-control',
+                    'class' => 'form-controlco',
                     'readonly']
             ])
             ->add('color_print', 'mediaImages', [
@@ -177,8 +184,13 @@ class ProductForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'choices'    => $productCollections,
                 'value'      => old('product_collections', $selectedProductCollections),
+            ])
+            ->add('product_labels[]', 'multiCheckList', [
+                'label'      => 'Product Label',
+                'label_attr' => ['class' => 'control-label'],
+                'choices'    => $productLabels,
+                'value'      => old('product_labels', $selectedProductLabels),
             ]);
-
 //        if (EcommerceHelper::isTaxEnabled()) {
 //            $taxes = app(TaxInterface::class)->pluck('title', 'id');
 //
