@@ -1925,6 +1925,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 2200px) {
+    .plc-5 {
+        padding-left: 3rem!important;
+    }
     .previews {
         width: 15% !important; 
     }
@@ -4422,4 +4425,29 @@ html {
     box-sizing: border-box;
     padding: 8.5px;
     width: 100%;
+}
+
+#exzoom {
+    width: 100%;
+    /*height: 400px;*/
+} 
+.hidden { display: none; }
+
+.exzoom .exzoom_img_ul_outer {
+    width: 100% !important;
+    height: 600px !important;
+}
+
+.exzoom .exzoom_img_box {
+    width: 100% !important;
+    height: 600px !important;
+}
+
+.exzoom .exzoom_nav .exzoom_nav_inner {
+    width: 100% !important;
+}
+ 
+.exzoom .exzoom_img_ul_outer .exzoom_img_ul li img {
+    width: 100% !important;
+    object-fit: contain;
 }

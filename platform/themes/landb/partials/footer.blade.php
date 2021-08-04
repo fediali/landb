@@ -107,6 +107,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="{{ asset('landb/js/jquery.exzoom.js') }}"></script> 
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
@@ -151,6 +153,7 @@ new Luminous(demoTrigger);
       var base64 = $("#signature").jSignature("getData");
       $("input[name='purchaser_sign']").val(base64);
     })
+ 
   })
 </script>
 <script>
@@ -503,6 +506,16 @@ new Luminous(demoTrigger);
 */
         }); //closing our doc ready
     </script>
+    <script type="text/javascript">
+
+    $('.containert').imagesLoaded( function() {
+    $("#exzoom").exzoom({
+        autoPlay: false,
+    });
+    $("#exzoom").removeClass('hidden')
+    });
+
+    </script> 
 
 @if(session()->has('success'))
     <script>

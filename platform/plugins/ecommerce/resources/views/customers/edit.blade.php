@@ -617,14 +617,22 @@
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Type</p>
+                                <div class="d-flex">
                                 <input
-                                    class="input-textbox form-control"
+                                    class="input-textbox mt-1"
                                     type="radio" name="address_type"
-                                    placeholder="Shipping" id="shipping_type" value="shipping"/> Shipping
+                                    placeholder="Shipping" id="shipping_type" value="shipping"/> 
+                                    <p>Shipping</p>
+                                </div>
+                               
+                                <div class="d-flex">
                                 <input
-                                    class="input-textbox form-control"
+                                    class="input-textbox mt-1"
                                     type="radio" name="address_type"
-                                    placeholder="Billing"  id="billing_type" value="billling"/> Billing
+                                    placeholder="Billing"  id="billing_type" value="billling"/>
+                                    <p>Billing</p>
+                                </div>
+  
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
