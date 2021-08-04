@@ -85,6 +85,7 @@ class Product extends BaseModel
         'color_print',
         'color_products',
         'sizes',
+        'product_label_id',
     ];
 
     /**

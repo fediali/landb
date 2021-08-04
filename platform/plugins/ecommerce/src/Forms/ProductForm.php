@@ -51,9 +51,9 @@ class ProductForm extends FormAbstract
         $productLabels = app(ProductLabelInterface::class)->pluck('name', 'id');
         $selectedProductLabels = [];
         if ($this->getModel()) {
-            $selectedProductLabels = $this->getModel()->productLabels()->pluck('product_label_id')
-                ->all();
+            $selectedProductLabels[] = $this->getModel()->product_label_id;
         }
+
         $productId = $this->getModel() ? $this->getModel()->id : null;
         $productAttributeSets = app(ProductAttributeSetInterface::class)->getAllWithSelected($productId);
         $productAttributes = app(ProductAttributeInterface::class)->getAllWithSelected($productId);
@@ -185,11 +185,12 @@ class ProductForm extends FormAbstract
                 'choices'    => $productCollections,
                 'value'      => old('product_collections', $selectedProductCollections),
             ])
-            ->add('product_labels[]', 'multiCheckList', [
+            ->add('product_label_id', 'multiCheckList', [
                 'label'      => 'Product Label',
                 'label_attr' => ['class' => 'control-label'],
                 'choices'    => $productLabels,
                 'value'      => old('product_labels', $selectedProductLabels),
+
             ]);
 //        if (EcommerceHelper::isTaxEnabled()) {
 //            $taxes = app(TaxInterface::class)->pluck('title', 'id');
