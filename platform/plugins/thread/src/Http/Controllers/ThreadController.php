@@ -180,7 +180,7 @@ class ThreadController extends BaseController
         $reg_category = $thread->regular_product_categories()->value('product_category_id');
         $plu_category = $thread->plus_product_categories()->value('product_category_id');
 
-        if (isset($requestData['regular_category_id']) && $reg_category && $reg_category != $requestData['regular_category_id']) {
+        if (isset($requestData['regular_category_id']) /*&& $reg_category*/ && $reg_category != $requestData['regular_category_id']) {
             if ($reg_category) {
                 $regCnt = DB::table('category_designer_count')->where(['user_id' => $thread->designer_id, 'product_category_id' => $reg_category])->value('count') - 1;
                 $cnt = $regCnt > 0 ? $regCnt : 0;
