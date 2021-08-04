@@ -44,6 +44,11 @@ class Product extends BaseModel
         'warehouse_sec',
         'order',
         'quantity',
+        'single_qty',
+        'sold_qty',
+        'pre_order_qty',
+        'reorder_qty',
+        'in_cart_qty',
         'in_person_sales_qty',
         'online_sales_qty',
         'allow_checkout_when_out_of_stock',
@@ -94,8 +99,7 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
-        'product_slug',
-        'sold_qty'
+        'product_slug'
     ];
 
     /**
@@ -621,35 +625,6 @@ class Product extends BaseModel
     public function inventory_history()
     {
         return $this->hasMany(InventoryHistory::class, 'parent_product_id');
-    }
-
-    public function getSoldQtyAttribute()
-    {
-        $getProdIds = ProductVariation::where('configurable_product_id', $this->id)->pluck('product_id')->all();
-        $getProdIds[] = $this->id;
-        $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
-            ->whereIn('product_id', $getProdIds)
-            ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
-            ->sum('qty');
-        return ($soldQty > 0) ? $soldQty : 0;
-    }
-
-    public function inCart()
-    {
-        $variations = $this->variations()->pluck('product_id');
-        $orders = Order::where('ec_orders.is_finished', 0)->join('ec_order_product as ecp', 'ecp.order_id', 'ec_orders.id')->whereIn('ecp.product_id', $variations);
-
-        $order_ids = $orders->select('ec_orders.*')->groupBy('ec_orders.id')->pluck('ec_orders.id');
-        $sumdata = $orders->select(DB::raw('sum(ecp.qty) as sum'))->get();
-        $sum = 0;
-        foreach ($sumdata as $data) {
-            $sum = $sum + $data->sum;
-        }
-
-        return [
-            'order_ids' => $order_ids,
-            'sum'       => $sum
-        ];
     }
 
     public function product_colors()

@@ -121,13 +121,20 @@ class ProductTable extends TableAbstract
             ->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
             })
-            ->editColumn('in_cart', function ($item) {
-              $data = $item->inCart();
-              if(count($data['order_ids'])){
-                return '<a href="'. route('orders.incomplete-list', ['order_ids' =>  json_encode($data['order_ids'])]) .'">'.$data['sum'].'</a>';
-              }else{
-                return !is_null($data['sum']) ? $data['sum'] : '-';
-              }
+            ->editColumn('in_cart_qty', function ($item) {
+                $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
+                $getProdIds[] = $item->id;
+                $orderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->whereIn('product_id', $getProdIds)
+                    ->where('ec_orders.is_finished', 0)
+                    ->groupBy('ec_orders.id')
+                    ->pluck('ec_orders.id')
+                    ->all();
+                if (count($orderQty)) {
+                    return '<a href="' . route('orders.incomplete-list', ['order_ids' => json_encode($orderQty)]) . '">' . $item->in_cart_qty . '</a>';
+                } else {
+                    return $item->in_cart_qty;
+                }
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -140,35 +147,39 @@ class ProductTable extends TableAbstract
                 return view('plugins/ecommerce::products.productStatus', ['item' => $item])->render();
             })
             ->editColumn('quantity', function ($item) {
-                $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
+                /*$getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                     $packQty = Product::where('id', $getPackId)->value('online_sales_qty');
                 } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                     $packQty = Product::where('id', $getPackId)->value('in_person_sales_qty');
                 } else {
                     $packQty = Product::where('id', $getPackId)->value('quantity');
-                }
-                return $packQty;
+                }*/
+                $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
+                Product::where('id', $getPackId)->value('quantity');
+                return $item->quantity;
             })
             ->editColumn('single_qty', function ($item) {
-                $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
+                /*$getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('online_sales_qty');
                 } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('in_person_sales_qty');
                 } else {
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
-                }
-                return $singleQty;
+                }*/
+                $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
+                Product::whereIn('id', $getSingleIds)->sum('quantity');
+                return $item->single_qty;
             })
-            ->editColumn('order_qty', function ($item) {
+            ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
                 $getProdIds[] = $item->id;
-                $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
+                /*$preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                     ->whereIn('product_id', $getProdIds)
                     ->where('order_type', Order::PRE_ORDER)
                     ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
-                    ->sum('qty');
+                    ->sum('qty');*/
                 $orderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                     ->whereIn('product_id', $getProdIds)
                     ->where('order_type', Order::PRE_ORDER)
@@ -176,8 +187,8 @@ class ProductTable extends TableAbstract
                     ->groupBy('ec_orders.id')
                     ->get();
                 $html = '&mdash;';
-                if ($orderQty && $preOrderQty) {
-                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $preOrderQty . '</span><br><span><em>Order : ' . count($orderQty) . '</em></span></a>';
+                if ($orderQty && $item->pre_order_qty) {
+                    $html = '<a href="' . route('orders.index', ['order_type' => 'pre_order', 'product_id' => $item->id]) . '"><span>' . $item->pre_order_qty . '</span><br><span><em>Order : ' . count($orderQty) . '</em></span></a>';
                 }
                 return $html;
             })
@@ -189,14 +200,14 @@ class ProductTable extends TableAbstract
                 return $html;
             })
             ->editColumn('reorder_qty', function ($item) {
-                $getProdSKU = Product::where('id', $item->id)->value('sku');
+                /*$getProdSKU = Product::where('id', $item->id)->value('sku');
                 $reOrderQty = Threadorders::join('thread_order_variations', 'thread_order_variations.thread_order_id', 'threadorders.id')
                     ->leftJoin('inventory_history', 'inventory_history.order_id', 'threadorders.id')
                     ->where('thread_order_variations.sku', $getProdSKU)
                     ->where('threadorders.order_status', Thread::REORDER)
                     ->whereNull('inventory_history.order_id')
-                    ->value('thread_order_variations.quantity');
-                $html = '<span>' . $reOrderQty . '</span>';
+                    ->value('thread_order_variations.quantity');*/
+                $html = '<span>' . $item->reorder_qty . '</span>';
                 return $html;
             });
 
@@ -228,10 +239,11 @@ class ProductTable extends TableAbstract
             'ec_products.sku',
             'ec_products.warehouse_sec',
             'ec_products.quantity',
-            'ec_products.quantity AS single_qty',
-            'ec_products.quantity AS order_qty',
-            'ec_products.quantity AS sold_qty',
-            'ec_products.quantity AS reorder_qty',
+            'ec_products.single_qty',
+            'ec_products.sold_qty',
+            'ec_products.pre_order_qty',
+            'ec_products.reorder_qty',
+            'ec_products.in_cart_qty',
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
@@ -315,48 +327,46 @@ class ProductTable extends TableAbstract
 //                'title' => trans('core/base::tables.id'),
 //                'width' => '20px',
 //            ],
-            'image'         => [
-                'name'  => 'ec_products.images',
+            'image' => [
+                'name' => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'sku'           => [
-                'name'  => 'ec_products.sku',
+            'sku' => [
+                'name' => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
             ],
-            'name'          => [
-                'name'  => 'ec_products.name',
+            'name' => [
+                'name' => 'ec_products.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
-            'price'         => [
-                'name'  => 'ec_products.price',
+            'price' => [
+                'name' => 'ec_products.price',
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
 
             'warehouse_sec' => [
-                'name'  => 'ec_products.warehouse_sec',
+                'name' => 'ec_products.warehouse_sec',
                 'title' => 'SEC',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'quantity'      => [
-                'name'  => 'ec_products.quantity',
+            'quantity' => [
+                'name' => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'single_qty'    => [
-                'name'       => 'ec_products.single_qty',
-                'title'      => 'Single Qty',
-                'class'      => 'text-left',
-                'searchable' => false,
-                'sortable'   => false
+            'single_qty' => [
+                'name' => 'ec_products.single_qty',
+                'title' => 'Single Qty',
+                'class' => 'text-left',
             ],
-            'product_type'  => [
-                'name'  => 'ec_products.product_type',
+            'product_type' => [
+                'name' => 'ec_products.product_type',
                 'title' => 'Type',
                 'class' => 'text-left',
             ],
@@ -366,37 +376,29 @@ class ProductTable extends TableAbstract
                 'width' => '50px',
                 'class' => 'text-center',
             ],*/
-            'order_qty'     => [
-                'name'       => 'ec_products.order_qty',
-                'title'      => 'Pre-order Qty',
-                'width'      => '100px',
-                'class'      => 'text-center',
-                'searchable' => false,
-                'sortable'   => false
+            'pre_order_qty' => [
+                'name' => 'ec_products.pre_order_qty',
+                'title' => 'Pre-order Qty',
+                'width' => '100px',
+                'class' => 'text-center',
             ],
-            'reorder_qty'   => [
-                'name'       => 'ec_products.reorder_qty',
-                'title'      => 'Re-order Qty',
-                'class'      => 'text-center',
-                'searchable' => false,
-                'sortable'   => false
+            'reorder_qty' => [
+                'name' => 'ec_products.reorder_qty',
+                'title' => 'Re-order Qty',
+                'class' => 'text-center',
             ],
-            'sold_qty'      => [
-                'name'       => 'ec_products.sold_qty',
-                'title'      => 'Sold Qty',
-                'class'      => 'text-center',
-                'searchable' => false,
-                'sortable'   => false
+            'sold_qty' => [
+                'name' => 'ec_products.sold_qty',
+                'title' => 'Sold Qty',
+                'class' => 'text-center',
             ],
-            'in_cart'      => [
-                'name'       => 'in_cart',
-                'title'      => 'In cart',
-                'class'      => 'text-center',
-                'searchable' => false,
-                'sortable'   => false
+            'in_cart_qty' => [
+                'name' => 'ec_products.in_cart_qty',
+                'title' => 'In cart',
+                'class' => 'text-center',
             ],
-            'created_at'    => [
-                'name'  => 'ec_products.created_at',
+            'created_at' => [
+                'name' => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-center',
@@ -407,8 +409,8 @@ class ProductTable extends TableAbstract
 //                'width' => '100px',
 //                'class' => 'text-center',
 //            ],
-            'status'        => [
-                'name'  => 'ec_products.status',
+            'status' => [
+                'name' => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
                 'class' => 'text-center',
@@ -460,10 +462,10 @@ class ProductTable extends TableAbstract
                 'type'  => 'date',
             ],*/
 
-            'ec_products.status'     => [
-                'title'    => trans('core/base::tables.status'),
-                'type'     => 'select',
-                'choices'  => BaseStatusEnum::$PRODUCT,
+            'ec_products.status' => [
+                'title' => trans('core/base::tables.status'),
+                'type' => 'select',
+                'choices' => BaseStatusEnum::$PRODUCT,
                 'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
             ],
 
