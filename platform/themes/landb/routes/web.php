@@ -10,6 +10,8 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
+
+
     Route::get('/products/{slug?}', 'ProductsController@getDetails')
       ->name('public.singleProduct');
 

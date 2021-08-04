@@ -38,7 +38,7 @@ class ProductsRepository{
     $price = isset($params['price_search']) ? $params['price_search'] : null;
     $search = isset($params['name_search']) ? $params['name_search'] : null;
 
-    $category_id = null;
+    $category_id = $tag_id  = null;
     if(!is_null($category_slug)){
       $category = Slug::where('prefix', 'product-categories')->where('key', $category_slug)->first();
       if($category){
@@ -46,6 +46,9 @@ class ProductsRepository{
       }
     }
     $tag_id = null;
+    if($category_slug == 'pre-order'){
+      $tag_slug = $category_slug;
+    }
     if(!is_null($tag_slug)){
       $tag = Slug::where('prefix', 'product-tags')->where('key', $tag_slug)->first();
       if($tag){
@@ -93,11 +96,11 @@ class ProductsRepository{
             ->when(!is_null($limit) , function ($query) use ($limit){
                 $query->limit($limit);
             })
-            ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals'])) , function ($query) use ($category_id){
+            ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])) , function ($query) use ($category_id){
                /* $query->where($this->model->getTable().'.category_id', $category_id);*/
                  $query->join('ec_product_category_product as epcp', 'epcp.product_id' , $this->model->getTable().'.id')->where('epcp.category_id', $category_id);
             })
-            ->when((!is_null($category_id) && in_array($category_slug, ['new-arrival', 'new-arrivals'])) , function ($query) use ($category_id){
+            ->when((!is_null($category_id) && in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])) , function ($query) use ($category_id){
                /* $query->where($this->model->getTable().'.category_id', $category_id);*/
                $date = Carbon::today()->subWeek();
                  $query->where($this->model->getTable().'.creation_date', '>=', $date);
