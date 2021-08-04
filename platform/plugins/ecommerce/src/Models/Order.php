@@ -69,6 +69,7 @@ class Order extends BaseModel
     ];
 
     protected $fillable = [
+        'id',
         'status',
         'user_id',
         'amount',

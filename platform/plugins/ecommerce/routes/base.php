@@ -170,6 +170,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ProductController@addCustomerProductDemandQty',
                 'permission' => 'products.edit',
             ]);
+
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'ProductController@changeStatus',
+                'permission' => 'products.status',
+            ]);
         });
 
         Route::group(['prefix' => 'product-categories', 'as' => 'product-categories.'], function () {

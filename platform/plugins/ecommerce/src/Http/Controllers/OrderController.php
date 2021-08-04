@@ -1098,6 +1098,7 @@ class OrderController extends BaseController
             $orderProduct = $order->products->where('product_id', $availableProduct->id)->first();
             if ($orderProduct) {
                 $availableProduct->select_qty = $orderProduct->qty;
+                $availableProduct->price = $orderProduct->price;
             }
             foreach ($availableProduct->variations as &$variation) {
                 $variation->price = $variation->product->front_sale_price;

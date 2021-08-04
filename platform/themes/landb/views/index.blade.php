@@ -5,19 +5,21 @@
         <!-- Indicators -->
         <ul class="carousel-indicators">
             @foreach($slider->sliderItems as $item)
-                <li data-target="#demo" data-slide-to="{{ $loop->iteration-1 }}" class="{{ ($loop->first) ? 'active': '' }}"></li>
+                <li data-target="#demo" data-slide-to="{{ $loop->iteration-1 }}"
+                    class="{{ ($loop->first) ? 'active': '' }}"></li>
             @endforeach
         </ul>
-        
+
         <!-- The slideshow -->
         <div class="carousel-inner">
             @foreach($slider->sliderItems as $item)
                 <a href="{{ $item->link }}" class="carousel-item {{ ($loop->first) ? 'active': '' }}">
-                <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" width="100%" height="750px">
+                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" width="100%"
+                         height="750px">
                 </a>
             @endforeach
         </div>
-        
+
         <!-- Left and right controls -->
         <a class="carousel-control-prev" href="#demo" data-slide="prev">
             <span class="carousel-control-prev-icon"></span>
@@ -25,7 +27,7 @@
         <a class="carousel-control-next" href="#demo" data-slide="next">
             <span class="carousel-control-next-icon"></span>
         </a>
-        </div>
+    </div>
 </div>
 <div class="row mt-5 mb-3">
     <div class="col-lg-2"></div>
@@ -42,13 +44,13 @@
         <div class="row mt-2 mb-5">
             <div class="col-lg-12">
                 <h2 class="text-center just-head">
-                    This Just In
+                    New Arrivals
                 </h2>
-                <div class="shoplisting detail-shoplist ml-4 mr-4">
+                <div class="shoplisting home-listing detail-shoplist ml-4 mr-4">
                     @php
                         $products1 = get_latest_products(4);
                     @endphp
-                        @foreach($products1 as $product)
+                    @foreach($products1 as $product)
                         @php
                             $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')
                                                 ->where('ep.quantity', '>', 0)
@@ -59,23 +61,30 @@
                             $default = $variationData->first();
 
                         @endphp
-                            <div class="listbox">
+                        <div class="listbox">
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                 <div class="img">
                                     {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
                                     <span>Latest</span>
                                     <div class="imgoverlay">
-                                        <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}"><i class="far fa-eye"></i></a>
+                                        <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}"><i
+                                                    class="far fa-eye"></i></a>
                                         @if(auth('customer')->user())
-                                            <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}" href="{!! generate_product_url('wishlist', $product->id) !!}" data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
-                                            <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ @$default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                                            <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}"
+                                               href="{!! generate_product_url('wishlist', $product->id) !!}"
+                                               data-id="{{$product->id}}"><i class="far fa-heart"></i></a>
+                                            <form id='myform-{{$product->id}}' class="add_to_cart_form"
+                                                  data-id="{{ @$default->product_id }}" method='POST'
+                                                  action='{{ route('public.cart.add_to_cart') }}'>
                                                 <div class="col-lg-4">
-                                                    <input type='hidden' name='quantity' value='1' class='qty' />
+                                                    <input type='hidden' name='quantity' value='1' class='qty'/>
                                                 </div>
-                                                <a class="cart-submit" id="cart-icon-{{$product->id}}" onclick="$('#myform-{{$product->id}}').trigger('submit');" href="javascript:void(0);"><i class="far fa-shopping-bag"></i></a>
+                                                <a class="cart-submit" id="cart-icon-{{$product->id}}"
+                                                   onclick="$('#myform-{{$product->id}}').trigger('submit');"
+                                                   href="javascript:void(0);"><i class="far fa-shopping-bag"></i></a>
                                             </form>
                                         @else
-                                            <a href="{{ route('customer.login') }}" ><i class="far fa-heart"></i></a>
+                                            <a href="{{ route('customer.login') }}"><i class="far fa-heart"></i></a>
                                             <a href="{{ route('customer.login') }}"><i class="far fa-shopping-bag"></i></a>
                                         @endif
                                     </div>
@@ -85,27 +94,34 @@
                                     <div class="price">
                                         ${{ $product->price }}
                                     </div>
-                                    <form id='myform-{{$product->id}}' class="add_to_cart_form" data-id="{{ @$default->product_id }}" method='POST' action='{{ route('public.cart.add_to_cart') }}'>
+                                    <form id='myform-{{$product->id}}' class="add_to_cart_form"
+                                          data-id="{{ @$default->product_id }}" method='POST'
+                                          action='{{ route('public.cart.add_to_cart') }}'>
                                         <div class="col-lg-4">
-                                            <input type='hidden' name='quantity' value='1' class='qty' />
+                                            <input type='hidden' name='quantity' value='1' class='qty'/>
                                         </div>
-                                        <a style="padding: 12px 20px;" class="mt-2 w-auto addTobag product-tile__add-to-cart" id="cart-icon-{{$product->id}}" onclick="$('#myform-{{$product->id}}').trigger('submit');" href="javascript:void(0);">ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                                        <a style="padding: 12px 20px;"
+                                           class="mt-2 w-auto addTobag product-tile__add-to-cart"
+                                           id="cart-icon-{{$product->id}}"
+                                           onclick="$('#myform-{{$product->id}}').trigger('submit');"
+                                           href="javascript:void(0);">ADD TO BAG &nbsp;&nbsp;<i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
                                     </form>{{--
                                     <button style="padding: 12px 20px;" class="mt-2 w-auto addTobag product-tile__add-to-cart"  >ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
                                     </button>--}}
                                 </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     @endif
 </section>
+
 @php
-//dd($products1->pluck('id')->toArray());
     $not_in = null;
-    if(count($products1)){
+    if(isset($products1) && count($products1)){
      $not_in = $products1->pluck('id')->toArray();
     }
     $products2 = get_latest_products(6, $not_in);
@@ -115,13 +131,14 @@
             ->limit(7)
             ->get();
 @endphp
-    @if(count($products2) > 5 && setting('theme-landb-home_section_2_status') == 1)
-        <div class="row">
-            <div class="col-lg-12">
+
+@if(count($products2) > 5 && setting('theme-landb-home_section_2_status') == 1)
+    <div class="row">
+        <div class="col-lg-12">
             <h4 class="text-center font-quiche mb-2"> BROWSE COLLECTION </h4>
-            </div>
         </div>
-        <div class="d-flex slider-t-main">
+    </div>
+    <div class="d-flex slider-t-main">
 
         <div class="t-one">
             <div class="ml-2 mr-2">
@@ -132,121 +149,142 @@
         </div>
         <div class="t-two">
             <div class="ml-2 mr-2">
-            <a href="{!! generate_product_url('detail', $products2[1]->id, $products2[1]->product_slug)  !!}">
-                {!! image_html_generator(@$products2[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img') !!}
-            </a>
-            <a href="{!! generate_product_url('detail', $products2[2]->id, $products2[2]->product_slug)  !!}">
-                {!! image_html_generator(@$products2[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
-            </a>
+                <a href="{!! generate_product_url('detail', $products2[1]->id, $products2[1]->product_slug)  !!}">
+                    {!! image_html_generator(@$products2[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img') !!}
+                </a>
+                <a href="{!! generate_product_url('detail', $products2[2]->id, $products2[2]->product_slug)  !!}">
+                    {!! image_html_generator(@$products2[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
+                </a>
             </div>
         </div>
         <div class="t-three">
-        <div class="dp-scroll-wrapper">
-        <div class="dp-scroll-text">
-            @foreach($categories as $category)
-                <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}"> {{ $category->name }}</p>
-            @endforeach
-        </div>
-    </div>
+            <div class="dp-scroll-wrapper">
+                <div class="dp-scroll-text">
+                    @foreach($categories as $category)
+                        <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}"> {{ $category->name }}</p>
+                    @endforeach
+                </div>
+            </div>
         </div>
         <div class="t-four">
-          <div class="ml-2 mr-2">
-              <a href="{!! generate_product_url('detail', $products2[3]->id, $products2[3]->product_slug)  !!}">
-                  {!! image_html_generator(@$products2[3]->images[3], null, null, null, true, 'w-100 slidert-slim-img') !!}
-              </a>
-              <a href="{!! generate_product_url('detail', $products2[4]->id, $products2[4]->product_slug)  !!}">
-                  {!! image_html_generator(@$products2[4]->images[4], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
-              </a>
-          </div>
+            <div class="ml-2 mr-2">
+                <a href="{!! generate_product_url('detail', $products2[3]->id, $products2[3]->product_slug)  !!}">
+                    {!! image_html_generator(@$products2[3]->images[3], null, null, null, true, 'w-100 slidert-slim-img') !!}
+                </a>
+                <a href="{!! generate_product_url('detail', $products2[4]->id, $products2[4]->product_slug)  !!}">
+                    {!! image_html_generator(@$products2[4]->images[4], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
+                </a>
+            </div>
         </div>
         <div class="t-five">
-          <div class="ml-2 mr-2">
-              <a href="{!! generate_product_url('detail', $products2[5]->id, $products2[5]->product_slug)  !!}">
-                  {!! image_html_generator(@$products2[5]->images[5], null, null, null, true, 'w-100 slidert-left-img') !!}
-              </a>
-          </div>
-        </div> 
+            <div class="ml-2 mr-2">
+                <a href="{!! generate_product_url('detail', $products2[5]->id, $products2[5]->product_slug)  !!}">
+                    {!! image_html_generator(@$products2[5]->images[5], null, null, null, true, 'w-100 slidert-left-img') !!}
+                </a>
+            </div>
+        </div>
     </div>
-    @endif
+@endif
 @if(setting('theme-landb-home_section_2_status') == 1)
     <section>
-     <div class="ml-5 mr-5">
-    <div class="row">
-        <div class="col-md-6">
-        <h1 class="revealUp hey-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>
-        </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-6">
+        <div class="ml-5 mr-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="revealUp hey-text text-center"
+                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
 
-                <p class="mt-3 font-madeg ft-20">
-                We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide fashion-forward, comfortable styles that give a nod to the American west. We are confident our clothing, accessories, and home goods will satisfy the needs of fiercely independent, unique customers of all ages, shapes, and sizes. We pride ourselves on collections that include luxe denim, bold custom vintage prints with artistic lace, and rich, on-trend hues.
-     <br />
-                Most importantly, we value the creative, exceptional retailers across the US and internationally that put our brand in the hands of those customers. L&B is a western apparel wholesale distributor that is passionate about developing authentic products that will help your business stand out. We promise to provide excellent customer service and accountability. We are partners in your success.
+                    <p class="mt-3 font-madeg ft-20">
+                        We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide
+                        fashion-forward, comfortable styles that give a nod to the American west. We are confident our
+                        clothing, accessories, and home goods will satisfy the needs of fiercely independent, unique
+                        customers of all ages, shapes, and sizes. We pride ourselves on collections that include luxe
+                        denim, bold custom vintage prints with artistic lace, and rich, on-trend hues.
+                        <br/>
+                        Most importantly, we value the creative, exceptional retailers across the US and internationally
+                        that put our brand in the hands of those customers. L&B is a western apparel wholesale
+                        distributor that is passionate about developing authentic products that will help your business
+                        stand out. We promise to provide excellent customer service and accountability. We are partners
+                        in your success.
 
-                </p>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                <!-- {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!} -->
+                    <img class="w-100" src="{{ asset('landb/img/product.jpg') }}"/>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-        {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!}
-        </div>
-    </div>
-    </div>
     </section>
 @endif
 @if(setting('theme-landb-home_section_3_status') == 1)
 
     <section>
-     <div class="ml-5 mr-5">
-    <div class="row">
-        <div class="col-md-6">
+        <div class="ml-5 mr-5">
+            <div class="row">
+                <div class="col-md-6">
 
-        <div class="collection_img">
-        <div class="collec-imgbox">
-            {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[0], null, null, null, true, 'ls-is-cached') !!}
-        <div class="imgcaption">
-        <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
-        <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
+                    <div class="collection_img home-overlap">
+                        <div class="collec-imgbox">
+                            {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[0], null, null, null, true, 'ls-is-cached') !!}
+                            <div class="imgcaption">
+                                <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
+                                <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="overlap">
+                            <div class="collec-imgbox">
+                                {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[1], null, null, null, true, 'imgtop ls-is-cached') !!}
+                                <div class="imgcaption">
+                                    <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
+                                    <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1 class="revealUp pro-text"
+                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Products </h1>
+                    <p class="mt-3 font-madeg ft-20">
+                        Our main offering is western wholesale clothing, of course, but we pride ourselves in providing
+                        a creative, quality range of products to cover the western lifestyle. We have accessories,
+                        handbags, and home products in addition to our clothing line, which features women’s denim,
+                        dresses, outerwear, loungewear, and more in regular and plus sizes. We also offer an extensive
+                        kid’s line of clothes.
+                    </p>
+                </div>
+            </div>
         </div>
-        </div>
-        <div class="overlap">
-        <div class="collec-imgbox">
-            {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[1], null, null, null, true, 'imgtop ls-is-cached') !!}
-            <div class="imgcaption">
-        <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
-        <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class="col-md-6">
-            <h1 class="revealUp pro-text" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Products </h1>
-                <p class="mt-3 font-madeg ft-20">
-                Our main offering is western wholesale clothing, of course, but we pride ourselves in providing a creative, quality range of products to cover the western lifestyle. We have accessories, handbags, and home products in addition to our clothing line, which features women’s denim, dresses, outerwear, loungewear, and more in regular and plus sizes. We also offer an extensive kid’s line of clothes.
-                </p>
-        </div>
-    </div>
-    </div>
     </section>
 @endif
 @if(setting('theme-landb-home_section_4_status') == 1)
 
-<div class="row">
-    <div class="col-lg-12">
-    <h1 class="mt-5 revealUp pro-text text-center" style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1> 
- <img src="{{ asset('landb/img/pr4.png') }}" alt="Product image" loading="lazy" class="mt-2 w-100 lazyloaded" >
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-10">
-        <p class="text-center mt-2 font-madeg ft-20">
-        L&B is passionate about developing creative, quality western wholesale boutique clothing that will help your business stand out. We are a family-owned business, which extends to our team and our customers. We promise to provide excellent customer service and accountability.<br /> 
-        You will find that all our products are inclusive of all ages, shapes, and sizes. We believe in celebrating diversity by providing our clients with clothing solutions that work for everyone. We believe that every person who wears our garments should feel comfortable and stylish.  
-        </p>
+        <div class="col-lg-12">
+            <h1 class="mt-5 revealUp pro-text text-center"
+                style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Promise </h1>
+            <img src="{{ asset('landb/img/pr4.png') }}" alt="Product image" loading="lazy"
+                 class="mt-2 w-100 lazyloaded">
+            <div class="row">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-10">
+                    <p class="text-center mt-2 font-madeg ft-20">
+                        L&B is passionate about developing creative, quality western wholesale boutique clothing that
+                        will help your business stand out. We are a family-owned business, which extends to our team and
+                        our customers. We promise to provide excellent customer service and accountability.<br/>
+                        You will find that all our products are inclusive of all ages, shapes, and sizes. We believe in
+                        celebrating diversity by providing our clients with clothing solutions that work for everyone.
+                        We believe that every person who wears our garments should feel comfortable and stylish.
+                    </p>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+
         </div>
-        <div class="col-lg-1"></div>
     </div>
-  
-    </div>
-</div>
 @endif
 {{--<div class="logocenter text-center">
     <img class="revealUp"src="landb/img/lucky&blessed_logo_sign_Black 1.png" alt="">
@@ -422,56 +460,55 @@
 </section>--}}
 
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
-    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
 
 <script>
-        console.log(innerHeight,'innerHeight');
+    console.log(innerHeight, 'innerHeight');
 
-      gsap
+    gsap
         .timeline({
-          scrollTrigger: {
-            trigger: ".grid-container",
-            start: "top top",
-            end: () => innerHeight * 9,
-            scrub: true,
-            pin: ".grid",
-            anticipatePin: 1,
-          },
-          
+            scrollTrigger: {
+                trigger: ".grid-container",
+                start: "top top",
+                end: () => innerHeight * 9,
+                scrub: true,
+                pin: ".grid",
+                anticipatePin: 1,
+            },
+
         })
-        .set(".gridBlock:not(.centerBlock)", { autoAlpha: 0 })
+        .set(".gridBlock:not(.centerBlock)", {autoAlpha: 0})
         .to(
-          ".gridBlock:not(.centerBlock)",
-          { duration: 0.1, autoAlpha: 1 },
-          0.001
+            ".gridBlock:not(.centerBlock)",
+            {duration: 0.1, autoAlpha: 1},
+            0.001
         )
-        .from(".gridLayer", { scale: 3.3333, ease: "none" });
+        .from(".gridLayer", {scale: 3.3333, ease: "none"});
 
-      // Images to make it look better, not related to the effect
-      /*const size = Math.max(innerWidth, innerHeight);
-      gsap.set(".gridBlock", {
-        backgroundImage: (i) =>
-          `url(https://picsum.photos/${size}/${size}?random=${i})`,
-      });*/
+    // Images to make it look better, not related to the effect
+    /*const size = Math.max(innerWidth, innerHeight);
+    gsap.set(".gridBlock", {
+      backgroundImage: (i) =>
+        `url(https://picsum.photos/${size}/${size}?random=${i})`,
+    });*/
 
-      const bigImg = new Image();
-      bigImg.addEventListener("load", function () {
+    const bigImg = new Image();
+    bigImg.addEventListener("load", function () {
         gsap.to(".centerPiece .gridBlock", {
-          autoAlpha: 1,
-          duration: 0.5,
+            autoAlpha: 1,
+            duration: 0.5,
         });
-      });
+    });
 
-      bigImg.src = `https://picsum.photos/${size}/${size}?random=50`;
-    </script>
+    bigImg.src = `https://picsum.photos/${size}/${size}?random=50`;
+</script>
 
-    <script>
-      $( document ).ready(function() {
+<script>
+    $(document).ready(function () {
         $('.carousel').carousel({
-    interval: 2000,
-    cycle: true,
-    pause: "null"
-})
-});
-    </script>
- 
+            interval: 2000,
+            cycle: true,
+            pause: "null"
+        })
+    });
+</script>

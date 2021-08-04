@@ -774,7 +774,7 @@ class ProductController extends BaseController
         $addedAttributes = $request->input('attribute_sets', []);
 
         if ($addedAttributes && !empty($addedAttributes) && is_array($addedAttributes)) {
-            dd($addedAttributes);
+
             $result = $productVariation->getVariationByAttributesOrCreate($variation->configurable_product_id, $addedAttributes);
 
             if (!$result['created'] && $result['variation']->id !== $variation->id) {
@@ -1036,7 +1036,9 @@ class ProductController extends BaseController
                 if (str_contains($variation->product->sku, 'pack')) {
                     $variation->packQty = packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
-                    $variation->per_piece_price = $variation->price / $variation->packQty;
+                    if ($variation->packQty) {
+                        $variation->per_piece_price = $variation->price / $variation->packQty;
+                    }
                 }
 
                 if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
@@ -1132,4 +1134,25 @@ class ProductController extends BaseController
             }
         }
     }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $product->fill($requestData);
+
+        $this->productRepository->createOrUpdate($product);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $product));
+
+        return $response;
+    }
+
 }
