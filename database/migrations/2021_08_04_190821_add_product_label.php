@@ -14,7 +14,7 @@ class AddProductLabel extends Migration
     public function up()
     {
         Schema::table('ec_products', function (Blueprint $table) {
-            $table->int('product_label_id')->nullable();
+            $table->integer('product_label_id')->nullable();
         });
     }
 
