@@ -141,12 +141,12 @@ class ProductForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'values'     => $productId ? $this->getModel()->color_print : '',
             ])
-            ->add('color_products[]', 'multiCheckList', [
-                'label'      => 'Color Products',
-                'label_attr' => ['class' => 'control-label'],
-                'choices'    => $products,
-                'value'      => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
-            ])
+//            ->add('color_products[]', 'multiCheckList', [
+//                'label'      => 'Color Products',
+//                'label_attr' => ['class' => 'control-label'],
+//                'choices'    => $products,
+//                'value'      => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
+//            ])
             ->add('inventory_history', 'inventory_history', [
                 'label'         => 'Inventory History',
                 'label_attr'    => ['class' => 'control-label'],

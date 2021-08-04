@@ -5,10 +5,10 @@
             <tbody>
             @foreach($products as $relatedProduct)
                 <tr>
-                    <td class="width-60-px min-width-60-px">
-                        <div class="wrap-img vertical-align-m-i">
-                            <img class="thumb-image" src="{{ RvMedia::getImageUrl($relatedProduct->image, 'thumb', false, RvMedia::getDefaultImage()) }}" alt="{{ $relatedProduct->name }}"></div>
-                    </td>
+{{--                    <td class="width-60-px min-width-60-px">--}}
+{{--                        <div class="wrap-img vertical-align-m-i">--}}
+{{--                            <img class="thumb-image" src="{{ RvMedia::getImageUrl($relatedProduct->image, 'thumb', false, RvMedia::getDefaultImage()) }}" alt="{{ $relatedProduct->name }}"></div>--}}
+{{--                    </td>--}}
                     <td class="pl5 p-r5 min-width-200-px">
                         <a class="hover-underline pre-line" href="{{ route('products.edit', $relatedProduct->id) }}">{{ $relatedProduct->name }}</a>
                         @if ($includeVariation)

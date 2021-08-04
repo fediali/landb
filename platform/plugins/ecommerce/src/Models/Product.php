@@ -654,6 +654,13 @@ class Product extends BaseModel
 
     public function product_colors()
     {
-        return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
+        $color = (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []);
+        $colors = [];
+        if ($color) {
+            $colors = array_map('intval', explode(',', $color[0]));
+        }
+        return $this->whereIn('id', $colors)->with('slugable')
+//            ->select('id', 'color_print', 'name')
+            ->get();
     }
 }
