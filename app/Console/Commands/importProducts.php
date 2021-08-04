@@ -98,7 +98,7 @@ class importProducts extends Command
                         $product->status = BaseStatusEnum::$STATUSES[$row['status']];
                     }
                     $product->cost_price = $row['cost_price'];
-                    $product->creation_date = date('Y-m-d', strtotime($row['timestamp']));
+                    $product->creation_date = date('Y-m-d', $row['timestamp']);
                     $product->sku = $row['product_code'];
                     $product->prod_pieces = $row['min_qty'];
                     $product->sizes = $row['variant_name'];
