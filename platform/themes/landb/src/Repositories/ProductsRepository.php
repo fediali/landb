@@ -35,6 +35,8 @@ class ProductsRepository{
     /*$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $limit;*/
     $size_id = isset($_GET['size']) ? $_GET['size'] : null;
     $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : null;
+    $price = isset($params['price_search']) ? $params['price_search'] : null;
+    $search = isset($params['name_search']) ? $params['name_search'] : null;
 
     $category_id = null;
     if(!is_null($category_slug)){
@@ -75,6 +77,12 @@ class ProductsRepository{
             })
             ->when($is_featured , function ($query){
                 $query->orderBy($this->model->getTable().'.is_featured', 'desc');
+            })
+            ->when(!is_null($price), function ($query) use($price){
+              $query->where('ec_products.price', $price);
+            })
+            ->when(!is_null($search), function ($query) use($search){
+              $query->whereRaw('ec_products.name LIKE "%'.$search.'%" || ec_products.sku LIKE "%'.$search.'%"');
             })
             ->when(!is_null($slug) , function ($query) use ($slug){
                 $query->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.key', $slug)->where('slugs.prefix', '=' ,'products');

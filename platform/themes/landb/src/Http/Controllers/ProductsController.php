@@ -97,8 +97,8 @@ class ProductsController extends Controller
 
         $data['product'] = get_products([
             'condition' => $condition,
-            'take'      => 1,
-            'with'      => [
+                'take'      => 1,
+                'with'      => [
                 'defaultProductAttributes',
                 'slugable',
                 'tags',
@@ -134,5 +134,25 @@ class ProductsController extends Controller
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
         $product = Timeline::where('date', $date)->first();
         return Theme::scope('timeline', ['product' => $product, 'user' => $user])->render();
+    }
+
+    public function searchProducts(Request $request){
+      $keyword = $request->keyword;
+
+      if(!empty($keyword)){
+        if(is_numeric($keyword)){
+          $data = [
+              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'price_search' => $keyword, 'paginate'  => true, 'array' => true])
+          ];
+
+        }else{
+          $data = [
+              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate'  => true, 'array' => true])
+          ];
+        }
+        return Theme::scope('products', $data)->render();
+      }else{
+        return redirect()->route('public.products');
+      }
     }
 }

@@ -468,6 +468,39 @@ new Luminous(demoTrigger);
             //     var modalImage = $(this).attr('src');
             //     $.fancybox.open(modalImage);
             // });
+          /*var main_search = document.getElementById("main_search");
+          main_search.addEventListener("keyup", function(){
+            var keyword = $('#main_search').val();
+            if(keyword.length >= 2){
+              setTimeout( function(){
+                console.log('search')
+                get_products(keyword);
+              }  , 400 );
+            }else if(keyword.length == 0){
+
+            } else{}
+          });
+
+          function get_institutes(keyword) {
+            $.ajax({
+              type        : 'GET',
+              url         : '',
+              data        : {'keyword' : keyword},
+              success: function (result) {
+                var data = result.data;
+                var status = result.status;
+                if(status == 1){
+
+                }else{
+
+                }
+              },
+              error: function (result) {
+
+              }
+            });
+          }
+*/
         }); //closing our doc ready
     </script>
 

@@ -75,9 +75,9 @@
                     
                 </li>
                 <div id="top-sear" class="top-search">
-                      <form action="#">
+                      <form action="{{ route('public.searchProducts') }}" method="GET">
                         <div class="d-flex main-search">
-                        <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." name="search">
+                        <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." id="main_search" name="keyword">
                         <button class="tp-search-btn" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                         <span class="tp-close-btn pl-2"><i class="fa fa-times" aria-hidden="true"></i></span>
                         </div> 

@@ -13,6 +13,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/products/{slug?}', 'ProductsController@getDetails')
       ->name('public.singleProduct');
 
+    Route::get('/search/product', 'ProductsController@searchProducts')
+      ->name('public.searchProducts');
+
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
