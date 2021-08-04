@@ -719,10 +719,11 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                                         <div class="col-lg-7">
                                             <p class="textbox-label">Purchaser Sign</p>
                                             @if(!empty(@$user->taxCertificate->purchaser_sign))
-                                                <img class="img-responsive"
-                                                     src="{{ asset($user->taxCertificate->purchaser_sign) }}"
-                                                     alt="Image" title="Image Not Available" height="120px"
-                                                     width="130px"/>
+                                                @if(str_contains($user->taxCertificate->purchaser_sign, 'data:image/png;base64'))
+                                                    <img class="img-responsive" src="{{ ($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @else
+                                                    <img class="img-responsive" src="{{ asset($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @endif
                                             @else
                                                 <span id="undo-sign" class="fa fa-undo"></span>
                                                 <div id="signature"></div>
