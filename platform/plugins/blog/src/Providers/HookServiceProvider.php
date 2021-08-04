@@ -9,6 +9,7 @@ use Botble\Blog\Models\Tag;
 use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Services\BlogService;
 use Botble\Dashboard\Supports\DashboardWidgetInstance;
+use Botble\Ecommerce\Models\ProductTag;
 use Botble\Page\Models\Page;
 use Botble\Page\Repositories\Interfaces\PageInterface;
 use Eloquent;
@@ -127,6 +128,10 @@ class HookServiceProvider extends ServiceProvider
 
         if (Auth::user()->hasPermission('tags.index')) {
             Menu::registerMenuOptions(Tag::class, trans('plugins/blog::tags.menu'));
+        }
+
+        if (Auth::user()->hasPermission('tags.index')) {
+            Menu::registerMenuOptions(ProductTag::class, 'Product Tags');
         }
     }
 

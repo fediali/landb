@@ -1130,6 +1130,7 @@ class ProductController extends BaseController
                 if (!in_array($id, $product_colors)) {
                     array_push($product_colors, $id);
                 }
+
                 $product->update(['color_products' => $product_colors]);
             }
         }
