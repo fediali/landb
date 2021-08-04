@@ -49,6 +49,9 @@ class ProductsController extends Controller
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true])
         ];
+      if(request()->ajax()){
+        return response()->json(['products' => $this->getProductsListingHtml($data['products'])]);
+      }
         //dd($data['products']);
         return Theme::scope('products', $data)->render();
     }
@@ -63,6 +66,10 @@ class ProductsController extends Controller
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
         ];
         //dd($data['products']);
+
+      if(request()->ajax()){
+        return response()->json(['products' => $this->getProductsListingHtml($data['products'])]);
+      }
         return Theme::scope('products', $data)->render();
     }
 
@@ -97,8 +104,8 @@ class ProductsController extends Controller
 
         $data['product'] = get_products([
             'condition' => $condition,
-            'take'      => 1,
-            'with'      => [
+                'take'      => 1,
+                'with'      => [
                 'defaultProductAttributes',
                 'slugable',
                 'tags',
@@ -134,5 +141,87 @@ class ProductsController extends Controller
         $date = Carbon::createFromFormat('Y-m-d', $tz)->toDateString();
         $product = Timeline::where('date', $date)->first();
         return Theme::scope('timeline', ['product' => $product, 'user' => $user])->render();
+    }
+
+    public function searchProducts(Request $request){
+      $keyword = $request->keyword;
+
+      if(!empty($keyword)){
+        if(is_numeric($keyword)){
+          $data = [
+              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'price_search' => $keyword, 'paginate'  => true, 'array' => true])
+          ];
+
+        }else{
+          $data = [
+              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate'  => true, 'array' => true])
+          ];
+        }
+        return Theme::scope('products', $data)->render();
+      }else{
+        return redirect()->route('public.products');
+      }
+    }
+
+    public function getProductsListingHtml($products){
+      $html = '';
+      foreach ($products as $product){
+        $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')
+            ->where('ep.quantity', '>', 0)
+            ->where('ec_product_variations.configurable_product_id', $product->id)
+            ->orderBy('ec_product_variations.is_default', 'desc')
+            ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
+            ->get();
+        $default = $variationData->first();
+
+        $inner = '';
+        if(auth('customer')->user()){
+          $inner = '<a class="add-to-wishlist" id="wishlist-icon-'.$product->id.'" href="'.generate_product_url('wishlist', $product->id).'" data-id="'.$product->id.'"><i class="far fa-heart" aria-hidden="true"></i></a>
+                            <form id="myform-'.$product->id.'" class="add_to_cart_form" data-id="'.$default->product_id.'" method="POST" action="'.route('public.cart.add_to_cart').'">
+                                <div class="col-lg-4">
+                                    <input type="hidden" name="quantity" value="1" class="qty">
+                                </div>
+                                <a class="cart-submit" id="cart-icon-'.$product->id.'" onclick="$(\'#myform-'.$product->id.'\').trigger(\'submit\');" href="javascript:void(0);"><i class="far fa-shopping-bag" aria-hidden="true"></i></a>
+                            </form>';
+        }else{
+          $inner = '<a href="'.route('customer.login').'"><i class="far fa-heart" aria-hidden="true"></i></a>
+                          <a href="'.route('customer.login').'"><i class="far fa-shopping-bag" aria-hidden="true"></i></a>';
+        }
+
+        $html .= '
+              <div class="listbox mb-3 col-lg-4">
+                  <div class="img">
+                      '. image_html_generator(@$product->images[0]) .'
+                      
+                      <span>Restock</span>
+  
+                      <div class="imgoverlay">
+                          <a href="http://landb.test/products/fuchsia-one-shoulder-tank-plus-size"><i class="far fa-eye" aria-hidden="true"></i></a>'.$inner.'                       
+                      </div>
+                  </div>
+                 <a href="'.generate_product_url('detail', $product->id, $product->product_slug).'">
+                     <div class="caption">
+                         <h4>'.$product->name.'</h4>
+                         <div class="price">
+                             $<span id="price-of-'.$product->id.'">'.$default->price.'</span>
+                         </div>
+  
+                     </div>
+                 </a>
+                  <div class="text-center">
+                  
+                      <form id="myform2-'.$product->id.'" class="add_to_cart_form" data-id="'.$default->product_id.'" method="POST" action="'.route('public.cart.add_to_cart').'">
+                          <div class="col-lg-4">
+                              <input type="hidden" name="quantity" value="1" class="qty">
+                          </div>
+                          <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span></button>
+                      </form>
+                  </div>
+  
+                  
+              </div>
+        ';
+      }
+      return $html;
     }
 }

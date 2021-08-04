@@ -181,7 +181,7 @@
 
 
         </div>
-        <div class="shoplisting row">
+        <div class="shoplisting row" id="paginated-posts">
             @if(count($products))
                 <?php
                     $limit = isset($_GET['limit']) ? $_GET['limit'] : '3';
@@ -280,7 +280,12 @@
                 <h3>No Matching Product Found!</h3>
             @endif
         </div>
-        {!! $products->appends($_GET)->links() !!}
+        <div class="row text-center" id="products-loader" style="display: none;">
+            <div class="spinner-border" role="status" style="margin: auto;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        {{--{!! $products->appends($_GET)->links() !!}--}}
        {{-- <div class="pagination">
 
             <ul>
@@ -381,4 +386,62 @@
         </div>
     </div>
     <!-- Modal Quick View -->
- 
+
+<script src="{{ asset('landb/js/jquery.js') }}"></script>
+<script>
+  var ENDPOINT = "{{ url()->current() }}";
+  var page = 1;
+  var haveMore = true;
+  /*infinteLoadMore(page);*/
+
+  $(window).scroll(function () {
+    if ($(window).scrollTop() + $(window).height() >= $(document).height()-400) {
+
+      if(haveMore === true){
+        console.log('scrolling')
+        page++;
+        $('#products-loader').show();
+        haveMore = infinteLoadMore(page);
+      }
+    }
+  });
+
+  function infinteLoadMore(page) {
+    var _return = true;
+    $.ajax({
+      url: ENDPOINT + "?page=" + page,
+      type: "get",
+      async: false,
+      beforeSend: function () { showLoader(); },
+    })
+        .done(function (response) {
+          var posts = response.products
+          if (posts.length == 0) {
+            _return = false;
+          }else{
+            $('#paginated-posts').append(posts);
+            _return = true;
+          }
+          hideLoader();
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+          console.log('Server error occured');
+         hideLoader();
+          return false;
+        });
+    return _return;
+  }
+  function showLoader() {
+    $("#products-loader").css("display", "");
+  }
+
+  function hideLoader() {
+    setTimeout(function () {
+      $("#products-loader").css("display", "none");
+    }, 1000);
+  }
+
+
+
+
+</script>
