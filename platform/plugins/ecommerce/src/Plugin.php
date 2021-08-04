@@ -73,6 +73,7 @@ class Plugin extends PluginOperationAbstract
         Schema::dropIfExists('ec_discount_product_collections');
         Schema::dropIfExists('ec_flash_sales');
         Schema::dropIfExists('ec_flash_sale_products');
+        Schema::dropIfExists('product_labels');
 
         app(DashboardWidgetInterface::class)->deleteBy(['name' => 'widget_ecommerce_report_general']);
 

@@ -101,3 +101,6 @@ if (!defined('ECOMMERCE_ORDER_DETAIL_EXTRA_HTML')) {
 if (!defined('FLASH_SALE_MODULE_SCREEN_NAME')) {
     define('FLASH_SALE_MODULE_SCREEN_NAME', 'flash-sale');
 }
+if (!defined('PRODUCT_LABEL_MODULE_SCREEN_NAME')) {
+    define('PRODUCT_LABEL_MODULE_SCREEN_NAME', 'product-label');
+}

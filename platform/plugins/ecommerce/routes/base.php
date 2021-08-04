@@ -211,6 +211,16 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             ]);
         });
 
+        Route::group(['prefix' => 'product-labels', 'as' => 'product-label.'], function () {
+            Route::resource('', 'ProductLabelController')->parameters(['' => 'product-label']);
+            Route::delete('items/destroy', [
+                'as'         => 'deletes',
+                'uses'       => 'ProductLabelController@deletes',
+                'permission' => 'product-label.destroy',
+            ]);
+        });
+
+
 
         Route::group(['prefix' => 'brands', 'as' => 'brands.'], function () {
             Route::resource('', 'BrandController')

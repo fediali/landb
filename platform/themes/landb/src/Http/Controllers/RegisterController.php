@@ -5,6 +5,7 @@ namespace Theme\Landb\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
 use Botble\ACL\Traits\RegistersUsers;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
@@ -114,7 +115,8 @@ class RegisterController extends Controller
             'password'    => bcrypt($data['password']),
             'first_name'  => $data['first_name'],
             'last_name'   => $data['last_name'],
-            'document'    => $doc_url
+            'document'    => $doc_url,
+            'status'    => BaseStatusEnum::DISABLED
         ]);
         if($customer){
           $cutomer_details = CustomerDetail::create([

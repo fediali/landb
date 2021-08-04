@@ -165,10 +165,10 @@ class CustomerTable extends TableAbstract
             })
             ->editColumn('status', function ($item) {
                 $html = '<span class="badge badge-default">' . $item->status . '</span>';
-                if ($item->status == BaseStatusEnum::$CUSTOMERS['verified']) {
-                    $html = '<span class="badge badge-success">' . BaseStatusEnum::$CUSTOMERS['verified'] . '</span>';
-                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['pending']) {
-                    $html = '<span class="badge badge-warning">' . BaseStatusEnum::$CUSTOMERS['pending'] . '</span>';
+                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
+                    $html = '<span class="badge badge-success">' . BaseStatusEnum::$CUSTOMERS['Active'] . '</span>';
+                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['Disabled']) {
+                    $html = '<span class="badge badge-warning">' . BaseStatusEnum::$CUSTOMERS['Disabled'] . '</span>';
                 } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['declined']) {
                     $html = '<span class="badge badge-danger">' . BaseStatusEnum::$CUSTOMERS['declined'] . '</span>';
                 }

@@ -19,6 +19,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface;
 use Botble\Ecommerce\Repositories\Interfaces\TaxInterface;
 use EcommerceHelper;
+use Illuminate\Support\Facades\Auth;
 
 class ProductForm extends FormAbstract
 {
@@ -65,8 +66,8 @@ class ProductForm extends FormAbstract
                 ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
             $productsRelatedToVariation = app(ProductInterface::class)->getProductVariations($productId);
-        }else{
-          $products = get_products_data();
+        } else {
+            $products = get_products_data();
         }
 
         $tags = null;
@@ -121,17 +122,23 @@ class ProductForm extends FormAbstract
                 'label'      => trans('core/base::tables.status'),
                 'label_attr' => ['class' => 'control-label required'],
                 'choices'    => BaseStatusEnum::$PRODUCT,
+            ])->add('oos_date', 'text', [
+                'label'      => 'Out of Stock Date',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'form-control',
+                    'readonly']
             ])
             ->add('color_print', 'mediaImages', [
-                'label'         => 'Color Print',
-                'label_attr'    => ['class' => 'control-label'],
+                'label'      => 'Color Print',
+                'label_attr' => ['class' => 'control-label'],
                 'values'     => $productId ? $this->getModel()->color_print : '',
             ])
             ->add('color_products[]', 'multiCheckList', [
-                'label'         => 'Color Products',
-                'label_attr'    => ['class' => 'control-label'],
-                'choices'       => $products,
-                'value'     => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
+                'label'      => 'Color Products',
+                'label_attr' => ['class' => 'control-label'],
+                'choices'    => $products,
+                'value'      => old('color_products', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : [])),
             ])
             ->add('inventory_history', 'inventory_history', [
                 'label'         => 'Inventory History',
@@ -193,6 +200,12 @@ class ProductForm extends FormAbstract
                     'placeholder' => trans('plugins/ecommerce::products.form.write_some_tags'),
                     'data-url'    => route('product-tag.all'),
                 ],
+            ])->add('sizes', 'text', [
+                'label'      => 'Sizes',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder' => 'Sizes',
+                ],
             ])
             /*->add('eta_pre_product', 'date', [
                 'label'      => 'ETA',
@@ -215,13 +228,13 @@ class ProductForm extends FormAbstract
                 'label'      => 'Pack Product Pieces',
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
-                    'placeholder'  => 'Pack Product Pieces',
+                    'placeholder' => 'Pack Product Pieces',
                 ],
             ])
             ->setBreakFieldPoint('status');
 
-
         if (empty($productVariations) || $productVariations->isEmpty()) {
+
             $this
                 ->removeMetaBox('variations')
                 ->addAfter('content', 'images[]', 'mediaImages', [
@@ -249,6 +262,7 @@ class ProductForm extends FormAbstract
                     ],
                 ]);
         } elseif ($productId) {
+
             $this
                 ->removeMetaBox('general')
                 ->removeMetaBox('attributes')

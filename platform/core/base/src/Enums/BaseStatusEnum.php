@@ -59,8 +59,8 @@ class BaseStatusEnum extends Enum
         'D' => self::DISABLED,
     ];
     public static $CUSTOMERS = [
-        self::VERIFIED => self::VERIFIED,
-        self::PENDING => self::PENDING,
+        self::ACTIVE => self::ACTIVE,
+        self::DISABLED => self::DISABLED,
         self::DECLINED => self::DECLINED,
     ];
     public static $THREAD = [
