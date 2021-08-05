@@ -190,7 +190,7 @@ class CheckoutController extends Controller
     $token = OrderHelper::getOrderSessionToken();
     $order_id = $request->input('order_id');
     $order = $this->orderRepository->findById($order_id, ['address', 'products']);
-    
+
     if ($token !== session('tracked_start_checkout') || !$order) {
       foreach ($order->products as $product){
        update_product_quantity($product->product_id, $product->qty, 'inc');
@@ -302,7 +302,8 @@ class CheckoutController extends Controller
               'shipping_amount' => 0,
               'currency_id'     => 1,
               'status'          => 'pre-order',
-              'parent_order'    => $id
+              'parent_order'    => $id,
+              'order_type'    => 'pre_order'
           ]);
           $preOrderId = $preOrder->id;
           //dd($check, $preOrderId);
