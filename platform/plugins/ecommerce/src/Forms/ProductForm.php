@@ -168,7 +168,7 @@ class ProductForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'default_value' => false,
             ])
-            ->add('categories[]', 'categoryMulti', [
+            ->add('categories[]', 'select', [
                 'label'      => trans('plugins/ecommerce::products.form.categories'),
                 'label_attr' => ['class' => 'control-label'],
                 'choices'    => get_product_categories_with_children(),

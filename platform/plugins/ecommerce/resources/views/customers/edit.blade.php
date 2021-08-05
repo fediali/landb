@@ -487,9 +487,9 @@
                         @if(isset($card))
                             @foreach($card as $cards)
                                 <tr>
-                                    <td>{{$cards->person_name}}</td>
-                                    <td>{{$cards->card_exp}}</td>
-                                    <td>{{$cards->card_last_four}}</td>
+                                    <td>{{@$cards->person_name}}</td>
+                                    <td>{{@$cards->card_exp}}</td>
+                                    <td>{{@$cards->card_last_four}}</td>
                                     {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
 
                                     {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
@@ -621,10 +621,10 @@
                                 <input
                                     class="input-textbox mt-1"
                                     type="radio" name="address_type"
-                                    placeholder="Shipping" id="shipping_type" value="shipping"/> 
+                                    placeholder="Shipping" id="shipping_type" value="shipping"/>
                                     <p>Shipping</p>
                                 </div>
-                               
+
                                 <div class="d-flex">
                                 <input
                                     class="input-textbox mt-1"
@@ -632,7 +632,7 @@
                                     placeholder="Billing"  id="billing_type" value="billling"/>
                                     <p>Billing</p>
                                 </div>
-  
+
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
