@@ -299,5 +299,23 @@ return [
         'name'        => 'Order Import',
         'flag'        => 'ecommerce.order-import.index',
         'parent_flag' => 'plugins.ecommerce',
+    ],[
+        'name' => 'Product labels',
+        'flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Create',
+        'flag'        => 'product-label.create',
+        'parent_flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Edit',
+        'flag'        => 'product-label.edit',
+        'parent_flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Delete',
+        'flag'        => 'product-label.destroy',
+        'parent_flag' => 'product-label.index',
     ],
 ];

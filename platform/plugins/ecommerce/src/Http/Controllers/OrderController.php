@@ -1351,6 +1351,7 @@ class OrderController extends BaseController
                             $data['email'] = str_replace(' ', '', $row['business_contact_name']) . '@lashowroomcustomer.com';
                             $data['phone'] = $row['phone_number'];
                             $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $data['status'] = BaseStatusEnum::DECLINED;
                             $customer = Customer::create($data);
                             $detail['customer_id'] = $customer['id'];
                             $detail['company'] = $row['business_company_name'];
@@ -1536,6 +1537,7 @@ class OrderController extends BaseController
                             $data['email'] = str_replace(' ', '', $row['company']) . '@orangeshine.com';
                             $data['phone'] = ($row['payment'] == 'PayPal') ? $row['shipping_phone'] : $row['billing_phone'];
                             $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $data['status'] = BaseStatusEnum::DECLINED;
                             $customer = Customer::create($data);
                             $detail['customer_id'] = $customer['id'];
                             $detail['company'] = $row['company'];
@@ -1717,6 +1719,7 @@ class OrderController extends BaseController
                             $data['email'] = str_replace(' ', '', $row['companyname']) . '@fashiongo.com';
                             $data['phone'] = $row['phonenumber'];
                             $data['password'] = bcrypt(rand(00000000, 99999999));
+                            $data['status'] = BaseStatusEnum::DECLINED;
                             $customer = Customer::create($data);
                             $detail['customer_id'] = $customer['id'];
                             $detail['company'] = $row['companyname'];

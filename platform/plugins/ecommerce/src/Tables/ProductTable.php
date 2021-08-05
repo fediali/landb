@@ -132,9 +132,9 @@ class ProductTable extends TableAbstract
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
-            ->editColumn('oos_date', function ($item) {
-                return BaseHelper::formatDate($item->oos_date);
-            })
+//            ->editColumn('oos_date', function ($item) {
+//                return BaseHelper::formatDate($item->oos_date);
+//            })
             ->editColumn('status', function ($item) {
                 // return strtoupper($item->status);
                 return view('plugins/ecommerce::products.productStatus', ['item' => $item])->render();
@@ -401,12 +401,12 @@ class ProductTable extends TableAbstract
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'oos_date'      => [
-                'name'  => 'ec_products.oos_date',
-                'title' => 'OOS Date',
-                'width' => '100px',
-                'class' => 'text-center',
-            ],
+//            'oos_date'      => [
+//                'name'  => 'ec_products.oos_date',
+//                'title' => 'OOS Date',
+//                'width' => '100px',
+//                'class' => 'text-center',
+//            ],
             'status'        => [
                 'name'  => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),

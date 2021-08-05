@@ -121,20 +121,15 @@
 
                 </div>
                 <div class="p-2 bg-white">
-                    @php
-                        $options = [
-                                    ['value' => 'verified', 'text' => 'Verified'],
-                                    ['value' => 'pending', 'text' => 'Pending'],
-                                    ['value' => 'draft', 'text' => 'Draft']
-                                   ];
-                    @endphp
                     Status:
-                    <select name="status" class="w-100">
-                        @foreach($options as $key => $option)
-                            <option
-                                value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
-                        @endforeach
-                    </select>
+
+                    {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMERS,  $customer->status , ['class' => 'w-100','placeholder'=>'Select Status']) !!}
+{{--                    <select name="status" class="w-100">--}}
+{{--                        @foreach($options as $key => $option)--}}
+{{--                            <option--}}
+{{--                                value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
 <hr>
                     <a class="w-100 btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View
                         All Orders</a>

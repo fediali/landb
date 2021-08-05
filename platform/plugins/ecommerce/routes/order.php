@@ -151,7 +151,7 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
-            Route::post('save-advance-search/{type}', [
+            Route::post('save-advance-search/plugin', [
                 'as'         => 'save.advance.search',
                 'uses'       => 'OrderController@saveAdvanceSearch',
                 'permission' => 'orders.create',
