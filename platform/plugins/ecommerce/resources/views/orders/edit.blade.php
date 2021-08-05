@@ -713,7 +713,7 @@
                             </div>
                         </div>
 
-                        @if($order->payment->payment_channel->label() == 'omni-payment')
+                        @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
                             <div class="wrapper-content bg-gray-white mb20">
 
                                 <!-- card -->
