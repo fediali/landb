@@ -513,6 +513,7 @@ new Luminous(demoTrigger);
       toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
 @endif
+
 </body>
 
 </html>
