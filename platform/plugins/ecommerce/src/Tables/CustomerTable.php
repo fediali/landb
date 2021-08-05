@@ -225,7 +225,7 @@ class CustomerTable extends TableAbstract
         //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
         $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
 //
-//        $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
+        $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
 //
 //        $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
 //        $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_order_id');
