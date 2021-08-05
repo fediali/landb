@@ -63,7 +63,7 @@ class importCustomers extends Command
                 if (!$check) {
                     if ($row['user_status'] == 'A') {
                         $row['user_status'] = BaseStatusEnum::ACTIVE;
-                    } elseif ($row['user_status'] = 'X') {
+                    } elseif ($row['user_status'] == 'X') {
                         $row['user_status'] = BaseStatusEnum::DECLINED;
                     } else {
                         $row['user_status'] = BaseStatusEnum::DISABLED;
