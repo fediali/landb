@@ -75,6 +75,11 @@ class OrderTable extends TableAbstract
             })->editColumn('id', function ($item) {
                 return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '</div>');
 
+            })->editColumn('user_id', function ($item) {
+                // return $item->user->name ?? $item->address->name;
+//                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
+
+                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
             })
             ->editColumn('order_type', function ($item) {
                 return $item->order_type_html;
@@ -95,10 +100,7 @@ class OrderTable extends TableAbstract
             ->editColumn('shipping_amount', function ($item) {
                 return format_price($item->shipping_amount, $item->currency_id);
             })
-            ->editColumn('user_id', function ($item) {
-                // return $item->user->name ?? $item->address->name;
-                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
-            })
+
             ->editColumn('salesperson_id', function ($item) {
                 return $item->salesperson ? $item->salesperson->getFullName() : 'N/A';
             })
@@ -262,11 +264,11 @@ class OrderTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::order.customer_label'),
                 'class' => 'text-left',
             ],
-            'salesperson_id' => [
-                'name'  => 'ec_orders.salesperson_id',
-                'title' => 'Salesperson',
-                'class' => 'text-left',
-            ],
+//            'salesperson_id' => [
+//                'name'  => 'ec_orders.salesperson_id',
+//                'title' => 'Salesperson',
+//                'class' => 'text-left',
+//            ],
             'amount'         => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
@@ -274,13 +276,13 @@ class OrderTable extends TableAbstract
             ],
         ];
 
-        if (EcommerceHelper::isTaxEnabled()) {
-            $columns['tax_amount'] = [
-                'name'  => 'ec_orders.amount',
-                'title' => trans('plugins/ecommerce::order.tax_amount'),
-                'class' => 'text-center',
-            ];
-        }
+//        if (EcommerceHelper::isTaxEnabled()) {
+//            $columns['tax_amount'] = [
+//                'name'  => 'ec_orders.amount',
+//                'title' => trans('plugins/ecommerce::order.tax_amount'),
+//                'class' => 'text-center',
+//            ];
+//        }
 
         $columns += [
             'shipping_amount' => [

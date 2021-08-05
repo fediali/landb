@@ -168,11 +168,15 @@ class ProductForm extends FormAbstract
                 'label_attr'    => ['class' => 'control-label'],
                 'default_value' => false,
             ])
-            ->add('categories[]', 'select', [
+            ->add('categories', 'customSelect', [
                 'label'      => trans('plugins/ecommerce::products.form.categories'),
                 'label_attr' => ['class' => 'control-label'],
-                'choices'    => get_product_categories_with_children(),
-                'value'      => old('categories', $selectedCategories),
+                'choices'    => get_product_categories_with_children_pluck(),
+                'default_value'      => old('categories', $selectedCategories),
+                'attr'          => [
+                    'class'    => 'select-search-full',
+                    'multiple' => 'multiple'
+                ],
             ])
 //            ->add('brand_id', 'customSelect', [
 //                'label'      => trans('plugins/ecommerce::products.form.brand'),
