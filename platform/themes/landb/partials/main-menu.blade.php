@@ -1,4 +1,4 @@
-<ul class="ml-auto " {!! $options !!}>
+<ul class="ml-auto mega-ul " {!! $options !!}>
     @foreach ($menu_nodes as $key => $row)
         @if($row->has_child)
             <li class="nav-item dropdown {{ $row->css_class }} @if ($row->url == Request::url()) active @endif">

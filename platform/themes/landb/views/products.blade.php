@@ -210,8 +210,9 @@
                         <h5>{{ @$product->category->name }}</h5>
                         <p>{{ $product->name }}</p>
                     </div>--}}
+                    <p class="pre-label">Pre-Order</p>
                     <span>Restock</span>
-
+                     <img class="usa-label" src="{{ asset('landb/img/usa-label.svg') }}" />   
                     <div class="imgoverlay">
                         <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}" ><i class="far fa-eye"></i></a>
                         @if(auth('customer')->user())

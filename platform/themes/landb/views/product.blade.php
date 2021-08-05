@@ -63,11 +63,13 @@
                     <li><img src="https://picsum.photos/400/400/?random"/></li> -->
                 </ul>
             </div>
-            <div class="exzoom_nav"></div>
-            <p class="exzoom_btn">
-                <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a>
+            <div class="exzoom_btn d-flex mt-3">
+            <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a>
+
+            <div class="exzoom_nav"></div> 
                 <a href="javascript:void(0);" class="exzoom_next_btn">  <i class="fa fa-angle-right"></i></a>
             </p>
+            </div>
         </div>
                 <!-- <div class="fancy-container clearfix">
                     <div class="gallery">
@@ -104,7 +106,7 @@
 
         </div>
         <div class="col-lg-7">
-        <div class="detail-magnify"></div>
+        <p class="pre-label-detail">Pre-Order</p>
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>

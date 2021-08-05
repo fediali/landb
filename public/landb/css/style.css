@@ -1924,6 +1924,11 @@ input.qtyminus {
     transform: rotate(45deg);
 }
 
+@media screen and (min-width: 992px) and (max-width: 5000px) {
+    .nav-custom {
+        display: none !important;
+    }
+}
 @media screen and (min-width: 992px) and (max-width: 2200px) {
     .plc-5 {
         padding-left: 3rem!important;
@@ -1961,6 +1966,19 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .exzoom .exzoom_img_box {
+        width: 100% !important;
+    }
+    .exzoom .exzoom_img_ul_outer {
+        width: 100% !important;
+    }
+    .exzoom .exzoom_img_ul_outer .exzoom_img_ul {
+        width: 100% !important;
+
+    }
+    .exzoom .exzoom_img_ul_outer .exzoom_img_ul li {
+        width: 100% !important;
+    }
     
     .breadcrumb { 
         padding: .75rem 0rem !important;
@@ -2026,7 +2044,7 @@ input.qtyminus {
     .dp-scroll-text {
         height: 600px !important;
     }
-    .header-col .navbar-parent ul {
+    .header-col .navbar-parent .mega-ul {
         overflow-x: scroll !important;
         display: flex !important;
         margin-right: 10px !important;
@@ -3180,10 +3198,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     .previews{ 
         position: absolute;
         bottom: -165px;
-    }
-    .detail-h1 {
-        padding-top: 135px !important;
-    }
+    } 
     .grid-container {
         height: 1420vh !important;
     }
@@ -4427,27 +4442,114 @@ html {
     width: 100%;
 }
 
-#exzoom {
-    width: 100%;
-    /*height: 400px;*/
-} 
-.hidden { display: none; }
+.exzoom .exzoom_img_box {
+    background: transparent !important;
+}
 
 .exzoom .exzoom_img_ul_outer {
-    width: 100% !important;
-    height: 600px !important;
+    border: none !important;
 }
 
+ #exzoom {
+    width: 100%; 
+    display: grid !important;
+}  
+.hidden { display: none; }
+/* 
+.exzoom .exzoom_img_ul_outer {
+    width: 100% !important;
+    height: 800px !important;
+} */
+
+/* .exzoom_zoom_outer {
+    height: 800px !important;
+    left: 0px !important;
+    width: 100% !important;
+} */
+/* 
 .exzoom .exzoom_img_box {
     width: 100% !important;
-    height: 600px !important;
-}
+    height: 800px !important;
+} */
 
-.exzoom .exzoom_nav .exzoom_nav_inner {
+/* .exzoom .exzoom_nav .exzoom_nav_inner {
     width: 100% !important;
 }
  
 .exzoom .exzoom_img_ul_outer .exzoom_img_ul li img {
     width: 100% !important;
     object-fit: contain;
+} */
+
+.pre-label {
+    position: absolute !important;
+    left: 12px !important;
+    top: 15px !important;
+    font-size: 12px !important;
+    color: #fff !important;
+    background: #ff0000 !important;
+    padding: 5px 10px !important;
 }
+
+.usa-label {
+    width: 65px !important;
+    position: absolute !important;
+    right: 12px !important;
+    top: 15px !important;
+}
+
+.pre-label-detail { 
+    width: max-content;
+    font-size: 12px !important;
+    color: #fff !important;
+    background: #ff0000 !important;
+    padding: 5px 10px !important;
+    z-index: 1;
+}
+
+
+/* ============ desktop view ============ */
+@media all and (min-width: 992px) {
+
+	.navbar-mob-mega .dropdown-menu li{
+		position: relative;
+	}
+	.navbar-mob-mega .dropdown-menu .submenu{ 
+		display: none;
+		position: absolute;
+		left:100%; top:-7px;
+	}
+	.navbar-mob-mega .dropdown-menu .submenu-left{ 
+		right:100%; left:auto;
+	}
+
+	.navbar-mob-mega .dropdown-menu > li:hover{ background-color: #f1f1f1 }
+	.navbar-mob-mega .dropdown-menu > li:hover > .submenu{
+		display: block;
+	}
+}	
+/* ============ desktop view .end// ============ */
+
+/* ============ small devices ============ */
+@media (max-width: 991px) {
+
+.navbar-mob-mega .dropdown-menu .dropdown-menu{
+		margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
+}
+
+}	
+.navbar-mob-mega .navbar-toggler-icon {
+    background-image: url('./download.svg') !important;
+}
+.navbar-mob-mega .navbar-toggler { 
+ border-color: #000 !important;
+}
+.navbar-mob-mega .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+    color: #000 !important;
+}
+.navbar-mob-mega {
+    background: #9e9e9e;
+	
+}
+/* ============ small devices .end// ============ */
+ 
