@@ -270,7 +270,7 @@ class CustomerController extends BaseController
                     ->orWhere('name', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('email', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('company', 'LIKE', '%' . $request->input('keyword') . '%')
-                    ->orWhere('status', BaseStatusEnum::ACTIVE);
+                    ->where('status', BaseStatusEnum::ACTIVE);
             })
             ->simplePaginate(15);
 
