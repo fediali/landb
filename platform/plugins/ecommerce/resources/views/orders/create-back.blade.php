@@ -9,8 +9,11 @@
         </create-order>
     </div>
 
-    <div class="card-area wrapper-content mb20">
-        <div class="wrapper-content bg-gray-white mb20">
+    <div id="main-order" class="max-width-1200">
+        <div class="flexbox-grid no-pd-none">
+            <div class="flexbox-content"></div>
+            <div class="flexbox-content flexbox-right">
+            <div class="wrapper-content bg-gray-white mb20">
             <button type="button" class="btn btn-info btn-card credit_card" data-toggle="collapse" data-target="#demo">
                 Credit Card
             </button>
@@ -89,7 +92,11 @@
                 </form>
             </div>-->
         </div>
+            </div>
+        </div>
     </div>
+
+   
 
 @stop
 
