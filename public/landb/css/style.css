@@ -1024,7 +1024,7 @@ section.parallax_video video {
 }
 
 .home-listing .listbox .img {
-    height: 468px !important;
+    height: auto !important;
 }
 .detail-listing .listbox .img {
     height: 450px !important;
