@@ -422,9 +422,10 @@ class CustomerController extends BaseController
 
         if ($customer->card->count() > 0) {
             $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
-            dd($omniId);
+
             foreach ($omniId as $item) {
                 if ($item->customer_omni_id) {
+                    dd($item->customer_omni_id);
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     $cards = collect(json_decode($card));
