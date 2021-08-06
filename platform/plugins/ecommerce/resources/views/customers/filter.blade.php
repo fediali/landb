@@ -67,7 +67,7 @@
                     <div class="col-md-4 mt-3">
                         <label class="font-bold">Status:</label>
                         <div class="ui-select-wrapper">
-                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMER,  request('status'), ['class' => 'form-control ui-select','placeholder'=>'Select Status']) !!}
+                            {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMERS,  request('status'), ['class' => 'form-control ui-select','placeholder'=>'Select Status']) !!}
                         </div>
                     </div>
 
@@ -93,7 +93,7 @@
                                    class="form-control" value="1" {{request('no_sales_rep') == 1 ? 'checked' : ''}}>
                             <label class="font-bold">No Sales Rep:</label>
                             </div>
-                          
+
                             <p class="mr-1"></p>
                         </div>
                         <div class="col-md-4 mt-3">
@@ -102,9 +102,9 @@
                                    class="form-control" value="1" {{request('merged_account') == 1 ? 'checked' : ''}}>
                         <label class="font-bold">Merged Account:</label>
                         <p class="mr-1"></p>
-                        </div> 
                         </div>
-                </div>  
+                        </div>
+                </div>
                 <div class="col-md-4">
                     <label class="mt-4 font-bold">Order Report:</label><br>
                     {{--{{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}--}}

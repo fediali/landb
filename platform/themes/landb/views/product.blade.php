@@ -42,8 +42,34 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
-        <div class="col-lg-6">
-                <div class="fancy-container clearfix">
+        <div class="col-lg-5 containert">
+        <div class="exzoom hidden mr-2" id="exzoom">
+            <div class="exzoom_img_box">
+                <ul class='exzoom_img_ul'>
+                         @if(count($product->images))
+                            @foreach($product->images as $image)
+                                <li>{!! image_html_generator($image, $product->name, null, null, true,) !!}</li> 
+                            @endforeach
+                            @else
+                            <li><img src="{{ asset('images/default.jpg') }}" /></li> 
+                        @endif
+                    <!-- <li><img src="https://picsum.photos/270/270/?random"/></li>
+                    <li><img src="https://picsum.photos/320/320/?random"/></li>
+                    <li><img src="https://picsum.photos/600/600/?random"/></li>
+                    <li><img src="https://picsum.photos/500/500/?random"/></li>
+                    <li><img src="https://picsum.photos/700/700/?random"/></li>
+                    <li><img src="https://picsum.photos/310/310/?random"/></li>
+                    <li><img src="https://picsum.photos/410/410/?random"/></li>
+                    <li><img src="https://picsum.photos/400/400/?random"/></li> -->
+                </ul>
+            </div>
+            <div class="exzoom_nav"></div>
+            <p class="exzoom_btn">
+                <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a>
+                <a href="javascript:void(0);" class="exzoom_next_btn">  <i class="fa fa-angle-right"></i></a>
+            </p>
+        </div>
+                <!-- <div class="fancy-container clearfix">
                     <div class="gallery">
                         <div class="previews">
                         @if(count($product->images))
@@ -60,7 +86,7 @@
                             <a href="javascript:void(0)" data-full="img/product/top2large.jpg"><img src="img/product/top2small.jpg" /></a>
                             <a href="javascript:void(0)" data-full="img/product/top3large.jpg"><img src="img/product/top3small.jpg" /></a>
                             <a href="javascript:void(0)" data-full="img/product/top4large.jpg"><img src="img/product/top4small.jpg" /></a>
-                            <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a> -->
+                            <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a>  
                         </div>
                         <div class="full text-center">
                         @if(count($product->images))
@@ -71,13 +97,13 @@
                         @else
                             <img src="{{ asset('images/default.jpg') }}">
                         @endif
-                            <!-- first image is viewable to start -->
+                            <!-- first image is viewable to start  
                         </div>
                 </div>
-                </div>
+                </div> -->
 
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-7">
         <div class="detail-magnify"></div>
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2">$ <span id="product_price">{{ $default_price }}</span></p>

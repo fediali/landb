@@ -154,11 +154,13 @@
                             class="p-0">
                             <div class="regpack">
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
-                                @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
-                                    <div class="sizediv">
-                                        {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
-                                    </div>
-                                @endforeach
+                                @if(isset($options['data']['reg_cat']->category_sizes))
+                                    @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
+                                        <div class="sizediv">
+                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </td>
                         @if(!empty($options['data']['plus_cat']))
@@ -167,11 +169,13 @@
                                 <div class="regpack">
                                     <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                         Plus Pack Size</h6>
-                                    @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
-                                        <div class="sizediv">
-                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->name }}
-                                        </div>
-                                    @endforeach
+                                    @if(isset($options['data']['plus_cat']->category_sizes))
+                                        @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                            <div class="sizediv">
+                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->name }}
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </td>
                         @endif
@@ -213,10 +217,10 @@
                                 Category <br>
 
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
-                     Reg Pack: {{ $options['data']['reg_cat']->name }}<br>
+                     Reg Pack: {{ @$options['data']['reg_cat']->name }}<br>
                      <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
                      @if(!empty($options['data']['plus_cat']))
-                             Plus Pack: {{ $options['data']['plus_cat']->name }}
+                             Plus Pack: {{ @$options['data']['plus_cat']->name }}
                          @endif
                      </span>
                      </span>
@@ -430,13 +434,15 @@
                                         <h6>PRIVATE LABEL SIZES</h6>
                                         <div style="display:flex;">
                                             @foreach($thread->regular_product_categories()->get() as $cat)
-                                                @foreach($cat->category_sizes as $catSize)
-                                                    <div
-                                                        style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
-                                                        <label for="name">{{$catSize->full_name}}</label>
-                                                        <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
-                                                    </div>
-                                                @endforeach
+                                                @if(isset($cat->category_sizes))
+                                                    @foreach($cat->category_sizes as $catSize)
+                                                        <div
+                                                            style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
+                                                            <label for="name">{{$catSize->full_name}}</label>
+                                                            <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         </div>
                                     @endif()
@@ -483,11 +489,13 @@
                             class="p-0">
                             <div class="regpack">
                                 <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
-                                @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
-                                    <div class="sizediv">
-                                        {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->name }}
-                                    </div>
-                                @endforeach
+                                @if(isset($options['data']['reg_cat']->category_sizes))
+                                    @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
+                                        <div class="sizediv">
+                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->name }}
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </td>
 
@@ -499,11 +507,14 @@
                                 <div class="regpack">
                                     <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                         Plus Pack
-                                        Size</h6>@foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
-                                        <div class="sizediv">
-                                            {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
-                                        </div>
-                                    @endforeach
+                                        Size</h6>
+                                    @if(isset($options['data']['plus_cat']->category_sizes))
+                                        @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                            <div class="sizediv">
+                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </td>
 
@@ -547,10 +558,10 @@
                                 Category <br>
 
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
-                     Reg Pack: {{ $options['data']['reg_cat']->name }}<br>
+                     Reg Pack: {{ @$options['data']['reg_cat']->name }}<br>
                      <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
                      @if(!empty($options['data']['plus_cat']))
-                             Plus Pack: {{ $options['data']['plus_cat']->name }}
+                             Plus Pack: {{ @$options['data']['plus_cat']->name }}
                          @endif
                      </span>
                      </span>
@@ -879,13 +890,15 @@
                                         <h6>PRIVATE LABEL SIZES</h6>
                                         <div style="display:flex;">
                                             @foreach($thread->regular_product_categories()->get() as $cat)
-                                                @foreach($cat->category_sizes as $catSize)
-                                                    <div
-                                                        style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
-                                                        <label for="name">{{$catSize->full_name}}</label>
-                                                        <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
-                                                    </div>
-                                                @endforeach
+                                                @if(isset($cat->category_sizes))
+                                                    @foreach($cat->category_sizes as $catSize)
+                                                        <div
+                                                            style=" margin: 0px 5px;background: #e8e8e8 !important; padding: 10px  !important;width: 65px  !important; border-radius: 5px  !important;    border: 1px solid #9a9a9a  !important;">
+                                                            <label for="name">{{$catSize->full_name}}</label>
+                                                            <p>{{get_pvt_cat_size_qty($thread->id,$cat->id,$catSize->id)}}</p>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         </div>
                                 @endif()
@@ -1039,11 +1052,13 @@
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
                                     <div class="regpack">
                                         <h6>{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
-                                        @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
-                                            <div class="sizediv">
-                                                {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
-                                            </div>
-                                        @endforeach
+                                        @if(isset($options['data']['reg_cat']->category_sizes))
+                                            @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
+                                                <div class="sizediv">
+                                                    {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($reg_cat->name,'-') : $reg_cat->full_name }}
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </td>
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
@@ -1051,11 +1066,13 @@
                                         <div class="regpack">
                                             <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: 'Raleway', sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                                 Plus Pack Size Run</h6>
-                                            @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
-                                                <div class="sizediv">
-                                                    {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
-                                                </div>
-                                            @endforeach
+                                            @if(isset($options['data']['plus_cat']->category_sizes))
+                                                @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
+                                                    <div class="sizediv">
+                                                        {{ $thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? strtok($plus_cat->name,'-') : $plus_cat->full_name }}
+                                                    </div>
+                                                @endforeach
+                                            @endif
                                         </div>
 
                                     @endif
@@ -1092,10 +1109,10 @@
                                 <td colspan="2" style="width: 14%;">
                                     <p class="font-bold font-12">Category <br>
                                         <span class="widget-title-color-red text-uppercase">
-                                            Reg Pack: {{ $options['data']['reg_cat']->name }}<br>
+                                            Reg Pack: {{ @$options['data']['reg_cat']->name }}<br>
                                             <span class="widget-title-color-red text-uppercase">
                                                 @if(!empty($options['data']['plus_cat']))
-                                                    Plus Pack: {{ $options['data']['plus_cat']->name }}
+                                                    Plus Pack: {{ @$options['data']['plus_cat']->name }}
                                                 @endif
                                             </span>
                                         </span>

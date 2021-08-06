@@ -192,11 +192,11 @@ class ProductsController extends Controller
               <div class="listbox mb-3 col-lg-4">
                   <div class="img">
                       '. image_html_generator(@$product->images[0]) .'
-                      
+
                       <span>Restock</span>
-  
+
                       <div class="imgoverlay">
-                          <a href="http://landb.test/products/fuchsia-one-shoulder-tank-plus-size"><i class="far fa-eye" aria-hidden="true"></i></a>'.$inner.'                       
+                         <a href="'.generate_product_url('detail', $product->id, $product->product_slug).'"><i class="far fa-eye" aria-hidden="true"></i></a>'.$inner.'
                       </div>
                   </div>
                  <a href="'.generate_product_url('detail', $product->id, $product->product_slug).'">
@@ -205,11 +205,11 @@ class ProductsController extends Controller
                          <div class="price">
                              $<span id="price-of-'.$product->id.'">'.$default->price.'</span>
                          </div>
-  
+
                      </div>
                  </a>
                   <div class="text-center">
-                  
+
                       <form id="myform2-'.$product->id.'" class="add_to_cart_form" data-id="'.$default->product_id.'" method="POST" action="'.route('public.cart.add_to_cart').'">
                           <div class="col-lg-4">
                               <input type="hidden" name="quantity" value="1" class="qty">
@@ -217,8 +217,8 @@ class ProductsController extends Controller
                           <button type="submit" class="product-tile__add-to-cart"><span>Add to Bag</span></button>
                       </form>
                   </div>
-  
-                  
+
+
               </div>
         ';
       }

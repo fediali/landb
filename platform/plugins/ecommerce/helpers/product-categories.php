@@ -79,3 +79,36 @@ if (!function_exists('get_product_categories_with_children')) {
         return $sortHelper->sort();
     }
 }
+if (!function_exists('get_product_categories_with_children_pluck')) {
+    /**
+     * @param array $options
+     * @return array
+     * @throws Exception
+     */
+    function get_product_categories_with_children_pluck(array $options = [])
+    {
+        $options = array_merge([
+            'status' => null,
+        ], $options);
+
+        $categories = app(ProductCategoryInterface::class)->pluck('name', 'id');
+//        dd($categories);
+//        if ($options['status'] !== null) {
+//            $categories = $categories->where('status', $options['status']);
+//        }
+
+       /* $categories = $categories
+            ->orderBy('order', 'ASC')
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        /**
+         * @var SortItemsWithChildrenHelper $sortHelper
+         */
+//        $sortHelper = app(SortItemsWithChildrenHelper::class);
+//        $sortHelper->setChildrenProperty('child_cats')->setItems($categories);*/
+
+//        return $sortHelper->sort();
+        return $categories;
+    }
+}
