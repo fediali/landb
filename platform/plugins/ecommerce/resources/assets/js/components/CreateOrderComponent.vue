@@ -41,6 +41,7 @@
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
                                             Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
+                                            Piece Price : {{ variant.product.prod_pieces ? variant.product.prod_pieces  / variant.product.prod_pieces : variant.product.prod_pieces / variant.packQty }}
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
                                             Sizes : {{ variant.product.sizes ? variant.product.sizes : variant.packSizes }}
