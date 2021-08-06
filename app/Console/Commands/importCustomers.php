@@ -54,7 +54,7 @@ class importCustomers extends Command
         /*$file = public_path('lnb-customers-3000.xlsx');
         Excel::import(new \App\Imports\ImportCustomers(), $file);*/
 
-        $file = File::get(public_path('lnb-customers-8000.json'));
+        $file = File::get(public_path('lnb-customers-100.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {
@@ -84,6 +84,25 @@ class importCustomers extends Command
 
                     CustomerCard::create(['customer_id' => $row['user_id'], 'customer_omni_id' => $row['omni_customer_id']]);
 
+
+                    $customer_type = [];
+                    if ($row['type_western']) {
+                        $customer_type[]= 'Western';
+                    }
+                    if ($row['type_boho']) {
+                        $customer_type[]= 'Boho';
+                    }
+                    if ($row['type_contemporary']) {
+                        $customer_type[]= 'Contemporary';
+                    }
+                    if ($row['type_conservative']) {
+                        $customer_type[]= 'Conservative';
+                    }
+                    if ($row['type_other']) {
+                        $customer_type[]= 'Other';
+                    }
+
+
                     $customerDetailData = [
                         'customer_id'    => $row['user_id'],
                         'sales_tax_id'   => $row['sales_tax_id'],
@@ -91,7 +110,13 @@ class importCustomers extends Command
                         'last_name'      => $row['lastname'],
                         'business_phone' => $row['phone'],
                         'company'        => $row['company'],
-                        'phone'          => $row['phone'],
+                        'phone'          => $row['mob'],
+                        'store_facebook'   => $row['fb'],
+                        'store_instagram'  => $row['insta'],
+                        'mortar_address'   => $row['mortar'],
+                        'hear_us'          => $row['hear_us'],
+                        'preferred_communication' => $row['way'],
+                        'customer_type' => json_encode($customer_type),
                     ];
                     CustomerDetail::create($customerDetailData);
 
