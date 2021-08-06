@@ -291,7 +291,7 @@
                                                           rows="3"
                                                           placeholder="{{ trans('plugins/ecommerce::order.add_note') }}">{{ $order->description }}</textarea>
                                                 <label
-                                                    class="text-title-field">Customer Notes</label>
+                                                    class="text-title-field mt-2">Customer Notes</label>
                                                 <textarea class="ui-text-area textarea-auto-height" name="notes"
                                                           rows="3"
                                                           placeholder="Customer Notes">{{ $order->notes }}</textarea>
@@ -585,11 +585,14 @@
                                 $next = $order->nextOrder();
                                 $previous = $order->previousOrder();
                                 ?>
+                                
                                 <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default" {{ is_null($previous) ? 'disabled' : '' }}>Previous Order</a>&nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default" {{ is_null($next) ? 'disabled' : '' }}>Next Order</a>&nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>  &nbsp;
                             </div>
+                            
+
                         </div>
                         <div class="wrapper-content mb20">
                             <div class="next-card-section p-none-b">
@@ -671,17 +674,17 @@
 
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
                                         data-target="#modal_split_order">Split Order
-                                </button>
+                                </button>&nbsp;&nbsp;
                                 <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
-                                   class="btn btn-success">Print Order</a>&nbsp;
+                                   class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
-                                   class="btn btn-warning">Edit Order</a>&nbsp;
+                                   class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
                                 <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
-                                   class="btn btn-info">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;
+                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
-                                    <a href="#" class="btn btn-secondary btn-trigger-cancel-order"
+                                    <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
 
@@ -699,10 +702,10 @@
                                 </div>
                                 <input type="hidden" id="customer_id" value="{{$order->user_id}}">
                                 <form action="{{ route('orders.edit', $order->id) }}">
-                                    <label class="text-title-field">Tracking No.</label>
+                                    <label class="text-title-field mt-3">Tracking No.</label>
                                     <input class="form-control" name="tracking_no" placeholder="Tracking No."
                                            value="{{ $order->tracking_no }}"/>
-                                    <label class="text-title-field">PO No.</label>
+                                    <label class="text-title-field mt-3">PO No.</label>
                                     <input class="form-control" name="po_number" placeholder="PO No."
                                            value="{{ $order->po_number }}"/>
                                     <div class="mt10">
@@ -853,7 +856,7 @@
                             </div>
                         @else
                             <div class="wrapper-content bg-gray-white mb20">
-                                <div class="row m-0 pt-4 bg-white">
+                                <div class="row m-0 pt-3 pb-3 bg-white">
                                     <div class="col-lg-12 ">
                                         <strong class="mb-2">Cash on delivery</strong>
                                     </div>

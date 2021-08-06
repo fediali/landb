@@ -33,13 +33,12 @@
     width: auto !important;
     left: 0px !important; }
       .exzoom .exzoom_nav .exzoom_nav_inner span {
-        border: 1px solid #ddd;
 		margin-left: 0px !important; 
         overflow: hidden;
         position: relative;
         float: left; }
         .exzoom .exzoom_nav .exzoom_nav_inner span.current {
-          border: 1px solid #000; }
+          }
         .exzoom .exzoom_nav .exzoom_nav_inner span img {
           max-width: 100%;
           max-height: 100%;

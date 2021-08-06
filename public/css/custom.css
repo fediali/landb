@@ -1152,3 +1152,15 @@
 .mt-quick-search {
   margin-top: 15px;
 }
+
+.order-btn-pre {
+  background: #000 !important;
+  color: #fff !important;
+  width: 48.5% !important;
+}
+ 
+
+tbody>tr>:nth-child(3) span{
+  margin-top: 11px !important;
+  display: block;
+ }

@@ -4553,3 +4553,15 @@ html {
 }
 /* ============ small devices .end// ============ */
  
+
+.color-area img {
+    border-radius: 30px !important;
+}
+
+.color-area label {
+    margin-right: 10px;
+}
+
+.tags a {
+    display: inline-block !important;
+}

@@ -114,7 +114,7 @@
         </div>
     @else
         <div class="wrapper-content bg-gray-white mb20">
-            <div class="row m-0 pt-4 bg-white">
+            <div class="row m-0 pt-2 pb-2 bg-white">
                 <div class="col-lg-12 ">
                     <strong class="mb-2">Cash on delivery</strong>
                 </div>
