@@ -914,7 +914,7 @@ if (!function_exists('packProdSizes')) {
         $sizes = '';
         try {
             foreach ($category->category_sizes as $cat) {
-                $sizes .= $cat->name . '/';
+                $sizes .= $cat->name . ', ';
             }
         } catch (Exception $error) {
             $sizes = 'No name';

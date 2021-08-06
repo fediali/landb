@@ -255,7 +255,7 @@ class OrderController extends BaseController
             'order_type'           => $request->input('order_type'),
             'notes'                => $request->input('customer_notes'),
             'order_card'           => $request->input('order_card'),
-            'platform'             => 'back-office'
+            'platform'             => isset($order->platform) ? $order->platform : 'back-office'
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
@@ -298,7 +298,7 @@ class OrderController extends BaseController
             $order->editing_started_at = NULL;
 
             $order->is_finished = 1;
-            $order->salesperson_id = auth()->user()->id;
+            $order->salesperson_id = $order->salesperson_id ? $order->salesperson_id : auth()->user()->id;
 
             $order->save();
 

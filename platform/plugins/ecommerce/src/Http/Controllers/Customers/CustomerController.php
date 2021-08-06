@@ -8,6 +8,7 @@ use App\Models\CustomerCard;
 use App\Models\MergeAccount;
 use Assets;
 use Botble\ACL\Repositories\Interfaces\UserInterface;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
@@ -265,11 +266,13 @@ class CustomerController extends BaseController
         $customers = $this->customerRepository
             ->getModel()
             ->whereHas('detail', function ($query) use ($request) {
-                return $query->where('business_phone', 'LIKE', '%' . $request->input('keyword') . '%')
+                return $query
+                    ->where('business_phone', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('name', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('email', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('company', 'LIKE', '%' . $request->input('keyword') . '%');
-            })
+
+            })->where('status', BaseStatusEnum::ACTIVE)
             ->simplePaginate(15);
 
         foreach ($customers as &$customer) {

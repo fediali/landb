@@ -46,9 +46,18 @@ class ProductsRepository{
       }
     }
     $tag_id = null;
+    $pre_order=false;
+    $pre_order_id = null;
     if($category_slug == 'pre-order'){
       $tag_slug = $category_slug;
+      $pre_order = true;
     }
+
+    if($pre_order){
+      $pre_order_id = Slug::where('prefix', 'product-tags')->where('key', 'pre-order')->pluck('reference_id')->first();
+    }
+
+
     if(!is_null($tag_slug)){
       $tag = Slug::where('prefix', 'product-tags')->where('key', $tag_slug)->first();
       if($tag){
@@ -107,6 +116,9 @@ class ProductsRepository{
             })
             ->when(!is_null($tag_id) , function ($query) use ($tag_id){
                 $query->join('ec_product_tag_product as ptag', 'ptag.product_id','ec_products.id')->where('tag_id', $tag_id);
+            })
+            ->when(!$pre_order, function ($query) use ($pre_order_id){
+              $query->leftJoin('ec_product_tag_product as ptag', 'ptag.product_id','ec_products.id')->where('ptag.tag_id', '=' , $pre_order_id);
             })
             ->when(!is_null($price_range) , function ($query) use ($min_range,$max_range){
                 if(!is_null($min_range)){

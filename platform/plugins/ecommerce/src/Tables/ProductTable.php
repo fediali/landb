@@ -156,8 +156,9 @@ class ProductTable extends TableAbstract
                     $packQty = Product::where('id', $getPackId)->value('quantity');
                 }*/
                 $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
-                Product::where('id', $getPackId)->value('quantity');
-                return $item->quantity;
+                $packQty = Product::where('id', $getPackId)->value('quantity');
+                Product::where('id', $item->id)->update(['quantity' => $packQty]);
+                return $packQty;
             })
             ->editColumn('single_qty', function ($item) {
                 /*$getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
@@ -169,8 +170,9 @@ class ProductTable extends TableAbstract
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 }*/
                 $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
-                Product::whereIn('id', $getSingleIds)->sum('quantity');
-                return $item->single_qty;
+                $singleQty  = Product::whereIn('id', $getSingleIds)->sum('quantity');
+                Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
+                return $singleQty;
             })
             ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();

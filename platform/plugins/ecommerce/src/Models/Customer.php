@@ -85,14 +85,14 @@ class Customer extends Authenticatable
         '2' => 'Social',
         '3' => 'LAShowroom',
         '4' => 'Fashiongo',
-        '5' => 'Dallas Market',
-        '6' => 'Atlanta Market',
-        '7' => 'Other'
+        '16' => 'Dallas Market',
+        '19' => 'Atlanta Market',
+        '11' => 'Other'
     ];
     public static $preferredCommunication = [
-        '1' => 'Email',
-        '2' => 'Phone',
-        '3' => 'Email & Phone'
+        '12' => 'Email',
+        '13' => 'Phone',
+        '14' => 'Email & Phone'
     ];
 
     /**

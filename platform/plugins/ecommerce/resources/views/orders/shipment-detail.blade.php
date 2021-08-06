@@ -6,7 +6,7 @@
         <span class="label carrier-status carrier-status-{{ $shipment->status }}">{{ $shipment->status->label() }}</span>
     </div>
 
-    <div class="pd-all-20 pt10">
+    {{--<div class="pd-all-20 pt10">
         <div class="flexbox-grid-form flexbox-grid-form-no-outside-padding rps-form-767 pt10">
             <div class="flexbox-grid-form-item ws-nm">
                 <span>{{ trans('plugins/ecommerce::shipping.shipping_method') }}: <span><i>{{ $shipment->order->shipping_method_name }}</i></span></span>
@@ -24,7 +24,7 @@
                 <span><i>{{ format_price($shipment->cod_amount) }}</i></span>
             </div>
         </div>
-    </div>
+    </div>--}}
     @if ($shipment->status != \Botble\Ecommerce\Enums\ShippingStatusEnum::CANCELED)
         <div class="panel-heading order-bottom shipment-actions-wrapper">
             <div class="flexbox-grid-default">

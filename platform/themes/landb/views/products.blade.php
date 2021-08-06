@@ -12,7 +12,7 @@
     <div class="container">
         <div class="filterbar mb-2 d_flex">
             <ul class="leftbar">
-                <li>Showing 1-12 of 21 results</li>
+                <li>Showing <span id="products-count">{{ count($products) }}</span> results</li>
                 <li class="seprator"></li>
                 <li>
                     <div class="dropdown">
@@ -421,6 +421,7 @@
             _return = false;
           }else{
             $('#paginated-posts').append(posts);
+            $('#products-count').html(parseFloat($('#products-count').html())+response.count);
             _return = true;
           }
           hideLoader();

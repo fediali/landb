@@ -7749,7 +7749,11 @@ var render = function() {
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                        Total Pieces : " +
-                                            _vm._s(variant.packQty) +
+                                            _vm._s(
+                                              variant.product.prod_pieces
+                                                ? variant.product.prod_pieces
+                                                : variant.packQty
+                                            ) +
                                             "\n                                    "
                                         )
                                       ])
@@ -7760,7 +7764,11 @@ var render = function() {
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                        Sizes : " +
-                                            _vm._s(variant.packSizes) +
+                                            _vm._s(
+                                              variant.product.sizes
+                                                ? variant.product.sizes
+                                                : variant.packSizes
+                                            ) +
                                             "\n                                    "
                                         )
                                       ])

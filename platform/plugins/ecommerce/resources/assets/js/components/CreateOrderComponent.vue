@@ -40,10 +40,10 @@
                                             </span>
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Total Pieces : {{ variant.packQty }}
+                                            Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Sizes : {{ variant.packSizes }}
+                                            Sizes : {{ variant.product.sizes ? variant.product.sizes : variant.packSizes }}
                                         </p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
