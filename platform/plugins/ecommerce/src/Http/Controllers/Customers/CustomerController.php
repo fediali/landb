@@ -419,15 +419,26 @@ class CustomerController extends BaseController
     {
         $customer = $this->customerRepository->findOrFail($id);
         $cards = 0;
-        if (count($customer->card) > 0) {
-            $omniId = $customer->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
-            dd($omniId);
-            if ($omniId) {
-                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
-                list($card, $info) = omni_api($url);
-                $cards = collect(json_decode($card));
+
+        if ($customer->card->count() > 0) {
+            $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+                    list($card, $info) = omni_api($url);
+                    $cards = collect(json_decode($card));
+                }
             }
         }
+//        if (count($customer->card) > 0) {
+//            $omniId = $customer->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+//
+//            if ($omniId) {
+//                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+//                list($card, $info) = omni_api($url);
+//                $cards = collect(json_decode($card));
+//            }
+//        }
         return $response->setData($cards);
     }
 
