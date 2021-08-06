@@ -24,11 +24,11 @@
     <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">
     <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
     <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
-    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> 
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
     <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
 
-    
+
     <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>
     <title>LandBAppreal</title>
     <style>
@@ -118,7 +118,7 @@
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
-                        <a href="{{ route('customer.login') }}">Sign Up</a>
+                        <a href="{{ route('public.register') }}">Sign Up</a>
                     @endauth
 
                 </li>
@@ -170,9 +170,9 @@
                           </li>
                           <li><a href="#">Another page</a></li>
                         </ul>
-                      </li> 
+                      </li>
                     </ul>
-                  </nav>  
+                  </nav>
                 </div>
                 <div id="menu" class="">
                     {!!
