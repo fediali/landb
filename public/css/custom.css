@@ -210,7 +210,7 @@
 
 .thread-area {
     background: #eee;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
 
 .thread-head {
@@ -233,11 +233,11 @@
     border-radius: 0;
 }
 .card-area  {
-  width: 25%;
+  /*width: 25%;
   margin-top: -10px;
   margin-left: 20px;
   right: 50px;
-  position: absolute;
+  position: absolute;*/
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -245,13 +245,13 @@
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
-    .flexbox-grid-form-no-outside-padding > .flexbox-grid-form-item { 
-        
+    .flexbox-grid-form-no-outside-padding > .flexbox-grid-form-item {
+
     font-size: 11px !important;
 
-    } 
+    }
     .order-border {
-        font-size: 12px !important; 
+        font-size: 12px !important;
     }
     .wrap-img {
         max-width: 25px !important;
@@ -261,15 +261,15 @@
     }
     img.thumb-image {
         max-width: 25px !important;
-        max-height: 25px !important; 
+        max-height: 25px !important;
     }
     .order-border .flexbox-auto-50 {
         flex: 0 0 0px !important;
     }
-    .order-border  .flexbox-content { 
-        padding: 0 10px 0px !important; 
+    .order-border  .flexbox-content {
+        padding: 0 10px 0px !important;
     }
-    .flexbox-grid-default .flexbox-content td { 
+    .flexbox-grid-default .flexbox-content td {
         font-size: 14px !important;
     }
  }
@@ -278,7 +278,7 @@
     margin-top: 45px;
  }
 
- 
+
 @media screen and (min-width: 992px) and (max-width: 2300px) {
 #add_variation .modal-lg {
     max-width: 1200px !important;
@@ -297,7 +297,7 @@
 .fa-2x {
     font-size: 1.5em;
   }
-  
+
   .app {
     position: relative;
     overflow: hidden;
@@ -307,7 +307,7 @@
     padding: 0;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
   }
-  
+
   .app-one {
     background-color: #f7f7f7;
     height: 100%;
@@ -316,7 +316,7 @@
     padding: 0;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .06), 0 2px 5px 0 rgba(0, 0, 0, .2);
   }
-  
+
   .side {
     padding: 0;
     margin: 0;
@@ -332,7 +332,7 @@
     display: block;
     top: 0;
   }
-  
+
   .side-two {
     padding: 0;
     margin: 0;
@@ -344,10 +344,10 @@
     left: -100%;
     -webkit-transition: left 0.3s ease;
     transition: left 0.3s ease;
-  
+
   }
-  
-  
+
+
   .heading {
     padding: 10px 16px 10px 15px;
     margin: 0;
@@ -356,24 +356,24 @@
     background-color: #a69b9b;
     z-index: 1000;
   }
-  
+
   .heading-avatar {
     padding: 0;
     cursor: pointer;
-  
+
   }
-  
+
   .heading-avatar-icon img {
     border-radius: 50%;
     height: 40px;
     width: 40px;
   }
-  
+
   .heading-name {
     padding: 0 !important;
     cursor: pointer;
   }
-  
+
   .heading-name-meta {
     font-weight: 700;
     font-size: 100%;
@@ -394,50 +394,50 @@
   .heading-compose {
     padding: 0;
   }
-  
+
   .heading-compose i {
     text-align: center;
     padding: 5px;
     color: #93918f;
     cursor: pointer;
   }
-  
+
   .heading-dot {
-    padding: 0; 
+    padding: 0;
   }
-  
+
   .heading-dot i {
     text-align: right;
     padding: 5px;
     color: #93918f;
     cursor: pointer;
   }
-  
+
   .searchBox {
     padding: 0 !important;
     margin: 0 !important;
     height: 60px;
     width: 100%;
   }
-  
+
   .searchBox-inner {
     height: 100%;
     width: 100%;
     padding: 10px !important;
     background-color: #fbfbfb;
   }
-  
-  
+
+
   /*#searchBox-inner input {
     box-shadow: none;
   }*/
-  
+
   .searchBox-inner input:focus {
     outline: none;
     border: none;
     box-shadow: none;
   }
-  
+
   .sideBar {
     padding: 0 !important;
     margin: 0 !important;
@@ -448,7 +448,7 @@
     display: block;
     overflow-y: scroll;
   }
-  
+
   .sideBar-body {
     position: relative;
     padding: 10px !important;
@@ -456,35 +456,35 @@
     margin: 0 !important;
     cursor: pointer;
   }
-  
+
   .sideBar-body:hover {
     background-color: #f2f2f2;
   }
-  
+
   .sideBar-avatar {
     text-align: center;
     padding: 0 !important;
   }
-  
+
   .avatar-icon img {
     border-radius: 50%;
     height: 49px;
     width: 49px;
   }
-  
+
   .sideBar-main {
     padding: 0 !important;
   }
-  
+
   .sideBar-main .row {
     padding: 0 !important;
     margin: 0 !important;
   }
-  
+
   .sideBar-name {
     padding: 10px !important;
   }
-  
+
   .name-meta {
     font-size: 100%;
     padding: 1% !important;
@@ -493,11 +493,11 @@
     white-space: nowrap;
     color: #000;
   }
-  
+
   .sideBar-time {
     padding: 10px !important;
   }
-  
+
   .time-meta {
     text-align: right;
     font-size: 12px;
@@ -505,9 +505,9 @@
     color: rgba(0, 0, 0, .4);
     vertical-align: baseline;
   }
-  
+
   /*New Message*/
-  
+
   .newMessage {
     padding: 0 !important;
     margin: 0 !important;
@@ -523,9 +523,9 @@
     background-color: #00bfa5;
     z-index: 1001;
   }
-  
+
   .side-three {
-    padding: 0; 
+    padding: 0;
     margin-left: auto;
     height: 100%;
     width: 50%;
@@ -535,7 +535,7 @@
     right: -100%;
     -webkit-transition: left 0.3s ease;
     transition: left 0.3s ease;
-  
+
   }
   .newMessage-main {
     padding:    0px 16px 0 15px !important;
@@ -546,7 +546,7 @@
     z-index: 1001;
     color: #fff;
   }
-  
+
   .newMessage-title {
     font-size: 18px;
     font-weight: 700;
@@ -562,27 +562,27 @@
   .newMessage-back i {
     margin: auto !important;
   }
-  
+
   .composeBox {
     padding: 0 !important;
     margin: 0 !important;
     height: 60px;
     width: 100%;
   }
-  
+
   .composeBox-inner {
     height: 100%;
     width: 100%;
     padding: 10px !important;
     background-color: #fbfbfb;
   }
-  
+
   .composeBox-inner input:focus {
     outline: none;
     border: none;
     box-shadow: none;
   }
-  
+
   .compose-sideBar {
     padding: 0 !important;
     margin: 0 !important;
@@ -591,9 +591,9 @@
     border: 1px solid #f7f7f7;
     height: calc(100% - 160px);
   }
-  
+
   /*Conversation*/
-  
+
   .conversation {
     padding: 0 !important;
     margin: 0 !important;
@@ -602,14 +602,14 @@
     border-left: 1px solid rgba(0, 0, 0, .08);
     /*overflow-y: auto;*/
   }
-  
+
   .message {
     padding: 0 !important;
     margin: 0 !important;
     background: url("w.jpg") no-repeat fixed center;
     background-size: cover;
     overflow-y: auto;
-    border: 1px solid #f7f7f7; 
+    border: 1px solid #f7f7f7;
     display: block;
     height: 705px;
     overflow-y: scroll;
@@ -626,12 +626,12 @@
     padding: 10px !important;
     cursor: pointer;
   }
-  
+
   .previous a {
     text-decoration: none;
     font-weight: 700;
   }
-  
+
   .message-body {
     margin: 0 !important;
     padding: 0 !important;
@@ -639,17 +639,17 @@
     height: auto;
     background: #f7f7f7;
   }
-  
+
   .message-main-receiver {
-    margin: 10px 0px; 
+    margin: 10px 0px;
   }
-  
+
   .message-main-sender {
     padding: 3px 20px !important;
     margin-left: 40% !important;
     max-width: 60%;
   }
-  
+
   .message-text {
     margin: 0 !important;
     padding: 5px !important;
@@ -658,16 +658,16 @@
     font-size: 14px;
     padding-bottom: 0 !important;
   }
-  
+
   .message-time {
     margin: 0 !important;
     margin-left: 50px !important;
     font-size: 12px;
     text-align: right;
     color: #9a9a9a;
-  
+
   }
-  
+
   .receiver {
     width: auto !important;
     padding: 4px 10px 7px !important;
@@ -678,7 +678,7 @@
     word-wrap: break-word;
     display: inline-block;
   }
-  
+
   .sender {
     float: right;
     width: auto !important;
@@ -690,10 +690,10 @@
     display: inline-block;
     word-wrap: break-word;
   }
-  
-  
+
+
   /*Reply*/
-  
+
   .reply {
     height: 60px;
     width: 100%;
@@ -702,44 +702,44 @@
     margin: 0 !important;
     z-index: 1000;
   }
-  
+
   .reply-emojis {
     padding: 5px !important;
   }
-  
+
   .reply-emojis i {
     text-align: center;
     padding: 5px 5px 5px 5px !important;
     color: #93918f;
     cursor: pointer;
   }
-  
+
   .reply-recording {
     padding: 5px !important;
   }
-  
+
   .reply-recording i {
     text-align: center;
     padding: 5px !important;
     color: #93918f;
     cursor: pointer;
   }
-  
+
   .reply-send {
     padding: 5px !important;
   }
-  
+
   .reply-send i {
     text-align: center;
     padding: 5px !important;
     color: #93918f;
     cursor: pointer;
   }
-  
+
   .reply-main {
     padding: 2px 5px !important;
   }
-  
+
   .reply-main textarea {
     width: 100%;
     resize: none;
@@ -752,14 +752,14 @@
     height: 100%;
     font-size: 16px;
   }
-  
+
   .reply-main textarea:focus {
     outline: none;
     border: none;
     text-indent: 5px;
     box-shadow: none;
   }
-  
+
   @media screen and (max-width: 700px) {
     .app {
       top: 0;
@@ -876,7 +876,7 @@
       font-size: 1.8em !important;
     }
   }
-    
+
 .msg_unread {
     background: #efefef !important;
 }
@@ -891,11 +891,11 @@
     position: absolute;
     right: 10px;
 }
-  
-.gallery-images-wrapper { 
+
+.gallery-images-wrapper {
    display: grid !important;
   }
-  
+
   ul.accordion-list-c {
     position: relative;
     display: block;
@@ -917,7 +917,7 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  .active-h .h-a::after {  
+  .active-h .h-a::after {
     content: "\f068";
     background: #a4a4a4;
     padding: 5px 7px;
@@ -947,7 +947,7 @@
     font-size: 13px;
     background: #a4a4a4;
     padding: 21px 7px;
-  } 
+  }
   div.answer {
     position: relative;
     display: block;
@@ -971,19 +971,19 @@
   }
 
   .h-a {
-    font-weight: 700; 
+    font-weight: 700;
     width: 100%;
     height: auto;
     padding: 0 0 0 0;
     margin: 0;
     font-size: 15px;
-    letter-spacing: 0.01em; 
+    letter-spacing: 0.01em;
   }
 
   .detail-back {
     cursor: pointer;
   }
-  
+
   .textbox-label {
     margin-top: 15px;
   }
@@ -1115,7 +1115,7 @@
 }
 
 .c-datepicker-picker {
-  z-index: 100000 !important; 
+  z-index: 100000 !important;
 }
 
 .c-datepicker-date-range-picker__header {
@@ -1128,24 +1128,24 @@
 }
 
 
-.c-datepicker-date-table td { 
+.c-datepicker-date-table td {
   padding: 0px 0 !important;
 }
 
-.c-datepicker-date-table td div { 
-  padding: 0px 0 !important; 
+.c-datepicker-date-table td div {
+  padding: 0px 0 !important;
 }
 
 .c-datepicker-input--small .c-datepicker-input__inner {
-  height: 23px !important; 
+  height: 23px !important;
 }
- 
+
 
 .c-datepicker-single-editor .c-datepicker-data-input {
   width: 95% !important;
 }
 
-.c-datepicker-date-range-picker-panel__wrap { 
+.c-datepicker-date-range-picker-panel__wrap {
   padding: 0px 10px !important;
 }
 
