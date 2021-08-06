@@ -1033,7 +1033,7 @@ class ProductController extends BaseController
 
                 $variation->packQty = 0;
                 $variation->packSizes = '';
-                if (str_contains($variation->product->sku, 'pack')) {
+                if ($variation->product->sku && str_contains($variation->product->sku, 'pack')) {
                     $variation->packQty = packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
                     if ($variation->packQty) {
