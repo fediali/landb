@@ -638,4 +638,9 @@ class Product extends BaseModel
 //            ->select('id', 'color_print', 'name')
             ->get();
     }
+
+    public function label()
+    {
+        return $this->belongsTo(ProductLabel::class, 'product_label_id');
+    }
 }

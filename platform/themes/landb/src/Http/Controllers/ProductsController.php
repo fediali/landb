@@ -203,7 +203,7 @@ class ProductsController extends Controller
                      <div class="caption">
                          <h4>'.$product->name.'</h4>
                          <div class="price">
-                             $<span id="price-of-'.$product->id.'">'.$default->price.'</span>
+                             $<span id="price-of-'.$product->id.'">'.$default->price/$product->prod_pieces.'</span>
                          </div>
 
                      </div>
