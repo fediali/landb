@@ -210,6 +210,8 @@ class importProducts extends Command
                                         $packAllProd->new_label = $product->new_label;
                                         $packAllProd->usa_made = $product->usa_made;
                                         $packAllProd->ptype = $product->ptype;
+                                        $packAllProd->prod_pieces = $product->prod_pieces;
+                                        $packAllProd->sizes = $product->sizes;
                                         $packAllProd->save();
 
                                         $logParam = [
@@ -238,6 +240,8 @@ class importProducts extends Command
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                                 $sizeProd = Product::where('id', $prodId)->first();
+
+                                                //TODO:: get attribute slug from id($getSizeAttr) then match it with exploded form from hw table if match then get upc and save it to our db.
 
                                                 //$barcodeSize = get_barcode();
                                                 //$sizeProd->upc = $barcodeSize['upc'];
