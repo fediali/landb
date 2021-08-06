@@ -54,7 +54,7 @@ class importCustomers extends Command
         /*$file = public_path('lnb-customers-3000.xlsx');
         Excel::import(new \App\Imports\ImportCustomers(), $file);*/
 
-        $file = File::get(public_path('lnb-customers-100.json'));
+        $file = File::get(storage_path('app/public/lnb-customers-100.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {
