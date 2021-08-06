@@ -425,7 +425,6 @@ class CustomerController extends BaseController
 
             foreach ($omniId as $item) {
                 if ($item->customer_omni_id) {
-                    dd($item->customer_omni_id);
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     $cards = collect(json_decode($card));
