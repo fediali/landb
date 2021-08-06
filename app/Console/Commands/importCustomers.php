@@ -86,36 +86,36 @@ class importCustomers extends Command
 
                     $customer_type = [];
                     if ($row['type_western']) {
-                        $customer_type[]= 'Western';
+                        $customer_type[] = 'Western';
                     }
                     if ($row['type_boho']) {
-                        $customer_type[]= 'Boho';
+                        $customer_type[] = 'Boho';
                     }
                     if ($row['type_contemporary']) {
-                        $customer_type[]= 'Contemporary';
+                        $customer_type[] = 'Contemporary';
                     }
                     if ($row['type_conservative']) {
-                        $customer_type[]= 'Conservative';
+                        $customer_type[] = 'Conservative';
                     }
                     if ($row['type_other']) {
-                        $customer_type[]= 'Other';
+                        $customer_type[] = 'Other';
                     }
 
 
                     $customerDetailData = [
-                        'customer_id'    => $row['user_id'],
-                        'sales_tax_id'   => $row['sales_tax_id'],
-                        'first_name'     => $row['firstname'],
-                        'last_name'      => $row['lastname'],
-                        'business_phone' => $row['phone'],
-                        'company'        => $row['company'],
-                        'phone'          => $row['mob'],
-                        'store_facebook'   => $row['fb'],
-                        'store_instagram'  => $row['insta'],
-                        'mortar_address'   => $row['mortar'],
-                        'hear_us'          => $row['hear_us'],
+                        'customer_id'             => $row['user_id'],
+                        'sales_tax_id'            => $row['sales_tax_id'],
+                        'first_name'              => $row['firstname'],
+                        'last_name'               => $row['lastname'],
+                        'business_phone'          => $row['phone'],
+                        'company'                 => $row['company'],
+                        'phone'                   => $row['mob'],
+                        'store_facebook'          => $row['fb'],
+                        'store_instagram'         => $row['insta'],
+                        'mortar_address'          => $row['mortar'],
+                        'hear_us'                 => $row['hear_us'],
                         'preferred_communication' => $row['way'],
-                        'customer_type' => json_encode($customer_type),
+                        'customer_type'           => json_encode($customer_type),
                     ];
                     CustomerDetail::create($customerDetailData);
 
@@ -125,7 +125,9 @@ class importCustomers extends Command
                         'phone'       => $row['b_phone'],
                         'country'     => $row['b_country'],
                         'city'        => $row['b_city'],
-                        'address'     => $row['b_address'],
+                        'zip_code'    => $row['b_zipcode'],
+                        'state'       => $row['b_state'],
+                        'address'     => $row['b_address_2'],
                         'customer_id' => $row['user_id'],
                         'first_name'  => $row['b_firstname'],
                         'last_name'   => $row['b_lastname'],
@@ -140,11 +142,13 @@ class importCustomers extends Command
                         'phone'       => $row['s_phone'],
                         'country'     => $row['s_country'],
                         'city'        => $row['s_city'],
-                        'address'     => $row['s_address'],
+                        'address'     => $row['s_address_2'],
+                        'state'       => $row['s_state'],
                         'customer_id' => $row['user_id'],
                         'first_name'  => $row['s_firstname'],
                         'last_name'   => $row['s_lastname'],
                         'company'     => $row['company'],
+                        'zip_code'    => $row['s_zipcode'],
                         'type'        => 'shipping',
                     ];
                     CustomerAddress::create($customerAddressS);
@@ -154,7 +158,7 @@ class importCustomers extends Command
                         'purchaser_name'       => $row['name'],
                         'purchaser_phone'      => $row['phone'],
                         'purchaser_address'    => $row['address'] . ' ' . $row['address2'],
-                        'purchaser_city'       => 'N/A',
+                        'purchaser_city'       => $row['address2'],
                         'permit_no'            => $row['tax_number'],
                         'registration_no'      => $row['registration_number'],
                         'business_description' => $row['business_description'],
