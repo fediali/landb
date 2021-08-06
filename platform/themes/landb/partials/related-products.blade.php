@@ -1,5 +1,5 @@
 <?php
-$related = get_related_products($product);
+$related = get_related_products_modded($product);
 ?>
 @if(count($related))
     <div class="row">
