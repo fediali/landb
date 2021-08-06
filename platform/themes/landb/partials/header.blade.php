@@ -25,6 +25,9 @@
     <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
     <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> 
+    <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
+    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
+
     
     <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>
     <title>LandBAppreal</title>
@@ -141,6 +144,36 @@
                 <button class="toggle-menu">
                     <span></span>
                 </button>
+                <div class="navigation nav-custom">
+                  <nav class="vg-nav vg-nav-lg">
+                    <ul>
+                      <li class="active">
+                        <a href="#">Home page</a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#">Left dropdown</a>
+                        <ul class="left">
+                          <li><a href="#">Any page</a></li>
+                          <li class="dropdown">
+                            <a href="#">Second level</a>
+                            <ul class="left">
+                              <li><a href="#">Another page</a></li>
+                              <li><a href="#">Any page</a></li>
+                              <li class="dropdown">
+                                <a href="#">Third level</a>
+                                <ul class="left">
+                                  <li><a href="#">Any page</a></li>
+                                  <li><a href="#">Another page</a></li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                          <li><a href="#">Another page</a></li>
+                        </ul>
+                      </li> 
+                    </ul>
+                  </nav>  
+                </div>
                 <div id="menu" class="">
                     {!!
                         Menu::renderMenuLocation('categories-menu', [

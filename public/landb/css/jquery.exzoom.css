@@ -25,18 +25,16 @@
       max-height: initial !important;
       left: 0;
       top: 0; }
-  .exzoom .exzoom_nav {
-    margin-top: 10px;
-    overflow: hidden;
-    position: relative;
-    left: 15px; }
+  .exzoom .exzoom_nav { 
+    overflow: hidden; 
+	    width: auto !important ;
+   }
     .exzoom .exzoom_nav .exzoom_nav_inner {
-      position: absolute;
-      left: 0;
-      top: 0;
-      margin: 0; }
+    width: auto !important;
+    left: 0px !important; }
       .exzoom .exzoom_nav .exzoom_nav_inner span {
         border: 1px solid #ddd;
+		margin-left: 0px !important; 
         overflow: hidden;
         position: relative;
         float: left; }
@@ -47,28 +45,25 @@
           max-height: 100%;
           position: relative; }
   .exzoom .exzoom_btn {
+      margin: auto !important;
     position: relative;
-    margin: 0; }
+	    margin-top: 15px !important;
+    }
     .exzoom .exzoom_btn a {
       display: block;
-      width: 20px;
-      border: 1px solid #ddd;
+      width: 20px; 
       height: 60px;
-      line-height: 60px;
-      background: #000;
+      line-height: 60px; 
       text-align: center;
-      font-size: 18px;
-      position: absolute;
-      left: 0;
+      font-size: 24px; 
       top: -62px;
       text-decoration: none;
-      color: #fff; }
+      color: #000; }
     .exzoom .exzoom_btn a:hover {
       background: #000;
       color: #fff; }
     .exzoom .exzoom_btn a.exzoom_next_btn {
-      left: auto;
-      right: 0; }
+      }
   .exzoom .exzoom_zoom {
     position: absolute;
     left: 0;
