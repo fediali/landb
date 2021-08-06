@@ -112,19 +112,25 @@ class CustomerController extends BaseController
     {
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate'])->findOrFail($id);
+        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate', 'card'])->findOrFail($id);
         //dd($customer);
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
-        $card = [];
+//        $card = 0;
         $customer->password = null;
-        if (!$customer->card->isEmpty()) {
-            if ($customer->card[0]->customer_omni_id !== null) {
-                $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-                list($card, $info) = omni_api($url);
-                $card = json_decode($card);
-            }
-        }
 
+        $card = [];
+        if ($customer->card->count() > 0) {
+            $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+                    list($card, $info) = omni_api($url);
+                    $card = collect(json_decode($card));
+                }
+            }
+
+
+        }
 
         return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
@@ -306,11 +312,11 @@ class CustomerController extends BaseController
 //            'customer_id' => $id,
 //        ]);
         $addresses = CustomerAddress::where('customer_id', $id)
-                ->whereNotNull('state')
-                ->whereNotNull('city')
-                ->whereNotNull('zip_code')
-                ->whereNotNull('country')
-                ->whereNotNull('address')->get();
+            ->whereNotNull('state')
+            ->whereNotNull('city')
+            ->whereNotNull('zip_code')
+            ->whereNotNull('country')
+            ->whereNotNull('address')->get();
 
         return $response->setData($addresses);
     }

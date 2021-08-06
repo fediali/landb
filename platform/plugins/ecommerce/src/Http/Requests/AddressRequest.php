@@ -22,6 +22,7 @@ class AddressRequest extends Request
             'state'      => 'required|max:120',
             'city'       => 'required|max:120',
             'address'    => 'required|max:120',
+            'zip_code'   => 'required|max:120',
             'is_default' => 'integer|min:0|max:1',
         ];
 

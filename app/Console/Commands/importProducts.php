@@ -197,13 +197,14 @@ class importProducts extends Command
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                         $packAllProd = Product::where('id', $prodId)->first();
-
+//no barcode image need
                                         try {
                                             $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
                                             $packAllProd->upc = $barcodePackAll['upc'];
                                             $packAllProd->barcode = $barcodePackAll['barcode'];
                                         } catch (\ErrorException $exception) {}
 
+                                        //change
                                         $packAllProd->private_label = $product->private_label;
                                         $packAllProd->restock = $product->restock;
                                         $packAllProd->new_label = $product->new_label;

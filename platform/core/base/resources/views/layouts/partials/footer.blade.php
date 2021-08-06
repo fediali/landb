@@ -316,8 +316,7 @@
     });
 
     function getCustomer() {
-        console.log($('#customer_id').val());
-
+        console.log('===',$('#customer_id').val());
 
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
@@ -381,7 +380,7 @@
     });
 
     $('button#tokenizebutton').on('click', () => {
-
+        getCustomer();
         var month = $('.month').val();
         var year = $('.year').val();
         successElement = document.querySelector('.success');
@@ -394,39 +393,40 @@
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
         console.log('customer address', address)
-
-        var extraDetails = {
-            firstname: customer.data.detail.first_name,
-            lastname: customer.data.detail.last_name,
-            email: customer.data.email,
-            method: "card",
-            month: month,
-            year: year,
-            phone: customer.data.detail.phone,
-            address_1: address.data?.address,
-            address_city: address.data?.city,
-            address_state: address.data?.state,
-            address_zip: address.data?.zip_code,
-            address_country: address.data?.country,
-            url: "https://omni.fattmerchant.com/#/bill/",
-            validate: false,
-        };
-        //console.log(extraDetails)
-        // call tokenize api
-        fattJs.tokenize(extraDetails).then((result) => {
-            console.log(result);
-            if (result) {
-                successElement.querySelector('.token').textContent = result.id;
-                successElement.classList.add('visible');
-                functionAddCard(result, customer.data.id);
-            }
-            loaderElement.classList.remove('visible');
-        }).catch(err => {
-            console.log(err)
-            errorElement.textContent = err.message;
-            errorElement.classList.add('visible');
-            loaderElement.classList.remove('visible');
-        });
+setTimeout(function (){
+    var extraDetails = {
+        firstname: customer.data.detail.first_name,
+        lastname: customer.data.detail.last_name,
+        email: customer.data.email,
+        method: "card",
+        month: month,
+        year: year,
+        phone: customer.data.detail.phone,
+        address_1: address.data?.address,
+        address_city: address.data?.city,
+        address_state: address.data?.state,
+        address_zip: address.data?.zip_code,
+        address_country: address.data?.country,
+        url: "https://omni.fattmerchant.com/#/bill/",
+        validate: false,
+    };
+    //console.log(extraDetails)
+    // call tokenize api
+    fattJs.tokenize(extraDetails).then((result) => {
+        console.log(result);
+        if (result) {
+            successElement.querySelector('.token').textContent = result.id;
+            successElement.classList.add('visible');
+            functionAddCard(result, customer.data.id);
+        }
+        loaderElement.classList.remove('visible');
+    }).catch(err => {
+        console.log(err)
+        errorElement.textContent = err.message;
+        errorElement.classList.add('visible');
+        loaderElement.classList.remove('visible');
+    });
+},1500)
     });
 
     function functionAddCard(result, customer_id) {
