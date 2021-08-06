@@ -1010,14 +1010,25 @@
                 $('input#split-input2-' + prodId).val(qty);
                 $(input).val(maxQty - qty);
             });
-            /*$('body').on('change', 'input.split-input', function () {
+            $('body').on('change', 'input.split-input', function () {
                 let prodId = $(this).data('prod-id');
-                let input = 'input#split-input-'+prodId;
-                let maxQty = $(input).data('prod-qty');
+                let maxQty = $(this).data('prod-qty');
+                let curVal = $(this).val();
+                let final = maxQty - curVal;
+                let input = 'input#split-input2-'+prodId;
+                $(input).val(final);
             });
             $('body').on('change', 'input.split-input2', function () {
                 let prodId = $(this).data('prod-id');
-            });*/
+                let input = 'input#split-input-' + prodId;
+                let maxQty = $(input).data('prod-qty');
+                let curVal = $(this).val();
+                let final = maxQty - curVal;
+                $(input).val(final);
+            });
+            $('#modal_split_order').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+            })
         });
     </script>
 
