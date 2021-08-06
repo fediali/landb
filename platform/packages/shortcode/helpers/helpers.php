@@ -166,17 +166,38 @@ if (!function_exists('update_product_quantity')) {
   {
     $product =  \Botble\Ecommerce\Models\Product::find($id);
     if($product){
-      if($type == 'inc'){
-       $product->increment('quantity' , $qty);
-      }elseif ($type == 'dec'){
-        if($product->quantity > $qty){
-          $product->decrement('quantity' , $qty);
-        }else{
-          $product->update(['quantity' => 0]);
+      if(!checkIfProductPreOrder($id)){
+        if($type == 'inc'){
+          $product->increment('quantity' , $qty);
+        }elseif ($type == 'dec'){
+          if($product->quantity > $qty){
+            $product->decrement('quantity' , $qty);
+          }else{
+            $product->update(['quantity' => 0]);
+          }
         }
       }
     }
 
+  }
+
+}
+
+if (!function_exists('checkIfProductPreOrder')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+   function checkIfProductPreOrder($productId){
+    $product = \Botble\Ecommerce\Models\ProductVariation::where('ec_product_variations.product_id', $productId)
+        ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_product_variations.configurable_product_id')
+        ->where('tag_id', 3)->first();
+    /*$product = Product::where('ec_products.id', 21)
+        ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_products.id')
+        ->where('tag_id', 3)->first();*/
+    if($product){ return true; }
+    else       { return false; }
   }
 
 }

@@ -287,7 +287,7 @@ class CheckoutController extends Controller
     $preOrderId = null;
     $orderTotal = 0;
     foreach ($order->products as $product){
-      $check = $this->checkIfProductPreOrder($product->product_id);
+      $check = checkIfProductPreOrder($product->product_id);
       if($check){
         if(is_null($preOrderId)){
           $token = OrderHelper::getOrderSessionToken();
@@ -320,15 +320,6 @@ class CheckoutController extends Controller
 
   }
 
-  public function checkIfProductPreOrder($productId){
-    $product = ProductVariation::where('ec_product_variations.product_id', $productId)
-                ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_product_variations.configurable_product_id')
-                ->where('tag_id', 3)->first();
-    /*$product = Product::where('ec_products.id', 21)
-        ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_products.id')
-        ->where('tag_id', 3)->first();*/
-    if($product){ return true; }
-    else       { return false; }
-  }
+
 
 }
