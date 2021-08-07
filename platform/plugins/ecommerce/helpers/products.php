@@ -343,7 +343,7 @@ if (!function_exists('get_related_products')) {
     {
         $params = [
             'condition' => [
-                'ec_products.status'       => BaseStatusEnum::PUBLISHED,
+                'ec_products.status'       => BaseStatusEnum::$PRODUCT['Active'],
                 'ec_products.is_variation' => 0,
             ],
             'order_by'  => [

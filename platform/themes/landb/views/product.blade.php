@@ -310,18 +310,18 @@
     <div class="row">
         <div class="col-lg-12 mt-4">
             <ul class="nav nav-tabs tabs-product mt-4">
-                <li><a class="active" data-toggle="tab" href="#home">Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <li><a class="active" data-toggle="tab" href="#home">Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
-                <li><a data-toggle="tab" href="#menu1">Product Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                {{--<li><a data-toggle="tab" href="#menu1">Product Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
-                <li><a data-toggle="tab" href="#menu2">Reviews</a></li>
+                <li><a data-toggle="tab" href="#menu2">Reviews</a></li>--}}
             </ul>
 
             <div class="tab-content product-tab-content">
                 <div id="home" class="tab-pane fade in active show">
                     {!! $product->description !!}
                 </div>
-                <div id="menu1" class="tab-pane fade">
+                {{--<div id="menu1" class="tab-pane fade">
                     <div class="row mt-4">
                         <div class="col-lg-2 col-6">
                             <p class="detail-head">Weight</p>
@@ -396,89 +396,11 @@
                                 blandit. Ut cras nunc suspendisse leo sed pharetra.</p>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 mt-4">
-            <h1 class="detail-subheading mt-4">You Might Also Like</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 mt-4">
-            <div class="shoplisting detail-listing detail-shoplist">
-                <div class="listbox">
-                    <div class="img">
-                        <img src="img/listing/listimg1.png" alt="">
-                        <span>Restock</span>
-                        <div class="imgoverlay">
-                            <a href="#"><i class="far fa-eye"></i></a>
-                            <a href="#"><i class="far fa-heart"></i></a>
-                            <a href="#"><i class="far fa-shopping-bag"></i></a>
-                        </div>
-                    </div>
-                    <div class="caption">
-                        <h4>Fuchsia Serape Stripe Strapless Faux Leather Romper</h4>
-                        <div class="price">
-                            $10.00
-                        </div>
-                    </div>
-                </div>
-                <div class="listbox">
-                    <div class="img">
-                        <img src="img/listing/listimg2.png" alt="">
-                        <span>Restock</span>
-                        <div class="imgoverlay">
-                            <a href="#"><i class="far fa-eye"></i></a>
-                            <a href="#"><i class="far fa-heart"></i></a>
-                            <a href="#"><i class="far fa-shopping-bag"></i></a>
-                        </div>
-                    </div>
-                    <div class="caption">
-                        <h4>Fuchsia Serape Stripe Strapless Faux Leather Romper</h4>
-                        <div class="price">
-                            $10.00
-                        </div>
-                    </div>
-                </div>
-                <div class="listbox">
-                    <div class="img">
-                        <img src="img/listing/listimg3.png" alt="">
-                        <span>Restock</span>
-                        <div class="imgoverlay">
-                            <a href="#"><i class="far fa-eye"></i></a>
-                            <a href="#"><i class="far fa-heart"></i></a>
-                            <a href="#"><i class="far fa-shopping-bag"></i></a>
-                        </div>
-                    </div>
-                    <div class="caption">
-                        <h4>Fuchsia Serape Stripe Strapless Faux Leather Romper</h4>
-                        <div class="price">
-                            $10.00
-                        </div>
-                    </div>
-                </div>
-                <div class="listbox">
-                    <div class="img">
-                        <img src="img/listing/listimg4.png" alt="">
-                        <span>Restock</span>
-                        <div class="imgoverlay">
-                            <a href="#"><i class="far fa-eye"></i></a>
-                            <a href="#"><i class="far fa-heart"></i></a>
-                            <a href="#"><i class="far fa-shopping-bag"></i></a>
-                        </div>
-                    </div>
-                    <div class="caption">
-                        <h4>Fuchsia Serape Stripe Strapless Faux Leather Romper</h4>
-                        <div class="price">
-                            $10.00
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {!! Theme::partial('related-products', ['product' => $product]) !!}
 </section>
 
 <!-- Modal Size Chart Kids -->
