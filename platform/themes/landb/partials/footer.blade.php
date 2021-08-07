@@ -515,7 +515,14 @@ new Luminous(demoTrigger);
     $("#exzoom").removeClass('hidden')
     });
 
-    </script> 
+    </script>
+    <script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
+    <script>
+		$(document).ready(function () {
+			$('.vg-nav').vegasMenu();
+		})
+	</script>
+
 
 @if(session()->has('success'))
     <script>

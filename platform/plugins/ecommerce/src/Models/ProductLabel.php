@@ -31,4 +31,9 @@ class ProductLabel extends BaseModel
     protected $casts = [
         'status' => BaseStatusEnum::class,
     ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'product_label_id');
+    }
 }

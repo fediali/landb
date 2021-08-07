@@ -191,9 +191,10 @@ class ProductsController extends Controller
         $html .= '
               <div class="listbox mb-3 col-lg-4">
                   <div class="img">
-                      '. image_html_generator(@$product->images[0]) .'
+                      '. image_html_generator(@$product->images[0])
+            .'
 
-                      <span>Restock</span>
+                     <span>Restock</span>
 
                       <div class="imgoverlay">
                          <a href="'.generate_product_url('detail', $product->id, $product->product_slug).'"><i class="far fa-eye" aria-hidden="true"></i></a>'.$inner.'
@@ -203,7 +204,7 @@ class ProductsController extends Controller
                      <div class="caption">
                          <h4>'.$product->name.'</h4>
                          <div class="price">
-                             $<span id="price-of-'.$product->id.'">'.$default->price.'</span>
+                             $<span id="price-of-'.$product->id.'">'.$default->price/$product->prod_pieces.'</span>
                          </div>
 
                      </div>
