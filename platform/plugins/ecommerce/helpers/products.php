@@ -354,13 +354,16 @@ if (!function_exists('get_related_products')) {
             'select'    => [
                 'ec_products.*',
             ],
-            'with'      => [
+            /*'with'      => [
                 'slugable',
                 'variations',
                 'productCollections',
                 'variationAttributeSwatchesForProductList',
                 'promotions',
-            ],
+            ],*/
+            'with'        =>[
+                'category'
+            ]
         ];
 
         $relatedIds = app(ProductInterface::class)->getRelatedProductIds($product);
@@ -374,6 +377,25 @@ if (!function_exists('get_related_products')) {
         return app(ProductInterface::class)->getProducts($params);
     }
 }
+
+function get_related_products_modded($product, $limit = 4)
+{
+
+  $relatedIds = app(ProductInterface::class)->getRelatedProductIds($product);
+
+  return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
+      ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
+      ->where('ep.quantity', '>', 0)
+      ->join('ec_products as ep', 'epv.product_id', 'ep.id')
+      ->where('ec_products.is_variation' , 0)
+      ->orderBy('ec_products.order','ASC')
+      ->orderBy('ec_products.created_at','DESC')
+      ->select('ec_products.*')
+      ->limit($limit)
+      ->get();
+
+}
+
 
 if (!function_exists('get_cross_sale_products')) {
     /**

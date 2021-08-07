@@ -80,7 +80,7 @@ class ProductsRepository
             $sort_key = isset($sort_break[0]) ? ((!empty($sort_break[0])) ? $sort_break[0] : null) : null;
             $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null) : null;
         }
-        $data = $this->model->with(['category']) ->where('ep.quantity', '>', 0)
+        $data = $this->model->with(['category'])->where('ep.quantity', '>', 0)
             ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
             ->join('ec_products as ep', 'epv.product_id', 'ep.id')
             ->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)
