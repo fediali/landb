@@ -124,10 +124,10 @@ class ProductsRepository
             })
             ->when(!is_null($price_range), function ($query) use ($min_range, $max_range) {
                 if (!is_null($min_range)) {
-                    $query->where('price', '>=', $min_range);
+                    $query->where($this->model->getTable() . '.price', '>=', $min_range);
                 }
                 if (!is_null($max_range)) {
-                    $query->where('price', '<=', $max_range);
+                    $query->where($this->model->getTable() . '.price', '<=', $max_range);
                 }
             })
             ->when(!is_null($size_id), function ($query) use ($size_id) {

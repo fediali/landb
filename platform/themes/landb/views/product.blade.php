@@ -114,7 +114,7 @@
         <div class="col-lg-7">
 {{--        <p class="pre-label-detail">Pre-Order</p>--}}
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$<span id="product_price">{{ $default_price}} <small>(${{$default_price}} pack price)</small></span></p>
+            <p class="detail-price mb-2">$<span id="product_price">{{ $default_price/ $product->prod_pieces}} <small>(${{$default_price}} pack price)</small></span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
                 <div class="col-md-6">

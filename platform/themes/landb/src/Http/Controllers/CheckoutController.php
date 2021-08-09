@@ -146,7 +146,6 @@ class CheckoutController extends Controller
 
                 $checkoutUrl = $this->payPalService->execute($request);
                 if ($checkoutUrl) {
-                    $this->checkIfPreOrder($order->id);
                     return redirect($checkoutUrl);
                 }
                 $data['error'] = true;
@@ -199,16 +198,16 @@ class CheckoutController extends Controller
     )
     {
         $chargeId = $palPaymentService->afterMakePayment($request);
+        $paymentStatus = $palPaymentService->getPaymentStatus($request);
         $token = OrderHelper::getOrderSessionToken();
         $order_id = $request->input('order_id');
+      if(!$paymentStatus){
+        $this->revertProductQuantity($order_id);
+        return redirect()->route('public.cart_index', ['payment' => 'false']);
+      }
+        $this->checkIfPreOrder($order_id);
         $order = $this->orderRepository->findById($order_id, ['address', 'products']);
-
-        if ($token !== session('tracked_start_checkout') || !$order) {
-            foreach ($order->products as $product) {
-                update_product_quantity($product->product_id, $product->qty, 'inc');
-            }
-            return $response->setNextUrl(url('/'));
-        }
+        
         $payment = Payment::where('charge_id', $chargeId)->first();
         //dd($payment);
         $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
@@ -333,6 +332,18 @@ class CheckoutController extends Controller
             $current->update(['amount' => $current->amount - $orderTotal]);
         }
 
+    }
+
+    public function revertProductQuantity($orderId){
+      $order = Order::where('id', $orderId)->with(['products'])->first();
+      if($order){
+        foreach ($order->products as $orderProduct){
+          $product = Product::find($orderProduct->product_id);
+          if($product){
+            $product->update(['quantity' => $product->quantity + $orderProduct->qty]);
+          }
+        }
+      }
     }
 
 

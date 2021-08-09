@@ -86,7 +86,7 @@
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-<script src="{{ asset('landb/js/custom.js') }}"></script>
+{{--<script src="{{ asset('landb/js/custom.js') }}"></script>--}}
 <script type="text/javascript">
 
     window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')
