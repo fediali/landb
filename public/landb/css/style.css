@@ -181,7 +181,7 @@ nav.navbar {
     animation-name: fadeInUp;
 }
 
-#menu ul:hover a {
+#menu li:hover  {
     opacity: 0.5;
 }
 
@@ -4006,6 +4006,10 @@ input:checked + .slider:before {
 header {
     background-color: #f6f5f7;
     padding-bottom: 20px !important;
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    width: 100%;
 }
 
 .navbar-parent li {
@@ -4592,4 +4596,30 @@ html {
     font-size: 24px;
     font-family: ""Madeglin"", sans-serif !important;
     line-height: 40px;
+}
+
+
+html { scroll-behavior: smooth;}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 40px;
+  width  : 40px;
+  height: 40px;
+}
+
+#myBtn i {
+    margin-top: -4px;
+    display: block;
 }
