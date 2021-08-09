@@ -921,14 +921,14 @@ section.parallax_video video {
 
 .breadcrumb_wrap {
     background: #F3F2F5;
-    height: 170px;
+    height: 100px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 5px !important;
 }
 
 .breadcrumb {
