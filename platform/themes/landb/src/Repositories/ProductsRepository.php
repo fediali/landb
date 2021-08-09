@@ -141,7 +141,7 @@ class ProductsRepository
             });
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
-            $data = $data->simplePaginate(6);
+            $data = $data->simplePaginate(30);
         } elseif ($simplePaginate) {
             $data = $data->simplePaginate();
         } elseif ($first) {
