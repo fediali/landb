@@ -67,8 +67,8 @@
                                     {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
                                     <span>Latest</span>
                                     <div class="imgoverlay">
-                                        <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}"><i
-                                                    class="far fa-eye"></i></a>
+                                        <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
+                                            <i class="far fa-eye"></i></a>
                                         @if(auth('customer')->user())
                                             <a class="add-to-wishlist" id="wishlist-icon-{{$product->id}}"
                                                href="{!! generate_product_url('wishlist', $product->id) !!}"
