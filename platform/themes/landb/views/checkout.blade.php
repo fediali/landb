@@ -499,7 +499,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Shipping Address</p>
-                        <div class="col-lg-12">
+                        <div class="mt-2">
                             <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
                         </div>
                     </div>
@@ -515,7 +515,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Billing Address</p>
-                        <div class="col-lg-12">
+                        <div class="mt-2">
                             <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
                         </div>
                     </div>
