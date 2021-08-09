@@ -34,7 +34,7 @@ theme_option()
         'label'      => __('Primary font'),
         'attributes' => [
             'name'  => 'primary_font',
-            'value' => 'Roboto',
+            'value' => '"Madeglin"',
         ],
     ])
     ->setField([
