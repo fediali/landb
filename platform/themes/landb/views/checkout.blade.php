@@ -351,7 +351,6 @@
                                                    value="{{ @$user_info->billingAddress[0]->zip_code }}"/>
                                         </div>
                                         <div class="col-lg-12">
-                                            <p class="textbox-label">Customer Type</p>
                                             <form action="">
                                                 <input class="ml-2" type="checkbox" name="Western" value="Western">
                                                 <label class="ml-2 label-setdefault" for="vehicle1"> Set as
