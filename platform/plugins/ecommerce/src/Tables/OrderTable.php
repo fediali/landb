@@ -84,7 +84,7 @@ class OrderTable extends TableAbstract
 
                     $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>';
                     if ($item->salesperson) {
-                        $customer .= ' <span class="text-success">' . $item->salesperson->getFullName()   . '</span>';
+                        $customer .= ' <span class="text-success">(' . $item->salesperson->getFullName()   . ')</span>';
                     }
 
 
