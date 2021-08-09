@@ -128,9 +128,9 @@ class importProducts extends Command
 
                     if ($row['upc_pack']) {
                         $product->upc = $row['upc_pack'];
-                        try {
-                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
-                        } catch (\ErrorException $exception) {}
+//                        try {
+//                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+//                        } catch (\ErrorException $exception) {}
                     }
 
                     if ($row['restock']) {
