@@ -92,9 +92,9 @@ class ImportProduct implements ToModel, WithHeadingRow
 
                 if ($row['upc_pack']) {
                     $product->upc = $row['upc_pack'];
-                    try {
-                        $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
-                    } catch (\ErrorException $exception) {}
+//                    try {
+//                        $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+//                    } catch (\ErrorException $exception) {}
                 }
 
                 if ($row['restock']) {
@@ -163,7 +163,8 @@ class ImportProduct implements ToModel, WithHeadingRow
                                     $packAllProd = Product::where('id', $prodId)->first();
 
                                     try {
-                                        $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+//                                        $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                        $barcodePackAll = $row['upc_pack'];
                                         $packAllProd->upc = $barcodePackAll['upc'];
                                         $packAllProd->barcode = $barcodePackAll['barcode'];
                                     } catch (\ErrorException $exception) {}
