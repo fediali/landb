@@ -40,10 +40,20 @@
                                             </span>
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
+                                            Total Pieces : {{
+                                                variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty
+                                            }}
+
                                         </p>
                                         <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Sizes : {{ variant.product.sizes ? variant.product.sizes : variant.packSizes }}
+                                            Piece Price : {{
+                                                variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
+                                            }}
+                                        </p>
+                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                            Sizes : {{
+                                                variant.product.sizes ? variant.product.sizes : variant.packSizes
+                                            }}
                                         </p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
@@ -110,16 +120,21 @@
                                                          :src="product_item.image_url"
                                                          :title="product_item.name" :alt="product_item.name">
                                                 </div>
-                                                <label class="inline_block ml10 mt10 ws-nm" style="width:calc(100% - 50px);">
+                                                <label class="inline_block ml10 mt10 ws-nm"
+                                                       style="width:calc(100% - 50px);">
                                                     {{ product_item.name }} ({{ product_item.sku }})
                                                     <span v-if="!product_item.variations.length">
                                                         <span v-if="product_item.is_out_of_stock" class="text-danger">
-                                                            <small>&nbsp;({{__('Out of stock')}})</small>
+                                                            <small>&nbsp;({{ __('Out of stock') }})</small>
                                                         </span>
-                                                        <span v-if="!product_item.is_out_of_stock && product_item.quantity > 0">
-                                                            <small>&nbsp;({{product_item.quantity}} {{ __('product(s) available') }})</small>
+                                                        <span
+                                                            v-if="!product_item.is_out_of_stock && product_item.quantity > 0">
+                                                            <small>&nbsp;({{ product_item.quantity }} {{
+                                                                    __('product(s) available')
+                                                                }})</small>
                                                         </span>
-                                                        <span v-if="product_item.product && product_item.product.sku.includes('pack')">
+                                                        <span
+                                                            v-if="product_item.product && product_item.product.sku.includes('pack')">
                                                             <small>&nbsp;({{ product_item.per_piece_price }} per piece price) </small>
                                                         </span>
                                                     </span>
@@ -132,19 +147,25 @@
                                                             @click="selectProductVariant(product_item, variation)"
                                                             v-if="variation.variation_items.length">
                                                             <a class="color_green float-left">
-                                                                <span v-for="(productItem, index) in variation.variation_items">
+                                                                <span
+                                                                    v-for="(productItem, index) in variation.variation_items">
                                                                     {{ productItem.attribute_title }}
-                                                                    <span v-if="index !== variation.variation_items.length - 1">/</span>
+                                                                    <span
+                                                                        v-if="index !== variation.variation_items.length - 1">/</span>
                                                                 </span>
                                                             </a>
                                                             <span>&nbsp;({{ variation.product.sku }})</span>
                                                             <span v-if="variation.is_out_of_stock" class="text-danger">
-                                                                <small>&nbsp;({{__('Out of stock')}})</small>
+                                                                <small>&nbsp;({{ __('Out of stock') }})</small>
                                                             </span>
-                                                            <span v-if="!variation.is_out_of_stock && variation.quantity > 0">
-                                                                <small>&nbsp;({{variation.quantity}} {{ __('product(s) available') }})</small>
+                                                            <span
+                                                                v-if="!variation.is_out_of_stock && variation.quantity > 0">
+                                                                <small>&nbsp;({{ variation.quantity }} {{
+                                                                        __('product(s) available')
+                                                                    }})</small>
                                                             </span>
-                                                            <span v-if="variation.product && variation.product.sku.includes('pack')">
+                                                            <span
+                                                                v-if="variation.product && variation.product.sku.includes('pack')">
                                                                 <small>&nbsp;({{ variation.per_piece_price }} per piece price) </small>
                                                             </span>
                                                         </li>
@@ -399,7 +420,8 @@
                                 <label class="title-product-main">{{ __('Customer') }}</label>
                             </div>
                             <div class="flexbox-auto-left">
-                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top" title="Delete customer" @click="removeCustomer()">
+                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top"
+                                   title="Delete customer" @click="removeCustomer()">
                                     <svg class="svg-next-icon svg-next-icon-size-12">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                     </svg>

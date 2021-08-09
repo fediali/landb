@@ -22,7 +22,15 @@
     $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
           ->getVariationsInfo($productVariations->pluck('id')->toArray());
 
+      $check = \Botble\Slug\Models\Slug::where('slugs.key', 'pre-order')->where('slugs.prefix', 'product-tags')
+                    ->join('ec_product_tag_product as eptp', 'eptp.tag_id','slugs.reference_id')
+                    ->where('eptp.product_id', $product->id)->first();
 
+        if($check){
+            $pre_order = true;
+        }else{
+            $pre_order = false;
+        }
 
 //dd($productVariationsInfo, $productVariations);
 @endphp
@@ -48,7 +56,7 @@
                     <ul class='exzoom_img_ul'>
                         @if(count($product->images))
                             @foreach($product->images as $image)
-                                <li>{!! image_html_generator($image, $product->name, null, null, true,) !!}</li>
+                                <li>{!! image_html_generator($image, $product->name, null, null, true) !!}</li>
                             @endforeach
                         @else
                             <li><img src="{{ asset('images/default.jpg') }}"/></li>
@@ -106,7 +114,7 @@
         <div class="col-lg-7">
 {{--        <p class="pre-label-detail">Pre-Order</p>--}}
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$<span id="product_price">{{ $default_price / $product->prod_pieces}} <small>(${{$default_price}} pack price)</small></span></p>
+            <p class="detail-price mb-2">$<span id="product_price">{{ $default_price}} <small>(${{$default_price}} pack price)</small></span></p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
                 <div class="col-md-6">
@@ -181,7 +189,7 @@
                     <div id="myform" class="col-lg-4">
                         <input type='button' value='-' class='qtyminus' data-update="0" field='quantity'/>
                         <input id="variation-quantity" type='text' name='quantity' value='1' min="1"
-                               max="{{ $default_max }}" class='qty' readonly/>
+                               max="{{ (!$pre_order)? $default_max : '' }}" class='qty' readonly/>
                         <input type='button' value='+' class='qtyplus' data-update="0" field='quantity'/>
 
                     </div>
@@ -193,8 +201,10 @@
                     </div>
                 </div>
             </form>
-            <p class=""><small><strong class="text-danger"><span id="varition_notice">{{ $default_max }}</span>
-                        packs in stock!</strong></small></p>
+            @if(!$pre_order)
+                <p class=""><small><strong class="text-danger"><span id="varition_notice">{{ $default_max }}</span>
+                            packs in stock!</strong></small></p>
+            @endif
             <p class="mt-4 detail-basic">Basic Code: &nbsp;&nbsp;&nbsp;<span
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span

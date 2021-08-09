@@ -79,7 +79,18 @@ class OrderTable extends TableAbstract
                 // return $item->user->name ?? $item->address->name;
 //                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
 
-                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
+//                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
+
+
+                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>';
+                    if ($item->salesperson) {
+                        $customer .= ' <span class="text-success">' . $item->salesperson->getFullName()   . '</span>';
+                    }
+
+
+                    return $customer;
+
+
             })
             ->editColumn('order_type', function ($item) {
                 return $item->order_type_html;

@@ -100,6 +100,9 @@ class ProductTable extends TableAbstract
             })
             ->editColumn('price', function ($item) {
                 $price = format_price($item->front_sale_price);
+                if ($item->prod_pieces) {
+                    $price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';
+                }
 
                 if ($item->front_sale_price != $item->price) {
                     $price .= ' <del class="text-danger">' . format_price($item->price) . '</del>';
@@ -253,6 +256,7 @@ class ProductTable extends TableAbstract
             'ec_products.start_date',
             'ec_products.end_date',
             'ec_products.oos_date',
+            'ec_products.prod_pieces',
         ];
 
         $query = $model
