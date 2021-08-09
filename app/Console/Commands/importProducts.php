@@ -199,7 +199,7 @@ class importProducts extends Command
                                         $packAllProd = Product::where('id', $prodId)->first();
 //no barcode image need
                                         try {
-                                            $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                            $barcodePackAll = $row['upc_pack'];
                                             $packAllProd->upc = $barcodePackAll['upc'];
                                             $packAllProd->barcode = $barcodePackAll['barcode'];
                                         } catch (\ErrorException $exception) {}
