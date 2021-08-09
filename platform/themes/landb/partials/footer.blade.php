@@ -52,6 +52,7 @@
                         <h6>Navigate</h6>
                         <ul> 
                             <li><a href="/about-us">About</a></li>
+                            <li><a href="/about-us">Trade Shows</a></li>
                             <li><a href="#">Contact</a></li>
                         </ul>
                     </div>
