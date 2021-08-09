@@ -296,21 +296,21 @@ class OrderTable extends TableAbstract
 //        }
 
         $columns += [
-            'shipping_amount' => [
-                'name'  => 'ec_orders.shipping_amount',
-                'title' => trans('plugins/ecommerce::order.shipping_amount'),
-                'class' => 'text-center',
-            ],
+//            'shipping_amount' => [
+//                'name'  => 'ec_orders.shipping_amount',
+//                'title' => trans('plugins/ecommerce::order.shipping_amount'),
+//                'class' => 'text-center',
+//            ],
             'payment_method'  => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('plugins/ecommerce::order.payment_method'),
                 'class' => 'text-center',
             ],
-            'payment_status'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_status_label'),
-                'class' => 'text-center',
-            ],
+//            'payment_status'  => [
+//                'name'  => 'ec_orders.id',
+//                'title' => trans('plugins/ecommerce::order.payment_status_label'),
+//                'class' => 'text-center',
+//            ],
             'status'          => [
                 'name'  => 'ec_orders.status',
                 'title' => trans('core/base::tables.status'),
