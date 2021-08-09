@@ -531,6 +531,10 @@ new Luminous(demoTrigger);
     </script>
 @endif
 
+@if(isset(request()->payment) && request()->payment == 'false')
+      <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
+@endif
+
 </body>
 
 </html>
