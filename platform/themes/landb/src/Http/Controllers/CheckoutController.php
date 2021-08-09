@@ -124,8 +124,8 @@ class CheckoutController extends Controller
 
         $order->update(['notes' => $request->notes]);
 
-        if (!isset(auth('customer')->user()->shippingAddress[0])) {
-            return redirect()->route('public.cart_index')->with('error', 'Shipping Address Not found!');
+        if (!isset(auth('customer')->user()->shippingAddress[0]) || !isset(auth('customer')->user()->billingAddress[0])) {
+            return redirect()->back()->with('error', 'Shipping or Billing Address Not found!');
         }
 
         foreach ($order->products as $product) {
