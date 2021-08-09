@@ -542,7 +542,7 @@
 
                         </div>
                     </div>
-                    <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
+                    <p class="note-product-size mt-1">{{$cartItem->product->sizes}}</p>
                     @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
                 @endforeach
                 <div class="row  mt-5">
@@ -556,14 +556,14 @@
                 </div>
                 <div class="row  mt-2">
                     <div class="col-lg-8 col-6">
-                        <p class="note-product-price mt-3">Shipping:</p>
+                        <p class="note-product-price mt-3">Shipping Cost:</p>
                     </div>
                     <div class="col-lg-4 col-6">
                         <p class="note-product-price mt-3">Add Later</p>
 
                     </div>
                 </div>
-                <p class="cout-note  mt-3">Notes</p>
+                <p class="cout-note  mt-3">Customers Notes</p>
                 <div class="row mt-2">
                     <div class="col-lg-12 col-12 pr-0">
                         <textarea type="text" rows="3" form="checkout-main-form" name="notes"
