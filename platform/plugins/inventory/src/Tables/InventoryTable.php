@@ -103,7 +103,7 @@ class InventoryTable extends TableAbstract
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 if ($item->is_full_released) {
-                    return NULL;
+                    return '<a href="' . route('inventory.details', $item->id) . '" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="View"><i class="fa fa-eye"></i></a>';
                 } else {
                     return $this->getOperations('inventory.edit', 'inventory.destroy', $item);
                 }

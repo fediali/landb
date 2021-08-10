@@ -425,4 +425,13 @@ class InventoryController extends BaseController
             return $response->setPreviousUrl(back())->setMessage('Inventory has been pushed into e-commerce successfully');
         }
     }
+
+    public function showInventoryDetail($id, Request $request)
+    {
+        page_title()->setTitle('Inventory Detail');
+
+        $inventoryDetail = $this->inventoryRepository->findOrFail($id);
+
+        return view('plugins/inventory::details', compact('inventoryDetail'));
+    }
 }
