@@ -8,7 +8,7 @@
         body {
             background-color: #fff;
             color: #222;
-            font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Madeglin", "Helvetica Neue", Arial, sans-serif;
+            font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Madeglin, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
         }
         .container {

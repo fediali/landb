@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family="Madeglin":wght@300;400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family="Madeglin":wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Madeglin:wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Madeglin:wght@300;400;500;600;700&display=swap");
 @import url(//db.onlinewebfonts.com/c/4c4c08af466e9ad071b6d69cf44093df?family=Saol+Display+Regular);
 
 html {
@@ -9,8 +9,12 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: ""Madeglin"", sans-serif;
+    font-family: "Madeglin", sans-serif;
     overflow-x: hidden;
+}
+
+.banner {
+    margin-top: 205px;
 }
 
 h1,
@@ -46,11 +50,11 @@ button:focus {
 }
 
 .topbar p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-size: 12px;
     text-align: center;
     color: #ffffff;
-    font-family: ""Madeglin"", sans-serif;
+    font-family: "Madeglin", sans-serif;
 }
 
 .topnav {
@@ -626,7 +630,7 @@ a.lookbook_btn:hover:after {
 }
 
 .caro_text h5 {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-weight: 600;
     font-size: 10px;
     text-transform: uppercase;
@@ -928,7 +932,7 @@ section.parallax_video video {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-top: 5px !important;
+    margin-top: 195px;
 }
 
 .breadcrumb {
@@ -1513,7 +1517,7 @@ section.parallax_video video {
 }
 
 .detail-h1 {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 32px;
@@ -1531,7 +1535,7 @@ section.parallax_video video {
 }
 
 .short-description {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -1541,7 +1545,7 @@ section.parallax_video video {
 }
 
 .detail-size {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -1550,7 +1554,7 @@ section.parallax_video video {
 }
 
 .detail-size-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 15px;
@@ -1559,7 +1563,7 @@ section.parallax_video video {
 }
 
 .detail-size-select {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 800;
     font-size: 14px;
@@ -1578,7 +1582,7 @@ section.parallax_video video {
 }
 
 .detail-color-text {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -1587,7 +1591,7 @@ section.parallax_video video {
 }
 
 .detail-color-text-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 15px;
@@ -1609,7 +1613,7 @@ section.parallax_video video {
 }
 
 .detail-basic-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1626,7 +1630,7 @@ section.parallax_video video {
 }
 
 .detail-category-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1643,7 +1647,7 @@ section.parallax_video video {
 }
 
 .detail-tag-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1652,7 +1656,7 @@ section.parallax_video video {
 }
 
 .share-text {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1698,7 +1702,7 @@ input.qtyminus {
 }
 
 .cart-btn {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1719,7 +1723,7 @@ input.qtyminus {
 }
 
 .border-btn {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1745,7 +1749,7 @@ input.qtyminus {
  
 
 .detail-subheading {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 37px;
@@ -1758,7 +1762,7 @@ input.qtyminus {
 }
 
 .tabs-product a {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -1772,7 +1776,7 @@ input.qtyminus {
 }
 
 .description-p {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1781,7 +1785,7 @@ input.qtyminus {
 }
 
 .description-heading {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -1794,7 +1798,7 @@ input.qtyminus {
 }
 
 .detail-text {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -1803,7 +1807,7 @@ input.qtyminus {
 }
 
 .detail-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -1825,7 +1829,7 @@ input.qtyminus {
 }
 
 .review-text {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -1834,7 +1838,7 @@ input.qtyminus {
 }
 
 .review-reply {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
@@ -1925,6 +1929,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 5000px) {
+    .custom-breadcrumb { 
+        margin-top: 215px !important;
+    }
     .nav-custom {
         display: none !important;
     }
@@ -1966,6 +1973,19 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .banner {
+        margin-top: 335px;
+    }
+    .custom-breadcrumb {
+        margin-top: 315px !important;
+        padding: 10px 0px;
+    }
+    .breadcrumb_wrap {
+        margin-top: 285px;
+    }
+    header {
+        position: absolute !important;
+    }
     .exzoom .exzoom_img_box {
         width: 100% !important;
     }
@@ -2208,7 +2228,7 @@ input.qtyminus {
 }
 
 .coupon-txt {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
@@ -2222,7 +2242,7 @@ input.qtyminus {
 }
 
 .total-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 15.5973px;
@@ -2231,7 +2251,7 @@ input.qtyminus {
 }
 
 .total-para {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 16.7971px;
@@ -2240,7 +2260,7 @@ input.qtyminus {
 }
 
 .final-total-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -2249,7 +2269,7 @@ input.qtyminus {
 }
 
 .final-total-para {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 22px;
@@ -2258,7 +2278,7 @@ input.qtyminus {
 }
 
 .cart-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 19.1966px;
@@ -2267,7 +2287,7 @@ input.qtyminus {
 }
 
 .cart-product-name {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -2276,7 +2296,7 @@ input.qtyminus {
 }
 
 .cart-product-code {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -2285,7 +2305,7 @@ input.qtyminus {
 }
 
 .cart-product-size {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -2300,7 +2320,7 @@ input.qtyminus {
 /* PROFILE CSS */
 
 .profile-light-txt {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2309,7 +2329,7 @@ input.qtyminus {
 }
 
 .textbox-label {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2334,7 +2354,7 @@ input.qtyminus {
 }
 
 .refer-link-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -2343,7 +2363,7 @@ input.qtyminus {
 }
 
 .refer-link-para {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -2356,7 +2376,7 @@ input.qtyminus {
     padding: 10px;
     width: 100%;
     border: none;
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -2364,7 +2384,7 @@ input.qtyminus {
 }
 
 .label-setdefault {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2383,7 +2403,7 @@ input.qtyminus {
 
 
 /* .Resources {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2411,7 +2431,7 @@ input[type="radio"] {
 }
 
 .texas-heading {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -2424,7 +2444,7 @@ input[type="radio"] {
 }
 
 .tax-address {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 16.4889px;
@@ -2433,7 +2453,7 @@ input[type="radio"] {
 }
 
 .tax-label {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2446,7 +2466,7 @@ input[type="radio"] {
 }
 
 .cert-label {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2472,7 +2492,7 @@ input[type="radio"]:checked {
 /* CHECKOUT CSS */
 
 .cout-note {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -2481,7 +2501,7 @@ input[type="radio"]:checked {
 }
 
 .cout-note-para {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -2490,7 +2510,7 @@ input[type="radio"]:checked {
 }
 
 .note-product {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 16.7708px;
@@ -2499,7 +2519,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-name {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -2508,7 +2528,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-price {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: normal;
     font-size: 14.8542px;
@@ -2517,7 +2537,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-size {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 11.6128px;
@@ -2532,7 +2552,7 @@ input[type="radio"]:checked {
 /* STORE LOCATOR CSS */
 
 .store-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
     font-size: 32px;
@@ -2563,7 +2583,7 @@ form.example button {
 }
 
 .search-store {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2919,7 +2939,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 /* LOGIN CSS START */
 
 .signin-head {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     font-style: normal;
     font-weight: 600;
     font-size: 24px;
@@ -4376,7 +4396,7 @@ html {
 }
 
 @font-face {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     src: url(//revamp.landbw.co/public/fonts/MagdelinAlt-Regular.otf) format("truetype");
 } */
 
@@ -4386,7 +4406,7 @@ html {
   }
   
 @font-face {
-    font-family: "Madeglin";
+    font-family: Madeglin;
     src: url("../fonts/MagdelinAlt-Regular.otf") format("truetype");
   }
  
@@ -4405,7 +4425,7 @@ html {
   }
 
   .font-madeg {
-    font-family: "Madeglin"; 
+    font-family: Madeglin; 
   }
 
   .font-boulden {
@@ -4575,8 +4595,9 @@ html {
 
 .custom-breadcrumb li {
     display: contents !important;
-    font-size: 1rem !important;
+    font-size: 1rem !important; 
 }
+
 
 .breadcrumb-a {
     color: #000 !important;
@@ -4594,7 +4615,7 @@ html {
 
 .ty-mainbox-special-title {
     font-size: 24px;
-    font-family: ""Madeglin"", sans-serif !important;
+    font-family: "Madeglin", sans-serif !important;
     line-height: 40px;
 }
 

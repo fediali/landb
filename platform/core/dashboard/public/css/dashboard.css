@@ -1597,13 +1597,13 @@
   font-weight: 400;
   font-size: 15px;
   color: #7d8c9d;
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
 }
 .morris-hover.morris-default-style .morris-hover-point {
   text-align: left;
   font-size: 14px;
   font-weight: 400;
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
 }
 
 .gmaps {
