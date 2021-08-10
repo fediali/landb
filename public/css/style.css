@@ -57,7 +57,7 @@ body {
     text-transform: uppercase;
     margin-right: 5px;
 }
- 
+
 
 .denim_table .checkbox {
     display: flex;
@@ -404,10 +404,10 @@ body {
         max-width: 1024px;
     }
 
-    
+
 }
 
-@media screen and (min-width: 320px) and (max-width: 991px) { 
+@media screen and (min-width: 320px) and (max-width: 991px) {
     .main-form {
         width: 100% !important;
     }
@@ -417,7 +417,7 @@ body {
     .d-mt-block {
         display: block !important;
     }
-    
+
 }
 
 @media (max-width: 768px) {
@@ -437,7 +437,7 @@ body {
 }
 
 @media (max-width: 767px) {
-    
+
 
     td.tablelogo {
         text-align: center;

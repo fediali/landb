@@ -75,7 +75,7 @@ class OrderTable extends TableAbstract
             })->editColumn('id', function ($item) {
                 $html = '<a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '');
                 if ($item->salesperson) {
-                    $html .= ' <span class="text-success">(' . $item->salesperson->first_name   . ')</span>';
+                    $html .= ' <span class="text-success">(' . $item->salesperson->first_name . ')</span>';
                 }
 
                 return $html;
