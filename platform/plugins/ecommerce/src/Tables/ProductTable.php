@@ -108,7 +108,7 @@ class ProductTable extends TableAbstract
                                 <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
                              </form>';
 //                }
-                $price .= ' <span class="text-success"> $' . format_price($item->front_sale_price)   . '</span>';
+                $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
                 if ($item->front_sale_price != $item->price) {
                     $price .= ' <del class="text-danger">' . format_price($item->price) . '</del>';
                 }
