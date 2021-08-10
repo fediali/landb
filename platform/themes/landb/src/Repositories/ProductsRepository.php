@@ -80,7 +80,7 @@ class ProductsRepository
             $sort_key = isset($sort_break[0]) ? ((!empty($sort_break[0])) ? $sort_break[0] : null) : null;
             $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null) : null;
         }
-        $data = $this->model->with(['category']) ->where('ep.quantity', '>', 0)
+        $data = $this->model->with(['category'])->where('ep.quantity', '>', 0)
             ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
             ->join('ec_products as ep', 'epv.product_id', 'ep.id')
             ->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)
@@ -117,17 +117,17 @@ class ProductsRepository
                 $query->where($this->model->getTable() . '.creation_date', '>=', $date);
             })
             ->when(!is_null($tag_id), function ($query) use ($tag_id) {
-                $query->join('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('tag_id', $tag_id);
+                $query->join('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('ptag.tag_id', $tag_id);
             })
             ->when(!$pre_order, function ($query) use ($pre_order_id) {
-                $query->leftJoin('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('ptag.tag_id', '=', $pre_order_id);
+                $query->leftJoin('ec_product_tag_product as ptag1', 'ptag1.product_id', 'ec_products.id')->where('ptag1.tag_id', '=', $pre_order_id);
             })
             ->when(!is_null($price_range), function ($query) use ($min_range, $max_range) {
                 if (!is_null($min_range)) {
-                    $query->where('price', '>=', $min_range);
+                    $query->where($this->model->getTable() . '.price', '>=', $min_range);
                 }
                 if (!is_null($max_range)) {
-                    $query->where('price', '<=', $max_range);
+                    $query->where($this->model->getTable() . '.price', '<=', $max_range);
                 }
             })
             ->when(!is_null($size_id), function ($query) use ($size_id) {
@@ -141,7 +141,7 @@ class ProductsRepository
             });
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
-            $data = $data->simplePaginate(6);
+            $data = $data->simplePaginate(30);
         } elseif ($simplePaginate) {
             $data = $data->simplePaginate();
         } elseif ($first) {

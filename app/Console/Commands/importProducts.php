@@ -48,7 +48,11 @@ class importProducts extends Command
      *
      * @return void
      */
-    public function __construct(ProductVariationInterface $productVariation, ProductCategoryInterface $productCategoryRepository, BaseHttpResponse $response)
+    public function __construct(
+        ProductVariationInterface $productVariation,
+        ProductCategoryInterface $productCategoryRepository,
+        BaseHttpResponse $response
+    )
     {
         parent::__construct();
         $this->response = $response;
@@ -128,9 +132,9 @@ class importProducts extends Command
 
                     if ($row['upc_pack']) {
                         $product->upc = $row['upc_pack'];
-                        try {
-                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
-                        } catch (\ErrorException $exception) {}
+//                        try {
+//                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+//                        } catch (\ErrorException $exception) {}
                     }
 
                     if ($row['restock']) {
@@ -199,7 +203,7 @@ class importProducts extends Command
                                         $packAllProd = Product::where('id', $prodId)->first();
 //no barcode image need
                                         try {
-                                            $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                            $barcodePackAll = $row['upc_pack'];
                                             $packAllProd->upc = $barcodePackAll['upc'];
                                             $packAllProd->barcode = $barcodePackAll['barcode'];
                                         } catch (\ErrorException $exception) {}

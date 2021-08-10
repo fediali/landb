@@ -23,17 +23,18 @@
 
     .error-page ul li {
         margin-bottom : 5px;
+        font-size: 18px;
     }
 </style>
 
 <div class="container error-page">
-    <div class="error-code">
+    <div class="error-code text-center mt-5">
         404
     </div>
 
-    <div class="error-border"></div>
-        <h4>{{ __('This may have occurred because of several reasons') }}:</h4>
-        <ul>
+    <div class="error-border text-center"></div>
+        <h5 class="text-center">{{ __('This may have occurred because of several reasons') }}:</h5>
+        <ul class="mt-4 mb-4">
             <li>{{ __('The page you requested does not exist.') }}</li>
             <li>{{ __('The link you clicked is no longer.') }}</li>
             <li>{{ __('The page may have moved to a new location.') }}</li>
@@ -41,7 +42,7 @@
             <li>{{ __('You are not authorized to view the requested resource.') }}</li>
         </ul>
         <br>
-        <strong>{!! clean(__('Please try again in a few minutes, or alternatively return to the homepage by <a href=":link">clicking here</a>.', ['link' => route('public.single')])) !!}</strong>
+        <strong class="text-center mb-5 d-block">{!! clean(__('Please try again in a few minutes, or alternatively return to the homepage by <a href=":link">clicking here</a>.', ['link' => route('public.single')])) !!}</strong>
     </div>
 </div>
 {!! Theme::partial('footer') !!}

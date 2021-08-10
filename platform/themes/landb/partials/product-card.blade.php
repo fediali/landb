@@ -57,7 +57,7 @@
         <div class="caption">
             <h4>{{ $product->name }}</h4>
             <div class="price">
-                $<span id="price-of-{{$product->id}}">{{ $default->price/$product->prod_pieces }}</span>
+                $<span id="price-of-{{$product->id}}">{{ @$default->price/$product->prod_pieces }}</span>
             </div>
 
         </div>
@@ -67,7 +67,7 @@
 
                 </button>--}}
         <form id='myform2-{{$product->id}}' class="add_to_cart_form"
-              data-id="{{ $default->product_id }}" method='POST'
+              data-id="{{ @$default->product_id }}" method='POST'
               action='{{ route('public.cart.add_to_cart') }}'>
             <div class="col-lg-4">
                 <input type='hidden' name='quantity' value='1' class='qty'/>

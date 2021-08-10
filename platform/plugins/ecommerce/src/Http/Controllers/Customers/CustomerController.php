@@ -269,6 +269,7 @@ class CustomerController extends BaseController
      */
     public function getListCustomerForSearch(Request $request, BaseHttpResponse $response)
     {
+
         $customers = $this->customerRepository
             ->getModel()
             ->whereHas('detail', function ($query) use ($request) {
@@ -281,9 +282,10 @@ class CustomerController extends BaseController
             })->where('status', BaseStatusEnum::ACTIVE)
             ->simplePaginate(15);
 
-        foreach ($customers as &$customer) {
-            $customer->avatar_url = (string)$customer->avatar_url;
-        }
+
+//        foreach ($customers as &$customer) {
+//            $customer->avatar_url = (string)$customer->avatar_url;
+//        }
 
         return $response->setData($customers);
     }

@@ -37,7 +37,10 @@ class sendSms extends Command
     protected $textmessageRepository;
 
     public function __construct(
-        ChatingInterface $chatingRepository, CustomerInterface $customerRepository, TextmessagesInterface $textmessageRepository)
+        ChatingInterface $chatingRepository,
+        CustomerInterface $customerRepository,
+        TextmessagesInterface $textmessageRepository
+    )
     {
         parent::__construct();
         $this->chatingRepository = $chatingRepository;

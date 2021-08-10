@@ -8,6 +8,7 @@
         </nav>
     </div>
 </section>
+<?php /*dd(request()->getQueryString()); */?>
 <section class="shoplisting_wrap">
     <div class="container">
         <div class="filterbar mb-2 d_flex">
@@ -342,8 +343,9 @@
 
     function infinteLoadMore(page) {
         var _return = true;
+        var str = '{{request()->getQueryString() }}';
         $.ajax({
-            url: ENDPOINT + "?page=" + page,
+            url: ENDPOINT + "?page=" + page +'&'+str.replace(/&amp;/g, '&'),
             type: "get",
             async: false,
             beforeSend: function () {

@@ -30,7 +30,7 @@
     @endif
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family="Madeglin":ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
@@ -86,7 +86,7 @@
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-<script src="{{ asset('landb/js/custom.js') }}"></script>
+{{--<script src="{{ asset('landb/js/custom.js') }}"></script>--}}
 <script type="text/javascript">
 
     window.Echo.channel('push_thread_notification_{{(Auth::check()) ? Auth::user()->id : ''}}')

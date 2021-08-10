@@ -135,6 +135,12 @@ class ProductForm extends FormAbstract
                 'attr'       => [
                     'class' => 'form-controlco',
                     'readonly']
+            ])->add('schedule_date', 'datetime-local', [
+                'label'      => 'Schedule Date',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'class' => 'form-control'
+                ]
             ])
             ->add('color_print', 'mediaImages', [
                 'label'      => 'Color Print',
@@ -169,10 +175,10 @@ class ProductForm extends FormAbstract
                 'default_value' => false,
             ])
             ->add('categories', 'customSelect', [
-                'label'      => trans('plugins/ecommerce::products.form.categories'),
-                'label_attr' => ['class' => 'control-label'],
-                'choices'    => get_product_categories_with_children_pluck(),
-                'default_value'      => old('categories', $selectedCategories),
+                'label'         => trans('plugins/ecommerce::products.form.categories'),
+                'label_attr'    => ['class' => 'control-label'],
+                'choices'       => get_product_categories_with_children_pluck(),
+                'default_value' => old('categories', $selectedCategories),
                 'attr'          => [
                     'class'    => 'select-search-full',
                     'multiple' => 'multiple'

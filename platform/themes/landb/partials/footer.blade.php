@@ -50,20 +50,18 @@
                     !!}
                     <div class="col-4">
                         <h6>Navigate</h6>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Collection</a></li>
-                            <li><a href="#">Lookbook</a></li>
-                            <li><a href="#">About</a></li>
+                        <ul> 
+                            <li><a href="/about-us">About</a></li>
+                            <li><a href="/about-us">Trade Shows</a></li>
                             <li><a href="#">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-4">
                         <h6>Need Help</h6>
                         <ul>
-                            <li><a href="#">Customer Service</a></li>
-                            <li><a href="#">Store Loacator</a></li>
-                            <li><a href="#">Login</a></li>
+                            <li><a href="/wholesale-info">Wholesale Info</a></li>
+                            <li><a href="#">Faqs</a></li>
+                            <li><a href="/login">Login</a></li>
 
                         </ul>
                     </div>
@@ -532,6 +530,10 @@ new Luminous(demoTrigger);
     <script>
       toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
+@endif
+
+@if(isset(request()->payment) && request()->payment == 'false')
+      <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
 @endif
 
 </body>
