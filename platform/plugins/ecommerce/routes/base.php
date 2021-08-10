@@ -165,6 +165,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'products.edit',
             ]);
 
+            Route::post('update-product-price/{id}', [
+                'as'         => 'update-product-price',
+                'uses'       => 'ProductController@updateProductPrice',
+                'permission' => 'products.edit',
+            ]);
+
             Route::post('add-product-demand/{id}', [
                 'as'         => 'add-product-demand',
                 'uses'       => 'ProductController@addCustomerProductDemandQty',
