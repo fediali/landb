@@ -130,21 +130,21 @@
                                  alt="">
                         </td>
                         <td style="width: 12%; border: 1px solid #333; padding:10px;" colspan="1" rowspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif; margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif; margin: 0px;">
                                 Order Date:<br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ parse_date($thread->order_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Description <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ $thread->name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Designer: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
@@ -153,7 +153,7 @@
                         <td style="width: 8%; border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
                             class="p-0">
                             <div class="regpack">
-                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: "Madeglin", sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
+                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: Madeglin, sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
                                 @if(isset($options['data']['reg_cat']->category_sizes))
                                     @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                         <div class="sizediv">
@@ -167,7 +167,7 @@
                             <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
                                 class="p-0">
                                 <div class="regpack">
-                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: "Madeglin", sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: Madeglin, sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                         Plus Pack Size</h6>
                                     @if(isset($options['data']['plus_cat']->category_sizes))
                                         @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)
@@ -180,21 +180,21 @@
                             </td>
                         @endif
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 PP Sample Due Date <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->pp_sample_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Request PP Sample: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->pp_sample }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 PP Sample Size: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ @$thread->pp_sample_size }} </span>
@@ -203,7 +203,7 @@
                     </tr>
                     <tr>
                         <td style="width: 14%;border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Style # <br>
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">  Reg Pack:  {{ $options['data']['reg_sku'] }} <br>
                                             @if(!empty($options['data']['plus_sku']))
@@ -213,7 +213,7 @@
                             </p>
                         </td>
                         <td colspan="2" style="width: 14%;border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Category <br>
 
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
@@ -227,21 +227,21 @@
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Season: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">  {{ @$thread->season->name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Vendor: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Status: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ $thread->thread_status }}</span>
@@ -250,21 +250,21 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="3">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Shipping Method: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ $thread->shipping_method }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="3">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Ship Date: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->ship_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="4">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 No Later Than <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->cancel_date) }}</span>
@@ -288,7 +288,7 @@
                             <h4 style=" text-align: center;
                   font-size: 16px;
                   text-transform: uppercase;
-                  margin: 0; font-family: "Madeglin", sans-serif;">Style</h4>
+                  margin: 0; font-family: Madeglin, sans-serif;">Style</h4>
                             @if(!is_null($thread->spec_files))
                                 @if(count($thread->spec_files))
                                     <div style=" max-width: 1000px;
@@ -315,7 +315,7 @@
                                 <h4 style="    text-align: center;
                      font-size: 16px;
                      text-transform: uppercase;
-                     margin: 0; font-family: "Madeglin", sans-serif;">Order</h4>
+                     margin: 0; font-family: Madeglin, sans-serif;">Order</h4>
                                 <div>
                                     <table style="border: 1px solid #333;
                         border-collapse: collapse;
@@ -324,14 +324,14 @@
                                         <tbody>
                                         <tr>
                                             <td style="border: 1px solid #333;  padding:0px 10px;">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Material:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->material }}</span>
                                                 </p>
                                             </td>
                                             <td style="border: 1px solid #333;  padding:0px 10px;" rowspan="2">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Label:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ @$thread->label }}</span>
@@ -340,7 +340,7 @@
                                         </tr>
                                         <tr>
                                             <td style="border: 1px solid #333;  padding:0px 10px;">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Sleeve Length:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->sleeve }}</span>
@@ -360,7 +360,7 @@
                                                                     style=" flex: 0 0 44.333333%; max-width: 44.333333%; position: relative; width: 100%; padding-right: 15px; padding-left: 15px;">
                                                                     <div
                                                                         style=" min-height: 445px; background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
-                                                                        <h5 style=" margin-top: 0.5rem !important; font-family: "Madeglin", sans-serif;">
+                                                                        <h5 style=" margin-top: 0.5rem !important; font-family: Madeglin, sans-serif;">
                                                                             {{$loop->iteration}}.
                                                                             Variation: {{ $variation->name }}
                                                                         </h5>
@@ -368,7 +368,7 @@
                                                                             style=" display: flex; flex-wrap:wrap;  margin-right: -15px; margin-left: -15px;">
                                                                             <div
                                                                                 style=" min-height: 245px; flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                                                <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                                                <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: Madeglin, sans-serif;">
                                                                                     <label for="">Print/Color:</label>
                                                                                     {{ @$variation->printdesign->name }}
                                                                                 </p>
@@ -376,7 +376,7 @@
                                                                                      src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                      height="120" width="120"
                                                                                      style="object-fit: cover">
-                                                                                <p style=" font-size: 12px !important; font-family: "Madeglin", sans-serif; margin:0px !important;">
+                                                                                <p style=" font-size: 12px !important; font-family: Madeglin, sans-serif; margin:0px !important;">
                                                                                     <span for="">Notes:</span>
                                                                                     {{ $variation->notes ?? 'None' }}
                                                                                 </p>
@@ -385,7 +385,7 @@
                                                                                 @foreach($variation->trim as $trim)
                                                                                     <div
                                                                                         style=" flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                                                        <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                                                        <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: Madeglin, sans-serif;">
                                                                                             <label for="">Trim:</label>
                                                                                         </p>
                                                                                         <img
@@ -393,7 +393,7 @@
                                                                                             src="{{ asset(strtolower(@$trim->trim_image)) }}"
                                                                                             height="120" width="100%"
                                                                                             style="object-fit: cover">
-                                                                                        <p style=" font-size: 12px !important; font-family: "Madeglin", sans-serif; margin:0px !important;">
+                                                                                        <p style=" font-size: 12px !important; font-family: Madeglin, sans-serif; margin:0px !important;">
                                                                                             <span for="">Notes:</span>
                                                                                             {{@$trim->trim_note}}
                                                                                         </p>
@@ -404,7 +404,7 @@
 
                                                                         <div
                                                                             style="margin-bottom: 0.5rem !important; margin-top: 5px !important !important;">
-                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: Madeglin, sans-serif;">
                                                                                 <span for="">REG. Packs:</span>
                                                                                 {{ $variation->regular_qty }} |
                                                                                 <span
@@ -412,7 +412,7 @@
                                                     Sku: {{ $variation->sku }}
                                                 </span>
                                                                             </p>
-                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                                            <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: Madeglin, sans-serif;">
                                                                                 {{ $variation->plus_qty }} |
                                                                                 <span
                                                                                     class="widget-title-color-red">
@@ -465,21 +465,21 @@
                                  alt="">
                         </td>
                         <td style="width: 12%; border: 1px solid #333; padding:10px;" colspan="1" rowspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif; margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif; margin: 0px;">
                                 Order Date:<br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ parse_date($thread->order_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Description <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ $thread->name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Designer: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ $thread->designer->first_name.' '.$thread->designer->last_name }}</span>
@@ -488,7 +488,7 @@
                         <td style="width: 8%; border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
                             class="p-0">
                             <div class="regpack">
-                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: "Madeglin", sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
+                                <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: Madeglin, sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">{{$thread->thread_status == \Botble\Thread\Models\Thread::PRIVATE ? 'Sizes' : 'Reg Pack Size Run'}}</h6>
                                 @if(isset($options['data']['reg_cat']->category_sizes))
                                     @foreach($options['data']['reg_cat']->category_sizes as $key => $reg_cat)
                                         <div class="sizediv">
@@ -505,7 +505,7 @@
                             <td style="width: 8%;border: 1px solid #333; vertical-align: top;" colspan="1" rowspan="2"
                                 class="p-0">
                                 <div class="regpack">
-                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: "Madeglin", sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                    <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: Madeglin, sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                         Plus Pack
                                         Size</h6>
                                     @if(isset($options['data']['plus_cat']->category_sizes))
@@ -521,21 +521,21 @@
                         @endif
 
                         <td style="width: 13%;border: 1px solid #333;  padding:0px 10px;" rowspan="1" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 PP Sample Due Date <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->pp_sample_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Request PP Sample: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->pp_sample }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 PP Sample Size: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ @$thread->pp_sample_size }} </span>
@@ -544,7 +544,7 @@
                     </tr>
                     <tr>
                         <td style="width: 14%;border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Style # <br>
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">  Reg Pack:  {{ $options['data']['reg_sku'] }} <br>
                                             @if(!empty($options['data']['plus_sku']))
@@ -554,7 +554,7 @@
                             </p>
                         </td>
                         <td colspan="2" style="width: 14%;border: 1px solid #333;  padding:0px 10px;">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Category <br>
 
                                 <span style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">
@@ -568,21 +568,21 @@
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Season: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">  {{ @$thread->season->name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="2">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Vendor: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->vendor->first_name.' '.@$thread->vendor->last_name }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="1">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Status: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ $thread->thread_status }}</span>
@@ -591,21 +591,21 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="3">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Shipping Method: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ $thread->shipping_method }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="3">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 Ship Date: <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->ship_date) }}</span>
                             </p>
                         </td>
                         <td style="border: 1px solid #333;  padding:0px 10px;" colspan="4">
-                            <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                            <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                 No Later Than <br>
                                 <span
                                     style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ parse_date($thread->cancel_date) }}</span>
@@ -629,7 +629,7 @@
                             <h4 style=" text-align: center;
                   font-size: 16px;
                   text-transform: uppercase;
-                  margin: 0; font-family: "Madeglin", sans-serif;">Style</h4>
+                  margin: 0; font-family: Madeglin, sans-serif;">Style</h4>
 
 
                             @if(!is_null($thread->spec_files))
@@ -658,33 +658,33 @@
                                 <h4 style="    text-align: center;
                      font-size: 16px;
                      text-transform: uppercase;
-                     margin: 0; font-family: "Madeglin", sans-serif;">SPECIFICATIONS</h4>
+                     margin: 0; font-family: Madeglin, sans-serif;">SPECIFICATIONS</h4>
                                 <div class="denim_table">
                                     <table style="border: 1px solid #333;
                         border-collapse: collapse;
                         height: 100%; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th style=" font-weight: 600; font-family: "Madeglin", sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <th style=" font-weight: 600; font-family: Madeglin, sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="1" rowspan="1">Inseam: {{ $thread->inseam }}</th>
-                                            <th style=" font-weight: 600; font-family: "Madeglin", sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <th style=" font-weight: 600; font-family: Madeglin, sans-serif;padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="1" rowspan="1">Label: {{ @$thread->label }}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td style="background: #ff442e; font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Fit</b>
                                                     @foreach(array_chunk($options['data']['fits'], 5, true) as $fits)
                                                         <div class="item">
                                                             @foreach($fits as $key => $fit)
                                                                 <div
-                                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
+                                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $fit }}</label>
-                                                                    <input style=" font-weight: 600; font-family: "Madeglin", sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
+                                                                    <input style=" font-weight: 600; font-family: Madeglin, sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
     cursor: default;  opacity: 1.65 !important;" type="checkbox" type="checkbox"
                                                                            disabled {!! ($key == $thread->fit_id) ? 'checked' : '' !!}>
                                                                            <img src="'. asset('images/checked.png') .'" alt="">
@@ -696,18 +696,18 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="background: #ff442e; font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style="background: #ff442e; font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Rise</b>
                                                     @foreach(array_chunk($options['data']['rises'], 1, true) as $rises)
                                                         <div class="item">
                                                             @foreach($rises as $key => $rise)
                                                                 <div
-                                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
+                                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex;  justify-content: space-between; align-items: baseline;">
                                                                     <label for=""> {{ $rise }}</label>
-                                                                    <input style=" font-weight: 600; font-family: "Madeglin", sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
+                                                                    <input style=" font-weight: 600; font-family: Madeglin, sans-serif;background-color: #ffffff; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFAQMAAAC3obSmAAAABlBMVEUAAADw8PC5otm+AAAAAXRSTlMAQObYZgAAABJJREFUCNdj4GAQYFBgcGBoAAACogD5g5VHSAAAAABJRU5ErkJggg==); border-color: #ff0000;   color: #000000;
     cursor: default;  opacity: 1.65 !important;" type="checkbox"
                                                                            disabled {!! ($key == $thread->rise_id) ? 'checked' : '' !!}>
                                                                 </div>
@@ -718,47 +718,47 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style=" font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Reg Pack Qty: </b>{{ $thread->reg_pack_qty }}
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style=" font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Plus Pack Qty: </b>{{ $thread->plus_pack_qty }}
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style=" font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Fabric Print Direction: </b>
                                                     {{ $thread->fabric_print_direction }}
                                                 </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style=" font-weight: 600; font-family: "Madeglin", sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
+                                            <td style=" font-weight: 600; font-family: Madeglin, sans-serif; border: 1px solid #333; padding: 8px; vertical-align: top;  font-size: 14px;"
                                                 colspan="12">
-                                                {{--<div style=" font-weight: 600; font-family: "Madeglin", sans-serif;display: flex; justify-content: space-between;">
+                                                {{--<div style=" font-weight: 600; font-family: Madeglin, sans-serif;display: flex; justify-content: space-between;">
                                                     <b>Additional Notes: </b>
                                                     {{ $thread->description }}
                                                 </div>--}}
                                                 <div
-                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif; display: flex !important;">
+                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif; display: flex !important;">
                                                     <div style="    display: flex;
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;">
-                                                        <div style=" font-weight: 600; font-family: "Madeglin", sans-serif; flex: 0 0 50%;
+                                                        <div style=" font-weight: 600; font-family: Madeglin, sans-serif; flex: 0 0 50%;
     max-width: 50%;    position: relative;
     width: 100%;
     padding-right: 15px;
@@ -766,44 +766,44 @@
                                                             <div
                                                                 style="background: #ffffff;
     border: 1px solid #d0d0d0;
-    border-radius: 10px; margin-bottom: 1rem !important; padding-right: 1rem !important; padding-left: 1rem !important; font-weight: 600; font-family: "Madeglin", sans-serif;">
+    border-radius: 10px; margin-bottom: 1rem !important; padding-right: 1rem !important; padding-left: 1rem !important; font-weight: 600; font-family: Madeglin, sans-serif;">
                                                                 @foreach($variations as $variation)
                                                                     @if($variation->status == 'active' && $variation->is_denim == 1)
                                                                         {{--<h5 class=" mt-2">{{$loop->iteration}}. Variation: {{$variation->name}}</h5>--}}
 
 
-                                                                        <div style=" font-weight: 600; font-family: "Madeglin", sans-serif; display: flex;
+                                                                        <div style=" font-weight: 600; font-family: Madeglin, sans-serif; display: flex;
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;">
-                                                                            <div style=" font-weight: 600; font-family: "Madeglin", sans-serif;flex: 0 0 40%;
+                                                                            <div style=" font-weight: 600; font-family: Madeglin, sans-serif;flex: 0 0 40%;
     max-width: 40%;    position: relative;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;">
-                                                                                <p style=" font-weight: 600; font-family: "Madeglin", sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                <p style=" font-weight: 600; font-family: Madeglin, sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                     <label
                                                                                         for="">Print/Color:</label>
                                                                                     {{ @$variation->printdesign->name }}
                                                                                 </p>
                                                                                 <img height="120"
-                                                                                     style=" font-weight: 600; font-family: "Madeglin", sans-serif;object-fit: cover;width: 100% !important;"
+                                                                                     style=" font-weight: 600; font-family: Madeglin, sans-serif;object-fit: cover;width: 100% !important;"
                                                                                      src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"/>
 
                                                                             </div>
                                                                             @foreach($variation->fabrics as $fabric)
-                                                                                <div style=" font-weight: 600; font-family: "Madeglin", sans-serif;flex: 0 0 40%;
+                                                                                <div style=" font-weight: 600; font-family: Madeglin, sans-serif;flex: 0 0 40%;
     max-width: 40%;    position: relative;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;">
-                                                                                    <p style=" font-weight: 600; font-family: "Madeglin", sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                    <p style=" font-weight: 600; font-family: Madeglin, sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                         <label
                                                                                             for="">Print/Color:</label>
                                                                                         {{ @$fabric->printdesign->name }}
                                                                                         <a href="{{ route('thread.removeFabric', $fabric->id) }}">
                                                                                             <strong
-                                                                                                style=" font-weight: 600; font-family: "Madeglin", sans-serif;float: right !important;">
+                                                                                                style=" font-weight: 600; font-family: Madeglin, sans-serif;float: right !important;">
                                                                                                 <i class="fa fa-times"></i>
                                                                                             </strong>
                                                                                         </a>
@@ -811,23 +811,23 @@
                                                                                     <img
                                                                                         src="{{ asset('storage/'.strtolower(@$fabric->printdesign->file)) }}"
                                                                                         height="120"
-                                                                                        style=" font-weight: 600; font-family: "Madeglin", sans-serif;object-fit: cover;width: 100% !important;">
+                                                                                        style=" font-weight: 600; font-family: Madeglin, sans-serif;object-fit: cover;width: 100% !important;">
                                                                                 </div>
                                                                             @endforeach
                                                                             @if($variation->trim->count() > 0)
                                                                                 @foreach($variation->trim as $trim)
                                                                                     <div
-                                                                                        style=" font-weight: 600; font-family: "Madeglin", sans-serif;flex: 0 0 40%;
+                                                                                        style=" font-weight: 600; font-family: Madeglin, sans-serif;flex: 0 0 40%;
     max-width: 40%;    position: relative;
     width: 100%;
     padding-right: 15px;
     padding-left: 15px;">
-                                                                                        <p style=" font-weight: 600; font-family: "Madeglin", sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                        <p style=" font-weight: 600; font-family: Madeglin, sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                             <label
                                                                                                 for="">Trim:</label>
                                                                                             <a href="{{ route('thread.removeVariationTrim',$trim->id) }}">
                                                                                                 <strong
-                                                                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif;float: right !important;">
+                                                                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif;float: right !important;">
                                                                                                     <i class="fa fa-times"></i>
                                                                                                 </strong>
                                                                                             </a>
@@ -835,8 +835,8 @@
                                                                                         <img
                                                                                             src="{{ asset(strtolower(@$trim->trim_image)) }}"
                                                                                             height="120"
-                                                                                            style=" font-weight: 600; font-family: "Madeglin", sans-serif;object-fit: cover;width: 100% !important;">
-                                                                                        <p style=" font-weight: 600; font-family: "Madeglin", sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                                            style=" font-weight: 600; font-family: Madeglin, sans-serif;object-fit: cover;width: 100% !important;">
+                                                                                        <p style=" font-weight: 600; font-family: Madeglin, sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                             <label for="">
                                                                                                 NOTES:{{@$trim->trim_note}}
                                                                                             </label>
@@ -847,31 +847,31 @@
                                                                         </div>
 
                                                                         <div
-                                                                            style=" font-weight: 600; font-family: "Madeglin", sans-serif;margin-bottom: 0.5rem !important; margin-top: 1rem !important;">
-                                                                            <p style=" font-weight: 600; font-family: "Madeglin", sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
+                                                                            style=" font-weight: 600; font-family: Madeglin, sans-serif;margin-bottom: 0.5rem !important; margin-top: 1rem !important;">
+                                                                            <p style=" font-weight: 600; font-family: Madeglin, sans-serif; margin-bottom: 0 !important; margin-top: 0.5rem !important;">
                                                                                 <label for="">Fabric:</label>
                                                                                 {{ @$variation->fabric->name }}
                                                                             </p>
-                                                                            <p style=" font-weight: 600; font-family: "Madeglin", sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                            <p style=" font-weight: 600; font-family: Madeglin, sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
                                                                                 <span for="">REG. Packs:</span>
                                                                                 {{ $variation->regular_qty }} |
                                                                                 <span
-                                                                                    style=" font-weight: 600; font-family: "Madeglin", sans-serif; color: #f36a5a;">
+                                                                                    style=" font-weight: 600; font-family: Madeglin, sans-serif; color: #f36a5a;">
                                                                                             Sku: {{ $variation->sku }}
                                                                                         </span>
                                                                             </p>
                                                                             @if($variation->plus_sku)
-                                                                                <p style=" font-weight: 600; font-family: "Madeglin", sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                                <p style=" font-weight: 600; font-family: Madeglin, sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
                                                                                             <span
                                                                                                 for="">PLUS Packs:</span>
                                                                                     {{ $variation->plus_qty }} |
                                                                                     <span
-                                                                                        style=" font-weight: 600; font-family: "Madeglin", sans-serif; color: #f36a5a;">
+                                                                                        style=" font-weight: 600; font-family: Madeglin, sans-serif; color: #f36a5a;">
                                                                                                 Plus Sku: {{ $variation->plus_sku }}
                                                                                             </span>
                                                                                 </p>
                                                                             @endif
-                                                                            <p style=" font-weight: 600; font-family: "Madeglin", sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
+                                                                            <p style=" font-weight: 600; font-family: Madeglin, sans-serif;color: #000000 !important; margin: 0 !important; text-transform: uppercase !important; font-size: 12px !important;">
                                                                                         <span
                                                                                             for="">Notes:</span> {{ $variation->notes ?? 'None' }}
                                                                             </p>
@@ -909,14 +909,14 @@
                                         <tbody>
                                         <tr>
                                             <td style="border: 1px solid #333;  padding:0px 10px;">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Material:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->material }}</span>
                                                 </p>
                                             </td>
                                             <td style="border: 1px solid #333;  padding:0px 10px;" rowspan="2">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Label:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; "> {{ @$thread->label }}</span>
@@ -925,7 +925,7 @@
                                         </tr>
                                         <tr>
                                             <td style="border: 1px solid #333;  padding:0px 10px;">
-                                                <p style="font-size: 12px !important; font-weight: 600; font-family: "Madeglin", sans-serif;margin: 0px;">
+                                                <p style="font-size: 12px !important; font-weight: 600; font-family: Madeglin, sans-serif;margin: 0px;">
                                                     Sleeve Length:
                                                     <span
                                                         style="color: #f36a5a; text-transform: uppercase !important; font-weight: 400; ">{{ @$thread->sleeve }}</span>
@@ -945,7 +945,7 @@
                                             style=" flex: 0 0 44.333333%; max-width: 44.333333%; position: relative; width: 100%; padding-right: 15px; padding-left: 15px;">
                                             <div
                                                 style=" min-height: 445px; background: #ffffff;  border: 1px solid #d0d0d0;  border-radius: 10px; padding-left: 1rem !important; padding-right: 1rem !important; ">
-                                                <h5 style=" margin-top: 0.5rem !important; font-family: "Madeglin", sans-serif;">
+                                                <h5 style=" margin-top: 0.5rem !important; font-family: Madeglin, sans-serif;">
 {{$loop->iteration}}.
                                                                             Variation: {{ $variation->name }}
                                             </h5>
@@ -953,7 +953,7 @@
                                                 style=" display: flex; flex-wrap:wrap;  margin-right: -15px; margin-left: -15px;">
                                                 <div
                                                     style=" min-height: 245px; flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: Madeglin, sans-serif;">
                                                         <label for="">Print/Color:</label>
 {{ @$variation->printdesign->name }}
                                             </p>
@@ -961,7 +961,7 @@
                                                  src="{{ asset('storage/'.strtolower(@$variation->printdesign->file)) }}"
                                                                                      height="120" width="120"
                                                                                      style="object-fit: cover">
-                                                                                <p style=" font-size: 12px !important; font-family: "Madeglin", sans-serif; margin:0px !important;">
+                                                                                <p style=" font-size: 12px !important; font-family: Madeglin, sans-serif; margin:0px !important;">
                                                                                     <span for="">Notes:</span>
                                                                                     {{ $variation->notes ?? 'None' }}
                                             </p>
@@ -970,7 +970,7 @@
                                             @foreach($variation->trim as $trim)
                                                 <div
                                                     style=" flex: 0 0 40%;max-width: 40%; position: relative; width: 100%; padding-right: 15px;  padding-left: 15px;">
-                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                    <p style="margin-top: 0.5rem !important;margin-bottom: 0 !important; font-family: Madeglin, sans-serif;">
                                                         <label for="">Trim:</label>
                                                     </p>
                                                     <img
@@ -978,7 +978,7 @@
                                                         src="{{ asset(strtolower(@$trim->trim_image)) }}"
                                                                                             height="120" width="100%"
                                                                                             style="object-fit: cover">
-                                                                                        <p style=" font-size: 12px !important; font-family: "Madeglin", sans-serif; margin:0px !important;">
+                                                                                        <p style=" font-size: 12px !important; font-family: Madeglin, sans-serif; margin:0px !important;">
                                                                                             <span for="">Notes:</span>
                                                                                             {{@$trim->trim_note}}
                                                     </p>
@@ -989,7 +989,7 @@
 
                                             <div
                                                 style="margin-bottom: 0.5rem !important; margin-top: 5px !important !important;">
-                                                <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: Madeglin, sans-serif;">
                                                     <span for="">REG. Packs:</span>
 {{ $variation->regular_qty }} |
                                                                                 <span
@@ -997,7 +997,7 @@
                                                     Sku: {{ $variation->sku }}
                                             </span>
                                                                         </p>
-                                                                        <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: "Madeglin", sans-serif;">
+                                                                        <p style="font-size: 10px !important; text-transform: uppercase !important; margin: 0 !important; font-family: Madeglin, sans-serif;">
 {{ $variation->plus_qty }} |
                                                                                 <span
                                                                                     class="widget-title-color-red">
@@ -1064,7 +1064,7 @@
                                 <td style="width: 8%;" colspan="1" rowspan="2" class="p-0">
                                     @if(!empty($options['data']['plus_cat']))
                                         <div class="regpack">
-                                            <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: "Madeglin", sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
+                                            <h6 style="font-size: 12px; margin:0px; background: #333;  font-family: Madeglin, sans-serif; color: #fff; padding: 4px; text-align: center; text-transform: uppercase; font-weight: 400;">
                                                 Plus Pack Size Run</h6>
                                             @if(isset($options['data']['plus_cat']->category_sizes))
                                                 @foreach($options['data']['plus_cat']->category_sizes as $key => $plus_cat)

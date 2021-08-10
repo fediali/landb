@@ -1876,12 +1876,12 @@ Bootstrap Datepicker
 .datepicker table td {
   color: #000000;
   font-weight: 300 !important;
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
 }
 
 .datepicker table th {
   color: #333333;
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
   font-weight: 400 !important;
 }
 
@@ -1983,11 +1983,11 @@ Bootstrap  Datetimepicker
 .datetimepicker table td {
   color: #000000;
   font-weight: 300 !important;
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
 }
 
 .datetimepicker table th {
-  font-family: "Madeglin", sans-serif;
+  font-family: Madeglin, sans-serif;
   font-weight: 400 !important;
 }
 

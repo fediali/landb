@@ -1,4 +1,4 @@
-<ul class="breadcrumb_wrap custom-breadcrumb mt-5" itemscope itemtype="http://schema.org/BreadcrumbList">
+<ul class="breadcrumb_wrap custom-breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
 <div class="container">
     @foreach ($crumbs = Theme::breadcrumb()->getCrumbs() as $i => $crumb)
         @if ($i != (count($crumbs) - 1))
