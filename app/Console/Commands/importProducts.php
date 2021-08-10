@@ -253,44 +253,47 @@ class importProducts extends Command
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                                 $sizeProd = Product::where('id', $prodId)->first();
 
+                                                if ($sizeProd) {
 
-                                                //$barcodeSize = get_barcode();
-                                                //$sizeProd->upc = $barcodeSize['upc'];
-                                                //$sizeProd->barcode = $barcodeSize['barcode'];
+                                                    //$barcodeSize = get_barcode();
+                                                    //$sizeProd->upc = $barcodeSize['upc'];
+                                                    //$sizeProd->barcode = $barcodeSize['barcode'];
 
 
-                                                //TODO:: get attribute slug from id($getSizeAttr) then match it with exploded form from hw table if match then get upc and save it to our db.
-                                                $getAttrSlug = ProductAttribute::where('id', $getSizeAttr)->value('slug');
-                                                if ($getAttrSlug) {
-                                                    $getAttrSlug = str_replace(' ', '', $getAttrSlug);
-                                                    $get_HW_UPCs = DB::table('hw_hw_upc_extra')->where('product_id', $row['product_id'])->get();
-                                                    foreach ($get_HW_UPCs as $get_HW_UPC) {
-                                                        $explode = explode('|', $get_HW_UPC->description);
-                                                        if (isset($explode[1])) {
-                                                            $explode[1] = str_replace(' ', '', strtolower($explode[1]));
-                                                            if ($explode[1] == $getAttrSlug) {
-                                                                $sizeProd->upc = $get_HW_UPC->upc;
+                                                    //TODO:: get attribute slug from id($getSizeAttr) then match it with exploded form from hw table if match then get upc and save it to our db.
+                                                    $getAttrSlug = ProductAttribute::where('id', $getSizeAttr)->value('slug');
+                                                    if ($getAttrSlug) {
+                                                        $getAttrSlug = str_replace(' ', '', $getAttrSlug);
+                                                        $get_HW_UPCs = DB::table('hw_hw_upc_extra')->where('product_id', $row['product_id'])->get();
+                                                        foreach ($get_HW_UPCs as $get_HW_UPC) {
+                                                            $explode = explode('|', $get_HW_UPC->description);
+                                                            if (isset($explode[1])) {
+                                                                $explode[1] = str_replace(' ', '', strtolower($explode[1]));
+                                                                if ($explode[1] == $getAttrSlug) {
+                                                                    $sizeProd->upc = $get_HW_UPC->upc;
+                                                                }
                                                             }
                                                         }
                                                     }
+
+
+                                                    $sizeProd->private_label = $product->private_label;
+                                                    $sizeProd->restock = $product->restock;
+                                                    $sizeProd->new_label = $product->new_label;
+                                                    $sizeProd->usa_made = $product->usa_made;
+                                                    $sizeProd->ptype = $product->ptype;
+                                                    $sizeProd->save();
+
+                                                    $logParam = [
+                                                        'parent_product_id' => $product->id,
+                                                        'product_id' => $prodId,
+                                                        'sku' => $sizeProd->sku,
+                                                        'created_by' => 1,
+                                                        'reference' => InventoryHistory::PROD_PUSH_ECOM
+                                                    ];
+                                                    log_product_history($logParam, false);
+
                                                 }
-
-
-                                                $sizeProd->private_label = $product->private_label;
-                                                $sizeProd->restock = $product->restock;
-                                                $sizeProd->new_label = $product->new_label;
-                                                $sizeProd->usa_made = $product->usa_made;
-                                                $sizeProd->ptype = $product->ptype;
-                                                $sizeProd->save();
-
-                                                $logParam = [
-                                                    'parent_product_id' => $product->id,
-                                                    'product_id' => $prodId,
-                                                    'sku' => $sizeProd->sku,
-                                                    'created_by' => 1,
-                                                    'reference' => InventoryHistory::PROD_PUSH_ECOM
-                                                ];
-                                                log_product_history($logParam, false);
 
                                             }
                                         }
