@@ -117,10 +117,10 @@ class ProductsRepository
                 $query->where($this->model->getTable() . '.creation_date', '>=', $date);
             })
             ->when(!is_null($tag_id), function ($query) use ($tag_id) {
-                $query->join('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('tag_id', $tag_id);
+                $query->join('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('ptag.tag_id', $tag_id);
             })
             ->when(!$pre_order, function ($query) use ($pre_order_id) {
-                $query->leftJoin('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('ptag.tag_id', '=', $pre_order_id);
+                $query->leftJoin('ec_product_tag_product as ptag1', 'ptag1.product_id', 'ec_products.id')->where('ptag1.tag_id', '=', $pre_order_id);
             })
             ->when(!is_null($price_range), function ($query) use ($min_range, $max_range) {
                 if (!is_null($min_range)) {
