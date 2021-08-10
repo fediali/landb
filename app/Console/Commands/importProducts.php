@@ -203,10 +203,13 @@ class importProducts extends Command
                                         $packAllProd = Product::where('id', $prodId)->first();
 //no barcode image need
                                         try {
-                                            $barcodePackAll = $row['upc_pack'];
+                                            $barcodePackAll =$row['upc_pack'];
                                             $packAllProd->upc = $barcodePackAll['upc'];
                                             $packAllProd->barcode = $barcodePackAll['barcode'];
-                                        } catch (\ErrorException $exception) {}
+                                        } catch (\ErrorException $exception) {
+
+
+                                        }
 
                                         //change
                                         $packAllProd->private_label = $product->private_label;
