@@ -101,7 +101,12 @@ class ProductTable extends TableAbstract
             ->editColumn('price', function ($item) {
                 $price = format_price($item->front_sale_price);
                 if ($item->prod_pieces) {
-                    $price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';
+                    /*$price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';*/
+                    $price .= '<form class="d-flex" action="' . route('products.update-product-price', $item->id) . '" method="POST">
+                                <input type="hidden" name="_token" value="' . @csrf_token() . '">
+                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" name="product_price" value="' . ($item->price / $item->prod_pieces) . '" required>
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
+                             </form>';
                 }
 
                 if ($item->front_sale_price != $item->price) {

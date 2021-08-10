@@ -1106,6 +1106,18 @@ class ProductController extends BaseController
         return $response->setMessage(trans('core/base::notices.update_success_message'));
     }
 
+    public function updateProductPrice($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->price = $request->input('product_price', 0) * $product->prod_pieces;
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['price' => $product->price]);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
     public function addCustomerProductDemandQty($id, Request $request, BaseHttpResponse $response)
     {
         $product = $this->productRepository->findOrFail($id);
