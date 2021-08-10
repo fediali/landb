@@ -18,6 +18,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Slug\Models\Slug;
 use File;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use SlugHelper;
@@ -70,7 +71,7 @@ class importProducts extends Command
         /*$file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
-        $file = File::get(public_path('lnb-products-all.json'));
+        $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {
@@ -125,16 +126,22 @@ class importProducts extends Command
                     }
                     // $product->sale_price = $variation->cost + $extras;
 
-                    if ($row['image_path']) {
-                        $product->images = json_encode([$row['image_path']]);
+                    if ($row['image_id'] && $row['image_path']) {
+                        $idLen = getDigitsLength($row['image_id']);
+                        if ($idLen <= 5) {
+                            $folder = substr($row['image_id'], 0, 2);
+                        } elseif ($idLen >= 6) {
+                            $folder = substr($row['image_id'], 0, 3);
+                        }
+                        $product->images = json_encode(['product-images/detailed/'.$folder.'/'.$row['image_path']]);
                     }
                     $product->tax_id = 1;
 
                     if ($row['upc_pack']) {
                         $product->upc = $row['upc_pack'];
-//                        try {
-//                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
-//                        } catch (\ErrorException $exception) {}
+                        /*try {
+                            $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
+                        } catch (\ErrorException $exception) {}*/
                     }
 
                     if ($row['restock']) {
@@ -201,15 +208,13 @@ class importProducts extends Command
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                         $packAllProd = Product::where('id', $prodId)->first();
-//no barcode image need
+                                        //no barcode image need
                                         try {
-                                            $barcodePackAll =$row['upc_pack'];
-                                            $packAllProd->upc = $barcodePackAll['upc'];
-                                            $packAllProd->barcode = $barcodePackAll['barcode'];
-                                        } catch (\ErrorException $exception) {
-
-
-                                        }
+                                            //$barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                            //$packAllProd->upc = $barcodePackAll['upc'];
+                                            //$packAllProd->barcode = $barcodePackAll['barcode'];
+                                            $packAllProd->upc = $row['upc_pack'];
+                                        } catch (\ErrorException $exception) {}
 
                                         //change
                                         $packAllProd->private_label = $product->private_label;
@@ -217,6 +222,8 @@ class importProducts extends Command
                                         $packAllProd->new_label = $product->new_label;
                                         $packAllProd->usa_made = $product->usa_made;
                                         $packAllProd->ptype = $product->ptype;
+                                        $packAllProd->prod_pieces = $product->prod_pieces;
+                                        $packAllProd->sizes = $product->sizes;
                                         $packAllProd->save();
 
                                         $logParam = [
@@ -246,9 +253,29 @@ class importProducts extends Command
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
                                                 $sizeProd = Product::where('id', $prodId)->first();
 
+
                                                 //$barcodeSize = get_barcode();
                                                 //$sizeProd->upc = $barcodeSize['upc'];
                                                 //$sizeProd->barcode = $barcodeSize['barcode'];
+
+
+                                                //TODO:: get attribute slug from id($getSizeAttr) then match it with exploded form from hw table if match then get upc and save it to our db.
+                                                $getAttrSlug = ProductAttribute::where('id', $getSizeAttr)->value('slug');
+                                                if ($getAttrSlug) {
+                                                    $getAttrSlug = str_replace(' ', '', $getAttrSlug);
+                                                    $get_HW_UPCs = DB::table('hw_hw_upc_extra')->where('product_id', $row['product_id'])->get();
+                                                    foreach ($get_HW_UPCs as $get_HW_UPC) {
+                                                        $explode = explode('|', $get_HW_UPC->description);
+                                                        if (isset($explode[1])) {
+                                                            $explode[1] = str_replace(' ', '', strtolower($explode[1]));
+                                                            if ($explode[1] == $getAttrSlug) {
+                                                                $sizeProd->upc = $get_HW_UPC->upc;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+
                                                 $sizeProd->private_label = $product->private_label;
                                                 $sizeProd->restock = $product->restock;
                                                 $sizeProd->new_label = $product->new_label;
