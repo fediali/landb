@@ -157,6 +157,7 @@ class ProductsController extends Controller
               'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate'  => true, 'array' => true])
           ];
         }
+
         return Theme::scope('products', $data)->render();
       }else{
         return redirect()->route('public.products');

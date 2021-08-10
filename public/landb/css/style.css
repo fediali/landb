@@ -921,14 +921,14 @@ section.parallax_video video {
 
 .breadcrumb_wrap {
     background: #F3F2F5;
-    height: 170px;
+    height: 100px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 5px !important;
 }
 
 .breadcrumb {
@@ -4564,4 +4564,29 @@ html {
 
 .tags a {
     display: inline-block !important;
+}
+
+.custom-breadcrumb li {
+    display: contents !important;
+    font-size: 1rem !important;
+}
+
+.breadcrumb-a {
+    color: #000 !important;
+}
+
+.breadcrumb-item-act::before {
+    display: inline-block;
+    padding-right: .5rem;
+    color: #6c757d;
+    content: "/";
+}
+.breadcrumb-item-act {
+    color: #6c757d;
+}
+
+.ty-mainbox-special-title {
+    font-size: 24px;
+    font-family: "Raleway", sans-serif !important;
+    line-height: 40px;
 }
