@@ -42,7 +42,7 @@ class sendSms extends Command
 //        TextmessagesInterface $textmessageRepository
     )
     {
-//        parent::__construct();
+        parent::__construct();
 //        $this->chatingRepository = $chatingRepository;
 //        $this->customerRepository = $customerRepository;
 //        $this->textmessageRepository = $textmessageRepository;

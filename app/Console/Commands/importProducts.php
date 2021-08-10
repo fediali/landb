@@ -54,7 +54,7 @@ class importProducts extends Command
 //        BaseHttpResponse $response
     )
     {
-//        parent::__construct();
+        parent::__construct();
 //        $this->response = $response;
 //        $this->productVariation = $productVariation;
 //        $this->productCategoryRepository = $productCategoryRepository;
