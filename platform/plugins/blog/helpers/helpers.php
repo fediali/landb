@@ -689,6 +689,12 @@ if (!function_exists('parse_date')) {
     }
 }
 
+if (!function_exists('getDigitsLength')) {
+    function getDigitsLength($num){
+        return (int) (log($num, 10) + 1);
+    }
+}
+
 if (!function_exists('get_barcode')) {
     function get_barcode()
     {
