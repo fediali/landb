@@ -501,7 +501,23 @@
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Shipping Address</p>
                         <div class="col-lg-12">
-                            <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
+                            @isset($user_info->shippingAddress[0])
+                                <span class="note-product-name">
+                                    <p>
+                                        {{ @$user_info->shippingAddress[0]->name.', ' }}
+                                        {{ @$user_info->shippingAddress[0]->address.', ' }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->shippingAddress[0]->city.' ,'.@$user_info->shippingAddress[0]->state.' ,'.@$user_info->shippingAddress[0]->country. ' ,'. @$user_info->shippingAddress[0]->zip_code }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->shippingAddress[0]->phone }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->shippingAddress[0]->email }}
+                                    </p>
+                                </span>
+                            @endisset
                         </div>
                     </div>
                     <div class="col-lg-5 col-5 text-right mt-5">
@@ -517,7 +533,23 @@
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Billing Address</p>
                         <div class="col-lg-12">
-                            <p class="note-product-name">Ivory Short Dolman Sleeve Top Plus Size</p>
+                            @isset($user_info->billingAddress[0])
+                                <span class="note-product-name">
+                                    <p>
+                                        {{ @$user_info->billingAddress[0]->name.', ' }}
+                                        {{ @$user_info->billingAddress[0]->address.', ' }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->billingAddress[0]->city.' ,'.@$user_info->billingAddress[0]->state.' ,'.@$user_info->billingAddress[0]->country. ' ,'. @$user_info->billingAddress[0]->zip_code }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->billingAddress[0]->phone }}
+                                    </p>
+                                    <p>
+                                        {{ @$user_info->billingAddress[0]->email }}
+                                    </p>
+                                </span>
+                            @endisset
                         </div>
                     </div>
                     <div class="col-lg-5 col-5 text-right mt-5">
