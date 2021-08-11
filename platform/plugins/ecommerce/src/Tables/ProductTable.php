@@ -102,11 +102,16 @@ class ProductTable extends TableAbstract
 //                $price = format_price($item->front_sale_price);
 //                if ($item->prod_pieces) {
                     /*$price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';*/
-                    $price = '<form class="d-flex" action="' . route('products.update-product-price', $item->id) . '" method="POST">
+                    $price = '<form id="upd-price-form-'.$item->id.'" class="d-flex" action="' . route('products.update-product-price', $item->id) . '" method="POST">
                                 <input type="hidden" name="_token" value="' . @csrf_token() . '">
-                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" name="product_price" value="' . ($item->price / $item->prod_pieces) . '" required>
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>
-                             </form>';
+                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" id="prod-price-tbl-'.$item->id.'" name="product_price" value="' .($item->prod_pieces ? ($item->price / $item->prod_pieces) : $item->price). '" required>
+                                <!--<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>-->
+                             </form><script>$("input#prod-price-tbl-'.$item->id.'").focusout(function() { $.ajax({
+            type: "POST",
+            url: "' . route('products.update-product-price', $item->id) . '",
+            data: {product_price: $("input#prod-price-tbl-'.$item->id.'").val()},
+            contentType: "application/x-www-form-urlencoded"
+        }) });</script>';
 //                }
                 $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
                 if ($item->front_sale_price != $item->price) {
