@@ -18,9 +18,9 @@
             </p>
 
         </div>
-            
+
         </div>
-        <div class="row mt-5"> 
+        <div class="row mt-5">
             <div class="col-lg-4">
                 <div style="background: #eaeaea;" class="p-3">
                 <h3>
@@ -31,7 +31,7 @@
                     12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
                 </p>
                 <p>
-                    97251235552 
+                    97251235552
                 </p>
                 <p>
                     customerservice@landapparel.com
@@ -95,7 +95,7 @@
                     12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
                 </p>
                 <p>
-                    97251235552 
+                    97251235552
                 </p>
                 <p>
                     customerservice@landapparel.com
@@ -122,7 +122,7 @@
                 <p class="cart-head">Price</p>
 
             </div>
-           
+
             <div class="col-lg-1 mt-2 mb-3 text-center">
                 <p class="cart-head"> Discount</p>
 
@@ -150,7 +150,7 @@
 
                         @endphp
                         @if($variation)
-                            <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
+                            <p class="cart-product-size">SIZE: {{ $order_product->product->sizes }}</p>
                         @endif
                     </div>
                 </div>
@@ -213,6 +213,6 @@
             <div class="col-lg-12 col-12">
                 <p class="mt-2"> For return policy please visit landapparel.com/faq.html
                 </p>
-            </div> 
+            </div>
         </div>
     </section>
