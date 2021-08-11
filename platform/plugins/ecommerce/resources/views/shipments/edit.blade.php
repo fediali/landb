@@ -68,7 +68,7 @@
                                                         <div class="flexbox-auto-50">
                                                             <div class="wrap-img"><img
                                                                     class="thumb-image thumb-image-cartorderlist"
-                                                                    src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"
+                                                                    src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
                                                                     alt="{{ $product->name }}"/></div>
                                                         </div>
                                                         <div class="flexbox-content">
