@@ -48,7 +48,11 @@ class importProducts extends Command
      *
      * @return void
      */
-    public function __construct(ProductVariationInterface $productVariation, ProductCategoryInterface $productCategoryRepository, BaseHttpResponse $response)
+    public function __construct(
+        ProductVariationInterface $productVariation,
+        ProductCategoryInterface $productCategoryRepository,
+        BaseHttpResponse $response
+    )
     {
         parent::__construct();
         $this->response = $response;

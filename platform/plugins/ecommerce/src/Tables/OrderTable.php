@@ -73,7 +73,12 @@ class OrderTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })->editColumn('id', function ($item) {
-                return $html = '<div class="d-flex"><a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '</div>');
+                $html = '<a href="' . route('orders.edit', $item->id) . '" data-toggle="tooltip">' . $item->id . '</a>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '');
+                if ($item->salesperson) {
+                    $html .= ' <span class="text-success">(' . $item->salesperson->first_name . ')</span>';
+                }
+
+                return $html;
 
             })->editColumn('user_id', function ($item) {
                 // return $item->user->name ?? $item->address->name;
@@ -83,10 +88,6 @@ class OrderTable extends TableAbstract
 
 
                     $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>';
-                    if ($item->salesperson) {
-                        $customer .= ' <span class="text-success">(' . $item->salesperson->getFullName()   . ')</span>';
-                    }
-
 
                     return $customer;
 
@@ -270,11 +271,7 @@ class OrderTable extends TableAbstract
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'user_id'        => [
-                'name'  => 'ec_orders.user_id',
-                'title' => trans('plugins/ecommerce::order.customer_label'),
-                'class' => 'text-left',
-            ],
+
 //            'salesperson_id' => [
 //                'name'  => 'ec_orders.salesperson_id',
 //                'title' => 'Salesperson',
@@ -296,21 +293,28 @@ class OrderTable extends TableAbstract
 //        }
 
         $columns += [
-            'shipping_amount' => [
-                'name'  => 'ec_orders.shipping_amount',
-                'title' => trans('plugins/ecommerce::order.shipping_amount'),
-                'class' => 'text-center',
-            ],
+//            'shipping_amount' => [
+//                'name'  => 'ec_orders.shipping_amount',
+//                'title' => trans('plugins/ecommerce::order.shipping_amount'),
+//                'class' => 'text-center',
+//            ],
             'payment_method'  => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('plugins/ecommerce::order.payment_method'),
                 'class' => 'text-center',
             ],
-            'payment_status'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_status_label'),
-                'class' => 'text-center',
+
+            'user_id'        => [
+                'name'  => 'ec_orders.user_id',
+                'title' => trans('plugins/ecommerce::order.customer_label'),
+                'class' => 'text-left',
             ],
+
+//            'payment_status'  => [
+//                'name'  => 'ec_orders.id',
+//                'title' => trans('plugins/ecommerce::order.payment_status_label'),
+//                'class' => 'text-center',
+//            ],
             'status'          => [
                 'name'  => 'ec_orders.status',
                 'title' => trans('core/base::tables.status'),

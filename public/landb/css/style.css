@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family="Madeglin":wght@300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family="Madeglin":wght@300;400;500;600;700&display=swap");
 @import url(//db.onlinewebfonts.com/c/4c4c08af466e9ad071b6d69cf44093df?family=Saol+Display+Regular);
 
 html {
@@ -9,7 +9,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: "Raleway", sans-serif;
+    font-family: ""Madeglin"", sans-serif;
     overflow-x: hidden;
 }
 
@@ -46,11 +46,11 @@ button:focus {
 }
 
 .topbar p {
-    font-family: Roboto;
+    font-family: "Madeglin";
     font-size: 12px;
     text-align: center;
     color: #ffffff;
-    font-family: "Roboto", sans-serif;
+    font-family: ""Madeglin"", sans-serif;
 }
 
 .topnav {
@@ -181,7 +181,7 @@ nav.navbar {
     animation-name: fadeInUp;
 }
 
-#menu ul:hover a {
+#menu li:hover  {
     opacity: 0.5;
 }
 
@@ -626,7 +626,7 @@ a.lookbook_btn:hover:after {
 }
 
 .caro_text h5 {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-weight: 600;
     font-size: 10px;
     text-transform: uppercase;
@@ -1513,7 +1513,7 @@ section.parallax_video video {
 }
 
 .detail-h1 {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 32px;
@@ -1531,7 +1531,7 @@ section.parallax_video video {
 }
 
 .short-description {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -1541,7 +1541,7 @@ section.parallax_video video {
 }
 
 .detail-size {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -1550,7 +1550,7 @@ section.parallax_video video {
 }
 
 .detail-size-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 15px;
@@ -1559,7 +1559,7 @@ section.parallax_video video {
 }
 
 .detail-size-select {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 800;
     font-size: 14px;
@@ -1578,7 +1578,7 @@ section.parallax_video video {
 }
 
 .detail-color-text {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -1587,7 +1587,7 @@ section.parallax_video video {
 }
 
 .detail-color-text-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 15px;
@@ -1609,7 +1609,7 @@ section.parallax_video video {
 }
 
 .detail-basic-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1626,7 +1626,7 @@ section.parallax_video video {
 }
 
 .detail-category-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1643,7 +1643,7 @@ section.parallax_video video {
 }
 
 .detail-tag-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1652,7 +1652,7 @@ section.parallax_video video {
 }
 
 .share-text {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1698,7 +1698,7 @@ input.qtyminus {
 }
 
 .cart-btn {
-    font-family: Roboto;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1719,7 +1719,7 @@ input.qtyminus {
 }
 
 .border-btn {
-    font-family: Roboto;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1745,7 +1745,7 @@ input.qtyminus {
  
 
 .detail-subheading {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 37px;
@@ -1758,7 +1758,7 @@ input.qtyminus {
 }
 
 .tabs-product a {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -1772,7 +1772,7 @@ input.qtyminus {
 }
 
 .description-p {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -1781,7 +1781,7 @@ input.qtyminus {
 }
 
 .description-heading {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -1794,7 +1794,7 @@ input.qtyminus {
 }
 
 .detail-text {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -1803,7 +1803,7 @@ input.qtyminus {
 }
 
 .detail-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -1825,7 +1825,7 @@ input.qtyminus {
 }
 
 .review-text {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -1834,7 +1834,7 @@ input.qtyminus {
 }
 
 .review-reply {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
@@ -2208,7 +2208,7 @@ input.qtyminus {
 }
 
 .coupon-txt {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
@@ -2222,7 +2222,7 @@ input.qtyminus {
 }
 
 .total-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 15.5973px;
@@ -2231,7 +2231,7 @@ input.qtyminus {
 }
 
 .total-para {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 16.7971px;
@@ -2240,7 +2240,7 @@ input.qtyminus {
 }
 
 .final-total-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -2249,7 +2249,7 @@ input.qtyminus {
 }
 
 .final-total-para {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 22px;
@@ -2258,7 +2258,7 @@ input.qtyminus {
 }
 
 .cart-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 19.1966px;
@@ -2267,7 +2267,7 @@ input.qtyminus {
 }
 
 .cart-product-name {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -2276,7 +2276,7 @@ input.qtyminus {
 }
 
 .cart-product-code {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -2285,7 +2285,7 @@ input.qtyminus {
 }
 
 .cart-product-size {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
@@ -2300,7 +2300,7 @@ input.qtyminus {
 /* PROFILE CSS */
 
 .profile-light-txt {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2309,7 +2309,7 @@ input.qtyminus {
 }
 
 .textbox-label {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2334,7 +2334,7 @@ input.qtyminus {
 }
 
 .refer-link-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -2343,7 +2343,7 @@ input.qtyminus {
 }
 
 .refer-link-para {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -2356,7 +2356,7 @@ input.qtyminus {
     padding: 10px;
     width: 100%;
     border: none;
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 12px;
@@ -2364,7 +2364,7 @@ input.qtyminus {
 }
 
 .label-setdefault {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2383,7 +2383,7 @@ input.qtyminus {
 
 
 /* .Resources {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2411,7 +2411,7 @@ input[type="radio"] {
 }
 
 .texas-heading {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 22px;
@@ -2424,7 +2424,7 @@ input[type="radio"] {
 }
 
 .tax-address {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 16.4889px;
@@ -2433,7 +2433,7 @@ input[type="radio"] {
 }
 
 .tax-label {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2446,7 +2446,7 @@ input[type="radio"] {
 }
 
 .cert-label {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -2472,7 +2472,7 @@ input[type="radio"]:checked {
 /* CHECKOUT CSS */
 
 .cout-note {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -2481,7 +2481,7 @@ input[type="radio"]:checked {
 }
 
 .cout-note-para {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -2490,7 +2490,7 @@ input[type="radio"]:checked {
 }
 
 .note-product {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 16.7708px;
@@ -2499,7 +2499,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-name {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -2508,7 +2508,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-price {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: normal;
     font-size: 14.8542px;
@@ -2517,7 +2517,7 @@ input[type="radio"]:checked {
 }
 
 .note-product-size {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 11.6128px;
@@ -2532,7 +2532,7 @@ input[type="radio"]:checked {
 /* STORE LOCATOR CSS */
 
 .store-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: bold;
     font-size: 32px;
@@ -2563,7 +2563,7 @@ form.example button {
 }
 
 .search-store {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 500;
     font-size: 13.8584px;
@@ -2919,7 +2919,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 /* LOGIN CSS START */
 
 .signin-head {
-    font-family: Raleway;
+    font-family: "Madeglin";
     font-style: normal;
     font-weight: 600;
     font-size: 24px;
@@ -3465,6 +3465,9 @@ table.shop_table tr th {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .shoplisting .listbox .img {
+        height: auto !important;
+    }
 .tabcontent {
     width: 100% !important;
 }
@@ -4003,6 +4006,10 @@ input:checked + .slider:before {
 header {
     background-color: #f6f5f7;
     padding-bottom: 20px !important;
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    width: 100%;
 }
 
 .navbar-parent li {
@@ -4398,7 +4405,7 @@ html {
   }
 
   .font-madeg {
-    font-family: "Madeglin" !important; 
+    font-family: "Madeglin"; 
   }
 
   .font-boulden {
@@ -4587,6 +4594,32 @@ html {
 
 .ty-mainbox-special-title {
     font-size: 24px;
-    font-family: "Raleway", sans-serif !important;
+    font-family: ""Madeglin"", sans-serif !important;
     line-height: 40px;
+}
+
+
+html { scroll-behavior: smooth;}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 40px;
+  width  : 40px;
+  height: 40px;
+}
+
+#myBtn i {
+    margin-top: -4px;
+    display: block;
 }

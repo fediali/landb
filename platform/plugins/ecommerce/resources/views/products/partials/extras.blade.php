@@ -15,7 +15,7 @@
             @endphp
 
             <input type="hidden" name="color_products[]"
-                   value="@if ($product->color_products) {{implode(',', $colors) }} @endif"/>
+                   value="@if ($product) {{implode(',', $colors) }} @endif"/>
             <div class="box-search-advance product">
                 <div>
                     <input type="text" class="next-input textbox-advancesearch"

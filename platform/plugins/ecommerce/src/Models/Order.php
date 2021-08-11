@@ -62,8 +62,8 @@ class Order extends BaseModel
     const IMPORT = 'import';
 
     public static $PLATFORMS = [
-        self::ONLINE    => 'Online Order',
-        self::SALES => 'Sales Rep\'s Order',
+        self::ONLINE => 'Online Order',
+        self::SALES  => 'Sales Rep\'s Order',
         self::MOBILE => 'Mobile Order',
         self::IMPORT => 'Imported Order',
     ];
@@ -169,12 +169,12 @@ class Order extends BaseModel
 
     public function shippingAddress()
     {
-      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'shipping');
+        return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'shipping');
     }
 
     public function billingAddress()
     {
-      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'billing');
+        return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'billing');
     }
 
     /**
@@ -182,6 +182,7 @@ class Order extends BaseModel
      */
     public function products()
     {
+
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
     }
 
@@ -260,14 +261,15 @@ class Order extends BaseModel
         return $this->belongsTo(User::class, 'salesperson_id');
     }
 
-    public function previousOrder(){
-      return Order::where('id', '<', $this->id)->max('id');
+    public function previousOrder()
+    {
+        return Order::where('id', '<', $this->id)->max('id');
     }
 
-    public function nextOrder(){
-      return Order::where('id', '>', $this->id)->min('id');
+    public function nextOrder()
+    {
+        return Order::where('id', '>', $this->id)->min('id');
     }
-
 
 
 }

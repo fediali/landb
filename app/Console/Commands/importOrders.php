@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Address;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderAddress;
@@ -48,11 +49,100 @@ class importOrders extends Command
 //        , function ($orders) {
         foreach ($orders as $order) {
             echo $order->order_id;
+            if ($order->status == 'C') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'O') {
+                $order->status = 'processing';
+            } else if ($order->status == 'F') {
+                $order->status = 'in store complete';
+            } else if ($order->status == 'D') {
+                $order->status = 'declined';
+            } else if ($order->status == 'I') {
+                $order->status = 'cancelled';
+            } else if ($order->status == 'Y') {
+                $order->status = 'pick up';
+            } else if ($order->status == 'A') {
+                $order->status = 'tradeshow';
+            } else if ($order->status == 'E') {
+                $order->status = 'exchange';
+            } else if ($order->status == 'G') {
+                $order->status = 'awaiting payment';
+            } else if ($order->status == 'H') {
+                $order->status = 'net accounts';
+            } else if ($order->status == 'J') {
+                $order->status = 'fashiongo complete';
+            } else if ($order->status == 'K') {
+                $order->status = 'lashowroom complete';
+            } else if ($order->status == 'L') {
+                $order->status = 'online pre-order';
+            } else if ($order->status == 'Q') {
+                $order->status = 'paid in full';
+            } else if ($order->status == 'R') {
+                $order->status = 'orangeshine complete';
+            } else if ($order->status == 'S') {
+                $order->status = 'atlanta pre-order';
+            } else if ($order->status == 'U') {
+                $order->status = 'dallas pre-order';
+            } else if ($order->status == 'V') {
+                $order->status = 'pita va';
+            } else if ($order->status == 'W') {
+                $order->status = 'pita personal';
+            } else if ($order->status == 'X') {
+                $order->status = 'store credit';
+            } else if ($order->status == 'T') {
+                $order->status = 'send to model';
+            } else if ($order->status == 'AA') {
+                $order->status = 'las vegas pre-order';
+            } else if ($order->status == 'AB') {
+                $order->status = 'on hold';
+            } else if ($order->status == 'AC') {
+                $order->status = 'model purchase';
+            } else if ($order->status == 'AE') {
+                $order->status = 'picking complete';
+            } else if ($order->status == 'AF') {
+                $order->status = 'dallas kids pre-order';
+            } else if ($order->status == 'AG') {
+                $order->status = 'showroom';
+            } else if ($order->status == 'AH') {
+                $order->status = 'refund';
+            } else if ($order->status == 'AD') {
+                $order->status = 'need tax ID';
+            } else if ($order->status == 'AI') {
+                $order->status = 'factory';
+            } else if ($order->status == 'AJ') {
+                $order->status = 'ready 2 ship';
+            } else if ($order->status == 'AM') {
+                $order->status = 'lashowroom processing';
+            } else if ($order->status == 'AN') {
+                $order->status = 'orangeshine processing';
+            } else if ($order->status == 'AO') {
+                $order->status = 'pending shipment';
+            } else if ($order->status == 'AP') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'M') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AQ') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AR') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AS') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AT') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AU') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AV') {
+                $order->status = 'shipping complete';
+            } else if ($order->status == 'AW') {
+                $order->status = 'shipping complete';
+            } else {
+                $order->status = 'Failed Preauth';
+            }
             $orderData = [
                 'id'              => $order->order_id,
                 'user_id'         => $order->user_id,
                 'status'          => $order->status,
-                'order_type'      => Order::NORMAL,
+                'order_type'      => ($order->status == 'B') ? Order::PRE_ORDER: Order::NORMAL,
                 'platform'        => $order->location ? $order->location : ($order->online_order ? 'online' : 'backorder'),
                 'amount'          => $order->total,
                 'currency_id'     => 1,

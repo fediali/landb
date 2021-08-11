@@ -1,3 +1,4 @@
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angle-up"></i></button>
 <div class="banner">
     <!-- <img src="landb/img/Banner.png" alt=""> -->
     <div id="demo" class="carousel slide mainslide" data-ride="carousel">
