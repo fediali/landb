@@ -118,23 +118,23 @@ class importOrders extends Command
             } else if ($order->status == 'AO') {
                 $order->status = 'pending shipment';
             } else if ($order->status == 'AP') {
-                $order->status = 'shipping complete';
+                $order->status = 'Western MKT Pre Order';
             } else if ($order->status == 'M') {
-                $order->status = 'shipping complete';
+                $order->status = 'Orangeshine Pre-Order';
             } else if ($order->status == 'AQ') {
-                $order->status = 'shipping complete';
+                $order->status = 'LA Showroom Pre-Order';
             } else if ($order->status == 'AR') {
-                $order->status = 'shipping complete';
+                $order->status = 'FashionGO Pre-Order';
             } else if ($order->status == 'AS') {
-                $order->status = 'shipping complete';
+                $order->status = 'Sample Sent';
             } else if ($order->status == 'AT') {
-                $order->status = 'shipping complete';
+                $order->status = 'Pickup & Process';
             } else if ($order->status == 'AU') {
-                $order->status = 'shipping complete';
+                $order->status = 'Donation / Gift';
             } else if ($order->status == 'AV') {
-                $order->status = 'shipping complete';
+                $order->status = 'Delinquent';
             } else if ($order->status == 'AW') {
-                $order->status = 'shipping complete';
+                $order->status = 'Ready to Charge';
             } else {
                 $order->status = 'Failed Preauth';
             }
