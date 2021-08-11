@@ -39,13 +39,14 @@
                     <div class="ml-3">
                         <p class="cart-product-name mt-2 mb-2">{{ $cartItem->product->name }}</p>
                         <p class="cart-product-code mb-2">CODE: {{ $cartItem->product->sku }}</p>
-                        @php
+                        {{--@php
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $cartItem->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
 
                         @endphp
                         @if($variation)
                             <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
-                        @endif
+                        @endif--}}
+                        <p class="cart-product-size">SIZE: {{ !empty($cartItem->product->sizes) ? $cartItem->product->sizes : 'NaN' }}</p>
                     </div>
                 </div>
             </div>

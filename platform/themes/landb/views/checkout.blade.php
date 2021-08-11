@@ -239,7 +239,7 @@
                                             <input class="input-textbox" readonly type="text"
                                                    value="{{ @$user_info->shippingAddress[0]->zip_code }}"/>
                                         </div>
-                                        <div class="col-lg-12">
+                                        {{--<div class="col-lg-12">
                                             <form action="">
                                                 <input class="ml-2" type="checkbox" name="Western" value="Western">
                                                 <label class="ml-2 label-setdefault" for="vehicle1"> Set as
@@ -260,7 +260,7 @@
                                         </div>
                                         <div class="col-lg-3 mt-5">
                                             <a href="#" class=" btn cart-btn w-100">Continue</a>
-                                        </div>
+                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +350,7 @@
                                             <input class="input-textbox" readonly type="text"
                                                    value="{{ @$user_info->billingAddress[0]->zip_code }}"/>
                                         </div>
-                                        <div class="col-lg-12">
+                                        {{--<div class="col-lg-12">
                                             <p class="textbox-label">Customer Type</p>
                                             <form action="">
                                                 <input class="ml-2" type="checkbox" name="Western" value="Western">
@@ -372,7 +372,7 @@
                                         </div>
                                         <div class="col-lg-3 mt-5">
                                             <a href="#" class=" btn cart-btn w-100">Continue</a>
-                                        </div>
+                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -574,7 +574,7 @@
 
                         </div>
                     </div>
-                    <p class="note-product-size mt-1">SIZE: 2(S), 2(M), 2(L)</p>
+                    <p class="note-product-size mt-1">SIZE:  {{ !empty($cartItem->product->sizes) ? $cartItem->product->sizes : 'NaN' }}</p>
                     @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
                 @endforeach
                 <div class="row  mt-5">
