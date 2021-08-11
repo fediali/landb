@@ -83,7 +83,6 @@ class ProductsRepository
         $data = $this->model->with(['category'])->where('ep.quantity', '>', 0)
             ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
             ->join('ec_products as ep', 'epv.product_id', 'ep.id')
-            ->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)
             ->when($category, function ($query) {
                 $query->with(['category' => function ($que) {
                     $que->with('category_sizes');
@@ -138,7 +137,7 @@ class ProductsRepository
             })
             ->when(!is_null($sort_by) && !is_null($sort_key) && !is_null($sort_type), function ($query) use ($sort_key, $sort_type) {
                 $query->orderBy($this->model->getTable() . '.' . $sort_key, $sort_type);
-            });
+            })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE);
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
             $data = $data->simplePaginate(30);
