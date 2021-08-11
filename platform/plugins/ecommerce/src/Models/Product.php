@@ -469,6 +469,14 @@ class Product extends BaseModel
         return $slug;
     }
 
+    public function getSkuAttribute($value)
+    {
+        if (str_contains($value, '-pack-all')) {
+            return str_replace('-pack-all', '', $value);
+        }
+        return $value;
+    }
+
     /**
      * @return BelongsToMany
      */
