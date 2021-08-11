@@ -519,6 +519,35 @@ new Luminous(demoTrigger);
 		$(document).ready(function () {
 			$('.vg-nav').vegasMenu();
 		})
+
+        $(document).ready(function () {
+
+          function dp_scroll_text() {
+            $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide");
+            $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide");
+            var images = $("p.dp-run-script.dp-animate-4").next().data('products');
+            $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
+            $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
+            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/'+images[0]);
+            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/'+images[1]);
+            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/'+images[2]);
+            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/'+images[3]);
+            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/'+images[4]);
+            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/'+images[5]);
+
+
+            $.each($('.dp-run-script'), function (index, runscript) {
+              index++;
+              $(runscript).addClass('dp-animate-' + index);
+            });
+          }
+
+          setInterval(function () {
+            dp_scroll_text();
+          }, 5000);
+
+
+        });
 	</script>
 
 
