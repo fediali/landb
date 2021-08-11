@@ -1449,6 +1449,7 @@ class OrderController extends BaseController
                             $iorder['discount_amount'] = 0;
                             $iorder['shipping_amount'] = 0;
                             $iorder['tax_amount'] = 0;
+                            $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
                             $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
@@ -1635,6 +1636,7 @@ class OrderController extends BaseController
                             $iorder['discount_amount'] = 0;
                             $iorder['shipping_amount'] = 0;
                             $iorder['tax_amount'] = 0;
+                            $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
                             $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
@@ -1818,6 +1820,7 @@ class OrderController extends BaseController
                             $iorder['is_finished'] = 1;
                             $iorder['discount_amount'] = 0;
                             $iorder['shipping_amount'] = 0;
+                            $iorder['platform'] = 'online';
                             $iorder['tax_amount'] = 0;
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
