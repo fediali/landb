@@ -39,18 +39,18 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{
                                                 variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty
                                             }}
 
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Piece Price : {{
                                                 variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
                                             }}
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
+                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Sizes : {{
                                                 variant.product.sizes ? variant.product.sizes : variant.packSizes
                                             }}
@@ -134,7 +134,7 @@
                                                                 }})</small>
                                                         </span>
                                                         <span
-                                                            v-if="product_item.product && product_item.product.sku.includes('pack')">
+                                                            v-if="product_item.product && !product_item.product.sku.includes('single')">
                                                             <small>&nbsp;({{ product_item.per_piece_price }} per piece price) </small>
                                                         </span>
                                                     </span>
@@ -165,7 +165,7 @@
                                                                     }})</small>
                                                             </span>
                                                             <span
-                                                                v-if="variation.product && variation.product.sku.includes('pack')">
+                                                                v-if="variation.product && !variation.product.sku.includes('single')">
                                                                 <small>&nbsp;({{ variation.per_piece_price }} per piece price) </small>
                                                             </span>
                                                         </li>

@@ -858,6 +858,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7745,7 +7767,7 @@ var render = function() {
                                     : _vm._e(),
                                   _vm._v(" "),
                                   variant.product &&
-                                  variant.product.sku.includes("pack")
+                                  !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                        Total Pieces : " +
@@ -7754,13 +7776,30 @@ var render = function() {
                                                 ? variant.product.prod_pieces
                                                 : variant.packQty
                                             ) +
+                                            "\n\n                                    "
+                                        )
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  variant.product &&
+                                  !variant.product.sku.includes("single")
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "\n                                        Piece Price : " +
+                                            _vm._s(
+                                              variant.product.prod_pieces
+                                                ? variant.price /
+                                                    variant.product.prod_pieces
+                                                : variant.price /
+                                                    variant.packQty
+                                            ) +
                                             "\n                                    "
                                         )
                                       ])
                                     : _vm._e(),
                                   _vm._v(" "),
                                   variant.product &&
-                                  variant.product.sku.includes("pack")
+                                  !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                        Sizes : " +
@@ -8157,8 +8196,8 @@ var render = function() {
                                               : _vm._e(),
                                             _vm._v(" "),
                                             product_item.product &&
-                                            product_item.product.sku.includes(
-                                              "pack"
+                                            !product_item.product.sku.includes(
+                                              "single"
                                             )
                                               ? _c("span", [
                                                   _c("small", [
@@ -8296,8 +8335,8 @@ var render = function() {
                                                         : _vm._e(),
                                                       _vm._v(" "),
                                                       variation.product &&
-                                                      variation.product.sku.includes(
-                                                        "pack"
+                                                      !variation.product.sku.includes(
+                                                        "single"
                                                       )
                                                         ? _c("span", [
                                                             _c("small", [
