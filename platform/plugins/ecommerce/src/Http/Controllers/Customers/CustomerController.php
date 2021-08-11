@@ -283,9 +283,9 @@ class CustomerController extends BaseController
             ->simplePaginate(15);
 
 
-//        foreach ($customers as &$customer) {
-//            $customer->avatar_url = (string)$customer->avatar_url;
-//        }
+        foreach ($customers as &$customer) {
+            $customer->avatar_url = (string)$customer->avatar_url;
+        }
 
         return $response->setData($customers);
     }

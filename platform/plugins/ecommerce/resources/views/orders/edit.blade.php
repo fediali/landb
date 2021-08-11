@@ -85,7 +85,7 @@
                                                     <td class="width-60-px min-width-60-px vertical-align-t">
                                                         <div class="wrap-img"><img
                                                                 class="thumb-image thumb-image-cartorderlist"
-                                                                src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"
+                                                                src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
                                                                 alt="{{ $orderProduct->product_name }}"></div>
                                                     </td>
                                                 @endif
@@ -585,13 +585,13 @@
                                 $next = $order->nextOrder();
                                 $previous = $order->previousOrder();
                                 ?>
-                                
+
                                 <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
                                    class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
                                    class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>  &nbsp;
                             </div>
-                            
+
 
                         </div>
                         <div class="wrapper-content mb20">
@@ -922,7 +922,7 @@
                                     <td>
                                         <div class="d-flex">
                                             <img class="split-img"
-                                                 src="{{ RvMedia::getImageUrl(@$product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"/>
+                                                 src="{{ RvMedia::getImageUrl(@$product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"/>
                                             <div class="ml-3">
                                                 <p class="split-head m-0">{{ $orderProduct->product_name }}</p>
                                                 <p class="split-code">SKU: {{ @$product->sku }}</p>

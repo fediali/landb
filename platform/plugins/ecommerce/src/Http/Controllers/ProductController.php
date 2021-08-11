@@ -1023,7 +1023,7 @@ class ProductController extends BaseController
             /**
              * @var Product $availableProduct
              */
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null,
                 false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
