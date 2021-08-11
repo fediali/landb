@@ -879,7 +879,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7716,10 +7715,7 @@ var render = function() {
                                     [
                                       _c("img", {
                                         staticClass: "thumb-image",
-                                        attrs: {
-                                          src: variant.image_url,
-                                          alt: variant.product_name
-                                        }
+                                        attrs: { src: variant.image_url }
                                       })
                                     ]
                                   )
@@ -7785,7 +7781,7 @@ var render = function() {
                                   !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
-                                          "\n                                        Piece Price : " +
+                                          "\n                                        Piece Price : $ " +
                                             _vm._s(
                                               variant.product.prod_pieces
                                                 ? variant.price /
@@ -8124,11 +8120,7 @@ var render = function() {
                                     [
                                       _c("img", {
                                         staticClass: "thumb-image",
-                                        attrs: {
-                                          src: product_item.image_url,
-                                          title: product_item.name,
-                                          alt: product_item.name
-                                        }
+                                        attrs: { src: product_item.image_url }
                                       })
                                     ]
                                   ),

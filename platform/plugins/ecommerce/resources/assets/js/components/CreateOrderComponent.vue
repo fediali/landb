@@ -25,8 +25,7 @@
                                 <tr v-for="variant in child_products">
                                     <td class="width-60-px min-width-60-px">
                                         <div class="wrap-img vertical-align-m-i">
-                                            <img class="thumb-image" :src="variant.image_url"
-                                                 :alt="variant.product_name">
+                                            <img class="thumb-image" :src="variant.image_url">
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 min-width-200-px">
@@ -46,7 +45,7 @@
 
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price : {{
+                                            Piece Price : $ {{
                                                 variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
                                             }}
                                         </p>
@@ -117,7 +116,8 @@
                                                 v-on="!product_item.variations.length ? { click : () => selectProductVariant(product_item) } : {}">
                                                 <div class="wrap-img inline_block vertical-align-t float-left">
                                                     <img class="thumb-image"
-                                                         :src="product_item.image_url">
+                                                         :src="product_item.image_url"
+                                                    >
                                                 </div>
                                                 <label class="inline_block ml10 mt10 ws-nm"
                                                        style="width:calc(100% - 50px);">

@@ -1017,7 +1017,7 @@ class ProductController extends BaseController
             ->leftJoin('ec_product_variations', 'ec_product_variations.configurable_product_id', '=', 'ec_products.id')
             ->leftJoin('ec_product_variation_items', 'ec_product_variation_items.variation_id', '=',
                 'ec_product_variations.id')
-            ->simplePaginate(5);
+            ->simplePaginate(15);
 
         foreach ($availableProducts as $pk => &$availableProduct) {
             /**
