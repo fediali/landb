@@ -151,7 +151,8 @@
                         @endphp
                         @if($variation)
                             <p class="cart-product-size">SIZE: {{ $order_product->product->sizes }}</p>
-                            <p class="cart-product-size">Pieces: {{ $order_product->product->prod_pieces }}</p>
+                    </br>
+                            <p class="cart-product-size">Pieces Per Pack: {{ $order_product->product->prod_pieces }}</p>
                         @endif
                     </div>
                 </div>
