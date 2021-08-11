@@ -95,9 +95,9 @@ class CustomerTable extends TableAbstract
             })
             ->editColumn('is_text', function ($item) {
                 if ($item->is_text == 1) {
-                    return $html = '<a href="javascript:void(0)" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Verify Number">Verified</a>';
+                    return $html = '<a href="javascript:void(0)" class="btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Verify Number">Verified Number</a>';
                 } else if ($item->is_text == 2) {
-                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-danger" data-toggle="tooltip" data-original-title="' . $item->phone_validation_error . '">UnVerified</a><script>function confirm_start(url){
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-danger" data-toggle="tooltip" data-original-title="' . $item->phone_validation_error . '">UnVerified </a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
@@ -125,7 +125,7 @@ class CustomerTable extends TableAbstract
                               });
                       }</script>';
                 } else {
-                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verified Number">Verify</a><script>function confirm_start(url){
+                    return $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('customers.verify-phone', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info" data-toggle="tooltip" data-original-title="Verified Number">Verify Number</a><script>function confirm_start(url){
                           swal({
                               title: \'Verify Customer Number?\',
                               text: "Do you want to verify customer phone number!",
@@ -234,7 +234,7 @@ class CustomerTable extends TableAbstract
 
 
         // $query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
-        
+
 
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
@@ -328,6 +328,7 @@ class CustomerTable extends TableAbstract
                 'name'  => 'ec_customers.is_text',
                 'title' => 'Text',
                 'class' => 'text-left',
+                'width' => '100px',
             ],
             'order_count'    => [
                 'name'       => 'order_count',

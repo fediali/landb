@@ -31,7 +31,7 @@ Route::group(['namespace' => 'Botble\Inventory\Http\Controllers', 'middleware' =
             Route::get('detail/{id}', [
                 'as'         => 'details',
                 'uses'       => 'InventoryController@showInventoryDetail',
-                'permission' => 'inventory.details',
+                'permission' => 'inventory.create',
             ]);
         });
     });

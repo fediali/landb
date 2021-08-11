@@ -110,7 +110,12 @@ class ProductTable extends TableAbstract
             type: "POST",
             url: "' . route('products.update-product-price', $item->id) . '",
             data: {product_price: $("input#prod-price-tbl-'.$item->id.'").val()},
-            contentType: "application/x-www-form-urlencoded"
+            contentType: "application/x-www-form-urlencoded",
+             success: function (result) {
+
+                toastr["success"](result.message, "Success");
+
+            },
         }) });</script>';
 //                }
                 $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
