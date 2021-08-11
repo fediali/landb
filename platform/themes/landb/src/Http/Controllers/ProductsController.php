@@ -49,6 +49,7 @@ class ProductsController extends Controller
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true])
         ];
+        //dd($data['products']);
       if(request()->ajax()){
         return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
       }
@@ -157,7 +158,10 @@ class ProductsController extends Controller
               'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate'  => true, 'array' => true])
           ];
         }
-
+        //dd($data['products']->hasPages());
+        if(request()->ajax()){
+          return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
+        }
         return Theme::scope('products', $data)->render();
       }else{
         return redirect()->route('public.products');
