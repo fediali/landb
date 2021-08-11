@@ -473,6 +473,12 @@ class Product extends BaseModel
     {
         if (str_contains($value, '-pack-all')) {
             return str_replace('-pack-all', '', $value);
+        } elseif (str_contains($value, ' - 0')) {
+            return str_replace(' - 0', '', $value);
+        } elseif (str_contains($value, ' - 1')) {
+            return str_replace(' - 1', '', $value);
+        } elseif (str_contains($value, ' - 2')) {
+            return str_replace(' - 2', '', $value);
         }
         return $value;
     }
