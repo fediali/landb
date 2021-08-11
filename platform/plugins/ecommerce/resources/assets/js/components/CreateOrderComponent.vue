@@ -117,8 +117,7 @@
                                                 v-on="!product_item.variations.length ? { click : () => selectProductVariant(product_item) } : {}">
                                                 <div class="wrap-img inline_block vertical-align-t float-left">
                                                     <img class="thumb-image"
-                                                         :src="product_item.image_url"
-                                                         :title="product_item.name" :alt="product_item.name">
+                                                         :src="product_item.image_url">
                                                 </div>
                                                 <label class="inline_block ml10 mt10 ws-nm"
                                                        style="width:calc(100% - 50px);">
