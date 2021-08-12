@@ -218,9 +218,39 @@ class OrderController extends BaseController
             }
 
             $curOrderProdIds[] = $product->id;
+
+            if ($request->input('order_id') && $request->input('order_id') > 0) {
+                $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
+                if ($getOrderProd && $demandQty != $getOrderProd->qty) {
+                    $this->orderHistoryRepository->createOrUpdate([
+                        'action' => 'order_product_qty_changed',
+                        'description' => 'Order product '.$getOrderProd->product_name.' qty changed from ' . $getOrderProd->qty . ' to ' . $demandQty . ' by %user_name%.',
+                        'order_id' => $request->input('order_id'),
+                        'user_id' => Auth::user()->getKey(),
+                    ], []);
+                }
+
+                if ($getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
+                    $this->orderHistoryRepository->createOrUpdate([
+                        'action'      => 'product_price_change_on_order',
+                        'description' => $product->name.' product price change in order from $'.$getOrderProd->price.' to $'.Arr::get($productItem, 'sale_price', 1).' by %user_name%.',
+                        'order_id'    => $request->input('order_id'),
+                        'user_id'     => Auth::user()->getKey(),
+                    ], []);
+                }
+            }
+
         }
 
         if ($request->input('order_id') && $request->input('order_id') > 0) {
+
+            $this->orderHistoryRepository->createOrUpdate([
+                'action'      => 'order_update',
+                'description' => 'Order updated by %user_name%.',
+                'order_id'    => $request->input('order_id'),
+                'user_id'     => Auth::user()->getKey(),
+            ], []);
+
             $condition = ['id' => $request->input('order_id')];
             $meta_condition = ['order_id' => $request->input('order_id')];
 
@@ -237,6 +267,15 @@ class OrderController extends BaseController
                 }
             }
 
+            if ($order->order_type != $request->input('order_type')) {
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action'      => 'order_type_changed',
+                    'description' => 'Order type changes from '.$order->order_type.' to '.$request->input('order_type').' by %user_name%.',
+                    'order_id'    => $request->input('order_id'),
+                    'user_id'     => Auth::user()->getKey(),
+                ], []);
+            }
+
             $prevOrderProdIds = OrderProduct::where('order_id', $request->input('order_id'))->pluck('product_id')->all();
 
             OrderProduct::where('order_id', $request->input('order_id'))->delete();
@@ -247,7 +286,7 @@ class OrderController extends BaseController
                     'description' => 'Product(s) change in order by %user_name%.',
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ], $meta_condition);
+                ], []);
             }
 
             if ($order->discount_amount != $request->input('discount_amount')) {
@@ -257,15 +296,24 @@ class OrderController extends BaseController
                         'description' => '$'.$request->input('discount_amount').' discount added on order by %user_name%.',
                         'order_id'    => $order->id,
                         'user_id'     => Auth::user()->getKey(),
-                    ], $meta_condition);
+                    ], []);
                 } elseif ($request->input('discount_amount') < $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
                         'action'      => 'remove_discount_on_order',
                         'description' => '$'.$request->input('discount_amount').' discount removed from order by %user_name%.',
                         'order_id'    => $order->id,
                         'user_id'     => Auth::user()->getKey(),
-                    ], $meta_condition);
+                    ], []);
                 }
+            }
+
+            if ($order->user_id != $request->input('customer_id')) {
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action'      => 'order_customer_changed',
+                    'description' => 'Customer changed in order by %user_name%.',
+                    'order_id'    => $request->input('order_id'),
+                    'user_id'     => Auth::user()->getKey(),
+                ], []);
             }
 
         }
@@ -295,25 +343,27 @@ class OrderController extends BaseController
 
         if ($order) {
 
-            $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'create_order_from_payment_page',
-                'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
-                'order_id'    => $order->id,
-            ], $meta_condition);
+            if (!$request->input('order_id', 0)) {
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action' => 'create_order_from_payment_page',
+                    'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
+                    'order_id' => $order->id,
+                ], []);
 
-            $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'create_order',
-                'description' => trans('plugins/ecommerce::order.new_order',
-                    ['order_id' => get_order_code($order->id)]),
-                'order_id'    => $order->id,
-            ], $meta_condition);
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action' => 'create_order',
+                    'description' => trans('plugins/ecommerce::order.new_order',
+                        ['order_id' => get_order_code($order->id)]),
+                    'order_id' => $order->id,
+                ], []);
 
-            $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'confirm_order',
-                'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-                'order_id'    => $order->id,
-                'user_id'     => Auth::user()->getKey(),
-            ], $meta_condition);
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action' => 'confirm_order',
+                    'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
+                ], []);
+            }
 
             if ($order->discount_amount > 0 && !$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
@@ -321,7 +371,7 @@ class OrderController extends BaseController
                     'description' => '$'.$order->discount_amount.' discount added on order by %user_name%.',
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ], $meta_condition);
+                ], []);
             }
 
             $payment = $this->paymentRepository->createOrUpdate([
@@ -352,7 +402,7 @@ class OrderController extends BaseController
                     ]),
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
-                ], $meta_condition);
+                ], []);
             }
 
             if ($request->input('customer_address.name')) {
@@ -414,13 +464,15 @@ class OrderController extends BaseController
 
                 $this->orderProductRepository->create($data);
 
-                if ($product->front_sale_price != $data['price']) {
-                    $this->orderHistoryRepository->createOrUpdate([
-                        'action'      => 'product_price_change_on_order',
-                        'description' => $product->name.' product price change in order from $'.$product->front_sale_price.' to $'.$data['price'].' by %user_name%.',
-                        'order_id'    => $order->id,
-                        'user_id'     => Auth::user()->getKey(),
-                    ], $meta_condition);
+                if (!$request->input('order_id', 0)) {
+                    if ($product->front_sale_price != $data['price']) {
+                        $this->orderHistoryRepository->createOrUpdate([
+                            'action' => 'product_price_change_on_order',
+                            'description' => $product->name . ' product price change in order from $' . $product->front_sale_price . ' to $' . $data['price'] . ' by %user_name%.',
+                            'order_id' => $order->id,
+                            'user_id' => Auth::user()->getKey(),
+                        ], []);
+                    }
                 }
 
                 $preQty = $product->quantity;
@@ -2222,6 +2274,13 @@ class OrderController extends BaseController
         $this->updateOrderTotal($new_order);
 
         /*************** Replication End ****************/
+
+        $this->orderHistoryRepository->createOrUpdate([
+            'action'      => 'split_order',
+            'description' => 'Order split by %user_name%.',
+            'order_id'    => $id,
+            'user_id'     => Auth::user()->getKey(),
+        ], []);
 
         return $response->setData($new_order)->setMessage(trans('core/base::notices.create_success_message'));
     }
