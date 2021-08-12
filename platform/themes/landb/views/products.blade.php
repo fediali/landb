@@ -211,6 +211,9 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
+        <div class="row text-center" id="load_more_products">
+            <button type="submit" class="product-tile__add-to-cart m-auto w-25"><span>Load More</span></button>
+        </div>
         {{--{!! $products->appends($_GET)->links() !!}--}}
         {{-- <div class="pagination">
 
@@ -329,7 +332,7 @@
     var haveMore = true;
     /*infinteLoadMore(page);*/
 
-    $(window).scroll(function () {
+   /* $(window).scroll(function () {
         if ($(window).scrollTop() + $(window).height() >= $(document).height() - 400) {
 
             if (haveMore === true) {
@@ -339,7 +342,17 @@
                 haveMore = infinteLoadMore(page);
             }
         }
-    });
+    });*/
+
+   $('#load_more_products').on('click', function () {
+     if (haveMore === true) {
+       page++;
+       $('#products-loader').show();
+       haveMore = infinteLoadMore(page);
+     }else{
+       $(this).hide();
+     }
+   })
 
     function infinteLoadMore(page) {
         var _return = true;
@@ -347,18 +360,20 @@
         $.ajax({
             url: ENDPOINT + "?page=" + page +'&'+str.replace(/&amp;/g, '&'),
             type: "get",
-            async: false,
             beforeSend: function () {
                 showLoader();
+              $('#load_more_products').hide();
             },
         })
             .done(function (response) {
                 var posts = response.products
                 if (posts.length == 0) {
+                    $('#load_more_products').hide();
                     _return = false;
                 } else {
                     $('#paginated-posts').append(posts);
                     $('#products-count').html(parseFloat($('#products-count').html()) + response.count);
+                    $('#load_more_products').show();
                     _return = true;
                 }
                 hideLoader();
