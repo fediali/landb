@@ -230,7 +230,7 @@ class OrderController extends BaseController
                     ], []);
                 }
 
-                if ($getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
+                if ($getOrderProd && $getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
                     $this->orderHistoryRepository->createOrUpdate([
                         'action'      => 'product_price_change_on_order',
                         'description' => $product->name.' product price change in order from $'.$getOrderProd->price.' to $'.Arr::get($productItem, 'sale_price', 1).' by %user_name%.',
