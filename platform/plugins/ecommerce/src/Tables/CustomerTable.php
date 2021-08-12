@@ -183,7 +183,7 @@ class CustomerTable extends TableAbstract
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
                 $html = '<button data-id="' . $item->id . '" class="merge-customer btn btn-icon btn-sm btn-success" data-toggle="tooltip" data-original-title="Merge"><i class="fa fa-align-center"></i></button>';
-                return $this->getOperations('customer.edit', 'customer.destroy', $item, $html);
+                return $this->getOperations('customer.edit', '', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -262,7 +262,7 @@ class CustomerTable extends TableAbstract
                 $q->where('ec_customers.email', 'LIKE', '%' . $search_items['customer_email'] . '%');
             });
             $query->when(isset($search_items['manager']), function ($q) use ($search_items) {
-                $q->where('ec_customers.salesperson_id',  $search_items['manager']);
+                $q->where('ec_customers.salesperson_id', $search_items['manager']);
             });
             $query->when(isset($search_items['status']), function ($q) use ($search_items) {
                 $q->where('ec_customers.status', $search_items['status']);
@@ -300,76 +300,76 @@ class CustomerTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'             => [
+            'id'               => [
                 'name'  => 'ec_customers.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'salesperson_id' => [
+            'salesperson_id'   => [
                 'name'  => 'ec_customers.salesperson_id',
                 'title' => 'Rep',
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'name'           => [
+            'name'             => [
                 'name'  => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
                 'class' => 'text-left',
             ],
-            'email'          => [
+            'email'            => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
             ],
-            'is_private'     => [
+            'is_private'       => [
                 'name'  => 'ec_customers.is_private',
                 'title' => 'Is Private',
                 'class' => 'text-left',
             ],
-            'is_text'        => [
+            'is_text'          => [
                 'name'  => 'ec_customers.is_text',
                 'title' => 'Text',
                 'class' => 'text-left',
                 'width' => '100px',
             ],
-            'order_count'    => [
+            'order_count'      => [
                 'name'       => 'order_count',
                 'title'      => 'Order Count',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'order_spend'          => [
+            'order_spend'      => [
                 'name'       => 'order_spend',
                 'title'      => 'Spend',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'abandon_products'      => [
+            'abandon_products' => [
                 'name'       => 'abandon_products',
                 'title'      => 'Abandoned',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'status'     => [
+            'status'           => [
                 'name'       => 'status',
                 'title'      => 'Validation',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'last_order_date'     => [
+            'last_order_date'  => [
                 'name'       => 'last_order_date',
                 'title'      => 'Last order',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'last_visit'     => [
+            'last_visit'       => [
                 'name'       => 'last_visit',
                 'title'      => 'Last visit',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'created_at'     => [
+            'created_at'       => [
                 'name'  => 'ec_customers.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
@@ -398,8 +398,10 @@ class CustomerTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('customer.deletes'), 'customer.destroy', parent::bulkActions());
+//        return $this->addDeleteAction(route('customer.deletes'), 'customer.destroy', parent::bulkActions());
+        return parent::bulkActions();
     }
+
 
     /**
      * {@inheritDoc}
