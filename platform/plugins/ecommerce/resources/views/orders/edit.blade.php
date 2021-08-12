@@ -86,7 +86,7 @@
                                                         <div class="wrap-img"><img
                                                                 class="thumb-image thumb-image-cartorderlist"
                                                                 src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
-                                                                alt="{{ $orderProduct->product_name }}"></div>
+                                                                "></div>
                                                     </td>
                                                 @endif
                                                 <td class="pl5 p-r5 min-width-200-px">

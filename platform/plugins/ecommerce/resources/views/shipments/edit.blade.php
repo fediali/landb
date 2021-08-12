@@ -69,7 +69,7 @@
                                                             <div class="wrap-img"><img
                                                                     class="thumb-image thumb-image-cartorderlist"
                                                                     src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
-                                                                    alt="{{ $product->name }}"/></div>
+                                                                   /></div>
                                                         </div>
                                                         <div class="flexbox-content">
                                                             <a class="wordwrap hide-print"
