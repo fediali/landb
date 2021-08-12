@@ -80,7 +80,7 @@ class ProductsRepository
             $sort_key = isset($sort_break[0]) ? ((!empty($sort_break[0])) ? $sort_break[0] : null) : null;
             $sort_type = isset($sort_break[1]) ? ((!empty($sort_break[1])) ? $sort_break[1] : null) : null;
         }
-        $data = $this->model->with(['category'])->where('ep.quantity', '>', 0)
+        $data = $this->model->with(['category'])
             ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
             ->join('ec_products as ep', 'epv.product_id', 'ep.id')
             ->when($category, function ($query) {
@@ -119,7 +119,7 @@ class ProductsRepository
                 $query->join('ec_product_tag_product as ptag', 'ptag.product_id', 'ec_products.id')->where('ptag.tag_id', $tag_id);
             })
             ->when(!$pre_order, function ($query) use ($pre_order_id) {
-                $query->leftJoin('ec_product_tag_product as ptag1', 'ptag1.product_id', 'ec_products.id')->where('ptag1.tag_id', '=', $pre_order_id);
+                $query->leftJoin('ec_product_tag_product as ptag1', 'ptag1.product_id', 'ec_products.id')->where('ptag1.tag_id', '=', $pre_order_id)->where('ep.quantity', '>', 0);
             })
             ->when(!is_null($price_range), function ($query) use ($min_range, $max_range) {
                 if (!is_null($min_range)) {
