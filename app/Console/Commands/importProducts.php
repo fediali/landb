@@ -71,7 +71,7 @@ class importProducts extends Command
         /*$file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
-        $file = File::get(public_path('lnb-products-all.json'));
+        $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {

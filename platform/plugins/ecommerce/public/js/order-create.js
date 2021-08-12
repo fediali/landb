@@ -1190,9 +1190,8 @@ __webpack_require__.r(__webpack_exports__);
         _productItem.select_qty = 1;
         this.child_products.push(_productItem);
         this.child_product_ids.push(product.id);
-      }
+      } // this.hidden_product_search_panel = true;
 
-      this.hidden_product_search_panel = true;
     },
     selectCustomer: function selectCustomer(customer) {
       this.child_customer = customer;

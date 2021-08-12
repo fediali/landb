@@ -485,6 +485,11 @@ class Product extends BaseModel
         return $value;
     }
 
+    public function setWithStorehouseManagementAttribute($value)
+    {
+        $this->attributes['with_storehouse_management'] = 1;
+    }
+
     /**
      * @return BelongsToMany
      */

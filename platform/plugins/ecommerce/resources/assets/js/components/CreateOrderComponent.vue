@@ -1132,7 +1132,7 @@ export default {
                 this.child_products.push(productItem);
                 this.child_product_ids.push(product.id);
             }
-            this.hidden_product_search_panel = true;
+            // this.hidden_product_search_panel = true;
         },
         selectCustomer: function (customer) {
             this.child_customer = customer;
