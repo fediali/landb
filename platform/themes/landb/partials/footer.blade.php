@@ -330,6 +330,7 @@ new Luminous(demoTrigger);
 @if(auth('customer')->user() && auth('customer')->user()->details && isset(auth('customer')->user()->billingAddress[0]))
     document.querySelector('#tokenizebutton').onclick = (e) => {
       e.preventDefault();
+      $('#tokenizebutton').attr('disabled', true);
       console.log('working')
       var month = $('.month').val();
       var year = $('.year').val();
@@ -365,8 +366,10 @@ new Luminous(demoTrigger);
       toggle_loader(false);
     })
     .catch(err => {
+
         toastr['error'](err.message, 'Error');
       toggle_loader(false);
+      $('#tokenizebutton').attr('disabled', false);
     });
     }
  @endif
@@ -399,6 +402,7 @@ new Luminous(demoTrigger);
         $('#checkout-main-form').submit();
       },
       error: function (request, status, error) {
+        $('#tokenizebutton').attr('disabled', false);
         toastr['warning']('Notification Unreadable', 'Reading Error');
       }
     });
@@ -426,6 +430,11 @@ new Luminous(demoTrigger);
     var id = $(this).data('id');
      $('.welcomeDiv'+id).hide();
  })
+
+$('#add_payment_btn').on('click', function(){
+  $('#checkout-main-form').submit();
+  $('#add_payment_btn').attr('disabled', true)
+})
 })
 
 </script>

@@ -466,7 +466,7 @@
                                                 </div>
                                                 <div id="add_payment" style="display: none;">
                                                     <div class="col-lg-5 mt-5">
-                                                        <button class=" btn cart-btn w-100" type="submit">Pay Now
+                                                        <button class=" btn cart-btn w-100" type="submit" id="add_payment_btn">Pay Now
                                                         </button>
                                                     </div>
                                                 </div>
