@@ -121,19 +121,19 @@
 </section>
 
 @php
-    $not_in = null;
+    /*$not_in = null;
     if(isset($products1) && count($products1)){
      $not_in = $products1->pluck('id')->toArray();
     }
-    $products2 = get_latest_products(6, $not_in);
-        $categories = \Botble\Ecommerce\Models\ProductCategory::
-            orderBy('order', 'ASC')
-            ->orderBy('created_at', 'DESC')
+    $products2 = get_latest_products(6, $not_in);*/
+        $categories = \Botble\Ecommerce\Models\ProductCategory::with(['products' ])->withCount('products')
+            ->orderBy('products_count', 'DESC')
+            ->orderBy('order', 'ASC')
             ->limit(7)
             ->get();
 @endphp
 
-@if(count($products2) > 5 && setting('theme-landb-home_section_2_status') == 1)
+@if(count($categories) > 5 && setting('theme-landb-home_section_2_status') == 1)
     <div class="row">
         <div class="col-lg-12">
             <h4 class="text-center font-quiche mb-2"> BROWSE COLLECTION </h4>
@@ -143,45 +143,33 @@
 
         <div class="t-one">
             <div class="ml-2 mr-2">
-                <a href="{!! generate_product_url('detail', $products2[0]->id, $products2[0]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[0]->images[0], null, null, null, true, 'w-100 slidert-left-img') !!}
-                </a>
+                    {!! image_html_generator(@$categories[0]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}
             </div>
         </div>
         <div class="t-two">
             <div class="ml-2 mr-2">
-                <a href="{!! generate_product_url('detail', $products2[1]->id, $products2[1]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img') !!}
-                </a>
-                <a href="{!! generate_product_url('detail', $products2[2]->id, $products2[2]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
-                </a>
+                    {!! image_html_generator(@$categories[0]->products[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}
+                    {!! image_html_generator(@$categories[0]->products[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}
             </div>
         </div>
         <div class="t-three">
             <div class="dp-scroll-wrapper">
                 <div class="dp-scroll-text">
                     @foreach($categories as $category)
-                        <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}"> {{ $category->name }}</p>
+                        <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}" data-products="{{ $category->products->pluck('images')->take(6) }}"> {{ $category->name }}</p>
                     @endforeach
                 </div>
             </div>
         </div>
         <div class="t-four">
             <div class="ml-2 mr-2">
-                <a href="{!! generate_product_url('detail', $products2[3]->id, $products2[3]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[3]->images[3], null, null, null, true, 'w-100 slidert-slim-img') !!}
-                </a>
-                <a href="{!! generate_product_url('detail', $products2[4]->id, $products2[4]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[4]->images[4], null, null, null, true, 'w-100 mt-3 slidert-slim-img') !!}
-                </a>
+                    {!! image_html_generator(@$categories[0]->products[3]->images[3], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}
+                    {!! image_html_generator(@$categories[0]->products[4]->images[4], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}
             </div>
         </div>
         <div class="t-five">
             <div class="ml-2 mr-2">
-                <a href="{!! generate_product_url('detail', $products2[5]->id, $products2[5]->product_slug)  !!}">
-                    {!! image_html_generator(@$products2[5]->images[5], null, null, null, true, 'w-100 slidert-left-img') !!}
-                </a>
+                    {!! image_html_generator(@$categories[0]->products[5]->images[5], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}
             </div>
         </div>
     </div>
@@ -459,50 +447,6 @@
         </div>
     </div>
 </section>--}}
-
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
-
-<script>
-    console.log(innerHeight, 'innerHeight');
-
-    gsap
-        .timeline({
-            scrollTrigger: {
-                trigger: ".grid-container",
-                start: "top top",
-                end: () => innerHeight * 9,
-                scrub: true,
-                pin: ".grid",
-                anticipatePin: 1,
-            },
-
-        })
-        .set(".gridBlock:not(.centerBlock)", {autoAlpha: 0})
-        .to(
-            ".gridBlock:not(.centerBlock)",
-            {duration: 0.1, autoAlpha: 1},
-            0.001
-        )
-        .from(".gridLayer", {scale: 3.3333, ease: "none"});
-
-    // Images to make it look better, not related to the effect
-    /*const size = Math.max(innerWidth, innerHeight);
-    gsap.set(".gridBlock", {
-      backgroundImage: (i) =>
-        `url(https://picsum.photos/${size}/${size}?random=${i})`,
-    });*/
-
-    const bigImg = new Image();
-    bigImg.addEventListener("load", function () {
-        gsap.to(".centerPiece .gridBlock", {
-            autoAlpha: 1,
-            duration: 0.5,
-        });
-    });
-
-    bigImg.src = `https://picsum.photos/${size}/${size}?random=50`;
-</script>
 
 <script>
     $(document).ready(function () {

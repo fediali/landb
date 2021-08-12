@@ -51,7 +51,7 @@ if (!function_exists('image_html_generator')) {
      * @param array $attributes
      * @return string
      */
-  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '')
+  function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '', $id= '')
   {
 
         $html = '<img
@@ -61,6 +61,7 @@ if (!function_exists('image_html_generator')) {
             alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
             class="lazyload '.$class.'"
+            id="'.$id.'"
             data-src="'.(!empty($img) ? asset('storage/'.$img) : asset('images/default.jpg')).'"
             onerror = "this.src=\''. asset('images/default.jpg') .'\'">'
             ;
