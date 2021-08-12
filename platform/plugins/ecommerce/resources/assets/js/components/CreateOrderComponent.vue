@@ -45,7 +45,7 @@
 
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price : $ {{
+                                            Piece Price : ${{
                                                 variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
                                             }}
                                         </p>

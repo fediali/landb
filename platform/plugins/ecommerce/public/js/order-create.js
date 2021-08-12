@@ -7781,7 +7781,7 @@ var render = function() {
                                   !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
-                                          "\n                                        Piece Price : $ " +
+                                          "\n                                        Piece Price : $" +
                                             _vm._s(
                                               variant.product.prod_pieces
                                                 ? variant.price /

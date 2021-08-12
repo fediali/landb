@@ -269,6 +269,7 @@
                 url: "{{ url('/admin/customers/get-customer-addresses') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
+                    console.log('address', data)
                     $.each(data.data, function (addressID, address) {
                         if (address.type === 'billing') {
                             var data = {
@@ -280,6 +281,7 @@
                             $('select#billing_address').append(html);
                         }
                     });
+
                     $('#billing_address').selectpicker("refresh");
 
                     getCustomer();
