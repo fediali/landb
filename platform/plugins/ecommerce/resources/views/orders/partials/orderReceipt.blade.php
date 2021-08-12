@@ -21,7 +21,7 @@
         </div>
     </div>
     <div style="display:flex" class="row mt-5">
-        <div style="width:50%">
+        <div style="width:33%">
             <div style="background: #eaeaea;" class="p-3">
                 <h3>
                     <b>STORE</b>
@@ -42,7 +42,7 @@
             </div>
         </div>
         @if($order->billingAddress)
-            <div style="width:50%">
+            <div style="width:33%">
                 <div class="p-3">
                     <h3>
                         <b>BILL TO</b>
@@ -64,7 +64,7 @@
             </div>
         @endif
         @if($order->shippingAddress)
-            <div style="width:50%">
+            <div style="width:33%">
                 <div class="p-3">
                     <h3>
                         <b>SHIP TO</b>

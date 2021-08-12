@@ -658,63 +658,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="wrapper-content bg-gray-white mb20">
-                            <div class="pd-all-20">
-                                <div class="p-b10">
-                                    <strong>{{ trans('plugins/ecommerce::order.warehouse') }}</strong>
-                                    <ul class="p-sm-r mb-0">
-                                        <li class="ws-nm">
-                                            <span
-                                                class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="wrapper-content bg-gray-white mb20">
-                            <div class="pd-all-20">
-                                <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
-                                        data-target="#modal_split_order">Split Order
-                                </button>&nbsp;&nbsp;
-                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
-                                   class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
-                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
-                                   class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
-                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
-                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;
-                                @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
-                                    <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
-                                       data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
-                                @endif
-
-                            </div>
-                        </div>
-
-                        <div class="wrapper-content bg-gray-white mb20">
-                            <div class="pd-all-20">
-                                <div class="d-flex">
-                                    <input class="form-control" type="text" id="salesperson_id"
-                                           value="{{@$order->salesperson->username}}"
-                                           disabled>
-                                    <i style="padding: 10px; background: #bbb;" class="fa fa-plus" data-toggle="modal"
-                                       data-target="#salesrep"></i>
-                                </div>
-                                <input type="hidden" id="customer_id" value="{{$order->user_id}}">
-                                <form action="{{ route('orders.edit', $order->id) }}">
-                                    <label class="text-title-field mt-3">Tracking No.</label>
-                                    <input class="form-control" name="tracking_no" placeholder="Tracking No."
-                                           value="{{ $order->tracking_no }}"/>
-                                    <label class="text-title-field mt-3">PO No.</label>
-                                    <input class="form-control" name="po_number" placeholder="PO No."
-                                           value="{{ $order->po_number }}"/>
-                                    <div class="mt10">
-                                        <button type="button"
-                                                class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
 
                         @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
                             <div class="wrapper-content bg-gray-white mb20">
@@ -863,6 +806,66 @@
                                 </div>
                             </div>
                         @endif
+
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <div class="p-b10">
+                                    <strong>{{ trans('plugins/ecommerce::order.warehouse') }}</strong>
+                                    <ul class="p-sm-r mb-0">
+                                        <li class="ws-nm">
+                                            <span
+                                                class="ww-bw text-no-bold">{{ $defaultStore->name ?? trans('plugins/ecommerce::order.default_store') }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
+                                        data-target="#modal_split_order">Split Order
+                                </button>&nbsp;&nbsp;
+                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
+                                   class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
+                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
+                                   class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
+                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
+                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;
+                                @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
+                                    <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
+                                       data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
+                                @endif
+
+                            </div>
+                        </div>
+
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <div class="d-flex">
+                                    <input class="form-control" type="text" id="salesperson_id"
+                                           value="{{@$order->salesperson->username}}"
+                                           disabled>
+                                    <i style="padding: 10px; background: #bbb;" class="fa fa-plus" data-toggle="modal"
+                                       data-target="#salesrep"></i>
+                                </div>
+                                <input type="hidden" id="customer_id" value="{{$order->user_id}}">
+                                <form action="{{ route('orders.edit', $order->id) }}">
+                                    <label class="text-title-field mt-3">Tracking No.</label>
+                                    <input class="form-control" name="tracking_no" placeholder="Tracking No."
+                                           value="{{ $order->tracking_no }}"/>
+                                    <label class="text-title-field mt-3">PO No.</label>
+                                    <input class="form-control" name="po_number" placeholder="PO No."
+                                           value="{{ $order->po_number }}"/>
+                                    <div class="mt10">
+                                        <button type="button"
+                                                class="btn btn-primary btn-update-order">{{ trans('plugins/ecommerce::order.save') }}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

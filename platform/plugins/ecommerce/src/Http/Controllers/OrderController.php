@@ -482,6 +482,7 @@ class OrderController extends BaseController
      */
     public function edit($id)
     {
+
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
                 'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
@@ -505,20 +506,32 @@ class OrderController extends BaseController
         }
 
         $cards = [
-            '0' => 'Add New Card'
+            '0'=>'Add New Card'
         ];
         $defaultStore = get_primary_store_locator();
         $salesRep = get_salesperson();
 
-        if (!$order->user->card->isEmpty()) {
-            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
-            if ($omniId) {
-                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
-                list($card, $info) = omni_api($url);
-                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+        if ($order->user->card->count() > 0) {
+            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->get();
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+                    list($card, $info) = omni_api($url);
+                    $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+                }
             }
+
+
         }
 
+//        if (!$order->user->card->isEmpty()) {
+//            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+//            if ($omniId) {
+//                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+//                list($card, $info) = omni_api($url);
+//                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+//            }
+//        }
         if (isset($_GET['debug'])) {
             dd($order, $cards, $order->payment);
         }
@@ -1187,17 +1200,28 @@ class OrderController extends BaseController
 
 
         $cards = [
-            '0' => 'Add New Card'
+        '0'=>'Add New Card'
         ];
-
-        if (!$order->user->card->isEmpty()) {
-            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
-            if ($omniId) {
-                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
-                list($card, $info) = omni_api($url);
-                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+        if ($order->user->card->count() > 0) {
+            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->get();
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+                    list($card, $info) = omni_api($url);
+                    $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+                }
             }
+
+
         }
+//        if (!$order->user->card->isEmpty()) {
+//            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+//            if ($omniId) {
+//                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+//                list($card, $info) = omni_api($url);
+//                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+//            }
+//        }
 
 
         return view('plugins/ecommerce::orders.reorder', compact(
