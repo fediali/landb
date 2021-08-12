@@ -136,7 +136,7 @@ class OrderTable extends TableAbstract
                     $html .= '<a href="' . route('orders.edit', $item->id) . '" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
                 }
                 //orders.edit
-                return $this->getOperations('', 'orders.destroy', $item, $html);
+                return $this->getOperations('', '', $item, $html);
             })
             ->escapeColumns([])
             ->make(true);
@@ -363,7 +363,8 @@ class OrderTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('orders.deletes'), 'orders.destroy', parent::bulkActions());
+//        return $this->addDeleteAction(route('orders.deletes'), 'orders.destroy', parent::bulkActions());
+        return parent::bulkActions();
     }
 
     /**

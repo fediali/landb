@@ -207,9 +207,12 @@ class CustomerTable extends TableAbstract
             'ec_customers.status',
             'ec_customers.last_visit',
             'ec_customers.phone_validation_error',
+            'ec_customers.phone',
         ];
 
+
         $query = $model->select($select);
+
 
         $from_date = Carbon::now()->format('Y-m-d');
         $to_date = Carbon::now()->format('Y-m-d');

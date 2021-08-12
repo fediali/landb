@@ -430,6 +430,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
               "class": _self.data('class-item')
             },
             success: function success(data) {
+                console.log(data);
               if (typeof data.data.redirectUrl !== 'undefined') {
                 window.open(data.data.redirectUrl, '_blank');
               }
