@@ -2109,6 +2109,14 @@ class OrderController extends BaseController
 
         event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $order));
         $this->orderRepository->createOrUpdate($order);
+
+        $this->orderHistoryRepository->createOrUpdate([
+            'action' => 'order_status_changed',
+            'description' => 'Order status changed to '.$requestData['status'].' by %user_name%.',
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
+        ], []);
+
         return $response;
     }
 
