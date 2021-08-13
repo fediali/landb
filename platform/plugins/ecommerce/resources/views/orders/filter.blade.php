@@ -160,7 +160,7 @@
                 return;
             }
             $.ajax({
-                url: '{{ route('orders.save.advance.search','orders') }}',
+                url: '{{ route('orders.save.advance.search',['type' => 'orders']) }}',
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {

@@ -226,7 +226,7 @@ class CustomerTable extends TableAbstract
         }
 
         //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
-        $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
+
 //
         $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
 //
@@ -248,6 +248,10 @@ class CustomerTable extends TableAbstract
 
         if (empty($search_items)) {
             $search_items = $this->request()->all();
+        }
+
+        if (!isset($search_items['report_type'])) {
+            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
         }
 
         if (!empty($search_items)) {
