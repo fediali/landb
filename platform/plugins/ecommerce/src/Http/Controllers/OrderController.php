@@ -1521,7 +1521,8 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+                            $pack = $product->prod_pieces;
+//                            $pack = quantityCalculate($product['category_id']);
                             $orderQuantity = $row['original_qty'] / $pack;
 
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
@@ -1709,7 +1710,8 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+//                            $pack = quantityCalculate($product['category_id']);
+                            $pack = $product->prod_pieces;
                             $orderQuantity = $row['total_qty'] / $pack;
 
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
@@ -1894,7 +1896,8 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+//                            $pack = quantityCalculate($product['category_id']);
+                            $pack = $product->prod_pieces;
                             $orderQuantity = $row['totalqty'] / $pack;
 
                             if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
