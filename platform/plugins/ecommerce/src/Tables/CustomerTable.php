@@ -6,6 +6,7 @@ use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
@@ -164,15 +165,17 @@ class CustomerTable extends TableAbstract
                 return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
             })
             ->editColumn('status', function ($item) {
-                $html = '<span class="badge badge-default">' . $item->status . '</span>';
-                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
-                    $html = '<span class="badge badge-success">' . BaseStatusEnum::$CUSTOMERS['Active'] . '</span>';
-                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['Disabled']) {
-                    $html = '<span class="badge badge-warning">' . BaseStatusEnum::$CUSTOMERS['Disabled'] . '</span>';
-                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['declined']) {
-                    $html = '<span class="badge badge-danger">' . BaseStatusEnum::$CUSTOMERS['declined'] . '</span>';
-                }
-                return $html;
+//                $html = '<span class="badge badge-default">' . $item->status . '</span>';
+//                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
+//                    $html = '<span class="badge badge-success">' . BaseStatusEnum::$CUSTOMERS['Active'] . '</span>';
+//                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['Disabled']) {
+//                    $html = '<span class="badge badge-warning">' . BaseStatusEnum::$CUSTOMERS['Disabled'] . '</span>';
+//                } elseif ($item->status == BaseStatusEnum::$CUSTOMERS['declined']) {
+//                    $html = '<span class="badge badge-danger">' . BaseStatusEnum::$CUSTOMERS['declined'] . '</span>';
+//                }
+//                return $html;
+
+                return view('plugins/ecommerce::customers/customerStatus', ['item' => $item])->render();
             })
             ->editColumn('last_order_date', function ($item) {
                 return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
@@ -208,12 +211,10 @@ class CustomerTable extends TableAbstract
             'ec_customers.last_visit',
             'ec_customers.phone_validation_error',
             'ec_customers.phone',
+            'ec_customer_detail.business_phone AS business_phone'
         ];
 
-
-        $query = $model->select($select);
-
-
+        $query = $model->join('ec_customer_detail', 'ec_customer_detail.customer_id', '=', 'ec_customers.id')->select($select);
         $from_date = Carbon::now()->format('Y-m-d');
         $to_date = Carbon::now()->format('Y-m-d');
         $request = request();
@@ -310,6 +311,12 @@ class CustomerTable extends TableAbstract
                 'width' => '20px',
                 'class' => 'text-left',
             ],
+            'business_phone'   => [
+                'name'    => 'ec_customer_detail.business_phone',
+                'title'   => 'Business Phone',
+                'width'   => '20px',
+                'visible' => false,
+            ],
             'salesperson_id'   => [
                 'name'  => 'ec_customers.salesperson_id',
                 'title' => 'Rep',
@@ -395,6 +402,15 @@ class CustomerTable extends TableAbstract
         ];
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Customer::class);
+    }
+
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        $return = parent::htmlDrawCallbackFunction();
+        if (Customer::all()->count()) {
+            $return .= '$(".editable").editable();';
+        }
+        return $return;
     }
 
     /**

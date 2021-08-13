@@ -2216,6 +2216,7 @@ class OrderController extends BaseController
 
     public function saveAdvanceSearch($type, Request $request)
     {
+
         $params = $request->all();
 
         $searchData = ['user_id' => auth()->user()->id, 'search_type' => $type, 'name' => $params['search_name'], 'status' => 1];
@@ -2337,7 +2338,7 @@ class OrderController extends BaseController
 
     public function quicksearch(Request $request, BaseHttpResponse $response)
     {
-        dd($request->all());
+//        dd($request->all());
         $order = $this->orderRepository->findOrFail($request->quicksearch);
         if ($order) {
 //            redirect(route('order'))

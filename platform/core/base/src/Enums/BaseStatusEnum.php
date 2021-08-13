@@ -29,7 +29,7 @@ class BaseStatusEnum extends Enum
     public const PRODUCTION = 'Production';
     public const COMPLETE = 'Complete';
     public const SHIPPED = 'Shipped';
-    public const DECLINED = 'declined';
+    public const DECLINED = 'Declined';
 
     public static $THREADSAMPLE = [
         'pending'    => self::PENDING,

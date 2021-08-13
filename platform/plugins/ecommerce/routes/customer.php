@@ -18,6 +18,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'permission' => 'customer.index',
             ]);
 
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'CustomerController@changeStatus',
+                'permission' => 'customer.create',
+            ]);
+
             Route::get('merge-customer-delete/{id}', [
                 'as'         => 'merge-customer-delete',
                 'uses'       => 'CustomerController@mergeDelete',

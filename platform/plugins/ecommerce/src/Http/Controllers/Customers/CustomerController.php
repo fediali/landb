@@ -31,6 +31,7 @@ use Botble\Ecommerce\Tables\CustomerTable;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
@@ -585,6 +586,20 @@ class CustomerController extends BaseController
     {
         MergeAccount::where('user_id_two', $id)->delete();
         return $response->setMessage('Customer Merge Delete Successfully');
+    }
+
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $customer = $this->customerRepository->findOrFail($request->input('pk'));
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $customer->fill($requestData);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $customer));
+        $this->customerRepository->createOrUpdate($customer);
+
+        return $response;
     }
 
 }
