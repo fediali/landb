@@ -1252,7 +1252,7 @@ class OrderController extends BaseController
 
 
         $cards = [
-        '0'=>'Add New Card'
+            '0'=>'Add New Card'
         ];
         if ($order->user->card->count() > 0) {
             $omniId = $order->user->card()->whereNotNull('customer_omni_id')->get();
@@ -1602,7 +1602,7 @@ class OrderController extends BaseController
                         }
 
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                        if ($product && $orderProduct &&$orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -1631,7 +1631,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
@@ -1791,7 +1791,7 @@ class OrderController extends BaseController
                         }
 
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -1820,7 +1820,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
@@ -1975,10 +1975,10 @@ class OrderController extends BaseController
                                     OrderImport::create($orderInfo);
                                 }
                             }
-
                         }
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -2007,7 +2007,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($product && $orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
