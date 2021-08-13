@@ -1975,8 +1975,8 @@ class OrderController extends BaseController
                                     OrderImport::create($orderInfo);
                                 }
                             }
-                        }
 
+                        }
 
                         if ($product && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
