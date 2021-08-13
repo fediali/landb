@@ -925,7 +925,7 @@ class ProductController extends BaseController
     {
         $availableProducts = $this->productRepository
             ->getModel()
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
             ->select([
