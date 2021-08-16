@@ -519,13 +519,13 @@ class Product extends BaseModel
             return false;
         }
 
-        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-            $checkQty = $this->online_sales_qty <= 0 ? true : false;
-        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
-        } else {
+//        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//            $checkQty = $this->online_sales_qty <= 0 ? true : false;
+//        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
+//        } else {
             $checkQty = $this->quantity <= 0 ? true : false;
-        }
+//        }
 
         return $checkQty && !$this->allow_checkout_when_out_of_stock;
     }

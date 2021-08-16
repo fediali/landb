@@ -118,7 +118,7 @@ class ProductTable extends TableAbstract
             },
         }) });</script>';
 //                }
-                $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
+//                $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
                 if ($item->front_sale_price != $item->price) {
                     $price .= ' <del class="text-danger">' . format_price($item->price) . '</del>';
                 }
@@ -278,7 +278,7 @@ class ProductTable extends TableAbstract
             ->select($select)
             ->where('is_variation', 0)
             ->where('status', '!=', BaseStatusEnum::HIDE);
-
+        
 
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
@@ -302,7 +302,8 @@ class ProductTable extends TableAbstract
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
-                $q->where('ec_products.status', $search_items['prod_status']);
+                $q->whereIn('ec_products.status', $search_items['prod_status']);
+
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
@@ -325,7 +326,7 @@ class ProductTable extends TableAbstract
             });
         }
 
-
+//dd($query->toSql(), $query->getBindings());
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -358,11 +359,14 @@ class ProductTable extends TableAbstract
                 'name' => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
+                'width' => '100px',
             ],
             'name' => [
                 'name' => 'ec_products.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
+                'width' => '200px',
+                'font-size' => '15px',
             ],
             'price' => [
                 'name' => 'ec_products.price',
@@ -400,7 +404,7 @@ class ProductTable extends TableAbstract
             'pre_order_qty' => [
                 'name' => 'ec_products.pre_order_qty',
                 'title' => 'Pre-order Qty',
-                'width' => '100px',
+                'width' => '30px',
                 'class' => 'text-center',
             ],
             'reorder_qty' => [

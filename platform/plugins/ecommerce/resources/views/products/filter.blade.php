@@ -72,7 +72,7 @@
                             <div>
                             @foreach(\Botble\Base\Enums\BaseStatusEnum::$PRODUCT as $prod_status)
                                 <div style="display:inline-flex" class="chk-orders">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status" class="form-control" value="{{strtolower($prod_status)}}" {{request('prod_status') == strtolower($prod_status) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{request('prod_status') == strtolower($prod_status) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
                                 </div>
                             @endforeach
                             </div>

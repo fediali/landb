@@ -925,7 +925,7 @@ class ProductController extends BaseController
     {
         $availableProducts = $this->productRepository
             ->getModel()
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
             ->select([
@@ -1041,13 +1041,14 @@ class ProductController extends BaseController
                     }
                 }
 
-                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                    $variation->quantity = $variation->product->online_sales_qty;
-                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                    $variation->quantity = $variation->product->in_person_sales_qty;
-                } else {
+//                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                    $variation->quantity = $variation->product->online_sales_qty;
+//                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                    $variation->quantity = $variation->product->in_person_sales_qty;
+//                }
+//                else {
                     $variation->quantity = $variation->product->quantity;
-                }
+//                }
 
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
