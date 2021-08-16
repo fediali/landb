@@ -261,6 +261,11 @@ return [
         'parent_flag' => 'plugins.ecommerce',
     ],
     [
+        'name'        => 'Order Import',
+        'flag'        => 'order-import.index',
+        'parent_flag' => 'plugins.ecommerce',
+    ],
+    [
         'name'        => 'Create',
         'flag'        => 'customer.create',
         'parent_flag' => 'customer.index',
@@ -296,10 +301,6 @@ return [
         'parent_flag' => 'flash-sale.index',
     ],
     [
-        'name'        => 'Order Import',
-        'flag'        => 'ecommerce.order-import.index',
-        'parent_flag' => 'plugins.ecommerce',
-    ],[
         'name' => 'Product labels',
         'flag' => 'product-label.index',
     ],

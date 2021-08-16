@@ -134,7 +134,7 @@
                                                         </span>
                                                         <span
                                                             v-if="product_item.product && !product_item.product.sku.includes('single')">
-                                                            <small>&nbsp;({{ product_item.per_piece_price }} per piece price) </small>
+                                                            <small>&nbsp;(${{ product_item.per_piece_price }} per piece price) </small>
                                                         </span>
                                                     </span>
                                                 </label>
