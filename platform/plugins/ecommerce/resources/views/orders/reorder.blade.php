@@ -16,7 +16,7 @@
                 :payment_method="'{{$order->payment ? $order->payment->payment_channel : 'cod'}}'"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
                 :customer_address="{{ $customerAddress }}"
-                :sub_amount="{{ $order->amount }}"
+                :sub_amount="{{ $order->sub_total }}"
                 :total_amount="{{ $order->payment->amount ?? $order->amount }}"
                 :discount_amount="{{ $order->discount_amount }}"
                 @if ($order->coupon_code) :discount_coupon_code="'{{ $order->coupon_code }}'" @endif
