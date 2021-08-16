@@ -202,14 +202,14 @@ class OrderController extends BaseController
                 continue;
             }
             $demandQty = Arr::get($productItem, 'quantity', 1);
-
-            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                $stockQty = $product->online_sales_qty;
-            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                $stockQty = $product->in_person_sales_qty;
-            } else {
+//
+//            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                $stockQty = $product->online_sales_qty;
+//            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                $stockQty = $product->in_person_sales_qty;
+//            } else {
                 $stockQty = $product->quantity;
-            }
+//            }
 
             if ($request->input('order_type') != Order::PRE_ORDER) {
                 if ($stockQty < $demandQty) {
