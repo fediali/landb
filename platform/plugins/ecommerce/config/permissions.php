@@ -262,7 +262,7 @@ return [
     ],
     [
         'name'        => 'Order Import',
-        'flag'        => 'ecommerce.order-import.index',
+        'flag'        => 'order-import.index',
         'parent_flag' => 'plugins.ecommerce',
     ],
     [
