@@ -231,11 +231,6 @@ class CustomerTable extends TableAbstract
             }
         }
 
-        if (isset(auth()->user()->roles[0])) {
-            if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
-                $query->where('salesperson_id', auth()->user()->id);
-            }
-        }
         //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
 
 //
