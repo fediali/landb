@@ -1462,6 +1462,7 @@ class OrderController extends BaseController
             $errors = [];
 
             if ($request->market_place == Order::LASHOWROOM) {
+                $orderProduct = 0;
                 foreach ($order as $od) {
                     foreach ($od as $row) {
                         if (!isset($row['po'])) {
