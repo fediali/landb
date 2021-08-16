@@ -1464,7 +1464,6 @@ class OrderController extends BaseController
             if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
-
                         if (!isset($row['po'])) {
                             return $response
                                 ->setError()
@@ -1580,7 +1579,7 @@ class OrderController extends BaseController
                             $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
-                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['order_status']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::LASHOWROOM]);
