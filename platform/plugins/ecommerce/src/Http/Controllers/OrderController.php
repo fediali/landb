@@ -1452,11 +1452,11 @@ class OrderController extends BaseController
             $move = $request->file('file')->move(public_path('storage/importorders'), $request->file('file')->getClientOriginalName());
             $order = Excel::toCollection(new OrderImportFile(), $move);
             $filecheck = OrderImportUpload::where('file', $move)->first();
-//            if ($filecheck != null) {
-//                return $response
-//                    ->setError()
-//                    ->setMessage('File Already Exist');
-//            }
+            if ($filecheck != null) {
+                return $response
+                    ->setError()
+                    ->setMessage('File Already Exist');
+            }
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
@@ -1521,12 +1521,12 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
+                            //$pack = quantityCalculate($product['category_id']);
                             $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
-//                            $pack = quantityCalculate($product['category_id']);
-                            if(!$pack){
+                            if (!$pack) {
                                 return $response
                                     ->setError()
-                                    ->setMessage('Please add Peices in Product '.$row['style']);
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
                             }
                             $orderQuantity = $row['original_qty'] / $pack;
 
@@ -1719,12 +1719,12 @@ class OrderController extends BaseController
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
                             $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
-                            if(!$pack){
+                            if (!$pack) {
                                 return $response
                                     ->setError()
-                                    ->setMessage('Please add Peices in Product '.$row['style']);
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
                             }
-                            $orderQuantity = $row['total_qty'] / $pack ;
+                            $orderQuantity = $row['total_qty'] / $pack;
 
 //                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
 //                                if ($orderQuantity <= $product->online_sales_qty) {
@@ -1909,11 +1909,11 @@ class OrderController extends BaseController
                         if ($product) {
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
-                            $pack = ($product->prod_pieces) ? $product->prod_pieces:quantityCalculate($product['category_id']) ;
-                            if(!$pack){
+                            $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
+                            if (!$pack) {
                                 return $response
                                     ->setError()
-                                    ->setMessage('Please add Peices in Product '.$row['style']);
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
                             }
                             $orderQuantity = $row['totalqty'] / $pack;
 
