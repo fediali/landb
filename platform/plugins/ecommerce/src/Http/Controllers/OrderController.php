@@ -1714,23 +1714,23 @@ class OrderController extends BaseController
                             $pack = $product->prod_pieces;
                             $orderQuantity = $row['total_qty'] / $pack;
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                                if ($orderQuantity <= $product->online_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->online_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->online_sales_qty;
-                                    $orderQuantity = $product->online_sales_qty;
-                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                                if ($orderQuantity <= $product->in_person_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->in_person_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
-                                    $orderQuantity = $product->in_person_sales_qty;
-                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } else {
+//                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                                if ($orderQuantity <= $product->online_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->online_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->online_sales_qty;
+//                                    $orderQuantity = $product->online_sales_qty;
+//                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                                if ($orderQuantity <= $product->in_person_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->in_person_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+//                                    $orderQuantity = $product->in_person_sales_qty;
+//                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } else {
                                 if ($orderQuantity <= $product->quantity) {
                                     $checkProdQty = true;
                                 } elseif ($product->quantity > 0) {
@@ -1738,7 +1738,7 @@ class OrderController extends BaseController
                                     $orderQuantity = $product->quantity;
                                     $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
                                 }
-                            }
+//                            }
 
                         } else {
                             $errors[] = $row['style'] . ' product is not found.';
@@ -1900,23 +1900,23 @@ class OrderController extends BaseController
                             $pack = $product->prod_pieces;
                             $orderQuantity = $row['totalqty'] / $pack;
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                                if ($orderQuantity <= $product->online_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->online_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->online_sales_qty;
-                                    $orderQuantity = $product->online_sales_qty;
-                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                                if ($orderQuantity <= $product->in_person_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->in_person_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
-                                    $orderQuantity = $product->in_person_sales_qty;
-                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } else {
+//                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                                if ($orderQuantity <= $product->online_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->online_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->online_sales_qty;
+//                                    $orderQuantity = $product->online_sales_qty;
+//                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                                if ($orderQuantity <= $product->in_person_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->in_person_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+//                                    $orderQuantity = $product->in_person_sales_qty;
+//                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } else {
                                 if ($orderQuantity <= $product->quantity) {
                                     $checkProdQty = true;
                                 } elseif ($product->quantity > 0) {
@@ -1924,7 +1924,7 @@ class OrderController extends BaseController
                                     $orderQuantity = $product->quantity;
                                     $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
                                 }
-                            }
+//                            }
 
                         } else {
                             $errors[] = $row['styleno'] . ' product is not found.';
