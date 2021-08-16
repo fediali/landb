@@ -277,7 +277,7 @@ class ProductTable extends TableAbstract
         $query = $model
             ->select($select)
             ->where('is_variation', 0)
-            ->where('status', '!=', BaseStatusEnum::HIDDEN);
+            ->where('status', '!=', BaseStatusEnum::HIDE);
 
 
         if ($this->request()->has('search_id')) {

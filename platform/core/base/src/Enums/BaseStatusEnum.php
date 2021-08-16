@@ -21,6 +21,7 @@ class BaseStatusEnum extends Enum
 
     public const SCHEDULE = 'schedule';
 
+    public const HIDE = 'Hide';
 
     public const VERIFIED = 'verified';
     public const HIDDEN = 'Hidden';

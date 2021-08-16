@@ -380,6 +380,13 @@ class ThreadordersController extends BaseController
                         $product->status = BaseStatusEnum::DRAFT;
                     }
                     $product->save();
+                    foreach ($product->variations as $item) {
+                        $item->product->status = BaseStatusEnum::PUBLISHED;
+                        if ($item->product->private_label) {
+                            $item->product->status = BaseStatusEnum::DRAFT;
+                        }
+                        $item->product->save();
+                    }
                 }
             }
         }
@@ -567,6 +574,8 @@ class ThreadordersController extends BaseController
             $variations = $threadorder->threadOrderVariations();
 
             foreach ($variations as $key => $variation) {
+                dd(quantityCalculate($variation->product_category_id));
+
                 $check = Product::where('sku', $variation->sku)->first();
                 if (!$check) {
                     $packQuantity = quantityCalculate($variation->product_category_id);
@@ -574,7 +583,7 @@ class ThreadordersController extends BaseController
                     $product->name = $variation->name;
                     $product->description = $variation->name;
                     $product->content = $variation->name;
-                    $product->status = BaseStatusEnum::HIDDEN;
+                    $product->status = BaseStatusEnum::HIDE;
                     if ($threadorder->thread_status == Thread::PRIVATE) {
                         // $product->status = BaseStatusEnum::DRAFT;
                         $product->private_label = 1;
