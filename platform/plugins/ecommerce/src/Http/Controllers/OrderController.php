@@ -1460,7 +1460,7 @@ class OrderController extends BaseController
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
-
+            $orderProduct = 0;
             if ($request->market_place == Order::LASHOWROOM) {
 
                 foreach ($order as $od) {
