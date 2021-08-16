@@ -534,7 +534,6 @@ class OrderController extends BaseController
      */
     public function edit($id)
     {
-
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
                 'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',

@@ -51,8 +51,8 @@ class Role extends BaseModel
     ];
 
     const ADMIN = 'admin';
-    const ONLINE_SALES = 'onlines-sales';
-    const IN_PERSON_SALES = 'inpersons-sales';
+    const ONLINE_SALES = 'onlines-saless';
+    const IN_PERSON_SALES = 'inpersons-saless';
 
     /**
      * @param string $value
