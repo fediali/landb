@@ -587,6 +587,7 @@ class OrderController extends BaseController
             dd($order, $cards, $order->payment);
         }
 
+
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
     }
 
