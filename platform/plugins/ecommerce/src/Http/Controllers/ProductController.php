@@ -948,7 +948,7 @@ class ProductController extends BaseController
         if ($includeVariation) {
             foreach ($availableProducts as &$availableProduct) {
                 $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null,
-                    'thumb', false, RvMedia::getDefaultImage());
+                    null, false, RvMedia::getDefaultImage());
                 $availableProduct->price = $availableProduct->front_sale_price;
                 foreach ($availableProduct->variations as &$variation) {
                     $variation->price = $variation->product->front_sale_price;
