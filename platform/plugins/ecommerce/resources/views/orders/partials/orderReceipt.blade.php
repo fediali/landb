@@ -123,7 +123,7 @@
             <tr>
                 <td >
 
-                    <img class="split-img"
+                    <img style="max-width: 80px;" class="split-img"
                          src="{{ RvMedia::getImageUrl($order_product->product->image, null, false, RvMedia::getDefaultImage()) }}"/>
                 </td>
                 <td>
