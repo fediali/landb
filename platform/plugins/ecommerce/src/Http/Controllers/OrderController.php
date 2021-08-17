@@ -1065,6 +1065,7 @@ class OrderController extends BaseController
             }
         }
         $status['status'] = 'Refund';
+        Order::where('id', $order->id)->update($status);
         $this->orderRepository->createOrUpdate($order, $status);
         if ($request->input('refund_amount', 0) > 0) {
             $this->orderHistoryRepository->createOrUpdate([
