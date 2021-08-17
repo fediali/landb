@@ -1174,3 +1174,7 @@ tbody>tr>:nth-child(3) span{
 
  .next-field__connected-wrapper .next-input, .next-input--stylized {
   min-width: 100px !important; }
+
+  .ft-12 {
+    font-size: 12px !important;
+  }
