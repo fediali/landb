@@ -16,6 +16,7 @@ use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Services\HandleApplyCouponService;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
 use Botble\Theme\Events\RenderingSingleEvent;
@@ -39,10 +40,11 @@ use OrderHelper;
 class CartController extends Controller
 {
     private $user;
-
-    public function __construct()
+    protected $coupan_service;
+    public function __construct(HandleApplyCouponService $applyCouponService)
     {
         $this->user = auth('customer')->user();
+      $this->coupan_service = $applyCouponService;
     }
 
     public function getIndex(Request $request)
@@ -54,12 +56,14 @@ class CartController extends Controller
                 }
             }
         }
-        $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
+        $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
         if (!count($cart->products)) {
             return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
         }
+
+
         $token = OrderHelper::getOrderSessionToken();
         return Theme::scope('cart', ['cart' => $cart])->render();
     }
@@ -170,17 +174,41 @@ class CartController extends Controller
 
     public function getOrderAndUpdateAmount()
     {
-        $orderId = $this->getUserCart();
+        $orderId = auth('customer')->user()->getUserCart();
         $products = OrderProduct::where('order_id', $orderId)->get();
         $amount = 0;
 
         foreach ($products as $product) {
             $amount = $amount + ($product->qty * $product->price);
         }
-        Order::find($orderId)->update([
+        $order_current = Order::find($orderId);
+        $coupon_code = $order_current->coupon_code;
+        $order_current->update([
             'sub_total' => $amount,
             'amount'    => $amount
         ]);
+        if(!empty($coupon_code)){
+          $order = Order::find($orderId);
+          $applyCoupon = $this->coupan_service->execute($order->coupon_code);
+
+          if(!$applyCoupon['error']){
+            if (count($products)){
+              $order->discount_amount =  $applyCoupon['data']['discount_amount'];
+              $order->amount = $order->sub_total - $order->discount_amount;
+              $order->save();
+            }else {
+              $order->coupon_code = null;
+              $order->discount_amount = 0.00;
+              $order->amount = $order->sub_total;
+              $order->save();
+            }
+          }else{
+            $order->coupon_code = null;
+            $order->discount_amount = 0.00;
+            $order->amount = $order->sub_total;
+            $order->save();
+          }
+        }
     }
 
     public function deleteCartItem($id)

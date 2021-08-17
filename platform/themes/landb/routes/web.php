@@ -60,6 +60,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
 
+    Route::post('/apply_coupon', 'CheckoutController@applyCoupon')
+        ->name('public.cart.apply_coupon');
+
     Route::get('/order/success/{id}', 'OrderController@success')
         ->name('public.order.success');
 

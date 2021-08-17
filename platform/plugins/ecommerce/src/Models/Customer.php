@@ -22,6 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use RvMedia;
+use OrderHelper;
 
 /**
  * @mixin \Eloquent
@@ -301,5 +302,29 @@ class Customer extends Authenticatable
       $date =  $this->orders()->where('is_finished' , 1)->latest()->pluck('created_at')->first();
       $date = !is_null($date) ? date('m/d/y', strtotime($date)) : '-';
       return $date;
+    }
+
+    public function getUserCart()
+    {
+      $check = $this->pendingOrder();
+      $token = OrderHelper::getOrderSessionToken();
+
+      if (!$check) {
+        $cart = Order::create([
+            'user_id'         => auth('customer')->user()->id,
+            'salesperson_id'  => auth('customer')->user()->salesperson_id,
+            'amount'          => 0,
+            'sub_total'       => 0,
+            'is_finished'     => 0,
+            'token'           => $token,
+            'tax_amount'      => 0,
+            'discount_amount' => 0,
+            'shipping_amount' => 0,
+            'currency_id'     => 1,
+        ]);
+        return $cart->id;
+      } else {
+        return $this->pendingOrderId();
+      }
     }
 }
