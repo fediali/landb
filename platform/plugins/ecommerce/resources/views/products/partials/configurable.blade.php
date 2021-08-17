@@ -41,9 +41,10 @@
                 <tr>
                     <td>
                         <div class="wrap-img-product">
-                            <img
-                                src="{{ RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, 'thumb', false, RvMedia::getDefaultImage()) }}"
-                                alt="{{ trans('plugins/ecommerce::products.form.image')  }}">
+                           <a href="{{RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, null, false, RvMedia::getDefaultImage()) }}}}" target="_blank"> <img
+                                src="{{ RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, null, false, RvMedia::getDefaultImage()) }}"
+{{--                                alt="{{ trans('plugins/ecommerce::products.form.image')  }}"--}}
+                            ></a>
                         </div>
                     </td>
                     @foreach ($productVariationsInfo->where('variation_id', $variation->id)->sortBy('attribute_set_id') as $key => $item)
