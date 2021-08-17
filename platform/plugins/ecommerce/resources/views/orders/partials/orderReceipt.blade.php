@@ -110,6 +110,7 @@
     <table class="table">
         <thead>
         <tr>
+            <th style="font-size:12px;" scope="col">Image</th>
             <th style="font-size:12px;" scope="col">Item Description</th>
             <th style="font-size:12px;" scope="col">SEC</th>
             <th style="font-size:12px;" scope="col">Quantity</th>
@@ -120,6 +121,10 @@
         <tbody>
         @foreach($order->products as $order_product)
             <tr>
+                <td >
+                    <img class="split-img"
+                         src="{{ RvMedia::getImageUrl(@$order_product->product->image, null, false, RvMedia::getDefaultImage()) }}"/>
+                </td>
                 <td>
                     {{--{!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}--}}
                     <div class="ml-3">
@@ -180,6 +185,18 @@
     </div>
     <hr>
     <div class="row">
+        <div class="col-lg-6 col-6">
+            <h3 style="font-size:16px;">
+                <b>Customer Notes</b>
+            </h3>
+        </div>
+        <div class="col-lg-6 col-6 text-right">
+            <p style="font-size:12px;">
+                {{ $order->notes }}
+            </p>
+        </div>
+    </div>
+    <hr> <div class="row">
         <div class="col-lg-6 col-6">
             <h3 style="font-size:16px;">
                 <b>TOTAL</b>
