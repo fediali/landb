@@ -41,7 +41,7 @@
                 <tr>
                     <td>
                         <div class="wrap-img-product">
-                           <a href="{{RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, null, false, RvMedia::getDefaultImage()) }}}}" target="_blank"> <img
+                           <a href="{{RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, null, false, RvMedia::getDefaultImage()) }}" target="_blank"> <img
                                 src="{{ RvMedia::getImageUrl($currentRelatedProduct && $currentRelatedProduct->image ? $currentRelatedProduct->image : $product->image, null, false, RvMedia::getDefaultImage()) }}"
 {{--                                alt="{{ trans('plugins/ecommerce::products.form.image')  }}"--}}
                             ></a>
