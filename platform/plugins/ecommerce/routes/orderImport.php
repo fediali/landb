@@ -5,14 +5,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
         Route::group(['prefix' => 'orders-import', 'as' => 'orders-import.'], function () {
             Route::resource('', 'OrderImportController')->parameters(['' => 'order-import']);
 
-
             Route::get('orders-import', [
                 'as'         => 'orders-import',
                 'uses'       => 'OrderImportController@index',
-                'permission' => 'orders-import.index',
+                'permission' => 'order-import.index',
             ]);
-
-
         });
 
     });

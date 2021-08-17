@@ -276,8 +276,8 @@ class ProductTable extends TableAbstract
 
         $query = $model
             ->select($select)
-            ->where('is_variation', 0);
-//            ->where('status', '!=', BaseStatusEnum::HIDDEN);
+            ->where('is_variation', 0)
+            ->where('status', '!=', BaseStatusEnum::HIDDEN);
 
 
         if ($this->request()->has('search_id')) {
@@ -303,7 +303,6 @@ class ProductTable extends TableAbstract
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
                 $q->whereIn('ec_products.status', $search_items['prod_status']);
-
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
