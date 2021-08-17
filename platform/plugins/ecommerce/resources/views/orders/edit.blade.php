@@ -76,6 +76,8 @@
                                                         'ec_products.end_date',
                                                         'ec_products.sku',
                                                         'ec_products.is_variation',
+                                                        'ec_products.sizes',
+                                                        'ec_products.prod_pieces',
                                                     ],
                                                 ]);
                                             @endphp
@@ -86,7 +88,8 @@
                                                         <div class="wrap-img"><img
                                                                 class="thumb-image thumb-image-cartorderlist"
                                                                 src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
-                                                                "></div>
+                                                            ">
+                                                        </div>
                                                     </td>
                                                 @endif
                                                 <td class="pl5 p-r5 min-width-200-px">
@@ -106,11 +109,14 @@
                                                                     @php $attributes = get_product_attributes($product->id) @endphp
                                                                     @if (!empty($attributes))
                                                                         @foreach ($attributes as $attribute)
-                                                                            {{ $attribute->attribute_set_title }}
-                                                                            : {{ $attribute->title }}@if (!$loop->last)
-                                                                                , @endif
+
+                                                                            @if($attribute->attribute_set_title !== 'Size')
+                                                                                {{ $attribute->attribute_set_title }}
+                                                                                : {{ $attribute->title }}@if (!$loop->last)
+                                                                                     @endif
+                                                                            @endif
                                                                         @endforeach
-                                                                    @endif
+                                                                    @endif , Size : {{$product->sizes}}
                                                                 </small>
                                                             </p>
                                                         @endif
@@ -587,9 +593,11 @@
                                 ?>
 
                                 <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
+                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>  &nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next
+                                    Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
 
 
@@ -1018,7 +1026,7 @@
                 let maxQty = $(this).data('prod-qty');
                 let curVal = $(this).val();
                 let final = maxQty - curVal;
-                let input = 'input#split-input2-'+prodId;
+                let input = 'input#split-input2-' + prodId;
                 $(input).val(final);
             });
             $('body').on('change', 'input.split-input2', function () {
