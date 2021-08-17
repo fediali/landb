@@ -1006,6 +1006,9 @@ class OrderController extends BaseController
     public function postRefund($id, RefundRequest $request, BaseHttpResponse $response)
     {
         $order = $this->orderRepository->findOrFail($id);
+        $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::REFUND],
+            compact('id'));
+
         if ($request->input('refund_amount') > ($order->payment->amount - $order->payment->refunded_amount)) {
             return $response
                 ->setError()
@@ -1064,9 +1067,7 @@ class OrderController extends BaseController
                 $this->orderProductRepository->createOrUpdate($orderProduct);
             }
         }
-        $status['status'] = 'Refund';
-        Order::where('id', $order->id)->update($status);
-        $this->orderRepository->createOrUpdate($order, $status);
+
         if ($request->input('refund_amount', 0) > 0) {
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'refund',
