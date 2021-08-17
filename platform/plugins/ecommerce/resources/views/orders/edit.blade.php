@@ -113,10 +113,11 @@
                                                                             @if($attribute->attribute_set_title !== 'Size')
                                                                                 {{ $attribute->attribute_set_title }}
                                                                                 : {{ $attribute->title }}@if (!$loop->last)
-                                                                                     @endif
+                                                                                @endif
                                                                             @endif
                                                                         @endforeach
-                                                                    @endif , Size : {{$product->sizes}}
+                                                                    @endif , Size : {{$product->sizes}}, Per
+                                                                    Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                 </small>
                                                             </p>
                                                         @endif
