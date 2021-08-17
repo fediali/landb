@@ -163,7 +163,7 @@
             <p style="font-size:12px;" class="mt-2">Shipping</p>
         </div>
         <div class="col-lg-6 col-6 text-right">
-            <p style="font-size:12px;" class="mt-2">$ 00.00</p>
+            <p style="font-size:12px;" class="mt-2">$ {{ $order->shipping_amount }}</p>
         </div>
     </div>
     <hr>
