@@ -132,12 +132,19 @@
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
 
                         @endphp
-                        @if($variation->title == 'Pack')
-{{--                            @dd($variation)--}}
+                        @if($variation)
                             <p style="font-size:12px;" class="cart-product-size mb-2">
-                                SIZE: {{ $order_product->product->sizes }}</p>
-                            <p style="font-size:14px;">
-                                <strong>Price Per Piece: ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}</p></strong>
+                                Type: {{ $variation->title }}</p>
+                            @if($variation->title == 'Pack')
+                                <p style="font-size:12px;"
+                                   class="cart-product-size mb-2">
+                                    SIZE: {{ $order_product->product->sizes }}</p>
+                                <p style="font-size:14px;">
+                                    <strong>Price Per Piece:
+                                        ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
+                                </p></strong>
+
+                            @endif
                         @endif
                     </div>
                 </td>
