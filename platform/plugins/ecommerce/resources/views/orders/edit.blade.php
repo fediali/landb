@@ -288,12 +288,12 @@
                                             </table>
                                         </div>
                                         <br>
-                                        <div class="text-right">
-                                            <a href="{{ route('orders.generate-invoice', $order->id) }}"
-                                               class="btn btn-info">
-                                                <i class="fa fa-download"></i> {{ trans('plugins/ecommerce::order.download_invoice') }}
-                                            </a>
-                                        </div>
+{{--                                        <div class="text-right">--}}
+{{--                                            <a href="{{ route('orders.generate-invoice', $order->id) }}"--}}
+{{--                                               class="btn btn-info">--}}
+{{--                                                <i class="fa fa-download"></i> {{ trans('plugins/ecommerce::order.download_invoice') }}--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
                                         <div class="pd-all-20">
                                             <form action="{{ route('orders.edit', $order->id) }}">
                                                 <label
