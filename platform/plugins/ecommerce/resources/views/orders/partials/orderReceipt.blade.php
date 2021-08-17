@@ -122,8 +122,9 @@
         @foreach($order->products as $order_product)
             <tr>
                 <td >
+
                     <img class="split-img"
-                         src="{{ RvMedia::getImageUrl(@$order_product->product->images, null, false, RvMedia::getDefaultImage()) }}"/>
+                         src="{{ RvMedia::getImageUrl($order_product->product->image, null, false, RvMedia::getDefaultImage()) }}"/>
                 </td>
                 <td>
                     {{--{!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}--}}
