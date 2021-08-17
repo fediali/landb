@@ -21,6 +21,7 @@ use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
+use Botble\Ecommerce\Services\HandleApplyCouponService;
 use Botble\Ecommerce\Supports\EcommerceHelper;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
@@ -53,19 +54,22 @@ class CheckoutController extends Controller
     protected $payPalService;
     protected $orderRepository;
     protected $omniPaymentService;
+    protected $coupan_service;
 
-    public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, OmniPaymentService $omniPaymentService)
+    public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, OmniPaymentService $omniPaymentService, HandleApplyCouponService $applyCouponService)
     {
         $this->payPalService = $payPalService;
         $this->orderRepository = $orderRepository;
         $this->omniPaymentService = $omniPaymentService;
+        $this->coupan_service = $applyCouponService;
     }
 
     public function getCheckoutIndex($token)
     {
-        $cart = $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
+        $cart =  Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
+
         foreach ($cart->products as $cartProduct) {
             if ($cartProduct->product->quantity < 1) {
                 return redirect()->route('public.cart_index', ['discard' => 'true', 'item' => $cartProduct->id])->with('error', '"' . $cartProduct->product->name . '" is out of stock and is removed from cart!');
@@ -344,6 +348,30 @@ class CheckoutController extends Controller
           }
         }
       }
+    }
+
+    public function applyCoupon(Request $request){
+      $code = $request->coupon_code;
+      if(!empty($code)){
+        $applyCoupon = $this->coupan_service->execute($code);
+
+        if(!$applyCoupon['error']){
+          $cart =  Order::where('id', auth('customer')->user()->getUserCart())->first();
+          if($cart){
+            if(empty($cart->coupon_code)){
+              $cart->coupon_code = $code;
+              $cart->discount_amount = $cart->discount_amount + $applyCoupon['data']['discount_amount'];
+              $cart->amount = $cart->sub_total - $cart->discount_amount;
+              if($cart->save()){
+                return redirect()->back()->with('success', 'Coupon Applied Successfully');
+              }
+            }
+          }
+        }else{
+          return redirect()->back()->with('error', $applyCoupon['message']);
+        }
+      }
+      return redirect()->back()->with('error', 'Something went wrong or invalid Coupon code');
     }
 
 

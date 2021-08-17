@@ -209,7 +209,7 @@ class Product extends BaseModel
      */
     public function discounts()
     {
-        return $this->belongsToMany(Discount::class, 'ec_discount_products', 'product_id', 'id');
+        return $this->belongsToMany(Discount::class, 'ec_discount_products', 'product_id', 'discount_id');
     }
 
     /**

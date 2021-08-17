@@ -269,3 +269,16 @@ if (!function_exists('get_country_name')) {
   }
 
 }
+
+if (!function_exists('get_parent_product_by_variant')) {
+  /**
+   * Helper get parent of product variation
+   * @param int $variationId
+   * @param array $with
+   * @return Product
+   */
+  function get_parent_product_by_variant($variationId, array $with = [])
+  {
+    return app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface::class)->getParentOfVariation($variationId, $with);
+  }
+}

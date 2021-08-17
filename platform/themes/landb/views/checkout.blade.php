@@ -386,7 +386,7 @@
                                     <form method="POST" id="checkout-main-form"
                                           action="{{ route('public.cart.order_checkout') }}">
                                         @csrf
-                                        <input type="hidden" name="amount" value="{{ $grand_total }}">
+                                        <input type="hidden" name="amount" value="{{ $cart->amount }}">
                                         <input type="hidden" name="order_id" value="{{ $cart->id }}">
                                         <input type="hidden" name="sub_total" value="{{ $cart->sub_total }}">
                                         <input type="hidden" name="currency"
@@ -585,7 +585,7 @@
                         <p class="cout-note">Subtotal:</p>
                     </div>
                     <div class="col-lg-4 col-6">
-                        <p class="note-product-price">$ {{ $grand_total }}</p>
+                        <p class="note-product-price">$ {{ $cart->sub_total }}</p>
 
                     </div>
                 </div>
@@ -611,12 +611,43 @@
                     <div></div>
 
                 </div>
+                <p class="cout-note  mt-3">Coupon Code</p>
+                <form method="POST" action="{{ route('public.cart.apply_coupon') }}">
+                    @csrf
+                <div class="row mt-2">
+
+                    <div class="col-lg-12 col-12 pr-0">
+                        <div class="row">
+                                <div class="col-lg-9 col-9 pr-0">
+                                    <input type="text" placeholder="Gift certificate or coupon code" @if(!empty($cart->coupon_code)) readonly @endif value="{{ $cart->coupon_code }}" name="coupon_code" class="cart-coupon-input" />
+                                </div>
+                                <div class="col-lg-3 col-3 pl-0">
+                                    <button type="submit" class=" btn cart-btn w-100" @if(!empty($cart->coupon_code)) disabled @endif>Apply</button>
+                                </div>
+
+                            <div></div>
+
+                        </div>
+                    </div>
+
+                </div>
+                </form>
+                <div class="row  mt-4">
+                    <div class="col-lg-8 col-6">
+                        <p class="cout-note">Discount:</p>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <p class="note-product-price">$ {{ $cart->discount_amount  }}</p>
+
+                    </div>
+                </div>
+
                 <div class="row  mt-4">
                     <div class="col-lg-8 col-6">
                         <p class="cout-note">Total:</p>
                     </div>
                     <div class="col-lg-4 col-6">
-                        <p class="note-product-price">$ {{ $grand_total }}</p>
+                        <p class="note-product-price">$ {{ $cart->amount  }}</p>
 
                     </div>
                 </div>
