@@ -208,7 +208,7 @@ class OrderController extends BaseController
 //            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
 //                $stockQty = $product->in_person_sales_qty;
 //            } else {
-                $stockQty = $product->quantity;
+            $stockQty = $product->quantity;
 //            }
 
             if ($request->input('order_type') != Order::PRE_ORDER) {
@@ -1064,7 +1064,8 @@ class OrderController extends BaseController
                 $this->orderProductRepository->createOrUpdate($orderProduct);
             }
         }
-
+        $status['status'] = 'Refund';
+        $this->orderRepository->createOrUpdate($order, $status);
         if ($request->input('refund_amount', 0) > 0) {
             $this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'refund',
