@@ -136,7 +136,7 @@
                             <p style="font-size:12px;" class="cart-product-size mb-2">
                                 SIZE: {{ $order_product->product->sizes }}</p>
                             <p style="font-size:14px;">
-                                <strong>Price Per Piece: {{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}</p></strong>
+                                <strong>Price Per Piece: ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}</p></strong>
                         @endif
                     </div>
                 </td>
