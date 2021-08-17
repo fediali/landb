@@ -133,9 +133,9 @@
 
                         @endphp
                         @if($variation)
-                            <p style="font-size:12px;" class="cart-product-size mb-2">
-                                Type: {{ $variation->title }}</p>
                             @if($variation->title == 'Pack')
+                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                    Type: {{ $variation->title }}</p>
                                 <p style="font-size:12px;"
                                    class="cart-product-size mb-2">
                                     SIZE: {{ $order_product->product->sizes }}</p>
@@ -143,7 +143,11 @@
                                     <strong>Price Per Piece:
                                         ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
                                 </p></strong>
-
+                            @else
+                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                    Type: Single</p>
+                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                    Size: {{ substr($variation->title,0,-3) }}</p>
                             @endif
                         @endif
                     </div>
