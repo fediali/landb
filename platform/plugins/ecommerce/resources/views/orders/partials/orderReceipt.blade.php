@@ -1,10 +1,10 @@
 <section class="ml-5 mr-5 mt-3" style=" page-break-before: always;">
     <div class="row">
         <div style="width:70%;">
-            <img height="50" src="{{ asset('landb/img/Logo.png') }}" />
-        </div> 
+            <img height="50" src="{{ asset('landb/img/Logo.png') }}"/>
+        </div>
         <div style="width:30%;">
-          <p style="font-size:12px;" class="m-0">
+            <p style="font-size:12px;" class="m-0">
                 <b> ORDER # {{ $order->id }} </b>
             </p>
             <p style="font-size:12px;" class="m-0">
@@ -17,9 +17,9 @@
                 <b>STATUS</b> {{ ucfirst($order->status) }}
             </p>
         </div>
-    </div> 
+    </div>
     <div style="display:flex" class="row mt-5">
-        <div style="width:33%">
+        <div style="width:34%">
             <div style="background: #eaeaea;" class="p-3">
                 <h6>
                     <b>STORE</b>
@@ -111,10 +111,9 @@
         <thead>
         <tr>
             <th style="font-size:12px;" scope="col">Item Description</th>
+            <th style="font-size:12px;" scope="col">SEC</th>
             <th style="font-size:12px;" scope="col">Quantity</th>
             <th style="font-size:12px;" scope="col">Price</th>
-            <th style="font-size:12px;" scope="col">Discount</th>
-            <th style="font-size:12px;" scope="col">Tax</th>
             <th style="font-size:12px;" scope="col">Item Total</th>
         </tr>
         </thead>
@@ -124,22 +123,27 @@
                 <td>
                     {{--{!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}--}}
                     <div class="ml-3">
-                        <p style="font-size:12px;" class="cart-product-name mt-2 mb-2">{{ $order_product->product->name }}</p>
-                        <p style="font-size:12px;" class="cart-product-code mb-2">CODE: {{ $order_product->product->sku }}</p>
+                        <p style="font-size:12px;"
+                           class="cart-product-name mt-2 mb-2">{{ $order_product->product->name }}</p>
+                        <p style="font-size:12px;" class="cart-product-code mb-2">
+                            CODE: {{ $order_product->product->sku }}</p>
                         @php $sizes = get_category_sizes_by_id($order_product->product->category_id); @endphp
                         @php
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
 
                         @endphp
                         @if($variation)
-                            <p style="font-size:12px;" class="cart-product-size">SIZE: {{ $variation->title }}</p>
+                            <p style="font-size:12px;" class="cart-product-size">
+                                SIZE: {{ $order_product->product->sizes }}</p>
+                            <p style="font-size:14px;"class="cart-product-size">
+                                <strong>Price Per Piece: {{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}</p></strong>
                         @endif
                     </div>
                 </td>
+                <td style="font-size:12px;">{{ $order_product->product->warehouse_sec }}</td>
                 <td style="font-size:12px;">{{ $order_product->qty }}</td>
-                <td style="font-size:12px;">$ {{ $order_product->price }}</td>
-                <td>-</td>
-                <td>-</td>
+                <td style="font-size:12px;">$ {{ $order_product->price  }}</td>
+
                 <td style="font-size:12px;">$ {{ $order_product->qty*$order_product->price  }}</td>
             </tr>
         @endforeach
