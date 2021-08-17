@@ -114,10 +114,14 @@
                                                                                 {{ $attribute->attribute_set_title }}
                                                                                 : {{ $attribute->title }}@if (!$loop->last)
                                                                                 @endif
+                                                                                @if($attribute->title !== 'Single')
+                                                                                    , Size : {{$product->sizes}}
+                                                                                @endif
                                                                             @endif
                                                                         @endforeach
-                                                                    @endif , Size : {{$product->sizes}}, Per
-                                                                    Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                    @endif
+                                                                    , Per Piece:
+                                                                    ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                 </small>
                                                             </p>
                                                         @endif
