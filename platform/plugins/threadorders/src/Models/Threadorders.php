@@ -215,9 +215,10 @@ class Threadorders extends BaseModel
     {
         $check = InventoryHistory::join('ec_products', 'ec_products.id', 'inventory_history.parent_product_id')
             ->where('thread_order_id', $this->id)
-            ->where('ec_products.status', BaseStatusEnum::PUBLISHED)
+            ->whereIn('ec_products.status', [BaseStatusEnum::PUBLISHED, BaseStatusEnum::DRAFT])
             /*->where('reference', '!=', InventoryHistory::PROD_REORDER)*/
             ->value('inventory_history.id');
+            //dd($check);
         if ($check) {
             return true;
         }

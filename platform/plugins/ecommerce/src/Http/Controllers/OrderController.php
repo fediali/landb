@@ -1605,8 +1605,8 @@ class OrderController extends BaseController
                             }
                         }
 
-
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
+
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
