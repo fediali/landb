@@ -50,15 +50,15 @@ class importProducts extends Command
      * @return void
      */
     public function __construct(
-//        ProductVariationInterface $productVariation,
-//        ProductCategoryInterface $productCategoryRepository,
-//        BaseHttpResponse $response
+        ProductVariationInterface $productVariation,
+        ProductCategoryInterface $productCategoryRepository,
+        BaseHttpResponse $response
     )
     {
         parent::__construct();
-//        $this->response = $response;
-//        $this->productVariation = $productVariation;
-//        $this->productCategoryRepository = $productCategoryRepository;
+        $this->response = $response;
+        $this->productVariation = $productVariation;
+        $this->productCategoryRepository = $productCategoryRepository;
     }
 
     /**
@@ -73,7 +73,7 @@ class importProducts extends Command
 
         $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
-
+        Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
 
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {

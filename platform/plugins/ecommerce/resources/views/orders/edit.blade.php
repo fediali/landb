@@ -842,12 +842,12 @@
                                             <label
                                                 class="title-text-second"><strong>Billing Address</strong></label>
                                         </div>
-                                        <li>{{ $order->billingAddress->name }}</li>
-                                        @if ($order->billingAddress->phone)
+                                        <li>{{ @$order->billingAddress->name }}</li>
+                                        @if (@$order->billingAddress->phone)
                                             <li>
-                                                <a href="tel:{{ $order->billingAddress->phone }}">
+                                                <a href="tel:{{ @$order->billingAddress->phone }}">
                                                     <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                                    <span>{{ $order->billingAddress->phone }}</span>
+                                                    <span>{{ @$order->billingAddress->phone }}</span>
                                                 </a>
                                             </li>
                                         @endif
