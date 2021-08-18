@@ -164,7 +164,6 @@ class OrderController extends BaseController
     public function index(OrderTable $dataTable)
     {
         page_title()->setTitle(trans('plugins/ecommerce::order.name'));
-
         return $dataTable->renderTable();
     }
 
@@ -181,7 +180,6 @@ class OrderController extends BaseController
             ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
-
         // return view('plugins/ecommerce::orders.create');
         return view('plugins/ecommerce::orders.create-back');
     }

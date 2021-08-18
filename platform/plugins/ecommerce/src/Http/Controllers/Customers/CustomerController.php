@@ -84,7 +84,8 @@ class CustomerController extends BaseController
 
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        return $formBuilder->create(CustomerForm::class)->remove('is_change_password')->renderForm();
+        return view('plugins/ecommerce::customers.create');
+//        return $formBuilder->create(CustomerForm::class)->remove('is_change_password')->renderForm();
     }
 
     /**
@@ -96,7 +97,11 @@ class CustomerController extends BaseController
     {
         $request->merge(['password' => bcrypt($request->input('password'))]);
         $customer = $this->customerRepository->createOrUpdate($request->input());
-
+        $data = $request->all();
+        $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
+        $data = array_diff_key($data, array_flip($remove));
+        $data['customer_type'] = json_encode($data['customer_type']);
+        CustomerDetail::updateOrCreate(['customer_id' => $customer->id], $data);
         event(new CreatedContentEvent(CUSTOMER_MODULE_SCREEN_NAME, $request, $customer));
 
         return $response
