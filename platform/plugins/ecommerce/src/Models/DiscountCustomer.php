@@ -12,6 +12,7 @@ class DiscountCustomer extends BaseModel
      * @var string
      */
     protected $table = 'ec_discount_customers';
+  public $timestamps = false;
 
     /**
      * @var array

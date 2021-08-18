@@ -186,7 +186,7 @@
                 <p class="mt-2">Subtotal</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ {{ $order->amount }}</p>
+                <p class="mt-2">$ {{ $order->sub_total }}</p>
             </div>
         </div>
         <div class="row">
@@ -195,6 +195,14 @@
             </div>
             <div class="col-lg-6 col-6 text-right">
                 <p class="mt-2">$ 00.00</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-6">
+                <p class="mt-2">Discount</p>
+            </div>
+            <div class="col-lg-6 col-6 text-right">
+                <p class="mt-2">$ {{ $order->discount_amount }}</p>
             </div>
         </div>
         <hr>

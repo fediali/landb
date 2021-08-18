@@ -15,6 +15,8 @@ use BaseHelper;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Cart\CartItem;
 use Botble\Ecommerce\Models\Customer;
+use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\DiscountCustomer;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\OrderProduct;
@@ -76,6 +78,10 @@ class CheckoutController extends Controller
             } elseif ($cartProduct->product->quantity < $cartProduct->qty) {
                 return redirect()->route('public.cart_index', ['discard' => 'false', 'item' => $cartProduct->id])->with('error', 'Required quantity of "' . $cartProduct->product->name . '" is out of stock. Only' . $cartProduct->product->quantity . ' left in stock!');
             }
+        }
+
+        if($this->checkIfCouponExpired($cart->id)){
+          return redirect()->route('public.checkout_index', $token)->with('error', 'Coupon code is now invalid or expired!');
         }
 
         $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress', 'addresses'])->first();
@@ -163,6 +169,7 @@ class CheckoutController extends Controller
                     $payment = Payment::where('charge_id', $chargeId)->first();
                     //dd($payment);
                     $this->checkIfPreOrder($order->id);
+                    $this->checkDiscount($order->id);
                     $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);
                     return redirect()->route('public.order.success', ['id' => $payment->order_id]);
                 }
@@ -210,6 +217,7 @@ class CheckoutController extends Controller
         return redirect()->route('public.cart_index', ['payment' => 'false']);
       }
         $this->checkIfPreOrder($order_id);
+        $this->checkDiscount($order_id);
         $order = $this->orderRepository->findById($order_id, ['address', 'products']);
         
         $payment = Payment::where('charge_id', $chargeId)->first();
@@ -353,6 +361,15 @@ class CheckoutController extends Controller
     public function applyCoupon(Request $request){
       $code = $request->coupon_code;
       if(!empty($code)){
+        $discountId = Discount::where('code', $code)->pluck('id')->first();
+        if($discountId){
+          $discounted = DiscountCustomer::where('discount_id', $discountId)->where('customer_id',  auth('customer')->user()->id)->first();
+          if($discounted){
+            return redirect()->back()->with('error', 'Coupon has already been used.');
+          }
+        }
+        /*if(){}*/
+
         $applyCoupon = $this->coupan_service->execute($code);
 
         if(!$applyCoupon['error']){
@@ -372,6 +389,38 @@ class CheckoutController extends Controller
         }
       }
       return redirect()->back()->with('error', 'Something went wrong or invalid Coupon code');
+    }
+
+    public function checkDiscount($id){
+      $order = Order::find($id);
+      if ($order){
+        $coupon_code = $order->coupon_code;
+        if(!empty($coupon_code)){
+          $discount = Discount::where('code', $coupon_code)->first();
+          if($discount){
+            DiscountCustomer::create(['discount_id' => $discount->id, 'customer_id' => $order->user_id]);
+          }
+        }
+      }
+    }
+
+    public function checkIfCouponExpired($id){
+      $order = Order::find($id);
+      if ($order) {
+        $coupon_code = $order->coupon_code;
+        if (!empty($coupon_code)) {
+          $applyCoupon = $this->coupan_service->execute($coupon_code);
+
+          if($applyCoupon['error']){
+            $order->coupon_code = null;
+            $order->discount_amount = 0.00;
+            $order->amount = $order->sub_total;
+            $order->save();
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
 
