@@ -202,14 +202,14 @@ class OrderController extends BaseController
                 continue;
             }
             $demandQty = Arr::get($productItem, 'quantity', 1);
-
-            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                $stockQty = $product->online_sales_qty;
-            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                $stockQty = $product->in_person_sales_qty;
-            } else {
-                $stockQty = $product->quantity;
-            }
+//
+//            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                $stockQty = $product->online_sales_qty;
+//            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                $stockQty = $product->in_person_sales_qty;
+//            } else {
+            $stockQty = $product->quantity;
+//            }
 
             if ($request->input('order_type') != Order::PRE_ORDER) {
                 if ($stockQty < $demandQty) {
@@ -223,17 +223,17 @@ class OrderController extends BaseController
                 $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
                 if ($getOrderProd && $demandQty != $getOrderProd->qty) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'order_product_qty_changed',
-                        'description' => 'Order product '.$getOrderProd->product_name.' qty changed from ' . $getOrderProd->qty . ' to ' . $demandQty . ' by %user_name%.',
-                        'order_id' => $request->input('order_id'),
-                        'user_id' => Auth::user()->getKey(),
+                        'action'      => 'order_product_qty_changed',
+                        'description' => 'Order product ' . $getOrderProd->product_name . ' qty changed from ' . $getOrderProd->qty . ' to ' . $demandQty . ' by %user_name%.',
+                        'order_id'    => $request->input('order_id'),
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
                 }
 
                 if ($getOrderProd && $getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
                     $this->orderHistoryRepository->createOrUpdate([
                         'action'      => 'product_price_change_on_order',
-                        'description' => $product->name.' product price change in order from $'.$getOrderProd->price.' to $'.Arr::get($productItem, 'sale_price', 1).' by %user_name%.',
+                        'description' => $product->name . ' product price change in order from $' . $getOrderProd->price . ' to $' . Arr::get($productItem, 'sale_price', 1) . ' by %user_name%.',
                         'order_id'    => $request->input('order_id'),
                         'user_id'     => Auth::user()->getKey(),
                     ], []);
@@ -270,7 +270,7 @@ class OrderController extends BaseController
             if ($order->order_type != $request->input('order_type')) {
                 $this->orderHistoryRepository->createOrUpdate([
                     'action'      => 'order_type_changed',
-                    'description' => 'Order type changes from '.$order->order_type.' to '.$request->input('order_type').' by %user_name%.',
+                    'description' => 'Order type changes from ' . $order->order_type . ' to ' . $request->input('order_type') . ' by %user_name%.',
                     'order_id'    => $request->input('order_id'),
                     'user_id'     => Auth::user()->getKey(),
                 ], []);
@@ -293,14 +293,14 @@ class OrderController extends BaseController
                 if ($request->input('discount_amount') > $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
                         'action'      => 'add_discount_on_order',
-                        'description' => '$'.$request->input('discount_amount').' discount added on order by %user_name%.',
+                        'description' => '$' . $request->input('discount_amount') . ' discount added on order by %user_name%.',
                         'order_id'    => $order->id,
                         'user_id'     => Auth::user()->getKey(),
                     ], []);
                 } elseif ($request->input('discount_amount') < $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
                         'action'      => 'remove_discount_on_order',
-                        'description' => '$'.$request->input('discount_amount').' discount removed from order by %user_name%.',
+                        'description' => '$' . $request->input('discount_amount') . ' discount removed from order by %user_name%.',
                         'order_id'    => $order->id,
                         'user_id'     => Auth::user()->getKey(),
                     ], []);
@@ -345,30 +345,30 @@ class OrderController extends BaseController
 
             if (!$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'create_order_from_payment_page',
+                    'action'      => 'create_order_from_payment_page',
                     'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
-                    'order_id' => $order->id,
+                    'order_id'    => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'create_order',
+                    'action'      => 'create_order',
                     'description' => trans('plugins/ecommerce::order.new_order',
                         ['order_id' => get_order_code($order->id)]),
-                    'order_id' => $order->id,
+                    'order_id'    => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'confirm_order',
+                    'action'      => 'confirm_order',
                     'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($order->discount_amount > 0 && !$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
                     'action'      => 'add_discount_on_order',
-                    'description' => '$'.$order->discount_amount.' discount added on order by %user_name%.',
+                    'description' => '$' . $order->discount_amount . ' discount added on order by %user_name%.',
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
                 ], []);
@@ -467,10 +467,10 @@ class OrderController extends BaseController
                 if (!$request->input('order_id', 0)) {
                     if ($product->front_sale_price != $data['price']) {
                         $this->orderHistoryRepository->createOrUpdate([
-                            'action' => 'product_price_change_on_order',
+                            'action'      => 'product_price_change_on_order',
                             'description' => $product->name . ' product price change in order from $' . $product->front_sale_price . ' to $' . $data['price'] . ' by %user_name%.',
-                            'order_id' => $order->id,
-                            'user_id' => Auth::user()->getKey(),
+                            'order_id'    => $order->id,
+                            'user_id'     => Auth::user()->getKey(),
                         ], []);
                     }
                 }
@@ -534,7 +534,6 @@ class OrderController extends BaseController
      */
     public function edit($id)
     {
-
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
                 'vendor/core/plugins/ecommerce/libraries/jquery.textarea_autosize.js',
@@ -558,7 +557,7 @@ class OrderController extends BaseController
         }
 
         $cards = [
-            '0'=>'Add New Card'
+            '0' => 'Add New Card'
         ];
         $defaultStore = get_primary_store_locator();
         $salesRep = get_salesperson();
@@ -587,6 +586,7 @@ class OrderController extends BaseController
         if (isset($_GET['debug'])) {
             dd($order, $cards, $order->payment);
         }
+
 
         return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
     }
@@ -1007,6 +1007,9 @@ class OrderController extends BaseController
     public function postRefund($id, RefundRequest $request, BaseHttpResponse $response)
     {
         $order = $this->orderRepository->findOrFail($id);
+        $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::REFUND],
+            compact('id'));
+
         if ($request->input('refund_amount') > ($order->payment->amount - $order->payment->refunded_amount)) {
             return $response
                 ->setError()
@@ -1252,7 +1255,7 @@ class OrderController extends BaseController
 
 
         $cards = [
-        '0'=>'Add New Card'
+            '0' => 'Add New Card'
         ];
         if ($order->user->card->count() > 0) {
             $omniId = $order->user->card()->whereNotNull('customer_omni_id')->get();
@@ -1460,11 +1463,11 @@ class OrderController extends BaseController
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
-
+            $orderProduct = 0;
             if ($request->market_place == Order::LASHOWROOM) {
+
                 foreach ($order as $od) {
                     foreach ($od as $row) {
-
                         if (!isset($row['po'])) {
                             return $response
                                 ->setError()
@@ -1521,34 +1524,40 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+                            //$pack = quantityCalculate($product['category_id']);
+                            $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
+                            if (!$pack) {
+                                return $response
+                                    ->setError()
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
+                            }
                             $orderQuantity = $row['original_qty'] / $pack;
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                                if ($orderQuantity <= $product->online_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->online_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->online_sales_qty;
-                                    $orderQuantity = $product->online_sales_qty;
-                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                                if ($orderQuantity <= $product->in_person_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->in_person_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
-                                    $orderQuantity = $product->in_person_sales_qty;
-                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } else {
-                                if ($orderQuantity <= $product->quantity) {
-                                    $checkProdQty = true;
-                                } elseif ($product->quantity > 0) {
-                                    $remQty = $orderQuantity - $product->quantity;
-                                    $orderQuantity = $product->quantity;
-                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
+//                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                                if ($orderQuantity <= $product->online_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->online_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->online_sales_qty;
+//                                    $orderQuantity = $product->online_sales_qty;
+//                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                                if ($orderQuantity <= $product->in_person_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->in_person_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+//                                    $orderQuantity = $product->in_person_sales_qty;
+//                                    $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } else {
+                            if ($orderQuantity <= $product->quantity) {
+                                $checkProdQty = true;
+                            } elseif ($product->quantity > 0) {
+                                $remQty = $orderQuantity - $product->quantity;
+                                $orderQuantity = $product->quantity;
+                                $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
                             }
+//                            }
 
                         } else {
                             $errors[] = $row['style_no'] . ' product is not found.';
@@ -1579,7 +1588,7 @@ class OrderController extends BaseController
                             $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
-                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['order_status']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::LASHOWROOM]);
@@ -1600,8 +1609,8 @@ class OrderController extends BaseController
                             }
                         }
 
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -1630,7 +1639,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
@@ -1706,37 +1715,45 @@ class OrderController extends BaseController
                         if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
+
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
+
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+//                            $pack = quantityCalculate($product['category_id']);
+                            $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
+                            if (!$pack) {
+                                return $response
+                                    ->setError()
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
+                            }
                             $orderQuantity = $row['total_qty'] / $pack;
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                                if ($orderQuantity <= $product->online_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->online_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->online_sales_qty;
-                                    $orderQuantity = $product->online_sales_qty;
-                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                                if ($orderQuantity <= $product->in_person_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->in_person_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
-                                    $orderQuantity = $product->in_person_sales_qty;
-                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } else {
-                                if ($orderQuantity <= $product->quantity) {
-                                    $checkProdQty = true;
-                                } elseif ($product->quantity > 0) {
-                                    $remQty = $orderQuantity - $product->quantity;
-                                    $orderQuantity = $product->quantity;
-                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
+//                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                                if ($orderQuantity <= $product->online_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->online_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->online_sales_qty;
+//                                    $orderQuantity = $product->online_sales_qty;
+//                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                                if ($orderQuantity <= $product->in_person_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->in_person_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+//                                    $orderQuantity = $product->in_person_sales_qty;
+//                                    $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } else {
+                            if ($orderQuantity <= $product->quantity) {
+                                $checkProdQty = true;
+                            } elseif ($product->quantity > 0) {
+                                $remQty = $orderQuantity - $product->quantity;
+                                $orderQuantity = $product->quantity;
+                                $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
                             }
+//                            }
 
                         } else {
                             $errors[] = $row['style'] . ' product is not found.';
@@ -1767,7 +1784,7 @@ class OrderController extends BaseController
                             $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
                             $iorder['status'] = OrderStatusEnum::PROCESSING;
-                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['orderstatus']];
+                            $iorder['order_type'] = Order::$IMPORT_ORDER_TYPES[$row['status']];
                             $importOrder = Order::create($iorder);
                             if ($importOrder && $product && $checkProdQty) {
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::ORANGESHINE]);
@@ -1789,7 +1806,7 @@ class OrderController extends BaseController
                         }
 
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -1818,7 +1835,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
@@ -1894,34 +1911,40 @@ class OrderController extends BaseController
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
-                            $pack = quantityCalculate($product['category_id']);
+//                            $pack = quantityCalculate($product['category_id']);
+                            $pack = ($product->prod_pieces) ? $product->prod_pieces : quantityCalculate($product['category_id']);
+                            if (!$pack) {
+                                return $response
+                                    ->setError()
+                                    ->setMessage('Please add Peices in Product ' . $row['style']);
+                            }
                             $orderQuantity = $row['totalqty'] / $pack;
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                                if ($orderQuantity <= $product->online_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->online_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->online_sales_qty;
-                                    $orderQuantity = $product->online_sales_qty;
-                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                                if ($orderQuantity <= $product->in_person_sales_qty) {
-                                    $checkProdQty = true;
-                                } elseif ($product->in_person_sales_qty > 0) {
-                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
-                                    $orderQuantity = $product->in_person_sales_qty;
-                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
-                            } else {
-                                if ($orderQuantity <= $product->quantity) {
-                                    $checkProdQty = true;
-                                } elseif ($product->quantity > 0) {
-                                    $remQty = $orderQuantity - $product->quantity;
-                                    $orderQuantity = $product->quantity;
-                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                }
+//                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                                if ($orderQuantity <= $product->online_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->online_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->online_sales_qty;
+//                                    $orderQuantity = $product->online_sales_qty;
+//                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                                if ($orderQuantity <= $product->in_person_sales_qty) {
+//                                    $checkProdQty = true;
+//                                } elseif ($product->in_person_sales_qty > 0) {
+//                                    $remQty = $orderQuantity - $product->in_person_sales_qty;
+//                                    $orderQuantity = $product->in_person_sales_qty;
+//                                    $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+//                                }
+//                            } else {
+                            if ($orderQuantity <= $product->quantity) {
+                                $checkProdQty = true;
+                            } elseif ($product->quantity > 0) {
+                                $remQty = $orderQuantity - $product->quantity;
+                                $orderQuantity = $product->quantity;
+                                $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
                             }
+//                            }
 
                         } else {
                             $errors[] = $row['styleno'] . ' product is not found.';
@@ -1975,7 +1998,7 @@ class OrderController extends BaseController
                         }
 
 
-                        if ($product && $orderProduct->order->order_type == Order::NORMAL) {
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
                                 ->getModel()
                                 ->where('id', $product->id)
@@ -2004,7 +2027,7 @@ class OrderController extends BaseController
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
                         }
 
-                        if ($product && $orderProduct->order->order_type == Order::PRE_ORDER) {
+                        if ($product && $orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
                             $pre_order_max_qty = get_ecommerce_setting('pre_order_max_qty');
                             $preOrderQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
                                 ->where('product_id', $product->id)
@@ -2032,7 +2055,7 @@ class OrderController extends BaseController
     {
         $this->orderHistoryRepository->createOrUpdate([
             'action'      => 'import_order',
-            'description' => 'This Order has been imported from '.$sheet.'  by %user_name%.',
+            'description' => 'This Order has been imported from ' . $sheet . '  by %user_name%.',
             'order_id'    => $orderId,
             'user_id'     => Auth::user()->getKey(),
         ], []);
@@ -2135,10 +2158,10 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'order_status_changed',
-            'description' => 'Order status changed to '.$requestData['status'].' by %user_name%.',
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
+            'action'      => 'order_status_changed',
+            'description' => 'Order status changed to ' . $requestData['status'] . ' by %user_name%.',
+            'order_id'    => $order->id,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
 
         return $response;
@@ -2358,6 +2381,7 @@ class OrderController extends BaseController
         $list = Order::whereIn('id', json_decode($orders))->with(['payment', 'shippingAddress', 'billingAddress', 'products' => function ($query) {
             $query->with(['product']);
         }])->get();
+
         $orderHtml = '';
         foreach ($list as $order) {
             $orderHtml .= view('plugins/ecommerce::orders.partials.orderReceipt', ['order' => $order]);

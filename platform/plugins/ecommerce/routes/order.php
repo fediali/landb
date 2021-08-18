@@ -29,12 +29,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::get('import', [
                 'as'         => 'import',
                 'uses'       => 'OrderController@import',
-                'permission' => 'orders.import',
+                'permission' => 'order-import.index',
             ]);
             Route::post('import-order', [
                 'as'         => 'import-order',
                 'uses'       => 'OrderController@importOrder',
-                'permission' => 'orders.import',
+                'permission' => 'order-import.index',
             ]);
 
             Route::get('edit-order/{id}', [

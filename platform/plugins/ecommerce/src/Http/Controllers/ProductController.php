@@ -925,7 +925,7 @@ class ProductController extends BaseController
     {
         $availableProducts = $this->productRepository
             ->getModel()
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
             ->select([
@@ -948,7 +948,7 @@ class ProductController extends BaseController
         if ($includeVariation) {
             foreach ($availableProducts as &$availableProduct) {
                 $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null,
-                    'thumb', false, RvMedia::getDefaultImage());
+                    null, false, RvMedia::getDefaultImage());
                 $availableProduct->price = $availableProduct->front_sale_price;
                 foreach ($availableProduct->variations as &$variation) {
                     $variation->price = $variation->product->front_sale_price;
@@ -1041,13 +1041,14 @@ class ProductController extends BaseController
                     }
                 }
 
-                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                    $variation->quantity = $variation->product->online_sales_qty;
-                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                    $variation->quantity = $variation->product->in_person_sales_qty;
-                } else {
+//                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                    $variation->quantity = $variation->product->online_sales_qty;
+//                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                    $variation->quantity = $variation->product->in_person_sales_qty;
+//                }
+//                else {
                     $variation->quantity = $variation->product->quantity;
-                }
+//                }
 
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
@@ -1088,7 +1089,8 @@ class ProductController extends BaseController
     public function inventory_history($id)
     {
         $data = Product::with(['inventory_history'])->where('id', $id)->first();
-        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data'));
+        $prodSkus = $data->inventory_history()->orderBy('product_id')->groupBy('sku')->pluck('sku')->all();
+        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data', 'prodSkus'));
     }
 
     public function product_timeline($id)

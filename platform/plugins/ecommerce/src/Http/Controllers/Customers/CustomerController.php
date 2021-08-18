@@ -245,7 +245,7 @@ class CustomerController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse
      */
-    public function getListCustomerForSelect($id, BaseHttpResponse $response)
+    public function getListCustomerForSelect($id = null, BaseHttpResponse $response)
     {
         if ($id) {
             $customer = $this->customerRepository

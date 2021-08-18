@@ -101,15 +101,15 @@ class ProductTable extends TableAbstract
             ->editColumn('price', function ($item) {
 //                $price = format_price($item->front_sale_price);
 //                if ($item->prod_pieces) {
-                    /*$price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';*/
-                    $price = '<form id="upd-price-form-'.$item->id.'" class="d-flex" action="' . route('products.update-product-price', $item->id) . '" method="POST">
+                /*$price .= ' <span class="text-success"> $' . $item->price / $item->prod_pieces   . '</span>';*/
+                $price = '<form id="upd-price-form-' . $item->id . '" class="d-flex" action="' . route('products.update-product-price', $item->id) . '" method="POST">
                                 <input type="hidden" name="_token" value="' . @csrf_token() . '">
-                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" id="prod-price-tbl-'.$item->id.'" name="product_price" value="' .($item->prod_pieces ? ($item->price / $item->prod_pieces) : $item->price). '" required>
+                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" id="prod-price-tbl-' . $item->id . '" name="product_price" value="' . ($item->prod_pieces ? ($item->price / $item->prod_pieces) : $item->price) . '" required>
                                 <!--<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i></button>-->
-                             </form><script>$("input#prod-price-tbl-'.$item->id.'").focusout(function() { $.ajax({
+                             </form><script>$("input#prod-price-tbl-' . $item->id . '").focusout(function() { $.ajax({
             type: "POST",
             url: "' . route('products.update-product-price', $item->id) . '",
-            data: {product_price: $("input#prod-price-tbl-'.$item->id.'").val()},
+            data: {product_price: $("input#prod-price-tbl-' . $item->id . '").val()},
             contentType: "application/x-www-form-urlencoded",
              success: function (result) {
 
@@ -118,7 +118,7 @@ class ProductTable extends TableAbstract
             },
         }) });</script>';
 //                }
-                $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
+//                $price .= ' <span class="text-success"> ' . format_price($item->front_sale_price)   . '</span>';
                 if ($item->front_sale_price != $item->price) {
                     $price .= ' <del class="text-danger">' . format_price($item->price) . '</del>';
                 }
@@ -188,7 +188,7 @@ class ProductTable extends TableAbstract
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 }*/
                 $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
-                $singleQty  = Product::whereIn('id', $getSingleIds)->sum('quantity');
+                $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
                 return $singleQty;
             })
@@ -272,12 +272,13 @@ class ProductTable extends TableAbstract
             'ec_products.end_date',
             'ec_products.oos_date',
             'ec_products.prod_pieces',
+            'ec_products.cost_price',
         ];
 
         $query = $model
             ->select($select)
             ->where('is_variation', 0)
-            ->where('status', '!=', BaseStatusEnum::HIDDEN);
+            ->where('status', '!=', BaseStatusEnum::HIDE);
 
 
         if ($this->request()->has('search_id')) {
@@ -302,7 +303,7 @@ class ProductTable extends TableAbstract
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
-                $q->where('ec_products.status', $search_items['prod_status']);
+                $q->whereIn('ec_products.status', $search_items['prod_status']);
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
@@ -325,7 +326,7 @@ class ProductTable extends TableAbstract
             });
         }
 
-
+//dd($query->toSql(), $query->getBindings());
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -348,46 +349,55 @@ class ProductTable extends TableAbstract
 //                'title' => trans('core/base::tables.id'),
 //                'width' => '20px',
 //            ],
-            'image' => [
-                'name' => 'ec_products.images',
+            'image'      => [
+                'name'  => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),
                 'width' => '100px',
                 'class' => 'text-center',
             ],
-            'sku' => [
-                'name' => 'ec_products.sku',
+            'sku'        => [
+                'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
+                'width' => '100px',
             ],
-            'name' => [
-                'name' => 'ec_products.name',
-                'title' => trans('core/base::tables.name'),
+            'name'       => [
+                'name'      => 'ec_products.name',
+                'title'     => trans('core/base::tables.name'),
+                'class'     => 'text-left',
+                'width'     => '200px',
+                'font-size' => '15px',
+            ],
+            'cost_price' => [
+                'name'  => 'ec_products.cost_price',
+                'title' => 'Cost Price',
                 'class' => 'text-left',
+                'width' => '100px',
             ],
-            'price' => [
-                'name' => 'ec_products.price',
+            'price'      => [
+                'name'  => 'ec_products.price',
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
 
             'warehouse_sec' => [
-                'name' => 'ec_products.warehouse_sec',
+                'name'  => 'ec_products.warehouse_sec',
                 'title' => 'SEC',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'quantity' => [
-                'name' => 'ec_products.quantity',
+            'quantity'      => [
+                'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'single_qty' => [
-                'name' => 'ec_products.single_qty',
+            'single_qty'    => [
+                'name'  => 'ec_products.single_qty',
                 'title' => 'Single Qty',
                 'class' => 'text-left',
             ],
-            'product_type' => [
-                'name' => 'ec_products.product_type',
+            'product_type'  => [
+                'name'  => 'ec_products.product_type',
                 'title' => 'Type',
                 'class' => 'text-left',
             ],
@@ -398,28 +408,28 @@ class ProductTable extends TableAbstract
                 'class' => 'text-center',
             ],*/
             'pre_order_qty' => [
-                'name' => 'ec_products.pre_order_qty',
+                'name'  => 'ec_products.pre_order_qty',
                 'title' => 'Pre-order Qty',
-                'width' => '100px',
+                'width' => '30px',
                 'class' => 'text-center',
             ],
-            'reorder_qty' => [
-                'name' => 'ec_products.reorder_qty',
+            'reorder_qty'   => [
+                'name'  => 'ec_products.reorder_qty',
                 'title' => 'Re-order Qty',
                 'class' => 'text-center',
             ],
-            'sold_qty' => [
-                'name' => 'ec_products.sold_qty',
+            'sold_qty'      => [
+                'name'  => 'ec_products.sold_qty',
                 'title' => 'Sold Qty',
                 'class' => 'text-center',
             ],
-            'in_cart_qty' => [
-                'name' => 'ec_products.in_cart_qty',
+            'in_cart_qty'   => [
+                'name'  => 'ec_products.in_cart_qty',
                 'title' => 'In cart',
                 'class' => 'text-center',
             ],
-            'created_at' => [
-                'name' => 'ec_products.created_at',
+            'created_at'    => [
+                'name'  => 'ec_products.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-center',
@@ -430,8 +440,8 @@ class ProductTable extends TableAbstract
 //                'width' => '100px',
 //                'class' => 'text-center',
 //            ],
-            'status' => [
-                'name' => 'ec_products.status',
+            'status'        => [
+                'name'  => 'ec_products.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
                 'class' => 'text-center',
@@ -484,9 +494,9 @@ class ProductTable extends TableAbstract
             ],*/
 
             'ec_products.status' => [
-                'title' => trans('core/base::tables.status'),
-                'type' => 'select',
-                'choices' => BaseStatusEnum::$PRODUCT,
+                'title'    => trans('core/base::tables.status'),
+                'type'     => 'select',
+                'choices'  => BaseStatusEnum::$PRODUCT,
                 'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
             ],
 

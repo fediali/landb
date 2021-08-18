@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Tables;
 
 use BaseHelper;
+use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\Discount;
@@ -84,6 +85,9 @@ class CustomerTable extends TableAbstract
             })
             ->editColumn('email', function ($item) {
                 return $item->email;
+            })
+            ->editColumn('company', function ($item) {
+                return $item->detail->company;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -211,7 +215,8 @@ class CustomerTable extends TableAbstract
             'ec_customers.last_visit',
             'ec_customers.phone_validation_error',
             'ec_customers.phone',
-            'ec_customer_detail.business_phone AS business_phone'
+            'ec_customer_detail.business_phone AS business_phone',
+            'ec_customer_detail.company AS company'
         ];
 
         $query = $model->join('ec_customer_detail', 'ec_customer_detail.customer_id', '=', 'ec_customers.id')->select($select);
@@ -257,7 +262,7 @@ class CustomerTable extends TableAbstract
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['company']), function ($q) use ($search_items) {
-                $q->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');
+//                $q->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id');
                 $q->where('ec_customer_detail.company', 'LIKE', '%' . $search_items['company'] . '%');
             });
             $query->when(isset($search_items['customer_name']), function ($q) use ($search_items) {
@@ -328,15 +333,21 @@ class CustomerTable extends TableAbstract
                 'title' => trans('core/base::forms.name'),
                 'class' => 'text-left',
             ],
-            'email'            => [
+            'company'            => [
+                'name'  => 'ec_customer_detail.company',
+                'title' => 'Company',
+                'class' => 'text-left',
+            ], 'email'            => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
+                'visible' => false,
             ],
             'is_private'       => [
                 'name'  => 'ec_customers.is_private',
                 'title' => 'Is Private',
                 'class' => 'text-left',
+                'visible' => false,
             ],
             'is_text'          => [
                 'name'  => 'ec_customers.is_text',

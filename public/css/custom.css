@@ -1164,3 +1164,17 @@ tbody>tr>:nth-child(3) span{
   margin-top: 11px !important;
   display: block;
  }
+
+ .next-field__connected-wrapper .date {
+  background: transparent !important;
+  display: contents !important;
+  position: inherit !important;
+  padding: 0px !important;
+ }
+
+ .next-field__connected-wrapper .next-input, .next-input--stylized {
+  min-width: 100px !important; }
+
+  .ft-12 {
+    font-size: 12px !important;
+  }

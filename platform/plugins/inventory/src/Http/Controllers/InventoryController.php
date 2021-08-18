@@ -24,6 +24,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Inventory\Forms\InventoryForm;
 use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends BaseController
 {
@@ -226,7 +227,7 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+        $products = DB::table('ec_products')->select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
             'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
             //->leftJoin('inventory_history', 'inventory_history.parent_product_id', 'ec_products.id')
@@ -246,7 +247,7 @@ class InventoryController extends BaseController
             $getChildIds = ProductVariation::where('configurable_product_id', $getProdIdByUPC)->pluck('product_id')->all();
             $getChildIds[] = $getProdIdByUPC;
 
-            $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            $products = DB::table('ec_products')->select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
                 'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
                 ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
                 ->whereIn('ec_products.id', $getChildIds)
@@ -275,7 +276,7 @@ class InventoryController extends BaseController
                         } else {
 
                             $old_stock = $product->quantity;
-                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->quantity += $inv_product->received_qty;
                             $product->with_storehouse_management = 1;
 
                             $qtyOS = 0;

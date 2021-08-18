@@ -49,7 +49,7 @@
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
-                    {{ $order->billingAddress->name.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
+                    {{ $order->billingAddress->name.', '.$order->billingAddress->address.' , '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                 </p>
                 <p>
                     {{ $order->billingAddress->phone }}
@@ -71,7 +71,7 @@
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
-                    {{ $order->shippingAddress->name.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
+                    {{ $order->shippingAddress->name.', '.$order->shippingAddress->address.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
                 </p>
                 <p>
                     {{ $order->shippingAddress->phone }}
@@ -194,7 +194,7 @@
                 <p class="mt-2">Shipping</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ 00.00</p>
+                <p class="mt-2">$ {{ $order->shipping_amount }}</p>
             </div>
         </div>
         <div class="row">

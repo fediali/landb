@@ -76,6 +76,8 @@
                                                         'ec_products.end_date',
                                                         'ec_products.sku',
                                                         'ec_products.is_variation',
+                                                        'ec_products.sizes',
+                                                        'ec_products.prod_pieces',
                                                     ],
                                                 ]);
                                             @endphp
@@ -86,7 +88,8 @@
                                                         <div class="wrap-img"><img
                                                                 class="thumb-image thumb-image-cartorderlist"
                                                                 src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
-                                                                "></div>
+                                                            ">
+                                                        </div>
                                                     </td>
                                                 @endif
                                                 <td class="pl5 p-r5 min-width-200-px">
@@ -106,11 +109,19 @@
                                                                     @php $attributes = get_product_attributes($product->id) @endphp
                                                                     @if (!empty($attributes))
                                                                         @foreach ($attributes as $attribute)
-                                                                            {{ $attribute->attribute_set_title }}
-                                                                            : {{ $attribute->title }}@if (!$loop->last)
-                                                                                , @endif
+
+                                                                            @if($attribute->attribute_set_title !== 'Size')
+                                                                                {{ $attribute->attribute_set_title }}
+                                                                                : {{ $attribute->title }}@if (!$loop->last)
+                                                                                @endif
+                                                                                @if($attribute->title !== 'Single')
+                                                                                    , Size : {{$product->sizes}}
+                                                                                @endif
+                                                                            @endif
                                                                         @endforeach
                                                                     @endif
+                                                                    , Per Piece:
+                                                                    ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                 </small>
                                                             </p>
                                                         @endif
@@ -277,12 +288,12 @@
                                             </table>
                                         </div>
                                         <br>
-                                        <div class="text-right">
-                                            <a href="{{ route('orders.generate-invoice', $order->id) }}"
-                                               class="btn btn-info">
-                                                <i class="fa fa-download"></i> {{ trans('plugins/ecommerce::order.download_invoice') }}
-                                            </a>
-                                        </div>
+                                        {{--                                        <div class="text-right">--}}
+                                        {{--                                            <a href="{{ route('orders.generate-invoice', $order->id) }}"--}}
+                                        {{--                                               class="btn btn-info">--}}
+                                        {{--                                                <i class="fa fa-download"></i> {{ trans('plugins/ecommerce::order.download_invoice') }}--}}
+                                        {{--                                            </a>--}}
+                                        {{--                                        </div>--}}
                                         <div class="pd-all-20">
                                             <form action="{{ route('orders.edit', $order->id) }}">
                                                 <label
@@ -587,75 +598,31 @@
                                 ?>
 
                                 <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
+                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>  &nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next
+                                    Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
 
 
                         </div>
-                        <div class="wrapper-content mb20">
-                            <div class="next-card-section p-none-b">
-                                <div class="flexbox-grid-default flexbox-align-items-center">
-                                    <div class="flexbox-auto-content-left">
-                                        <label
-                                            class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
-                                    </div>
-                                    <div class="flexbox-auto-left">
-                                        <img class="width-30-px radius-cycle" width="40"
-                                             src="{{ $order->user->id ? $order->user->avatar_url : $order->address->avatar_url }}"
-                                             alt="{{ $order->address->name }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="next-card-section border-none-t">
-                                <div class="mb5">
-                                    <a href=" {{route('customer.edit', $order->user->id)}}"> <strong
-                                            class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong></a>
-                                </div>
-                                @if ($order->user->id)
-                                    <div>
-                                        <i class="fas fa-inbox mr5"></i><span>{{ $order->user->orders()->count() }}</span> {{ trans('plugins/ecommerce::order.orders') }}
-                                    </div>
+                        <div class="wrapper-content bg-gray-white mb20">
+                            <div class="pd-all-20">
+                                <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
+                                        data-target="#modal_split_order">Split Order
+                                </button>&nbsp;&nbsp;
+                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
+                                   class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
+                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
+                                   class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
+{{--                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"--}}
+{{--                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;--}}
+                                @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
+                                    <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
+                                       data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
-                                <ul class="ws-nm text-infor-subdued">
-                                    <li class="overflow-ellipsis"><a class="hover-underline"
-                                                                     href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">{{ $order->user->email ? $order->user->email : $order->address->email }}</a>
-                                    </li>
-                                    @if ($order->user->id)
-                                        <li>
-                                            <div>{{ trans('plugins/ecommerce::order.have_an_account_already') }}</div>
-                                        </li>
-                                    @else
-                                        <li>
-                                            <div>{{ trans('plugins/ecommerce::order.dont_have_an_account_yet') }}</div>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </div>
-                            <div class="next-card-section">
-                                <div class="flexbox-grid-default flexbox-align-items-center">
-                                    <div class="flexbox-auto-content-left">
-                                        <label
-                                            class="title-text-second"><strong>{{ trans('plugins/ecommerce::order.shipping_address') }}</strong></label>
-                                    </div>
-                                    <div class="flexbox-auto-content-right text-right">
-                                        <a href="#" class="btn-trigger-update-shipping-address">
-                                        <span data-placement="top" title="" data-toggle="tooltip"
-                                              data-original-title="{{ trans('plugins/ecommerce::order.update_address') }}">
-                                            <svg class="svg-next-icon svg-next-icon-size-12">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                     xlink:href="#next-edit"></use>
-                                            </svg>
-                                        </span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div>
-                                    <ul class="ws-nm text-infor-subdued shipping-address-info">
-                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->address])
-                                    </ul>
-                                </div>
+
                             </div>
                         </div>
 
@@ -807,6 +774,108 @@
                             </div>
                         @endif
 
+
+
+
+                        <div class="wrapper-content mb20">
+                            <div class="next-card-section p-none-b">
+                                <div class="flexbox-grid-default flexbox-align-items-center">
+                                    <div class="flexbox-auto-content-left">
+                                        <label
+                                            class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
+                                    </div>
+                                    <div class="flexbox-auto-left">
+                                        <img class="width-30-px radius-cycle" width="40"
+                                             src="{{ $order->user->id ? $order->user->avatar_url : $order->address->avatar_url }}"
+                                             alt="{{ $order->address->name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="next-card-section border-none-t">
+                                <div class="mb5">
+                                    <a href=" {{route('customer.edit', $order->user->id)}}"> <strong
+                                            class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong></a>
+                                </div>
+                                @if ($order->user->id)
+                                    <div>
+                                        <i class="fas fa-inbox mr5"></i><span>{{ $order->user->orders()->count() }}</span> {{ trans('plugins/ecommerce::order.orders') }}
+                                    </div>
+                                @endif
+                                <ul class="ws-nm text-infor-subdued">
+                                    <li class="overflow-ellipsis"><a class="hover-underline"
+                                                                     href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">{{ $order->user->email ? $order->user->email : $order->address->email }}</a>
+                                    </li>
+                                    @if ($order->user->id)
+                                        <li>
+                                            <div>{{ trans('plugins/ecommerce::order.have_an_account_already') }}</div>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <div>{{ trans('plugins/ecommerce::order.dont_have_an_account_yet') }}</div>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                            <div class="next-card-section">
+                                <div class="flexbox-grid-default flexbox-align-items-center">
+                                    <div class="flexbox-auto-content-left">
+                                        <label
+                                            class="title-text-second"><strong>{{ trans('plugins/ecommerce::order.shipping_address') }}</strong></label>
+                                    </div>
+                                    <div class="flexbox-auto-content-right text-right">
+                                        <a href="#" class="btn-trigger-update-shipping-address">
+                                        <span data-placement="top" title="" data-toggle="tooltip"
+                                              data-original-title="{{ trans('plugins/ecommerce::order.update_address') }}">
+                                            <svg class="svg-next-icon svg-next-icon-size-12">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                     xlink:href="#next-edit"></use>
+                                            </svg>
+                                        </span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <ul class="ws-nm text-infor-subdued shipping-address-info">
+                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->address])
+
+                                        <hr>
+                                        <div class="flexbox-auto-content-left">
+                                            <label
+                                                class="title-text-second"><strong>Billing Address</strong></label>
+                                        </div>
+                                        <li>{{ $order->billingAddress->name }}</li>
+                                        @if ($order->billingAddress->phone)
+                                            <li>
+                                                <a href="tel:{{ $order->billingAddress->phone }}">
+                                                    <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
+                                                    <span>{{ $order->billingAddress->phone }}</span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                        <li>
+                                            @if ($order->billingAddress->address)
+                                                <div>{{ $order->billingAddress->address }}</div>
+                                            @endif
+                                            @if ($order->billingAddress->city)
+                                                <div>{{ $order->billingAddress->city }}</div>
+                                            @endif
+                                            @if ($order->billingAddress->state)
+                                                <div>{{ $order->billingAddress->state }}</div>
+                                            @endif
+                                            @if ($order->billingAddress->country_name)
+                                                <div>{{ $order->billingAddress->country_name }}</div>
+                                            @endif
+                                            @if ($order->billingAddress->zip_code)
+                                                <div>{{ $order->billingAddress->zip_code }}</div>
+                                            @endif
+
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
                                 <div class="p-b10">
@@ -818,25 +887,6 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="wrapper-content bg-gray-white mb20">
-                            <div class="pd-all-20">
-                                <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
-                                        data-target="#modal_split_order">Split Order
-                                </button>&nbsp;&nbsp;
-                                <a href="{{ route('orders.printReceipt', json_encode([$order->id])) }}"
-                                   class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
-                                <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
-                                   class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
-                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"
-                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;
-                                @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
-                                    <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
-                                       data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
-                                @endif
-
                             </div>
                         </div>
 
@@ -1018,7 +1068,7 @@
                 let maxQty = $(this).data('prod-qty');
                 let curVal = $(this).val();
                 let final = maxQty - curVal;
-                let input = 'input#split-input2-'+prodId;
+                let input = 'input#split-input2-' + prodId;
                 $(input).val(final);
             });
             $('body').on('change', 'input.split-input2', function () {
