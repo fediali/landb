@@ -597,12 +597,11 @@
                                 $previous = $order->previousOrder();
                                 ?>
 
-                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
-                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next
-                                    Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
+                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;</a>&nbsp;
+                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
 
 
