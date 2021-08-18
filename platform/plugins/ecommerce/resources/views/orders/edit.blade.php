@@ -852,19 +852,19 @@
                                             </li>
                                         @endif
                                         <li>
-                                            @if ($order->billingAddress->address)
+                                            @if (@$order->billingAddress->address)
                                                 <div>{{ $order->billingAddress->address }}</div>
                                             @endif
-                                            @if ($order->billingAddress->city)
+                                            @if (@$order->billingAddress->city)
                                                 <div>{{ $order->billingAddress->city }}</div>
                                             @endif
-                                            @if ($order->billingAddress->state)
+                                            @if (@$order->billingAddress->state)
                                                 <div>{{ $order->billingAddress->state }}</div>
                                             @endif
-                                            @if ($order->billingAddress->country_name)
+                                            @if (@$order->billingAddress->country_name)
                                                 <div>{{ $order->billingAddress->country_name }}</div>
                                             @endif
-                                            @if ($order->billingAddress->zip_code)
+                                            @if (@$order->billingAddress->zip_code)
                                                 <div>{{ $order->billingAddress->zip_code }}</div>
                                             @endif
 
