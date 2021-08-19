@@ -34,6 +34,8 @@ class InventoryHistory extends Model
     const PROD_REORDER = 'product_reorder';
     const PROD_PUSH_ECOM = 'product_push_to_ecommerce';
     const PROD_STOCK_ADD = 'product_stock_added';
+    const PROD_ORDER_QTY_ADD = 'product_order_qty_add';
+    const PROD_ORDER_QTY_DEDUCT = 'product_order_qty_deduct';
 
     protected $with = ['user', 'order', 'thread_order', 'inventory'];
 
