@@ -212,6 +212,7 @@
             </div>
         </div>
         @if($products->hasPages())
+            <hr>
             <div class="row text-center" id="load_more_products">
                 <button type="submit" class="product-tile__add-to-cart m-auto w-25"><span>Load More</span></button>
             </div>

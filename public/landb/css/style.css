@@ -44,6 +44,10 @@ button:focus {
     outline: none !important;
 }
 
+.imgoverlay{
+    display: none !Important;
+}
+
 .topbar {
     background: #000000;
     padding: 15px;
@@ -1109,7 +1113,7 @@ section.parallax_video video {
 }
 
 .shoplisting .listbox .caption .price {
-    font-family: "Saol Display Regular";
+    font-family: 'Madeglin';
     font-size: 20px;
     color: #000;
 
@@ -1356,9 +1360,16 @@ section.parallax_video video {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     }
+    .imgoverlay{
+        display: none !Important;
+    }
 }
 
 @media (max-width: 767px) {
+    .imgoverlay{
+        display: none !Important;
+    }
+
     h1 {
         font-size: 20px;
     }

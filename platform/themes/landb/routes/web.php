@@ -10,22 +10,26 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
-
-
-    Route::get('/products/{slug?}', 'ProductsController@getDetails')
-      ->name('public.singleProduct');
-
-    Route::get('/search/product', 'ProductsController@searchProducts')
-      ->name('public.searchProducts');
-
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
 });
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
   Route::get('logout', 'AuthController@logout')->name('public.logout');
 });
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']], function () {
+
+    Route::get('/products', 'ProductsController@getIndex')
+        ->name('public.products');
+
+
+    Route::get('/products/{slug?}', 'ProductsController@getDetails')
+        ->name('public.singleProduct');
+
+    Route::get('/search/product', 'ProductsController@searchProducts')
+        ->name('public.searchProducts');
 
     Route::get('/cart', 'CartController@getIndex')
         ->name('public.cart_index');
@@ -93,6 +97,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'as'         => 'create-customer-payment',
             'uses'       => 'CustomerController@postCustomerCard'
         ]);
+
+        Route::get('/{slug?}', 'ProductsController@productsByCategory')
+            ->name('public.productsByCategory');
     });
 });
 Theme::routes();
@@ -119,8 +126,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/register', 'RegisterController@showRegisterForm')
             ->name('public.register');
 
-        Route::get('/products', 'ProductsController@getIndex')
-            ->name('public.products');
+
 
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
@@ -156,8 +162,7 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
         ->name('public.single');
 
-    Route::get('/{slug?}', 'ProductsController@productsByCategory')
-        ->name('public.productsByCategory');
+
 
 
   });
