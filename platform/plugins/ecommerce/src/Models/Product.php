@@ -469,7 +469,7 @@ class Product extends BaseModel
         return $slug;
     }
 
-    public function getSkuAttribute($value)
+    /*public function getSkuAttribute($value)
     {
         if ($value) {
             if (str_contains($value, '-pack-all')) {
@@ -483,9 +483,9 @@ class Product extends BaseModel
             }
         }
         return $value;
-    }
+    }*/
 
-    public function setWithStorehouseManagementAttribute($value)
+    public function setWithStorehouseManagementAttribute()
     {
         $this->attributes['with_storehouse_management'] = 1;
     }
