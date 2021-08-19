@@ -127,13 +127,25 @@ class importProducts extends Command
                     // $product->sale_price = $variation->cost + $extras;
 
                     if ($row['image_id'] && $row['image_path']) {
-                        $idLen = getDigitsLength($row['image_id']);
-                        if ($idLen <= 5) {
-                            $folder = substr($row['image_id'], 0, 2);
-                        } elseif ($idLen >= 6) {
-                            $folder = substr($row['image_id'], 0, 3);
+
+                        $getProdImages = DB::table('hw_images_links')
+                            ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
+                            ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
+                            ->where('hw_images_links.object_type', 'product')
+                            ->where('hw_images_links.object_id', $row['product_id'])
+                            ->orderBy('hw_images_links.type', 'DESC')
+                            ->get();
+                        $arrr = [];
+                        foreach ($getProdImages as $getProdImage) {
+                            $idLen = getDigitsLength($getProdImage->image_id);
+                            if ($idLen <= 5) {
+                                $folder = substr($getProdImage->image_id, 0, 2);
+                            } elseif ($idLen >= 6) {
+                                $folder = substr($getProdImage->image_id, 0, 3);
+                            }
+                            $arrr[]= 'product-images/detailed/'.$folder.'/'.$getProdImage->image_path;
                         }
-                        $product->images = json_encode(['product-images/detailed/'.$folder.'/'.$row['image_path']]);
+                        $product->images = json_encode($arrr);
                     }
                     $product->tax_id = 1;
 
