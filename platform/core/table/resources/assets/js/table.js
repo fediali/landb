@@ -440,7 +440,7 @@
                         class: _self.data('class-item')
                     },
                     success: data => {
-                        if(data.data){
+                        if (data.data) {
                             if (typeof data.data.redirectUrl !== 'undefined') {
                                 window.open(data.data.redirectUrl, '_blank');
                             }
