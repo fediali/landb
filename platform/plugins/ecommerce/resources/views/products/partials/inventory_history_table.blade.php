@@ -7,9 +7,15 @@
 
     <ul class="nav nav-tabs" id="prodSkuTab" role="tablist">
         @foreach($prodSkus as $sku)
-            @php $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->value('quantity'); @endphp
+            @php
+                $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->value('quantity');
+                $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
+                ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type', \Botble\Ecommerce\Models\Order::NORMAL)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
+            @endphp
             <li class="nav-item" role="presentation">
-                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$sku}}-tab" data-toggle="tab" href="#{{$sku}}"><strong>{{ $sku }} ({{$qty}} qty)</strong></button>
+                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$sku}}-tab" data-toggle="tab" href="#{{$sku}}"><strong>{{ $sku }}</strong></button>
+                <span>In Stock : {{$qty}} qty</span><br>
+                <span>Sold : {{$soldQty}} qty</span>
             </li>
         @endforeach
     </ul>
@@ -34,7 +40,10 @@
                 <tbody>
                 @foreach($histories as $history)
                     <tr class="cm-row-status-a">
-                        <td class="center"><strong>{{ ($history->quantity > 0) ? '+'.$history->quantity : 0 }}</strong></td>
+                        @php
+                            $sign = ($history->reference == \App\Models\InventoryHistory::PROD_ORDER_QTY_DEDUCT) ? '-' : '+';
+                        @endphp
+                        <td class="center"><strong>{{ ($history->quantity > 0) ? $sign.$history->quantity : 0 }}</strong></td>
                         <td class="center">{{ $history->new_stock ? $history->new_stock : 0 }}</td>
                         <td class="center">{{ $history->old_stock ? $history->old_stock : 0 }}</td>
                         {{--<td class="nowrap"><p class="muted"><small></small></p></td>--}}
