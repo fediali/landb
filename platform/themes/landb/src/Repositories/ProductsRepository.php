@@ -50,6 +50,7 @@ class ProductsRepository
                 $category_id = $category->reference_id;
             }
         }
+
         $tag_id = null;
         $pre_order = false;
         $pre_order_id = null;
@@ -107,8 +108,12 @@ class ProductsRepository
                 $query->limit($limit);
             })
             ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])), function ($query) use ($category_id) {
+
+                $category = ProductCategory::where('parent_id', $category_id)->pluck('id')->toArray();
+                 array_push($category, $category_id);
+
                 /* $query->where($this->model->getTable().'.category_id', $category_id);*/
-                $query->join('ec_product_category_product as epcp', 'epcp.product_id', $this->model->getTable() . '.id')->where('epcp.category_id', $category_id);
+                $query->join('ec_product_category_product as epcp', 'epcp.product_id', $this->model->getTable() . '.id')->whereIn('epcp.category_id', $category);
             })
             ->when((!is_null($category_id) && in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])), function ($query) use ($category_id) {
                 /* $query->where($this->model->getTable().'.category_id', $category_id);*/
