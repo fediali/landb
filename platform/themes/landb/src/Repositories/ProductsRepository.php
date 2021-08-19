@@ -111,7 +111,6 @@ class ProductsRepository
 
                 $category = ProductCategory::where('parent_id', $category_id)->pluck('id')->toArray();
                  array_push($category, $category_id);
-
                 /* $query->where($this->model->getTable().'.category_id', $category_id);*/
                 $query->join('ec_product_category_product as epcp', 'epcp.product_id', $this->model->getTable() . '.id')->whereIn('epcp.category_id', $category);
             })
@@ -153,7 +152,6 @@ class ProductsRepository
         } else {
             $data = $data->get();
         }
-        //dd($data);
         return $data;
     }
 
