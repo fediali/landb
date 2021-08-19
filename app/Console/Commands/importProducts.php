@@ -207,6 +207,22 @@ class importProducts extends Command
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+
+                                        $packAllProdSku = Product::where('id', $prodId)->value('sku');
+                                        if (str_contains($packAllProdSku, '-pack-all')) {
+                                            $packAllProdSku = str_replace('-pack-all', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 0')) {
+                                            $packAllProdSku = str_replace(' - 0', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 1')) {
+                                            $packAllProdSku = str_replace(' - 1', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 2')) {
+                                            $packAllProdSku = str_replace(' - 2', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        }
+
                                         $packAllProd = Product::where('id', $prodId)->first();
                                         //no barcode image need
                                         try {
@@ -251,6 +267,22 @@ class importProducts extends Command
 
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
+
+                                                $sizeProdSku = Product::where('id', $prodId)->value('sku');
+                                                if (str_contains($sizeProdSku, '-pack-all')) {
+                                                    $sizeProdSku = str_replace('-pack-all', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 0')) {
+                                                    $sizeProdSku = str_replace(' - 0', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 1')) {
+                                                    $sizeProdSku = str_replace(' - 1', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 2')) {
+                                                    $sizeProdSku = str_replace(' - 2', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                }
+
                                                 $sizeProd = Product::where('id', $prodId)->first();
 
                                                 if ($sizeProd) {
