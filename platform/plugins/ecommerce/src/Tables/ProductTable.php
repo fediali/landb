@@ -544,7 +544,7 @@ class ProductTable extends TableAbstract
     public function renderCustomFilter(): string
     {
         $user = Auth::id();
-        $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
+        $searches = UserSearch::where(['search_type' => 'products', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
         $data['prod_categories'] = ProductCategory::where('status', BaseStatusEnum::PUBLISHED)->pluck('name', 'id')->all();
         $data['prod_types'] = ['regular' => 'Regular', 'pre_order' => 'Pre-Order', 're_order' => 'Re-Order'];
         $data['show_products'] = ['all' => 'All', 'with_images' => 'With Images', 'without_images' => 'Without Images'];

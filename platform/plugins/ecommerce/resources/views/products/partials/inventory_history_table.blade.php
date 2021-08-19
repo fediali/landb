@@ -8,20 +8,23 @@
     <ul class="nav nav-tabs" id="prodSkuTab" role="tablist">
         @foreach($prodSkus as $sku)
             <li class="nav-item" role="presentation">
-                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$sku}}-tab" data-toggle="tab" href="#{{$sku}}"><strong>{{ $sku }}</strong></button>
+                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$sku}}-tab" data-toggle="tab"
+                        href="#{{$sku}}"><strong>{{ $sku }}</strong></button>
             </li>
         @endforeach
     </ul>
 
     <div class="tab-content" id="prodSkuTabContent">
-        @foreach($prodSkus as $sku)
-            @php $histories = $data->inventory_history()->where('sku', $sku)->orderBy('id', 'DESC')->get(); @endphp
-            <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel" aria-labelledby="{{$sku}}-tab">
+        @foreach($prodSkus as $k =>$sku)
 
+            @php $histories = $data->inventory_history()->where('sku', $sku)->orderBy('id', 'DESC')->get(); @endphp
+            <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel"
+                 aria-labelledby="{{$sku}}-tab">
                 @php
-                    $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->value('quantity');
-                    $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
-                    ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type', \Botble\Ecommerce\Models\Order::NORMAL)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
+                    $sku  = ($k == 0) ? $sku.'-pack-all': $sku;
+                        $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->value('quantity');
+                        $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
+                        ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type', \Botble\Ecommerce\Models\Order::NORMAL)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
                 @endphp
                 <span>In Stock : {{$qty}} qty</span><br>
                 <span>Sold : {{$soldQty}} qty</span>
@@ -45,24 +48,28 @@
                             @php
                                 $sign = ($history->reference == \App\Models\InventoryHistory::PROD_ORDER_QTY_DEDUCT) ? '-' : '+';
                             @endphp
-                            <td class="center"><strong>{{ ($history->quantity > 0) ? $sign.$history->quantity : 0 }}</strong></td>
+                            <td class="center">
+                                <strong>{{ ($history->quantity > 0) ? $sign.$history->quantity : 0 }}</strong></td>
                             <td class="center">{{ $history->new_stock ? $history->new_stock : 0 }}</td>
                             <td class="center">{{ $history->old_stock ? $history->old_stock : 0 }}</td>
                             {{--<td class="nowrap"><p class="muted"><small></small></p></td>--}}
                             <td class="nowrap">{{ @$history->user->first_name. ' ' . @$history->user->last_name }}</td>
                             <td class="nowrap">
                                 @if(!empty($history->thread_order_id))
-                                    <a href="{{ route('threadorders.threadOrderDetail', ['id' => @$history->thread_order->id]) }}" target="_blank">Thread Order #{{ @$history->thread_order->order_no }}</a>
+                                    <a href="{{ route('threadorders.threadOrderDetail', ['id' => @$history->thread_order->id]) }}"
+                                       target="_blank">Thread Order #{{ @$history->thread_order->order_no }}</a>
                                     <p class="muted">
                                         <small>Status: ThreadOrder &gt; {{ $history->thread_order->status }}</small>
                                     </p>
                                 @elseif(!empty(@$history->order_id))
-                                    <a href="{{ route('orders.edit', @$history->order->id) }}" target="_blank">Order #{{ @$history->order->id }}</a>
+                                    <a href="{{ route('orders.edit', @$history->order->id) }}" target="_blank">Order
+                                        #{{ @$history->order->id }}</a>
                                     <p class="muted">
                                         <small>Status: Order &gt; {{ @$history->order->status }}</small>
                                     </p>
                                 @elseif(!empty($history->inventory_id))
-                                    <a href="{{ route('inventory.edit', ['inventory' => @$history->inventory->id]) }}" target="_blank">Inventory ID: {{ @$history->inventory->id }}</a>
+                                    <a href="{{ route('inventory.edit', ['inventory' => @$history->inventory->id]) }}"
+                                       target="_blank">Inventory ID: {{ @$history->inventory->id }}</a>
                                     <p class="muted">
                                         <small>Status: Inventory &gt; {{ @$history->inventory->status }}</small>
                                     </p>
