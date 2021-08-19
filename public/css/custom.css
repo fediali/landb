@@ -438,7 +438,7 @@
     box-shadow: none;
   }
 
-  .sideBar {
+  /*.sideBar {
     padding: 0 !important;
     margin: 0 !important;
     background-color: #fff;
@@ -447,7 +447,7 @@
     height: 705px;
     display: block;
     overflow-y: scroll;
-  }
+  }*/
 
   .sideBar-body {
     position: relative;
