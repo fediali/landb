@@ -15,7 +15,7 @@
 
     <div class="tab-content" id="prodSkuTabContent">
         @foreach($prodSkus as $sku)
-            @php $histories = $data->inventory_history()->where('sku', $sku)->get(); @endphp
+            @php $histories = $data->inventory_history()->where('sku', $sku)->orderBy('id', 'DESC')->get(); @endphp
             <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel" aria-labelledby="{{$sku}}-tab">
 
                 @php
