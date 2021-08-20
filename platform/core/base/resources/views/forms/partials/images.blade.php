@@ -36,8 +36,7 @@
                             <div class="custom-image-box image-box">
                                 <input type="hidden" name="{{ $name }}" value="{{ $image }}" class="image-data">
                                     <div class="preview-image-wrapper @if (!Arr::get($attributes, 'allow_thumb', true)) preview-image-wrapper-not-allow-thumb @endif">
-                                    <img src="{{ RvMedia::getImageUrl($image, Arr::get($attributes, 'allow_thumb', true) == true ? 'thumb' : null) }}" alt="{{ trans('core/base::base.preview_image') }}"
-                                         class="preview_image">
+                                    <img src="{{ RvMedia::getImageUrl($image, Arr::get($attributes, 'allow_thumb', true) == true ? null/*'thumb'*/ : null) }}" alt="{{ trans('core/base::base.preview_image') }}" class="preview_image">
                                 </div>
                             </div>
                         </li>

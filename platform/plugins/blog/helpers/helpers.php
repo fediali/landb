@@ -8,6 +8,7 @@ use Botble\Blog\Repositories\Interfaces\CategoryInterface;
 use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Orderstatuses\Models\Orderstatuses;
@@ -942,5 +943,25 @@ if (!function_exists('packProdSizes')) {
     }
 }
 
+
+if (!function_exists('filter_product_sku')) {
+    function filter_product_sku($prodId)
+    {
+        $prodSku = Product::where('id', $prodId)->value('sku');
+        if (str_contains($prodSku, '-pack-all')) {
+            $prodSku = str_replace('-pack-all', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 0')) {
+            $prodSku = str_replace(' - 0', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 1')) {
+            $prodSku = str_replace(' - 1', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 2')) {
+            $prodSku = str_replace(' - 2', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        }
+    }
+}
 
 //Utils
