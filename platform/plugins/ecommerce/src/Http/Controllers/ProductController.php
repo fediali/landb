@@ -251,6 +251,7 @@ class ProductController extends BaseController
                             ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                             $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                            filter_product_sku($prodId);
                             $packAllProd = Product::where('id', $prodId)->first();
 
                             $barcodePackAll = get_barcode();
@@ -275,6 +276,7 @@ class ProductController extends BaseController
 
                                     $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                     Product::where('id', $prodId)->update(['price' => 0]);
+                                    filter_product_sku($prodId);
                                     $sizeProd = Product::where('id', $prodId)->first();
 
                                     $barcodeSize = get_barcode();
