@@ -71,6 +71,20 @@ class importProducts extends Command
         /*$file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
+
+        /*DB::table('ec_products')->truncate();
+        DB::table('ec_product_with_attribute_set')->truncate();
+        DB::table('ec_product_with_attribute')->truncate();
+        DB::table('ec_product_variations')->truncate();
+        DB::table('ec_product_variation_items')->truncate();
+        DB::table('ec_product_collection_products')->truncate();
+        DB::table('ec_product_category_product')->truncate();
+        DB::table('ec_order_addresses')->truncate();
+        DB::table('ec_order_histories')->truncate();
+        DB::table('ec_order_product')->truncate();
+        DB::table('ec_orders')->truncate();
+        dd();*/
+
         $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
         Slug::where('prefix', 'products')->delete();
@@ -252,6 +266,7 @@ class importProducts extends Command
                                         $packAllProd->ptype = $product->ptype;
                                         $packAllProd->prod_pieces = $product->prod_pieces;
                                         $packAllProd->sizes = $product->sizes;
+                                        $packAllProd->images = $product->images;
                                         $packAllProd->save();
 
                                         $logParam = [
