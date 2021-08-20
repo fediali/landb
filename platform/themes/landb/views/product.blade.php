@@ -424,6 +424,7 @@
             </button>
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR KIDS</h3>
+                <div class="table-responsive">
                 <table>
                     <tbody>
                     <tr tabindex="0">
@@ -506,7 +507,8 @@
                     </tr>
 
                     </tbody>
-                </table>
+                </table>    
+                </div> 
             </div>
         </div>
 
@@ -524,6 +526,7 @@
             </button>
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S TOPS</h3>
+                <div class="table-responsive">
                 <table>
                     <tbody>
                     <tr tabindex="0">
@@ -576,6 +579,7 @@
 
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 
@@ -594,6 +598,7 @@
             </button>
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S</h3>
+                <div class="table-responsive">
                 <table>
                     <tbody>
                     <tr tabindex="0">
@@ -679,6 +684,7 @@
 
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 

@@ -1951,6 +1951,9 @@ input.qtyminus {
     .custom-breadcrumb {
         margin-top: 215px !important;
     }
+    .verify-page {
+        margin-top: 250px !important;
+    }
     .nav-custom {
         display: none !important;
     }
@@ -1992,12 +1995,21 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .pro-text {
+        margin-top: 0px !important;
+    }
+    .verify-img {
+        width: 100% !important;
+    }
     .banner {
         margin-top: 335px;
     }
     .custom-breadcrumb {
         margin-top: 315px !important;
         padding: 10px 0px;
+    }
+    .verify-page {
+        margin-top: 315px !important;
     }
     .breadcrumb_wrap {
         margin-top: 285px;
@@ -2029,10 +2041,12 @@ input.qtyminus {
         display: block !important;
     }
     .slidert-left-img {
-        height: 525px !important;
+        height: auto !important;
+        margin-top: 0px !important;
     }
+    
     .slidert-slim-img {
-        height: 525px !important;
+        height: auto !important;
     }
     .previews{
         display: flex !important;
