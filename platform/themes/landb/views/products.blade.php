@@ -255,166 +255,171 @@
                  </ul>
              </div>--}}
 
-            @else
-
-                <div>
-                    <p>no Access</p>
-                </div>
-            @endif()
 
         </div>
 
+
     </section>
 
+@else
+    <section class="shoplisting_wrap">
+        @php $categories = get_category(request()->path('c_slug')) @endphp
+        <div class="container">
+            <div class="filterbar mb-2">
+                {!!$categories->description!!}
+            </div>
+        </div>
+    </section>
+@endif()
 
-    <!-- Modal Quick View -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog modal-lg modal-quickview">
+<!-- Modal Quick View -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-quickview">
 
-            <!-- Modal content-->
-            <div class="modal-content">
+        <!-- Modal content-->
+        <div class="modal-content">
 
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                    <div class="row">
-                        <!-- <div class="col-lg-1">
-                            <img class="mt-2 side-img" src="./img//product/back.png" />
-                            <img class="mt-2 side-img" src="./img//product/side.png" />
-                        </div> -->
-                        <div class="col-lg-6 mt-2">
-                            <!-- <img class="front-img" src="./img//product/Front.png" /> -->
-                            <div class="fancy-container clearfix">
-                                <div class="gallery">
-                                    <div class="previews" id="product-detail-images">
+                <div class="row">
+                    <!-- <div class="col-lg-1">
+                        <img class="mt-2 side-img" src="./img//product/back.png" />
+                        <img class="mt-2 side-img" src="./img//product/side.png" />
+                    </div> -->
+                    <div class="col-lg-6 mt-2">
+                        <!-- <img class="front-img" src="./img//product/Front.png" /> -->
+                        <div class="fancy-container clearfix">
+                            <div class="gallery">
+                                <div class="previews" id="product-detail-images">
 
-                                    </div>
-                                    <div class="full quick-full" id="product-detail-image">
-                                        <!-- first image is viewable to start -->
-                                    </div>
+                                </div>
+                                <div class="full quick-full" id="product-detail-image">
+                                    <!-- first image is viewable to start -->
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <h1 class="detail-h1 mb-2" id="product-detail-name"> Coral Cut Out V-neck Basic Tee Plus
-                                Size </h1>
-                            <p class="detail-price mb-2">$ <span id="product-detail-price">0.0</span></p>
-                            <p class="short-description mb-2" id="product-detail-desc"></p>
-                            {{--<p class="detail-size-p mb-2"><span class="detail-size">Size</span> <span  id="product-detail-sizes"></span> </p>--}}
+                    </div>
+                    <div class="col-lg-6">
+                        <h1 class="detail-h1 mb-2" id="product-detail-name"> Coral Cut Out V-neck Basic Tee Plus
+                            Size </h1>
+                        <p class="detail-price mb-2">$ <span id="product-detail-price">0.0</span></p>
+                        <p class="short-description mb-2" id="product-detail-desc"></p>
+                        {{--<p class="detail-size-p mb-2"><span class="detail-size">Size</span> <span  id="product-detail-sizes"></span> </p>--}}
 
-                            <form class="add_to_cart_form" id="product-detail-form" data-id="" method='POST'
-                                  action='{{ route('public.cart.add_to_cart') }}'>
-                                <div class="row mt-4">
-                                    <div class="col-lg-6" hidden>
-                                        <input type='button' value='-' class='qtyminus' data-update="0"
-                                               field='quantity'/>
-                                        <input id="product-detail-qty" type='text' name='quantity' value='1' class='qty'
-                                               readonly/>
-                                        <input type='button' value='+' class='qtyplus' data-update="0"
-                                               field='quantity'/>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <button class="cart-btn w-100 add-to-cart-button cart-submit"
-                                                id="product-detail-button" data-id="">Add to cart
-                                        </button>
-                                    </div>
+                        <form class="add_to_cart_form" id="product-detail-form" data-id="" method='POST'
+                              action='{{ route('public.cart.add_to_cart') }}'>
+                            <div class="row mt-4">
+                                <div class="col-lg-6" hidden>
+                                    <input type='button' value='-' class='qtyminus' data-update="0"
+                                           field='quantity'/>
+                                    <input id="product-detail-qty" type='text' name='quantity' value='1' class='qty'
+                                           readonly/>
+                                    <input type='button' value='+' class='qtyplus' data-update="0"
+                                           field='quantity'/>
                                 </div>
-                            </form>
-                            <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p"
-                                                                                            id="product-detail-sku"></span>
-                            </p>
-                            <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
-                                    class="detail-category-p mt-2"
-                                    id="product-detail-category"></span>
-                            </p>
-                            {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p" id="product-detail-tags"></span> </p>--}}
-                            <div class="d-flex mt-4">
-                            <!-- <p class="share-text pt-1 mr-2"> Share this items :
+                                <div class="col-lg-6">
+                                    <button class="cart-btn w-100 add-to-cart-button cart-submit"
+                                            id="product-detail-button" data-id="">Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="mt-4 detail-basic">Basic Code &nbsp;&nbsp;&nbsp;<span class="detail-basic-p"
+                                                                                        id="product-detail-sku"></span>
+                        </p>
+                        <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
+                                class="detail-category-p mt-2"
+                                id="product-detail-category"></span>
+                        </p>
+                        {{--<p class="detail-tag mt-2">Tag:&nbsp;&nbsp;&nbsp;<span class="detail-tag-p" id="product-detail-tags"></span> </p>--}}
+                        <div class="d-flex mt-4">
+                        <!-- <p class="share-text pt-1 mr-2"> Share this items :
                                 </p>
                                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/snapchat.png') }}" /></a>
                                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/facebook.png') }}" /></a>
                                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/Twitter.png') }}" /></a>
                                 <a href="#"><img class="social-img ml-2" src="{{ asset('landb/img/icons/instagram.png') }}" /></a> -->
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
-    <!-- Modal Quick View -->
+</div>
+<!-- Modal Quick View -->
 
-    <script src="{{ asset('landb/js/jquery.js') }}"></script>
-    <script>
-        var ENDPOINT = "{{ url()->current() }}";
-        var page = 1;
-        var haveMore = true;
-        /*infinteLoadMore(page);*/
+<script src="{{ asset('landb/js/jquery.js') }}"></script>
+<script>
+    var ENDPOINT = "{{ url()->current() }}";
+    var page = 1;
+    var haveMore = true;
+    /*infinteLoadMore(page);*/
 
-        /* $(window).scroll(function () {
-             if ($(window).scrollTop() + $(window).height() >= $(document).height() - 400) {
+    /* $(window).scroll(function () {
+         if ($(window).scrollTop() + $(window).height() >= $(document).height() - 400) {
 
-                 if (haveMore === true) {
-                     console.log('scrolling')
-                     page++;
-                     $('#products-loader').show();
-                     haveMore = infinteLoadMore(page);
-                 }
+             if (haveMore === true) {
+                 console.log('scrolling')
+                 page++;
+                 $('#products-loader').show();
+                 haveMore = infinteLoadMore(page);
              }
-         });*/
+         }
+     });*/
 
-        $('#load_more_products').on('click', function () {
-            if (haveMore === true) {
-                page++;
-                $('#products-loader').show();
-                haveMore = infinteLoadMore(page);
-            } else {
-                $(this).hide();
-            }
+    $('#load_more_products').on('click', function () {
+        if (haveMore === true) {
+            page++;
+            $('#products-loader').show();
+            haveMore = infinteLoadMore(page);
+        } else {
+            $(this).hide();
+        }
+    })
+
+    function infinteLoadMore(page) {
+        var _return = true;
+        var str = '{{request()->getQueryString() }}';
+        $.ajax({
+            url: ENDPOINT + "?page=" + page + '&' + str.replace(/&amp;/g, '&'),
+            type: "get",
+            beforeSend: function () {
+                showLoader();
+                $('#load_more_products').hide();
+            },
         })
-
-        function infinteLoadMore(page) {
-            var _return = true;
-            var str = '{{request()->getQueryString() }}';
-            $.ajax({
-                url: ENDPOINT + "?page=" + page + '&' + str.replace(/&amp;/g, '&'),
-                type: "get",
-                beforeSend: function () {
-                    showLoader();
+            .done(function (response) {
+                var posts = response.products
+                if (posts.length == 0) {
                     $('#load_more_products').hide();
-                },
+                    _return = false;
+                } else {
+                    $('#paginated-posts').append(posts);
+                    $('#products-count').html(parseFloat($('#products-count').html()) + response.count);
+                    $('#load_more_products').show();
+                    _return = true;
+                }
+                hideLoader();
             })
-                .done(function (response) {
-                    var posts = response.products
-                    if (posts.length == 0) {
-                        $('#load_more_products').hide();
-                        _return = false;
-                    } else {
-                        $('#paginated-posts').append(posts);
-                        $('#products-count').html(parseFloat($('#products-count').html()) + response.count);
-                        $('#load_more_products').show();
-                        _return = true;
-                    }
-                    hideLoader();
-                })
-                .fail(function (jqXHR, ajaxOptions, thrownError) {
-                    console.log('Server error occured');
-                    hideLoader();
-                    return false;
-                });
-            return _return;
-        }
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                console.log('Server error occured');
+                hideLoader();
+                return false;
+            });
+        return _return;
+    }
 
-        function showLoader() {
-            $("#products-loader").css("display", "");
-        }
+    function showLoader() {
+        $("#products-loader").css("display", "");
+    }
 
-        function hideLoader() {
-            setTimeout(function () {
-                $("#products-loader").css("display", "none");
-            }, 1000);
-        }
+    function hideLoader() {
+        setTimeout(function () {
+            $("#products-loader").css("display", "none");
+        }, 1000);
+    }
 
 
-    </script>
+</script>

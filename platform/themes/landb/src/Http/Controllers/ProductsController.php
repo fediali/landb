@@ -65,7 +65,6 @@ class ProductsController extends Controller
         }
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category]),
-            'category' => get_category($category)
         ];
 
         if (request()->ajax()) {
