@@ -1,5 +1,6 @@
 <?php
 
+use Botble\Slug\Models\Slug;
 use Botble\Theme\Facades\AdminBarFacade;
 use Botble\Theme\Facades\ThemeOptionFacade;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -106,6 +107,18 @@ if (!function_exists('theme_path')) {
     function theme_path($path = null)
     {
         return platform_path('themes' . DIRECTORY_SEPARATOR . $path);
+    }
+}
+if (!function_exists('get_category')) {
+    /**
+     * @return string
+     */
+    function get_category($slug = 0)
+    {
+
+        $category = Slug::where('prefix', 'product-categories')->where('key', $slug)->first();
+        $data = \Botble\Ecommerce\Models\ProductCategory::where('id', $category->reference_id)->first();
+        return $data;
     }
 }
 

@@ -21,7 +21,7 @@
             <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel"
                  aria-labelledby="{{$sku}}-tab">
                 @php
-                    $sku  = ($k == 0) ? $sku.'-pack-all': $sku;
+
                         $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->value('quantity');
                         $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
                         ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type', \Botble\Ecommerce\Models\Order::NORMAL)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');

@@ -1,3 +1,4 @@
+@dd($products['category'])
 @if(auth('customer')->user())
 
     <section class="breadcrumb_wrap">
@@ -5,7 +6,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">Home</li>
-                    <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                    <li class="breadcrumb-item active" aria-current="page"></li>
                 </ol>
             </nav>
         </div>

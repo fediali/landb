@@ -64,11 +64,12 @@ class ProductsController extends Controller
             return redirect()->route('public.single', $category);
         }
         $data = [
-            'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
+            'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category]),
+            'category' => get_category($category)
         ];
 
-
         if (request()->ajax()) {
+
             return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
         }
 
