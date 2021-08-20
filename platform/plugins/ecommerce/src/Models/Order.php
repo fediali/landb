@@ -149,7 +149,7 @@ class Order extends BaseModel
      */
     public function user()
     {
-        return $this->belongsTo(Customer::class, 'user_id', 'id')->withDefault();
+        return $this->belongsTo(Customer::class, 'user_id', 'id')->withoutGlobalScope('userScope')->withDefault();
     }
 
     /**

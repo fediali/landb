@@ -784,8 +784,7 @@
                             <div class="next-card-section p-none-b">
                                 <div class="flexbox-grid-default flexbox-align-items-center">
                                     <div class="flexbox-auto-content-left">
-                                        <label
-                                            class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
+                                        <label class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <img class="width-30-px radius-cycle" width="40"
@@ -796,17 +795,22 @@
                             </div>
                             <div class="next-card-section border-none-t">
                                 <div class="mb5">
-                                    <a href=" {{route('customer.edit', $order->user->id)}}"> <strong
-                                            class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong></a>
+                                    <a href=" {{route('customer.edit', $order->user->id)}}">
+                                        <strong class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong>
+                                    </a>
                                 </div>
                                 @if ($order->user->id)
                                     <div>
-                                        <i class="fas fa-inbox mr5"></i><span>{{ $order->user->orders()->count() }}</span> {{ trans('plugins/ecommerce::order.orders') }}
+                                        <i class="fas fa-inbox mr5"></i>
+                                        <span>{{ $order->user->orders()->count() }}</span>
+                                        {{ trans('plugins/ecommerce::order.orders') }}
                                     </div>
                                 @endif
                                 <ul class="ws-nm text-infor-subdued">
-                                    <li class="overflow-ellipsis"><a class="hover-underline"
-                                                                     href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">{{ $order->user->email ? $order->user->email : $order->address->email }}</a>
+                                    <li class="overflow-ellipsis">
+                                        <a class="hover-underline" href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">
+                                            {{ $order->user->email ? $order->user->email : $order->address->email }}
+                                        </a>
                                     </li>
                                     @if ($order->user->id)
                                         <li>
