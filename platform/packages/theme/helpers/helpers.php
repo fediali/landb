@@ -117,7 +117,10 @@ if (!function_exists('get_category')) {
     {
 
         $category = Slug::where('prefix', 'product-categories')->where('key', $slug)->first();
-        $data = \Botble\Ecommerce\Models\ProductCategory::where('id', $category->reference_id)->first();
+        $data = [];
+        if ($category) {
+            $data = \Botble\Ecommerce\Models\ProductCategory::where('id', $category->reference_id)->first();
+        }
         return $data;
     }
 }

@@ -266,7 +266,7 @@
         @php $categories = get_category(request()->path('c_slug')) @endphp
         <div class="container">
             <div class="filterbar mb-2">
-                {!!$categories->description!!}
+                {!!@$categories->description!!}
             </div>
         </div>
     </section>
