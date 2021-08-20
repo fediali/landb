@@ -95,6 +95,8 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         ]);
 
     });
+
+
 });
 Theme::routes();
 
@@ -152,14 +154,16 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
 });
 
-Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core','customer','verifiedCustomer']], function () {
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
+
+        Route::get('/products', 'ProductsController@getIndex')
+            ->name('public.products');
+
 
         Route::get('/{slug?}', 'ProductsController@productsByCategory')
             ->name('public.productsByCategory');
 
-        Route::get('/products', 'ProductsController@getIndex')
-            ->name('public.products');
 
         Route::get('/products/{slug?}', 'ProductsController@getDetails')
             ->name('public.singleProduct');

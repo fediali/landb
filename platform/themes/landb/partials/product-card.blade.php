@@ -60,8 +60,7 @@
         <div class="caption">
             <h4>{{ $product->name }}</h4>
             <div class="price">
-                $<span
-                    id="price-of-{{$product->id}}">{{ ($product->prod_pieces) ? @$default->price/$product->prod_pieces:@$default->price }}</span>
+                $<span id="price-of-{{$product->id}}">{{ ($product->prod_pieces) ? @$default->price/$product->prod_pieces:@$default->price }}</span>
             </div>
 
         </div>

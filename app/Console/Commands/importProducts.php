@@ -72,7 +72,7 @@ class importProducts extends Command
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
 
-        /*DB::table('ec_products')->truncate();
+        DB::table('ec_products')->truncate();
         DB::table('ec_product_with_attribute_set')->truncate();
         DB::table('ec_product_with_attribute')->truncate();
         DB::table('ec_product_variations')->truncate();
@@ -83,7 +83,7 @@ class importProducts extends Command
         DB::table('ec_order_histories')->truncate();
         DB::table('ec_order_product')->truncate();
         DB::table('ec_orders')->truncate();
-        dd();*/
+        dd();
 
         $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
