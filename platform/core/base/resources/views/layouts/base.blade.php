@@ -44,6 +44,7 @@
           integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
           crossorigin="anonymous"/>
     <script src="{{ asset('js/barcodeScanner.js') }}"></script>
+    <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
     @yield('head')
 
     @stack('header')
