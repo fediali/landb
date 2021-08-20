@@ -392,20 +392,11 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="pd-all-20 border-top-title-main">
-                                <div class="flexbox-grid-default flexbox-flex-wrap flexbox-align-items-center">
-                                    @if ($order->status == \Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED && !$order->shipment->id)
-                                        <div class="flexbox-auto-left">
-                                            <svg class="svg-next-icon svg-next-icon-size-20 svg-next-icon-green">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                     xlink:href="#next-checkmark"></use>
-                                            </svg>
-                                        </div>
-                                        <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                            <span>{{ trans('plugins/ecommerce::order.all_products_are_not_delivered') }}</span>
-                                        </div>
-                                    @else
-                                        @if ($order->shipment->id)
+
+                            @if($order->payment->status != \Botble\Payment\Enums\PaymentStatusEnum::REFUNDED)
+                                <div class="pd-all-20 border-top-title-main">
+                                    <div class="flexbox-grid-default flexbox-flex-wrap flexbox-align-items-center">
+                                        @if ($order->status == \Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED && !$order->shipment->id)
                                             <div class="flexbox-auto-left">
                                                 <svg class="svg-next-icon svg-next-icon-size-20 svg-next-icon-green">
                                                     <use xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -413,38 +404,51 @@
                                                 </svg>
                                             </div>
                                             <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
-                                                <span>Shipping</span>
+                                                <span>{{ trans('plugins/ecommerce::order.all_products_are_not_delivered') }}</span>
                                             </div>
                                         @else
-                                            <div class="flexbox-auto-left">
-                                                <svg class="svg-next-icon svg-next-icon-size-24 svg-next-icon-gray">
-                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                         xlink:href="#next-shipping"></use>
-                                                </svg>
-                                            </div>
-                                            <div class="flexbox-auto-content ml15 mr15 text-upper">
-                                                {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
-                                                <span>Shipping</span>
-                                            </div>
-                                            <div class="flexbox-auto-left">
-                                                <div class="item">
-                                                    <button class="btn btn-primary btn-trigger-shipment"
-                                                            data-target="{{ route('orders.get-shipment-form', $order->id) }}">
-                                                        {{--{{ trans('plugins/ecommerce::order.delivery') }}--}}
-                                                        Shipping
-                                                    </button>
+                                            @if ($order->shipment->id)
+                                                <div class="flexbox-auto-left">
+                                                    <svg class="svg-next-icon svg-next-icon-size-20 svg-next-icon-green">
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                             xlink:href="#next-checkmark"></use>
+                                                    </svg>
                                                 </div>
-                                            </div>
+                                                <div class="flexbox-auto-content ml15 mr15 text-upper">
+                                                    {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                    <span>Shipping</span>
+                                                </div>
+                                            @else
+                                                <div class="flexbox-auto-left">
+                                                    <svg class="svg-next-icon svg-next-icon-size-24 svg-next-icon-gray">
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                             xlink:href="#next-shipping"></use>
+                                                    </svg>
+                                                </div>
+                                                <div class="flexbox-auto-content ml15 mr15 text-upper">
+                                                    {{--<span>{{ trans('plugins/ecommerce::order.delivery') }}</span>--}}
+                                                    <span>Shipping</span>
+                                                </div>
+                                                <div class="flexbox-auto-left">
+                                                    <div class="item">
+                                                        <button class="btn btn-primary btn-trigger-shipment"
+                                                                data-target="{{ route('orders.get-shipment-form', $order->id) }}">
+                                                            {{--{{ trans('plugins/ecommerce::order.delivery') }}--}}
+                                                            Shipping
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         @endif
-                                    @endif
+                                    </div>
                                 </div>
-                            </div>
-                            @if (!$order->shipment->id)
-                                <div class="shipment-create-wrap hidden"></div>
-                            @else
-                                @include('plugins/ecommerce::orders.shipment-detail', ['shipment' => $order->shipment])
+                                @if (!$order->shipment->id)
+                                    <div class="shipment-create-wrap hidden"></div>
+                                @else
+                                    @include('plugins/ecommerce::orders.shipment-detail', ['shipment' => $order->shipment])
+                                @endif
                             @endif
+
                         </div>
                         <div class="mt20 mb20">
                             <div>
