@@ -67,12 +67,11 @@ class ProductsController extends Controller
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
         ];
 
-        dd($data['products']);
 
         if (request()->ajax()) {
             return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
         }
-        dd($data['products']);
+
         return Theme::scope('products', $data)->render();
     }
 
