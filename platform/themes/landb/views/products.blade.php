@@ -1,4 +1,4 @@
-@dd($products['category'])
+{{--@dd($products['category'])--}}
 @if(auth('customer')->user())
 
     <section class="breadcrumb_wrap">
