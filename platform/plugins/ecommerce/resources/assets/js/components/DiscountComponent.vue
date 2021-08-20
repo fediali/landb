@@ -155,26 +155,84 @@
                                 </div>
                             </div>
 
-                            <div class="inline mb5" id="div-select-customer"
-                                 v-if="target === 'customer' && type_option !== 'shipping'">
-                                <div class="drop-select-search drop-control dropdown dropdown-collection">
+                            <div class="inline mb5" id="div-select-customer" v-if="target === 'customer' && type_option !== 'shipping'">
+                                <!--<div class="drop-select-search drop-control dropdown dropdown-collection">
                                     <input type="hidden" name="customers" v-model="customer_id">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                            @click="loadListCustomersForSelect()">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="loadListCustomersForSelect()">
                                         <span class="overflow-title max-250 p-r15">{{ customer_name }}</span>
                                     </button>
                                     <div class="dropdown-menu">
                                         <div class="has-loading" v-show="loading">
                                             <i class="fa fa-spinner fa-spin"></i>
                                         </div>
-                                        <a v-show="!loading" class="dropdown-item"
-                                           @click="handleSelectCustomers(customer)" href="#"
-                                           v-for="customer in customers" v-bind:value="customer.id">{{
-                                                customer.name
-                                            }}</a>
+                                        <a v-show="!loading" class="dropdown-item" @click="handleSelectCustomers(customer)" href="#" v-for="customer in customers" v-bind:value="customer.id">
+                                            {{customer.name }}
+                                        </a>
                                     </div>
+                                </div>-->
+
+
+                                <div class="box-search-advance customer">
+                                    <span class="overflow-title max-250 p-r15"><strong>{{ customer_name }}</strong></span>
+                                    <input type="hidden" name="customers" v-model="customer_id">
+                                    <div>
+                                        <input type="text" class="next-input textbox-advancesearch customer" @click="loadListCustomersForSearch()" @keyup="handleSearchCustomer($event.target.value)" placeholder="Search or create a new customer">
+                                    </div>
+                                    <div class="panel panel-default" v-bind:class="{ active: customers, hidden : hidden_customer_search_panel }">
+                                        <div class="panel-body">
+                                            <div class="list-search-data">
+                                                <div class="has-loading" v-show="loading">
+                                                    <i class="fa fa-spinner fa-spin"></i>
+                                                </div>
+                                                <ul class="clearfix select-customer" v-show="!loading">
+                                                    <li class="row" v-for="customer in customers.data" @click="handleSelectCustomers(customer)" v-bind:value="customer.id">
+                                                        <div class="flexbox-grid-default flexbox-align-items-center">
+                                                            <div class="flexbox-auto-40">
+                                                                <div class="wrap-img inline_block vertical-align-t radius-cycle">
+                                                                    <img class="thumb-image radius-cycle" :src="customer.avatar_url">
+                                                                </div>
+                                                            </div>
+                                                            <div class="flexbox-auto-content-right">
+                                                                <div class="overflow-ellipsis">{{ customer.name }}</div>
+                                                                <div class="overflow-ellipsis">
+                                                                    <a :href="'mailto:' + customer.email">
+                                                                        <span class="asd">{{customer.email ? customer.email : '-'}}</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li v-if="customers.data.length === 0">
+                                                        <span>{{ __('No customer found!') }}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-footer" v-if="customers.next_page_url || customers.prev_page_url">
+                                            <div class="btn-group float-right">
+                                                <button type="button" @click="loadListCustomersForSearch((customers.prev_page_url ? customers.current_page - 1 : customers.current_page), true)"
+                                                        v-bind:class="{ 'btn btn-secondary': customers.current_page !== 1, 'btn btn-secondary disable': customers.current_page === 1}"
+                                                        :disabled="customers.current_page === 1">
+                                                    <svg role="img" class="svg-next-icon svg-next-icon-size-16 svg-next-icon-rotate-180">
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-chevron"></use>
+                                                    </svg>
+                                                </button>
+                                                <button type="button" @click="loadListCustomersForSearch((customers.next_page_url ? customers.current_page + 1 : customers.current_page), true)"
+                                                        v-bind:class="{ 'btn btn-secondary': customers.next_page_url, 'btn btn-secondary disable': !customers.next_page_url }"
+                                                        :disabled="!customers.next_page_url">
+                                                    <svg role="img" class="svg-next-icon svg-next-icon-size-16">
+                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-chevron"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+
                                 </div>
+
+
                             </div>
 
                             <div class="inline mb5" id="div-select-product-variant"
@@ -437,11 +495,16 @@ export default {
             products: [],
             product_keyword: null,
             product_text: 'Select product',
-            customers: [],
+            customers: {
+                data: [],
+            },
             customer_id: null,
             customer_name: 'Select customer',
             loading: false,
-            discountUnit: '$'
+            discountUnit: '$',
+
+            hidden_customer_search_panel: true,
+            customer_keyword: null,
         }
     },
     props: {
@@ -458,12 +521,43 @@ export default {
 
             if (!container.is(e.target) && container.has(e.target).length === 0) {
                 context.hidden_product_search_panel = true;
+                context.hidden_customer_search_panel = true;
             }
         });
 
         this.discountUnit = this.currency;
     },
     methods: {
+        loadListCustomersForSearch: function (page = 1, force = false) {
+            let context = this;
+            context.hidden_customer_search_panel = false;
+            $('.textbox-advancesearch.customer').closest('.box-search-advance.customer').find('.panel').addClass('active');
+            if (_.isEmpty(context.customers.data) || force) {
+                context.loading = true;
+                axios
+                    .get(route('customers.get-list-customers-for-search', {
+                        keyword: context.customer_keyword,
+                        page: page
+                    }))
+                    .then(res => {
+                        context.customers = res.data.data;
+                        context.loading = false;
+                    })
+                    .catch(res => {
+                        Botble.handleError(res.response.data);
+                    });
+            }
+        },
+        handleSearchCustomer: function (value) {
+            if (value !== this.customer_keyword) {
+                let context = this;
+                this.customer_keyword = value;
+                setTimeout(() => {
+                    context.loadListCustomersForSearch(1, true);
+                }, 500);
+            }
+        },
+
         generateCouponCode: function (event) {
             event.preventDefault();
             let context = this;
@@ -645,6 +739,7 @@ export default {
         handleSelectCustomers: function (customer) {
             this.customer_id = customer.id;
             this.customer_name = customer.name;
+            this.hidden_customer_search_panel = true;
         },
         selectProductVariant: function (productVariant, variation) {
             if (!_.includes(this.variant_ids, variation.product_id)) {
