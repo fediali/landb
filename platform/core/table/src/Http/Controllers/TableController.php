@@ -115,7 +115,6 @@ class TableController extends Controller
         try {
 
             if($request->input('class') == 'Botble\Ecommerce\Tables\OrderTable' && $inputValue == 'print_now'){
-              //dd($ids);
               return $response->setData(['redirectUrl' => route('orders.printReceipt', json_encode($ids))]);
             }else{
               $object->saveBulkChanges($ids, $inputKey, $inputValue);

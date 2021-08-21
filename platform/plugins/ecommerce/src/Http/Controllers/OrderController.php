@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Http\Controllers;
 use App\Events\OrderEdit;
 use App\Imports\OrderImportFile;
 use App\Models\CardPreAuth;
+use App\Models\InventoryHistory;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use Assets;
@@ -30,6 +31,7 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\OrderProductShipmentVerify;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
@@ -164,7 +166,6 @@ class OrderController extends BaseController
     public function index(OrderTable $dataTable)
     {
         page_title()->setTitle(trans('plugins/ecommerce::order.name'));
-
         return $dataTable->renderTable();
     }
 
@@ -181,7 +182,6 @@ class OrderController extends BaseController
             ->addScripts(['blockui', 'input-mask']);
 
         page_title()->setTitle(trans('plugins/ecommerce::order.create'));
-
         // return view('plugins/ecommerce::orders.create');
         return view('plugins/ecommerce::orders.create-back');
     }
@@ -259,11 +259,27 @@ class OrderController extends BaseController
             if ($order->order_type != Order::PRE_ORDER) {
                 $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
                 foreach ($order_products as $order_product) {
+
+                    $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id'        => $order_product->product_id,
+                        'sku'               => $order_product->product->sku,
+                        'quantity'          => $order_product->qty,
+                        'new_stock'         => $order_product->product->quantity + $order_product->qty,
+                        'old_stock'         => $order_product->product->quantity,
+                        'order_id'          => $order->id,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                    ];
+                    log_product_history($logParam);
+
                     $this->productRepository
                         ->getModel()
                         ->where('id', $order_product->product_id)
                         ->where('with_storehouse_management', 1)
                         ->increment('quantity', $order_product->qty);
+
                 }
             }
 
@@ -485,7 +501,21 @@ class OrderController extends BaseController
                         ->where('quantity', '>', 0)
                         ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
 
-                    if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                    $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id'        => $product->id,
+                        'sku'               => $product->sku,
+                        'quantity'          => $data['qty'],
+                        'new_stock'         => $product->quantity - $data['qty'],
+                        'old_stock'         => $product->quantity,
+                        'order_id'          => $order->id,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                    ];
+                    log_product_history($logParam);
+
+                    /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                         $this->productRepository
                             ->getModel()
                             ->where('id', $product->id)
@@ -500,7 +530,7 @@ class OrderController extends BaseController
                             ->where('with_storehouse_management', 1)
                             ->where('in_person_sales_qty', '>', 0)
                             ->decrement('in_person_sales_qty', Arr::get($productItem, 'quantity', 1));
-                    }
+                    }*/
 
                     $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
                     set_product_oos_date($order->id, $product, Arr::get($productItem, 'quantity', 1), $preQty);
@@ -941,6 +971,31 @@ class OrderController extends BaseController
             'order_id'    => $order->id,
             'user_id'     => Auth::user()->getKey(),
         ]);
+
+        if ($order->order_type != Order::PRE_ORDER) {
+            $order_products = OrderProduct::where('order_id', $order->id)->get();
+            foreach ($order_products as $order_product) {
+                $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
+                $logParam = [
+                    'parent_product_id' => $getParentProdId,
+                    'product_id'        => $order_product->product_id,
+                    'sku'               => $order_product->product->sku,
+                    'quantity'          => $order_product->qty,
+                    'new_stock'         => $order_product->product->quantity + $order_product->qty,
+                    'old_stock'         => $order_product->product->quantity,
+                    'order_id'          => $order->id,
+                    'created_by'        => Auth::user()->id,
+                    'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                ];
+                log_product_history($logParam);
+
+                $this->productRepository
+                    ->getModel()
+                    ->where('id', $order_product->product_id)
+                    ->where('with_storehouse_management', 1)
+                    ->increment('quantity', $order_product->qty);
+            }
+        }
 
         $mailer = EmailHandler::setModule(ECOMMERCE_MODULE_SCREEN_NAME);
         if ($mailer->templateEnabled('customer_cancel_order')) {

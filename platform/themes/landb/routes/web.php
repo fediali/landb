@@ -10,22 +10,22 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
-
-
-    Route::get('/products/{slug?}', 'ProductsController@getDetails')
-      ->name('public.singleProduct');
-
-    Route::get('/search/product', 'ProductsController@searchProducts')
-      ->name('public.searchProducts');
-
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
+
+
 });
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
-  Route::get('logout', 'AuthController@logout')->name('public.logout');
+    Route::get('logout', 'AuthController@logout')->name('public.logout');
 });
+
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']], function () {
+
+
+
 
     Route::get('/cart', 'CartController@getIndex')
         ->name('public.cart_index');
@@ -90,10 +90,13 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         ]);
 
         Route::post('create-customer-payment', [
-            'as'         => 'create-customer-payment',
-            'uses'       => 'CustomerController@postCustomerCard'
+            'as'   => 'create-customer-payment',
+            'uses' => 'CustomerController@postCustomerCard'
         ]);
+
     });
+
+
 });
 Theme::routes();
 
@@ -119,8 +122,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/register', 'RegisterController@showRegisterForm')
             ->name('public.register');
 
-        Route::get('/products', 'ProductsController@getIndex')
-            ->name('public.products');
 
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
@@ -133,32 +134,44 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             ->name('public.register.post');
 
 
-      Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
-        Route::get('get_states', [
-            'as'   => 'getStates',
-            'uses' => 'CustomerController@getStates'
-        ]);
-        Route::get('get_countries', [
-            'as'   => 'getCountries',
-            'uses' => 'CustomerController@getCountries'
-        ]);
-      });
+        Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
+            Route::get('get_states', [
+                'as'   => 'getStates',
+                'uses' => 'CustomerController@getStates'
+            ]);
+            Route::get('get_countries', [
+                'as'   => 'getCountries',
+                'uses' => 'CustomerController@getCountries'
+            ]);
+        });
 
+        Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
+            ->name('public.single');
+
+        Route::get('sitemap.xml', 'LandbController@getSiteMap')
+            ->name('public.sitemap');
     });
+
 });
 
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
-  Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
+    Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
-    Route::get('sitemap.xml', 'LandbController@getSiteMap')
-        ->name('public.sitemap');
-
-    Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
-        ->name('public.single');
-
-    Route::get('/{slug?}', 'ProductsController@productsByCategory')
-        ->name('public.productsByCategory');
+        Route::get('/products', 'ProductsController@getIndex')
+            ->name('public.products');
 
 
-  });
+        Route::get('/{slug?}', 'ProductsController@productsByCategory')
+            ->name('public.productsByCategory');
+
+
+        Route::get('/products/{slug?}', 'ProductsController@getDetails')
+            ->name('public.singleProduct');
+
+        Route::get('/search/product', 'ProductsController@searchProducts')
+            ->name('public.searchProducts');
+
+
+
+    });
 });

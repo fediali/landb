@@ -50,15 +50,15 @@ class importProducts extends Command
      * @return void
      */
     public function __construct(
-//        ProductVariationInterface $productVariation,
-//        ProductCategoryInterface $productCategoryRepository,
-//        BaseHttpResponse $response
+        ProductVariationInterface $productVariation,
+        ProductCategoryInterface $productCategoryRepository,
+        BaseHttpResponse $response
     )
     {
         parent::__construct();
-//        $this->response = $response;
-//        $this->productVariation = $productVariation;
-//        $this->productCategoryRepository = $productCategoryRepository;
+        $this->response = $response;
+        $this->productVariation = $productVariation;
+        $this->productCategoryRepository = $productCategoryRepository;
     }
 
     /**
@@ -71,9 +71,23 @@ class importProducts extends Command
         /*$file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
+
+//        DB::table('ec_products')->truncate();
+//        DB::table('ec_product_with_attribute_set')->truncate();
+//        DB::table('ec_product_with_attribute')->truncate();
+//        DB::table('ec_product_variations')->truncate();
+//        DB::table('ec_product_variation_items')->truncate();
+//        DB::table('ec_product_collection_products')->truncate();
+//        DB::table('ec_product_category_product')->truncate();
+//        DB::table('ec_order_addresses')->truncate();
+//        DB::table('ec_order_histories')->truncate();
+//        DB::table('ec_order_product')->truncate();
+//        DB::table('ec_orders')->truncate();
+//        dd();
+
         $file = File::get(public_path('lnb-products-100.json'));
         $data = json_decode(utf8_encode($file), true);
-
+        Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
 
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
@@ -127,13 +141,25 @@ class importProducts extends Command
                     // $product->sale_price = $variation->cost + $extras;
 
                     if ($row['image_id'] && $row['image_path']) {
-                        $idLen = getDigitsLength($row['image_id']);
-                        if ($idLen <= 5) {
-                            $folder = substr($row['image_id'], 0, 2);
-                        } elseif ($idLen >= 6) {
-                            $folder = substr($row['image_id'], 0, 3);
+
+                        $getProdImages = DB::table('hw_images_links')
+                            ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
+                            ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
+                            ->where('hw_images_links.object_type', 'product')
+                            ->where('hw_images_links.object_id', $row['product_id'])
+                            ->orderBy('hw_images_links.type', 'DESC')
+                            ->get();
+                        $arrr = [];
+                        foreach ($getProdImages as $getProdImage) {
+                            $idLen = getDigitsLength($getProdImage->image_id);
+                            if ($idLen <= 5) {
+                                $folder = substr($getProdImage->image_id, 0, 2);
+                            } elseif ($idLen >= 6) {
+                                $folder = substr($getProdImage->image_id, 0, 3);
+                            }
+                            $arrr[]= 'product-images/detailed/'.$folder.'/'.$getProdImage->image_path;
                         }
-                        $product->images = json_encode(['product-images/detailed/'.$folder.'/'.$row['image_path']]);
+                        $product->images = json_encode($arrr);
                     }
                     $product->tax_id = 1;
 
@@ -207,6 +233,22 @@ class importProducts extends Command
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+
+                                        $packAllProdSku = Product::where('id', $prodId)->value('sku');
+                                        if (str_contains($packAllProdSku, '-pack-all')) {
+                                            $packAllProdSku = str_replace('-pack-all', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 0')) {
+                                            $packAllProdSku = str_replace(' - 0', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 1')) {
+                                            $packAllProdSku = str_replace(' - 1', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        } elseif (str_contains($packAllProdSku, ' - 2')) {
+                                            $packAllProdSku = str_replace(' - 2', '', $packAllProdSku);
+                                            Product::where('id', $prodId)->update(['sku' => $packAllProdSku]);
+                                        }
+
                                         $packAllProd = Product::where('id', $prodId)->first();
                                         //no barcode image need
                                         try {
@@ -224,6 +266,7 @@ class importProducts extends Command
                                         $packAllProd->ptype = $product->ptype;
                                         $packAllProd->prod_pieces = $product->prod_pieces;
                                         $packAllProd->sizes = $product->sizes;
+                                        $packAllProd->images = $product->images;
                                         $packAllProd->save();
 
                                         $logParam = [
@@ -251,6 +294,22 @@ class importProducts extends Command
 
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
+
+                                                $sizeProdSku = Product::where('id', $prodId)->value('sku');
+                                                if (str_contains($sizeProdSku, '-pack-all')) {
+                                                    $sizeProdSku = str_replace('-pack-all', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 0')) {
+                                                    $sizeProdSku = str_replace(' - 0', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 1')) {
+                                                    $sizeProdSku = str_replace(' - 1', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                } elseif (str_contains($sizeProdSku, ' - 2')) {
+                                                    $sizeProdSku = str_replace(' - 2', '', $sizeProdSku);
+                                                    Product::where('id', $prodId)->update(['sku' => $sizeProdSku]);
+                                                }
+
                                                 $sizeProd = Product::where('id', $prodId)->first();
 
                                                 if ($sizeProd) {

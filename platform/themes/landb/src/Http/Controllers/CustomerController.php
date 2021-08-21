@@ -9,6 +9,7 @@ use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Models\StoreLocator;
@@ -281,6 +282,9 @@ return $submit;
   }
 
   public function pendingNotification(){
+     if(auth('customer')->user()->status == BaseStatusEnum::ACTIVE){
+         return redirect()->route('public.index');
+     }
     return Theme::scope('customer.verify')->render();
   }
 

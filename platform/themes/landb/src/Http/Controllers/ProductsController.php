@@ -46,43 +46,44 @@ class ProductsController extends Controller
 
     public function getIndex()
     {
+
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true])
         ];
         //dd($data['products']);
-      if(request()->ajax()){
-        return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
-      }
-        //dd($data['products']);
+        if (request()->ajax()) {
+            return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
+        }
         return Theme::scope('products', $data)->render();
     }
 
     public function productsByCategory($category)
     {
-      $slug = SlugHelper::getSlug($category, '');
-      if ($slug) {
-        return redirect()->route('public.single', $category);
-      }
+        $slug = SlugHelper::getSlug($category, '');
+        if ($slug) {
+            return redirect()->route('public.single', $category);
+        }
         $data = [
             'products' => $this->productRepo->getProductsByParams(['latest' => true, 'paginate' => true, 'array' => true, 'category_slug' => $category])
         ];
-        //dd($data['products']);
 
-      if(request()->ajax()){
-        return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
-      }
+
+        if (request()->ajax()) {
+            return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
+        }
+
         return Theme::scope('products', $data)->render();
     }
 
     public function getDetails($slug, Request $request)
     {
 
-      /*$data = [
-          'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
-      ];
-      if(!$data['product']){
-        abort('404');
-      }*/
+        /*$data = [
+            'product' => $this->productRepo->getProductsByParams(['first' => true, 'slug' => $slug, 'category' => true])
+        ];
+        if(!$data['product']){
+          abort('404');
+        }*/
 
         $slug = $this->slugRepository->getFirstBy([
             'key'            => $slug,
@@ -105,8 +106,8 @@ class ProductsController extends Controller
 
         $data['product'] = get_products([
             'condition' => $condition,
-                'take'      => 1,
-                'with'      => [
+            'take'      => 1,
+            'with'      => [
                 'defaultProductAttributes',
                 'slugable',
                 'tags',
@@ -144,35 +145,37 @@ class ProductsController extends Controller
         return Theme::scope('timeline', ['product' => $product, 'user' => $user])->render();
     }
 
-    public function searchProducts(Request $request){
-      $keyword = $request->keyword;
+    public function searchProducts(Request $request)
+    {
+        $keyword = $request->keyword;
 
-      if(!empty($keyword)){
-        if(is_numeric($keyword)){
-          $data = [
-              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'price_search' => $keyword, 'paginate'  => true, 'array' => true])
-          ];
+        if (!empty($keyword)) {
+            if (is_numeric($keyword)) {
+                $data = [
+                    'products' => $this->productRepo->getProductsByParams(['latest' => true, 'price_search' => $keyword, 'paginate' => true, 'array' => true])
+                ];
 
-        }else{
-          $data = [
-              'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate'  => true, 'array' => true])
-          ];
+            } else {
+                $data = [
+                    'products' => $this->productRepo->getProductsByParams(['latest' => true, 'name_search' => $keyword, 'paginate' => true, 'array' => true])
+                ];
+            }
+            //dd($data['products']->hasPages());
+            if (request()->ajax()) {
+                return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
+            }
+            return Theme::scope('products', $data)->render();
+        } else {
+            return redirect()->route('public.products');
         }
-        //dd($data['products']->hasPages());
-        if(request()->ajax()){
-          return response()->json(['products' => $this->getProductsListingHtml($data['products']), 'count' => count($data['products'])]);
-        }
-        return Theme::scope('products', $data)->render();
-      }else{
-        return redirect()->route('public.products');
-      }
     }
 
-    public function getProductsListingHtml($products){
-      $html = '';
-      foreach ($products as $product){
-        $html .= Theme::partial('product-card', ['product' => $product , 'col' => '4']);
-      }
-      return $html;
+    public function getProductsListingHtml($products)
+    {
+        $html = '';
+        foreach ($products as $product) {
+            $html .= Theme::partial('product-card', ['product' => $product, 'col' => '4']);
+        }
+        return $html;
     }
 }

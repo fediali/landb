@@ -469,7 +469,7 @@ class Product extends BaseModel
         return $slug;
     }
 
-    public function getSkuAttribute($value)
+    /*public function getSkuAttribute($value)
     {
         if ($value) {
             if (str_contains($value, '-pack-all')) {
@@ -483,11 +483,18 @@ class Product extends BaseModel
             }
         }
         return $value;
-    }
+    }*/
 
     public function setWithStorehouseManagementAttribute($value)
     {
         $this->attributes['with_storehouse_management'] = 1;
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $getPackId = ProductVariation::where('configurable_product_id', $this->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['status' => $value]);
+        $this->attributes['status'] = $value;
     }
 
     /**

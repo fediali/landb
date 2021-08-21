@@ -56,7 +56,6 @@ class OrderTable extends TableAbstract
         $this->repository = $orderRepository;
         $this->setOption('id', 'table-orders');
         parent::__construct($table, $urlGenerator);
-
         if (!Auth::user()->hasPermission('orders.edit')) {
             $this->hasOperations = false;
             $this->hasActions = false;
@@ -402,7 +401,6 @@ class OrderTable extends TableAbstract
         ) {
             return view('plugins/ecommerce::orders.intro');
         }
-
         return parent::renderTable($data, $mergeData);
     }
 

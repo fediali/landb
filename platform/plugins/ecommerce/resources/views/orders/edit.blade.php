@@ -597,12 +597,11 @@
                                 $previous = $order->previousOrder();
                                 ?>
 
-                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
-                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;Previous Order</a>&nbsp;
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>Next
-                                    Order&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
+                                        class="fa fa-angle-left"></i>&nbsp;&nbsp;</a>&nbsp;
+                                <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
 
 
@@ -843,29 +842,29 @@
                                             <label
                                                 class="title-text-second"><strong>Billing Address</strong></label>
                                         </div>
-                                        <li>{{ $order->billingAddress->name }}</li>
-                                        @if ($order->billingAddress->phone)
+                                        <li>{{ @$order->billingAddress->name }}</li>
+                                        @if (@$order->billingAddress->phone)
                                             <li>
-                                                <a href="tel:{{ $order->billingAddress->phone }}">
+                                                <a href="tel:{{ @$order->billingAddress->phone }}">
                                                     <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                                    <span>{{ $order->billingAddress->phone }}</span>
+                                                    <span>{{ @$order->billingAddress->phone }}</span>
                                                 </a>
                                             </li>
                                         @endif
                                         <li>
-                                            @if ($order->billingAddress->address)
+                                            @if (@$order->billingAddress->address)
                                                 <div>{{ $order->billingAddress->address }}</div>
                                             @endif
-                                            @if ($order->billingAddress->city)
+                                            @if (@$order->billingAddress->city)
                                                 <div>{{ $order->billingAddress->city }}</div>
                                             @endif
-                                            @if ($order->billingAddress->state)
+                                            @if (@$order->billingAddress->state)
                                                 <div>{{ $order->billingAddress->state }}</div>
                                             @endif
-                                            @if ($order->billingAddress->country_name)
+                                            @if (@$order->billingAddress->country_name)
                                                 <div>{{ $order->billingAddress->country_name }}</div>
                                             @endif
-                                            @if ($order->billingAddress->zip_code)
+                                            @if (@$order->billingAddress->zip_code)
                                                 <div>{{ $order->billingAddress->zip_code }}</div>
                                             @endif
 

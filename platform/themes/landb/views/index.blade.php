@@ -91,9 +91,9 @@
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <h4 class="text-left">{{ $product->name }}</h4>
+                                    <h4 class="text-center">{{ $product->name }}</h4>
                                     <div class="price">
-                                        ${{ $product->price }}
+                                        ${{ $product->price/$product->prod_pieces }}
                                     </div>
                                     <form id='myform-{{$product->id}}' class="add_to_cart_form"
                                           data-id="{{ @$default->product_id }}" method='POST'

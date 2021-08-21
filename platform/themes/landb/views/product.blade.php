@@ -43,7 +43,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Shop</li>
                 <li class="breadcrumb-item active" aria-current="page">{{ @$product->categories[0]->name }}</li>
                 {{--<li class="breadcrumb-item active" aria-current="page">Plus Top</li>--}}
-                <li class="breadcrumb-item active" aria-current="page"><b>{{ $product->name }}</b></li>
+                <li class="breadcrumb-item active" aria-current="page"><b>{{ @$product->name }}</b></li>
             </ol>
         </nav>
     </div>
