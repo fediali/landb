@@ -86,6 +86,7 @@
 <script src="//{{ Request::getHost() }}:{{env('LARAVEL_ECHO_PORT')}}/socket.io/socket.io.js"></script>
 <script src="{{ asset('vendor/core/core/base/js/laravel-echo-setup.js') }}"></script>
 <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 {{--<script src="{{ asset('landb/js/custom.js') }}"></script>--}}
 <script type="text/javascript">
 
