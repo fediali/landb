@@ -24,6 +24,7 @@ use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Services\HandleApplyCouponService;
+use Botble\Ecommerce\Services\HandleApplyPromotionsService;
 use Botble\Ecommerce\Supports\EcommerceHelper;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
@@ -56,18 +57,21 @@ class CheckoutController extends Controller
     protected $payPalService;
     protected $orderRepository;
     protected $omniPaymentService;
-    protected $coupan_service;
+    protected $coupon_service;
+    protected $promotion_service;
 
-    public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, OmniPaymentService $omniPaymentService, HandleApplyCouponService $applyCouponService)
+    public function __construct(PayPalPaymentService $payPalService, OrderInterface $orderRepository, OmniPaymentService $omniPaymentService, HandleApplyCouponService $applyCouponService, HandleApplyPromotionsService $applyPromotionsService)
     {
         $this->payPalService = $payPalService;
         $this->orderRepository = $orderRepository;
         $this->omniPaymentService = $omniPaymentService;
-        $this->coupan_service = $applyCouponService;
+        $this->coupon_service = $applyCouponService;
+        $this->promotion_service = $applyPromotionsService;
     }
 
     public function getCheckoutIndex($token)
     {
+        $this->applyPromotionIfAvailable(auth('customer')->user()->getUserCart(), $token);
         $cart =  Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
@@ -370,7 +374,7 @@ class CheckoutController extends Controller
         }
         /*if(){}*/
 
-        $applyCoupon = $this->coupan_service->execute($code);
+        $applyCoupon = $this->coupon_service->execute($code);
 
         if(!$applyCoupon['error']){
           $cart =  Order::where('id', auth('customer')->user()->getUserCart())->first();
@@ -409,7 +413,7 @@ class CheckoutController extends Controller
       if ($order) {
         $coupon_code = $order->coupon_code;
         if (!empty($coupon_code)) {
-          $applyCoupon = $this->coupan_service->execute($coupon_code);
+          $applyCoupon = $this->coupon_service->execute($coupon_code);
 
           if($applyCoupon['error']){
             $order->coupon_code = null;
@@ -421,6 +425,20 @@ class CheckoutController extends Controller
         }
       }
       return false;
+    }
+
+    public function applyPromotionIfAvailable($orderId, $token = null){
+        $promotionAmount = $this->promotion_service->execute($token);
+
+        $order = Order::find($orderId);
+        if($order->promotion_applied != 1){
+          $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount: $promotionAmount;
+          $order->amount = $order->sub_total - $order->discount_amount;
+          $order->promotion_applied = 1;
+          $order->save();
+        }
+
+
     }
 
 

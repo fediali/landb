@@ -100,7 +100,8 @@ class Order extends BaseModel
         'parent_order',
         'notes',
         'transaction_error',
-        'po_number'
+        'po_number',
+        'promotion_applied'
     ];
 
     /**

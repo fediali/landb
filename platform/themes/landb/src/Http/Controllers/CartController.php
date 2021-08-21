@@ -17,6 +17,7 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Services\HandleApplyCouponService;
+use Botble\Ecommerce\Services\HandleApplyPromotionsService;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
 use Botble\Theme\Events\RenderingSingleEvent;
@@ -41,10 +42,12 @@ class CartController extends Controller
 {
     private $user;
     protected $coupan_service;
-    public function __construct(HandleApplyCouponService $applyCouponService)
+    protected $promotion_service;
+    public function __construct(HandleApplyCouponService $applyCouponService, HandleApplyPromotionsService $applyPromotionsService)
     {
         $this->user = auth('customer')->user();
       $this->coupan_service = $applyCouponService;
+      $this->promotion_service = $applyPromotionsService;
     }
 
     public function getIndex(Request $request)
@@ -187,28 +190,37 @@ class CartController extends Controller
             'sub_total' => $amount,
             'amount'    => $amount
         ]);
+      $promotionAmount = $this->promotion_service->execute();
+
+      $order = Order::find($orderId);
+      /*if($order->promotion_applied == 1){
+        $order->discount_amount = $promotionAmount;
+        $order->amount = $order->sub_total - $order->discount_amount;
+        $order->promotion_applied = 1;
+      }*/
+      $order->promotion_applied = 0;
+
         if(!empty($coupon_code)){
-          $order = Order::find($orderId);
           $applyCoupon = $this->coupan_service->execute($order->coupon_code);
 
           if(!$applyCoupon['error']){
             if (count($products)){
               $order->discount_amount =  $applyCoupon['data']['discount_amount'];
               $order->amount = $order->sub_total - $order->discount_amount;
-              $order->save();
             }else {
               $order->coupon_code = null;
               $order->discount_amount = 0.00;
               $order->amount = $order->sub_total;
-              $order->save();
             }
           }else{
             $order->coupon_code = null;
             $order->discount_amount = 0.00;
             $order->amount = $order->sub_total;
-            $order->save();
           }
         }
+
+        $order->save();
+
     }
 
     public function deleteCartItem($id)
