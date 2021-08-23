@@ -105,6 +105,7 @@
                         </div>
                         </div>
                 </div>
+                <div class="row">
                 <div class="col-md-4">
                     <label class="mt-4 font-bold">Order Report:</label><br>
                     {{--{{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}--}}
@@ -122,9 +123,10 @@
                     </div>
                     {{--{{ Form::close() }}--}}
                 </div>
+                </div>
 
             </div>
-            <div class="d-flex mb-3 mt-3">
+            <div class="pl-3 pr-3 d-flex mb-3 mt-3">
                 <div class="d-flex adv-input">
                     <input type="text" name="search_name" class="form-control mr-2" id="search-name">
                     <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
