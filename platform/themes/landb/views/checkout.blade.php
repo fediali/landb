@@ -440,7 +440,7 @@
                                                             <div id="card-element" class="field">
                                                                 <span>Card</span>
                                                                 <div id="fattjs-number" style="height: 35px"></div>
-                                                                <span class="mt-2">CVV</span>
+                                                                <span class="mt-3 d-block">CVV</span>
                                                                 <div id="fattjs-cvv" style="height: 35px"></div>
                                                             </div>
                                                         </label>
@@ -458,7 +458,7 @@
                                                                    class="form-control year">
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-3 mt-5">
+                                                    <div class="col-lg-4 mt-5">
                                                         <button class=" btn cart-btn w-100" id="tokenizebutton">Pay
                                                             Now
                                                         </button>
