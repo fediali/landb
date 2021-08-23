@@ -15,7 +15,7 @@
     </ul>
 
     <div class="tab-content" id="prodSkuTabContent">
-        @foreach($prodSkus as $k =>$sku)
+        @foreach($prodSkus as $sku)
 
             @php $histories = $data->inventory_history()->where('sku', $sku)->orderBy('id', 'DESC')->get(); @endphp
             <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel"
@@ -38,7 +38,7 @@
                         {{--<th><span>Options</span></th>--}}
                         <th>User</th>
                         <th>Detailed information</th>
-                        <th>reference</th>
+                        <th>Reference</th>
                         <th width="10%">Date</th>
                     </tr>
                     </thead>
@@ -49,7 +49,7 @@
                                 $sign = ($history->reference == \App\Models\InventoryHistory::PROD_ORDER_QTY_DEDUCT) ? '-' : '+';
                             @endphp
                             <td class="center">
-                                <strong>{{ ($history->quantity > 0) ? $sign.$history->quantity : 0 }}</strong></td>
+                            <strong>{{ ($history->quantity > 0) ? $sign.$history->quantity : 0 }}</strong></td>
                             <td class="center">{{ $history->new_stock ? $history->new_stock : 0 }}</td>
                             <td class="center">{{ $history->old_stock ? $history->old_stock : 0 }}</td>
                             {{--<td class="nowrap"><p class="muted"><small></small></p></td>--}}

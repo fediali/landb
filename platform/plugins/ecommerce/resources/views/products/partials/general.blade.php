@@ -25,6 +25,7 @@
             </div>
         </div>
     </div>
+
     @if(@\Illuminate\Support\Facades\Auth::user()->roles[0]->slug == 'warehouse')
     <div class="col-md-4">
         <div class="form-group">
@@ -43,6 +44,23 @@
         </div>
     </div>
     @endif()
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="text-title-field">
+                <span>UPC</span>
+            </label>
+            <div class="next-input--stylized">
+                <span
+                    class="next-input-add-on next-input__add-on--before">{{ get_application_currency()->symbol }}</span>
+                <input name="upc"
+                       class="next-input  next-input--invisible"
+                       value="{{ old('upc', $product ? $product->upc : ($originalProduct->upc ?? null)) }}"
+                       type="text">
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-4">
         <div class="form-group">
             <label class="text-title-field">
@@ -77,6 +95,7 @@
             </div>
         </div>
     </div>
+
     <div
         class="col-md-6 scheduled-time @if (old('sale_type', $product ? $product->sale_type : ($originalProduct->sale_type ?? 0)) == 0) hidden @endif">
         <div class="form-group">
