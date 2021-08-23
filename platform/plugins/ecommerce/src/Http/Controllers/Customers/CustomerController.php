@@ -250,11 +250,20 @@ class CustomerController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse
      */
-    public function getListCustomerForSelect($id = null, BaseHttpResponse $response)
+    public function getListCustomerForSelect($id = null, Request $request, BaseHttpResponse $response)
     {
+        $search = null;
+        if (!$request->get('search', null)) {
+            $search = $request->get('search');
+        }
         if ($id) {
-            $customer = $this->customerRepository
-                ->allBy([], [], ['id', 'name', 'email'])->where('id', '!=', $id)->take(200)->toArray();
+            $customer = $this->customerRepository->allBy([], [], ['id', 'name', 'email'])
+                ->where('id', '!=', $id)
+                ->when($search != null, function($q) use($search) {
+                    $q->where('name', 'LIKE', '%'.$search.'%');
+                })
+                ->take(200)
+                ->toArray();
             $account = MergeAccount::where('user_id_one', $id)->pluck('user_id_two');
             $merge = Customer::whereIn('id', $account)->get()->toArray();
             $customers['customer'] = $customer;
@@ -263,6 +272,10 @@ class CustomerController extends BaseController
         } else {
             $customers = $this->customerRepository
                 ->allBy([], [], ['id', 'name'])
+                ->when($search != null, function($q) use($search) {
+                    $q->where('name', 'LIKE', '%'.$search.'%');
+                })
+                ->take(200)
                 ->toArray();
         }
         return $response->setData($customers);

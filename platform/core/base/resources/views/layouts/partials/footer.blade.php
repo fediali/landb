@@ -55,16 +55,16 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="merge_customer_modal" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">Merge Customer <span
-                            class="variation-name"></span></h4>
+                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                        Merge Customer <span class="variation-name"></span>
+                    </h4>
                     <div></div>
                 </div>
             </div>
@@ -74,14 +74,10 @@
                         <form method="post" action="{{route('customers.merge-customer')}}">
                             @csrf
                             <div class="form-group">
-                                <label for="name" class="control-label" aria-required="true">Customer List
-                                </label>
-                                <input type="hidden" value="" name="user_id_one" id="user_id_one">
+                                <label for="name" class="control-label" aria-required="true">Customer List</label>
+                                <input type="hidden" name="user_id_one" id="user_id_one">
                                 <div class="d-flex">
-                                    <select name="user_id_two" id="merge_customer_list"
-                                            class="form-control is-valid select-search-full">
-                                        <option disabled> Select Customer</option>
-                                    </select>
+                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2" style="width: 400px"></select>
                                     <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
                                 </div>
                             </div>
@@ -97,20 +93,15 @@
                                 <th>Operation</th>
                             </tr>
                             </thead>
-                            <tbody class="merge_account_body">
-
-                            </tbody>
-
+                            <tbody class="merge_account_body"></tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
+
 
 
 <script>
@@ -120,32 +111,49 @@
 
     $(document).ready(function () {
 
+        $('#merge_customer_list').select2({
+            ajax: {
+                url: "{{ route('customers.get-list-customers-for-select') }}",
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                    };
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (obj) { obj.text = obj.text || obj.name; return obj; })
+                    };
+                },
+            }
+        });
+
         $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
+            //$('select#merge_customer_list').empty();
             var customer_id = $(this).data('id');
             $('#user_id_one').val(customer_id);
             $.ajax({
                 url: "{{ route('customers.get-list-customers-for-select','') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
-                    $.each(data.data.customer, function (customerID, customerName) {
-                        console.log('asd', customerID, customerName);
-                        html = `<option value="${customerName.id}">
-                            ${customerName.name} - (${customerName.email})
-                        </option>`
-                        $('select#merge_customer_list').append(html);
+                    let html = '';
+                    /*$.each(data.data.customer, function (customerID, customerName) {
+                        html += `<option value="${customerName.id}"> ${customerName.name} - (${customerName.email}) </option>`;
                     });
+                    $('select#merge_customer_list').append(html);*/
 
+                    html = '';
                     $.each(data.data.merge, function (mergeID, mergeAccount) {
-
-                        html = ` <tr>
+                        html += ` <tr>
                                     <td>${mergeAccount.id}</td>
                                     <td>${mergeAccount.name}</td>
                                     <td>${mergeAccount.email}</td>
                                     <td><a href="{{route('customers.merge-customer-delete','')}}/${mergeAccount.id}" <i class="fa fa-trash"></i></td>
-</tr> `
-                        $('.merge_account_body').append(html);
+                                 </tr> `;
                     });
+                    $('.merge_account_body').append(html);
                 },
                 error: function (request, status, error) {
                     toastr['warning']('No Address', 'Reading Error');
@@ -153,6 +161,7 @@
             });
             $('#merge_customer_modal').modal('toggle');
         });
+
 
         payment_method();
 
