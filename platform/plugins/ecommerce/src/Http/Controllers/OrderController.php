@@ -220,6 +220,7 @@ class OrderController extends BaseController
             $curOrderProdIds[] = $product->id;
 
             if ($request->input('order_id') && $request->input('order_id') > 0) {
+                $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                 $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
                 if ($getOrderProd && $demandQty != $getOrderProd->qty) {
                     $this->orderHistoryRepository->createOrUpdate([
@@ -228,6 +229,54 @@ class OrderController extends BaseController
                         'order_id'    => $request->input('order_id'),
                         'user_id'     => Auth::user()->getKey(),
                     ], []);
+
+                    if ($request->input('order_type') != Order::PRE_ORDER) {
+                        if ($demandQty > $getOrderProd->qty) {
+                            $diff = $demandQty - $getOrderProd->qty;
+                            $logParam = [
+                                'parent_product_id' => $getParentProdId,
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $diff,
+                                'new_stock'         => $product->quantity - $diff,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $request->input('order_id'),
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            ];
+                            log_product_history($logParam);
+                        } elseif ($demandQty < $getOrderProd->qty) {
+                            $diff = $getOrderProd->qty - $demandQty;
+                            $logParam = [
+                                'parent_product_id' => $getParentProdId,
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $diff,
+                                'new_stock'         => $product->quantity + $diff,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $request->input('order_id'),
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                            ];
+                            log_product_history($logParam);
+                        }
+                    }
+
+                } elseif (!$getOrderProd) {
+                    if ($request->input('order_type') != Order::PRE_ORDER) {
+                        $logParam = [
+                            'parent_product_id' => $getParentProdId,
+                            'product_id' => $product->id,
+                            'sku' => $product->sku,
+                            'quantity' => $demandQty,
+                            'new_stock' => $product->quantity + $demandQty,
+                            'old_stock' => $product->quantity,
+                            'order_id' => $request->input('order_id'),
+                            'created_by' => Auth::user()->id,
+                            'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                        ];
+                        log_product_history($logParam);
+                    }
                 }
 
                 if ($getOrderProd && $getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
@@ -259,27 +308,11 @@ class OrderController extends BaseController
             if ($order->order_type != Order::PRE_ORDER) {
                 $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
                 foreach ($order_products as $order_product) {
-
-                    $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
-                    $logParam = [
-                        'parent_product_id' => $getParentProdId,
-                        'product_id'        => $order_product->product_id,
-                        'sku'               => $order_product->product->sku,
-                        'quantity'          => $order_product->qty,
-                        'new_stock'         => $order_product->product->quantity + $order_product->qty,
-                        'old_stock'         => $order_product->product->quantity,
-                        'order_id'          => $order->id,
-                        'created_by'        => Auth::user()->id,
-                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
-                    ];
-                    log_product_history($logParam);
-
                     $this->productRepository
                         ->getModel()
                         ->where('id', $order_product->product_id)
                         ->where('with_storehouse_management', 1)
                         ->increment('quantity', $order_product->qty);
-
                 }
             }
 
@@ -501,19 +534,21 @@ class OrderController extends BaseController
                         ->where('quantity', '>', 0)
                         ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
 
-                    $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
-                    $logParam = [
-                        'parent_product_id' => $getParentProdId,
-                        'product_id'        => $product->id,
-                        'sku'               => $product->sku,
-                        'quantity'          => $data['qty'],
-                        'new_stock'         => $product->quantity - $data['qty'],
-                        'old_stock'         => $product->quantity,
-                        'order_id'          => $order->id,
-                        'created_by'        => Auth::user()->id,
-                        'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
-                    ];
-                    log_product_history($logParam);
+                    if (!$request->input('order_id', 0)) {
+                        $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                        $logParam = [
+                            'parent_product_id' => $getParentProdId,
+                            'product_id' => $product->id,
+                            'sku' => $product->sku,
+                            'quantity' => $data['qty'],
+                            'new_stock' => $product->quantity - $data['qty'],
+                            'old_stock' => $product->quantity,
+                            'order_id' => $order->id,
+                            'created_by' => Auth::user()->id,
+                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                        ];
+                        log_product_history($logParam);
+                    }
 
                     /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                         $this->productRepository
