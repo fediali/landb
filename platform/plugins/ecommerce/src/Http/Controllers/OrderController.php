@@ -1287,13 +1287,13 @@ class OrderController extends BaseController
         $customerOrderNumbers = 0;
         if ($order->user_id) {
             $customer = $this->customerRepository->findById($order->user_id);
-            $customer->avatar = (string)$customer->avatar_url;
 
             if ($customer) {
                 $customerOrderNumbers = $customer->orders()->count();
+                $customer->avatar = (string)$customer->avatar_url;
+                $customerAddresses = $customer->addresses->toArray();
             }
 
-            $customerAddresses = $customer->addresses->toArray();
         }
         $customerAddress = $order->address;
 
