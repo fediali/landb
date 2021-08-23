@@ -264,7 +264,7 @@
 @else
     <section class="shoplisting_wrap">
         @php $categories = get_category(request()->path('c_slug')) @endphp
-        <div class="container">
+        <div class="">
             <div class="filterbar mb-2">
                 {!! Theme::partial('login-partial') !!}
                 {!!@$categories->description!!}

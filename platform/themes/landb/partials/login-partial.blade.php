@@ -8,7 +8,7 @@
         </nav>
     </div>
 </section> -->
-<section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
+<section class="custom-breadcrumb shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
     <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-4">
