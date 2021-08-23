@@ -1304,8 +1304,8 @@ class OrderController extends BaseController
             ])
             ->addScripts(['blockui', 'input-mask']);
 
-        $order->editing_by = auth()->user()->id;
-        $order->editing_started_at = Carbon::now();
+       // $order->editing_by = auth()->user()->id;
+       // $order->editing_started_at = Carbon::now();
         $order->save();
 
 
