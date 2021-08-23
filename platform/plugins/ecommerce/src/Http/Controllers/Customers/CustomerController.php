@@ -253,16 +253,22 @@ class CustomerController extends BaseController
     public function getListCustomerForSelect($id = null, Request $request, BaseHttpResponse $response)
     {
         $search = null;
-        if (!$request->get('search', null)) {
+        if ($request->get('search', null)) {
             $search = $request->get('search');
         }
         if ($id) {
-            $customer = $this->customerRepository->allBy([], [], ['id', 'name', 'email'])
-                ->where('id', '!=', $id)
+            $customer = Customer::select('ec_customers.id','ec_customers.name')
+                ->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
+                ->where('ec_customers.id', '!=', $id)
                 ->when($search != null, function($q) use($search) {
-                    $q->where('name', 'LIKE', '%'.$search.'%');
+                    $q->where('ec_customers.name', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customers.email', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.company', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.business_phone', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.phone', 'LIKE', '%'.$search.'%');
                 })
-                ->take(200)
+                ->limit(200)
+                ->get()
                 ->toArray();
             $account = MergeAccount::where('user_id_one', $id)->pluck('user_id_two');
             $merge = Customer::whereIn('id', $account)->get()->toArray();
@@ -270,12 +276,17 @@ class CustomerController extends BaseController
             $customers['merge'] = $merge;
 
         } else {
-            $customers = $this->customerRepository
-                ->allBy([], [], ['id', 'name'])
+            $customers = Customer::select('ec_customers.id','ec_customers.name')
+                ->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
                 ->when($search != null, function($q) use($search) {
-                    $q->where('name', 'LIKE', '%'.$search.'%');
+                    $q->where('ec_customers.name', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customers.email', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.company', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.business_phone', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.phone', 'LIKE', '%'.$search.'%');
                 })
-                ->take(200)
+                ->limit(200)
+                ->get()
                 ->toArray();
         }
         return $response->setData($customers);
