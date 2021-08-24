@@ -129,11 +129,9 @@
             </div>
             <div class="col-lg-1 mt-2 mb-3 text-center">
                 <p class="cart-head">Tax</p>
-
             </div>
             <div class="col-lg-1 mt-2 mb-3">
                 <p class="cart-head">Item Total</p>
-
             </div>
         </div>
         @foreach($order->products as $order_product)
