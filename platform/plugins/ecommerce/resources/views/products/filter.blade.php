@@ -72,7 +72,10 @@
                             <div>
                             @foreach(\Botble\Base\Enums\BaseStatusEnum::$PRODUCT as $prod_status)
                                 <div style="display:inline-flex" class="chk-orders">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{@$data['search_items']['prod_status'] == strtolower($prod_status) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
+                                    <?php
+                                        $statuses = isset($data['search_items']['prod_status']) ? explode(',', $data['search_items']['prod_status']) : [];
+                                    ?>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{in_array(strtolower($prod_status), $statuses) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
                                 </div>
                             @endforeach
                             </div>
@@ -102,7 +105,7 @@
 
                     <div class="d-flex mb-3 mt-3">
                         <div class="d-flex adv-input">
-                            <input type="text" name="search_name" class="form-control mr-2" id="search-name">
+                            <input type="text" name="search_name" class="form-control mr-2" id="search-name" value="{{@$data['search_name']}}">
                             <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
                         </div>
                         <div class="text-right adv-input">
@@ -131,10 +134,10 @@
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {
-                    location.reload();
+                    //location.reload();
                 },
                 error: function (request, status, error) {
-                    location.reload();
+                    //location.reload();
                     toastr['warning']('Something went wrong.', 'Validation Error');
                 }
             });
