@@ -304,7 +304,7 @@
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
                             <!--<input type="hidden" v-model="child_payment_method" value="cod">-->
                             <button class="btn btn-primary ml15" @click="createOrder($event)"
-                                    :disabled="!child_product_ids.length || child_total_amount === 0">
+                                    :disabled="!child_product_ids.length || child_total_amount === 0 || creating_order">
                                 {{ this.order_id ? 'Update Order' : 'Create Order' }}
                             </button>
                         </div>
@@ -1030,6 +1030,8 @@ export default {
             child_shipping_method_name: this.shipping_method_name,
             child_is_selected_shipping: this.is_selected_shipping,
             child_payment_method: this.payment_method,
+
+            creating_order: false,
         }
     },
     mounted: function () {
@@ -1183,7 +1185,8 @@ export default {
         },
         createOrder: function ($event, paid = false) {
             $event.preventDefault();
-            $($event.target).find('.btn-primary').addClass('button-loading').attr('disabled');
+            this.creating_order = true;
+            $($event.target).find('.btn-primary').addClass('button-loading');
             let context = this;
 
             let products = [];
@@ -1220,6 +1223,7 @@ export default {
                     let data = res.data.data;
                     if (data.error) {
                         Botble.showError(Botble.showError(res.data.message))
+                        this.creating_order = false;
                     } else {
                         Botble.showSuccess(res.data.message);
                         if (paid) {
@@ -1240,6 +1244,7 @@ export default {
                         Botble.handleError(res.response.data);
                     }
                     $($event.target).find('.btn-primary').removeClass('button-loading');
+                    this.creating_order = false;
                 });
         },
         createProduct: function ($event) {

@@ -1086,7 +1086,8 @@ __webpack_require__.r(__webpack_exports__);
       child_shipping_option: this.shipping_option,
       child_shipping_method_name: this.shipping_method_name,
       child_is_selected_shipping: this.is_selected_shipping,
-      child_payment_method: this.payment_method
+      child_payment_method: this.payment_method,
+      creating_order: false
     };
   },
   mounted: function mounted() {
@@ -1236,9 +1237,12 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     createOrder: function createOrder($event) {
+      var _this = this;
+
       var paid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       $event.preventDefault();
-      $($event.target).find('.btn-primary').addClass('button-loading').attr('disabled');
+      this.creating_order = true;
+      $($event.target).find('.btn-primary').addClass('button-loading');
       var context = this;
       var products = [];
 
@@ -1274,6 +1278,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (data.error) {
           Botble.showError(Botble.showError(res.data.message));
+          _this.creating_order = false;
         } else {
           Botble.showSuccess(res.data.message);
 
@@ -1295,6 +1300,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         $($event.target).find('.btn-primary').removeClass('button-loading');
+        _this.creating_order = false;
       });
     },
     createProduct: function createProduct($event) {
@@ -8784,7 +8790,8 @@ var render = function() {
                       attrs: {
                         disabled:
                           !_vm.child_product_ids.length ||
-                          _vm.child_total_amount === 0
+                          _vm.child_total_amount === 0 ||
+                          _vm.creating_order
                       },
                       on: {
                         click: function($event) {
