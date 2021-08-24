@@ -549,6 +549,19 @@ class ProductTable extends TableAbstract
         $data['prod_types'] = ['regular' => 'Regular', 'pre_order' => 'Pre-Order', 're_order' => 'Re-Order'];
         $data['show_products'] = ['all' => 'All', 'with_images' => 'With Images', 'without_images' => 'Without Images'];
 
+        if ($this->request()->has('search_id')) {
+            $search_id = (int)$this->request()->input('search_id');
+            if ($search_id) {
+                $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
+            }
+        }
+
+        if (empty($search_items)) {
+            $search_items = $this->request()->all();
+        }
+
+        $data['search_items'] = $search_items;
+
         return view($this->customFilterTemplate, compact('searches', 'data'))->render();
     }
 
