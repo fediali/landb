@@ -305,6 +305,34 @@ class OrderController extends BaseController
 
             $order = Order::where('id', $request->input('order_id'))->first();
 
+            if ($order->order_type != $request->input('order_type')) {
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action'      => 'order_type_changed',
+                    'description' => 'Order type changes from ' . $order->order_type . ' to ' . $request->input('order_type') . ' by %user_name%.',
+                    'order_id'    => $request->input('order_id'),
+                    'user_id'     => Auth::user()->getKey(),
+                ], []);
+
+                if ($request->input('order_type') == Order::PRE_ORDER) {
+                    $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
+                    foreach ($order_products as $order_product) {
+                        $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
+                        $logParam = [
+                            'parent_product_id' => $getParentProdId,
+                            'product_id'        => $order_product->product_id,
+                            'sku'               => $order_product->product->sku,
+                            'quantity'          => $order_product->qty,
+                            'new_stock'         => $order_product->product->quantity + $order_product->qty,
+                            'old_stock'         => $order_product->product->quantity,
+                            'order_id'          => $request->input('order_id'),
+                            'created_by'        => Auth::user()->id,
+                            'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                        ];
+                        log_product_history($logParam);
+                    }
+                }
+            }
+
             if ($order->order_type != Order::PRE_ORDER) {
                 $order_products = OrderProduct::where('order_id', $request->input('order_id'))->get();
                 foreach ($order_products as $order_product) {
@@ -314,15 +342,6 @@ class OrderController extends BaseController
                         ->where('with_storehouse_management', 1)
                         ->increment('quantity', $order_product->qty);
                 }
-            }
-
-            if ($order->order_type != $request->input('order_type')) {
-                $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'order_type_changed',
-                    'description' => 'Order type changes from ' . $order->order_type . ' to ' . $request->input('order_type') . ' by %user_name%.',
-                    'order_id'    => $request->input('order_id'),
-                    'user_id'     => Auth::user()->getKey(),
-                ], []);
             }
 
             $prevOrderProdIds = OrderProduct::where('order_id', $request->input('order_id'))->pluck('product_id')->all();
