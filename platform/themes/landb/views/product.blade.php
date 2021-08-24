@@ -52,6 +52,11 @@
     <div class="row">
         <div class="col-lg-5 containert">
             <div class="exzoom hidden mr-2" id="exzoom">
+            <div class="exzoom_btn d-flex mt-3">
+            <!-- <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a> -->
+            <div class="exzoom_nav"></div>
+                <!-- <a href="javascript:void(0);" class="exzoom_next_btn">  <i class="fa fa-angle-right"></i></a> -->
+            </div>
                 <div class="exzoom_img_box">
                     <ul class='exzoom_img_ul'>
                         @if(count($product->images))
@@ -71,11 +76,7 @@
                     <li><img src="https://picsum.photos/400/400/?random"/></li> -->
                 </ul>
             </div>
-            <div class="exzoom_btn d-flex mt-3">
-            <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a>
-            <div class="exzoom_nav"></div>
-                <a href="javascript:void(0);" class="exzoom_next_btn">  <i class="fa fa-angle-right"></i></a>
-            </div>
+            
         </div>
                 <!-- <div class="fancy-container clearfix">
                     <div class="gallery">

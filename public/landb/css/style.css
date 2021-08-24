@@ -1947,7 +1947,30 @@ input.qtyminus {
     transform: rotate(45deg);
 }
 
-@media screen and (min-width: 992px) and (max-width: 5000px) {
+@media screen and (min-width: 992px) and (max-width: 5000px) { 
+    #exzoom {
+        display: flex !important;
+        margin-left: -20%;
+    }
+	
+	 .exzoom .exzoom_nav {  
+    display: contents !important; 
+   }
+   
+   .exzoom .exzoom_nav .exzoom_nav_inner { 
+      display:grid !important; 
+      margin-left: 55% !important; 
+  }
+  
+  .exzoom .exzoom_nav .exzoom_nav_inner span {
+        width: 150px !important;
+        height: 150px !important;
+        margin: 0px 0px 5px 0px !important;
+		}
+		
+		.exzoom .exzoom_nav .exzoom_nav_inner span img {
+          height: 150px !important;
+		  }
     .invoice-final {
         margin-top: 200px !important;
     }
@@ -3295,7 +3318,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 
 .navbar-brand img {
-    height: 70px !important;
+    height: 60px !important;
 
   }
 
@@ -4518,7 +4541,7 @@ html {
 
  #exzoom {
     width: 100%;
-    display: grid !important;
+    display: grid;
 }
 .hidden { display: none; }
 /*
@@ -4687,4 +4710,8 @@ html { scroll-behavior: smooth;}
 .invoice-final-p {
     font-weight: 600 !important;
     font-size: 14px !important;
+}
+
+.t-three {
+    z-index: 10;
 }
