@@ -72,7 +72,7 @@ class CheckoutController extends Controller
     public function getCheckoutIndex($token)
     {
         $this->applyPromotionIfAvailable(auth('customer')->user()->getUserCart(), $token);
-        $cart =  Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
+        $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
 
@@ -84,8 +84,8 @@ class CheckoutController extends Controller
             }
         }
 
-        if($this->checkIfCouponExpired($cart->id)){
-          return redirect()->route('public.checkout_index', $token)->with('error', 'Coupon code is now invalid or expired!');
+        if ($this->checkIfCouponExpired($cart->id)) {
+            return redirect()->route('public.checkout_index', $token)->with('error', 'Coupon code is now invalid or expired!');
         }
 
         $user = Customer::where('id', auth('customer')->user()->id)->with(['details', 'shippingAddress', 'billingAddress', 'addresses'])->first();
@@ -172,7 +172,7 @@ class CheckoutController extends Controller
                     $chargeId = $this->omniPaymentService->execute($request);
                     $payment = Payment::where('charge_id', $chargeId)->first();
                     //dd($payment);
-                    $this->checkIfPreOrder($order->id);
+                    $pre = $this->checkIfPreOrder($order->id);
                     $this->checkDiscount($order->id);
                     $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);
                     return redirect()->route('public.order.success', ['id' => $payment->order_id]);
@@ -216,14 +216,14 @@ class CheckoutController extends Controller
         $paymentStatus = $palPaymentService->getPaymentStatus($request);
         $token = OrderHelper::getOrderSessionToken();
         $order_id = $request->input('order_id');
-      if(!$paymentStatus){
-        $this->revertProductQuantity($order_id);
-        return redirect()->route('public.cart_index', ['payment' => 'false']);
-      }
+        if (!$paymentStatus) {
+            $this->revertProductQuantity($order_id);
+            return redirect()->route('public.cart_index', ['payment' => 'false']);
+        }
         $this->checkIfPreOrder($order_id);
         $this->checkDiscount($order_id);
         $order = $this->orderRepository->findById($order_id, ['address', 'products']);
-        
+
         $payment = Payment::where('charge_id', $chargeId)->first();
         //dd($payment);
         $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
@@ -312,7 +312,8 @@ class CheckoutController extends Controller
 
     public function checkIfPreOrder($id)
     {
-        $order = Order::find($id)->with('products')->first();
+        $order = Order::where('id', $id)->with('products')->first();
+
         $preOrderId = null;
         $orderTotal = 0;
         foreach ($order->products as $product) {
@@ -345,97 +346,102 @@ class CheckoutController extends Controller
         if (!is_null($preOrderId)) {
             Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1]);
             $current = Order::find($id);
-            $current->update(['amount' => $current->amount - $orderTotal]);
+            $current->update(['amount' => $current->amount - $orderTotal, 'sub_total' => $current->amount - $orderTotal]);
         }
 
     }
 
-    public function revertProductQuantity($orderId){
-      $order = Order::where('id', $orderId)->with(['products'])->first();
-      if($order){
-        foreach ($order->products as $orderProduct){
-          $product = Product::find($orderProduct->product_id);
-          if($product){
-            $product->update(['quantity' => $product->quantity + $orderProduct->qty]);
-          }
-        }
-      }
-    }
-
-    public function applyCoupon(Request $request){
-      $code = $request->coupon_code;
-      if(!empty($code)){
-        $discountId = Discount::where('code', $code)->pluck('id')->first();
-        if($discountId){
-          $discounted = DiscountCustomer::where('discount_id', $discountId)->where('customer_id',  auth('customer')->user()->id)->first();
-          if($discounted){
-            return redirect()->back()->with('error', 'Coupon has already been used.');
-          }
-        }
-        /*if(){}*/
-
-        $applyCoupon = $this->coupon_service->execute($code);
-
-        if(!$applyCoupon['error']){
-          $cart =  Order::where('id', auth('customer')->user()->getUserCart())->first();
-          if($cart){
-            if(empty($cart->coupon_code)){
-              $cart->coupon_code = $code;
-              $cart->discount_amount = $cart->discount_amount + $applyCoupon['data']['discount_amount'];
-              $cart->amount = $cart->sub_total - $cart->discount_amount;
-              if($cart->save()){
-                return redirect()->back()->with('success', 'Coupon Applied Successfully');
-              }
+    public function revertProductQuantity($orderId)
+    {
+        $order = Order::where('id', $orderId)->with(['products'])->first();
+        if ($order) {
+            foreach ($order->products as $orderProduct) {
+                $product = Product::find($orderProduct->product_id);
+                if ($product) {
+                    $product->update(['quantity' => $product->quantity + $orderProduct->qty]);
+                }
             }
-          }
-        }else{
-          return redirect()->back()->with('error', $applyCoupon['message']);
         }
-      }
-      return redirect()->back()->with('error', 'Something went wrong or invalid Coupon code');
     }
 
-    public function checkDiscount($id){
-      $order = Order::find($id);
-      if ($order){
-        $coupon_code = $order->coupon_code;
-        if(!empty($coupon_code)){
-          $discount = Discount::where('code', $coupon_code)->first();
-          if($discount){
-            DiscountCustomer::create(['discount_id' => $discount->id, 'customer_id' => $order->user_id]);
-          }
+    public function applyCoupon(Request $request)
+    {
+        $code = $request->coupon_code;
+        if (!empty($code)) {
+            $discountId = Discount::where('code', $code)->pluck('id')->first();
+            if ($discountId) {
+                $discounted = DiscountCustomer::where('discount_id', $discountId)->where('customer_id', auth('customer')->user()->id)->first();
+                if ($discounted) {
+                    return redirect()->back()->with('error', 'Coupon has already been used.');
+                }
+            }
+            /*if(){}*/
+
+            $applyCoupon = $this->coupon_service->execute($code);
+
+            if (!$applyCoupon['error']) {
+                $cart = Order::where('id', auth('customer')->user()->getUserCart())->first();
+                if ($cart) {
+                    if (empty($cart->coupon_code)) {
+                        $cart->coupon_code = $code;
+                        $cart->discount_amount = $cart->discount_amount + $applyCoupon['data']['discount_amount'];
+                        $cart->amount = $cart->sub_total - $cart->discount_amount;
+                        if ($cart->save()) {
+                            return redirect()->back()->with('success', 'Coupon Applied Successfully');
+                        }
+                    }
+                }
+            } else {
+                return redirect()->back()->with('error', $applyCoupon['message']);
+            }
         }
-      }
+        return redirect()->back()->with('error', 'Something went wrong or invalid Coupon code');
     }
 
-    public function checkIfCouponExpired($id){
-      $order = Order::find($id);
-      if ($order) {
-        $coupon_code = $order->coupon_code;
-        if (!empty($coupon_code)) {
-          $applyCoupon = $this->coupon_service->execute($coupon_code);
-
-          if($applyCoupon['error']){
-            $order->coupon_code = null;
-            $order->discount_amount = 0.00;
-            $order->amount = $order->sub_total;
-            $order->save();
-            return true;
-          }
+    public function checkDiscount($id)
+    {
+        $order = Order::find($id);
+        if ($order) {
+            $coupon_code = $order->coupon_code;
+            if (!empty($coupon_code)) {
+                $discount = Discount::where('code', $coupon_code)->first();
+                if ($discount) {
+                    DiscountCustomer::create(['discount_id' => $discount->id, 'customer_id' => $order->user_id]);
+                }
+            }
         }
-      }
-      return false;
     }
 
-    public function applyPromotionIfAvailable($orderId, $token = null){
+    public function checkIfCouponExpired($id)
+    {
+        $order = Order::find($id);
+        if ($order) {
+            $coupon_code = $order->coupon_code;
+            if (!empty($coupon_code)) {
+                $applyCoupon = $this->coupon_service->execute($coupon_code);
+
+                if ($applyCoupon['error']) {
+                    $order->coupon_code = null;
+                    $order->discount_amount = 0.00;
+                    $order->amount = $order->sub_total;
+                    $order->save();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function applyPromotionIfAvailable($orderId, $token = null)
+    {
         $promotionAmount = $this->promotion_service->execute($token);
 
         $order = Order::find($orderId);
-        if($order->promotion_applied != 1){
-          $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount: $promotionAmount;
-          $order->amount = $order->sub_total - $order->discount_amount;
-          $order->promotion_applied = 1;
-          $order->save();
+        if ($order->promotion_applied != 1) {
+            $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount : $promotionAmount;
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->promotion_applied = 1;
+            $order->save();
         }
 
 

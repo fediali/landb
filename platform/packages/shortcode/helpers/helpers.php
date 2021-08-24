@@ -191,6 +191,7 @@ if (!function_exists('checkIfProductPreOrder')) {
      * @return string
      */
    function checkIfProductPreOrder($productId){
+
     $product = \Botble\Ecommerce\Models\ProductVariation::where('ec_product_variations.product_id', $productId)
          ->join('ec_product_tag_product as eptp', 'eptp.product_id','ec_product_variations.configurable_product_id')
          ->where('tag_id', 3)->first();

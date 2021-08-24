@@ -257,19 +257,19 @@
                                                     <td class="border-bottom"></td>
                                                     <td class="border-bottom"></td>
                                                 </tr>
-                                                <tr>
-                                                    <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.paid_amount') }}</td>
-                                                    <td class="text-right color-subtext pl10">
-                                                        @if ($order->payment->id)
-                                                            <a href="{{ route('payment.show', $order->payment->id) }}"
-                                                               target="_blank">
-                                                                <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>
-                                                            </a>
-                                                        @else
-                                                            <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>
-                                                        @endif
-                                                    </td>
-                                                </tr>
+{{--                                                <tr>--}}
+{{--                                                    <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.paid_amount') }}</td>--}}
+{{--                                                    <td class="text-right color-subtext pl10">--}}
+{{--                                                        @if ($order->payment->id)--}}
+{{--                                                            <a href="{{ route('payment.show', $order->payment->id) }}"--}}
+{{--                                                               target="_blank">--}}
+{{--                                                                <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
+{{--                                                            </a>--}}
+{{--                                                        @else--}}
+{{--                                                            <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
+{{--                                                        @endif--}}
+{{--                                                    </td>--}}
+{{--                                                </tr>--}}
                                                 @if ($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::REFUNDED)
                                                     <tr class="hidden">
                                                         <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.refunded_amount') }}</td>
