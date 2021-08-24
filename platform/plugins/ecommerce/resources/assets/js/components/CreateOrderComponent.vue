@@ -1183,7 +1183,7 @@ export default {
         },
         createOrder: function ($event, paid = false) {
             $event.preventDefault();
-            $($event.target).find('.btn-primary').addClass('button-loading');
+            $($event.target).find('.btn-primary').addClass('button-loading').attr('disabled');
             let context = this;
 
             let products = [];

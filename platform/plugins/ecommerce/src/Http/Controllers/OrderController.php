@@ -293,12 +293,12 @@ class OrderController extends BaseController
 
         if ($request->input('order_id') && $request->input('order_id') > 0) {
 
-            $this->orderHistoryRepository->createOrUpdate([
+            /*$this->orderHistoryRepository->createOrUpdate([
                 'action'      => 'order_update',
                 'description' => 'Order updated by %user_name%.',
                 'order_id'    => $request->input('order_id'),
                 'user_id'     => Auth::user()->getKey(),
-            ], []);
+            ], []);*/
 
             $condition = ['id' => $request->input('order_id')];
             $meta_condition = ['order_id' => $request->input('order_id')];

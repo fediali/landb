@@ -718,5 +718,9 @@ setTimeout(function (){
 <script>
     $(document).ready(function () {
         $('.dt-length-style > select').append(new Option("100", "100"));
+
+        $("form").submit(function(){
+            $(this).find('input:submit').val('Please wait ...').attr('disabled','disabled');
+        });
     });
 </script>
