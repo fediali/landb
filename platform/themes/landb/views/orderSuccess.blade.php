@@ -1,7 +1,7 @@
-<section class="ml-5 mr-5 mt-3">
+<section class="ml-5 mr-5 mt-3 invoice-final">
         <div class="row">
         <div class="col-lg-9">
-            <img src="{{ asset('landb/img/Logo.png') }}" />
+            <img style="height: 60px;" src="{{ asset('landb/img/Logo.png') }}" />
         </div>
         <div class="col-lg-3">
             <p>
@@ -151,10 +151,10 @@
                         @endphp
                         @if($variation)
                             @if($variation->title == 'Pack')
-                            <p class="cart-product-size">TYPE: {{ $variation->title }}</p>
-                            <p class="cart-product-size">SIZE: {{ $order_product->product->sizes }}</p>
-                            <p class="cart-product-size">Pieces Per Pack: {{ $order_product->product->prod_pieces }}</p>
-                            <p class="cart-product-size"><strong>Price Per Pack:</strong>  ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
+                            <p class="cart-product-size invoice-final-p mt-1">TYPE: {{ $variation->title }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1">SIZE: {{ $order_product->product->sizes }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1">Pieces Per Pack: {{ $order_product->product->prod_pieces }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1"><b>Price Per Pack:</b>  ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
                                </p>
                             @else
                                 <p style="font-size:12px;" class="cart-product-size mb-2">

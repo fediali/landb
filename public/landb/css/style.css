@@ -1948,6 +1948,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 5000px) {
+    .invoice-final {
+        margin-top: 200px !important;
+    }
     .custom-breadcrumb {
         margin-top: 215px !important;
     }
@@ -1995,6 +1998,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .invoice-final {
+        margin-top: 330px !important;
+    }
     .pro-text {
         margin-top: 0px !important;
     }
@@ -4676,4 +4682,9 @@ html { scroll-behavior: smooth;}
 #myBtn i {
     margin-top: -4px;
     display: block;
+}
+
+.invoice-final-p {
+    font-weight: 600 !important;
+    font-size: 14px !important;
 }

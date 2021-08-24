@@ -72,7 +72,7 @@
                                     <td>{{ $order->sub_total }}</td>
                                     <td>{{ $order->shipping_amount }}</td>
                                     <td>{{ $order->amount }}
-                                        <span>{{ $order->discount_amount }}</span>
+                                        <span class="d-block " style=" font-size: 12px; font-weight: 600;"> Discount : {{ $order->discount_amount }}</span>
                                     </td>
                                     <td><span class="badge badge-secondary">{{ $order->shipping_method }}</span></td>
                                 </tr>
