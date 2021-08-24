@@ -43,11 +43,11 @@
                             <label class="font-bold">Price ($):</label>
                             <div class="d-flex">
                                 <div class="col-md-6 pl-0">
-                                    <input type="number" name="product_min_price" step="0.1" class="form-control" value="{{request('product_min_price')}}">
+                                    <input type="number" name="product_min_price" step="0.1" class="form-control" value="{{@$data['search_items']['product_min_price']}}">
                                 </div>
                                 --
                                 <div class="col-md-6 pr-0">
-                                    <input type="number" name="product_max_price" step="0.1" class="form-control" value="{{request('product_max_price')}}">
+                                    <input type="number" name="product_max_price" step="0.1" class="form-control" value="{{@$data['search_items']['product_max_price']}}">
                                 </div>
                             </div>
                         </div>
@@ -57,14 +57,14 @@
                             <select class="form-control select-search-full" name="prod_category" style="width: 100%">
                                 <option selected="selected" value="" disabled="">Select Category</option>
                                 @foreach($data['prod_categories'] as $key => $prod_category)
-                                    <option value="{{ $key }}" {{request('prod_category') == $key ? 'selected' : ''}}>{{ $prod_category }}</option>
+                                    <option value="{{ $key }}" {{@$data['search_items']['prod_category'] == $key ? 'selected' : ''}}>{{ $prod_category }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-md-4">
                             <label class="mt-4 font-bold">SEC:</label>
-                            <input type="text" name="prod_sec" class="form-control" value="{{request('prod_sec')}}">
+                            <input type="text" name="prod_sec" class="form-control" value="{{@$data['search_items']['prod_sec']}}">
                         </div>
 
                         <div class="col-md-12">
@@ -72,7 +72,7 @@
                             <div>
                             @foreach(\Botble\Base\Enums\BaseStatusEnum::$PRODUCT as $prod_status)
                                 <div style="display:inline-flex" class="chk-orders">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{request('prod_status') == strtolower($prod_status) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{@$data['search_items']['prod_status'] == strtolower($prod_status) ? 'checked' : ''}}> <p class="mr-1">{{$prod_status}}</p>
                                 </div>
                             @endforeach
                             </div>
@@ -83,7 +83,7 @@
                             <select class="form-control" name="prod_type" style="width: 100%">
                                 <option selected="selected" value="" disabled="">Select Product Type</option>
                                 @foreach($data['prod_types'] as $k => $prod_type)
-                                    <option value="{{ $k }}" {{request('prod_type') == $k ? 'selected' : ''}}>{{ $prod_type }}</option>
+                                    <option value="{{ $k }}" {{@$data['search_items']['prod_type'] == $k ? 'selected' : ''}}>{{ $prod_type }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -93,7 +93,7 @@
                             <select class="form-control" name="show_products" style="width: 100%">
                                 <option selected="selected" value="" disabled="">Show Products</option>
                                 @foreach($data['show_products'] as $k => $show_product)
-                                    <option value="{{ $k }}" {{request('show_products') == $k ? 'selected' : ''}}>{{ $show_product }}</option>
+                                    <option value="{{ $k }}" {{@$data['search_items']['show_products'] == $k ? 'selected' : ''}}>{{ $show_product }}</option>
                                 @endforeach
                             </select>
                         </div>
