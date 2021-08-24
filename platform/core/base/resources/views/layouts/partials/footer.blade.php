@@ -741,7 +741,7 @@ setTimeout(function (){
                 mybutton_counter--;
             }
             $(".btn").removeAttr("disabled");
-        }, 10000);
+        }, 6000);
 
 
 
