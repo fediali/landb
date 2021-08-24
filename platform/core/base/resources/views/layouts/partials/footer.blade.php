@@ -719,8 +719,31 @@ setTimeout(function (){
     $(document).ready(function () {
         $('.dt-length-style > select').append(new Option("100", "100"));
 
+
+        
         $("form").submit(function(){
             $(this).find('input:submit').val('Please wait ...').attr('disabled','disabled');
         });
+        $(document).ajaxComplete(function(){
+            $(".btn").removeAttr("disabled");
+        });
+        var mybutton_counter=0;
+        $(".btn").click(function(e) {
+            if (mybutton_counter > 0){
+                $(this).prop('disabled', 'disabled');
+                return false;
+            }
+            mybutton_counter++;
+        });
+        setInterval(function() {
+            console.log(mybutton_counter);
+            if(mybutton_counter > 0) {
+                mybutton_counter--;
+            }
+            $(".btn").removeAttr("disabled");
+        }, 10000);
+
+
+
     });
 </script>
