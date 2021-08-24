@@ -1238,7 +1238,7 @@ __webpack_require__.r(__webpack_exports__);
     createOrder: function createOrder($event) {
       var paid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       $event.preventDefault();
-      $($event.target).find('.btn-primary').addClass('button-loading');
+      $($event.target).find('.btn-primary').addClass('button-loading').attr('disabled');
       var context = this;
       var products = [];
 
