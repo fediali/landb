@@ -511,7 +511,19 @@ class CustomerTable extends TableAbstract
             120 => 'Quarterly',
             180 => 'Six Month',
         ];
-        return view($this->customFilterTemplate, compact('report_types', 'searches'))->render();
+
+        if ($this->request()->has('search_id')) {
+            $search_id = (int)$this->request()->input('search_id');
+            if ($search_id) {
+                $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
+            }
+        }
+
+        if (empty($search_items)) {
+            $search_items = $this->request()->all();
+        }
+
+        return view($this->customFilterTemplate, compact('report_types', 'searches', 'search_items'))->render();
     }
 
 }

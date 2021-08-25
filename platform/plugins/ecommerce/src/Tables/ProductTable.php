@@ -303,7 +303,7 @@ class ProductTable extends TableAbstract
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
-                $q->whereIn('ec_products.status', $search_items['prod_status']);
+                $q->whereIn('ec_products.status', explode(',', $search_items['prod_status']));
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
@@ -552,6 +552,7 @@ class ProductTable extends TableAbstract
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
             if ($search_id) {
+                $data['search_name'] = UserSearch::where('id', $search_id)->value('name');
                 $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
             }
         }

@@ -2348,7 +2348,6 @@ class OrderController extends BaseController
 
     public function saveAdvanceSearch($type, Request $request)
     {
-
         $params = $request->all();
 
         $searchData = ['user_id' => auth()->user()->id, 'search_type' => $type, 'name' => $params['search_name'], 'status' => 1];
@@ -2357,6 +2356,9 @@ class OrderController extends BaseController
         unset($params['search_name']);
         foreach ($params as $key => $value) {
             if ($value) {
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
                 $searchItems[] = ['user_search_id' => $search->id, 'key' => $key, 'value' => $value];
             }
         }
