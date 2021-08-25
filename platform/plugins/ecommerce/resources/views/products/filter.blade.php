@@ -79,10 +79,14 @@
                             @foreach(\Botble\Base\Enums\BaseStatusEnum::$PRODUCT as $prod_status)
                                 <div style="display:inline-flex" class="chk-orders">
                                     <?php
-                                    if (is_array($data['search_items']['prod_status'])) {
-                                        $statuses = isset($data['search_items']['prod_status']) ? $data['search_items']['prod_status'] : [];
+                                    if (isset($data['search_items']['prod_status'])) {
+                                        if (is_array($data['search_items']['prod_status'])) {
+                                            $statuses = isset($data['search_items']['prod_status']) ? $data['search_items']['prod_status'] : [];
+                                        } else {
+                                            $statuses = explode(',', $data['search_items']['prod_status']);
+                                        }
                                     } else {
-                                        $statuses = isset($data['search_items']['prod_status']) ? explode(',', $data['search_items']['prod_status']) : [];
+                                        $statuses = [];
                                     }
 
                                     ?>
