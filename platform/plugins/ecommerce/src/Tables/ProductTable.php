@@ -303,7 +303,13 @@ class ProductTable extends TableAbstract
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
-                $q->whereIn('ec_products.status', explode(',', $search_items['prod_status']));
+
+                if(is_array($search_items['prod_status'])){
+                    $q->whereIn('ec_products.status',  $search_items['prod_status']);
+                }
+                else{
+                    $q->whereIn('ec_products.status', explode(',', $search_items['prod_status']));
+                }
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
                 $q->where('ec_products.category_id', $search_items['prod_category']);
