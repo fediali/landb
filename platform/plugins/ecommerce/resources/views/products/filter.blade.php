@@ -156,7 +156,7 @@
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {
-                    //location.reload();
+                    window.location = window.location.href.split('?')[0] + '?search_id=' + data.data.id;
                 },
                 error: function (request, status, error) {
                     //location.reload();

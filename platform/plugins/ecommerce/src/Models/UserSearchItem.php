@@ -17,6 +17,8 @@ class UserSearchItem extends BaseModel
      */
     protected $table = 'user_search_items';
 
+    public $timestamps = false;
+
     /**
      * @var array
      */

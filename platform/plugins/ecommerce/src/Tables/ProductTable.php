@@ -331,7 +331,6 @@ class ProductTable extends TableAbstract
             });
         }
 
-//dd($query->toSql(), $query->getBindings());
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 

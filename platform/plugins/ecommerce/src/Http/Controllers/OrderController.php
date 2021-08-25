@@ -2351,25 +2351,23 @@ class OrderController extends BaseController
         $params = $request->all();
 
         $searchData = ['user_id' => auth()->user()->id, 'search_type' => $type, 'name' => $params['search_name'], 'status' => 1];
-        $search = UserSearch::create($searchData);
-        $searchItems = [];
+        $search = UserSearch::updateOrCreate($searchData);
+
         unset($params['search_name']);
         foreach ($params as $key => $value) {
             if ($value) {
                 if (is_array($value)) {
                     $value = implode(',', $value);
                 }
-                $searchItems[] = ['user_search_id' => $search->id, 'key' => $key, 'value' => $value];
+                $searchItems = ['user_search_id' => $search->id, 'key' => $key, 'value' => $value];
+                UserSearchItem::updateOrCreate(['user_search_id' => $search->id, 'key' => $key], $searchItems);
             }
-        }
-        if (!empty($searchItems)) {
-            UserSearchItem::insert($searchItems);
         }
 
         if ($search) {
-            return response()->json(['status' => 'success'], 200);
+            return response()->json(['status' => 'success', 'data' => $search], 200);
         } else {
-            return response()->json(['status' => 'error'], 500);
+            return response()->json(['status' => 'error', 'data' => []], 500);
         }
     }
 
