@@ -691,8 +691,9 @@ if (!function_exists('parse_date')) {
 }
 
 if (!function_exists('getDigitsLength')) {
-    function getDigitsLength($num){
-        return (int) (log($num, 10) + 1);
+    function getDigitsLength($num)
+    {
+        return (int)(log($num, 10) + 1);
     }
 }
 
@@ -826,17 +827,25 @@ if (!function_exists('omni_api')) {
 }
 
 if (!function_exists('get_order_statuses')) {
-    function get_order_statuses()
+    function get_order_statuses($data = 0)
     {
         $pl = [];
-        $statuses = Orderstatuses::where('status', 'published')->get();
-        foreach ($statuses as $status) {
-            $pl[] = [
-                'value' => strtolower($status->name),
-                'text'  => strtoupper($status->name),
-            ];
+        if ($data) {
+            $statuses = Orderstatuses::where('status', 'published')->pluck('name','name');
+            return $statuses;
         }
-        return $pl;
+        else{
+            $statuses = Orderstatuses::where('status', 'published')->get();
+            foreach ($statuses as $status) {
+                $pl[] = [
+                    'value' => strtolower($status->name),
+                    'text'  => strtoupper($status->name),
+                ];
+            }
+
+            return $pl;
+        }
+
     }
 }
 

@@ -372,16 +372,16 @@ class OrderTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            /*'ec_orders.status'     => [
+            'ec_orders.status'     => [
                 'title'    => trans('core/base::tables.status'),
                 'type'     => 'select',
-                'choices'  => OrderStatusEnum::labels(),
-                'validate' => 'required|in:' . implode(',', OrderStatusEnum::values()),
+                'choices'  => get_order_statuses(1),
+                //'validate' => 'required|in:' . json_encode(get_order_statuses()),
             ],
-            'ec_orders.created_at' => [
-                'title' => trans('core/base::tables.created_at'),
-                'type'  => 'date',
-            ],*/
+//            'ec_orders.created_at' => [
+//                'title' => trans('core/base::tables.created_at'),
+//                'type'  => 'date',
+//            ],
             'ec_orders.id' => [
                 'title' => 'Print',
                 'type' => 'select',
