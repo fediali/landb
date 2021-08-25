@@ -269,11 +269,11 @@ class OrderController extends BaseController
                             'product_id' => $product->id,
                             'sku' => $product->sku,
                             'quantity' => $demandQty,
-                            'new_stock' => $product->quantity + $demandQty,
+                            'new_stock' => $product->quantity - $demandQty,
                             'old_stock' => $product->quantity,
                             'order_id' => $request->input('order_id'),
                             'created_by' => Auth::user()->id,
-                            'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                         ];
                         log_product_history($logParam);
                     }
@@ -345,6 +345,25 @@ class OrderController extends BaseController
             }
 
             $prevOrderProdIds = OrderProduct::where('order_id', $request->input('order_id'))->pluck('product_id')->all();
+
+            foreach ($prevOrderProdIds as $prevOrderProdId) {
+                if (!in_array($prevOrderProdId, $curOrderProdIds)) {
+                    $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $prevOrderProdId)->first();
+                    $getParentProdId = ProductVariation::where('product_id', $getOrderProd->product_id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id'        => $getOrderProd->product_id,
+                        'sku'               => $getOrderProd->product->sku,
+                        'quantity'          => $getOrderProd->qty,
+                        'new_stock'         => $getOrderProd->product->quantity,
+                        'old_stock'         => $getOrderProd->product->quantity - $getOrderProd->qty,
+                        'order_id'          => $request->input('order_id'),
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                    ];
+                    log_product_history($logParam);
+                }
+            }
 
             OrderProduct::where('order_id', $request->input('order_id'))->delete();
 
