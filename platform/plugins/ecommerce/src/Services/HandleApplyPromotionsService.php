@@ -63,6 +63,18 @@ class HandleApplyPromotionsService
                         case 'all-orders':
                             $promotionDiscountAmount += $promotion->value;
                             break;
+                        case 'category' || 'specific-product':
+                            foreach ($promotion->products as $p_product){
+                              foreach ($cart->products as $c_product){
+                                if($p_product->product_id == $c_product->product->id){
+                                  $promotionDiscountAmount += $promotion->value;
+                                }
+                              }
+                            }
+                            break;
+                       // case '':
+
+                          break;
                         default:
                             if ($cart->products->count() >= $promotion->product_quantity) {
                                 $promotionDiscountAmount += $promotion->value;
@@ -79,6 +91,15 @@ class HandleApplyPromotionsService
                             break;
                         case 'all-orders':
                             $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
+                            break;
+                        case 'category' || 'specific-product':
+                            foreach ($promotion->products as $p_product){
+                              foreach ($cart->products as $c_product){
+                                if($p_product->product_id == $c_product->product->id){
+                                  $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
+                                }
+                              }
+                            }
                             break;
                         default:
                             if ($cart->products->count() >= $promotion->product_quantity) {

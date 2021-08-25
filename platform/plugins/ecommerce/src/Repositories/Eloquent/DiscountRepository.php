@@ -29,7 +29,7 @@ class DiscountRepository extends RepositoriesAbstract implements DiscountInterfa
                  * @var Builder $query
                  */
                 return $query
-                    ->whereIn('target', ['all-orders', 'amount-minimum-order'])
+                    ->whereIn('target', ['all-orders', 'amount-minimum-order', 'specific-product', 'category'])
                     ->orWhere(function ($sub) {
                         /**
                          * @var Builder $sub
