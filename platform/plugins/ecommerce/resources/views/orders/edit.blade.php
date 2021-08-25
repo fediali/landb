@@ -1,5 +1,13 @@
 @extends('core/base::layouts.master')
+
 @section('content')
+    <link media="all" type="text/css" rel="stylesheet" href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
+    <script src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
+    <script>
+        setTimeout(()=>{
+            $(".editable").editable();
+        }, 200);
+    </script>
     <div class="max-width-1200">
         <div class="ui-layout">
             <div class="flexbox-layout-sections" id="main-order-content">
@@ -257,19 +265,19 @@
                                                     <td class="border-bottom"></td>
                                                     <td class="border-bottom"></td>
                                                 </tr>
-{{--                                                <tr>--}}
-{{--                                                    <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.paid_amount') }}</td>--}}
-{{--                                                    <td class="text-right color-subtext pl10">--}}
-{{--                                                        @if ($order->payment->id)--}}
-{{--                                                            <a href="{{ route('payment.show', $order->payment->id) }}"--}}
-{{--                                                               target="_blank">--}}
-{{--                                                                <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
-{{--                                                            </a>--}}
-{{--                                                        @else--}}
-{{--                                                            <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
-{{--                                                        @endif--}}
-{{--                                                    </td>--}}
-{{--                                                </tr>--}}
+                                                {{--                                                <tr>--}}
+                                                {{--                                                    <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.paid_amount') }}</td>--}}
+                                                {{--                                                    <td class="text-right color-subtext pl10">--}}
+                                                {{--                                                        @if ($order->payment->id)--}}
+                                                {{--                                                            <a href="{{ route('payment.show', $order->payment->id) }}"--}}
+                                                {{--                                                               target="_blank">--}}
+                                                {{--                                                                <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
+                                                {{--                                                            </a>--}}
+                                                {{--                                                        @else--}}
+                                                {{--                                                            <span>{{ format_price($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::COMPLETED ? $order->payment->amount : 0) }}</span>--}}
+                                                {{--                                                        @endif--}}
+                                                {{--                                                    </td>--}}
+                                                {{--                                                </tr>--}}
                                                 @if ($order->payment->status == \Botble\Payment\Enums\PaymentStatusEnum::REFUNDED)
                                                     <tr class="hidden">
                                                         <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.refunded_amount') }}</td>
@@ -409,7 +417,8 @@
                                         @else
                                             @if ($order->shipment->id)
                                                 <div class="flexbox-auto-left">
-                                                    <svg class="svg-next-icon svg-next-icon-size-20 svg-next-icon-green">
+                                                    <svg
+                                                        class="svg-next-icon svg-next-icon-size-20 svg-next-icon-green">
                                                         <use xmlns:xlink="http://www.w3.org/1999/xlink"
                                                              xlink:href="#next-checkmark"></use>
                                                     </svg>
@@ -605,7 +614,8 @@
                                    class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
                                         class="fa fa-angle-left"></i>&nbsp;&nbsp;</a>&nbsp;
                                 <a href="{{ !is_null($previous) ? route('orders.edit', ['order' => $previous]) : 'javascript:void(0);' }}"
-                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a> &nbsp;
+                                   class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>&nbsp;&nbsp;<i
+                                        class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
 
 
@@ -619,13 +629,23 @@
                                    class="btn btn-success mb-2">Print Order</a>&nbsp;&nbsp;
                                 <a href="{{ route('orders.editOrder', ['id' => $order->id]) }}"
                                    class="btn btn-warning mb-2">Edit Order</a>&nbsp;&nbsp;
-{{--                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"--}}
-{{--                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;--}}
+                                {{--                                <a href="{{ route('orders.reorder', ['order_id' => $order->id]) }}"--}}
+                                {{--                                   class="btn btn-info mb-2">{{ trans('plugins/ecommerce::order.reorder') }}</a>&nbsp;&nbsp;--}}
                                 @if (!in_array($order->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED]))
                                     <a href="#" class="btn  mb-2 btn-secondary btn-trigger-cancel-order"
                                        data-target="{{ route('orders.cancel', $order->id) }}">{{ trans('plugins/ecommerce::order.cancel') }}</a>
                                 @endif
 
+                                <a data-type="select"
+                                   data-source="{{ json_encode(get_order_statuses()) }}"
+                                   data-pk="{{ $order->id }}"
+                                   data-url="{{ route('orders.changeStatus') }}"
+                                   data-value="{{ strtolower($order->status) }}"
+                                   data-title="Change Status"
+                                   class="editable"
+                                   href="#">
+                                    {{ strtoupper($order->status) }}
+                                </a>
                             </div>
                         </div>
 
@@ -778,13 +798,12 @@
                         @endif
 
 
-
-
                         <div class="wrapper-content mb20">
                             <div class="next-card-section p-none-b">
                                 <div class="flexbox-grid-default flexbox-align-items-center">
                                     <div class="flexbox-auto-content-left">
-                                        <label class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
+                                        <label
+                                            class="title-product-main text-no-bold">{{ trans('plugins/ecommerce::order.customer_label') }}</label>
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <img class="width-30-px radius-cycle" width="40"
@@ -796,7 +815,8 @@
                             <div class="next-card-section border-none-t">
                                 <div class="mb5">
                                     <a href=" {{route('customer.edit', $order->user->id)}}">
-                                        <strong class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong>
+                                        <strong
+                                            class="text-capitalize">{{ $order->user->name ? $order->user->name : $order->address->name }}</strong>
                                     </a>
                                 </div>
                                 @if ($order->user->id)
@@ -808,7 +828,8 @@
                                 @endif
                                 <ul class="ws-nm text-infor-subdued">
                                     <li class="overflow-ellipsis">
-                                        <a class="hover-underline" href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">
+                                        <a class="hover-underline"
+                                           href="mailto:{{ $order->user->email ? $order->user->email : $order->address->email }}">
                                             {{ $order->user->email ? $order->user->email : $order->address->email }}
                                         </a>
                                     </li>
