@@ -24,7 +24,7 @@
 
                         $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->orderBy('id', 'DESC')->value('quantity');
                         $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
-                        ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where(['ec_orders.order_type'=> \Botble\Ecommerce\Models\Order::NORMAL, 'ec_orders.status'=>\Botble\Base\Enums\BaseStatusEnum::CANCELLED])->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
+                        ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type',\Botble\Ecommerce\Models\Order::NORMAL)->where('ec_orders.status' ,'!=',\Botble\Base\Enums\BaseStatusEnum::CANCELLED)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
                 @endphp
                 <span>In Stock : {{$qty}} qty</span><br>
                 <span>Sold : {{$soldQty}} qty</span>
