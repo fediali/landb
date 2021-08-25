@@ -59,7 +59,7 @@ class InventoryTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
-            ->editColumn('ecommerce', function ($item) {
+            ->addColumn('ecommerce', function ($item) {
                 if ($item->is_full_released) {
                     $html = '<a href="javascript:void(0)" class="btn btn-sm btn-warning" disabled>Released</a>';
                 } else {
