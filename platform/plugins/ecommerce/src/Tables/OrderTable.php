@@ -245,7 +245,13 @@ class OrderTable extends TableAbstract
             });
             $query->when(isset($search_items['payment_method']), function ($q) use ($search_items) {
                 $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
-                $q->where('payments.payment_channel', $search_items['payment_method']);
+                if(is_array($search_items['payment_method'])){
+                    $q->whereIn('payments.payment_channel',  $search_items['payment_method']);
+                }
+                else{
+                    $q->whereIn('payments.payment_channel', explode(',', $search_items['payment_method']));
+                }
+                //$q->where('payments.payment_channel', $search_items['payment_method']);
             });
             $query->when(isset($search_items['online_order']), function ($q) use ($search_items) {
                 $q->where('ec_orders.platform', $search_items['online_order']);
@@ -444,6 +450,7 @@ class OrderTable extends TableAbstract
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
             if ($search_id) {
+                $data['search_name'] = UserSearch::where('id', $search_id)->value('name');
                 $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
             }
         }

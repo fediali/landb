@@ -107,7 +107,7 @@
                         <div>
                             @foreach($data['payment_methods'] as $key => $payment_method)
                                 <div style="display:inline-flex">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="payment_method" class="form-control" value="{{$key}}" {{@$data['search_items']['payment_method'] == $key ? 'checked' : ''}}>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="payment_method[]" class="form-control" value="{{$key}}" {{@$data['search_items']['payment_method'] == $key ? 'checked' : ''}}>
                                     <p class="mr-1">{{$payment_method}}</p>
                                 </div>
                             @endforeach
@@ -135,7 +135,7 @@
 
                 <div class="d-flex mb-3 mt-3">
                     <div class="d-flex adv-input">
-                        <input type="text" name="search_name" class="form-control mr-2" id="search-name">
+                        <input type="text" name="search_name" class="form-control mr-2" id="search-name" value="{{@$data['search_name']}}">
                         <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
                     </div>
                     <div class="text-right adv-input">
@@ -164,10 +164,10 @@
                 type: 'POST',
                 data: $('#adv-search-form').serialize(),
                 success: function (data) {
-                    location.reload();
+                    window.location = window.location.href.split('?')[0] + '?search_id=' + data.data.id;
                 },
                 error: function (request, status, error) {
-                    location.reload();
+                    //location.reload();
                     toastr['warning']('Something went wrong.', 'Validation Error');
                 }
             });

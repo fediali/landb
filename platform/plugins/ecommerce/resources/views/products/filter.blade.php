@@ -8,8 +8,7 @@
                 <select name="search_id" class="ui-select" required>
                     <option value="">Saved Search</option>
                     @foreach($searches as $key => $value)
-                        <option
-                            value="{{ $key }}" {{request('search_id') == $key ? 'selected' : ''}}>{{ $value }}</option>
+                        <option value="{{ $key }}" {{request('search_id') == $key ? 'selected' : ''}}>{{ $value }}</option>
                     @endforeach
                 </select>
                 <svg class="svg-next-icon svg-next-icon-size-16">
@@ -34,7 +33,8 @@
                 <div class="d-flex w-100">
                     <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head search-head color-white">Advance Search
-                        <span class="variation-name"></span></h4>
+                        <span class="variation-name"></span>
+                    </h4>
                 </div>
             </div>
             {{ Form::open(['method' => 'GET', 'class' => 'filter-form', 'id' => 'adv-search-form']) }}
@@ -45,13 +45,11 @@
                         <label class="font-bold">Price ($):</label>
                         <div class="d-flex">
                             <div class="col-md-6 pl-0">
-                                <input type="number" name="product_min_price" step="0.1" class="form-control"
-                                       value="{{@$data['search_items']['product_min_price']}}">
+                                <input type="number" name="product_min_price" step="0.1" class="form-control" value="{{@$data['search_items']['product_min_price']}}">
                             </div>
                             --
                             <div class="col-md-6 pr-0">
-                                <input type="number" name="product_max_price" step="0.1" class="form-control"
-                                       value="{{@$data['search_items']['product_max_price']}}">
+                                <input type="number" name="product_max_price" step="0.1" class="form-control" value="{{@$data['search_items']['product_max_price']}}">
                             </div>
                         </div>
                     </div>
@@ -61,16 +59,14 @@
                         <select class="form-control select-search-full" name="prod_category" style="width: 100%">
                             <option selected="selected" value="" disabled="">Select Category</option>
                             @foreach($data['prod_categories'] as $key => $prod_category)
-                                <option
-                                    value="{{ $key }}" {{@$data['search_items']['prod_category'] == $key ? 'selected' : ''}}>{{ $prod_category }}</option>
+                                <option value="{{ $key }}" {{@$data['search_items']['prod_category'] == $key ? 'selected' : ''}}>{{ $prod_category }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="col-md-4">
                         <label class="mt-4 font-bold">SEC:</label>
-                        <input type="text" name="prod_sec" class="form-control"
-                               value="{{@$data['search_items']['prod_sec']}}">
+                        <input type="text" name="prod_sec" class="form-control" value="{{@$data['search_items']['prod_sec']}}">
                     </div>
 
                     <div class="col-md-12">
@@ -88,11 +84,8 @@
                                     } else {
                                         $statuses = [];
                                     }
-
                                     ?>
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox"
-                                           name="prod_status[]" class="form-control"
-                                           value="{{strtolower($prod_status)}}" {{in_array(strtolower($prod_status), $statuses) ? 'checked' : ''}}>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="prod_status[]" class="form-control" value="{{strtolower($prod_status)}}" {{in_array(strtolower($prod_status), $statuses) ? 'checked' : ''}}>
                                     <p class="mr-1">{{$prod_status}}</p>
                                 </div>
                             @endforeach
@@ -104,8 +97,7 @@
                         <select class="form-control" name="prod_type" style="width: 100%">
                             <option selected="selected" value="" disabled="">Select Product Type</option>
                             @foreach($data['prod_types'] as $k => $prod_type)
-                                <option
-                                    value="{{ $k }}" {{@$data['search_items']['prod_type'] == $k ? 'selected' : ''}}>{{ $prod_type }}</option>
+                                <option value="{{ $k }}" {{@$data['search_items']['prod_type'] == $k ? 'selected' : ''}}>{{ $prod_type }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -115,8 +107,7 @@
                         <select class="form-control" name="show_products" style="width: 100%">
                             <option selected="selected" value="" disabled="">Show Products</option>
                             @foreach($data['show_products'] as $k => $show_product)
-                                <option
-                                    value="{{ $k }}" {{@$data['search_items']['show_products'] == $k ? 'selected' : ''}}>{{ $show_product }}</option>
+                                <option value="{{ $k }}" {{@$data['search_items']['show_products'] == $k ? 'selected' : ''}}>{{ $show_product }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -125,13 +116,11 @@
 
                 <div class="d-flex mb-3 mt-3">
                     <div class="d-flex adv-input">
-                        <input type="text" name="search_name" class="form-control mr-2" id="search-name"
-                               value="{{@$data['search_name']}}">
+                        <input type="text" name="search_name" class="form-control mr-2" id="search-name" value="{{@$data['search_name']}}">
                         <input type="button" class="btn btn-info" value="Save Search" id="adv-save-search">
                     </div>
                     <div class="text-right adv-input">
-                        <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close
-                        </button>
+                        <button type="button" class="btn btn-danger pull-left ml-5 mr-2" data-dismiss="modal">Close</button>
                         <input type="submit" class="btn btn-primary" value="Search">
                     </div>
                 </div>

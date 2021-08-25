@@ -515,6 +515,7 @@ class CustomerTable extends TableAbstract
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
             if ($search_id) {
+                $data['search_name'] = UserSearch::where('id', $search_id)->value('name');
                 $search_items = UserSearchItem::where('user_search_id', $search_id)->pluck('value', 'key')->all();
             }
         }
@@ -523,7 +524,9 @@ class CustomerTable extends TableAbstract
             $search_items = $this->request()->all();
         }
 
-        return view($this->customFilterTemplate, compact('report_types', 'searches', 'search_items'))->render();
+        $data['search_items'] = $search_items;
+
+        return view($this->customFilterTemplate, compact('report_types', 'searches', 'data'))->render();
     }
 
 }
