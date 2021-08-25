@@ -31,6 +31,7 @@ class BaseStatusEnum extends Enum
     public const COMPLETE = 'Complete';
     public const SHIPPED = 'Shipped';
     public const DECLINED = 'Declined';
+    public const CANCELLED = 'canceled';
 
     public static $THREADSAMPLE = [
         'pending'    => self::PENDING,
