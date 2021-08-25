@@ -728,20 +728,20 @@ setTimeout(function (){
             $(".btn").removeAttr("disabled");
         });
         var mybutton_counter=0;
-        $(".btn").click(function(e) {
-            if (mybutton_counter > 0){
-                $(this).prop('disabled', 'disabled');
-                return false;
-            }
-            mybutton_counter++;
-        });
-        setInterval(function() {
-            console.log(mybutton_counter);
-            if(mybutton_counter > 0) {
-                mybutton_counter--;
-            }
-            $(".btn").removeAttr("disabled");
-        }, 6000);
+        // $(".btn").click(function(e) {
+        //     if (mybutton_counter > 0){
+        //         $(this).prop('disabled', 'disabled');
+        //         return false;
+        //     }
+        //     mybutton_counter++;
+        // });
+        // setInterval(function() {
+        //     console.log(mybutton_counter);
+        //     if(mybutton_counter > 0) {
+        //         mybutton_counter--;
+        //     }
+        //     $(".btn").removeAttr("disabled");
+        // }, 6000);
 
 
 
