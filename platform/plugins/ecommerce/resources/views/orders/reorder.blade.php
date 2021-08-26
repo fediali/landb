@@ -35,8 +35,8 @@
                 :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}">
         </create-order>
     </div>
-
-    @if($order->payment->payment_channel->label() == 'omni-payment')
+    
+    @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
         <div class="wrapper-content bg-gray-white mb20">
 
             <!-- card -->
@@ -116,7 +116,7 @@
         <div class="wrapper-content bg-gray-white mb20">
             <div class="row m-0 pt-2 pb-2 bg-white">
                 <div class="col-lg-12 ">
-                    <strong class="mb-2">Cash on delivery</strong>
+                    <strong class="mb-2">{{$order->payment ? $order->payment->payment_channel : 'Cash on delivery'}}</strong>
                 </div>
             </div>
         </div>
