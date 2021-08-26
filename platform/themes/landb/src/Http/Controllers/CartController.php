@@ -52,6 +52,7 @@ class CartController extends Controller
 
     public function getIndex(Request $request)
     {
+
         if ($request->has('discard')) {
             if ($request->discard == 'true') {
                 if ($request->has('item')) {
@@ -65,7 +66,6 @@ class CartController extends Controller
         if (!count($cart->products)) {
             return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
         }
-
 
         $token = OrderHelper::getOrderSessionToken();
         return Theme::scope('cart', ['cart' => $cart])->render();
