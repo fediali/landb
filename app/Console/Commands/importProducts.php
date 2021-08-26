@@ -72,20 +72,20 @@ class importProducts extends Command
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
 
-//        DB::table('ec_products')->truncate();
-//        DB::table('ec_product_with_attribute_set')->truncate();
-//        DB::table('ec_product_with_attribute')->truncate();
-//        DB::table('ec_product_variations')->truncate();
-//        DB::table('ec_product_variation_items')->truncate();
-//        DB::table('ec_product_collection_products')->truncate();
-//        DB::table('ec_product_category_product')->truncate();
-//        DB::table('ec_order_addresses')->truncate();
-//        DB::table('ec_order_histories')->truncate();
-//        DB::table('ec_order_product')->truncate();
-//        DB::table('ec_orders')->truncate();
-//        dd('s');
+        DB::table('ec_products')->truncate();
+        DB::table('ec_product_with_attribute_set')->truncate();
+        DB::table('ec_product_with_attribute')->truncate();
+        DB::table('ec_product_variations')->truncate();
+        DB::table('ec_product_variation_items')->truncate();
+        DB::table('ec_product_collection_products')->truncate();
+        DB::table('ec_product_category_product')->truncate();
+        DB::table('ec_order_addresses')->truncate();
+        DB::table('ec_order_histories')->truncate();
+        DB::table('ec_order_product')->truncate();
+        DB::table('ec_orders')->truncate();
+        dd('s');
 
-        $file = File::get(public_path('lnb-products_100.json'));
+        $file = File::get(public_path('lnb-products_all.json'));
         $data = json_decode(utf8_encode($file), true);
         Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
