@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -37,4 +38,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+//    public function render($request, Exception $e)
+//    {
+////        dd('s');
+////        if ($e instanceof Symfony\Component\HttpKernel\Exception\HttpException) {
+////            return route('public.index');
+////        }
+////        return parent::render($request, $e);
+//    }
 }
