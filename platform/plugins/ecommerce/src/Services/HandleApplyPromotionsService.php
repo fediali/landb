@@ -126,4 +126,33 @@ class HandleApplyPromotionsService
 
         return $promotionDiscountAmount;
     }
+
+
+    public function applyPromotionIfAvailable($orderId, $token = null)
+    {
+        $this->removePromotionIfAvailable($orderId);
+
+        $promotionAmount = $this->execute($token);
+
+        $order = Order::find($orderId);
+        if (!$order->promotion_applied) {
+            $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount : $promotionAmount;
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->promotion_amount = $promotionAmount;
+            $order->promotion_applied = 1;
+            $order->save();
+        }
+    }
+
+    public function removePromotionIfAvailable($orderId)
+    {
+        $order = Order::find($orderId);
+        if ($order->promotion_applied) {
+            $order->discount_amount -= $order->promotion_amount;
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->promotion_applied = 0;
+            $order->save();
+        }
+    }
+
 }

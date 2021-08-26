@@ -45,6 +45,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ShipmentHistoryInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ShipmentInterface;
 use Botble\Ecommerce\Repositories\Interfaces\StoreLocatorInterface;
 use Botble\Ecommerce\Services\HandleApplyCouponService;
+use Botble\Ecommerce\Services\HandleApplyPromotionsService;
 use Botble\Ecommerce\Services\HandleShippingFeeService;
 use Botble\Ecommerce\Tables\OrderIncompleteTable;
 use Botble\Ecommerce\Tables\OrderTable;
@@ -121,6 +122,8 @@ class OrderController extends BaseController
      */
     protected $addressRepository;
 
+    protected $promotion_service;
+
     /**
      * @param OrderInterface $orderRepository
      * @param CustomerInterface $customerRepository
@@ -143,7 +146,8 @@ class OrderController extends BaseController
         PaymentInterface $paymentRepository,
         StoreLocatorInterface $storeLocatorRepository,
         OrderProductInterface $orderProductRepository,
-        AddressInterface $addressRepository
+        AddressInterface $addressRepository,
+        HandleApplyPromotionsService $applyPromotionsService
     )
     {
         $this->orderRepository = $orderRepository;
@@ -156,6 +160,7 @@ class OrderController extends BaseController
         $this->storeLocatorRepository = $storeLocatorRepository;
         $this->orderProductRepository = $orderProductRepository;
         $this->addressRepository = $addressRepository;
+        $this->promotion_service = $applyPromotionsService;
     }
 
     /**
@@ -623,6 +628,8 @@ class OrderController extends BaseController
                 }
 
             }
+
+            $this->promotion_service->applyPromotionIfAvailable($order->id);
 
         }
 

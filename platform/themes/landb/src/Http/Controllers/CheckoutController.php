@@ -71,7 +71,7 @@ class CheckoutController extends Controller
 
     public function getCheckoutIndex($token)
     {
-        $this->applyPromotionIfAvailable(auth('customer')->user()->getUserCart(), $token);
+        $this->promotion_service->applyPromotionIfAvailable(auth('customer')->user()->getUserCart(), $token);
         $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
@@ -432,20 +432,7 @@ class CheckoutController extends Controller
         return false;
     }
 
-    public function applyPromotionIfAvailable($orderId, $token = null)
-    {
-        $promotionAmount = $this->promotion_service->execute($token);
 
-        $order = Order::find($orderId);
-        if ($order->promotion_applied != 1) {
-            $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount : $promotionAmount;
-            $order->amount = $order->sub_total - $order->discount_amount;
-            $order->promotion_applied = 1;
-            $order->save();
-        }
-
-
-    }
 
 
 }

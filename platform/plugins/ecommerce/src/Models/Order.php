@@ -101,7 +101,8 @@ class Order extends BaseModel
         'notes',
         'transaction_error',
         'po_number',
-        'promotion_applied'
+        'promotion_applied',
+        'promotion_amount',
     ];
 
     /**
