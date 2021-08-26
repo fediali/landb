@@ -83,8 +83,8 @@ class importProducts extends Command
         DB::table('ec_order_histories')->truncate();
         DB::table('ec_order_product')->truncate();
         DB::table('ec_orders')->truncate();
+        DB::table('ec_products')->increments('id')->start_from(150000);
         dd('s');
-
         $file = File::get(public_path('lnb-products_all.json'));
         $data = json_decode(utf8_encode($file), true);
         Slug::where('prefix', 'products')->delete();
