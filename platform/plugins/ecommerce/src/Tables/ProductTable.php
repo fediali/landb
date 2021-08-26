@@ -277,7 +277,7 @@ class ProductTable extends TableAbstract
 
         $query = $model
             ->select($select)
-            ->where('is_variation', 0)
+            ->where(['is_variation' => 0, 'ptype' => 'R'])
             ->where('status', '!=', BaseStatusEnum::HIDE);
 
 
@@ -303,10 +303,9 @@ class ProductTable extends TableAbstract
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
             });
             $query->when(isset($search_items['prod_status']), function ($q) use ($search_items) {
-                if(is_array($search_items['prod_status'])){
-                    $q->whereIn('ec_products.status',  $search_items['prod_status']);
-                }
-                else{
+                if (is_array($search_items['prod_status'])) {
+                    $q->whereIn('ec_products.status', $search_items['prod_status']);
+                } else {
                     $q->whereIn('ec_products.status', explode(',', $search_items['prod_status']));
                 }
             });
