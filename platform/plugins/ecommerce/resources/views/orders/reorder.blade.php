@@ -35,7 +35,7 @@
                 :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}">
         </create-order>
     </div>
-    
+
     @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
         <div class="wrapper-content bg-gray-white mb20">
 

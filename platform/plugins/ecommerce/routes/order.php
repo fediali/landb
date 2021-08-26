@@ -162,6 +162,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@splitOrder',
                 'permission' => 'orders.create',
             ]);
+            Route::post('split-payment/{id}', [
+                'as'         => 'split.payment',
+                'uses'       => 'OrderController@splitPayment',
+                'permission' => 'orders.create',
+            ]);
             Route::post('sales-rep/{id}', [
                 'as'         => 'sales-rep',
                 'uses'       => 'OrderController@salesRepupdate',

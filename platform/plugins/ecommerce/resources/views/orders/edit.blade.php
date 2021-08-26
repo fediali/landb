@@ -622,6 +622,9 @@
                         </div>
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
+                                <button type="button" class="btn btn-outline-warning mb-2" data-toggle="modal"
+                                        data-target="#modal_split_payment">Split Payment
+                                </button>
                                 <button type="button" class="btn btn-outline-danger mb-2" data-toggle="modal"
                                         data-target="#modal_split_order">Split Order
                                 </button>&nbsp;&nbsp;
@@ -946,6 +949,42 @@
 
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal_split_payment" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="d-flex w-100">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                        <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                            Split Payment#{{$order->id}}
+                            <span class="variation-name"></span>
+                        </h4>
+                    </div>
+                </div>
+
+                <form method="post" action="{{route('orders.split.payment', $order->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <label>Cash $</label>
+                            {!! Form::number('cash_payment', 0, ['class' => 'form-control', 'placeholder'=>'Cash Payment']) !!}
+                        </div>
+                        <div class="col-md-12">
+                            <label>Cheque $</label>
+                            {!! Form::number('cheque_payment', 0, ['class' => 'form-control', 'placeholder'=>'Cheque Payment']) !!}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

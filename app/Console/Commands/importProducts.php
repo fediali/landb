@@ -84,7 +84,7 @@ class importProducts extends Command
         DB::table('ec_order_product')->truncate();
         DB::table('ec_orders')->truncate();
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
-        $file = File::get(public_path('lnb-products_all.json'));
+        $file = File::get(public_path('lnb-products_100.json'));
         $data = json_decode(utf8_encode($file), true);
         Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
@@ -99,7 +99,7 @@ class importProducts extends Command
                     $category->save();
                 }
 
-                $check = Product::where('sku', $row['product_code'])->first();
+                $check = Product::where('id', $row['product_id'])->first();
                 if (!$check && $category) {
 //                    $packQuantity = quantityCalculate($category->id);
                     $packQuantity = 0;
