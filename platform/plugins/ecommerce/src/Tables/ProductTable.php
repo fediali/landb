@@ -277,7 +277,9 @@ class ProductTable extends TableAbstract
 
         $query = $model
             ->select($select)
-            ->where(['is_variation' => 0, 'ptype' => 'R'])
+            ->where(['is_variation' => 0
+//                     'ptype' => 'R'
+            ])
             ->where('status', '!=', BaseStatusEnum::HIDE);
 
 
