@@ -87,7 +87,6 @@ class importProducts extends Command
 
         $file = File::get(public_path('lnb-products-100-new.json'));
         $data = json_decode(utf8_encode($file), true);
-        dd($data);
         Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
 
