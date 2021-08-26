@@ -99,7 +99,7 @@ class importProducts extends Command
                     $category->save();
                 }
 
-                $check = Product::where('sku', $row['product_code'])->first();
+                $check = Product::where('id', $row['product_id'])->first();
                 if (!$check && $category) {
 //                    $packQuantity = quantityCalculate($category->id);
                     $packQuantity = 0;

@@ -410,6 +410,7 @@ class CustomerController extends BaseController
 
     public function postCustomerCard(Request $request)
     {
+        dd($request->all());
         $request['customer_omni_id'] = $request->customer_data['customer_id'];
         $request['customer_data'] = json_encode($request->customer_data);
         $card = CustomerCard::create($request->all());
