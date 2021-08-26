@@ -140,7 +140,7 @@ class importProducts extends Command
                     }
                     // $product->sale_price = $variation->cost + $extras;
 
-                    if ($row['image_id'] && $row['image_path']) {
+                   // if ($row['image_id'] && $row['image_path']) {
 
                         $getProdImages = DB::table('hw_images_links')
                             ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
@@ -160,7 +160,7 @@ class importProducts extends Command
                             $arrr[]= 'product-images/detailed/'.$folder.'/'.$getProdImage->image_path;
                         }
                         $product->images = json_encode($arrr);
-                    }
+                   // }
                     $product->tax_id = 1;
 
                     if ($row['upc_pack']) {
