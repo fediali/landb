@@ -44,7 +44,7 @@ class HandleApplyPromotionsService
 
         $promotionDiscountAmount = 0;
         if ($admin) {
-            $cart = Order::where('id', $token)->with(['products' => function ($query) {
+            $cart = Order::where('id', $admin)->with(['products' => function ($query) {
                 $query->with(['product']);
             }])->first();
         } else {
