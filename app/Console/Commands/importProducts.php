@@ -88,7 +88,6 @@ class importProducts extends Command
         $data = json_decode(utf8_encode($file), true);
         Slug::where('prefix', 'products')->delete();
         foreach ($data['rows'] as $row) {
-
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
                 $category = ProductCategory::where('name', $row['category'])->first();
