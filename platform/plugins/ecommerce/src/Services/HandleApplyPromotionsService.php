@@ -38,15 +38,20 @@ class HandleApplyPromotionsService
      * @param string $token
      * @return float
      */
-    public function execute($token = null)
+    public function execute($token = null, $admin = null)
     {
         $promotions = $this->discountRepository->getAvailablePromotions();
 
         $promotionDiscountAmount = 0;
-
-        $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
-          $query->with(['product']);
-        }])->first();
+        if ($admin) {
+            $cart = Order::where('id', $token)->with(['products' => function ($query) {
+                $query->with(['product']);
+            }])->first();
+        } else {
+            $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
+                $query->with(['product']);
+            }])->first();
+        }
 
         foreach ($promotions as $promotion) {
             /**
@@ -132,7 +137,7 @@ class HandleApplyPromotionsService
     {
         $this->removePromotionIfAvailable($orderId);
 
-        $promotionAmount = $this->execute($token);
+        $promotionAmount = $this->execute($token, $orderId);
 
         $order = Order::find($orderId);
         if (!$order->promotion_applied) {
