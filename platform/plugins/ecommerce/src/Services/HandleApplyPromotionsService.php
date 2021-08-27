@@ -38,13 +38,13 @@ class HandleApplyPromotionsService
      * @param string $token
      * @return float
      */
-    public function execute($token = null, $admin = null)
+    public function execute($token = null, $order = null)
     {
         $promotions = $this->discountRepository->getAvailablePromotions();
 
         $promotionDiscountAmount = 0;
-        if ($admin) {
-            $cart = Order::where('id', $admin)->with(['products' => function ($query) {
+        if ($order) {
+            $cart = Order::where('id', $order)->with(['products' => function ($query) {
                 $query->with(['product']);
             }])->first();
         } else {
