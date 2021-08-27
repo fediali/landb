@@ -2494,6 +2494,13 @@ class OrderController extends BaseController
         $orderObj->save();
     }
 
+    public function splitPayment($id, Request $request, BaseHttpResponse $response)
+    {
+        $params = $request->all();
+
+        return $response->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
     public function quicksearch(Request $request, BaseHttpResponse $response)
     {
 //        dd($request->all());
