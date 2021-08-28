@@ -63,18 +63,15 @@ class HandleApplyPromotionsService
                         case 'all-orders':
                             $promotionDiscountAmount += $promotion->value;
                             break;
-                        case 'category' || 'specific-product':
+                        case 'product-variant' || 'category':
                             foreach ($promotion->products as $p_product){
                               foreach ($cart->products as $c_product){
-                                if($p_product->product_id == $c_product->product->id){
-                                  $promotionDiscountAmount += $promotion->value;
+                                if($p_product->id == $c_product->product_id){
+                                  $promotionDiscountAmount += $c_product->qty * $promotion->value;
                                 }
                               }
                             }
                             break;
-                       // case '':
-
-                          break;
                         default:
                             if ($cart->products->count() >= $promotion->product_quantity) {
                                 $promotionDiscountAmount += $promotion->value;
@@ -92,11 +89,11 @@ class HandleApplyPromotionsService
                         case 'all-orders':
                             $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
                             break;
-                        case 'category' || 'specific-product':
+                        case 'product-variant' || 'category':
                             foreach ($promotion->products as $p_product){
                               foreach ($cart->products as $c_product){
-                                if($p_product->product_id == $c_product->product->id){
-                                  $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
+                                if($p_product->id == $c_product->product_id){
+                                  $promotionDiscountAmount += ($c_product->qty * $c_product->price) * $promotion->value / 100;
                                 }
                               }
                             }

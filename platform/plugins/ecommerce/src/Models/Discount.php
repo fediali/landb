@@ -81,8 +81,8 @@ class Discount extends BaseModel
      */
     public function products()
     {
-        return $this->hasMany(DiscountProduct::class);
-       // return $this->belongsToMany(Product::class, 'ec_discount_products', 'discount_id', 'product_id');
+        //return $this->hasMany(DiscountProduct::class);
+       return $this->belongsToMany(Product::class, 'ec_discount_products', 'discount_id', 'product_id');
     }
 
     protected static function boot()
