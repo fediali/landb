@@ -186,12 +186,18 @@ class importProducts extends Command
                         $product->categories()->sync([$category->id]);
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
-                        Slug::create([
+
+                        $slugParams = [
                             'reference_type' => Product::class,
                             'reference_id' => $product->id,
                             'key' => Str::slug($product->name),
                             'prefix' => SlugHelper::getPrefix(Product::class),
-                        ]);
+                        ];
+                        $checkSlug = Slug::where($slugParams)->first();
+                        if ($checkSlug) {
+                            $slugParams['key'] .= '-'.time();
+                        }
+                        Slug::create($slugParams);
 
                         $getTypeAttrSet = ProductAttributeSet::where('slug', 'type')->value('id');
                         if ($getTypeAttrSet) {
