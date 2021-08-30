@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="col-lg-1 mt-2 text-center">
-                <p class="mt-2">$ {{ $wishlistItem->product->price }}</p>
+                <p class="mt-2">$ {{ $wishlistItem->product->final_price }}</p>
             </div>
             <div class="col-lg-2 mt-2">
                 <form id='myform' method='POST' action='#'>
@@ -56,7 +56,7 @@
                 </form>
             </div>
             <div class="col-lg-1 mt-2 mb-txt-center">
-                <p class="mt-2">$ {{ $wishlistItem->product->price * $wishlistItem->quantity }}</p>
+                <p class="mt-2">$ {{ $wishlistItem->product->final_price * $wishlistItem->quantity }}</p>
             </div>
             <div class="col-lg-2 mt-2 text-center">
                 <a href="#" class=" btn cart-btn w-100">Add to Cart</a>

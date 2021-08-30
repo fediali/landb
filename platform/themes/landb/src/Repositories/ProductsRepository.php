@@ -141,7 +141,7 @@ class ProductsRepository
             })
             ->when(!is_null($sort_by) && !is_null($sort_key) && !is_null($sort_type), function ($query) use ($sort_key, $sort_type) {
                 $query->orderBy($this->model->getTable() . '.' . $sort_key, $sort_type);
-            })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE);
+            })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)->where($this->model->getTable() . '.is_variation' , 0);
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
             $data = $data->simplePaginate(30);

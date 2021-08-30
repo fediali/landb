@@ -212,6 +212,9 @@ class Product extends BaseModel
         return $this->belongsToMany(Discount::class, 'ec_discount_products', 'product_id', 'discount_id');
     }
 
+
+
+
     /**
      * @return BelongsToMany
      */
@@ -377,6 +380,14 @@ class Product extends BaseModel
         } catch (Exception $exception) {
             return [];
         }
+    }
+
+    public function getFinalPriceAttribute(){
+      if(!is_null($this->sale_price)) {
+        return $this->sale_price;
+      }else{
+        return $this->price;
+      }
     }
 
     /**
