@@ -1035,7 +1035,7 @@ section.parallax_video video {
     height: auto !important;
 }
 .detail-listing .listbox .img {
-    height: 450px !important;
+    height: auto !important;
 }
 
 .shoplisting .listbox .img img {
