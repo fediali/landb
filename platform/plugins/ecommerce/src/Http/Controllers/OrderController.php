@@ -8,6 +8,7 @@ use App\Models\CardPreAuth;
 use App\Models\InventoryHistory;
 use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
+use App\Models\OrderSplitPayment;
 use Assets;
 use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -681,8 +682,6 @@ class OrderController extends BaseController
                     $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
                 }
             }
-
-
         }
 
 //        if (!$order->user->card->isEmpty()) {
@@ -693,12 +692,17 @@ class OrderController extends BaseController
 //                $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
 //            }
 //        }
+
         if (isset($_GET['debug'])) {
             dd($order, $cards, $order->payment);
         }
 
+        $split_payments = [];
+        if ($order->split_payment) {
+            $split_payments = $order->split_payments->pluck('amount', 'payment_type')->all();
+        }
 
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep'));
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep', 'split_payments'));
     }
 
 
@@ -1313,7 +1317,8 @@ class OrderController extends BaseController
                 ->setMessage(trans('plugins/ecommerce::order.order_is_not_existed'));
         }
 
-        page_title()->setTitle(trans('plugins/ecommerce::order.reorder'));
+        // page_title()->setTitle(trans('plugins/ecommerce::order.reorder'));
+        page_title()->setTitle('Edit Order');
 
         $order = $this->orderRepository->findById($id);
 
@@ -2497,6 +2502,15 @@ class OrderController extends BaseController
     public function splitPayment($id, Request $request, BaseHttpResponse $response)
     {
         $params = $request->all();
+
+        OrderSplitPayment::where('id', $id)->delete();
+        foreach ($params as $key => $val) {
+            if ($key != '_token') {
+                $data = ['order_id' => $id, 'payment_type' => $key, 'amount' => $val];
+                OrderSplitPayment::create($data);
+            }
+        }
+        Order::where('id', $id)->update(['split_payment' => 1]);
 
         return $response->setMessage(trans('core/base::notices.create_success_message'));
     }

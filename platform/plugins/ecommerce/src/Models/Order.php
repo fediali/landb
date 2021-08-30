@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\CardPreAuth;
+use App\Models\OrderSplitPayment;
 use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Models\BaseModel;
@@ -103,6 +104,7 @@ class Order extends BaseModel
         'po_number',
         'promotion_applied',
         'promotion_amount',
+        'split_payment',
     ];
 
     /**
@@ -229,6 +231,14 @@ class Order extends BaseModel
     public function payment()
     {
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function split_payments()
+    {
+        return $this->hasMany(OrderSplitPayment::class, 'order_id');
     }
 
     /**

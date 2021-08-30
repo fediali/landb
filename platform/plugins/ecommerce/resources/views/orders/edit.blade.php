@@ -972,12 +972,20 @@
                     <div class="modal-body">
                         <div class="col-md-12">
                             <label>Cash $</label>
-                            {!! Form::number('cash_payment', 0, ['class' => 'form-control', 'placeholder'=>'Cash Payment']) !!}
+                            {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
                         </div>
                         <div class="col-md-12">
                             <label>Cheque $</label>
-                            {!! Form::number('cheque_payment', 0, ['class' => 'form-control', 'placeholder'=>'Cheque Payment']) !!}
+                            {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
                         </div>
+                        @foreach($cards as $key => $value)
+                            @if($key)
+                                <div class="col-md-12">
+                                    <label>{{$value}} $</label>
+                                    {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
