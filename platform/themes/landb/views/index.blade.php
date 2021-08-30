@@ -66,7 +66,7 @@
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                 <div class="img">
                                     {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
-                                    <span>Latest</span>
+                                    <span>New</span>
                                     <div class="imgoverlay">
                                         <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                             <i class="far fa-eye"></i></a>
