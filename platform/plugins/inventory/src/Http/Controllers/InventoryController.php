@@ -242,7 +242,8 @@ class InventoryController extends BaseController
             //->where('status', 'published')
             ->where(['ec_products.ptype' => 'R'])
             ->where('ec_products.status', '!=', BaseStatusEnum::HIDE)
-            ->orderBy('ec_products.id', 'DESC')
+            ->orderBy('ec_products.sku', 'ASC')
+            ->orderBy('ec_products.name', 'ASC')
             ->orderBy('thread_order_variations.thread_order_id', 'DESC')
             ->get();
         if ($products && count($products) > 1) {
