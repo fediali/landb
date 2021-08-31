@@ -3,19 +3,22 @@
     //dd($productVariations);
     $default = 0;
     $default_max = 1;
-    $default_price = $product->price;
+    $default_price = $product->final_price;
+    $fixed_price = $product->price;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
             $default = $variation->product_id;
             $default_max = $variation->product->quantity;
-            $default_price = $variation->product->price;
+            $default_price = $variation->product->final_price;
+            $fixed_price = $product->price;
         }
     }
     if($default == 0 && count($productVariations)){
         $variation = $productVariations->first();
         $default = $variation->product_id;
         $default_max = $variation->product->quantity;
-        $default_price = $variation->product->price;
+        $default_price = $variation->product->final_price;
+        $fixed_price = $product->price;
     }
     //dd($default);
 //dd($productVariations);

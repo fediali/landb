@@ -4,6 +4,7 @@
                         ->where('ec_product_variations.configurable_product_id', $product->id)
                         ->orderBy('ec_product_variations.is_default', 'desc')
                         ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
+                        ->with(['product'])
                         ->get();
     $default = $variationData->first();
 
@@ -60,7 +61,7 @@
         <div class="caption">
             <h4>{{ $product->name }}</h4>
             <div class="price">
-                $<span id="price-of-{{$product->id}}">{{ ($product->prod_pieces) ? @$default->price/$product->prod_pieces:@$default->price }}</span>
+                $<span id="price-of-{{$product->id}}">{{ ($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces:@$default->product->final_price }}</span>
             </div>
 
         </div>

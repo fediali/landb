@@ -104,6 +104,15 @@ class  HandleApplyCouponService
                         case 'all-orders':
                             $couponDiscountAmount += $discount->value;
                             break;
+                        case 'product-variant' || 'category':
+                          foreach ($discount->products as $p_product){
+                            foreach ($cart->products as $c_product){
+                              if($p_product->id == $c_product->product_id){
+                                $couponDiscountAmount += $c_product->qty * $discount->value ;
+                              }
+                            }
+                          }
+                          break;
                         default:
                             /*if (Cart::instance('cart')->count() >= $discount->product_quantity) {*/
                             if ($cart->products->count() >= $discount->product_quantity) {
@@ -125,6 +134,15 @@ class  HandleApplyCouponService
                             /*$couponDiscountAmount = Cart::instance('cart')->rawTotal() * $discount->value / 100;*/
                             $couponDiscountAmount = $cart->sub_total * $discount->value / 100;
                             break;
+                        case 'product-variant' || 'category':
+                          foreach ($discount->products as $p_product){
+                            foreach ($cart->products as $c_product){
+                              if($p_product->id == $c_product->product_id){
+                                $couponDiscountAmount = ($c_product->qty * $c_product->price) * $discount->value / 100;
+                              }
+                            }
+                          }
+                          break;
                         default:
                             /*if (Cart::instance('cart')->count() >= $discount->product_quantity) {*/
                             if ($cart->products->count() >= $discount->product_quantity) {

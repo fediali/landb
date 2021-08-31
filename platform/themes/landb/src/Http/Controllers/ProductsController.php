@@ -125,7 +125,7 @@ class ProductsController extends Controller
             }
         }
         //dd($data['product']->variations()->get());
-        //dd($data['product']);
+        //dd($data['product']->price);
         if ($request->ajax()) {
             $values = $data['productVariations']->values();
             $data['productVariations'] = $values->all();
