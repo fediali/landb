@@ -209,15 +209,37 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="text-right color-subtext mt10">
-                                                        <p class="mb0">{{ trans('plugins/ecommerce::order.discount') }}</p>
                                                         @if ($order->coupon_code)
-                                                            <p class="mb0">{!! trans('plugins/ecommerce::order.coupon_code', ['code' => Html::tag('strong', $order->coupon_code)->toHtml()])  !!}</p>
+                                                            <p class="mb0">
+                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
+                                                                {!! trans('plugins/ecommerce::order.coupon_code', ['code' => Html::tag('strong', $order->coupon_code)->toHtml()])  !!}
+                                                            </p>
                                                         @elseif ($order->discount_description)
-                                                            <p class="mb0">{{ $order->discount_description }}</p>
+                                                            <p class="mb0">
+                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
+                                                                {{ $order->discount_description }}
+                                                            </p>
                                                         @endif
+                                                        @if ($order->promotion_applied)
+                                                            <p class="mb0">
+                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('discount-type-ip').value = 'promotion'; document.getElementById('remove-discount').submit();"></i>
+                                                                Promotion Discount
+                                                            </p>
+                                                        @endif
+                                                        <p class="mb0">{{ trans('plugins/ecommerce::order.discount') }}</p>
                                                     </td>
                                                     <td class="text-right p-none-b pl10">
+                                                        @if ($order->coupon_code)
+                                                            <p class="mb0">{{ format_price($order->discount_amount - $order->promotion_amount) }}</p>
+                                                        @endif
+                                                        @if ($order->promotion_applied)
+                                                            <p class="text-right p-none-b pl10 mb0">{{ format_price($order->promotion_amount) }}</p>
+                                                        @endif
                                                         <p class="mb0">{{ format_price($order->discount_amount) }}</p>
+
+                                                        <form id="remove-discount" action="{{ route('orders.remove-discount', $order->id) }}" style="display:none;">
+                                                            <input type="hidden" name="discount_type" value="coupon" id="discount-type-ip">
+                                                        </form>
                                                     </td>
                                                 </tr>
                                                 <tr>

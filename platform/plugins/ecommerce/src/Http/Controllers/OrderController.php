@@ -28,6 +28,7 @@ use Botble\Ecommerce\Http\Requests\UpdateOrderRequest;
 use Botble\Ecommerce\Models\Address;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\Discount;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\OrderProductShipmentVerify;
@@ -630,7 +631,17 @@ class OrderController extends BaseController
 
             }
 
-            $this->promotion_service->applyPromotionIfAvailable($order->id);
+            $applyPromotion = true;
+            if ($order->coupon_code) {
+                $checkCoupon = Discount::where('code', $order->coupon_code)->value('can_use_with_promotion');
+                if (!$checkCoupon) {
+                    $applyPromotion = false;
+                }
+            }
+
+            if ($applyPromotion) {
+                $this->promotion_service->applyPromotionIfAvailable($order->id);
+            }
 
         }
 
@@ -2545,6 +2556,21 @@ class OrderController extends BaseController
 
         return view('plugins/ecommerce::orders.receiptList', ['orderHtml' => $orderHtml]);
 
+    }
+
+    public function removeDiscount($orderId, Request $request) {
+        $getType = $request->get('discount_type', false);
+        if ($getType == 'coupon') {
+            $order = Order::where('id', $orderId)->first();
+            $order->discount_amount = $order->promotion_amount;
+            $order->coupon_code = NULL;
+            $order->discount_description = NULL;
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->save();
+        } elseif ($getType == 'promotion') {
+            $this->promotion_service->removePromotionIfAvailable($orderId);
+        }
+        return redirect()->back();
     }
 
 }
