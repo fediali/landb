@@ -4776,7 +4776,7 @@ html { scroll-behavior: smooth;}
 }
 .owl-carousel .owl-dot { 
     margin-bottom: 5px;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;  
 }

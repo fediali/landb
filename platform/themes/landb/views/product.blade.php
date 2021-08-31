@@ -61,7 +61,8 @@
                     @foreach($product->images as $image)
                          <div>{!! image_html_generator($image, $product->name, null, null, true) !!} </div>
                     @endforeach
-              
+                @else
+                <div><img src="{{ asset('images/default.jpg') }}"/></div>
             @endif 
         </div>
         </div>
