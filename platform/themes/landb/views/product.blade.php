@@ -3,22 +3,26 @@
     //dd($productVariations);
     $default = 0;
     $default_max = 1;
+    $sale_price = null;
     $default_price = $product->final_price;
-    $fixed_price = $product->price;
+    $fixed_price = null;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
             $default = $variation->product_id;
             $default_max = $variation->product->quantity;
             $default_price = $variation->product->final_price;
-            $fixed_price = $product->price;
+            $fixed_price = $variation->product->price;
+            $sale_price =  $variation->product->sale_price;
         }
     }
     if($default == 0 && count($productVariations)){
         $variation = $productVariations->first();
+
         $default = $variation->product_id;
         $default_max = $variation->product->quantity;
         $default_price = $variation->product->final_price;
-        $fixed_price = $product->price;
+        $fixed_price = $variation->product->price;
+        $sale_price =  $variation->product->sale_price;
     }
     //dd($default);
 //dd($productVariations);
@@ -88,7 +92,13 @@
         <div class="col-lg-6">
 {{--        <p class="pre-label-detail">Pre-Order</p>--}}
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-            <p class="detail-price mb-2">$<span id="product_price"><del>{{ $default_price/ $product->prod_pieces}} </del><small>(${{$default_price}} pack price)</small></span></p>
+                <p class="detail-price mb-2"><span id="product_price">
+                    @if(!empty($sale_price))
+                        <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
+                        $ {{ format_price($sale_price/ $product->prod_pieces) }}
+                    @endif
+                        <small>(${{$default_price}} pack price)</small></span>
+                </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
                 <div class="col-md-6">

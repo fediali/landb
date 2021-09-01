@@ -349,11 +349,13 @@ class ProductTable extends TableAbstract
     public function columns()
     {
         return [
-//            'id'            => [
-//                'name'  => 'ec_products.id',
-//                'title' => trans('core/base::tables.id'),
-//                'width' => '20px',
-//            ],
+            'id'            => [
+                'name'  => 'ec_products.id',
+                'title' => trans('core/base::tables.id'),
+                'width' => '20px',
+                'searchable' => 'true',
+                'visible' => false,
+            ],
             'image'      => [
                 'name'  => 'ec_products.images',
                 'title' => trans('plugins/ecommerce::products.image'),

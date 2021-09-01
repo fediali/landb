@@ -61,7 +61,11 @@
         <div class="caption">
             <h4>{{ $product->name }}</h4>
             <div class="price">
-                $<span id="price-of-{{$product->id}}">{{ ($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces:@$default->product->final_price }}</span>
+                <span id="price-of-{{$product->id}}">
+                    <span id="product_price">
+                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
+                            ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
+                    </span>
             </div>
 
         </div>
