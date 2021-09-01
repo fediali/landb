@@ -9,6 +9,7 @@ use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Http\Requests\DiscountRequest;
 use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Tables\DiscountTable;
 use Carbon\Carbon;
@@ -110,7 +111,11 @@ class DiscountController extends BaseController
                 if (!is_array($productCategories)) {
                     // $productCategories = [$productCategories];
                     $products = DB::table('ec_product_category_product')->where('category_id', $productCategories)->pluck('product_id')->all();
-                    $discount->products()->attach($products);
+                    foreach ($products as $product){
+                      $variants = Product::find($product)->variations()->pluck('product_id')->all();
+                      $discount->products()->attach($variants);
+                    }
+
                 }
             }
 

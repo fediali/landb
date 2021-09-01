@@ -506,7 +506,7 @@
                             @isset($user_info->shippingAddress[0])
                                 <span class="note-product-name">
                                     <p>
-                                        {{ @$user_info->shippingAddress[0]->name.', ' }}
+                                        {{ @$user_info->shippingAddress[0]->first_name.' '.@$user_info->shippingAddress[0]->last_name.', ' }}
                                         {{ @$user_info->shippingAddress[0]->address.', ' }}
                                     </p>
                                     <p>
@@ -538,7 +538,7 @@
                             @isset($user_info->billingAddress[0])
                                 <span class="note-product-name">
                                     <p>
-                                        {{ @$user_info->billingAddress[0]->name.', ' }}
+                                        {{ @$user_info->billingAddress[0]->first_name.' '.@$user_info->billingAddress[0]->last_name.', ' }}
                                         {{ @$user_info->billingAddress[0]->address.', ' }}
                                     </p>
                                     <p>
