@@ -268,6 +268,11 @@ class Order extends BaseModel
         return $this->hasOne(CardPreAuth::class, 'order_id');
     }
 
+    public function order_cards_preauth()
+    {
+        return $this->hasMany(CardPreAuth::class, 'order_id');
+    }
+
     public function salesperson()
     {
         return $this->belongsTo(User::class, 'salesperson_id');

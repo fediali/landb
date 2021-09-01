@@ -2246,9 +2246,11 @@ class OrderController extends BaseController
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
             $order['order_id'] = $request->order_id;
+            $order['card_id'] = $request->payment_id;
             $order['transaction_id'] = $response['id'];
             $order['response'] = json_encode($response);
             $order['status'] = 0;
+            $order['payment_status'] = 0;
             CardPreAuth::create($order);
         } else {
             $errors = [
@@ -2262,6 +2264,7 @@ class OrderController extends BaseController
             $status['transaction_error'] = $response['message'];
             $status['status'] = 'Declined';
             Order::where('id', $request->order_id)->update($status);
+            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
             return back();
         }
 
@@ -2279,6 +2282,7 @@ class OrderController extends BaseController
         $status = $info['http_code'];
         if (floatval($status) == 200) {
             $order['status'] = 1;
+            $order['payment_status'] = 1;
             CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
         } else {
             $errors = [
