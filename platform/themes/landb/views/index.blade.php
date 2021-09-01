@@ -93,7 +93,8 @@
                                 <div class="caption">
                                     <h4 class="text-center">{{ $product->name }}</h4>
                                     <div class="price">
-                                        ${{ $product->final_price/$product->prod_pieces }}
+                                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
+                                        ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
                                     </div>
                                     <form id='myform-{{$product->id}}' class="add_to_cart_form"
                                           data-id="{{ @$default->product_id }}" method='POST'
