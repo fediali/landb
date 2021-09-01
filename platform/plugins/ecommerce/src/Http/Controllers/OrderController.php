@@ -4,6 +4,7 @@ namespace Botble\Ecommerce\Http\Controllers;
 
 use App\Events\OrderEdit;
 use App\Imports\OrderImportFile;
+use App\Mail\OrderCreate;
 use App\Models\CardPreAuth;
 use App\Models\InventoryHistory;
 use App\Models\OrderImport;
@@ -63,6 +64,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -643,6 +645,7 @@ class OrderController extends BaseController
                 $this->promotion_service->applyPromotionIfAvailable($order->id);
             }
 
+            Mail::to($order->user->email)->send(new OrderCreate([]));
         }
 
         return $response
