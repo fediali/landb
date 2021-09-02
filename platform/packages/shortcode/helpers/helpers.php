@@ -69,6 +69,18 @@ if (!function_exists('image_html_generator')) {
     return $html;
   }
 }
+
+if (!function_exists('format_price')) {
+    /**
+     * @param string $name
+     * @param array $attributes
+     * @return string
+     */
+  function format_price($number)
+  {
+    return number_format((float)$number, 2, '.', '');
+  }
+}
 if (!function_exists('generate_product_url')) {
     /**
      * @param string $name
