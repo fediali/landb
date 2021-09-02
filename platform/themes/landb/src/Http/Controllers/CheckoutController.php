@@ -76,6 +76,10 @@ class CheckoutController extends Controller
             $query->with(['product']);
         }])->first();
 
+        if(!count($cart->products)){
+          return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
+        }
+
         foreach ($cart->products as $cartProduct) {
             if ($cartProduct->product->quantity < 1) {
                 return redirect()->route('public.cart_index', ['discard' => 'true', 'item' => $cartProduct->id])->with('error', '"' . $cartProduct->product->name . '" is out of stock and is removed from cart!');
