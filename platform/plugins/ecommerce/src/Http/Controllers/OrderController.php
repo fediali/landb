@@ -2519,9 +2519,14 @@ class OrderController extends BaseController
 
     public function splitPayment($id, Request $request, BaseHttpResponse $response)
     {
-        $params = $request->all();
+        $params = $request->except('_token');
 
-        OrderSplitPayment::where('id', $id)->delete();
+        $orderAmount = Order::where('id', $id)->value('amount');
+        if (array_sum(array_values($params)) != $orderAmount) {
+            return $response->setCode(406)->setError()->setMessage('Order Split Payment must be equal to the Order Total Amount!');
+        }
+
+        OrderSplitPayment::where('order_id', $id)->delete();
         foreach ($params as $key => $val) {
             if ($key != '_token') {
                 $data = ['order_id' => $id, 'payment_type' => $key, 'amount' => $val];
