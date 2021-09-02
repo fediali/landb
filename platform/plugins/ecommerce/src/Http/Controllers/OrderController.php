@@ -1675,7 +1675,7 @@ class OrderController extends BaseController
                         if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
                             //$pack = quantityCalculate($product['category_id']);
@@ -1870,7 +1870,7 @@ class OrderController extends BaseController
                             $prodSKU .= '-pack-all';
                         }
 
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
 
                             //count pack quantity for product
@@ -2062,7 +2062,7 @@ class OrderController extends BaseController
                         if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
