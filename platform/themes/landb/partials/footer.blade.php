@@ -110,6 +110,7 @@
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
 <script>
 var demoTrigger = document.querySelector('.demo-trigger');
 

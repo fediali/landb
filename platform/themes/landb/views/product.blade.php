@@ -57,12 +57,23 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
-        <div class="col-lg-5 containert">
-            <div class="exzoom hidden mr-2" id="exzoom">
+        <div class="col-lg-6 containert">
+
+        <div class="content-carousel product-carousel">
+        <div class="owl-carousel">
+            @if(count($product->images))
+                    @foreach($product->images as $image)
+                         <div>{!! image_html_generator($image, $product->name, null, null, true) !!} </div>
+                    @endforeach
+                @else
+                <div><img src="{{ asset('images/default.jpg') }}"/></div>
+            @endif 
+        </div>
+        </div>
+
+            <!-- <div class="exzoom hidden mr-2" id="exzoom">
             <div class="exzoom_btn d-flex mt-3">
-            <!-- <a href="javascript:void(0);" class="exzoom_prev_btn"> <i class="fa fa-angle-left"></i> </a> -->
             <div class="exzoom_nav"></div>
-                <!-- <a href="javascript:void(0);" class="exzoom_next_btn">  <i class="fa fa-angle-right"></i></a> -->
             </div>
                 <div class="exzoom_img_box">
                     <ul class='exzoom_img_ul'>
@@ -72,54 +83,13 @@
                             @endforeach
                         @else
                             <li><img src="{{ asset('images/default.jpg') }}"/></li>
-                    @endif
-                    <!-- <li><img src="https://picsum.photos/270/270/?random"/></li>
-                    <li><img src="https://picsum.photos/320/320/?random"/></li>
-                    <li><img src="https://picsum.photos/600/600/?random"/></li>
-                    <li><img src="https://picsum.photos/500/500/?random"/></li>
-                    <li><img src="https://picsum.photos/700/700/?random"/></li>
-                    <li><img src="https://picsum.photos/310/310/?random"/></li>
-                    <li><img src="https://picsum.photos/410/410/?random"/></li>
-                    <li><img src="https://picsum.photos/400/400/?random"/></li> -->
-                </ul>
-            </div>
-            
+                    @endif 
+                    </ul>
+                </div> 
+            </div>  -->
         </div>
-                <!-- <div class="fancy-container clearfix">
-                    <div class="gallery">
-                        <div class="previews">
-                        @if(count($product->images))
-            @foreach($product->images as $image)
-                <a href="javascript:void(0)" data-full="{{ asset('storage/'.$image) }}">
-                                {!! image_html_generator($image, $product->name, null, null, true, ' side-img') !!}
-                    </a>
-@endforeach
-        @else
-            <a href="javascript:void(0)" class="selected" data-full="{{ asset('images/default.jpg') }}"><img src="{{ asset('images/default.jpg') }}" /></a>
-                            <!-- <img class="mt-2 side-img" src="{{ asset('images/default.jpg') }}"> -->
-        @endif
-        <!-- <a href="javascript:void(0)" class="selected" data-full="img/product/top1large.jpg"><img src="img/product/top1small.jpg" /></a>
-                            <a href="javascript:void(0)" data-full="img/product/top2large.jpg"><img src="img/product/top2small.jpg" /></a>
-                            <a href="javascript:void(0)" data-full="img/product/top3large.jpg"><img src="img/product/top3small.jpg" /></a>
-                            <a href="javascript:void(0)" data-full="img/product/top4large.jpg"><img src="img/product/top4small.jpg" /></a>
-                            <a href="javascript:void(0)" data-full="img/product/top5large.jpg"><img src="img/product/top5small.jpg" /></a>
-                        </div>
-                        <div class="full text-center">
-                        @if(count($product->images))
-            <a class="demo-trigger" href={{asset('storage/'.$product->images[0])}}>
-                        {!! image_html_generator($product->images[0], $product->name, null, null, true, 'front-img') !!}
-                </a>
-
-@else
-            <img src="{{ asset('images/default.jpg') }}">
-                        @endif
-                <!-- first image is viewable to start
-                        </div>
-                </div>
-                </div> -->
-
-        </div>
-        <div class="col-lg-7">
+      
+        <div class="col-lg-6">
 {{--        <p class="pre-label-detail">Pre-Order</p>--}}
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
                 <p class="detail-price mb-2"><span id="product_price">

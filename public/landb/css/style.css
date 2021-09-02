@@ -2021,6 +2021,19 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .owl-carousel .owl-dot {
+        height: 100% !important;
+        width: 80px !important;
+    }
+    .owl-carousel .owl-dots { 
+        display: flex !important;
+        width: 100% !important;  
+        height: 20% !important;
+    }
+    .owl-stage-outer {
+        width: 100% !important;
+        margin-left: 0% !important; 
+    }
     .invoice-final {
         margin-top: 330px !important;
     }
@@ -3277,6 +3290,9 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .detail-h1 { 
+        margin-top: 110px;
+    }
     .previews{
         position: absolute;
         bottom: -165px;
@@ -4717,3 +4733,54 @@ html { scroll-behavior: smooth;}
     
 }
 
+
+/******* PRODUCT SLIDER CSS **********/
+@media screen and (min-width: 992px) and (max-width: 5000px) {
+    .owl-stage-outer {
+        width: 80% !important;
+        margin-left: 21%;
+    }
+    .product-carousel .owl-item img {
+        width: 490px !important;
+    }
+    .owl-carousel .owl-dots {
+        top: 0; 
+    }
+    .owl-carousel .owl-dot {
+        height: 22.3333% !important; 
+    }
+}
+
+
+ 
+.content-carousel {
+    width: 100%;
+	display: block;
+	margin: 0 auto;
+}
+.owl-carousel {
+	width: calc(100% - 170px);
+}
+.owl-carousel div {
+	width: 100%;
+}
+.owl-carousel .owl-controls .owl-dot {
+	background-size: cover;
+	margin-top: 10px;
+}
+.owl-carousel .owl-dots {
+	position: absolute; 
+    left: 0px;
+    width: 20%;
+	height: 100%;
+}
+.owl-carousel .owl-dot { 
+    margin-bottom: 5px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;  
+}
+
+
+
+/******* PRODUCT SLIDER CSS **********/
