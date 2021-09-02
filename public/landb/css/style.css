@@ -3290,8 +3290,11 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .owl-carousel .owl-dots { 
+        margin-top: 5px;
+    }
     .detail-h1 { 
-        margin-top: 110px;
+        margin-top: 120px;
     }
     .previews{
         position: absolute;
@@ -3563,6 +3566,13 @@ table.shop_table tr th {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .breadcrumb_wrap div {
+        display: none;
+    }
+    .navbar-brand img {
+        height: 66px !important;
+    }
+    
     .shoplisting .listbox .img {
         height: auto !important;
     }
