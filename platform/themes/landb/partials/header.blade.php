@@ -143,7 +143,7 @@
                     ])
                 !!}
                 {!!
-                    Menu::renderMenuLocation('main-menu', [
+                    Menu::renderMenuLocation('categories-menu', [
                         'options' => [],
                         'theme' => true,
                         'view' => 'mobile-menu',
