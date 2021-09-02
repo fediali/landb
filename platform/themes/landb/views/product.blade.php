@@ -94,7 +94,7 @@
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
                 <p class="detail-price mb-2"><span id="product_price">
                     @if(!empty($sale_price))
-                        <del>${{ format_price($fixed_price)  }} </del>
+                        <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
                         <small>(${{$default_price}} pack price)</small></span>
