@@ -30,8 +30,8 @@ class OrderCreate extends Mailable
      */
     public function build()
     {
-        return $this->view('email.order_created')
-            ->from('')
+        return $this->view('emails.order_created')
+            //->from('')
             ->subject('[L&B New Order Created]')
             //->replyTo($this->data['email'])
             ->with(['data' => $this->data]);

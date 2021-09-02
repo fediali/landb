@@ -1036,7 +1036,7 @@ class ProductController extends BaseController
                 $variation->packQty = 0;
                 $variation->packSizes = '';
                 if ($variation->product->sku && !str_contains($variation->product->sku, 'single')) {
-                    $variation->packQty = packProdQtyCalculate($variation->product->category_id);
+                    $variation->packQty = $availableProduct->prod_pieces ? $availableProduct->prod_pieces : packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
                     if ($variation->packQty) {
                         $variation->per_piece_price = $variation->price / $variation->packQty;
