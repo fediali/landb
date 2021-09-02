@@ -286,7 +286,7 @@ class CheckoutController extends Controller
 
         if (isset($shipping[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'shipping'], [
-                'name'     => $shipping[0]->name,
+                'name'     => $shipping[0]->first_name. ' ' . $shipping[0]->last_name,
                 'phone'    => $shipping[0]->phone,
                 'email'    => $shipping[0]->email,
                 'country'  => $shipping[0]->country,
@@ -298,7 +298,7 @@ class CheckoutController extends Controller
         }
         if (isset($billing[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'billing'], [
-                'name'     => $billing[0]->name,
+                'name'     => $billing[0]->first_name. ' ' . $billing[0]->last_name,
                 'phone'    => $billing[0]->phone,
                 'email'    => $billing[0]->email,
                 'country'  => $billing[0]->country,
