@@ -33,6 +33,16 @@ $(document).ready(function () {
     })
 });
 
+function toggle_loader(event) {
+  if(event){
+    $('.loading-overlay').addClass('is-active');
+
+  }else{
+    $('.loading-overlay').removeClass('is-active');
+  }
+
+}
+
 $('.toggle-menu').click(function () {
     $(this).toggleClass('active');
     $('#menu').toggleClass('open');
@@ -370,7 +380,7 @@ $(document).ready(function () {
 
 });*/
 
-var mybutton = document.getElementById("myBtn");
+/*var mybutton = document.getElementById("myBtn");
 
 // When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function() {scrollFunction()};
@@ -381,7 +391,7 @@ function scrollFunction() {
   } else {
     mybutton.style.display = "none";
   }
-}
+}*/
 
 // When the user clicks on the button, scroll to the top of the document
 function topFunction() {
