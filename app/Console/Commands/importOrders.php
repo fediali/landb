@@ -44,9 +44,8 @@ class importOrders extends Command
      */
     public function handle()
     {
-        $orders = DB::table('hw_orders')->orderBy('hw_orders.order_id', 'ASC')->chunk(100)->get();
-
-//        , function ($orders) {
+        $orders = DB::table('hw_orders')->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
+ function ($orders) {
         foreach ($orders as $order) {
             echo $order->order_id;
             if ($order->status == 'C') {
@@ -237,7 +236,7 @@ class importOrders extends Command
             OrderAddress::create($shippingAddress);
 
         }
-//        });
+        });
 
         echo 'success';
     }
