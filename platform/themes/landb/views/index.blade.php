@@ -261,7 +261,7 @@
             <div class="row">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
-                    <p class="text-center mt-2 font-madeg ft-20">
+                    <p class="text-center mt-4 ml-3 mr-3 mb-4 font-madeg ft-20">
                         L&B is passionate about developing creative, quality western wholesale boutique clothing that
                         will help your business stand out. We are a family-owned business, which extends to our team and
                         our customers. We promise to provide excellent customer service and accountability.<br/>

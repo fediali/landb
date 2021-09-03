@@ -767,14 +767,15 @@ a.lookbook_btn:hover:after {
 }
 
 .footer_sec h6 {
-    font-size: 12px;
+    font-size: 15px;
     color: #b4b4b4;
     font-weight: bold;
+    text-align: left;
     margin-bottom: 20px !important;
 }
 
 .footer_sec ul li a {
-    font-size: 12px;
+    font-size: 15px;
     color: #b4b4b4;
 }
 
@@ -4809,6 +4810,10 @@ html { scroll-behavior: smooth;}
     width: 250px;
     height: 250px;
   }
+
+
+  .form-control.is-invalid, .was-validated .form-control:invalid { 
+    background-position: center right calc(.75em + .1875rem) !important;}
   
   
   
