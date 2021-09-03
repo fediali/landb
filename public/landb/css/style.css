@@ -767,14 +767,15 @@ a.lookbook_btn:hover:after {
 }
 
 .footer_sec h6 {
-    font-size: 12px;
+    font-size: 15px;
     color: #b4b4b4;
     font-weight: bold;
+    text-align: left;
     margin-bottom: 20px !important;
 }
 
 .footer_sec ul li a {
-    font-size: 12px;
+    font-size: 15px;
     color: #b4b4b4;
 }
 
@@ -2021,6 +2022,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .dp-scroll-text p {
+        font-size: 55px !important;
+    }
     .owl-carousel .owl-dot {
         height: 100% !important;
         width: 80px !important;
@@ -2120,6 +2124,8 @@ input.qtyminus {
     }
     .slider-t-main {
         display: block !important;
+        margin-left:  0px !important;  
+         margin-right: 0px !important;
     }
     .t-one {
         width: 100% !important;
@@ -3354,6 +3360,9 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .dp-scroll-text :nth-child(2){
+         font-size: 40px !important;
+    }
     #register-form {
         padding-left: 15px;
         padding-right: 15px;
@@ -4341,11 +4350,14 @@ html {
 
 .slidert-slim-img {
     height: 275px;
+    object-fit: contain;
 }
 
 .slidert-left-img {
     height: 370px;
     margin-top: 40%;
+    object-fit: contain;
+
 }
 
 .txt-slider-container ul, li {
@@ -4792,5 +4804,17 @@ html { scroll-behavior: smooth;}
 }
 
 
+#details-container {
+    position: relative;
+    float: left;
+    width: 250px;
+    height: 250px;
+  }
 
+
+  .form-control.is-invalid, .was-validated .form-control:invalid { 
+    background-position: center right calc(.75em + .1875rem) !important;}
+  
+  
+  
 /******* PRODUCT SLIDER CSS **********/

@@ -72,7 +72,7 @@
                     @enderror
                 </div>
                 <div class="col-lg-12">
-                    <p class="textbox-label">Customer Type *</p>
+                    <p class="textbox-label">Customer Type * </p>
                     @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
                         <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}">
                         <label class="mr-2" for="vehicle1"> {{ $type }}</label>
@@ -82,25 +82,25 @@
                     @enderror
                 </div>
                 <div class="col-lg-6">
-                    <p class="textbox-label">Store’s Facebook *</p>
+                    <p class="textbox-label">Store’s Facebook  </p>
                     <input class="input-textbox form-control" type="text"  value="{{ old('store_facebook') }}" name="store_facebook"  />
 
                 </div>
                 <div class="col-lg-6">
-                    <p class="textbox-label">Store’s Instagram *</p>
+                    <p class="textbox-label">Store’s Instagram  </p>
                     <input class="input-textbox form-control" type="text" value="{{ old('store_instagram') }}" name="store_instagram" />
                 </div>
                 <div class="col-lg-12">
-                    <p class="textbox-label">Store’s Brick & Mortar address *</p>
+                    <p class="textbox-label">Store’s Brick & Mortar address  </p>
                     <input class="input-textbox form-control" type="text" value="{{ old('mortar_address') }}" name="mortar_address"/>
                 </div>
                 <div class="col-lg-12">
-                    <p class="textbox-label">Newsletter *</p>
+                    <p class="textbox-label">Newsletter  </p>
                         <input class="" type="checkbox" name="newsletter" value="1">
                         <label class="mr-2" for="Subscibe"> Want to Subscibe?</label>
                 </div>
                 <div class="col-lg-6">
-                    <p class="textbox-label">Where did they find us from? *</p>
+                    <p class="textbox-label">Where did they find us from?  </p>
                     <select class="input-textbox form-control" name="hear_us">
                         <option @if(is_null(old('hear_us'))) selected @endif disabled hidden>Select an Option</option>
                         @foreach(\Botble\Ecommerce\Models\Customer::$hearUs as $key => $hearUs)
@@ -109,7 +109,7 @@
                     </select>
                 </div>
                 <div class="col-lg-6">
-                    <p class="textbox-label">Preffered Way of Communication *</p>
+                    <p class="textbox-label">Preffered Way of Communication </p>
                     <select class="input-textbox form-control" name="preferred_communication">
                         <option @if(is_null(old('preferred_communication'))) selected @endif disabled hidden>Select an Option</option>
                         @foreach(\Botble\Ecommerce\Models\Customer::$preferredCommunication as $key => $preferred)
@@ -125,11 +125,11 @@
                     @enderror
                 </div>
                 <div class="col-lg-6">
-                    <p class="textbox-label">Which shows/events do you attend? *</p>
+                    <p class="textbox-label">Which shows/events do you attend?</p>
                     <input class="input-textbox form-control" type="text"  value="{{ old('events_attended') }}" name="events_attended" />
                 </div>
                 <div class="col-lg-12">
-                    <p class="textbox-label">Comments *</p>
+                    <p class="textbox-label">Comments </p>
                     <textarea rows="4" class="input-textbox form-control" name="comments">{{ old('comments') }}</textarea>
                 </div>
 
@@ -208,7 +208,7 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="shipping-checkbox-area mt-2 d-flex">
-                        <p class="text-billing">Billing and shipping addresses are the same *</p>
+                        <p class="text-billing">Billing and shipping addresses are the same </p>
                         <div class="ml-3">
                             <input class="ml-2" type="radio" name="billing" value="1" data-toggle="collapse" data-target=".collapseOne.show" checked>
                             <label class="mr-2 mb-0" for="vehicle1"> Yes</label>
