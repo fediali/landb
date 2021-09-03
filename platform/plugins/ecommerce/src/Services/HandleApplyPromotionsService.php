@@ -174,6 +174,7 @@ class HandleApplyPromotionsService
             $order->discount_amount -= $order->promotion_amount;
             $order->amount = $order->sub_total - $order->discount_amount;
             $order->promotion_applied = 0;
+            $order->promotion_amount = 0;
             $order->save();
         }
     }

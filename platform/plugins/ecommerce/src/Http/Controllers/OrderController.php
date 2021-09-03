@@ -4,6 +4,7 @@ namespace Botble\Ecommerce\Http\Controllers;
 
 use App\Events\OrderEdit;
 use App\Imports\OrderImportFile;
+use App\Mail\OrderCreate;
 use App\Models\CardPreAuth;
 use App\Models\InventoryHistory;
 use App\Models\OrderImport;
@@ -63,6 +64,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -643,6 +645,7 @@ class OrderController extends BaseController
                 $this->promotion_service->applyPromotionIfAvailable($order->id);
             }
 
+            //Mail::to($order->user->email)->send(new OrderCreate([]));
         }
 
         return $response
@@ -1672,7 +1675,7 @@ class OrderController extends BaseController
                         if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
                             //$pack = quantityCalculate($product['category_id']);
@@ -1867,7 +1870,7 @@ class OrderController extends BaseController
                             $prodSKU .= '-pack-all';
                         }
 
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
 
                             //count pack quantity for product
@@ -2059,7 +2062,7 @@ class OrderController extends BaseController
                         if (!str_contains($prodSKU, 'pack-all')) {
                             $prodSKU .= '-pack-all';
                         }
-                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->latest()->first();
+                        $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
@@ -2246,9 +2249,11 @@ class OrderController extends BaseController
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
             $order['order_id'] = $request->order_id;
+            $order['card_id'] = $request->payment_id;
             $order['transaction_id'] = $response['id'];
             $order['response'] = json_encode($response);
             $order['status'] = 0;
+            $order['payment_status'] = 0;
             CardPreAuth::create($order);
         } else {
             $errors = [
@@ -2262,6 +2267,7 @@ class OrderController extends BaseController
             $status['transaction_error'] = $response['message'];
             $status['status'] = 'Declined';
             Order::where('id', $request->order_id)->update($status);
+            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
             return back();
         }
 
@@ -2279,6 +2285,7 @@ class OrderController extends BaseController
         $status = $info['http_code'];
         if (floatval($status) == 200) {
             $order['status'] = 1;
+            $order['payment_status'] = 1;
             CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
         } else {
             $errors = [
@@ -2512,9 +2519,14 @@ class OrderController extends BaseController
 
     public function splitPayment($id, Request $request, BaseHttpResponse $response)
     {
-        $params = $request->all();
+        $params = $request->except('_token');
 
-        OrderSplitPayment::where('id', $id)->delete();
+        $orderAmount = Order::where('id', $id)->value('amount');
+        if (array_sum(array_values($params)) != $orderAmount) {
+            return $response->setCode(406)->setError()->setMessage('Order Split Payment must be equal to the Order Total Amount!');
+        }
+
+        OrderSplitPayment::where('order_id', $id)->delete();
         foreach ($params as $key => $val) {
             if ($key != '_token') {
                 $data = ['order_id' => $id, 'payment_type' => $key, 'amount' => $val];

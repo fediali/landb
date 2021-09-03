@@ -631,7 +631,6 @@
                                 $next = $order->nextOrder();
                                 $previous = $order->previousOrder();
                                 ?>
-
                                 <a href="{{ !is_null($next) ? route('orders.edit', ['order' => $next]) : 'javascript:void(0);' }}"
                                    class="btn btn-default order-btn-pre" {{ is_null($previous) ? 'disabled' : '' }}><i
                                         class="fa fa-angle-left"></i>&nbsp;&nbsp;</a>&nbsp;
@@ -639,8 +638,6 @@
                                    class="btn btn-default order-btn-pre" {{ is_null($next) ? 'disabled' : '' }}>&nbsp;&nbsp;<i
                                         class="fa fa-angle-right"></i></a> &nbsp;
                             </div>
-
-
                         </div>
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
@@ -674,152 +671,231 @@
                             </div>
                         </div>
 
-                        @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
-                            <div class="wrapper-content bg-gray-white mb20">
 
-                                <!-- card -->
-                                @if($order->preauth == null)
-                                    <div class="row m-0 pt-4 bg-white">
-                                        <div class="col-lg-12 ">
-                                            <span class="mb-2">Card</span>
-                                            {!!Form::select('card_list', $cards, @$order->order_card, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
-                                        </div>
-                                    </div>
-
-                                    <div class="add_card bg-white">
-
-                                        <div class="row group m-0 pt-4 ">
-                                            @isset($order->user->billingAddress)
-                                                <label class="col-lg-12 ">
-                                                    <span class="mb-2">Billing Address</span>
-                                                    {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
-                                                </label>
-                                            @endisset
-                                        </div>
-
-                                        <div class="group row m-0">
-                                            <label class="col-lg-12">
-                                                <div id="card-element" class="field">
-                                                    <span>Card</span>
-                                                    <div id="fattjs-number" style="height: 35px"></div>
-                                                    <span class="mt-2">CVV</span>
-                                                    <div id="fattjs-cvv" style="height: 35px"></div>
+                        @if($order->split_payment)
+                            @foreach($order->split_payments as $split_payment)
+                                @if($split_payment->amount)
+                                    @if(in_array($split_payment->payment_type, ['cash_payment','cheque_payment']))
+                                        <div class="wrapper-content bg-gray-white mb20">
+                                            <div class="row m-0 pt-3 pb-3 bg-white">
+                                                <div class="col-lg-10">
+                                                    <strong class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
                                                 </div>
-                                            </label>
-                                        </div>
-                                        <div class="row m-0">
-                                            <div class="col-lg-3">
-                                                <input name="month" size="3" maxlength="2" placeholder="MM"
-                                                       class="form-control month">
-                                            </div>
-                                            <p class="mt-2"> / </p>
-                                            <div class="col-lg-3">
-                                                <input name="year" size="5" maxlength="4" placeholder="YYYY"
-                                                       class="form-control year">
+                                                <div class="col-lg-2">
+                                                    <strong class="mb-2">$ {{$split_payment->amount}}</strong>
+                                                </div>
                                             </div>
                                         </div>
-                                        {{--<button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
-                                        <div class="row m-0">
-                                            <div class="col-lg-6">
-                                                <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit
-                                                    Card
-                                                </button>
+                                    @else
+                                        <div class="wrapper-content bg-gray-white mb20">
+                                            <div class="row m-0 pt-3 pb-3 bg-white">
+                                                <div class="col-lg-10">
+                                                    <strong>{{$cards[str_replace('card_', '', $split_payment->payment_type)]}}</strong>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <strong class="mb-2">$ {{$split_payment->amount}}</strong>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row m-0">
-                                            <div class="col-lg-12">
-                                                <div class="outcome">
-                                                    <div class="error"></div>
-                                                    <div class="success">
-                                                        Successful! The ID is
-                                                        <span class="token"></span>
+                                            <?php $order_card_preauth = \App\Models\CardPreAuth::where(['order_id' => $order->id, 'card_id' => str_replace('card_', '', $split_payment->payment_type)])->first(); ?>
+                                            @if($order_card_preauth == null)
+                                                <div class="pd-all-20 bg-white">
+                                                    <form action="{{route('orders.charge')}}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" value="{{str_replace('card_', '', $split_payment->payment_type)}}" name="payment_id">
+                                                        <input type="hidden" value="{{$order->id}}" name="order_id">
+                                                        <input type="hidden" value="{{$split_payment->amount}}" name="sub_total">
+                                                        <input type="hidden" value="{{$split_payment->amount}}" name="amount">
+                                                        <button type="submit" class="btn btn-info">Create Payment</button>
+                                                    </form>
+                                                </div>
+                                            @elseif($order_card_preauth->status == 0)
+                                                <div class="pd-all-20">
+                                                    <form action="{{route('orders.capture')}}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" value="{{$order_card_preauth->transaction_id}}" name="transaction_id">
+                                                        <input type="hidden" value="{{$split_payment->amount}}" name="amount">
+                                                        <label class="col-lg-12"> <strong>Transaction ID : </strong>{{$order_card_preauth->transaction_id}}</label>
+                                                        <button type="submit" class="btn btn-info">Capture Payment</button>
+                                                    </form>
+                                                </div>
+                                            @else
+                                                <div class="wrapper-content bg-gray-white mb20">
+                                                    <div class="pd-all-20">
+                                                        <div class="p-b10">
+                                                            <strong>Payment Status</strong>
+                                                            <ul class="p-sm-r mb-0">
+                                                                <li class="ws-nm">
+                                                                    <span class="ww-bw text-no-bold">
+                                                                        <button class="btn btn-info">Captured</button>
+                                                                    </span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                    <div class="loader" style="margin: auto"></div>
+                                                </div>
+                                            @endif
+                                            @if(@$order_card_preauth->payment_status == 'Declined')
+                                                <div class="wrapper-content bg-gray-white mb20">
+                                                    <div class="pd-all-20">
+                                                        <div class="p-b10">
+                                                            <strong>Declined Reason</strong>
+                                                            <ul class="p-sm-r mb-0">
+                                                                <li class="ws-nm">
+                                                                    <span class="ww-bw text-no-bold">{{$order_card_preauth->response}}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @else
+                            @if(in_array($order->payment->payment_channel->label(), ['omni-payment', 'omni_payment']))
+                                <div class="wrapper-content bg-gray-white mb20">
+
+                                    <!-- card -->
+                                    @if($order->preauth == null)
+                                        <div class="row m-0 pt-4 bg-white">
+                                            <div class="col-lg-12 ">
+                                                <span class="mb-2">Card</span>
+                                                {!!Form::select('card_list', $cards, @$order->order_card, ['class' => 'form-control selectpicker card_list','id'    => 'card_id',])!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="add_card bg-white">
+
+                                            <div class="row group m-0 pt-4 ">
+                                                @isset($order->user->billingAddress)
+                                                    <label class="col-lg-12 ">
+                                                        <span class="mb-2">Billing Address</span>
+                                                        {!! Form::select('billing_address', $order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address']) !!}
+                                                    </label>
+                                                @endisset
+                                            </div>
+
+                                            <div class="group row m-0">
+                                                <label class="col-lg-12">
+                                                    <div id="card-element" class="field">
+                                                        <span>Card</span>
+                                                        <div id="fattjs-number" style="height: 35px"></div>
+                                                        <span class="mt-2">CVV</span>
+                                                        <div id="fattjs-cvv" style="height: 35px"></div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-3">
+                                                    <input name="month" size="3" maxlength="2" placeholder="MM"
+                                                           class="form-control month">
+                                                </div>
+                                                <p class="mt-2"> / </p>
+                                                <div class="col-lg-3">
+                                                    <input name="year" size="5" maxlength="4" placeholder="YYYY"
+                                                           class="form-control year">
+                                                </div>
+                                            </div>
+                                            {{--<button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
+                                            <div class="row m-0">
+                                                <div class="col-lg-6">
+                                                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit
+                                                        Card
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-12">
+                                                    <div class="outcome">
+                                                        <div class="error"></div>
+                                                        <div class="success">
+                                                            Successful! The ID is
+                                                            <span class="token"></span>
+                                                        </div>
+                                                        <div class="loader" style="margin: auto"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="pd-all-20 bg-white">
-                                        <form action="{{route('orders.charge')}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="" name="payment_id" class="payment_id">
-                                            <input type="hidden" value="{{$order->id}}" name="order_id"
-                                                   class="order_id">
-                                            <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
-                                            <input type="hidden" value="{{$order->amount}}" name="amount">
-                                            <button type="submit" class="btn btn-info">Create Payment</button>
-                                        </form>
-                                    </div>
-                                @elseif($order->preauth->status == 0)
-                                    <div class="capture_card">
-                                        <div class="row group"></div>
-                                        <div class="group row"></div>
-                                    </div>
-                                    <div class="pd-all-20">
-                                        <form action="{{route('orders.capture')}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{$order->preauth->transaction_id}}"
-                                                   name="transaction_id">
-                                            <input type="hidden" value="{{$order->amount}}" name="amount">
-                                            <label class="col-lg-12"> <strong>Transaction ID
-                                                    : </strong>{{$order->preauth->transaction_id}}</label>
-                                            <button type="submit" class="btn btn-info">Capture Payment</button>
-                                        </form>
-                                    </div>
-                                @else
-                                    <div class="wrapper-content bg-gray-white mb20">
+                                        <div class="pd-all-20 bg-white">
+                                            <form action="{{route('orders.charge')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="" name="payment_id" class="payment_id">
+                                                <input type="hidden" value="{{$order->id}}" name="order_id"
+                                                       class="order_id">
+                                                <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
+                                                <input type="hidden" value="{{$order->amount}}" name="amount">
+                                                <button type="submit" class="btn btn-info">Create Payment</button>
+                                            </form>
+                                        </div>
+                                    @elseif($order->preauth->status == 0)
+                                        <div class="capture_card">
+                                            <div class="row group"></div>
+                                            <div class="group row"></div>
+                                        </div>
                                         <div class="pd-all-20">
-                                            <div class="p-b10">
-                                                <strong>Payment Status</strong>
-                                                <ul class="p-sm-r mb-0">
-                                                    <li class="ws-nm">
+                                            <form action="{{route('orders.capture')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{$order->preauth->transaction_id}}"
+                                                       name="transaction_id">
+                                                <input type="hidden" value="{{$order->amount}}" name="amount">
+                                                <label class="col-lg-12"> <strong>Transaction ID
+                                                        : </strong>{{$order->preauth->transaction_id}}</label>
+                                                <button type="submit" class="btn btn-info">Capture Payment</button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <div class="wrapper-content bg-gray-white mb20">
+                                            <div class="pd-all-20">
+                                                <div class="p-b10">
+                                                    <strong>Payment Status</strong>
+                                                    <ul class="p-sm-r mb-0">
+                                                        <li class="ws-nm">
                                                         <span class="ww-bw text-no-bold">
                                                             <button class="btn btn-info">Captured</button>
                                                         </span>
-                                                    </li>
-                                                </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
-
-                                @endif
-
-                                @if($order->status == 'Declined')
-                                    <div class="wrapper-content bg-gray-white mb20">
-                                        <div class="pd-all-20">
-                                            <div class="p-b10">
-                                                <strong>Declined Reason</strong>
-                                                <ul class="p-sm-r mb-0">
-                                                    <li class="ws-nm">
+                                    @if($order->status == 'Declined')
+                                        <div class="wrapper-content bg-gray-white mb20">
+                                            <div class="pd-all-20">
+                                                <div class="p-b10">
+                                                    <strong>Declined Reason</strong>
+                                                    <ul class="p-sm-r mb-0">
+                                                        <li class="ws-nm">
                                             <span
-                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
-                                                    </li>
-                                                </ul>
+                                                    class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
-
-                                @endif
-
-                            </div>
-                        @elseif($order->payment->payment_channel->label() == 'paypal')
-                            <div class="wrapper-content bg-gray-white mb20">
-                                <div class="row m-0 pt-4 bg-white">
-                                    <div class="col-lg-12 ">
-                                        <strong class="mb-2">Paid with Paypal</strong>
+                                </div>
+                            @elseif($order->payment->payment_channel->label() == 'paypal')
+                                <div class="wrapper-content bg-gray-white mb20">
+                                    <div class="row m-0 pt-4 bg-white">
+                                        <div class="col-lg-12 ">
+                                            <strong class="mb-2">Paid with Paypal</strong>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @else
-                            <div class="wrapper-content bg-gray-white mb20">
-                                <div class="row m-0 pt-3 pb-3 bg-white">
-                                    <div class="col-lg-12 ">
-                                        <strong class="mb-2">Cash on delivery</strong>
+                            @else
+                                <div class="wrapper-content bg-gray-white mb20">
+                                    <div class="row m-0 pt-3 pb-3 bg-white">
+                                        <div class="col-lg-12 ">
+                                            <strong class="mb-2">Cash on delivery</strong>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
 
 

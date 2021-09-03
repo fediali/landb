@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css'>
     <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
-    <script src="{{ asset('js/barcodeScanner.js') }}"></script>
+    {{--<script src="{{ asset('js/barcodeScanner.js') }}"></script>--}}
     <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">
     <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
     <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
@@ -142,39 +142,14 @@
                         'view' => 'main-menu',
                     ])
                 !!}
-                <button class="toggle-menu">
-                    <span></span>
-                </button>
-                <div class="navigation nav-custom">
-                  <nav class="vg-nav vg-nav-lg">
-                    <ul>
-                      <li class="active">
-                        <a href="#">Home page</a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#">Left dropdown</a>
-                        <ul class="left">
-                          <li><a href="#">Any page</a></li>
-                          <li class="dropdown">
-                            <a href="#">Second level</a>
-                            <ul class="left">
-                              <li><a href="#">Another page</a></li>
-                              <li><a href="#">Any page</a></li>
-                              <li class="dropdown">
-                                <a href="#">Third level</a>
-                                <ul class="left">
-                                  <li><a href="#">Any page</a></li>
-                                  <li><a href="#">Another page</a></li>
-                                </ul>
-                              </li>
-                            </ul>
-                          </li>
-                          <li><a href="#">Another page</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+                {!!
+                    Menu::renderMenuLocation('categories-menu', [
+                        'options' => [],
+                        'theme' => true,
+                        'view' => 'mobile-menu',
+                    ])
+                !!}
+
                 <div id="menu" class="">
                     {!!
                         Menu::renderMenuLocation('categories-menu', [

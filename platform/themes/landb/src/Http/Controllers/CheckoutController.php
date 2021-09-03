@@ -76,6 +76,10 @@ class CheckoutController extends Controller
             $query->with(['product']);
         }])->first();
 
+        if(!count($cart->products)){
+          return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
+        }
+
         foreach ($cart->products as $cartProduct) {
             if ($cartProduct->product->quantity < 1) {
                 return redirect()->route('public.cart_index', ['discard' => 'true', 'item' => $cartProduct->id])->with('error', '"' . $cartProduct->product->name . '" is out of stock and is removed from cart!');
@@ -286,7 +290,7 @@ class CheckoutController extends Controller
 
         if (isset($shipping[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'shipping'], [
-                'name'     => $shipping[0]->name,
+                'name'     => $shipping[0]->first_name. ' ' . $shipping[0]->last_name,
                 'phone'    => $shipping[0]->phone,
                 'email'    => $shipping[0]->email,
                 'country'  => $shipping[0]->country,
@@ -298,7 +302,7 @@ class CheckoutController extends Controller
         }
         if (isset($billing[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'billing'], [
-                'name'     => $billing[0]->name,
+                'name'     => $billing[0]->first_name. ' ' . $billing[0]->last_name,
                 'phone'    => $billing[0]->phone,
                 'email'    => $billing[0]->email,
                 'country'  => $billing[0]->country,
