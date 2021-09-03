@@ -44,6 +44,7 @@ class Product extends BaseModel
         'warehouse_sec',
         'order',
         'quantity',
+        'extra_qty',
         'single_qty',
         'sold_qty',
         'pre_order_qty',

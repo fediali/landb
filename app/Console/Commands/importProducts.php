@@ -72,21 +72,25 @@ class importProducts extends Command
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
 
-//        DB::table('ec_products')->truncate();
-//        DB::table('ec_product_with_attribute_set')->truncate();
-//        DB::table('ec_product_with_attribute')->truncate();
-//        DB::table('ec_product_variations')->truncate();
-//        DB::table('ec_product_variation_items')->truncate();
-//        DB::table('ec_product_collection_products')->truncate();
-//        DB::table('ec_product_category_product')->truncate();
-//        DB::table('ec_order_addresses')->truncate();
-//        DB::table('ec_order_histories')->truncate();
-//        DB::table('ec_order_product')->truncate();
-//        DB::table('ec_orders')->truncate();
-//        DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
-        $file = File::get(public_path('lnb-prod_42979.json'));
+        DB::table('ec_products')->truncate();
+        DB::table('ec_product_with_attribute_set')->truncate();
+        DB::table('ec_product_with_attribute')->truncate();
+        DB::table('ec_product_variations')->truncate();
+        DB::table('ec_product_variation_items')->truncate();
+        DB::table('ec_product_collection_products')->truncate();
+        DB::table('ec_product_category_product')->truncate();
+        DB::table('ec_order_addresses')->truncate();
+        DB::table('ec_order_histories')->truncate();
+        DB::table('ec_order_product')->truncate();
+        DB::table('ec_orders')->truncate();
+
+        DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
+
+        $file = File::get(public_path('lnb-prod_500.json'));
         $data = json_decode(utf8_encode($file), true);
+
         Slug::where('prefix', 'products')->delete();
+
         foreach ($data['rows'] as $row) {
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
@@ -121,7 +125,19 @@ class importProducts extends Command
                     $product->prod_pieces = $row['min_qty'];
                     $product->sizes = $row['variant_name'];
                     $product->category_id = $category->id;
+
                     $product->quantity = 0;
+                    if ($row['amount']) {
+                        if ($row['min_qty']) {
+                            $packQty = round($row['amount'] / $row['min_qty']);
+                            $looseQty = $packQty * $row['min_qty'];
+                            $diff = $row['amount'] - $looseQty;
+                            $product->quantity = $packQty;
+                            $product->extra_qty = $diff;
+                        } else {
+                            $product->extra_qty = $row['amount'];
+                        }
+                    }
 
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
 
