@@ -58,16 +58,26 @@
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
         <div class="col-lg-6 containert">
+  
 
         <div class="content-carousel product-carousel">
-        <div class="owl-carousel">
+        <div class="owl-carousel " >
             @if(count($product->images))
                     @foreach($product->images as $image)
-                         <div>{!! image_html_generator($image, $product->name, null, null, true) !!} </div>
+                    @if($loop->first) 
+                    <div class="xzoom-container">
+          <img class="xzoom" id="xzoom-default" src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg" xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg" /></div> 
+          @else
+          {!! image_html_generator($image, $product->name, null, null, true, '', '') !!}
+                    @endif
+                   
+      
+                         <!-- {!! image_html_generator($image, $product->name, null, null, true, 'xzoom', 'xzoom-default') !!}  -->
+                         
                     @endforeach
-                @else
+                @else  
                 <div><img src="{{ asset('images/default.jpg') }}"/></div>
-            @endif 
+            @endif  
         </div>
         </div>
 
@@ -89,7 +99,7 @@
             </div>  -->
         </div>
       
-        <div class="col-lg-6">
+        <div class="col-lg-6">  
 {{--        <p class="pre-label-detail">Pre-Order</p>--}}
         <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
                 <p class="detail-price mb-2"><span id="product_price">
