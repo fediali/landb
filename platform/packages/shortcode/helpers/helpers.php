@@ -53,7 +53,7 @@ if (!function_exists('image_html_generator')) {
      */
   function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '', $id= '')
   {
-$img='';
+
         $html = '<img
             ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
             ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '

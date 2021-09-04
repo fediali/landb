@@ -15,7 +15,7 @@
         <div class="carousel-inner">
             @foreach($slider->sliderItems as $item)
                 <a href="{{ $item->link }}" class="carousel-item {{ ($loop->first) ? 'active': '' }}">
-                    <img src="{{ /*asset('storage/'.$item->image)*/ asset('images/default.jpg') }}" alt="{{ $item->title }}" width="100%"
+                    <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" width="100%"
                          height="750px">
                 </a>
             @endforeach
