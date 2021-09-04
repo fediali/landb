@@ -33,6 +33,16 @@ $(document).ready(function () {
     })
 });
 
+function toggle_loader(event) {
+  if(event){
+    $('.loading-overlay').addClass('is-active');
+
+  }else{
+    $('.loading-overlay').removeClass('is-active');
+  }
+
+}
+
 $('.toggle-menu').click(function () {
     $(this).toggleClass('active');
     $('#menu').toggleClass('open');

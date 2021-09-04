@@ -548,15 +548,7 @@ $('#add_payment_btn').on('click', function(){
 
 
         });
-        function toggle_loader(event) {
-          if(event){
-            $('.loading-overlay').addClass('is-active');
 
-          }else{
-            $('.loading-overlay').removeClass('is-active');
-          }
-
-        }
 	</script>
 
 
