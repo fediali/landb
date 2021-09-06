@@ -86,7 +86,7 @@ class importProducts extends Command
 
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
-        $file = File::get(public_path('lnb-prod_500.json'));
+        $file = File::get(public_path('lnb-prod_43059.json'));
         $data = json_decode(utf8_encode($file), true);
 
         Slug::where('prefix', 'products')->delete();
@@ -148,34 +148,34 @@ class importProducts extends Command
                             $packQuantity = $product->prod_pieces;
                         }
                         $extras = ($row['price'] * $packQuantity) * $percentage / 100;
-                        $packPrice = $row['price'] * $packQuantity ;
+                        $packPrice = $row['price'] * $packQuantity;
                         $single = $row['price'] * $percentage / 100;
                         $singlePrice = $row['price'];
                         $product->price = $packPrice;
                     }
                     // $product->sale_price = $variation->cost + $extras;
 
-                   // if ($row['image_id'] && $row['image_path']) {
+                    // if ($row['image_id'] && $row['image_path']) {
 
-                        $getProdImages = DB::table('hw_images_links')
-                            ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
-                            ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
-                            ->where('hw_images_links.object_type', 'product')
-                            ->where('hw_images_links.object_id', $row['product_id'])
-                            ->orderBy('hw_images_links.type', 'DESC')
-                            ->get();
-                        $arrr = [];
-                        foreach ($getProdImages as $getProdImage) {
-                            $idLen = getDigitsLength($getProdImage->image_id);
-                            if ($idLen <= 5) {
-                                $folder = substr($getProdImage->image_id, 0, 2);
-                            } elseif ($idLen >= 6) {
-                                $folder = substr($getProdImage->image_id, 0, 3);
-                            }
-                            $arrr[]= 'product-images/detailed/'.$folder.'/'.$getProdImage->image_path;
+                    $getProdImages = DB::table('hw_images_links')
+                        ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
+                        ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
+                        ->where('hw_images_links.object_type', 'product')
+                        ->where('hw_images_links.object_id', $row['product_id'])
+                        ->orderBy('hw_images_links.type', 'DESC')
+                        ->get();
+                    $arrr = [];
+                    foreach ($getProdImages as $getProdImage) {
+                        $idLen = getDigitsLength($getProdImage->image_id);
+                        if ($idLen <= 5) {
+                            $folder = substr($getProdImage->image_id, 0, 2);
+                        } elseif ($idLen >= 6) {
+                            $folder = substr($getProdImage->image_id, 0, 3);
                         }
-                        $product->images = json_encode($arrr);
-                   // }
+                        $arrr[] = 'product-images/detailed/' . $folder . '/' . $getProdImage->image_path;
+                    }
+                    $product->images = json_encode($arrr);
+                    // }
                     $product->tax_id = 1;
 
                     if ($row['upc_pack']) {
@@ -205,13 +205,13 @@ class importProducts extends Command
 
                         $slugParams = [
                             'reference_type' => Product::class,
-                            'reference_id' => $product->id,
-                            'key' => Str::slug($product->name),
-                            'prefix' => SlugHelper::getPrefix(Product::class),
+                            'reference_id'   => $product->id,
+                            'key'            => Str::slug($product->name),
+                            'prefix'         => SlugHelper::getPrefix(Product::class),
                         ];
                         $checkSlug = Slug::where($slugParams)->first();
                         if ($checkSlug) {
-                            $slugParams['key'] .= '-'.time();
+                            $slugParams['key'] .= '-' . time();
                         }
                         Slug::create($slugParams);
 
@@ -263,7 +263,8 @@ class importProducts extends Command
                                             //$packAllProd->upc = $barcodePackAll['upc'];
                                             //$packAllProd->barcode = $barcodePackAll['barcode'];
                                             $packAllProd->upc = $row['upc_pack'];
-                                        } catch (\ErrorException $exception) {}
+                                        } catch (\ErrorException $exception) {
+                                        }
 
                                         //change
                                         $packAllProd->private_label = $product->private_label;
@@ -278,10 +279,10 @@ class importProducts extends Command
 
                                         $logParam = [
                                             'parent_product_id' => $product->id,
-                                            'product_id' => $prodId,
-                                            'sku' => $packAllProd->sku,
-                                            'created_by' => 1,
-                                            'reference' => InventoryHistory::PROD_PUSH_ECOM
+                                            'product_id'        => $prodId,
+                                            'sku'               => $packAllProd->sku,
+                                            'created_by'        => 1,
+                                            'reference'         => InventoryHistory::PROD_PUSH_ECOM
                                         ];
                                         log_product_history($logParam, false);
                                     }
@@ -337,10 +338,10 @@ class importProducts extends Command
 
                                                     $logParam = [
                                                         'parent_product_id' => $product->id,
-                                                        'product_id' => $prodId,
-                                                        'sku' => $sizeProd->sku,
-                                                        'created_by' => 1,
-                                                        'reference' => InventoryHistory::PROD_PUSH_ECOM
+                                                        'product_id'        => $prodId,
+                                                        'sku'               => $sizeProd->sku,
+                                                        'created_by'        => 1,
+                                                        'reference'         => InventoryHistory::PROD_PUSH_ECOM
                                                     ];
                                                     log_product_history($logParam, false);
 
@@ -358,7 +359,7 @@ class importProducts extends Command
                 }
 
                 //echo $check ? $check->sku : $row['product_code'].'\n';
-                echo isset($product) ? $product->sku : '--no--'.'====';
+                echo isset($product) ? $product->sku : '--no--' . '====';
             }
         }
 
