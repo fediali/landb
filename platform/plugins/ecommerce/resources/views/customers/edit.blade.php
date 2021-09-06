@@ -123,7 +123,10 @@
                 <div class="p-2 bg-white">
                     Status:
 
-                    {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMERS,  $customer->status , ['class' => 'w-100','placeholder'=>'Select Status']) !!}
+                    @if(Auth::user()->hasAnyPermission(["customer.status"]))
+                        {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMERS,  $customer->status , ['class' => 'w-100','placeholder'=>'Select Status']) !!}
+                    @endif
+
                     {{--                    <select name="status" class="w-100">--}}
                     {{--                        @foreach($options as $key => $option)--}}
                     {{--                            <option--}}

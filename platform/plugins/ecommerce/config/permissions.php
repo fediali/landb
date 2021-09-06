@@ -280,6 +280,11 @@ return [
         'flag'        => 'customer.destroy',
         'parent_flag' => 'customer.index',
     ],
+    [
+        'name'        => 'Status Change',
+        'flag'        => 'customer.status',
+        'parent_flag' => 'customer.index',
+    ],
 
     [
         'name' => 'Flash sales',
