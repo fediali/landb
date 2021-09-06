@@ -2579,6 +2579,14 @@ class OrderController extends BaseController
             $order->discount_description = NULL;
             $order->amount = $order->sub_total - $order->discount_amount;
             $order->save();
+
+            $this->orderHistoryRepository->createOrUpdate([
+                'action'      => 'remove_discount_on_order',
+                'description' => '$' . $order->discount_amount . ' discount removed from order by %user_name%.',
+                'order_id'    => $order->id,
+                'user_id'     => Auth::user()->getKey(),
+            ], []);
+
         } elseif ($getType == 'promotion') {
             $this->promotion_service->removePromotionIfAvailable($orderId);
         }
