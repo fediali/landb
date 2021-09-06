@@ -140,7 +140,8 @@ class ProductForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'class' => 'form-control'
-                ]
+                ],
+                'value'         => $this->model->schedule_date ? date('Y-m-d\TH:i', strtotime($this->model->schedule_date)) : now(config('app.timezone'))->format('Y-m-d\TH:i')
             ])
             ->add('color_print', 'mediaImages', [
                 'label'      => 'Color Print',
@@ -252,6 +253,13 @@ class ProductForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'attr'       => [
                     'placeholder' => 'Pack Product Pieces',
+                ],
+            ])
+            ->add('extra_qty', 'number', [
+                'label'      => 'Extra Qty',
+                'label_attr' => ['class' => 'control-label'],
+                'attr'       => [
+                    'placeholder' => 'Extra Qty',
                 ],
             ])
             ->setBreakFieldPoint('status');
