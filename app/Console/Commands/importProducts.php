@@ -128,7 +128,7 @@ class importProducts extends Command
                     $product->quantity = 0;
                     if ($row['amount']) {
                         if ($row['min_qty']) {
-                            $packQty = abs($row['amount'] / $row['min_qty']);
+                            $packQty = floor($row['amount'] / $row['min_qty']);
                             $looseQty = $packQty * $row['min_qty'];
                             $diff = $row['amount'] - $looseQty;
                             $product->quantity = $packQty;
