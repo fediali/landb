@@ -602,7 +602,7 @@
                 <div class="row mt-2">
                     <div class="col-lg-12 col-12 pr-0">
                         <textarea type="text" rows="3" form="checkout-main-form" name="notes"
-                                  placeholder="Notes to be attached witht the order"
+                                  placeholder="Notes to be attached with the order"
                                   class="cart-coupon-input">{{ $cart->notes }}</textarea>
                     </div>
                     {{--<div class="col-lg-4 col-4 pl-0">
