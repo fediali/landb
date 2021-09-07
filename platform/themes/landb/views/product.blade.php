@@ -58,57 +58,65 @@
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
         <div class="col-lg-6 containert">
-  
 
-        <div class="content-carousel product-carousel">
-        <div class="owl-carousel " >
-            @if(count($product->images))
-                    @foreach($product->images as $image)
-                    @if($loop->first) 
-                    <div class="xzoom-container">
-          <img class="xzoom" id="xzoom-default" src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg" xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg" /></div> 
-          @else
-          {!! image_html_generator($image, $product->name, null, null, true, '', '') !!}
+
+            <div class="content-carousel product-carousel">
+                <div class="owl-carousel ">
+                    @if(count($product->images))
+                        @foreach($product->images as $image)
+
+                            @if($loop->first)
+                                {{--                    <div class="xzoom-container">--}}
+                                <img class="xzoom"
+                                     src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg"
+                                     xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg"/>
+                                {{--        </div>--}}
+                            @else
+
+                                {{--                                {!! image_html_generator($image, $product->name, null, null, true) !!}--}}
+                                <img class={{'xzoom'.$loop->iteration}}
+                                    src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg"
+                                     xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg"/>
+                            @endif
+
+
+
+
+                        @endforeach
+                    @else
+                        <div><img src="{{ asset('images/default.jpg') }}"/></div>
                     @endif
-                   
-      
-                         <!-- {!! image_html_generator($image, $product->name, null, null, true, 'xzoom', 'xzoom-default') !!}  -->
-                         
-                    @endforeach
-                @else  
-                <div><img src="{{ asset('images/default.jpg') }}"/></div>
-            @endif  
-        </div>
-        </div>
+                </div>
+            </div>
 
-            <!-- <div class="exzoom hidden mr-2" id="exzoom">
+        <!-- <div class="exzoom hidden mr-2" id="exzoom">
             <div class="exzoom_btn d-flex mt-3">
             <div class="exzoom_nav"></div>
             </div>
                 <div class="exzoom_img_box">
                     <ul class='exzoom_img_ul'>
                         @if(count($product->images))
-                            @foreach($product->images as $image)
-                                <li>{!! image_html_generator($image, $product->name, null, null, true) !!}</li>
+            @foreach($product->images as $image)
+                <li>{!! image_html_generator($image, $product->name, null, null, true) !!}</li>
                             @endforeach
-                        @else
-                            <li><img src="{{ asset('images/default.jpg') }}"/></li>
-                    @endif 
-                    </ul>
-                </div> 
-            </div>  -->
+        @else
+            <li><img src="{{ asset('images/default.jpg') }}"/></li>
+                    @endif
+            </ul>
         </div>
-      
-        <div class="col-lg-6">  
-{{--        <p class="pre-label-detail">Pre-Order</p>--}}
-        <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
-                <p class="detail-price mb-2"><span id="product_price">
+    </div>  -->
+        </div>
+
+        <div class="col-lg-6">
+            {{--        <p class="pre-label-detail">Pre-Order</p>--}}
+            <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
+            <p class="detail-price mb-2"><span id="product_price">
                     @if(!empty($sale_price))
                         <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
                         <small>(${{$default_price}} pack price)</small></span>
-                </p>
+            </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
                 <div class="col-md-6">
@@ -419,90 +427,90 @@
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR KIDS</h3>
                 <div class="table-responsive">
-                <table>
-                    <tbody>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SIZE CHART FOR KIDS</td>
-                        <td>(4/5) XS</td>
-                        <td>(6/7) S</td>
-                        <td>(8/9) M</td>
-                        <td>(10/11) L</td>
-                        <td>(12/14) XL</td>
-                    </tr>
+                    <table>
+                        <tbody>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SIZE CHART FOR KIDS</td>
+                            <td>(4/5) XS</td>
+                            <td>(6/7) S</td>
+                            <td>(8/9) M</td>
+                            <td>(10/11) L</td>
+                            <td>(12/14) XL</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">BACK</td>
-                        <td>10 5/8</td>
-                        <td>11 1/4</td>
-                        <td>11 7/8</td>
-                        <td>12 1/2</td>
-                        <td>13 1/8</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">BUST</td>
-                        <td>13 1/2</td>
-                        <td>14 1/2</td>
-                        <td>15 1/2</td>
-                        <td>16 1/2</td>
-                        <td>17 1/2</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">BACK</td>
+                            <td>10 5/8</td>
+                            <td>11 1/4</td>
+                            <td>11 7/8</td>
+                            <td>12 1/2</td>
+                            <td>13 1/8</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">BUST</td>
+                            <td>13 1/2</td>
+                            <td>14 1/2</td>
+                            <td>15 1/2</td>
+                            <td>16 1/2</td>
+                            <td>17 1/2</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">WAIST</td>
-                        <td>19 20 1/2</td>
-                        <td>22</td>
-                        <td>23 1/2</td>
-                        <td>25</td>
-                        <td>26 1/2 28</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">WAIST</td>
+                            <td>19 20 1/2</td>
+                            <td>22</td>
+                            <td>23 1/2</td>
+                            <td>25</td>
+                            <td>26 1/2 28</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">WAIST (AVERAGE)</td>
-                        <td>19 1/4</td>
-                        <td>22</td>
-                        <td>23 1/2</td>
-                        <td>25</td>
-                        <td>27 1/4</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">WAIST (AVERAGE)</td>
+                            <td>19 1/4</td>
+                            <td>22</td>
+                            <td>23 1/2</td>
+                            <td>25</td>
+                            <td>27 1/4</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">TOP LENGTH</td>
-                        <td>17 1/4</td>
-                        <td>18 1/4</td>
-                        <td>19 1/4</td>
-                        <td>20 1/4</td>
-                        <td>21 1/4</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">TOP LENGTH</td>
+                            <td>17 1/4</td>
+                            <td>18 1/4</td>
+                            <td>19 1/4</td>
+                            <td>20 1/4</td>
+                            <td>21 1/4</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SLEEVE LENGTH</td>
-                        <td>6 1/4</td>
-                        <td>6 1/2</td>
-                        <td>6 3/4</td>
-                        <td>7</td>
-                        <td>7 1/4</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SLEEVE LENGTH</td>
+                            <td>6 1/4</td>
+                            <td>6 1/2</td>
+                            <td>6 3/4</td>
+                            <td>7</td>
+                            <td>7 1/4</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SLEEVE WRIST OPENING</td>
-                        <td>5 1/2</td>
-                        <td>5 3/4</td>
-                        <td>6</td>
-                        <td>6 1/4</td>
-                        <td>6 1/2</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SHOULDERS</td>
-                        <td>2 5/8</td>
-                        <td>2 3/4</td>
-                        <td>2 7/8</td>
-                        <td>3</td>
-                        <td>3 1/8</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SLEEVE WRIST OPENING</td>
+                            <td>5 1/2</td>
+                            <td>5 3/4</td>
+                            <td>6</td>
+                            <td>6 1/4</td>
+                            <td>6 1/2</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SHOULDERS</td>
+                            <td>2 5/8</td>
+                            <td>2 3/4</td>
+                            <td>2 7/8</td>
+                            <td>3</td>
+                            <td>3 1/8</td>
+                        </tr>
 
-                    </tbody>
-                </table>    
-                </div> 
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -521,58 +529,58 @@
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S TOPS</h3>
                 <div class="table-responsive">
-                <table>
-                    <tbody>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SIZE</td>
-                        <td>S</td>
-                        <td>M</td>
-                        <td>L</td>
-                        <td>XL</td>
-                        <td>2XL</td>
-                        <td>3XL</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">BUST</td>
-                        <td>8 1/2</td>
-                        <td>9</td>
-                        <td>9 1/2</td>
-                        <td>9 3/4</td>
-                        <td>10</td>
-                        <td>10 1/4</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">WAIST</td>
-                        <td>7 1/2</td>
-                        <td>8</td>
-                        <td>8 1/2</td>
-                        <td>9</td>
-                        <td>9 1/2</td>
-                        <td>10</td>
-                    </tr>
+                    <table>
+                        <tbody>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SIZE</td>
+                            <td>S</td>
+                            <td>M</td>
+                            <td>L</td>
+                            <td>XL</td>
+                            <td>2XL</td>
+                            <td>3XL</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">BUST</td>
+                            <td>8 1/2</td>
+                            <td>9</td>
+                            <td>9 1/2</td>
+                            <td>9 3/4</td>
+                            <td>10</td>
+                            <td>10 1/4</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">WAIST</td>
+                            <td>7 1/2</td>
+                            <td>8</td>
+                            <td>8 1/2</td>
+                            <td>9</td>
+                            <td>9 1/2</td>
+                            <td>10</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">HIPS (STRAIGHT)</td>
-                        <td>9</td>
-                        <td>9 1/2</td>
-                        <td>10</td>
-                        <td>10 1/2</td>
-                        <td>11</td>
-                        <td>11 1/2</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">HIPS (STRAIGHT)</td>
+                            <td>9</td>
+                            <td>9 1/2</td>
+                            <td>10</td>
+                            <td>10 1/2</td>
+                            <td>11</td>
+                            <td>11 1/2</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">LENGTH (CAMI)</td>
-                        <td>24 3/4</td>
-                        <td>25 1/2</td>
-                        <td>26 1/4</td>
-                        <td>27</td>
-                        <td>27 3/4</td>
-                        <td>28 1/2</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">LENGTH (CAMI)</td>
+                            <td>24 3/4</td>
+                            <td>25 1/2</td>
+                            <td>26 1/4</td>
+                            <td>27</td>
+                            <td>27 3/4</td>
+                            <td>28 1/2</td>
+                        </tr>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -593,97 +601,97 @@
             <div class="modal-body size-chart mt-4">
                 <h3 class="text-center mb-3">SIZE CHART FOR WOMEM'S</h3>
                 <div class="table-responsive">
-                <table>
-                    <tbody>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">SIZE</td>
-                        <td>WAIST SIZE</td>
-                        <td>HIP</td>
-                        <td>THIGH</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">2</td>
-                        <td>27 - 27 1/2"</td>
-                        <td>31 - 32"</td>
-                        <td>18 - 19"</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">4</td>
-                        <td>28 - 28 1/2"</td>
-                        <td>32 - 33"</td>
-                        <td>19 - 20"</td>
-                    </tr>
+                    <table>
+                        <tbody>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">SIZE</td>
+                            <td>WAIST SIZE</td>
+                            <td>HIP</td>
+                            <td>THIGH</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">2</td>
+                            <td>27 - 27 1/2"</td>
+                            <td>31 - 32"</td>
+                            <td>18 - 19"</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">4</td>
+                            <td>28 - 28 1/2"</td>
+                            <td>32 - 33"</td>
+                            <td>19 - 20"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">6</td>
-                        <td>29 - 29 1/2"</td>
-                        <td>33 - 34"</td>
-                        <td>20 - 21"</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">8</td>
-                        <td>30 30 1/2"</td>
-                        <td>34 - 35"</td>
-                        <td>20 1/2 - 21 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">6</td>
+                            <td>29 - 29 1/2"</td>
+                            <td>33 - 34"</td>
+                            <td>20 - 21"</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">8</td>
+                            <td>30 30 1/2"</td>
+                            <td>34 - 35"</td>
+                            <td>20 1/2 - 21 1/2"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">10</td>
-                        <td>31 - 31 1/2"</td>
-                        <td>35 - 36"</td>
-                        <td>21 1/2 - 22 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">10</td>
+                            <td>31 - 31 1/2"</td>
+                            <td>35 - 36"</td>
+                            <td>21 1/2 - 22 1/2"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">12</td>
-                        <td>32 - 32 1/2"</td>
-                        <td>36 - 37"</td>
-                        <td>21 1/2 - 22 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">12</td>
+                            <td>32 - 32 1/2"</td>
+                            <td>36 - 37"</td>
+                            <td>21 1/2 - 22 1/2"</td>
+                        </tr>
 
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">14</td>
-                        <td>34 - 34 1/2"</td>
-                        <td>37 - 38"</td>
-                        <td>22 1/2 - 23 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">14</td>
+                            <td>34 - 34 1/2"</td>
+                            <td>37 - 38"</td>
+                            <td>22 1/2 - 23 1/2"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">16</td>
-                        <td>36 - 36 1/2"</td>
-                        <td>38 - 39"</td>
-                        <td>23 1/2 - 24 1/2"</td>
-                    </tr>
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">18</td>
-                        <td>38 - 38 1/2"</td>
-                        <td>40 - 41"</td>
-                        <td>24 1/2 - 25 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">16</td>
+                            <td>36 - 36 1/2"</td>
+                            <td>38 - 39"</td>
+                            <td>23 1/2 - 24 1/2"</td>
+                        </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">18</td>
+                            <td>38 - 38 1/2"</td>
+                            <td>40 - 41"</td>
+                            <td>24 1/2 - 25 1/2"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">20</td>
-                        <td>40 - 40 1/2"</td>
-                        <td>42 - 43"</td>
-                        <td>25 - 26"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">20</td>
+                            <td>40 - 40 1/2"</td>
+                            <td>42 - 43"</td>
+                            <td>25 - 26"</td>
+                        </tr>
 
-                    <tr tabindex="0">
-                        <td class="text-left pl-2">22</td>
-                        <td>42 - 42 1/2"</td>
-                        <td>44 - 45"</td>
-                        <td>26 1/2 - 27 1/2"</td>
-                    </tr>
+                        <tr tabindex="0">
+                            <td class="text-left pl-2">22</td>
+                            <td>42 - 42 1/2"</td>
+                            <td>44 - 45"</td>
+                            <td>26 1/2 - 27 1/2"</td>
+                        </tr>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
     </div>
-  </div>
+</div>
 
 
 
