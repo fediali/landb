@@ -238,6 +238,38 @@ class OrderHelper
     }
 
     /**
+     * @param OrderHistory $history
+     * @return mixed
+     */
+    public function processCustomerHistoryVariables($history)
+    {
+        if (empty($history)) {
+            return null;
+        }
+
+        $variables = [
+            'customer_id'  => Html::link(route('customer.edit', $history->customer->id), get_order_code($history->customer->id))
+                ->toHtml(),
+            'user_name' => $history->user_id === 0 ? 'System' :
+                ($history->user ? $history->user->getFullName() : ($history->customer->user->name ?
+                    $history->customer->user->name :
+                    $history->customer->address->name
+                )),
+        ];
+
+        $content = $history->description;
+
+        foreach ($variables as $key => $value) {
+            $content = str_replace('% ' . $key . ' %', $value, $content);
+            $content = str_replace('%' . $key . '%', $value, $content);
+            $content = str_replace('% ' . $key . '%', $value, $content);
+            $content = str_replace('%' . $key . ' %', $value, $content);
+        }
+
+        return $content;
+    }
+
+    /**
      * @param string $token
      * @param string|array $data
      * @return bool

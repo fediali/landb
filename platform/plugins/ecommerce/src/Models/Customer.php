@@ -327,4 +327,12 @@ class Customer extends Authenticatable
         return $this->pendingOrderId();
       }
     }
+
+    /**
+     * @return HasMany
+     */
+    public function histories()
+    {
+        return $this->hasMany(CustomerHistory::class, 'customer_id')->with(['user', 'customer']);
+    }
 }
