@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 /*use Botble\Theme\Theme;*/
 
 use App\Models\CardPreAuth;
+use App\Models\InventoryHistory;
 use App\Models\UserCart;
 use App\Models\UserCartItem;
 use App\Models\UserWishlist;
@@ -345,6 +346,15 @@ class CheckoutController extends Controller
                 $orderTotal = $orderTotal + $product->price;
                 OrderProduct::find($product->id)->update(['order_id' => $preOrderId]);
             }
+            $parent = get_parent_product_by_variant($product->product_id);
+            $logParam = [
+                'parent_product_id' => $parent->id,
+                'product_id'        => $product->product_id,
+                'sku'               => $product->product->sku,
+                'created_by'        => auth('customer')->user()->id,
+                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+            ];
+            log_product_history($logParam, false);
         }
 
         if (!is_null($preOrderId)) {
