@@ -32,12 +32,21 @@
 
     @endphp
     @foreach($cart->products as $cartItem)
+
+        @php
+            $parent = get_parent_product_by_variant($cartItem->product_id);
+        @endphp
         <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
                 <div class="d-flex">
                     {!! image_html_generator(@$cartItem->product->images[0], @$cartItem->product->name, '95px', '75px' ) !!}
                     <div class="ml-3">
-                        <p class="cart-product-name mt-2 mb-2">{{ $cartItem->product->name }}</p>
+                        <a href="{!! generate_product_url('detail',
+                        $parent->id,
+                        $parent->product_slug) !!}">
+                            <p class="cart-product-name mt-2 mb-2">{{ $cartItem->product->name }}</p>
+                        </a>
+
                         <p class="cart-product-code mb-2">CODE: {{ $cartItem->product->sku }}</p>
                         {{--@php
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $cartItem->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
