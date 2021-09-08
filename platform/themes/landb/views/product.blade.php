@@ -62,8 +62,10 @@
         <div class="owl-carousel " >
             @if(count($product->images))
                     @foreach($product->images as $image)
-                    <div class="zoom-box">
-                        <img class="product-zoomer" src="{{ asset('storage/'.$image) }}" />
+                    <div class="image-set">
+                        <a data-magnify="gallery" href="{{ asset('storage/'.$image) }}">
+                        <img class="" src="{{ asset('storage/'.$image) }}" />
+                        </a> 
                         <!-- {!! image_html_generator($image, $product->name, null, null, true, 'product-zoomer', '') !!} -->
                     </div>
                     @endforeach

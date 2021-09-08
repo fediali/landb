@@ -113,18 +113,17 @@
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
-<script src="{{ asset('landb/js/jquery.jqZoom.js') }}"></script>
-<script>
-    $(function(){
-        $(".product-zoomer").jqZoom({
-            selectorWidth: 30,
-            selectorHeight: 30,
-            viewerWidth: 400,
-            viewerHeight: 300
-        });
+<script src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
+  <script>
+    $('[data-magnify]').magnify({
+      resizable: false,
+      initMaximized: true,
+      headerToolbar: [
+        'close'
+      ],
+    });
 
-    })
-</script>
+  </script>
 <script>
 
 
