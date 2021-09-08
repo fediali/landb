@@ -83,22 +83,21 @@ class importProducts extends Command
         DB::table('ec_order_histories')->truncate();
         DB::table('ec_order_product')->truncate();
         DB::table('ec_orders')->truncate();
-
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
-        $file = File::get(public_path('lnb-prod_43059.json'));
-        $data = json_decode(utf8_encode($file), true);
-
         Slug::where('prefix', 'products')->delete();
+        $file = File::get(public_path('lnb-prod_3016.json'));
+        $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
                 $category = ProductCategory::where('name', $row['category'])->first();
-                if (!$category && $row['category'] && $row['parent_id']) {
+
+                if (!$category && $row['category'] /*&& $row['parent_id']*/) {
                     $category = new ProductCategory();
                     $category->name = $row['category'];
-                    $category->parent_id = $row['parent_id'];
+                    $category->parent_id = @$row['parent_id'];
                     $category->save();
                 }
 
@@ -129,7 +128,7 @@ class importProducts extends Command
                     $product->quantity = 0;
                     if ($row['amount']) {
                         if ($row['min_qty']) {
-                            $packQty = round($row['amount'] / $row['min_qty']);
+                            $packQty = floor($row['amount'] / $row['min_qty']);
                             $looseQty = $packQty * $row['min_qty'];
                             $diff = $row['amount'] - $looseQty;
                             $product->quantity = $packQty;
@@ -359,10 +358,12 @@ class importProducts extends Command
                 }
 
                 //echo $check ? $check->sku : $row['product_code'].'\n';
-                echo isset($product) ? $product->sku : '--no--' . '====';
+                echo isset($product) ? '' : $row['product_id'] . '====';
             }
         }
 
         echo 'success';
     }
 }
+
+

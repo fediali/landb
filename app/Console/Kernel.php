@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('update:product-qty')->hourly();
+        $schedule->command('active:scheduled-product')->hourly();
     }
 
     /**

@@ -188,9 +188,17 @@ class ProductTable extends TableAbstract
                     $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
                 }*/
                 $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
-                $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
+                $singleQty = 0;
+                $skuQty = '';
+                foreach ($getSingleIds as $getSingleId) {
+                    $singleSkuQty = Product::where('id', $getSingleId)->select('sku', 'quantity')->first();
+                    if ($singleSkuQty) {
+                        $singleQty += $singleSkuQty->quantity;
+                        $skuQty .= explode('-single-', $singleSkuQty->sku)[1].':'.$singleSkuQty->quantity.' | ';
+                    }
+                }
                 Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
-                return $singleQty;
+                return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
             })
             ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
@@ -259,6 +267,7 @@ class ProductTable extends TableAbstract
             'ec_products.sku',
             'ec_products.warehouse_sec',
             'ec_products.quantity',
+            'ec_products.extra_qty',
             'ec_products.single_qty',
             'ec_products.sold_qty',
             'ec_products.pre_order_qty',
@@ -296,10 +305,12 @@ class ProductTable extends TableAbstract
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['product_min_price']), function ($q) use ($search_items) {
-                $q->where('ec_products.price', '>=', $search_items['product_min_price']);
+                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) >= '.$search_items['product_min_price']);
+                //$q->where('ec_products.price', '>=', $search_items['product_min_price']);
             });
             $query->when(isset($search_items['product_max_price']), function ($q) use ($search_items) {
-                $q->where('ec_products.price', '<=', $search_items['product_max_price']);
+                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) <= '.$search_items['product_max_price']);
+                //$q->where('ec_products.price', '<=', $search_items['product_max_price']);
             });
             $query->when(isset($search_items['prod_sec']), function ($q) use ($search_items) {
                 $q->where('ec_products.warehouse_sec', 'LIKE', '%' . $search_items['prod_sec'] . '%');
@@ -397,6 +408,11 @@ class ProductTable extends TableAbstract
                 'name'  => 'ec_products.quantity',
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
+            ],
+            'extra_qty'      => [
+                'name'  => 'ec_products.extra_qty',
+                'title' => 'Extra Qty',
+                'class' => 'text-left red_font',
             ],
             'single_qty'    => [
                 'name'  => 'ec_products.single_qty',
