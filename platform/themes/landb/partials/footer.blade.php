@@ -109,165 +109,21 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<script src="{{ asset('landb/js/jquery.exzoom.js') }}"></script>
 <![endif]-->
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
-
+<script src="{{ asset('landb/js/jquery.jqZoom.js') }}"></script>
 <script>
-    (function ($) {
-        $(document).ready(function () {
-            $('.xzoom, .xzoom-gallery').xzoom({zoomWidth: 400, title: true, tint: '#333', Xoffset: 15});
-            $('.xzoom2, .xzoom-gallery2').xzoom({position: '#xzoom2-id', tint: '#ffa200'});
-            $('.xzoom3, .xzoom-gallery3').xzoom({position: 'lens', lensShape: 'circle', sourceClass: 'xzoom-hidden'});
-            $('.xzoom4, .xzoom-gallery4').xzoom({tint: '#006699', Xoffset: 15});
-            $('.xzoom5, .xzoom-gallery5').xzoom({tint: '#006699', Xoffset: 15});
-
-            //Integration with hammer.js
-            var isTouchSupported = 'ontouchstart' in window;
-
-            if (isTouchSupported) {
-                //If touch device
-                $('.xzoom, .xzoom2, .xzoom3, .xzoom4, .xzoom5').each(function () {
-                    var xzoom = $(this).data('xzoom');
-                    xzoom.eventunbind();
-                });
-
-                $('.xzoom, .xzoom2, .xzoom3').each(function () {
-                    var xzoom = $(this).data('xzoom');
-                    $(this).hammer().on("tap", function (event) {
-                        event.pageX = event.gesture.center.pageX;
-                        event.pageY = event.gesture.center.pageY;
-                        var s = 1, ls;
-
-                        xzoom.eventmove = function (element) {
-                            element.hammer().on('drag', function (event) {
-                                event.pageX = event.gesture.center.pageX;
-                                event.pageY = event.gesture.center.pageY;
-                                xzoom.movezoom(event);
-                                event.gesture.preventDefault();
-                            });
-                        }
-
-                        xzoom.eventleave = function (element) {
-                            element.hammer().on('tap', function (event) {
-                                xzoom.closezoom();
-                            });
-                        }
-                        xzoom.openzoom(event);
-                    });
-                });
-
-                $('.xzoom4').each(function () {
-                    var xzoom = $(this).data('xzoom');
-                    $(this).hammer().on("tap", function (event) {
-                        event.pageX = event.gesture.center.pageX;
-                        event.pageY = event.gesture.center.pageY;
-                        var s = 1, ls;
-
-                        xzoom.eventmove = function (element) {
-                            element.hammer().on('drag', function (event) {
-                                event.pageX = event.gesture.center.pageX;
-                                event.pageY = event.gesture.center.pageY;
-                                xzoom.movezoom(event);
-                                event.gesture.preventDefault();
-                            });
-                        }
-
-                        var counter = 0;
-                        xzoom.eventclick = function (element) {
-                            element.hammer().on('tap', function () {
-                                counter++;
-                                if (counter == 1) setTimeout(openfancy, 300);
-                                event.gesture.preventDefault();
-                            });
-                        }
-
-                        function openfancy() {
-                            if (counter == 2) {
-                                xzoom.closezoom();
-                                $.fancybox.open(xzoom.gallery().cgallery);
-                            } else {
-                                xzoom.closezoom();
-                            }
-                            counter = 0;
-                        }
-
-                        xzoom.openzoom(event);
-                    });
-                });
-
-                $('.xzoom5').each(function () {
-                    var xzoom = $(this).data('xzoom');
-                    $(this).hammer().on("tap", function (event) {
-                        event.pageX = event.gesture.center.pageX;
-                        event.pageY = event.gesture.center.pageY;
-                        var s = 1, ls;
-
-                        xzoom.eventmove = function (element) {
-                            element.hammer().on('drag', function (event) {
-                                event.pageX = event.gesture.center.pageX;
-                                event.pageY = event.gesture.center.pageY;
-                                xzoom.movezoom(event);
-                                event.gesture.preventDefault();
-                            });
-                        }
-
-                        var counter = 0;
-                        xzoom.eventclick = function (element) {
-                            element.hammer().on('tap', function () {
-                                counter++;
-                                if (counter == 1) setTimeout(openmagnific, 300);
-                                event.gesture.preventDefault();
-                            });
-                        }
-
-                        function openmagnific() {
-                            if (counter == 2) {
-                                xzoom.closezoom();
-                                var gallery = xzoom.gallery().cgallery;
-                                var i, images = new Array();
-                                for (i in gallery) {
-                                    images[i] = {src: gallery[i]};
-                                }
-                                $.magnificPopup.open({items: images, type: 'image', gallery: {enabled: true}});
-                            } else {
-                                xzoom.closezoom();
-                            }
-                            counter = 0;
-                        }
-
-                        xzoom.openzoom(event);
-                    });
-                });
-
-            } else {
-                //If not touch device
-
-                //Integration with fancybox plugin
-                $('#xzoom-fancy').bind('click', function (event) {
-                    var xzoom = $(this).data('xzoom');
-                    xzoom.closezoom();
-                    $.fancybox.open(xzoom.gallery().cgallery, {padding: 0, helpers: {overlay: {locked: false}}});
-                    event.preventDefault();
-                });
-
-                //Integration with magnific popup plugin
-                $('#xzoom-magnific').bind('click', function (event) {
-                    var xzoom = $(this).data('xzoom');
-                    xzoom.closezoom();
-                    var gallery = xzoom.gallery().cgallery;
-                    var i, images = new Array();
-                    for (i in gallery) {
-                        images[i] = {src: gallery[i]};
-                    }
-                    $.magnificPopup.open({items: images, type: 'image', gallery: {enabled: true}});
-                    event.preventDefault();
-                });
-            }
+    $(function(){
+        $(".product-zoomer").jqZoom({
+            selectorWidth: 30,
+            selectorHeight: 30,
+            viewerWidth: 400,
+            viewerHeight: 300
         });
-    })(jQuery);
+
+    })
 </script>
 <script>
 
@@ -460,10 +316,10 @@
                 // reinit form
             });
 
-        fattJs.on('card_form_complete', (message) => {
-            // activate pay button
-            //payButton.disabled = false;
-            var billing = $("#billing_address option:selected").text();
+    fattJs.on('card_form_complete', (message) => {
+        // activate pay button
+        //payButton.disabled = false;
+        var billing = $("#billing_address option:selected").text();
 
 
             tokenizeButton.disabled = billing === 'Select Address';
@@ -628,96 +484,96 @@
             }  , 400 );
           }else if(keyword.length == 0){
 
-          } else{}
-        });
+            } else{}
+          });
 
-        function get_institutes(keyword) {
-          $.ajax({
-            type        : 'GET',
-            url         : '',
-            data        : {'keyword' : keyword},
-            success: function (result) {
-              var data = result.data;
-              var status = result.status;
-              if(status == 1){
+          function get_institutes(keyword) {
+            $.ajax({
+              type        : 'GET',
+              url         : '',
+              data        : {'keyword' : keyword},
+              success: function (result) {
+                var data = result.data;
+                var status = result.status;
+                if(status == 1){
 
-              }else{
+                }else{
+
+                }
+              },
+              error: function (result) {
 
               }
-            },
-            error: function (result) {
-
-            }
-          });
-        }
+            });
+          }
 */
-    }); //closing our doc ready
-</script>
-<!-- <script type="text/javascript">
+        }); //closing our doc ready
+    </script>
+    <!-- <script type="text/javascript">
 
-$('.containert').imagesLoaded( function() {
-$("#exzoom").exzoom({
-    autoPlay: false,
-});
-$("#exzoom").removeClass('hidden')
-});
+    $('.containert').imagesLoaded( function() {
+    $("#exzoom").exzoom({
+        autoPlay: false,
+    });
+    $("#exzoom").removeClass('hidden')
+    });
 
-</script> -->
-<script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
-<script>
-    $(document).ready(function () {
-        $('.vg-nav').vegasMenu();
-    })
-    @if(is_null(@request()->segments()[0]))
-    $(document).ready(function () {
+    </script> -->
+    <script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
+    <script>
+		$(document).ready(function () {
+			$('.vg-nav').vegasMenu();
+		})
+        @if(is_null(@request()->segments()[0]))
+        $(document).ready(function () {
 
-        function dp_scroll_text() {
+          function dp_scroll_text() {
             $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide");
             $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide");
             var images = $("p.dp-run-script.dp-animate-4").next().data('products');
             $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
             $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
-            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/' + images[0]);
-            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/' + images[1]);
-            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/' + images[2]);
-            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/' + images[3]);
-            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/' + images[4]);
-            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/' + images[5]);
+            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/'+images[0]);
+            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/'+images[1]);
+            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/'+images[2]);
+            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/'+images[3]);
+            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/'+images[4]);
+            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/'+images[5]);
 
 
             $.each($('.dp-run-script'), function (index, runscript) {
-                index++;
-                $(runscript).addClass('dp-animate-' + index);
+              index++;
+              $(runscript).addClass('dp-animate-' + index);
             });
-        }
+          }
 
-        setInterval(function () {
+          setInterval(function () {
             dp_scroll_text();
-        }, 5000);
+          }, 5000);
 
 
-    });
+        });
 
-    @endif
+        @endif
 
-</script>
+	</script>
 
 
 @if(session()->has('success'))
     <script>
-        toastr['success']("{{ session()->get('success') }}", 'Success!');
+      toastr['success']("{{ session()->get('success') }}", 'Success!');
     </script>
 @elseif(session()->has('error'))
     <script>
-        toastr['error']("{{ session()->get('error') }}", 'Error!');
+      toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
 @endif
 
 @if(isset(request()->payment) && request()->payment == 'false')
-    <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
-    @endif
+      <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
+@endif
 
 
-    </body>
+</body>
 
-    </html>
+</html>
