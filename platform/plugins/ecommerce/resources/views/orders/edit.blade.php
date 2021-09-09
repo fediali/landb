@@ -641,8 +641,15 @@
                         </div>
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                                <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}" class="btn btn-primary mb-2">Order Invoice</a>&nbsp;&nbsp;
+                                @if($order->payment->status != 'completed')
+                                    <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}" class="btn btn-primary mb-2">
+                                        {{$order->payment->paypal_invoice_id ? 'Reminder' : 'Order Invoice'}}
+                                    </a>&nbsp;&nbsp;
+                                @elseif($order->payment->status == 'completed')
+                                    <button type="button" class="btn btn-outline-success mb-2">Invoice Paid</button>
+                                @endif
                                 <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}" class="btn btn-warning mb-2">Shipping Invoice</a>&nbsp;&nbsp;
+
                                 <button type="button" class="btn btn-outline-warning mb-2" data-toggle="modal"
                                         data-target="#modal_split_payment">Split Payment
                                 </button>
