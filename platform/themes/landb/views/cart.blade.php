@@ -16,11 +16,11 @@
             <p class="cart-head">Product</p>
         </div>
         <div class="col-lg-2 mt-2 mb-3 text-center">
-            <p class="cart-head">Price</p>
+            <p class="cart-head">Pack Price</p>
 
         </div>
         <div class="col-lg-2 mt-2 mb-3">
-            <p class="cart-head">Quantity</p>
+            <p class="cart-head">Pack Quantity</p>
 
         </div>
         <div class="col-lg-2 mt-2 mb-3">
@@ -55,28 +55,39 @@
                         @if($variation)
                             <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
                         @endif--}}
-                        <p class="cart-product-size">SIZE: {{ !empty($cartItem->product->sizes) ? $cartItem->product->sizes : 'NaN' }}</p>
+                        <p class="cart-product-size mb-2">
+                            SIZE: {{ !empty($cartItem->product->sizes) ? $cartItem->product->sizes : 'NaN' }}</p>
+                        <p class="cart-product-code mb-2">
+                            Pieces In Pack: {{ !empty($cartItem->product->prod_pieces) ? $cartItem->product->prod_pieces : 'NaN' }}</p>
+                        <p class="cart-product-code mb-2">
+                           Cost Per Piece: ${{ ($cartItem->product->prod_pieces) ? $cartItem->product->price/ $cartItem->product->prod_pieces : $cartItem->product->price }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-2 mt-2 text-center">
-                <p class="mt-2"><b class="cart-m-title">Price</b>$ {{ $cartItem->price }}</p>
+                <p class="mt-2"><b class="cart-m-title">Price</b>${{ $cartItem->price }}</p>
             </div>
             <div class="col-lg-2 mt-2">
 
                 <form id='myform' method='POST' action='#'>
-                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity' />
-                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty' readonly/>
-                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}" data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity' />
+                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}"
+                           data-id="{{ $cartItem->id }}" value='-' class='qtyminus' field='quantity'/>
+                    <input style="height: 35px;" type='text' name='quantity' value='{{ $cartItem->qty }}' class='qty'
+                           readonly/>
+                    <input style="height: 35px;" type='button' data-update="1" data-price="{{ $cartItem->price }}"
+                           data-id="{{ $cartItem->id }}" value='+' class='qtyplus' field='quantity'/>
                 </form>
-                <a class="text-center d-block mt-2" href="{{ route('public.cart.delete_item', ['id' => $cartItem->id]) }}"><i class="fa fa-trash-alt color-black"></i></a></span>
+                <a class="text-center d-block mt-2"
+                   href="{{ route('public.cart.delete_item', ['id' => $cartItem->id]) }}"><i
+                        class="fa fa-trash-alt color-black"></i></a></span>
 
             </div>
             <div class="col-lg-2 mt-2 ItemPrice">
                 @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
-                <p class="mt-2"><b class="cart-m-title">Total</b> $ <span id="cart-item-total-{{$cartItem->id}}">{{ $total }}</p>
+                <p class="mt-2"><b class="cart-m-title">Total</b> $ <span
+                        id="cart-item-total-{{$cartItem->id}}">{{ $total }}</p>
             </div>
-        </div> 
+        </div>
     @endforeach
     {{--<div class="row mb-4 mt-4">
         <div class="col-lg-6 mt-2">
@@ -162,7 +173,8 @@
 
                 </div>
                 <div class="col-lg-6 mt-3">
-                    <a href="{{ route('public.checkout_index', session('tracked_start_checkout')) }}" class=" btn cart-btn w-100">Proceed to Checkout</a>
+                    <a href="{{ route('public.checkout_index', session('tracked_start_checkout')) }}"
+                       class=" btn cart-btn w-100">Proceed to Checkout</a>
                 </div>
             </div>
         </div>

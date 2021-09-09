@@ -174,7 +174,7 @@ class ProductsController extends Controller
     {
         $html = '';
         foreach ($products as $product) {
-            $html .= Theme::partial('product-card', ['product' => $product, 'col' => '4']);
+            $html .= Theme::partial('product-card', ['product' => $product, 'col' => isset($_GET['col']) ? $_GET['col'] : 4]);
         }
         return $html;
     }

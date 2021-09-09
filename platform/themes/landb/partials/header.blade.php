@@ -28,6 +28,7 @@
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
     <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
 
 
     <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>

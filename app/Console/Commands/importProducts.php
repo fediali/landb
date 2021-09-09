@@ -86,7 +86,7 @@ class importProducts extends Command
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
         Slug::where('prefix', 'products')->delete();
-        $file = File::get(public_path('lnb-prod_3016.json'));
+        $file = File::get(public_path('lnb-prod_43063.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {

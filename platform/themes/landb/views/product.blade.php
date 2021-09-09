@@ -57,31 +57,17 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
-        <div class="col-lg-6 containert">
-
-
+        <div class="col-lg-6">
             <div class="content-carousel product-carousel">
                 <div class="owl-carousel ">
                     @if(count($product->images))
                         @foreach($product->images as $image)
-
-                            @if($loop->first)
-                                {{--                    <div class="xzoom-container">--}}
-                                <img class="xzoom"
-                                     src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg"
-                                     xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg"/>
-                                {{--        </div>--}}
-                            @else
-
-                                {{--                                {!! image_html_generator($image, $product->name, null, null, true) !!}--}}
-                                <img class={{'xzoom'.$loop->iteration}}
-                                    src="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/preview/01_b_car.jpg"
-                                     xoriginal="http://www.jqueryscript.net/demo/Feature-rich-Product-Gallery-With-Image-Zoom-xZoom/images/gallery/original/01_b_car.jpg"/>
-                            @endif
-
-
-
-
+                            <div class="image-set">
+                                <a data-magnify="gallery" href="{{ asset('storage/'.$image) }}">
+                                    <img class="" src="{{ asset('storage/'.$image) }}"/>
+                                </a>
+                            <!-- {!! image_html_generator($image, $product->name, null, null, true, 'product-zoomer', '') !!} -->
+                            </div>
                         @endforeach
                     @else
                         <div><img src="{{ asset('images/default.jpg') }}"/></div>
@@ -115,7 +101,7 @@
                         <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
-                        <small>(${{$default_price}} pack price)</small></span>
+                        <small>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}} (${{$default_price}} pack price)</small></span>
             </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
@@ -159,6 +145,7 @@
 
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
+            
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
                     <label class="">
@@ -185,6 +172,7 @@
                     <span class="checkmark"></span>
                 </label>--}}
             </div>
+            <p class="mt-3 detail-color-text"> Note:  Add Pack Quantity </p>
             <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
                 <div class="row m-0 mt-4">
@@ -197,8 +185,7 @@
                     </div>
                     <div class="col-lg-4">
                         <button class="cart-btn w-100 add-to-cart-button cart-submit" id="variation-submit"
-                                data-id="{{ $default }}">Add
-                            to cart
+                                data-id="{{ $default }}">ADD TO BAG
                         </button>
                     </div>
                 </div>
