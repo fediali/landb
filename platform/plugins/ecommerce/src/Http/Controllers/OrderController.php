@@ -54,6 +54,7 @@ use Botble\Ecommerce\Tables\OrderIncompleteTable;
 use Botble\Ecommerce\Tables\OrderTable;
 use Botble\Payment\Enums\PaymentMethodEnum;
 use Botble\Payment\Enums\PaymentStatusEnum;
+use Botble\Payment\Models\Payment;
 use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Carbon\Carbon;
 use EmailHandler;
@@ -69,6 +70,16 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use OrderHelper;
+use PayPal\Api\BillingInfo;
+use PayPal\Api\Currency;
+use PayPal\Api\Invoice;
+use PayPal\Api\InvoiceAddress;
+use PayPal\Api\InvoiceItem;
+use PayPal\Api\MerchantInfo;
+use PayPal\Api\Notification;
+use PayPal\Api\PaymentTerm;
+use PayPal\Api\Phone;
+use PayPal\Api\ShippingInfo;
 use RvMedia;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
@@ -233,10 +244,10 @@ class OrderController extends BaseController
                 $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
                 if ($getOrderProd && $demandQty != $getOrderProd->qty) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action'      => 'order_product_qty_changed',
+                        'action' => 'order_product_qty_changed',
                         'description' => 'Order product ' . $getOrderProd->product_name . ' qty changed from ' . $getOrderProd->qty . ' to ' . $demandQty . ' by %user_name%.',
-                        'order_id'    => $request->input('order_id'),
-                        'user_id'     => Auth::user()->getKey(),
+                        'order_id' => $request->input('order_id'),
+                        'user_id' => Auth::user()->getKey(),
                     ], []);
 
                     if ($request->input('order_type') != Order::PRE_ORDER) {
@@ -244,28 +255,28 @@ class OrderController extends BaseController
                             $diff = $demandQty - $getOrderProd->qty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id'        => $product->id,
-                                'sku'               => $product->sku,
-                                'quantity'          => $diff,
-                                'new_stock'         => $product->quantity - $diff,
-                                'old_stock'         => $product->quantity,
-                                'order_id'          => $request->input('order_id'),
-                                'created_by'        => Auth::user()->id,
-                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                                'product_id' => $product->id,
+                                'sku' => $product->sku,
+                                'quantity' => $diff,
+                                'new_stock' => $product->quantity - $diff,
+                                'old_stock' => $product->quantity,
+                                'order_id' => $request->input('order_id'),
+                                'created_by' => Auth::user()->id,
+                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
                         } elseif ($demandQty < $getOrderProd->qty) {
                             $diff = $getOrderProd->qty - $demandQty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id'        => $product->id,
-                                'sku'               => $product->sku,
-                                'quantity'          => $diff,
-                                'new_stock'         => $product->quantity + $diff,
-                                'old_stock'         => $product->quantity,
-                                'order_id'          => $request->input('order_id'),
-                                'created_by'        => Auth::user()->id,
-                                'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                                'product_id' => $product->id,
+                                'sku' => $product->sku,
+                                'quantity' => $diff,
+                                'new_stock' => $product->quantity + $diff,
+                                'old_stock' => $product->quantity,
+                                'order_id' => $request->input('order_id'),
+                                'created_by' => Auth::user()->id,
+                                'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
                             ];
                             log_product_history($logParam);
                         }
@@ -290,10 +301,10 @@ class OrderController extends BaseController
 
                 if ($getOrderProd && $getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action'      => 'product_price_change_on_order',
+                        'action' => 'product_price_change_on_order',
                         'description' => $product->name . ' product price change in order from $' . $getOrderProd->price . ' to $' . Arr::get($productItem, 'sale_price', 1) . ' by %user_name%.',
-                        'order_id'    => $request->input('order_id'),
-                        'user_id'     => Auth::user()->getKey(),
+                        'order_id' => $request->input('order_id'),
+                        'user_id' => Auth::user()->getKey(),
                     ], []);
                 }
             }
@@ -316,10 +327,10 @@ class OrderController extends BaseController
 
             if ($order->order_type != $request->input('order_type')) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'order_type_changed',
+                    'action' => 'order_type_changed',
                     'description' => 'Order type changes from ' . $order->order_type . ' to ' . $request->input('order_type') . ' by %user_name%.',
-                    'order_id'    => $request->input('order_id'),
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $request->input('order_id'),
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
 
                 if ($request->input('order_type') == Order::PRE_ORDER) {
@@ -328,14 +339,14 @@ class OrderController extends BaseController
                         $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
                         $logParam = [
                             'parent_product_id' => $getParentProdId,
-                            'product_id'        => $order_product->product_id,
-                            'sku'               => $order_product->product->sku,
-                            'quantity'          => $order_product->qty,
-                            'new_stock'         => $order_product->product->quantity + $order_product->qty,
-                            'old_stock'         => $order_product->product->quantity,
-                            'order_id'          => $request->input('order_id'),
-                            'created_by'        => Auth::user()->id,
-                            'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                            'product_id' => $order_product->product_id,
+                            'sku' => $order_product->product->sku,
+                            'quantity' => $order_product->qty,
+                            'new_stock' => $order_product->product->quantity + $order_product->qty,
+                            'old_stock' => $order_product->product->quantity,
+                            'order_id' => $request->input('order_id'),
+                            'created_by' => Auth::user()->id,
+                            'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
                         ];
                         log_product_history($logParam);
                     }
@@ -361,14 +372,14 @@ class OrderController extends BaseController
                     $getParentProdId = ProductVariation::where('product_id', $getOrderProd->product_id)->value('configurable_product_id');
                     $logParam = [
                         'parent_product_id' => $getParentProdId,
-                        'product_id'        => $getOrderProd->product_id,
-                        'sku'               => $getOrderProd->product->sku,
-                        'quantity'          => $getOrderProd->qty,
-                        'new_stock'         => $getOrderProd->product->quantity,
-                        'old_stock'         => $getOrderProd->product->quantity - $getOrderProd->qty,
-                        'order_id'          => $request->input('order_id'),
-                        'created_by'        => Auth::user()->id,
-                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                        'product_id' => $getOrderProd->product_id,
+                        'sku' => $getOrderProd->product->sku,
+                        'quantity' => $getOrderProd->qty,
+                        'new_stock' => $getOrderProd->product->quantity,
+                        'old_stock' => $getOrderProd->product->quantity - $getOrderProd->qty,
+                        'order_id' => $request->input('order_id'),
+                        'created_by' => Auth::user()->id,
+                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
                     ];
                     log_product_history($logParam);
                 }
@@ -378,61 +389,61 @@ class OrderController extends BaseController
 
             if (!check_array_equal($curOrderProdIds, $prevOrderProdIds)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'product_change_on_order',
+                    'action' => 'product_change_on_order',
                     'description' => 'Product(s) change in order by %user_name%.',
-                    'order_id'    => $order->id,
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($order->discount_amount != $request->input('discount_amount')) {
                 if ($request->input('discount_amount') > $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action'      => 'add_discount_on_order',
+                        'action' => 'add_discount_on_order',
                         'description' => '$' . $request->input('discount_amount') . ' discount added on order by %user_name%.',
-                        'order_id'    => $order->id,
-                        'user_id'     => Auth::user()->getKey(),
+                        'order_id' => $order->id,
+                        'user_id' => Auth::user()->getKey(),
                     ], []);
                 } elseif ($request->input('discount_amount') < $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action'      => 'remove_discount_on_order',
+                        'action' => 'remove_discount_on_order',
                         'description' => '$' . $request->input('discount_amount') . ' discount removed from order by %user_name%.',
-                        'order_id'    => $order->id,
-                        'user_id'     => Auth::user()->getKey(),
+                        'order_id' => $order->id,
+                        'user_id' => Auth::user()->getKey(),
                     ], []);
                 }
             }
 
             if ($order->user_id != $request->input('customer_id')) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'order_customer_changed',
+                    'action' => 'order_customer_changed',
                     'description' => 'Customer changed in order by %user_name%.',
-                    'order_id'    => $request->input('order_id'),
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $request->input('order_id'),
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
             }
 
         }
 
         $request->merge([
-            'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
-            'currency_id'          => get_application_currency_id(),
-            'user_id'              => $request->input('customer_id') ?? 0,
-            'shipping_method'      => $request->input('shipping_method', ShippingMethodEnum::DEFAULT),
-            'shipping_option'      => $request->input('shipping_option'),
-            'shipping_amount'      => $request->input('shipping_amount'),
-            'tax_amount'           => session('tax_amount', 0),
-            'sub_total'            => $request->input('amount'),
-            'coupon_code'          => $request->input('coupon_code'),
-            'discount_amount'      => $request->input('discount_amount'),
+            'amount' => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
+            'currency_id' => get_application_currency_id(),
+            'user_id' => $request->input('customer_id') ?? 0,
+            'shipping_method' => $request->input('shipping_method', ShippingMethodEnum::DEFAULT),
+            'shipping_option' => $request->input('shipping_option'),
+            'shipping_amount' => $request->input('shipping_amount'),
+            'tax_amount' => session('tax_amount', 0),
+            'sub_total' => $request->input('amount'),
+            'coupon_code' => $request->input('coupon_code'),
+            'discount_amount' => $request->input('discount_amount'),
             'discount_description' => $request->input('discount_description'),
-            'description'          => $request->input('note'),
-            'is_confirmed'         => 1,
-            'status'               => OrderStatusEnum::NEW_ORDER,
-            'order_type'           => $request->input('order_type'),
-            'notes'                => $request->input('customer_notes'),
-            'order_card'           => $request->input('order_card'),
-            'platform'             => isset($order->platform) ? $order->platform : 'back-office'
+            'description' => $request->input('note'),
+            'is_confirmed' => 1,
+            'status' => OrderStatusEnum::NEW_ORDER,
+            'order_type' => $request->input('order_type'),
+            'notes' => $request->input('customer_notes'),
+            'order_card' => $request->input('order_card'),
+            'platform' => isset($order->platform) ? $order->platform : 'back-office'
         ]);
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
@@ -441,43 +452,44 @@ class OrderController extends BaseController
 
             if (!$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'create_order_from_payment_page',
+                    'action' => 'create_order_from_payment_page',
                     'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
-                    'order_id'    => $order->id,
+                    'order_id' => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'create_order',
+                    'action' => 'create_order',
                     'description' => trans('plugins/ecommerce::order.new_order',
                         ['order_id' => get_order_code($order->id)]),
-                    'order_id'    => $order->id,
+                    'order_id' => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'confirm_order',
+                    'action' => 'confirm_order',
                     'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-                    'order_id'    => $order->id,
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($order->discount_amount > 0 && !$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'add_discount_on_order',
+                    'action' => 'add_discount_on_order',
                     'description' => '$' . $order->discount_amount . ' discount added on order by %user_name%.',
-                    'order_id'    => $order->id,
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
             }
 
             $payment = $this->paymentRepository->createOrUpdate([
-                'amount'          => $order->amount,
-                'currency'        => get_application_currency()->title,
+                'amount' => $order->amount,
+                'currency' => get_application_currency()->title,
                 'payment_channel' => $request->input('payment_method'), //$order->payment->payment_channel,
-                'status'          => $request->input('payment_status', PaymentStatusEnum::PENDING),
-                'payment_type'    => 'confirm',
-                'order_id'        => $order->id,
-                'charge_id'       => Str::upper(Str::random(10)),
+                'paypal_email' => $request->input('paypal_email'),
+                'status' => $request->input('payment_status', PaymentStatusEnum::PENDING),
+                'payment_type' => 'confirm',
+                'order_id' => $order->id,
+                'charge_id' => Str::upper(Str::random(10)),
             ], $meta_condition);
 
             $order->payment_id = $payment->id;
@@ -490,36 +502,40 @@ class OrderController extends BaseController
 
             $order->save();
 
+            if ($order->user_id && $payment->paypal_email) {
+                Customer::where('id', $order->user_id)->update(['paypal_email' => $payment->paypal_email]);
+            }
+
             if ($request->input('payment_status') === PaymentStatusEnum::COMPLETED) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action'      => 'confirm_payment',
+                    'action' => 'confirm_payment',
                     'description' => trans('plugins/ecommerce::order.payment_was_confirmed_by', [
                         'money' => format_price($order->amount, $order->currency_id),
                     ]),
-                    'order_id'    => $order->id,
-                    'user_id'     => Auth::user()->getKey(),
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($request->input('customer_address.name')) {
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_address.id'),
-                    'name'                => $request->input('customer_address.name'),
-                    'phone'               => $request->input('customer_address.phone'),
-                    'email'               => $request->input('customer_address.email'),
-                    'state'               => $request->input('customer_address.state'),
-                    'city'                => $request->input('customer_address.city'),
-                    'zip_code'            => $request->input('customer_address.zip_code'),
-                    'country'             => $request->input('customer_address.country'),
-                    'address'             => $request->input('customer_address.address'),
-                    'order_id'            => $order->id
+                    'name' => $request->input('customer_address.name'),
+                    'phone' => $request->input('customer_address.phone'),
+                    'email' => $request->input('customer_address.email'),
+                    'state' => $request->input('customer_address.state'),
+                    'city' => $request->input('customer_address.city'),
+                    'zip_code' => $request->input('customer_address.zip_code'),
+                    'country' => $request->input('customer_address.country'),
+                    'address' => $request->input('customer_address.address'),
+                    'order_id' => $order->id
                 ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
                 $this->orderAddressRepository->createOrUpdate([
-                    'name'     => $customer->name,
-                    'phone'    => $customer->phone,
-                    'email'    => $customer->email,
+                    'name' => $customer->name,
+                    'phone' => $customer->phone,
+                    'email' => $customer->email,
                     'order_id' => $order->id,
                 ], $meta_condition);
             }
@@ -528,16 +544,16 @@ class OrderController extends BaseController
                 $address = $this->addressRepository->findById($request->input('billing_address'));
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $address->id,
-                    'name'                => $address->name,
-                    'phone'               => $address->phone,
-                    'email'               => $address->email,
-                    'state'               => $address->state,
-                    'city'                => $address->city,
-                    'zip_code'            => $address->zip_code,
-                    'country'             => $address->country,
-                    'address'             => $address->address,
-                    'order_id'            => $order->id,
-                    'type'                => 'billing',
+                    'name' => $address->name,
+                    'phone' => $address->phone,
+                    'email' => $address->email,
+                    'state' => $address->state,
+                    'city' => $address->city,
+                    'zip_code' => $address->zip_code,
+                    'country' => $address->country,
+                    'address' => $address->address,
+                    'order_id' => $order->id,
+                    'type' => 'billing',
                 ], $meta_condition);
             }
 
@@ -548,14 +564,14 @@ class OrderController extends BaseController
                 }
 
                 $data = [
-                    'order_id'     => $order->id,
-                    'product_id'   => $product->id,
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
                     'product_name' => $product->name,
-                    'qty'          => Arr::get($productItem, 'quantity', 1),
-                    'weight'       => $product->weight,
-                    'price'        => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
-                    'tax_amount'   => 0,
-                    'options'      => [],
+                    'qty' => Arr::get($productItem, 'quantity', 1),
+                    'weight' => $product->weight,
+                    'price' => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
+                    'tax_amount' => 0,
+                    'options' => [],
                 ];
 
                 $this->orderProductRepository->create($data);
@@ -563,10 +579,10 @@ class OrderController extends BaseController
                 if (!$request->input('order_id', 0)) {
                     if ($product->front_sale_price != $data['price']) {
                         $this->orderHistoryRepository->createOrUpdate([
-                            'action'      => 'product_price_change_on_order',
+                            'action' => 'product_price_change_on_order',
                             'description' => $product->name . ' product price change in order from $' . $product->front_sale_price . ' to $' . $data['price'] . ' by %user_name%.',
-                            'order_id'    => $order->id,
-                            'user_id'     => Auth::user()->getKey(),
+                            'order_id' => $order->id,
+                            'user_id' => Auth::user()->getKey(),
                         ], []);
                     }
                 }
@@ -810,10 +826,10 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'confirm_order',
+            'action' => 'confirm_order',
             'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-            'order_id'    => $order->id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
         ]);
 
         $payment = $this->paymentRepository->getFirstBy(['order_id' => $order->id]);
@@ -886,11 +902,11 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shippingData = [
-            'address'     => $order->address->address,
-            'country'     => $order->address->country,
-            'state'       => $order->address->state,
-            'city'        => $order->address->city,
-            'weight'      => $weight,
+            'address' => $order->address->address,
+            'country' => $order->address->country,
+            'state' => $order->address->state,
+            'city' => $order->address->city,
+            'weight' => $weight,
             'order_total' => $order->amount,
         ];
 
@@ -929,8 +945,8 @@ class OrderController extends BaseController
         $weight = 0;
         foreach ($order->products as $orderProduct) {
             $products[] = [
-                'name'     => $orderProduct->product_name,
-                'weight'   => $orderProduct->weight ?? 0.1,
+                'name' => $orderProduct->product_name,
+                'weight' => $orderProduct->weight ?? 0.1,
                 'quantity' => $orderProduct->qty,
             ];
             $weight += $orderProduct->weight ?? 0.1;
@@ -939,17 +955,17 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shipment = [
-            'order_id'   => $order->id,
-            'user_id'    => Auth::user()->getKey(),
-            'weight'     => $weight,
-            'note'       => $request->input('note'),
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
+            'weight' => $weight,
+            'note' => $request->input('note'),
             'cod_amount' => $request->input('cod_amount') ?? ($order->payment->status !== PaymentStatusEnum::COMPLETED ? $order->amount : 0),
             'cod_status' => 'pending',
-            'type'       => $request->input('method'),
+            'type' => $request->input('method'),
             // 'status'     => ShippingStatusEnum::DELIVERING,
-            'status'     => ShippingStatusEnum::PICKING,
-            'price'      => $order->shipping_amount,
-            'store_id'   => $request->input('store_id'),
+            'status' => ShippingStatusEnum::PICKING,
+            'price' => $order->shipping_amount,
+            'store_id' => $request->input('store_id'),
         ];
 
         $store = $this->storeLocatorRepository->findById($request->input('store_id'));
@@ -967,7 +983,7 @@ class OrderController extends BaseController
 
         if (!$result->isError()) {
             $this->orderRepository->createOrUpdate([
-                'status'          => OrderStatusEnum::DELIVERING,
+                'status' => OrderStatusEnum::DELIVERING,
                 'shipping_method' => $request->input('method'),
                 'shipping_option' => $request->input('option'),
             ], compact('id'));
@@ -984,18 +1000,18 @@ class OrderController extends BaseController
             }
 
             $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'create_shipment',
+                'action' => 'create_shipment',
                 'description' => $result->getMessage() . ' ' . trans('plugins/ecommerce::order.by_username'),
-                'order_id'    => $id,
-                'user_id'     => Auth::user()->getKey(),
+                'order_id' => $id,
+                'user_id' => Auth::user()->getKey(),
             ]);
 
             $shipmentHistoryRepository->createOrUpdate([
-                'action'      => 'create_from_order',
+                'action' => 'create_from_order',
                 'description' => trans('plugins/ecommerce::order.shipping_was_created_from'),
                 'shipment_id' => $shipment->id,
-                'order_id'    => $id,
-                'user_id'     => Auth::user()->getKey(),
+                'order_id' => $id,
+                'user_id' => Auth::user()->getKey(),
             ]);
         }
 
@@ -1013,15 +1029,15 @@ class OrderController extends BaseController
             compact('id'));
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'cancel_shipment',
+            'action' => 'cancel_shipment',
             'description' => trans('plugins/ecommerce::order.shipping_was_canceled_by'),
-            'order_id'    => $shipment->order_id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $shipment->order_id,
+            'user_id' => Auth::user()->getKey(),
         ]);
 
         return $response
             ->setData([
-                'status'      => ShippingStatusEnum::CANCELED,
+                'status' => ShippingStatusEnum::CANCELED,
                 'status_text' => ShippingStatusEnum::CANCELED()->label(),
             ])
             ->setMessage(trans('plugins/ecommerce::order.shipping_was_canceled_success'));
@@ -1044,7 +1060,7 @@ class OrderController extends BaseController
 
         return $response
             ->setData([
-                'line'   => view('plugins/ecommerce::orders.shipping-address.line', compact('address'))->render(),
+                'line' => view('plugins/ecommerce::orders.shipping-address.line', compact('address'))->render(),
                 'detail' => view('plugins/ecommerce::orders.shipping-address.detail', compact('address'))->render(),
             ])
             ->setMessage(trans('plugins/ecommerce::order.update_shipping_address_success'));
@@ -1064,10 +1080,10 @@ class OrderController extends BaseController
             compact('id'));
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'cancel_order',
+            'action' => 'cancel_order',
             'description' => trans('plugins/ecommerce::order.order_was_canceled_by'),
-            'order_id'    => $order->id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
         ]);
 
         if ($order->order_type != Order::PRE_ORDER) {
@@ -1076,14 +1092,14 @@ class OrderController extends BaseController
                 $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
                 $logParam = [
                     'parent_product_id' => $getParentProdId,
-                    'product_id'        => $order_product->product_id,
-                    'sku'               => $order_product->product->sku,
-                    'quantity'          => $order_product->qty,
-                    'new_stock'         => $order_product->product->quantity + $order_product->qty,
-                    'old_stock'         => $order_product->product->quantity,
-                    'order_id'          => $order->id,
-                    'created_by'        => Auth::user()->id,
-                    'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
+                    'product_id' => $order_product->product_id,
+                    'sku' => $order_product->product->sku,
+                    'quantity' => $order_product->qty,
+                    'new_stock' => $order_product->product->quantity + $order_product->qty,
+                    'old_stock' => $order_product->product->quantity,
+                    'order_id' => $order->id,
+                    'created_by' => Auth::user()->id,
+                    'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
                 ];
                 log_product_history($logParam);
 
@@ -1140,12 +1156,12 @@ class OrderController extends BaseController
         }
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'confirm_payment',
+            'action' => 'confirm_payment',
             'description' => trans('plugins/ecommerce::order.payment_was_confirmed_by', [
                 'money' => format_price($order->amount),
             ]),
-            'order_id'    => $order->id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
         ]);
 
         return $response->setMessage(trans('plugins/ecommerce::order.confirm_payment_success'));
@@ -1176,7 +1192,7 @@ class OrderController extends BaseController
         foreach ($request->input('products', []) as $productId => $quantity) {
             $orderProduct = $this->orderProductRepository->getFirstBy([
                 'product_id' => $productId,
-                'order_id'   => $id,
+                'order_id' => $id,
             ]);
             if ($quantity > ($orderProduct->qty - $orderProduct->restock_quantity)) {
                 $hasError = true;
@@ -1214,7 +1230,7 @@ class OrderController extends BaseController
 
             $orderProduct = $this->orderProductRepository->getFirstBy([
                 'product_id' => $productId,
-                'order_id'   => $id,
+                'order_id' => $id,
             ]);
             if ($orderProduct) {
                 $orderProduct->restock_quantity += $quantity;
@@ -1224,13 +1240,13 @@ class OrderController extends BaseController
 
         if ($request->input('refund_amount', 0) > 0) {
             $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'refund',
+                'action' => 'refund',
                 'description' => trans('plugins/ecommerce::order.refund_success_with_price', [
                     'price' => format_price($request->input('refund_amount')),
                 ]),
-                'order_id'    => $order->id,
-                'user_id'     => Auth::user()->getKey(),
-                'extras'      => json_encode([
+                'order_id' => $order->id,
+                'user_id' => Auth::user()->getKey(),
+                'extras' => json_encode([
                     'amount' => $request->input('refund_amount'),
                     'method' => $payment->payment_channel ?? PaymentMethodEnum::COD,
                 ]),
@@ -1266,11 +1282,11 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shippingData = [
-            'address'     => $request->input('address'),
-            'country'     => $request->input('country'),
-            'state'       => $request->input('state'),
-            'city'        => $request->input('city'),
-            'weight'      => $weight,
+            'address' => $request->input('address'),
+            'country' => $request->input('country'),
+            'state' => $request->input('state'),
+            'city' => $request->input('city'),
+            'weight' => $weight,
             'order_total' => $orderAmount,
         ];
 
@@ -1280,7 +1296,7 @@ class OrderController extends BaseController
         foreach ($shipping as $key => $shippingItem) {
             foreach ($shippingItem as $subKey => $subShippingItem) {
                 $result[$key . ';' . $subKey . ';' . $subShippingItem['price']] = [
-                    'name'  => $subShippingItem['name'],
+                    'name' => $subShippingItem['name'],
                     'price' => format_price($subShippingItem['price'], null, true),
                 ];
             }
@@ -1403,8 +1419,8 @@ class OrderController extends BaseController
             ])
             ->addScripts(['blockui', 'input-mask']);
 
-       // $order->editing_by = auth()->user()->id;
-       // $order->editing_started_at = Carbon::now();
+        // $order->editing_by = auth()->user()->id;
+        // $order->editing_started_at = Carbon::now();
         $order->save();
 
 
@@ -2208,22 +2224,22 @@ class OrderController extends BaseController
     public function addOrderImportHistory($orderId, $sheet)
     {
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'import_order',
+            'action' => 'import_order',
             'description' => 'This Order has been imported from ' . $sheet . '  by %user_name%.',
-            'order_id'    => $orderId,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $orderId,
+            'user_id' => Auth::user()->getKey(),
         ], []);
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'create_order',
+            'action' => 'create_order',
             'description' => trans('plugins/ecommerce::order.new_order',
                 ['order_id' => get_order_code($orderId)]),
-            'order_id'    => $orderId,
+            'order_id' => $orderId,
         ], []);
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'confirm_order',
+            'action' => 'confirm_order',
             'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-            'order_id'    => $orderId,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $orderId,
+            'user_id' => Auth::user()->getKey(),
         ], []);
     }
 
@@ -2232,14 +2248,14 @@ class OrderController extends BaseController
 
         $data = [
             'payment_method_id' => $request->payment_id,
-            'meta'              => [
+            'meta' => [
                 'reference' => $request->order_id,
-                'tax'       => 0,
-                'subtotal'  => $request->sub_total,
+                'tax' => 0,
+                'subtotal' => $request->sub_total,
                 'lineItems' => []
             ],
-            'total'             => $request->amount,
-            'pre_auth'          => 1
+            'total' => $request->amount,
+            'pre_auth' => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
         list($response, $info) = omni_api($url, $data, 'POST');
@@ -2316,10 +2332,10 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'order_status_changed',
+            'action' => 'order_status_changed',
             'description' => 'Order status changed to ' . $requestData['status'] . ' by %user_name%.',
-            'order_id'    => $order->id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
         ], []);
 
         return $response;
@@ -2490,10 +2506,10 @@ class OrderController extends BaseController
         /*************** Replication End ****************/
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action'      => 'split_order',
+            'action' => 'split_order',
             'description' => 'Order split by %user_name%.',
-            'order_id'    => $id,
-            'user_id'     => Auth::user()->getKey(),
+            'order_id' => $id,
+            'user_id' => Auth::user()->getKey(),
         ], []);
 
         return $response->setData($new_order)->setMessage(trans('core/base::notices.create_success_message'));
@@ -2570,7 +2586,8 @@ class OrderController extends BaseController
 
     }
 
-    public function removeDiscount($orderId, Request $request) {
+    public function removeDiscount($orderId, Request $request)
+    {
         $getType = $request->get('discount_type', false);
         if ($getType == 'coupon') {
             $order = Order::where('id', $orderId)->first();
@@ -2581,16 +2598,220 @@ class OrderController extends BaseController
             $order->save();
 
             $this->orderHistoryRepository->createOrUpdate([
-                'action'      => 'remove_discount_on_order',
+                'action' => 'remove_discount_on_order',
                 'description' => '$' . $order->discount_amount . ' discount removed from order by %user_name%.',
-                'order_id'    => $order->id,
-                'user_id'     => Auth::user()->getKey(),
+                'order_id' => $order->id,
+                'user_id' => Auth::user()->getKey(),
             ], []);
 
         } elseif ($getType == 'promotion') {
             $this->promotion_service->removePromotionIfAvailable($orderId);
         }
         return redirect()->back();
+    }
+
+
+    public function createInvoice($orderId, Request $request, BaseHttpResponse $response)
+    {
+        if ($orderId) {
+            $order = Order::where('id', $orderId)->first();
+            $user = Customer::where('id', $order->user_id)->first();
+
+            //LIVE
+            $apiContext = new \PayPal\Rest\ApiContext(
+                new \PayPal\Auth\OAuthTokenCredential(
+                    env('PAYPAL_SANDBOX_CLIENT_ID', 'AciZq5ZxzoDCQB03f_TzwP9dC6UB2GqihP4s_gu3DJLfcVryAB8sf2UFTCWXl5rSSagaKXHYDpwL_xpP'),     // ClientID
+                    env('PAYPAL_SANDBOX_CLIENT_SECRET', 'EHgN0b0AItivo9SztzVFr5ZUVshS_MdagqUcaHHjX-QLdNRbbPZGeKdVZDA2ebr9JRjyCeMDKJSrQgdQ')     // ClientSecret
+                )
+            );
+
+            //SANDBOX
+            /*$apiContext = new \PayPal\Rest\ApiContext(
+                new \PayPal\Auth\OAuthTokenCredential(
+                    'AQX1TpbTGqjgE56LJL0M880xBPBIHKSY8wMT1Ehk8Po_fkIjGAqTbrOPZVNuea1OgjuLE-qZOjb3eysv',     // ClientID
+                    'EAZWdCMjo7OK1ndf-4658vQ5Xt9HII_cnwhJqRrKlDf0sfUEqrvJqIlFXJ8RtmyvUGuqeLzS4mbRyNXT'     // ClientSecret
+                )
+            );*/
+
+            $apiContext->setConfig(
+                array(
+                    'mode' => env('PAYPAL_MODE', 'live'),
+                    'log.LogEnabled' => true,
+                    'log.FileName' => '../PayPal.log',
+                    'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                )
+            );
+
+            $invoice = new Invoice();
+            $invoice
+                ->setMerchantInfo(new MerchantInfo())
+                ->setBillingInfo(array(new BillingInfo()))
+                ->setNote($request->type == 0 ? 'Shipping' : 'Order' . " Cost of order # " . $order->id)
+                ->setPaymentTerm(new PaymentTerm())
+                ->setShippingInfo(new ShippingInfo());
+
+            //LIVE
+            $invoice->getMerchantInfo()
+                ->setemail("accountsreceivable@landbapparel.com")
+                ->setbusinessName("LUCKY AND BLESSED LLC")
+                ->setPhone(new Phone())
+                ->setAddress(new InvoiceAddress());
+
+            //SANDBOX
+            /*$invoice->getMerchantInfo()
+                ->setemail("sb-h2vny4007350@business.example.com")
+                ->setbusinessName("LUCKY AND BLESSED LLC")
+                ->setPhone(new Phone())
+                ->setAddress(new InvoiceAddress());*/
+
+            $invoice->getMerchantInfo()->getPhone()
+                ->setCountryCode("001")
+                ->setNationalNumber("9724086273");
+
+            $invoice->getMerchantInfo()->getAddress()
+                ->setLine1("12801 N Stemmon.")
+                ->setCity("Farmers Branch")
+                ->setState("TX")
+                ->setPostalCode("75234")
+                ->setCountryCode("US");
+
+            $billing = $invoice->getBillingInfo();
+            $billing[0]->setEmail($user->paypal_email);
+
+
+            $items = array();
+            if ($request->type == 0) {
+                if ($order->shipping_amount > 0) {
+                    // After Step 1
+                    $items[0] = new InvoiceItem();
+                    $items[0]
+                        ->setName("Shipping Cost of Order ID:" . $order->id)
+                        ->setQuantity(1)
+                        ->setUnitPrice(new Currency());
+                    $items[0]->getUnitPrice()
+                        ->setCurrency("USD")
+                        ->setValue($order->shipping_amount);
+                } else {
+                    return $response->setCode(406)->setError()->setMessage('Please add the shipping cost first');
+                }
+            } else {
+                $i = 0;
+                foreach ($order->products as $ord) {
+                    $items[$i] = new InvoiceItem();
+                    $items[$i]
+                        ->setName("Product Code:" . $ord->product->sku)
+                        ->setQuantity($ord->qty)
+                        ->setUnitPrice(new Currency());
+                    $items[$i]->getUnitPrice()
+                        ->setCurrency("USD")
+                        ->setValue($ord->price);
+                    $i++;
+                }
+            }
+            $invoice->setItems($items);
+
+            $invoice->getPaymentTerm()->setTermType("NET_45");
+
+            $invoice->getShippingInfo()
+                ->setFirstName($user->first_name)
+                ->setLastName($user->last_name)
+                ->setBusinessName(isset($user->detail->company) ? $user->detail->company : 'No Company')
+                ->setPhone(new Phone())
+                ->setAddress(new InvoiceAddress());
+
+            $invoice->getShippingInfo()->getPhone()
+                ->setCountryCode("001")
+                ->setNationalNumber(isset($user->phone) ? $user->phone : '0000000000');
+
+            $invoice->getShippingInfo()->getAddress()
+                ->setLine1(isset($user->shippingAddress->address) ? $user->shippingAddress->address : '')
+                ->setCity(isset($user->shippingAddress->city) ? $user->shippingAddress->city : '')
+                ->setState(isset($user->shippingAddress->state) ? $user->shippingAddress->state : '')
+                ->setPostalCode(isset($user->shippingAddress->zip_code) ? $user->shippingAddress->zip_code : '')
+                ->setCountryCode(isset($user->shippingAddress->country) ? $user->shippingAddress->country : 'US');
+
+            $invoice->setLogoUrl('https://landbapparel.com/images/logos/31/landb-final---logo.png');
+
+
+            try {
+                $paypal = Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->whereNotNull('paypal_invoice_id')->first();
+                if ($paypal != null) {
+                    $notify = new Notification();
+                    $notify->setSubject("Invoice Reminder")->setNote("Please pay soon")->setSendToMerchant(true);
+                    $invoice = Invoice::get($paypal->paypal_invoice_id, $apiContext);
+                    $invoice->remind($notify, $apiContext);
+                    return $response->setMessage('Reminder Sent');
+                } else {
+                    $invoice = $invoice->create($apiContext);
+                    $invoice->send($apiContext);
+                    $invoice = Invoice::get($invoice->id, $apiContext);
+
+                    Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->update(['paypal_invoice_id' => $invoice->id]);
+                    return $response->setMessage('Invoice created successfully');
+                }
+
+            } catch (\PayPal\Exception\PayPalConnectionException $ex) {
+                echo $ex->getCode(); // Prints the Error Code
+                echo $ex->getData();
+                die($ex);
+            }
+        }
+
+        return $response->setCode(406)->setError()->setMessage('Data is incorrect');
+    }
+
+    public function checkInvoice(Request $request)
+    {
+        /*$apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                'AQX1TpbTGqjgE56LJL0M880xBPBIHKSY8wMT1Ehk8Po_fkIjGAqTbrOPZVNuea1OgjuLE-qZOjb3eysv',     // ClientID
+                'EAZWdCMjo7OK1ndf-4658vQ5Xt9HII_cnwhJqRrKlDf0sfUEqrvJqIlFXJ8RtmyvUGuqeLzS4mbRyNXT'     // ClientSecret
+            )
+        );*/
+
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                env('PAYPAL_SANDBOX_CLIENT_ID', 'AciZq5ZxzoDCQB03f_TzwP9dC6UB2GqihP4s_gu3DJLfcVryAB8sf2UFTCWXl5rSSagaKXHYDpwL_xpP'),     // ClientID
+                env('PAYPAL_SANDBOX_CLIENT_SECRET', 'EHgN0b0AItivo9SztzVFr5ZUVshS_MdagqUcaHHjX-QLdNRbbPZGeKdVZDA2ebr9JRjyCeMDKJSrQgdQ')     // ClientSecret
+            )
+        );
+
+        $apiContext->setConfig(
+            array(
+                'mode' => env('PAYPAL_MODE', 'sandbox'),
+                'log.LogEnabled' => true,
+                'log.FileName' => '../PayPal.log',
+                'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+            )
+        );
+
+        /*try {
+            $paypal = PaypalInvoice::where('invoice_status', PaypalInvoice::UNPAID)->get();
+            if ($request->isMethod('GET')) {
+                dd('Get');
+            } else {
+                foreach ($paypal as $pay) {
+                    $invoice = Invoice::get($pay->invoice_id, $apiContext);
+                    if ($invoice->status == PaypalInvoice::PAID) {
+                        $status = [];
+                        $status['invoice_status'] = 1;
+                        PaypalInvoice::where('id', $pay->id)->update($status);
+                        if ($pay->type == 0) {
+                            $status['invoice_status'] = 1;
+                            Order::where('id', $pay->order_id)->update($status);
+                        } else {
+                            $status['product_invoice_status'] = 1;
+                            Order::where('id', $pay->order_id)->update($status);
+                        }
+                    }
+                }
+                return 'Invoice Checked';
+            }
+        } catch (\PayPal\Exception\PayPalConnectionException $ex) {
+            echo $ex->getCode(); // Prints the Error Code
+            echo $ex->getData();
+            die($ex);
+        }*/
     }
 
 }
