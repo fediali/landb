@@ -140,7 +140,9 @@ class CheckoutController extends Controller
         ];
 
         $order = Order::with('products')->find($request->input('order_id'));
-
+        if($order->is_finished == 1){
+          return redirect()->route('public.products')->with('error', 'Order is already been placed');
+        }
         $order->update(['notes' => $request->notes]);
 
         if (!isset(auth('customer')->user()->shippingAddress[0]) || !isset(auth('customer')->user()->billingAddress[0])) {
