@@ -31,6 +31,7 @@ class Payment extends BaseModel
         'payment_channel',
         'paypal_email',
         'paypal_invoice_id',
+        'type',
         'description',
         'status',
         'order_id',

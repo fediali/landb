@@ -2734,9 +2734,9 @@ class OrderController extends BaseController
 
 
             try {
-                $paypal = Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->whereNotNull('paypal_invoice_id')->orderBy('id', 'DESC')->first();
-                if ($paypal != null) {
-                    if ($this->checkInvoice($paypal->paypal_invoice_id)) {
+                $paypal = Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal', 'type' => $request->type])->whereNotNull('paypal_invoice_id')->orderBy('id', 'DESC')->first();
+                if ($paypal != null && $paypal->paypal_invoice_id) {
+                    if ($this->checkInvoice($paypal->paypal_invoice_id, $request->type)) {
                         return redirect()->back();
                     }
                     $notify = new Notification();
@@ -2749,7 +2749,7 @@ class OrderController extends BaseController
                     $invoice->send($apiContext);
                     $invoice = Invoice::get($invoice->id, $apiContext);
 
-                    Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->update(['paypal_invoice_id' => $invoice->id]);
+                    Payment::updateOrCreate(['order_id' => $order->id, 'payment_channel' => 'paypal', 'type' => $request->type])->update(['paypal_invoice_id' => $invoice->id]);
                     return $response->setMessage('Invoice created successfully');
                 }
 
@@ -2763,7 +2763,7 @@ class OrderController extends BaseController
         return $response->setCode(406)->setError()->setMessage('Data is incorrect');
     }
 
-    public function checkInvoice($paypal_invoice_id)
+    public function checkInvoice($paypal_invoice_id, $type)
     {
         //LIVE
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -2791,8 +2791,8 @@ class OrderController extends BaseController
         );
 
         try {
-            $paypal = Payment::where('paypal_invoice_id', $paypal_invoice_id)->where('status', 'pending')->where('payment_channel', 'paypal')->orderBy('id', 'DESC')->first();
-            if ($paypal->paypal_invoice_id) {
+            $paypal = Payment::where('paypal_invoice_id', $paypal_invoice_id)->where('status', 'pending')->where('payment_channel', 'paypal')->where('type', $type)->orderBy('id', 'DESC')->first();
+            if ($paypal && $paypal->paypal_invoice_id) {
                 $invoice = Invoice::get($paypal->paypal_invoice_id, $apiContext);
                 if ($invoice->status == 'PAID') {
                     Payment::where('id', $paypal->id)->update(['status' => 'completed']);
