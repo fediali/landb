@@ -79,7 +79,7 @@ class CartController extends Controller
             $cart_status = $this->createCartItem($data, $product);
             //dd($cart_status);
             if (empty($cart_status)) {
-                return response()->json(['message' => 'Product added to cart successfully'], 200);
+                return response()->json(['message' => 'Pack added to bag successfully'], 200);
             } else {
                 return response()->json(['message' => $cart_status], 500);
             }
