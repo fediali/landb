@@ -4769,7 +4769,7 @@ html { scroll-behavior: smooth;}
         margin-left: 20%;
     }
     .product-carousel .owl-item img {
-        width: 490px !important;
+        width: 80% !important;
     }
     .owl-carousel .owl-dots {
         top: 0; 
