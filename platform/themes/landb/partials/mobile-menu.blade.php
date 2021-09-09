@@ -1,6 +1,6 @@
-<!-- <button class="toggle-menu">
+<button class="toggle-menu">
     <span></span>
-</button> -->
+</button>
 <div class="navigation nav-custom">
     <nav class="vg-nav vg-nav-lg">
         <ul {!! $options !!}>

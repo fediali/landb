@@ -55,7 +55,7 @@
                         @if($variation)
                             <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
                         @endif--}}
-                        <p class="cart-product-size">
+                        <p class="cart-product-size mb-2">
                             SIZE: {{ !empty($cartItem->product->sizes) ? $cartItem->product->sizes : 'NaN' }}</p>
                         <p class="cart-product-code mb-2">
                             Pieces In Pack: {{ !empty($cartItem->product->prod_pieces) ? $cartItem->product->prod_pieces : 'NaN' }}</p>

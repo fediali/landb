@@ -2022,6 +2022,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .toggle-menu {
+        display: none;
+    }
     .dp-scroll-text p {
         font-size: 55px !important;
     }
@@ -3317,7 +3320,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         bottom: -310px;
     }
     .detail-h1 {
-        padding-top: 280px !important;
+        padding-top: 175px !important;
     }
     .grid-container {
         height: 1200vh !important;
@@ -3571,6 +3574,9 @@ table.shop_table tr th {
 @media screen and (min-width: 992px) and (max-width: 1024px) {
     .shipping-checkbox-area p {
         width:60%;
+    }
+    .detail-h1 {
+        padding-top: 0px !important;
     }
 }
 

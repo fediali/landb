@@ -145,6 +145,7 @@
 
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
+            
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
                     <label class="">
@@ -171,6 +172,7 @@
                     <span class="checkmark"></span>
                 </label>--}}
             </div>
+            <p class="mt-3 detail-color-text"> Note:  Add Pack Quantity </p>
             <form class="add_to_cart_form" id="variation-form" data-id="{{ $default }}" method='POST'
                   action='{{ route('public.cart.add_to_cart') }}'>
                 <div class="row m-0 mt-4">
