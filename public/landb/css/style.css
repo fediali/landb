@@ -4759,8 +4759,8 @@ html { scroll-behavior: smooth;}
 /******* PRODUCT SLIDER CSS **********/
 @media screen and (min-width: 992px) and (max-width: 5000px) {
     .owl-stage-outer {
-        width: 100% !important;
-        margin-left: 21%;
+        width: 80% !important;
+        margin-left: 20%;
     }
     .product-carousel .owl-item img {
         width: 490px !important;
