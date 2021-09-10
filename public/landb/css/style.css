@@ -2022,6 +2022,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .toggle-menu {
+        display: none;
+    }
     .dp-scroll-text p {
         font-size: 55px !important;
     }
@@ -3317,7 +3320,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         bottom: -310px;
     }
     .detail-h1 {
-        padding-top: 280px !important;
+        padding-top: 175px !important;
     }
     .grid-container {
         height: 1200vh !important;
@@ -3571,6 +3574,9 @@ table.shop_table tr th {
 @media screen and (min-width: 992px) and (max-width: 1024px) {
     .shipping-checkbox-area p {
         width:60%;
+    }
+    .detail-h1 {
+        padding-top: 0px !important;
     }
 }
 
@@ -4760,7 +4766,7 @@ html { scroll-behavior: smooth;}
 @media screen and (min-width: 992px) and (max-width: 5000px) {
     .owl-stage-outer {
         width: 80% !important;
-        margin-left: 21%;
+        margin-left: 20%;
     }
     .product-carousel .owl-item img {
         width: 490px !important;
@@ -4814,7 +4820,55 @@ html { scroll-behavior: smooth;}
 
   .form-control.is-invalid, .was-validated .form-control:invalid { 
     background-position: center right calc(.75em + .1875rem) !important;}
+   
+
+    .magnify-modal {
+        box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
+      }
   
+      .magnify-header .magnify-toolbar {
+        background-color: rgba(0, 0, 0, .5);
+      }
   
+      .magnify-stage {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border-width: 0;
+        border: none !important;
+      }
+
+      .magnify-button {
+        background: #c5c5c5 !important;
+      }
+
+      .magnify-toolbar .magnify-button {
+        background:rgb(255 255 255 / 60%) !important;
+      }
   
-/******* PRODUCT SLIDER CSS **********/
+      .magnify-footer {
+        bottom: 10px;
+      }
+  
+      .magnify-footer .magnify-toolbar {
+        background-color: #fff;
+        border-radius: 5px;
+      }
+  
+      .magnify-loader {
+        background-color: transparent;
+      }
+  
+      .magnify-header,
+      .magnify-footer {
+        pointer-events: none;
+      }
+  
+      .magnify-button {
+        pointer-events: auto;
+      }
+
+      .magnify-footer .magnify-toolbar {
+        background-color: transparent;
+      }

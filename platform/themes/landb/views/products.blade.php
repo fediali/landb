@@ -58,11 +58,11 @@
                     <a href="{{ request()->fullUrlWithQuery(['limit' => 5]) }}"><span class="fivedots {{ (request()->query('limit') == 5) ? '':'active' }}"></span></a>
                 </li> -->
                     <li class="seprator"></li>
-                    <li class="filter"><a href="#" id="filtertoggle" class="filterbtn">Filter <span
-                                class="filtericon"></span></a>
+{{--                    <li class="filter"><a href="#" id="filtertoggle" class="filterbtn">Filter <span--}}
+{{--                                class="filtericon"></span></a>--}}
 
 
-                    </li>
+{{--                    </li>--}}
                 </ul>
             </div>
             <div class="" id="filtermenu">

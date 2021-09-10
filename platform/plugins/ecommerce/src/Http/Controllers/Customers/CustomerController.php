@@ -23,6 +23,7 @@ use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\CustomerHistory;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
@@ -186,6 +187,17 @@ class CustomerController extends BaseController
         $data['is_private'] = isset($data['is_private']) ? $data['is_private'] : 0;
 
         $customer = $this->customerRepository->createOrUpdate($data, ['id' => $id]);
+
+        if (isset($data['status'])) {
+            $custHist = [
+                'action' => 'customer_status_changed',
+                'description' => $customer->name.' status changed to '.$data['status'].' by '.auth()->user()->username,
+                'user_id' => auth()->user()->id,
+                'customer_id' => $customer->id,
+            ];
+            CustomerHistory::create($custHist);
+        }
+
         $data = $request->all();
         $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
         $data = array_diff_key($data, array_flip($remove));

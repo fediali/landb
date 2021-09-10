@@ -17,7 +17,7 @@ class CustomerEditRequest extends Request
         $rules = [
             'name'  => 'required|max:120|min:2',
             'email' => 'required|max:60|min:6|email|unique:ec_customers,email,' . $this->route('customer'),
-            'status' => 'required',
+            //'status' => 'required',
             'first_name'     => 'required|max:255',
             'last_name'     => 'required|max:255',
             'business_phone'     => 'required|max:12',
