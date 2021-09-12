@@ -66,7 +66,7 @@ class importCustomers extends Command
         DB::table('ec_customers_merge')->truncate();
         DB::table('ec_customers')->truncate();
 
-        $file = File::get(storage_path('app/public/lnb-cust_24599.json')); 
+        $file = File::get(storage_path('app/public/lnb-cust_24599.json'));
         $data = json_decode(utf8_encode($file), true);
         foreach ($data['rows'] as $row) {
             if ($row['user_id']) {
@@ -119,7 +119,7 @@ class importCustomers extends Command
                         'sales_tax_id'            => $row['sales_tax_id'],
                         'first_name'              => $row['firstname'],
                         'last_name'               => $row['lastname'],
-                        'business_phone'          => $row['phone'],
+                        'business_phone'          => $row['user_phone'],
                         'company'                 => $row['company'],
                         'phone'                   => $row['mob'],
                         'store_facebook'          => $row['fb'],
