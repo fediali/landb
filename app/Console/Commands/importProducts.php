@@ -89,9 +89,9 @@ class importProducts extends Command
         $file = File::get(public_path('lnb-products_43080.json'));
         $data = json_decode(utf8_encode($file), true);
 
+        dd($data);
+
         foreach ($data['rows'] as $row) {
-            dd($row);
-            
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
                 $category = ProductCategory::where('name', $row['category'])->first();
