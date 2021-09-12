@@ -168,7 +168,7 @@ class importCustomers extends Command
                     $taxData = [
                         'customer_id'          => $row['user_id'],
                         'purchaser_name'       => $row['cert_name'] ? $row['cert_name'] : 'N/A',
-                        'purchaser_phone'      => $row['cert_phone'],
+                        'purchaser_phone'      => $row['cert_phone'] ? $row['cert_phone'] : 'N/A',
                         'purchaser_address'    => $row['cert_address'] . ' ' . $row['cert_address2'],
                         'purchaser_city'       => $row['cert_address2'],
                         'permit_no'            => $row['cert_tax_number'],
