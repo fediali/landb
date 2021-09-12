@@ -527,8 +527,8 @@
         $(document).ready(function () {
 
           function dp_scroll_text() {
-            $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide");
-            $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide");
+            $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide up-top");
+            $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide up-top");
             var images = $("p.dp-run-script.dp-animate-4").next().data('products');
             $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
             $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
