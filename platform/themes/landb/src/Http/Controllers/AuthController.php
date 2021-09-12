@@ -111,8 +111,6 @@ class AuthController extends Controller
 
         $checkOld = Customer::where('email', $email)->value('old_customer');
 
-        dd($checkOld);
-
         if ($checkOld) {
             $res = $this->checkOldLoginCredentials($email, $password);
             if ($res && isset($res->token)) {
