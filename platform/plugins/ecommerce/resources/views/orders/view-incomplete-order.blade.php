@@ -106,13 +106,15 @@
                                             <td class="text-right p-sm-r">
                                                 {{ trans('plugins/ecommerce::order.order_amount') }}:
                                             </td>
-                                            <td class="text-right p-r5">{{ format_price($order->amount) }}</td>
+                                            {{--<td class="text-right p-r5">{{ format_price($order->amount) }}</td>--}}
+                                            <td class="text-right p-r5">{{ format_price($order->sub_total) }}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="3" class="text-right p-sm-r">
                                                 {{ trans('plugins/ecommerce::order.total_amount') }}:
                                             </td>
-                                            <td class="text-right p-r5">{{ format_price($order->amount + $order->shipping_amount - $order->discount_amount) }}</td>
+                                            {{--<td class="text-right p-r5">{{ format_price($order->amount + $order->shipping_amount - $order->discount_amount) }}</td>--}}
+                                            <td class="text-right p-r5">{{ format_price($order->amount + $order->shipping_amount) }}</td>
                                         </tr>
                                         </tbody>
                                     </table>
