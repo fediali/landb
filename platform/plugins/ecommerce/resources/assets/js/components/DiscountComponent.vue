@@ -1,6 +1,6 @@
 <template>
     <div class="flexbox-grid no-pd-none">
-        <div class="flexbox-content">
+        <div  class="flexbox-content pb-4">
             <div class="wrapper-content">
                 <div class="pd-all-20 ws-nm">
                     <label class="title-product-main text-no-bold"><span
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pd-all-20 border-top-color">
+                <div class="pd-all-20 border-top-color pb-5">
                     <label class="title-product-main text-no-bold block-display">{{ __('Coupon type') }}</label>
                     <div class="form-inline form-group discount-input mt15 mb0 ws-nm">
                         <div class="ui-select-wrapper inline_block mb5" style="min-width: 200px;">
@@ -335,7 +335,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin: 10px 0;" v-show="is_promotion">
+                        <div style="margin:40px 0 10px 0;" v-show="is_promotion">
                             <span class="lb-dis">  {{ __('Number of products') }}: </span>
                             <input type="text" class="form-control width-100-px p-none-r" name="product_quantity"
                                    id="product-quantity" v-model="product_quantity">
