@@ -358,7 +358,7 @@ class importProducts extends Command
                 }
 
                 //echo $check ? $check->sku : $row['product_code'].'\n';
-                echo isset($product) ? '' : $row['product_id'] . '====';
+                echo isset($product) ? $row['product_id'] : $row['product_id'] . '====';
             }
         }
 
