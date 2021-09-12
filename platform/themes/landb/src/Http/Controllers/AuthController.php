@@ -91,7 +91,6 @@ class AuthController extends Controller
 
         // Submit the POST request
         $result = curl_exec($crl);
-        dd($result);
         // Close cURL session handle
         curl_close($crl);
 
