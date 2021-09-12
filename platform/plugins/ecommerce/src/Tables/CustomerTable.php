@@ -257,7 +257,7 @@ class CustomerTable extends TableAbstract
         }
 
         if (!isset($search_items['report_type'])) {
-            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
+            //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
         }
 
         if (!empty($search_items)) {
@@ -337,7 +337,8 @@ class CustomerTable extends TableAbstract
                 'name'  => 'ec_customer_detail.company',
                 'title' => 'Company',
                 'class' => 'text-left',
-            ], 'email'            => [
+            ],
+            'email'            => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
@@ -355,12 +356,12 @@ class CustomerTable extends TableAbstract
                 'class' => 'text-left',
                 'width' => '100px',
             ],
-            'order_count'      => [
+            /*'order_count'      => [
                 'name'       => 'order_count',
                 'title'      => 'Order Count',
                 'class'      => 'text-left',
                 'searchable' => false
-            ],
+            ],*/
             /*'order_spend'      => [
                 'name'       => 'order_spend',
                 'title'      => 'Spend',
