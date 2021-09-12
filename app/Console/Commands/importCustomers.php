@@ -181,7 +181,11 @@ class importCustomers extends Command
                         'status'               => 1,
                     ];
                     CustomerTaxCertificate::create($taxData);
+                } else {
+                    echo $row['user_id'].'----------';
                 }
+            } else {
+                echo $row['user_id'].'==========';
             }
         }
 
