@@ -66,7 +66,7 @@ class importCustomers extends Command
         DB::table('ec_customers_merge')->truncate();
         DB::table('ec_customers')->truncate();
 
-        $file = File::get(storage_path('app/public/lnb-customers_24599.json'));
+        $file = File::get(storage_path('app/public/lnb-cust_24599.json'));
         $data = json_decode(utf8_encode($file), true);
         foreach ($data['rows'] as $row) {
             if ($row['user_id']) {
