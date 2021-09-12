@@ -163,15 +163,42 @@ class importOrders extends Command
 
             $orderProducts = DB::table('hw_order_details')->where('order_id', $order->order_id)->get();
             foreach ($orderProducts as $orderProduct) {
-                $productName = Product::where('id', $orderProduct->product_id)->value('name');
+                //$productName = Product::where('id', $orderProduct->product_id)->value('name');
+                $productObj = Product::where('id', $orderProduct->product_id)->first();
+                $diff = 0;
+                $isPack = 0;
+                $qty = $orderProduct->amount;
+                if ($productObj && $productObj->prod_pieces) {
+                    $isPack = 1;
+                    $packQty = floor($qty / $productObj->prod_pieces);
+                    $qty = $packQty;
+
+                    $looseQty = $packQty * $productObj->prod_pieces;
+                    $diff = $qty - $looseQty;
+                }
                 $orderProductData = [
                     'order_id'     => $orderProduct->order_id,
-                    'qty'          => $orderProduct->amount,
+                    'qty'          => $qty,
+                    'is_pack'      => $isPack,
                     'price'        => $orderProduct->price,
                     'product_id'   => $orderProduct->product_id,
-                    'product_name' => $productName ? $productName : $orderProduct->product_code
+                    'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
                 ];
                 OrderProduct::create($orderProductData);
+
+                if ($diff) {
+                    $isPack = 0;
+                    $orderProductData = [
+                        'order_id'     => $orderProduct->order_id,
+                        'qty'          => $diff,
+                        'is_pack'      => $isPack,
+                        'price'        => $orderProduct->price,
+                        'product_id'   => $orderProduct->product_id,
+                        'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                    ];
+                    OrderProduct::create($orderProductData);
+                }
+
             }
 
             $custAddB = [
