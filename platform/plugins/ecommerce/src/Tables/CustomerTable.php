@@ -322,12 +322,12 @@ class CustomerTable extends TableAbstract
                 'width'   => '20px',
                 'visible' => false,
             ],
-            'salesperson_id'   => [
-                'name'  => 'ec_customers.salesperson_id',
-                'title' => 'Rep',
-                'width' => '20px',
-                'class' => 'text-left',
-            ],
+//            'salesperson_id'   => [
+//                'name'  => 'ec_customers.salesperson_id',
+//                'title' => 'Rep',
+//                'width' => '20px',
+//                'class' => 'text-left',
+//            ],
             'name'             => [
                 'name'  => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
