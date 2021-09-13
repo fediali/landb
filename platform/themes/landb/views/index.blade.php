@@ -65,7 +65,8 @@
                         <div class="listbox">
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                 <div class="img">
-                                    {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
+{{--                                    {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}--}}
+                                    <img src="{{@$product->images[0]}}">
                                     <span>New</span>
                                     <div class="imgoverlay">
                                         <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
