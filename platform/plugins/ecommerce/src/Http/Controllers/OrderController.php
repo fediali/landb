@@ -2734,8 +2734,11 @@ class OrderController extends BaseController
 
 
             try {
-                $paypal = Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->whereNotNull('paypal_invoice_id')->first();
-                if ($paypal != null) {
+                $paypal = Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal', 'type' => $request->type])->whereNotNull('paypal_invoice_id')->orderBy('id', 'DESC')->first();
+                if ($paypal != null && $paypal->paypal_invoice_id) {
+                    if ($this->checkInvoice($paypal->paypal_invoice_id, $request->type)) {
+                        return redirect()->back();
+                    }
                     $notify = new Notification();
                     $notify->setSubject("Invoice Reminder")->setNote("Please pay soon")->setSendToMerchant(true);
                     $invoice = Invoice::get($paypal->paypal_invoice_id, $apiContext);
@@ -2746,7 +2749,7 @@ class OrderController extends BaseController
                     $invoice->send($apiContext);
                     $invoice = Invoice::get($invoice->id, $apiContext);
 
-                    Payment::where(['order_id' => $order->id, 'payment_channel' => 'paypal'])->update(['paypal_invoice_id' => $invoice->id]);
+                    Payment::updateOrCreate(['order_id' => $order->id, 'payment_channel' => 'paypal', 'type' => $request->type])->update(['paypal_invoice_id' => $invoice->id]);
                     return $response->setMessage('Invoice created successfully');
                 }
 
@@ -2760,15 +2763,9 @@ class OrderController extends BaseController
         return $response->setCode(406)->setError()->setMessage('Data is incorrect');
     }
 
-    public function checkInvoice(Request $request)
+    public function checkInvoice($paypal_invoice_id, $type)
     {
-        /*$apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                'AQX1TpbTGqjgE56LJL0M880xBPBIHKSY8wMT1Ehk8Po_fkIjGAqTbrOPZVNuea1OgjuLE-qZOjb3eysv',     // ClientID
-                'EAZWdCMjo7OK1ndf-4658vQ5Xt9HII_cnwhJqRrKlDf0sfUEqrvJqIlFXJ8RtmyvUGuqeLzS4mbRyNXT'     // ClientSecret
-            )
-        );*/
-
+        //LIVE
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 env('PAYPAL_SANDBOX_CLIENT_ID', 'AciZq5ZxzoDCQB03f_TzwP9dC6UB2GqihP4s_gu3DJLfcVryAB8sf2UFTCWXl5rSSagaKXHYDpwL_xpP'),     // ClientID
@@ -2776,42 +2773,38 @@ class OrderController extends BaseController
             )
         );
 
+        //SANDBOX
+        /*$apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                'AQX1TpbTGqjgE56LJL0M880xBPBIHKSY8wMT1Ehk8Po_fkIjGAqTbrOPZVNuea1OgjuLE-qZOjb3eysv',     // ClientID
+                'EAZWdCMjo7OK1ndf-4658vQ5Xt9HII_cnwhJqRrKlDf0sfUEqrvJqIlFXJ8RtmyvUGuqeLzS4mbRyNXT'     // ClientSecret
+            )
+        );*/
+
         $apiContext->setConfig(
             array(
-                'mode' => env('PAYPAL_MODE', 'sandbox'),
+                'mode' => env('PAYPAL_MODE', 'live'),
                 'log.LogEnabled' => true,
                 'log.FileName' => '../PayPal.log',
                 'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
             )
         );
 
-        /*try {
-            $paypal = PaypalInvoice::where('invoice_status', PaypalInvoice::UNPAID)->get();
-            if ($request->isMethod('GET')) {
-                dd('Get');
-            } else {
-                foreach ($paypal as $pay) {
-                    $invoice = Invoice::get($pay->invoice_id, $apiContext);
-                    if ($invoice->status == PaypalInvoice::PAID) {
-                        $status = [];
-                        $status['invoice_status'] = 1;
-                        PaypalInvoice::where('id', $pay->id)->update($status);
-                        if ($pay->type == 0) {
-                            $status['invoice_status'] = 1;
-                            Order::where('id', $pay->order_id)->update($status);
-                        } else {
-                            $status['product_invoice_status'] = 1;
-                            Order::where('id', $pay->order_id)->update($status);
-                        }
-                    }
+        try {
+            $paypal = Payment::where('paypal_invoice_id', $paypal_invoice_id)->where('status', 'pending')->where('payment_channel', 'paypal')->where('type', $type)->orderBy('id', 'DESC')->first();
+            if ($paypal && $paypal->paypal_invoice_id) {
+                $invoice = Invoice::get($paypal->paypal_invoice_id, $apiContext);
+                if ($invoice->status == 'PAID') {
+                    Payment::where('id', $paypal->id)->update(['status' => 'completed']);
+                    return true;
                 }
-                return 'Invoice Checked';
             }
+            return false;
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
             echo $ex->getCode(); // Prints the Error Code
             echo $ex->getData();
             die($ex);
-        }*/
+        }
     }
 
 }

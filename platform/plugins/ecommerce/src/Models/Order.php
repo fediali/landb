@@ -233,6 +233,11 @@ class Order extends BaseModel
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
+
     /**
      * @return mixed
      */

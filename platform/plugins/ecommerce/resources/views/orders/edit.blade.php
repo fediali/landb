@@ -641,8 +641,23 @@
                         </div>
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                                <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}" class="btn btn-primary mb-2">Order Invoice</a>&nbsp;&nbsp;
-                                <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}" class="btn btn-warning mb-2">Shipping Invoice</a>&nbsp;&nbsp;
+                                @if($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status != 'completed')
+                                    <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}" class="btn btn-primary mb-2">
+                                        {{$order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->paypal_invoice_id ? 'Order Reminder' : 'Order Invoice'}}
+                                    </a>&nbsp;&nbsp;
+                                @elseif($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status == 'completed')
+                                    <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid</button>
+                                @endif
+                                @if($order->shipping_amount > 0)
+                                    @if($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status != 'completed')
+                                        <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}" class="btn btn-warning mb-2">
+                                            {{$order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->paypal_invoice_id ? 'Shipping Reminder' : 'Shipping Invoice'}}
+                                        </a>&nbsp;&nbsp;
+                                    @elseif($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status == 'completed')
+                                        <button type="button" class="btn btn-outline-success mb-2">Shipping Invoice Paid</button>
+                                    @endif
+                                @endif
+
                                 <button type="button" class="btn btn-outline-warning mb-2" data-toggle="modal"
                                         data-target="#modal_split_payment">Split Payment
                                 </button>
@@ -893,7 +908,7 @@
                                 <div class="wrapper-content bg-gray-white mb20">
                                     <div class="row m-0 pt-3 pb-3 bg-white">
                                         <div class="col-lg-12 ">
-                                            <strong class="mb-2">Cash on delivery</strong>
+                                            <strong class="mb-2">{{$order->payment->payment_channel->label()}}</strong>
                                         </div>
                                     </div>
                                 </div>

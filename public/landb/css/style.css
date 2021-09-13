@@ -4409,7 +4409,7 @@ html {
     font-family: "Northhead" !important;
 }
 .dp-scroll-text {
-    height: 350px;
+    height: 460px;
 }
 .dp-scroll-text :nth-child(1){
     opacity: 1; transform: translate(0%, 0%) matrix(1, 0, 0, 1, 0, 0) ;
@@ -4439,8 +4439,12 @@ html {
  animation-timing-function: linear;
 }
 .dp-scroll-text .dp-animate-hide{
-    animation-name: movehide;
+    /* animation-name: movehide; */
 
+}
+.up-top {
+    top: -50px !important;
+    position: absolute;
 }
 .dp-scroll-text .dp-animate-1{
     animation-name:move1;
