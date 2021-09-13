@@ -7,6 +7,10 @@
                         ->with(['product'])
                         ->get();
     $default = $variationData->first();
+    $promotion = null;
+    if($default->product->promotions && isset($default->product->promotions[0])){
+        $promotion = $default->product->promotions[0];
+    }
 
 /* $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
                              ->getVariationsInfo($variationData->pluck('id')->toArray());*/
@@ -14,6 +18,9 @@
 @endphp
 @if($default)
 <div class="listbox mb-3 col-lg-{{ isset($col) ? $col : '4' }}">
+    @if(!empty($promotion))
+        <span> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
+    @endif
     <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
         <div class="img">
             {{--<img src="{{asset('storage/' . $product->images[0])}}">--}}
