@@ -66,7 +66,7 @@ class importCustomers extends Command
         DB::table('ec_customers_merge')->truncate();
         DB::table('ec_customers')->truncate();
 
-        $file = File::get(storage_path('app/public/lnb-customers_24599.json'));
+        $file = File::get(storage_path('app/public/lnb-cust_24599.json'));
         $data = json_decode(utf8_encode($file), true);
         foreach ($data['rows'] as $row) {
             if ($row['user_id']) {
@@ -119,7 +119,7 @@ class importCustomers extends Command
                         'sales_tax_id'            => $row['sales_tax_id'],
                         'first_name'              => $row['firstname'],
                         'last_name'               => $row['lastname'],
-                        'business_phone'          => $row['phone'],
+                        'business_phone'          => $row['user_phone'],
                         'company'                 => $row['company'],
                         'phone'                   => $row['mob'],
                         'store_facebook'          => $row['fb'],
@@ -167,21 +167,25 @@ class importCustomers extends Command
 
                     $taxData = [
                         'customer_id'          => $row['user_id'],
-                        'purchaser_name'       => $row['name'],
-                        'purchaser_phone'      => $row['phone'],
-                        'purchaser_address'    => $row['address'] . ' ' . $row['address2'],
-                        'purchaser_city'       => $row['address2'],
-                        'permit_no'            => $row['tax_number'],
-                        'registration_no'      => $row['registration_number'],
-                        'business_description' => $row['business_description'],
-                        'items_description'    => $row['products_description'],
-                        'title'                => $row['title'],
-                        'date'                 => date('Y-m-d', strtotime($row['date'])),
-                        'purchaser_sign'       => $row['signature'],
+                        'purchaser_name'       => $row['cert_name'] ? $row['cert_name'] : 'N/A',
+                        'purchaser_phone'      => $row['cert_phone'] ? $row['cert_phone'] : 'N/A',
+                        'purchaser_address'    => $row['cert_address'] . ' ' . $row['cert_address2'],
+                        'purchaser_city'       => $row['cert_address2'],
+                        'permit_no'            => $row['cert_tax_number'],
+                        'registration_no'      => $row['cert_registration_number'],
+                        'business_description' => $row['cert_business_description'],
+                        'items_description'    => $row['cert_products_description'],
+                        'title'                => $row['cert_title'],
+                        'date'                 => date('Y-m-d', strtotime($row['cert_date'])),
+                        'purchaser_sign'       => $row['cert_signature'],
                         'status'               => 1,
                     ];
                     CustomerTaxCertificate::create($taxData);
+                } else {
+                    echo $row['user_id'].'----------';
                 }
+            } else {
+                echo $row['user_id'].'==========';
             }
         }
 

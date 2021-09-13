@@ -323,8 +323,10 @@ class CheckoutController extends Controller
 
         $preOrderId = null;
         $orderTotal = 0;
+        $includesNormals = false;
         foreach ($order->products as $product) {
             $check = checkIfProductPreOrder($product->product_id);
+            //dd($);
             if ($check) {
                 if (is_null($preOrderId)) {
                     $token = OrderHelper::getOrderSessionToken();
@@ -347,6 +349,8 @@ class CheckoutController extends Controller
                 }
                 $orderTotal = $orderTotal + $product->price;
                 OrderProduct::find($product->id)->update(['order_id' => $preOrderId]);
+            }else{
+              $includesNormals = true;
             }
             $parent = get_parent_product_by_variant($product->product_id);
             $logParam = [
@@ -360,9 +364,16 @@ class CheckoutController extends Controller
         }
 
         if (!is_null($preOrderId)) {
+          if($includesNormals){
             Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1]);
             $current = Order::find($id);
             $current->update(['amount' => $current->amount - $orderTotal, 'sub_total' => $current->amount - $orderTotal]);
+          }else{
+            Order::where('id', $id)->update(['status' => 'pre-order', 'order_type'      => 'pre_order']);
+            OrderProduct::where('order_id', $preOrderId)->update(['order_id' => $id]);
+            Order::find($preOrderId)->delete();
+          }
+
         }
 
     }

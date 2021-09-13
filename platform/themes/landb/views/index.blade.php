@@ -3,6 +3,7 @@
     <!-- <img src="landb/img/Banner.png" alt=""> -->
     <div id="demo" class="carousel slide mainslide" data-ride="carousel">
 
+
         <!-- Indicators -->
         <ul class="carousel-indicators">
             @foreach($slider->sliderItems as $item)
@@ -13,6 +14,7 @@
 
         <!-- The slideshow -->
         <div class="carousel-inner">
+
             @foreach($slider->sliderItems as $item)
                 <a href="{{ $item->link }}" class="carousel-item {{ ($loop->first) ? 'active': '' }}">
                     <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" width="100%"
@@ -66,6 +68,7 @@
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                 <div class="img">
                                     {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
+
                                     <span>New</span>
                                     <div class="imgoverlay">
                                         <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">

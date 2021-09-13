@@ -86,7 +86,7 @@ class OrderTable extends TableAbstract
 //                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
 
 
-                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>';
+                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->detail->company . '</a>';
 
                     return $customer;
 
@@ -309,6 +309,11 @@ class OrderTable extends TableAbstract
 //                'title' => trans('plugins/ecommerce::order.shipping_amount'),
 //                'class' => 'text-center',
 //            ],
+            'status'          => [
+                'name'  => 'ec_orders.status',
+                'title' => trans('core/base::tables.status'),
+                'class' => 'text-center',
+            ],
             'payment_method'  => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('plugins/ecommerce::order.payment_method'),
@@ -317,7 +322,7 @@ class OrderTable extends TableAbstract
 
             'user_id'        => [
                 'name'  => 'ec_orders.user_id',
-                'title' => trans('plugins/ecommerce::order.customer_label'),
+                'title' => 'Company',
                 'class' => 'text-left',
             ],
 
@@ -326,11 +331,7 @@ class OrderTable extends TableAbstract
 //                'title' => trans('plugins/ecommerce::order.payment_status_label'),
 //                'class' => 'text-center',
 //            ],
-            'status'          => [
-                'name'  => 'ec_orders.status',
-                'title' => trans('core/base::tables.status'),
-                'class' => 'text-center',
-            ],
+
             'order_type'      => [
                 'name'  => 'ec_orders.order_type',
                 'title' => 'Order Type',
