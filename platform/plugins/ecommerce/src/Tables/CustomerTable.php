@@ -256,9 +256,9 @@ class CustomerTable extends TableAbstract
             $search_items = $this->request()->all();
         }
 
-        if (!isset($search_items['report_type'])) {
-            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
-        }
+//        if (!isset($search_items['report_type'])) {
+//            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
+//        }
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['company']), function ($q) use ($search_items) {
