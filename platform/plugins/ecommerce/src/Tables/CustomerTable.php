@@ -159,15 +159,15 @@ class CustomerTable extends TableAbstract
                       }</script>';
                 }
             })
-            ->editColumn('order_count', function ($item) {
-                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
-            })
-            ->editColumn('order_spend', function ($item) {
-                return $item->order_spend;
-            })
-            ->editColumn('abandon_products', function ($item) {
-                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
-            })
+//            ->editColumn('order_count', function ($item) {
+//                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
+//            })
+//            ->editColumn('order_spend', function ($item) {
+//                return $item->order_spend;
+//            })
+//            ->editColumn('abandon_products', function ($item) {
+//                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
+//            })
             ->editColumn('status', function ($item) {
 //                $html = '<span class="badge badge-default">' . $item->status . '</span>';
 //                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
@@ -181,9 +181,9 @@ class CustomerTable extends TableAbstract
 
                 return view('plugins/ecommerce::customers/customerStatus', ['item' => $item])->render();
             })
-            ->editColumn('last_order_date', function ($item) {
-                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
-            })
+//            ->editColumn('last_order_date', function ($item) {
+//                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
+//            })
             ->editColumn('last_visit', function ($item) {
                 return !is_null($item->last_visit) ? date('m/d/y', strtotime($item->last_visit)) : '-';
             });
@@ -367,24 +367,24 @@ class CustomerTable extends TableAbstract
 //                'class'      => 'text-left',
 //                'searchable' => false
 //            ],
-            'abandon_products' => [
-                'name'       => 'abandon_products',
-                'title'      => 'Abandoned',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],
+//            'abandon_products' => [
+//                'name'       => 'abandon_products',
+//                'title'      => 'Abandoned',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
             'status'           => [
                 'name'       => 'status',
                 'title'      => 'Validation',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            'last_order_date'  => [
-                'name'       => 'last_order_date',
-                'title'      => 'Last order',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],
+//            'last_order_date'  => [
+//                'name'       => 'last_order_date',
+//                'title'      => 'Last order',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
             'last_visit'       => [
                 'name'       => 'last_visit',
                 'title'      => 'Last visit',
