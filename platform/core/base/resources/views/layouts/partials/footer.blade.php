@@ -213,7 +213,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
+    var fattJs = new FattJs('Lucky-and-BlessedLLC-b9b76900aed8', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
