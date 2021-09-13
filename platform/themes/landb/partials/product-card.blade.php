@@ -7,6 +7,10 @@
                         ->with(['product'])
                         ->get();
     $default = $variationData->first();
+    $promotion = null;
+    if($default->product->promotions && isset($default->product->promotions[0])){
+        $promotion = $default->product->promotions[0];
+    }
 
 /* $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
                              ->getVariationsInfo($variationData->pluck('id')->toArray());*/
@@ -25,6 +29,9 @@
             </div>--}}
             @if($product->tags()->where('name','Pre-Order')->value('name'))
                 <p class="pre-label">Pre-Order</p>
+            @endif
+            @if(!empty($promotion))
+                <span class="promotion-display"> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
             @endif
             @if($product->product_label_id)
                 @if($product->product_label_id == 3)
@@ -66,7 +73,9 @@
             <div class="price">
                 <span id="price-of-{{$product->id}}">
                     <span id="product_price">
-                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
+                        @if(!empty($default->product->sale_price))
+                            <del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;
+                        @endif
                             ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
                     </span>
             </div>
