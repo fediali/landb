@@ -159,15 +159,15 @@ class CustomerTable extends TableAbstract
                       }</script>';
                 }
             })
-//            ->editColumn('order_count', function ($item) {
-//                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
-//            })
-//            ->editColumn('order_spend', function ($item) {
-//                return $item->order_spend;
-//            })
-//            ->editColumn('abandon_products', function ($item) {
-//                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
-//            })
+            ->editColumn('order_count', function ($item) {
+                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
+            })
+            ->editColumn('order_spend', function ($item) {
+                return $item->order_spend;
+            })
+            ->editColumn('abandon_products', function ($item) {
+                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
+            })
             ->editColumn('status', function ($item) {
 //                $html = '<span class="badge badge-default">' . $item->status . '</span>';
 //                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
@@ -181,9 +181,9 @@ class CustomerTable extends TableAbstract
 
                 return view('plugins/ecommerce::customers/customerStatus', ['item' => $item])->render();
             })
-//            ->editColumn('last_order_date', function ($item) {
-//                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
-//            })
+            ->editColumn('last_order_date', function ($item) {
+                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
+            })
             ->editColumn('last_visit', function ($item) {
                 return !is_null($item->last_visit) ? date('m/d/y', strtotime($item->last_visit)) : '-';
             });
@@ -231,18 +231,18 @@ class CustomerTable extends TableAbstract
             }
         }
 
-        //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
-
-//
-        //$query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
-//
-       // $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
-       // $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
-//
-       // $query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
+        $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
 
 
-        // $query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
+        $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
+
+        $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
+        $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
+
+        $query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
+
+
+        $query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
 
 
         if ($this->request()->has('search_id')) {
@@ -256,9 +256,9 @@ class CustomerTable extends TableAbstract
             $search_items = $this->request()->all();
         }
 
-//        if (!isset($search_items['report_type'])) {
-//            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
-//        }
+        if (!isset($search_items['report_type'])) {
+            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
+        }
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['company']), function ($q) use ($search_items) {
@@ -310,89 +310,89 @@ class CustomerTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'               => [
-                'name'  => 'ec_customers.id',
+            'id' => [
+                'name' => 'ec_customers.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'business_phone'   => [
-                'name'    => 'ec_customer_detail.business_phone',
-                'title'   => 'Business Phone',
-                'width'   => '20px',
+            'business_phone' => [
+                'name' => 'ec_customer_detail.business_phone',
+                'title' => 'Business Phone',
+                'width' => '20px',
                 'visible' => false,
             ],
-//            'salesperson_id'   => [
-//                'name'  => 'ec_customers.salesperson_id',
-//                'title' => 'Rep',
-//                'width' => '20px',
-//                'class' => 'text-left',
-//            ],
-            'name'             => [
-                'name'  => 'ec_customers.name',
+            'salesperson_id' => [
+                'name' => 'ec_customers.salesperson_id',
+                'title' => 'Rep',
+                'width' => '20px',
+                'class' => 'text-left',
+            ],
+            'name' => [
+                'name' => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
                 'class' => 'text-left',
             ],
-            'company'            => [
-                'name'  => 'ec_customer_detail.company',
+            'company' => [
+                'name' => 'ec_customer_detail.company',
                 'title' => 'Company',
                 'class' => 'text-left',
-            ], 'email'            => [
-                'name'  => 'ec_customers.email',
+            ], 'email' => [
+                'name' => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
                 'visible' => false,
             ],
-            'is_private'       => [
-                'name'  => 'ec_customers.is_private',
+            'is_private' => [
+                'name' => 'ec_customers.is_private',
                 'title' => 'Is Private',
                 'class' => 'text-left',
                 'visible' => false,
             ],
-            'is_text'          => [
-                'name'  => 'ec_customers.is_text',
+            'is_text' => [
+                'name' => 'ec_customers.is_text',
                 'title' => 'Text',
                 'class' => 'text-left',
                 'width' => '100px',
             ],
-//            'order_count'      => [
-//                'name'       => 'order_count',
-//                'title'      => 'Order Count',
-//                'class'      => 'text-left',
-//                'searchable' => false
-//            ],
-//            'order_spend'      => [
-//                'name'       => 'order_spend',
-//                'title'      => 'Spend',
-//                'class'      => 'text-left',
-//                'searchable' => false
-//            ],
-//            'abandon_products' => [
-//                'name'       => 'abandon_products',
-//                'title'      => 'Abandoned',
-//                'class'      => 'text-left',
-//                'searchable' => false
-//            ],
-            'status'           => [
-                'name'       => 'status',
-                'title'      => 'Validation',
-                'class'      => 'text-left',
+            'order_count' => [
+                'name' => 'order_count',
+                'title' => 'Order Count',
+                'class' => 'text-left',
                 'searchable' => false
             ],
-//            'last_order_date'  => [
-//                'name'       => 'last_order_date',
-//                'title'      => 'Last order',
-//                'class'      => 'text-left',
-//                'searchable' => false
-//            ],
-            'last_visit'       => [
-                'name'       => 'last_visit',
-                'title'      => 'Last visit',
-                'class'      => 'text-left',
+            'order_spend' => [
+                'name' => 'order_spend',
+                'title' => 'Spend',
+                'class' => 'text-left',
                 'searchable' => false
             ],
-            'created_at'       => [
-                'name'  => 'ec_customers.created_at',
+            'abandon_products' => [
+                'name' => 'abandon_products',
+                'title' => 'Abandoned',
+                'class' => 'text-left',
+                'searchable' => false
+            ],
+            'status' => [
+                'name' => 'status',
+                'title' => 'Validation',
+                'class' => 'text-left',
+                'searchable' => false
+            ],
+            'last_order_date' => [
+                'name' => 'last_order_date',
+                'title' => 'Last order',
+                'class' => 'text-left',
+                'searchable' => false
+            ],
+            'last_visit' => [
+                'name' => 'last_visit',
+                'title' => 'Last visit',
+                'class' => 'text-left',
+                'searchable' => false
+            ],
+            'created_at' => [
+                'name' => 'ec_customers.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-left',
@@ -455,8 +455,8 @@ class CustomerTable extends TableAbstract
 //                'type'  => 'date',
 //            ],
             'ec_customers.salesperson_id' => [
-                'title'   => 'Sales Rep',
-                'type'    => 'select',
+                'title' => 'Sales Rep',
+                'type' => 'select',
                 'choices' => get_salesperson(),
             ],
         ];
@@ -505,9 +505,9 @@ class CustomerTable extends TableAbstract
         $searches = UserSearch::where(['search_type' => 'customers', 'status' => 1])->where('user_id', $user)->pluck('name', 'id')->all();
 
         $report_types = [
-            7   => 'Weekly',
-            15  => 'Bi-Weekly',
-            30  => 'Monthly',
+            7 => 'Weekly',
+            15 => 'Bi-Weekly',
+            30 => 'Monthly',
             120 => 'Quarterly',
             180 => 'Six Month',
         ];
