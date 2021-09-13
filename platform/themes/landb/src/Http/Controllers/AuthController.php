@@ -76,7 +76,7 @@ class AuthController extends Controller
         $post_data = json_encode($post_data);
 
         $header = array(
-            'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
+            'Authorization:Basic ZmFpc2FsQG1lZGlhZ2F0ZS5jb206MDdpN1NTdWw4YTA0ZzVOMXE0NjZDbjFpR1ExUTAxeEw=',
             'Content-Type: application/json'
         );
 

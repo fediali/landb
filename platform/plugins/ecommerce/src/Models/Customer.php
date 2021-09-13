@@ -56,6 +56,7 @@ class Customer extends Authenticatable
         'avatar',
         'phone',
         'dob',
+        'paypal_email',
         'status',
         'login_status',
         'is_private',
@@ -67,8 +68,9 @@ class Customer extends Authenticatable
     ];
     protected $with = [
         'detail',
-
     ];
+
+    protected $appends = [];
 
     /**
      * The attributes that should be hidden for arrays.

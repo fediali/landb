@@ -283,6 +283,10 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="form-group" v-if="payment_method == 'paypal'">
+                                    <label class="text-title-field" for="paypal_email">Paypal Email</label>
+                                    <input type="email" id="paypal_email" class="form-control" placeholder="Paypal Email" v-model="paypal_email">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -880,6 +884,10 @@ export default {
             type: Number,
             default: () => null,
         },
+        paypal_email_prop: {
+            type: String,
+            default: () => null,
+        },
         order_id: {
             type: Number,
             default: () => null,
@@ -1016,6 +1024,7 @@ export default {
             discount_custom_value: 0,
             child_customer: this.customer,
             child_customer_id: this.customer_id,
+            paypal_email: this.paypal_email_prop,
             child_customer_order_numbers: this.customer_order_numbers,
             child_customer_addresses: this.customer_addresses,
             child_customer_address: this.customer_address,
@@ -1139,6 +1148,7 @@ export default {
         selectCustomer: function (customer) {
             this.child_customer = customer;
             this.child_customer_id = customer.id;
+            this.paypal_email = customer.paypal_email ? customer.paypal_email : customer.email;
 
             this.loadCustomerAddress(this.child_customer_id);
 
@@ -1147,6 +1157,7 @@ export default {
         removeCustomer: function () {
             this.child_customer = this.customer;
             this.child_customer_id = null;
+            this.paypal_email = null;
             this.child_customer_addresses = [];
             this.child_customer_address = {
                 name: null,
@@ -1210,6 +1221,7 @@ export default {
                     discount_description: this.child_discount_description,
                     coupon_code: this.coupon_code,
                     customer_id: this.child_customer_id,
+                    paypal_email: this.paypal_email,
                     order_id: this.order_id,
                     note: this.note,
                     customer_notes: this.customer_notes,

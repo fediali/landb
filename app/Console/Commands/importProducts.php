@@ -79,14 +79,14 @@ class importProducts extends Command
         DB::table('ec_product_variation_items')->truncate();
         DB::table('ec_product_collection_products')->truncate();
         DB::table('ec_product_category_product')->truncate();
-        DB::table('ec_order_addresses')->truncate();
-        DB::table('ec_order_histories')->truncate();
-        DB::table('ec_order_product')->truncate();
-        DB::table('ec_orders')->truncate();
+     //   DB::table('ec_order_addresses')->truncate();
+      //  DB::table('ec_order_histories')->truncate();
+      //  DB::table('ec_order_product')->truncate();
+      //  DB::table('ec_orders')->truncate();
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
         Slug::where('prefix', 'products')->delete();
-        $file = File::get(public_path('lnb-prod_43063.json'));
+        $file = File::get(public_path('lnb-products_43080.json'));
         $data = json_decode(utf8_encode($file), true);
 
         foreach ($data['rows'] as $row) {
@@ -358,7 +358,7 @@ class importProducts extends Command
                 }
 
                 //echo $check ? $check->sku : $row['product_code'].'\n';
-                echo isset($product) ? '' : $row['product_id'] . '====';
+                echo isset($product) ? $row['product_id'] : $row['product_id'] . '====';
             }
         }
 

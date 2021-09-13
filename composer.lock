@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd1ef6b9fdc3ff89a274eb62794aa903",
+    "content-hash": "b7c6adb64e17f419f27d51a245d93508",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5281,6 +5281,10 @@
                 "rest",
                 "sdk"
             ],
+            "support": {
+                "issues": "https://github.com/paypal/PayPal-PHP-SDK/issues",
+                "source": "https://github.com/paypal/PayPal-PHP-SDK/tree/master"
+            },
             "abandoned": true,
             "time": "2019-01-04T20:04:25+00:00"
         },
@@ -13538,10 +13542,10 @@
     ],
     "aliases": [
         {
-            "alias": "1.5.0",
-            "alias_normalized": "1.5.0.0",
+            "package": "wikimedia/composer-merge-plugin",
             "version": "dev-feature/composer-v2",
-            "package": "wikimedia/composer-merge-plugin"
+            "alias": "1.5.0",
+            "alias_normalized": "1.5.0.0"
         }
     ],
     "minimum-stability": "dev",
@@ -13568,5 +13572,6 @@
         "ext-json": "*",
         "ext-zip": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

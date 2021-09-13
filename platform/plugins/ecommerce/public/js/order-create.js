@@ -879,6 +879,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -895,6 +899,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     customer_id: {
       type: Number,
+      "default": function _default() {
+        return null;
+      }
+    },
+    paypal_email_prop: {
+      type: String,
       "default": function _default() {
         return null;
       }
@@ -1073,6 +1083,7 @@ __webpack_require__.r(__webpack_exports__);
       discount_custom_value: 0,
       child_customer: this.customer,
       child_customer_id: this.customer_id,
+      paypal_email: this.paypal_email_prop,
       child_customer_order_numbers: this.customer_order_numbers,
       child_customer_addresses: this.customer_addresses,
       child_customer_address: this.customer_address,
@@ -1197,12 +1208,14 @@ __webpack_require__.r(__webpack_exports__);
     selectCustomer: function selectCustomer(customer) {
       this.child_customer = customer;
       this.child_customer_id = customer.id;
+      this.paypal_email = customer.paypal_email ? customer.paypal_email : customer.email;
       this.loadCustomerAddress(this.child_customer_id);
       this.getOrderNumbers();
     },
     removeCustomer: function removeCustomer() {
       this.child_customer = this.customer;
       this.child_customer_id = null;
+      this.paypal_email = null;
       this.child_customer_addresses = [];
       this.child_customer_address = {
         name: null,
@@ -1265,6 +1278,7 @@ __webpack_require__.r(__webpack_exports__);
         discount_description: this.child_discount_description,
         coupon_code: this.coupon_code,
         customer_id: this.child_customer_id,
+        paypal_email: this.paypal_email,
         order_id: this.order_id,
         note: this.note,
         customer_notes: this.customer_notes,
@@ -8757,7 +8771,46 @@ var render = function() {
                         ])
                       ])
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.payment_method == "paypal"
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "text-title-field",
+                            attrs: { for: "paypal_email" }
+                          },
+                          [_vm._v("Paypal Email")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.paypal_email,
+                              expression: "paypal_email"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "email",
+                            id: "paypal_email",
+                            placeholder: "Paypal Email"
+                          },
+                          domProps: { value: _vm.paypal_email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.paypal_email = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e()
                 ])
               ])
             ])

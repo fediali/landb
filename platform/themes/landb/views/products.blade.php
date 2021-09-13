@@ -1,4 +1,5 @@
 {{--@dd($products['category'])--}}
+@php $col='3'; @endphp
 @if(auth('customer')->user())
 
     <section class="breadcrumb_wrap">
@@ -196,7 +197,6 @@
 
             </div>
             <div class="shoplisting row" id="paginated-posts">
-                @php $col='3'; @endphp
                 @if(count($products))
                     <?php
                     $limit = isset($_GET['limit']) ? $_GET['limit'] : '3';
@@ -385,7 +385,7 @@
         var _return = true;
         var str = '{{request()->getQueryString() }}';
         $.ajax({
-            url: ENDPOINT + "?page=" + page + '&' + str.replace(/&amp;/g, '&')+'&col={{$col}}',
+            url: ENDPOINT + "?page=" + page + '&' + str.replace(/&amp;/g, '&')+'&col={{ isset($col) ? $col:'3' }}',
             type: "get",
             beforeSend: function () {
                 showLoader();

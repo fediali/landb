@@ -179,6 +179,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('order-invoice/{id}', [
+                'as'         => 'orderInvoice',
+                'uses'       => 'OrderController@createInvoice',
+                'permission' => 'orders.create',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {
