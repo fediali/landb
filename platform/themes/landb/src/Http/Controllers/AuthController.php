@@ -118,6 +118,9 @@ class AuthController extends Controller
                 $request->password = $pwd;
             }
         }
+        else{
+
+        }
 
         $this->validateLogin($request);
 

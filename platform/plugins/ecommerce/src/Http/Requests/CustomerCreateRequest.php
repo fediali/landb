@@ -19,6 +19,7 @@ class CustomerCreateRequest extends Request
             'email'                 => 'required|max:60|min:6|email|unique:ec_customers',
             'password'              => 'required|min:6',
             'password_confirmation' => 'required|same:password',
+            'customer_type' => 'required',
         ];
     }
 }
