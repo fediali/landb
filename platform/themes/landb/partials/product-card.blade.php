@@ -7,23 +7,31 @@
                         ->with(['product'])
                         ->get();
     $default = $variationData->first();
+    $promotion = null;
+    if($default->product->promotions && isset($default->product->promotions[0])){
+        $promotion = $default->product->promotions[0];
+    }
 
- $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
-                             ->getVariationsInfo($variationData->pluck('id')->toArray());
+/* $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
+                             ->getVariationsInfo($variationData->pluck('id')->toArray());*/
 
 @endphp
+@if($default)
 <div class="listbox mb-3 col-lg-{{ isset($col) ? $col : '4' }}">
     <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
         <div class="img">
-            <img src="{{asset('storage/' . $product->images[0])}}">
+            {{--<img src="{{asset('storage/' . $product->images[0])}}">--}}
 
-{{--            {!! image_html_generator(@$product->images[0]) !!}--}}
+            {!! image_html_generator(@$product->images[0]) !!}
             {{--<div class="caro_text">
                 <h5>{{ @$product->category->name }}</h5>
                 <p>{{ $product->name }}</p>
             </div>--}}
             @if($product->tags()->where('name','Pre-Order')->value('name'))
                 <p class="pre-label">Pre-Order</p>
+            @endif
+            @if(!empty($promotion))
+                <span class="promotion-display"> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
             @endif
             @if($product->product_label_id)
                 @if($product->product_label_id == 3)
@@ -65,7 +73,9 @@
             <div class="price">
                 <span id="price-of-{{$product->id}}">
                     <span id="product_price">
-                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
+                        @if(!empty($default->product->sale_price))
+                            <del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;
+                        @endif
                             ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
                     </span>
             </div>
@@ -111,3 +121,4 @@
 
     </div>--}}
 </div>
+@endif

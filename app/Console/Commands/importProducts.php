@@ -79,16 +79,29 @@ class importProducts extends Command
         DB::table('ec_product_variation_items')->truncate();
         DB::table('ec_product_collection_products')->truncate();
         DB::table('ec_product_category_product')->truncate();
-     //   DB::table('ec_order_addresses')->truncate();
-      //  DB::table('ec_order_histories')->truncate();
-      //  DB::table('ec_order_product')->truncate();
-      //  DB::table('ec_orders')->truncate();
+
+        //DB::table('ec_order_addresses')->truncate();
+        //DB::table('ec_order_histories')->truncate();
+        //DB::table('ec_order_product')->truncate();
+        //DB::table('ec_orders')->truncate();
+
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
         Slug::where('prefix', 'products')->delete();
-        $file = File::get(public_path('lnb-products_43080.json'));
-        $data = json_decode(utf8_encode($file), true);
 
+        $file = File::get(public_path('lnb-prod-active_2949.json'));
+        $data = json_decode(utf8_encode($file), true);
+        $this->insertProducts($data);
+        echo 'success-active';
+
+        $file = File::get(public_path('lnb-prod-inactive_40131.json'));
+        $data = json_decode(utf8_encode($file), true);
+        $this->insertProducts($data);
+        echo 'success-inactive';
+    }
+
+    public function insertProducts($data)
+    {
         foreach ($data['rows'] as $row) {
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
@@ -208,7 +221,7 @@ class importProducts extends Command
                             'key'            => Str::slug($product->name),
                             'prefix'         => SlugHelper::getPrefix(Product::class),
                         ];
-                        $checkSlug = Slug::where($slugParams)->first();
+                        $checkSlug = Slug::where(['key' => Str::slug($product->name), 'prefix' => SlugHelper::getPrefix(Product::class)])->first();
                         if ($checkSlug) {
                             $slugParams['key'] .= '-' . time();
                         }
@@ -361,9 +374,6 @@ class importProducts extends Command
                 echo isset($product) ? $row['product_id'] : $row['product_id'] . '====';
             }
         }
-
-        echo 'success';
     }
+
 }
-
-
