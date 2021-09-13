@@ -74,9 +74,9 @@ class AuthController extends Controller
             'password' => $password,
         );
         $post_data = json_encode($post_data);
-
+        $token = base64_encode('vanessa.abrego@landbapparel.com:Hv5ta08hZ4FXh9P0Fa8CAA5Q2L3Z3955');
         $header = array(
-            'Authorization:Basic ZmFpc2FsQG1lZGlhZ2F0ZS5jb206MDdpN1NTdWw4YTA0ZzVOMXE0NjZDbjFpR1ExUTAxeEw=',
+            'Authorization:Basic ' . $token . '',
             'Content-Type: application/json'
         );
 
@@ -91,6 +91,7 @@ class AuthController extends Controller
 
         // Submit the POST request
         $result = curl_exec($crl);
+        dd($result);
         // Close cURL session handle
         curl_close($crl);
 
@@ -117,8 +118,7 @@ class AuthController extends Controller
                 Customer::where('email', $email)->update(['old_customer' => 0, 'password' => $pwd]);
                 $request->password = $pwd;
             }
-        }
-        else{
+        } else {
 
         }
 
