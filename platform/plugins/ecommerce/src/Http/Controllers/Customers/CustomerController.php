@@ -97,6 +97,7 @@ class CustomerController extends BaseController
     public function store(CustomerCreateRequest $request, BaseHttpResponse $response)
     {
         $request->merge(['password' => bcrypt($request->input('password'))]);
+        $request['old_customer'] = 0;
         $customer = $this->customerRepository->createOrUpdate($request->input());
         $data = $request->all();
         $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];

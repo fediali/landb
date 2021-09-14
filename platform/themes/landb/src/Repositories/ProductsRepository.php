@@ -105,7 +105,6 @@ class ProductsRepository
                 $query->limit($limit);
             })
             ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])), function ($query) use ($category_id) {
-
                 $category = ProductCategory::where('parent_id', $category_id)->pluck('id')->toArray();
                  array_push($category, $category_id);
                 /* $query->where($this->model->getTable().'.category_id', $category_id);*/

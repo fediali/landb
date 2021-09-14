@@ -79,10 +79,10 @@ class importProducts extends Command
         DB::table('ec_product_variation_items')->truncate();
         DB::table('ec_product_collection_products')->truncate();
         DB::table('ec_product_category_product')->truncate();
-        DB::table('ec_order_addresses')->truncate();
-        DB::table('ec_order_histories')->truncate();
-        DB::table('ec_order_product')->truncate();
-        DB::table('ec_orders')->truncate();
+     //   DB::table('ec_order_addresses')->truncate();
+      //  DB::table('ec_order_histories')->truncate();
+      //  DB::table('ec_order_product')->truncate();
+      //  DB::table('ec_orders')->truncate();
         DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
         Slug::where('prefix', 'products')->delete();

@@ -159,15 +159,15 @@ class CustomerTable extends TableAbstract
                       }</script>';
                 }
             })
-            ->editColumn('order_count', function ($item) {
-                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
-            })
-            ->editColumn('order_spend', function ($item) {
-                return $item->order_spend;
-            })
-            ->editColumn('abandon_products', function ($item) {
-                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
-            })
+//            ->editColumn('order_count', function ($item) {
+//                return $html = '<a  target="_blank" href="' . route('orders.index', ['user_id' => $item->id]) . '">' . $item->order_count . '</a>';
+//            })
+//            ->editColumn('order_spend', function ($item) {
+//                return $item->order_spend;
+//            })
+//            ->editColumn('abandon_products', function ($item) {
+//                return '<a href="' . route('orders.incomplete-list', ['order_id' => $item->abandon_order_id]) . '">' . $item->abandon_products . '</a>';
+//            })
             ->editColumn('status', function ($item) {
 //                $html = '<span class="badge badge-default">' . $item->status . '</span>';
 //                if ($item->status == BaseStatusEnum::$CUSTOMERS['Active']) {
@@ -181,9 +181,9 @@ class CustomerTable extends TableAbstract
 
                 return view('plugins/ecommerce::customers/customerStatus', ['item' => $item])->render();
             })
-            ->editColumn('last_order_date', function ($item) {
-                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
-            })
+//            ->editColumn('last_order_date', function ($item) {
+//                return !is_null($item->last_order_date) ? date('m/d/y', strtotime($item->last_order_date)) : '-';
+//            })
             ->editColumn('last_visit', function ($item) {
                 return !is_null($item->last_visit) ? date('m/d/y', strtotime($item->last_visit)) : '-';
             });
@@ -236,10 +236,10 @@ class CustomerTable extends TableAbstract
 //
         //$query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
 //
-        //$query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
-        //$query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
+       // $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
+       // $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
 //
-        //$query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
+       // $query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
 
 
         // $query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
@@ -256,9 +256,9 @@ class CustomerTable extends TableAbstract
             $search_items = $this->request()->all();
         }
 
-        if (!isset($search_items['report_type'])) {
-            //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
-        }
+//        if (!isset($search_items['report_type'])) {
+//            $query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_count');
+//        }
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['company']), function ($q) use ($search_items) {
@@ -322,12 +322,12 @@ class CustomerTable extends TableAbstract
                 'width'   => '20px',
                 'visible' => false,
             ],
-            'salesperson_id'   => [
-                'name'  => 'ec_customers.salesperson_id',
-                'title' => 'Rep',
-                'width' => '20px',
-                'class' => 'text-left',
-            ],
+//            'salesperson_id'   => [
+//                'name'  => 'ec_customers.salesperson_id',
+//                'title' => 'Rep',
+//                'width' => '20px',
+//                'class' => 'text-left',
+//            ],
             'name'             => [
                 'name'  => 'ec_customers.name',
                 'title' => trans('core/base::forms.name'),
@@ -337,8 +337,7 @@ class CustomerTable extends TableAbstract
                 'name'  => 'ec_customer_detail.company',
                 'title' => 'Company',
                 'class' => 'text-left',
-            ],
-            'email'            => [
+            ], 'email'            => [
                 'name'  => 'ec_customers.email',
                 'title' => trans('plugins/ecommerce::customer.name'),
                 'class' => 'text-left',
@@ -356,36 +355,36 @@ class CustomerTable extends TableAbstract
                 'class' => 'text-left',
                 'width' => '100px',
             ],
-            /*'order_count'      => [
-                'name'       => 'order_count',
-                'title'      => 'Order Count',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],*/
-            /*'order_spend'      => [
-                'name'       => 'order_spend',
-                'title'      => 'Spend',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],*/
-            /*'abandon_products' => [
-                'name'       => 'abandon_products',
-                'title'      => 'Abandoned',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],*/
+//            'order_count'      => [
+//                'name'       => 'order_count',
+//                'title'      => 'Order Count',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
+//            'order_spend'      => [
+//                'name'       => 'order_spend',
+//                'title'      => 'Spend',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
+//            'abandon_products' => [
+//                'name'       => 'abandon_products',
+//                'title'      => 'Abandoned',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
             'status'           => [
                 'name'       => 'status',
                 'title'      => 'Validation',
                 'class'      => 'text-left',
                 'searchable' => false
             ],
-            /*'last_order_date'  => [
-                'name'       => 'last_order_date',
-                'title'      => 'Last order',
-                'class'      => 'text-left',
-                'searchable' => false
-            ],*/
+//            'last_order_date'  => [
+//                'name'       => 'last_order_date',
+//                'title'      => 'Last order',
+//                'class'      => 'text-left',
+//                'searchable' => false
+//            ],
             'last_visit'       => [
                 'name'       => 'last_visit',
                 'title'      => 'Last visit',
