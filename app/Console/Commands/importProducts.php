@@ -72,27 +72,27 @@ class importProducts extends Command
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
 
-        DB::table('ec_products')->truncate();
-        DB::table('ec_product_with_attribute_set')->truncate();
-        DB::table('ec_product_with_attribute')->truncate();
-        DB::table('ec_product_variations')->truncate();
-        DB::table('ec_product_variation_items')->truncate();
-        DB::table('ec_product_collection_products')->truncate();
-        DB::table('ec_product_category_product')->truncate();
+//        DB::table('ec_products')->truncate();
+//        DB::table('ec_product_with_attribute_set')->truncate();
+//        DB::table('ec_product_with_attribute')->truncate();
+//        DB::table('ec_product_variations')->truncate();
+//        DB::table('ec_product_variation_items')->truncate();
+//        DB::table('ec_product_collection_products')->truncate();
+//        DB::table('ec_product_category_product')->truncate();
 
         //DB::table('ec_order_addresses')->truncate();
         //DB::table('ec_order_histories')->truncate();
         //DB::table('ec_order_product')->truncate();
         //DB::table('ec_orders')->truncate();
 
-        DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
+       // DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
 
-        Slug::where('prefix', 'products')->delete();
+       // Slug::where('prefix', 'products')->delete();
 
-        $file = File::get(public_path('lnb-prod-active_2949.json'));
-        $data = json_decode(utf8_encode($file), true);
-        $this->insertProducts($data);
-        echo 'success-active';
+//        $file = File::get(public_path('lnb-prod-active_2949.json'));
+//        $data = json_decode(utf8_encode($file), true);
+//        $this->insertProducts($data);
+//        echo 'success-active';
 
         $file = File::get(public_path('lnb-prod-inactive_40131.json'));
         $data = json_decode(utf8_encode($file), true);
