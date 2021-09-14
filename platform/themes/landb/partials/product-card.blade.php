@@ -18,9 +18,6 @@
 @endphp
 @if($default)
 <div class="listbox mb-3 col-lg-{{ isset($col) ? $col : '4' }}">
-    @if(!empty($promotion))
-        <span> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
-    @endif
     <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
         <div class="img">
             {{--<img src="{{asset('storage/' . $product->images[0])}}">--}}
@@ -32,6 +29,9 @@
             </div>--}}
             @if($product->tags()->where('name','Pre-Order')->value('name'))
                 <p class="pre-label">Pre-Order</p>
+            @endif
+            @if(!empty($promotion))
+                <span class="promotion-display"> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
             @endif
             @if($product->product_label_id)
                 @if($product->product_label_id == 3)
@@ -73,7 +73,9 @@
             <div class="price">
                 <span id="price-of-{{$product->id}}">
                     <span id="product_price">
-                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
+                        @if(!empty($default->product->sale_price))
+                            <del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;
+                        @endif
                             ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
                     </span>
             </div>
