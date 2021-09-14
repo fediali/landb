@@ -278,15 +278,13 @@
                 url: "{{ url('/admin/customers/get-customer-addresses') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
-                    console.log('address', data)
                     $.each(data.data, function (addressID, address) {
                         if (address.type === 'billing') {
                             var data = {
                                 id: address.id,
                                 text: address.address
                             };
-                            console.log(address);
-                            let html = `<option value="${address.id}"> ${address.address} </option>`;
+                            let html = `<option value="${address.id}"> ${address.address}, ${address.city}, ${address.state}, ${address.country} </option>`;
                             $('select#billing_address').append(html);
                         }
                     });

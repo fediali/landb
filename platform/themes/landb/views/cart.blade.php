@@ -35,6 +35,10 @@
 
         @php
             $parent = get_parent_product_by_variant($cartItem->product_id);
+            $promotion = null;
+            if($cartItem->product->promotions && isset($cartItem->product->promotions[0])){
+                $promotion = $cartItem->product->promotions[0];
+            }
         @endphp
         <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
@@ -65,7 +69,14 @@
                 </div>
             </div>
             <div class="col-lg-2 mt-2 text-center">
-                <p class="mt-2"><b class="cart-m-title">Price</b>${{ $cartItem->price }}</p>
+                <p class="mt-2"><b class="cart-m-title">Price</b>
+                    @if(!is_null($promotion))
+                        <del>${{ $cartItem->price }}</del>&nbsp;
+                        <span>${{ ($promotion->type_option) == 'percentage' ? $cartItem->price - ($cartItem->price * $promotion->value/100) : (($promotion->type_option) == 'amount' ? $cartItem->price - $promotion->value : $cartItem->price) }}</span>
+                    @else
+                        ${{ $cartItem->price }}
+                    @endif
+                </p>
             </div>
             <div class="col-lg-2 mt-2">
 
@@ -83,9 +94,12 @@
 
             </div>
             <div class="col-lg-2 mt-2 ItemPrice">
-                @php $total = $cartItem->qty * $cartItem->price; $grand_total = $grand_total + $total; @endphp
+                @php
+                    $total = $cartItem->qty * $cartItem->price;
+                    $grand_total = $grand_total + $total;
+                @endphp
                 <p class="mt-2"><b class="cart-m-title">Total</b> $ <span
-                        id="cart-item-total-{{$cartItem->id}}">{{ $total }}</p>
+                            id="cart-item-total-{{$cartItem->id}}">{{ $total }}</span></p>
             </div>
         </div>
     @endforeach
