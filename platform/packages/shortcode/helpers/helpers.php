@@ -54,7 +54,7 @@ if (!function_exists('image_html_generator')) {
     function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '', $id = '', $original = '')
     {
 
-        $html = '<img
+        /*$html = '<img
             ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
             ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
             src="' . asset('landb/defaultLogo.png') . '"
@@ -64,7 +64,17 @@ if (!function_exists('image_html_generator')) {
             id="' . $id . '"
             xoriginal="' . (!empty($original) ? asset('storage/' . $img) : '') . '"
             data-src="' . (!empty($img) ? asset('storage/' . $img) : asset('images/default.jpg')) . '"
-            onerror = "this.src=\'' . asset('images/default.jpg') . '\'">';
+            onerror = "this.src=\'' . asset('images/default.jpg') . '\'">';*/
+
+        $html = '<img
+              ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
+              ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
+              src="' . asset('storage/'. $img) . '"
+              alt="' . (!is_null($alt) ? $alt : 'No image') . '"
+              loading="lazy"
+              class=" ' . $class . '"
+              id="' . $id . '"
+              onerror = "this.src=\'' . asset('images/oops.png') . '\'">';
 
         return $html;
     }

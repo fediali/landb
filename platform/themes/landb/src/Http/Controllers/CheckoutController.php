@@ -256,12 +256,12 @@ class CheckoutController extends Controller
                 'subtotal'  => $request->sub_total,
                 'lineItems' => []
             ],
-            'total'             => $request->amount,
+            'total'             => 1,
             'pre_auth'          => 1
         ];
         $url = (env("OMNI_URL") . "charge/");
         list($response, $info) = omni_api($url, $data, 'POST');
-
+     /* dd($response, $info);*/
         $status = $info['http_code'];
 
         if (floatval($status) == 200) {
@@ -278,6 +278,13 @@ class CheckoutController extends Controller
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
+            $response = json_decode($response, true);
+
+            $status = [];
+            $status['transaction_error'] = $response['message'];
+            $status['status'] = 'Declined';
+            Order::where('id', $request->order_id)->update($status);
+            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
             return $errors;
         }
 
