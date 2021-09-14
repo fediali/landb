@@ -30,7 +30,7 @@
             @if($product->tags()->where('name','Pre-Order')->value('name'))
                 <p class="pre-label">Pre-Order</p>
             @endif
-            @if(!empty($promotion))
+            @if(!empty($promotion) && empty($default->product->sale_price))
                 <span class="promotion-display"> {{$promotion->value}} {{ ($promotion->type_option) == 'percentage' ? '%' : (($promotion->type_option) == 'amount' ? '$' : '') }} OFF</span>
             @endif
             @if($product->product_label_id)
@@ -73,7 +73,7 @@
             <div class="price">
                 <span id="price-of-{{$product->id}}">
                     <span id="product_price">
-                        @if(!empty($default->product->sale_price))
+                        @if(!empty($default->product->sale_price) || !is_null($promotion))
                             <del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;
                         @endif
                             ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
