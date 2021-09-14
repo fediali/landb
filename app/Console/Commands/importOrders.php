@@ -159,6 +159,8 @@ class importOrders extends Command
                         'is_finished' => 1,
                         'salesperson_id' => $order->issuer_id,
                         'po_number' => $order->po_number,
+                        'created_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
+                        'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
                     Order::create($orderData);
 

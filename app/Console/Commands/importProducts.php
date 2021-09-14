@@ -208,7 +208,7 @@ class importProducts extends Command
                             'key'            => Str::slug($product->name),
                             'prefix'         => SlugHelper::getPrefix(Product::class),
                         ];
-                        $checkSlug = Slug::where($slugParams)->first();
+                        $checkSlug = Slug::where(['key' => Str::slug($product->name), 'prefix' => SlugHelper::getPrefix(Product::class)])->first();
                         if ($checkSlug) {
                             $slugParams['key'] .= '-' . time();
                         }
