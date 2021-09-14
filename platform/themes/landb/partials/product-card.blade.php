@@ -8,10 +8,11 @@
                         ->get();
     $default = $variationData->first();
 
- $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
-                             ->getVariationsInfo($variationData->pluck('id')->toArray());
+/* $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
+                             ->getVariationsInfo($variationData->pluck('id')->toArray());*/
 
 @endphp
+@if($default)
 <div class="listbox mb-3 col-lg-{{ isset($col) ? $col : '4' }}">
     <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
         <div class="img">
@@ -109,3 +110,4 @@
 
     </div>--}}
 </div>
+@endif

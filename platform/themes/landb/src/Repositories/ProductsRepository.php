@@ -95,9 +95,6 @@ class ProductsRepository
             ->when(!is_null($price), function ($query) use ($price) {
                 $query->where('ec_products.price', $price);
             })
-            ->when(!is_null($search), function ($query) use ($search) {
-                $query->whereRaw('ec_products.name LIKE "%' . $search . '%" || ec_products.sku LIKE "%' . $search . '%"');
-            })
 //            ->when(!is_null($slug), function ($query) use ($slug) {
 //                $query->join('slugs', 'ec_products.id', 'slugs.reference_id')->where('slugs.key', $slug)->where('slugs.prefix', '=', 'products');
 //            })
@@ -132,6 +129,9 @@ class ProductsRepository
                 if (!is_null($max_range)) {
                     $query->where($this->model->getTable() . '.price', '<=', $max_range);
                 }
+            })
+            ->when(!is_null($search), function ($query) use ($search) {
+              $query->whereRaw('ec_products.name LIKE "%' . $search . '%" || ec_products.sku LIKE "%' . $search . '%"');
             })
             ->when(!is_null($size_id), function ($query) use ($size_id) {
                 $query->join('product_categories_sizes as psizes', 'psizes.product_category_id', 'ec_products.category_id')->where('category_size_id', $size_id);
