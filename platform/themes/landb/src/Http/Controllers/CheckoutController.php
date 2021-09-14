@@ -266,11 +266,13 @@ class CheckoutController extends Controller
 
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
-            $order['order_id'] = $request->order_id;
-            $order['transaction_id'] = $response['id'];
-            $order['response'] = json_encode($response);
-            $order['status'] = 0;
+//            $order['order_id'] = $request->order_id;
+//            $order['transaction_id'] = $response['id'];
+//            $order['response'] = json_encode($response);
+//            $order['status'] = 0;
 //            CardPreAuth::create($order);
+            $status['status'] = 'new';
+            Order::where('id', $request->order_id)->update($status);
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
