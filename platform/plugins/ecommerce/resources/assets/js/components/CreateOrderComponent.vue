@@ -583,8 +583,10 @@
             </div>
         </b-modal>
 
+
+        <!--@shown="loadCountries()"-->
         <b-modal id="add-customer" title="Create a new customer" ok-title="Save" cancel-title="Cancel"
-                 @shown="loadCountries()" @ok="createNewCustomer($event)">
+                  @ok="createNewCustomer($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
@@ -759,8 +761,8 @@
             </div>
         </b-modal>
 
-        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel"
-                 @shown="loadCountries()" @ok="updateOrderAddress($event)">
+        <!--@shown="loadCountries()" -->
+        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel" @ok="updateOrderAddress($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
@@ -1074,6 +1076,7 @@ export default {
                         Botble.handleError(res.response.data);
                     });
             }
+            context.loadCountries();
         },
         handleSearchCustomer: function (value) {
             if (value !== this.customer_keyword) {
@@ -1326,9 +1329,10 @@ export default {
         updateOrderAddress: function ($event) {
             $event.preventDefault();
 
-            if (this.customer) {
+            if (this.child_customer) {
+                $($event.target).find('.btn-primary').addClass('button-loading');
 
-                $($event.target).addClass('button-loading');
+                console.log($event.target, "--------------");
 
                 let $modal = $(event.target).closest('.modal-dialog');
                 this.child_customer_address.name = $modal.find('.customer-address-name').val();
@@ -1337,12 +1341,14 @@ export default {
                 this.child_customer_address.address = $modal.find('.customer-address-address').val();
                 this.child_customer_address.city = $modal.find('.customer-address-city').val();
                 this.child_customer_address.state = $modal.find('.customer-address-state').val();
-                this.child_customer_address.country = $modal.find('.customer-address-country').val();
+                //this.child_customer_address.country = $modal.find('.customer-address-country').val();
                 this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val();
 
                 // this.loadCountries();
                 this.$root.$emit('bv::hide::modal', 'edit-address');
-                $($event.target).removeClass('button-loading');
+                $($event.target).find('.btn-primary').removeClass('button-loading');
+
+                console.log(this.child_customer, "==------==");
             }
         },
         createNewCustomer: function ($event) {
