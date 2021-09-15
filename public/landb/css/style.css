@@ -4883,4 +4883,8 @@ html { scroll-behavior: smooth;}
         background-color: transparent;
       }
 
-      
+      @media screen and (min-width: 540px) and (max-width: 767px){
+    .detail-h1 {
+        margin-top: 155px !important;
+    }
+}
