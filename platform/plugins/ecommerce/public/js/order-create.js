@@ -883,6 +883,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1132,6 +1134,8 @@ __webpack_require__.r(__webpack_exports__);
           Botble.handleError(res.response.data);
         });
       }
+
+      context.loadCountries();
     },
     handleSearchCustomer: function handleSearchCustomer(value) {
       if (value !== this.customer_keyword) {
@@ -1368,20 +1372,22 @@ __webpack_require__.r(__webpack_exports__);
     updateOrderAddress: function updateOrderAddress($event) {
       $event.preventDefault();
 
-      if (this.customer) {
-        $($event.target).addClass('button-loading');
+      if (this.child_customer) {
+        $($event.target).find('.btn-primary').addClass('button-loading');
+        console.log($event.target, "--------------");
         var $modal = $(event.target).closest('.modal-dialog');
         this.child_customer_address.name = $modal.find('.customer-address-name').val();
         this.child_customer_address.email = $modal.find('.customer-address-email').val();
         this.child_customer_address.phone = $modal.find('.customer-address-phone').val();
         this.child_customer_address.address = $modal.find('.customer-address-address').val();
         this.child_customer_address.city = $modal.find('.customer-address-city').val();
-        this.child_customer_address.state = $modal.find('.customer-address-state').val();
-        this.child_customer_address.country = $modal.find('.customer-address-country').val();
+        this.child_customer_address.state = $modal.find('.customer-address-state').val(); //this.child_customer_address.country = $modal.find('.customer-address-country').val();
+
         this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val(); // this.loadCountries();
 
         this.$root.$emit('bv::hide::modal', 'edit-address');
-        $($event.target).removeClass('button-loading');
+        $($event.target).find('.btn-primary').removeClass('button-loading');
+        console.log(this.child_customer, "==------==");
       }
     },
     createNewCustomer: function createNewCustomer($event) {
@@ -9914,9 +9920,6 @@ var render = function() {
             "cancel-title": "Cancel"
           },
           on: {
-            shown: function($event) {
-              return _vm.loadCountries()
-            },
             ok: function($event) {
               return _vm.createNewCustomer($event)
             }
@@ -10678,9 +10681,6 @@ var render = function() {
             "cancel-title": "Cancel"
           },
           on: {
-            shown: function($event) {
-              return _vm.loadCountries()
-            },
             ok: function($event) {
               return _vm.updateOrderAddress($event)
             }

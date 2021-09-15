@@ -387,6 +387,19 @@ class Product extends BaseModel
       if(!is_null($this->sale_price)) {
         return $this->sale_price;
       }else{
+        if($this->promotions){
+          if(@$this->promotions[0]->type_option == 'percentage'){
+            return $this->price - ($this->price * @$this->promotions[0]->value / 100);
+          }elseif (@$this->promotions[0]->type_option == 'amount'){
+            if(@$this->promotions[0]->value < $this->price){
+              return $this->price - @$this->promotions[0]->value;
+            }else{
+              return $this->price;
+            }
+          }else{
+            return $this->price;
+          }
+        }
         return $this->price;
       }
     }

@@ -266,11 +266,13 @@ class CheckoutController extends Controller
 
         if (floatval($status) == 200) {
             $response = json_decode($response, true);
-            $order['order_id'] = $request->order_id;
-            $order['transaction_id'] = $response['id'];
-            $order['response'] = json_encode($response);
-            $order['status'] = 0;
-            CardPreAuth::create($order);
+//            $order['order_id'] = $request->order_id;
+//            $order['transaction_id'] = $response['id'];
+//            $order['response'] = json_encode($response);
+//            $order['status'] = 0;
+//            CardPreAuth::create($order);
+            $status['status'] = 'new';
+            Order::where('id', $request->order_id)->update($status);
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
@@ -284,7 +286,7 @@ class CheckoutController extends Controller
             $status['transaction_error'] = $response['message'];
             $status['status'] = 'Declined';
             Order::where('id', $request->order_id)->update($status);
-            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
+//            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
             return $errors;
         }
 
