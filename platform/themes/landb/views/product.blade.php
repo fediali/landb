@@ -153,6 +153,7 @@
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
                             {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
                         </a>
+                    <span class="color-name">{{ $color->color_name }}</span>
                     </label>
                 @endforeach
                 {{--<label class="container-check">

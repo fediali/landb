@@ -148,6 +148,14 @@ class ProductForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label'],
                 'values'     => $productId ? $this->getModel()->color_print : '',
             ])
+            ->add('color_name', 'text', [
+                'label'      => __('Color Name'),
+                'label_attr' => ['class' => 'required'],
+                'attr'       => [
+                    'placeholder'  => __('Color Name'),
+                    'data-counter' => 120,
+                ],
+            ])
 //            ->add('color_products[]', 'multiCheckList', [
 //                'label'      => 'Color Products',
 //                'label_attr' => ['class' => 'control-label'],
