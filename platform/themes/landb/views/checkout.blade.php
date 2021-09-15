@@ -399,7 +399,7 @@
                                                value="{{ route('public.checkout_success', $token) }}">
                                         <div class="row">
                                             <div class="col-lg-12">
-                                                <div class="">
+                                                <div class="chk">
                                                     {{--<input class="" type="radio" name="payment_method" value="1">
                                                     <label class="mr-2 mb-0" for=""> Credit Card (Secure)</label>--}}
                                                     <input class="ml-2" type="radio" name="payment_method"
