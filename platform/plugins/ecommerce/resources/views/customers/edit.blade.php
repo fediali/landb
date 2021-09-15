@@ -372,7 +372,7 @@
 
                 <form onsubmit="return false;">
                     <!--      Make your own form or copy this one -->
-                    <div class="row group">
+                    {{--<div class="row group">
                         @isset($customer->billingAddress)
                             <label class="col-lg-12">
                                 <span>Billing Address</span>
@@ -382,7 +382,7 @@
                     !!}
                             </label>
                         @endisset
-                    </div>
+                    </div>--}}
                     <div class="group row">
                         <label class="col-lg-12">
 
