@@ -534,6 +534,60 @@
                                         }}</a>
                                 </div>
                             </li>
+                            <li class="clearfix"></li>
+                            <li class="clearfix"></li>
+                            <li class="clearfix">
+                                <div class="flexbox-grid-default">
+                                    <div class="flexbox-auto-content-left">
+                                        <label class="title-text-second">{{ __('Billing Address') }}</label>
+                                    </div>
+                                    <div class="flexbox-auto-left">
+                                        <a v-b-modal.edit-billing-address>
+                                            <span data-placement="top" title="Update Billing address" data-toggle="tooltip">
+                                                <svg class="svg-next-icon svg-next-icon-size-12">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="text-infor-subdued mt15">
+                                <div v-if="child_customer_billing_addresses.length > 1">
+                                    <div class="ui-select-wrapper">
+                                        <select class="ui-select" @change="selectCustomerBillingAddress($event)">
+                                            <option v-for="address_item in child_customer_billing_addresses"
+                                                    :value="address_item.id"
+                                                    :selected="parseInt(address_item.id) === parseInt(customer_address.email)">
+                                                {{
+                                                address_item.address + ', ' + address_item.city + ', ' +
+                                                address_item.state + ', ' +
+                                                address_item.country + (zip_code_enabled ? ', ' +
+                                                address_item.zip_code : '')
+                                                }}
+                                            </option>
+                                        </select>
+                                        <svg class="svg-next-icon svg-next-icon-size-16">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
+                                        </svg>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div>{{ child_customer_billing_address.name }}</div>
+                                <div>{{ child_customer_billing_address.phone }}</div>
+                                <div><a :href="'mailto:' + child_customer_billing_address.email">{{ child_customer_billing_address.email }}</a></div>
+                                <div>{{ child_customer_billing_address.address }}</div>
+                                <div>{{ child_customer_billing_address.city }}</div>
+                                <div>{{ child_customer_billing_address.state }}</div>
+                                <div>{{ child_customer_billing_address.country }}</div>
+                                <div v-if="zip_code_enabled">{{ child_customer_billing_address.zip_code }}</div>
+                                <div>
+                                    <a target="_blank" class="hover-underline"
+                                       :href="'https://maps.google.com/?q=' + child_customer_billing_address.address + ', ' + child_customer_billing_address.city + ', ' + child_customer_billing_address.state + ', ' + child_customer_billing_address.country + (zip_code_enabled ? ', ' + child_customer_billing_address.zip_code : '')">{{
+                                        __('See on maps')
+                                        }}</a>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <!--/ko-->
@@ -825,6 +879,69 @@
             </div>
         </b-modal>
 
+        <b-modal id="edit-billing-address" title="Update Billing address" ok-title="Save" cancel-title="Cancel" @ok="updateOrderBillingAddress($event)">
+            <div class="next-form-section">
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Name') }}</label>
+                        <input type="text" class="next-input customer-address-name"
+                               :value="child_customer_billing_address.name">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Phone') }}</label>
+                        <input type="text" class="next-input customer-address-phone"
+                               :value="child_customer_billing_address.phone">
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Address') }}</label>
+                        <input type="text" class="next-input customer-address-address"
+                               :value="child_customer_billing_address.address">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Email') }}</label>
+                        <input type="text" class="next-input customer-address-email"
+                               :value="child_customer_billing_address.email">
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Country') }}</label>
+                        <div class="ui-select-wrapper">
+                            <select class="ui-select" v-model="child_customer_billing_address.country">
+                                <option v-for="(countryName, countryCode) in countries" :value="countryCode">
+                                    {{ countryName }}
+                                </option>
+                            </select>
+                            <svg class="svg-next-icon svg-next-icon-size-16">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('State') }}</label>
+                        <input type="text" class="next-input customer-address-state"
+                               :value="child_customer_billing_address.state">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('City/District') }}</label>
+                        <input type="text" class="next-input customer-address-city"
+                               :value="child_customer_billing_address.city">
+                    </div>
+                </div>
+                <div class="next-form-grid" v-if="zip_code_enabled">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Zip code') }}</label>
+                        <input type="text" class="next-input customer-address-zip-code"
+                               :value="child_customer_billing_address.zip_code">
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+
         <b-modal id="make-paid" title="Create a new order" ok-title="Create order" cancel-title="Close"
                  @ok="createOrder($event, true)">
             <label class="ws-nm">{{ __('Confirm payment is paid for this order') }}</label>
@@ -906,6 +1023,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        customer_billing_addresses: {
+            type: Array,
+            default: () => [],
+        },
         order_types: {
             type: Object,
             default: () => [],
@@ -915,6 +1036,19 @@ export default {
             default: () => [],
         },
         customer_address: {
+            type: Object,
+            default: () => ({
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            }),
+        },
+        customer_billing_address: {
             type: Object,
             default: () => ({
                 name: null,
@@ -1029,7 +1163,9 @@ export default {
             paypal_email: this.paypal_email_prop,
             child_customer_order_numbers: this.customer_order_numbers,
             child_customer_addresses: this.customer_addresses,
+            child_customer_billing_addresses: this.customer_billing_addresses,
             child_customer_address: this.customer_address,
+            child_customer_billing_address: this.customer_billing_address,
             child_products: this.products,
             child_product_ids: this.product_ids,
             child_sub_amount: this.sub_amount,
@@ -1162,7 +1298,18 @@ export default {
             this.child_customer_id = null;
             this.paypal_email = null;
             this.child_customer_addresses = [];
+            this.child_customer_billing_addresses = [];
             this.child_customer_address = {
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            };
+            this.child_customer_billing_address = {
                 name: null,
                 email: null,
                 address: null,
@@ -1231,6 +1378,7 @@ export default {
                     order_type: this.order_type,
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,
+                    customer_billing_address: this.child_customer_billing_address,
                     order_card: $("select.card_list option:selected").val(),
                     billing_address: $("select#billing_address option:selected").val(),
                 })
@@ -1351,6 +1499,25 @@ export default {
                 console.log(this.child_customer, "==------==");
             }
         },
+        updateOrderBillingAddress: function ($event) {
+            $event.preventDefault();
+
+            if (this.child_customer) {
+                $($event.target).find('.btn-primary').addClass('button-loading');
+
+                let $modal = $(event.target).closest('.modal-dialog');
+                this.child_customer_billing_address.name = $modal.find('.customer-address-name').val();
+                this.child_customer_billing_address.email = $modal.find('.customer-address-email').val();
+                this.child_customer_billing_address.phone = $modal.find('.customer-address-phone').val();
+                this.child_customer_billing_address.address = $modal.find('.customer-address-address').val();
+                this.child_customer_billing_address.city = $modal.find('.customer-address-city').val();
+                this.child_customer_billing_address.state = $modal.find('.customer-address-state').val();
+                this.child_customer_billing_address.zip_code = $modal.find('.customer-address-zip-code').val();
+
+                this.$root.$emit('bv::hide::modal', 'edit-billing-address');
+                $($event.target).find('.btn-primary').removeClass('button-loading');
+            }
+        },
         createNewCustomer: function ($event) {
             $event.preventDefault();
             let context = this;
@@ -1401,6 +1568,14 @@ export default {
                 }
             });
         },
+        selectCustomerBillingAddress: function (event) {
+            let context = this;
+            _.each(this.child_customer_billing_addresses, (item) => {
+                if (parseInt(item.id) === parseInt(event.target.value)) {
+                    context.child_customer_billing_address = item;
+                }
+            });
+        },
         getOrderNumbers: function () {
             let context = this;
             axios
@@ -1417,9 +1592,13 @@ export default {
             axios
                 .get(route('customers.get-customer-addresses', context.child_customer_id))
                 .then(res => {
-                    context.child_customer_addresses = res.data.data;
+                    context.child_customer_addresses = res.data.data.filter(function(addr) {return addr.type == 'shipping'});
+                    context.child_customer_billing_addresses = res.data.data.filter(function(addr) {return addr.type == 'billing'});
                     if (!_.isEmpty(context.child_customer_addresses)) {
                         context.child_customer_address = _.first(context.child_customer_addresses);
+                    }
+                    if (!_.isEmpty(context.child_customer_billing_addresses)) {
+                        context.child_customer_billing_address = _.first(context.child_customer_billing_addresses);
                     }
                 })
                 .catch(res => {

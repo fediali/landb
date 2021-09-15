@@ -27,12 +27,12 @@
                                     {!!Form::select('order_card', ['No Credit Card Found'], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
                                 </label>
                             </div>
-                            <div class="row group m-0 pt-4 ">
+                            {{--<div class="row group m-0 pt-4 ">
                                 <label class="col-lg-12 ">
                                     <span class="mb-2">Billing Address</span>
                                     {!! Form::select('billing_address',[],null ,['class' => 'form-control','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address', ]) !!}
                                 </label>
-                            </div>
+                            </div>--}}
                             <div class="add_card">
                                 <div class="group row m-0">
                                     <label class="col-lg-12">
