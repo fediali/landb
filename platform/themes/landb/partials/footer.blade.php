@@ -547,7 +547,7 @@
 
           setInterval(function () {
             dp_scroll_text();
-          }, 5000);
+          }, 7000);
 
 
         });

@@ -1618,11 +1618,7 @@ section.parallax_video video {
     line-height: 18px;
     color: #000000;
 }
-
-.color-area {
-    display: flex;
-    height: 30px;
-}
+ 
 
 .detail-basic {
     font-style: normal;
@@ -4703,6 +4699,17 @@ html {
 
 .color-area label {
     margin-right: 10px;
+    text-align: center;
+}
+
+.color-name {
+    font-family: Madeglin;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.image-set img {
+    cursor: zoom-in;
 }
 
 .tags a {
