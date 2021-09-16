@@ -1618,7 +1618,7 @@ section.parallax_video video {
     line-height: 18px;
     color: #000000;
 }
- 
+
 
 .detail-basic {
     font-style: normal;
@@ -1944,27 +1944,27 @@ input.qtyminus {
     transform: rotate(45deg);
 }
 
-@media screen and (min-width: 992px) and (max-width: 5000px) { 
+@media screen and (min-width: 992px) and (max-width: 5000px) {
     #exzoom {
         display: flex !important;
         margin-left: -20%;
     }
-	
-	 .exzoom .exzoom_nav {  
-    display: contents !important; 
+
+	 .exzoom .exzoom_nav {
+    display: contents !important;
    }
-   
-   .exzoom .exzoom_nav .exzoom_nav_inner { 
-      display:grid !important; 
-      margin-left: 55% !important; 
+
+   .exzoom .exzoom_nav .exzoom_nav_inner {
+      display:grid !important;
+      margin-left: 55% !important;
   }
-  
+
   .exzoom .exzoom_nav .exzoom_nav_inner span {
         width: 150px !important;
         height: 150px !important;
         margin: 0px 0px 5px 0px !important;
 		}
-		
+
 		.exzoom .exzoom_nav .exzoom_nav_inner span img {
           height: 150px !important;
 		  }
@@ -2031,14 +2031,14 @@ input.qtyminus {
         height: 100% !important;
         width: 80px !important;
     }
-    .owl-carousel .owl-dots { 
+    .owl-carousel .owl-dots {
         display: flex !important;
-        width: 100% !important;  
+        width: 100% !important;
         height: 20% !important;
     }
     .owl-stage-outer {
         width: 100% !important;
-        margin-left: 0% !important; 
+        margin-left: 0% !important;
     }
     .invoice-final {
         margin-top: 330px !important;
@@ -2092,7 +2092,7 @@ input.qtyminus {
         height: auto !important;
         margin-top: 0px !important;
     }
-    
+
     .slidert-slim-img {
         height: auto !important;
     }
@@ -2126,7 +2126,7 @@ input.qtyminus {
     }
     .slider-t-main {
         display: block !important;
-        margin-left:  0px !important;  
+        margin-left:  0px !important;
          margin-right: 0px !important;
     }
     .t-one {
@@ -3301,10 +3301,10 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     .chk label {
         font-size: 0.9rem !important;
     }
-    .owl-carousel .owl-dots { 
+    .owl-carousel .owl-dots {
         margin-top: 5px;
     }
-    .detail-h1 { 
+    .detail-h1 {
         margin-top: 120px;
     }
     .previews{
@@ -3589,7 +3589,7 @@ table.shop_table tr th {
     .navbar-brand img {
         height: 66px !important;
     }
-    
+
     .shoplisting .listbox .img {
         height: auto !important;
     }
@@ -4707,7 +4707,7 @@ html {
     font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
-    font-size: 13px !important;  
+    font-size: 13px !important;
     position: absolute;
 }
 
@@ -4778,7 +4778,7 @@ html { scroll-behavior: smooth;}
 
 .t-three {
     z-index: 10;
-    
+
 }
 
 
@@ -4792,15 +4792,15 @@ html { scroll-behavior: smooth;}
         width: 65% !important;
     }
     .owl-carousel .owl-dots {
-        top: 0; 
+        top: 0;
     }
     .owl-carousel .owl-dot {
-        height: 22.3333% !important; 
+        height: 22.3333% !important;
     }
 }
 
 
- 
+
 .content-carousel {
     width: 100%;
 	display: block;
@@ -4817,16 +4817,16 @@ html { scroll-behavior: smooth;}
 	margin-top: 10px;
 }
 .owl-carousel .owl-dots {
-	position: absolute; 
+	position: absolute;
     left: 0px;
     width: 20%;
 	height: 100%;
 }
-.owl-carousel .owl-dot { 
+.owl-carousel .owl-dot {
     margin-bottom: 5px;
     background-size: contain;
     background-position: center;
-    background-repeat: no-repeat;  
+    background-repeat: no-repeat;
 }
 
 
@@ -4838,18 +4838,18 @@ html { scroll-behavior: smooth;}
   }
 
 
-  .form-control.is-invalid, .was-validated .form-control:invalid { 
+  .form-control.is-invalid, .was-validated .form-control:invalid {
     background-position: center right calc(.75em + .1875rem) !important;}
-   
+
 
     .magnify-modal {
         box-shadow: 0 0 6px 2px rgba(0, 0, 0, .3);
       }
-  
+
       .magnify-header .magnify-toolbar {
         background-color: rgba(0, 0, 0, .5);
       }
-  
+
       .magnify-stage {
         top: 0;
         right: 0;
@@ -4866,25 +4866,25 @@ html { scroll-behavior: smooth;}
       .magnify-toolbar .magnify-button {
         background:rgb(255 255 255 / 60%) !important;
       }
-  
+
       .magnify-footer {
         bottom: 10px;
       }
-  
+
       .magnify-footer .magnify-toolbar {
         background-color: #fff;
         border-radius: 5px;
       }
-  
+
       .magnify-loader {
         background-color: transparent;
       }
-  
+
       .magnify-header,
       .magnify-footer {
         pointer-events: none;
       }
-  
+
       .magnify-button {
         pointer-events: auto;
       }
@@ -4907,7 +4907,7 @@ html { scroll-behavior: smooth;}
     top: -50px !important;
     position: absolute;
 }
- 
+
 .selected-color img {
-    border: 2px solid #000 !important;
+    border: 2px solid #5a595a !important;
 }
