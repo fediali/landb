@@ -102,7 +102,7 @@
                         <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
-                        <small>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}} (${{$default_price}} pack price)</small></span>
+                        <span class="pack-per-price"><b>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}}</b> (${{$default_price}} pack price)</span></span>
             </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">

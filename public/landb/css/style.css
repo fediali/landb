@@ -4898,3 +4898,7 @@ html { scroll-behavior: smooth;}
         margin-top: 155px !important;
     }
 }
+
+.pack-per-price {
+    font-size: 16px;
+}
