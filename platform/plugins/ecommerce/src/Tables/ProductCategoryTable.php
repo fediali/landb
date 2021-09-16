@@ -36,7 +36,8 @@ class ProductCategoryTable extends TableAbstract
         DataTables $table,
         UrlGenerator $urlGenerator,
         ProductCategoryInterface $productCategoryRepository
-    ) {
+    )
+    {
         $this->repository = $productCategoryRepository;
         $this->setOption('id', 'table-product-categories');
         parent::__construct($table, $urlGenerator);
@@ -74,7 +75,7 @@ class ProductCategoryTable extends TableAbstract
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
             })->editColumn('product', function ($item) {
-                return $item->products->where('ptype', 'R')->where('status', '!=', BaseStatusEnum::HIDE)->count();
+                return $item->products->where(['is_variation' => 0, 'ptype' => 'R'])->where('status', '!=', BaseStatusEnum::HIDE)->count();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -122,41 +123,41 @@ class ProductCategoryTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'         => [
+            'id'          => [
                 'name'  => 'ec_product_categories.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'image'      => [
+            'image'       => [
                 'name'  => 'ec_product_categories.image',
                 'title' => trans('core/base::tables.image'),
                 'width' => '70px',
                 'class' => 'text-left',
             ],
-            'name'       => [
+            'name'        => [
                 'name'  => 'ec_product_categories.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
-            'is_plus_cat'   => [
+            'is_plus_cat' => [
                 'name'  => 'is_plus_cat',
                 'title' => 'Is Plus Category',
                 'width' => '100px',
                 'class' => 'text-left',
-            ],  'product'   => [
+            ], 'product'  => [
                 'name'  => 'product',
                 'title' => 'Product',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'created_at' => [
+            'created_at'  => [
                 'name'  => 'ec_product_categories.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'status'     => [
+            'status'      => [
                 'name'  => 'ec_product_categories.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
