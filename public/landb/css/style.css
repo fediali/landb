@@ -4908,3 +4908,6 @@ html { scroll-behavior: smooth;}
     position: absolute;
 }
  
+.selected-color img {
+    border: 2px solid #000 !important;
+}
