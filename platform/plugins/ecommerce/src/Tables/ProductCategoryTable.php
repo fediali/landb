@@ -145,7 +145,7 @@ class ProductCategoryTable extends TableAbstract
                 'width' => '100px',
                 'class' => 'text-left',
             ],  'product'   => [
-                'name'  => 'produc',
+                'name'  => 'product',
                 'title' => 'Product',
                 'width' => '100px',
                 'class' => 'text-left',
