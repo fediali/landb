@@ -55,16 +55,16 @@ class importCustomers extends Command
         /*$file = public_path('lnb-customers-3000.xlsx');
         Excel::import(new \App\Imports\ImportCustomers(), $file);*/
 
-        DB::table('customer_histories')->truncate();
-        DB::table('customer_product_demand')->truncate();
-        DB::table('ec_customer_addresses')->truncate();
-        DB::table('ec_customer_card')->truncate();
-        DB::table('ec_customer_detail')->truncate();
-        DB::table('ec_customer_store_locator')->truncate();
-        DB::table('ec_customer_tax_certificate')->truncate();
-        DB::table('ec_discount_customers')->truncate();
-        DB::table('ec_customers_merge')->truncate();
-        DB::table('ec_customers')->truncate();
+//        DB::table('customer_histories')->truncate();
+//        DB::table('customer_product_demand')->truncate();
+//        DB::table('ec_customer_addresses')->truncate();
+//        DB::table('ec_customer_card')->truncate();
+//        DB::table('ec_customer_detail')->truncate();
+//        DB::table('ec_customer_store_locator')->truncate();
+//        DB::table('ec_customer_tax_certificate')->truncate();
+//        DB::table('ec_discount_customers')->truncate();
+//        DB::table('ec_customers_merge')->truncate();
+//        DB::table('ec_customers')->truncate();
 
         $file = File::get(storage_path('app/public/lnb-cust_24599.json'));
         $data = json_decode(utf8_encode($file), true);

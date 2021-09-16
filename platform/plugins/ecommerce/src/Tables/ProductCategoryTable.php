@@ -73,6 +73,8 @@ class ProductCategoryTable extends TableAbstract
             })
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
+            })->editColumn('product', function ($item) {
+                return $item->products->count();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -140,6 +142,11 @@ class ProductCategoryTable extends TableAbstract
             'is_plus_cat'   => [
                 'name'  => 'is_plus_cat',
                 'title' => 'Is Plus Category',
+                'width' => '100px',
+                'class' => 'text-left',
+            ],  'product'   => [
+                'name'  => 'produc',
+                'title' => 'Product',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
