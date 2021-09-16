@@ -149,6 +149,10 @@
 
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
+                    <?php
+                        $default = $color->variations()->orderBy('is_default', 'desc')->first();
+                    ?>
+                @if($default && $default->product->quantity > 0)
                     <label class="">
                         <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
@@ -160,6 +164,7 @@
                         </a>
                     <span class="d-block color-name">{{ $color->color_name }}</span>
                     </label>
+                @endif
                 @endforeach
                 {{--<label class="container-check">
                     <input type="checkbox">
