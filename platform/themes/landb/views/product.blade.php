@@ -151,7 +151,11 @@
                     <label class="">
                         <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
-                            {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
+                            @if(!empty($color->color_print))
+                                {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
+                            @else
+                                {!! image_html_generator(@$product->images[0], $color->name, 40, 40) !!}
+                            @endif
                         </a>
                     <span class="d-block color-name">{{ $color->color_name }}</span>
                     </label>

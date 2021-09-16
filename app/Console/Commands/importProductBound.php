@@ -47,7 +47,6 @@ class importProductBound extends Command
     public function handle()
     {
         $products = Product::all();
-
         foreach ($products as $product) {
             $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
             if ($getBound) {
