@@ -92,9 +92,8 @@
         </div>
     </div>  -->
         </div>
-
-        <div class="col-lg-1"></div>
-        <div class="col-lg-6">
+ 
+        <div class="col-lg-7 margin-left-pro-detail">
             {{--        <p class="pre-label-detail">Pre-Order</p>--}}
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2"><span id="product_price">
@@ -102,7 +101,7 @@
                         <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
-                        <small>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}} (${{$default_price}} pack price)</small></span>
+                        <span class="pack-per-price"><b>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}}</b> (${{$default_price}} pack price)</span></span>
             </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
@@ -149,8 +148,12 @@
 
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
+                    <?php
+                        $default = $color->variations()->orderBy('is_default', 'desc')->first();
+                    ?>
+                @if($default && $default->product->quantity > 0)
                     <label class="">
-                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
+                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}" class=" @if($color->id == $product->id) selected-color @endif ">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
                             @if(!empty($color->color_print))
                                 {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
@@ -160,6 +163,7 @@
                         </a>
                     <span class="d-block color-name">{{ $color->color_name }}</span>
                     </label>
+                @endif
                 @endforeach
                 {{--<label class="container-check">
                     <input type="checkbox">
