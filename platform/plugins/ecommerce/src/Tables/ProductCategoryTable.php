@@ -75,7 +75,7 @@ class ProductCategoryTable extends TableAbstract
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
             })->editColumn('product', function ($item) {
-                return $item->products->where(['is_variation' => 0, 'ptype' => 'R'])->where('status', '!=', BaseStatusEnum::HIDE)->count();
+                return $item->count->count();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -147,7 +147,7 @@ class ProductCategoryTable extends TableAbstract
                 'class' => 'text-left',
             ], 'product'  => [
                 'name'  => 'product',
-                'title' => 'Product',
+                'title' => 'Active Product',
                 'width' => '100px',
                 'class' => 'text-left',
             ],

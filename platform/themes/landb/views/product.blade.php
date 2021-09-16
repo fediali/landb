@@ -315,7 +315,7 @@
     <div class="row">
         <div class="col-lg-12 mt-4">
             <ul class="nav nav-tabs tabs-product mt-4">
-                <li><a class="active" data-toggle="tab" href="#home">Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <li><a class="active" data-toggle="tab" href="#home"></a>
                 </li>
                 {{--<li><a data-toggle="tab" href="#menu1">Product Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
@@ -324,7 +324,7 @@
 
             <div class="tab-content product-tab-content">
                 <div id="home" class="tab-pane fade in active show">
-                    {!! $product->description !!}
+                    {!! $product->content !!}
                 </div>
                 {{--<div id="menu1" class="tab-pane fade">
                     <div class="row mt-4">
