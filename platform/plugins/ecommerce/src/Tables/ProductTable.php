@@ -323,7 +323,8 @@ class ProductTable extends TableAbstract
                 }
             });
             $query->when(isset($search_items['prod_category']), function ($q) use ($search_items) {
-                $q->where('ec_products.category_id', $search_items['prod_category']);
+                $q->join('ec_product_category_product', 'ec_product_category_product.product_id', 'ec_products.id');
+                $q->where('ec_product_category_product.category_id', $search_items['prod_category']);
             });
             $query->when(isset($search_items['prod_type']), function ($q) use ($search_items) {
                 if ($search_items['prod_type'] == 'regular') {
