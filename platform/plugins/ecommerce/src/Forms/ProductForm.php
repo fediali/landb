@@ -146,7 +146,7 @@ class ProductForm extends FormAbstract
             ->add('color_print', 'mediaImages', [
                 'label'      => 'Color Print',
                 'label_attr' => ['class' => 'control-label'],
-                'values'     => $productId ? $this->getModel()->color_print : '',
+                'values'     => $productId ? [$this->getModel()->color_print] : '',
             ])
             ->add('color_name', 'text', [
                 'label'      => __('Color Name'),

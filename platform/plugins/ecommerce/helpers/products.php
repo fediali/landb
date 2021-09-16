@@ -416,6 +416,25 @@ function get_cross_selling_products_modded($product, $limit = 4)
 
 }
 
+function get_like_products_modded($product, $limit = 4)
+{
+
+  $like_selling = app(ProductInterface::class)->getRelatedCategoryIds($product);
+
+  return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
+      ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
+      ->where('ep.quantity', '>', 0)
+      ->join('ec_products as ep', 'epv.product_id', 'ep.id')
+      ->where('ec_products.is_variation' , 0)
+      ->whereIn('ec_products.id' , $like_selling)
+      ->orderBy('ec_products.order','ASC')
+      ->orderBy('ec_products.created_at','DESC')
+      ->select('ec_products.*')
+      ->limit($limit)
+      ->get();
+
+}
+
 
 if (!function_exists('get_cross_sale_products')) {
     /**
