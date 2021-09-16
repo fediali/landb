@@ -4708,7 +4708,7 @@ html {
     font-style: normal;
     font-weight: bold;
     font-size: 13px !important;  
-
+    position: absolute;
 }
 
 .image-set img {
