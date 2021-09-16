@@ -180,15 +180,11 @@
 @endif
 @if(setting('theme-landb-home_section_2_status') == 1)
     <section>
-        <div class="ml-5 mr-5">
-            <div class="row">
+        <div class="ml-5 mt-5 mr-5">
+            <div class="row"> 
                 <div class="col-md-6">
-                    <h1 class="revealUp hey-text text-center"
-                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>
-                </div>
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
-
+                <h1 class="mt-0 revealUp hey-text text-center"
+                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>      
                     <p class="mt-3 font-madeg ft-20">
                         We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide
                         fashion-forward, comfortable styles that give a nod to the American west. We are confident our
@@ -264,7 +260,7 @@
             <div class="row">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-10">
-                    <p class="text-center mt-4 ml-3 mr-3 mb-4 font-madeg ft-20">
+                    <p class="text-center mt-5 ml-3 mr-3 mb-5 font-madeg ft-20">
                         L&B is passionate about developing creative, quality western wholesale boutique clothing that
                         will help your business stand out. We are a family-owned business, which extends to our team and
                         our customers. We promise to provide excellent customer service and accountability.<br/>

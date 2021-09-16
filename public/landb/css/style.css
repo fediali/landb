@@ -4325,7 +4325,7 @@ html {
   }
 
   .pro-text {
-    font-size: 45px;
+    font-size: 70px;
     margin-top: 150px;
     font-family: 'NorthHead';
 
@@ -4422,7 +4422,7 @@ html {
      font-size: 50px;
 }
 .dp-scroll-text :nth-child(3){
-    opacity: 0.5; transform: translate(0%, 150%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ;
+    opacity: 1; transform: translate(0%, 150%) matrix(0.8, 0, 0, 0.8, 0, 0) scale(0.8, 0.8) ;
 }
 .dp-scroll-text :nth-child(4){
     opacity: 0.25; transform: translate(0%, 300%) matrix(0.7, 0, 0, 0.7, 0, 0) scale(0.7, 0.7) ;
@@ -4785,11 +4785,11 @@ html { scroll-behavior: smooth;}
 /******* PRODUCT SLIDER CSS **********/
 @media screen and (min-width: 992px) and (max-width: 5000px) {
     .owl-stage-outer {
-        width: 80% !important;
-        margin-left: 20%;
+        width: 65% !important;
+        margin-left: 21%;
     }
     .product-carousel .owl-item img {
-        width: 80% !important;
+        width: 65% !important;
     }
     .owl-carousel .owl-dots {
         top: 0; 
@@ -4902,3 +4902,9 @@ html { scroll-behavior: smooth;}
 .pack-per-price {
     font-size: 16px;
 }
+
+.dp-scroll-text p:first-child {
+    top: -50px !important;
+    position: absolute;
+}
+ 

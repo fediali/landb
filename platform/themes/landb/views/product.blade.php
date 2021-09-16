@@ -92,9 +92,8 @@
         </div>
     </div>  -->
         </div>
-
-        <div class="col-lg-1"></div>
-        <div class="col-lg-6">
+ 
+        <div class="col-lg-7 margin-left-pro-detail">
             {{--        <p class="pre-label-detail">Pre-Order</p>--}}
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
             <p class="detail-price mb-2"><span id="product_price">
