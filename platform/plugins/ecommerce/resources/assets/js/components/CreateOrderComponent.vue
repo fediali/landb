@@ -1480,8 +1480,6 @@ export default {
             if (this.child_customer) {
                 $($event.target).find('.btn-primary').addClass('button-loading');
 
-                console.log($event.target, "--------------");
-
                 let $modal = $(event.target).closest('.modal-dialog');
                 this.child_customer_address.name = $modal.find('.customer-address-name').val();
                 this.child_customer_address.email = $modal.find('.customer-address-email').val();
@@ -1495,8 +1493,6 @@ export default {
                 // this.loadCountries();
                 this.$root.$emit('bv::hide::modal', 'edit-address');
                 $($event.target).find('.btn-primary').removeClass('button-loading');
-
-                console.log(this.child_customer, "==------==");
             }
         },
         updateOrderBillingAddress: function ($event) {

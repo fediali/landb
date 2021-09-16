@@ -62,7 +62,6 @@ class ProductCategoryTable extends TableAbstract
                 if (!Auth::user()->hasPermission('product-categories.edit')) {
                     return $item->name;
                 }
-
                 return Html::link(route('product-categories.edit', $item->id), $item->name);
             })
             ->editColumn('image', function ($item) {
@@ -74,9 +73,10 @@ class ProductCategoryTable extends TableAbstract
             })
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
-            })->editColumn('product', function ($item) {
-                return $item->count->count();
             })
+            /*->editColumn('prod_count', function ($item) {
+                return $item->count->count();
+            })*/
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -114,6 +114,11 @@ class ProductCategoryTable extends TableAbstract
             ->orderBy('ec_product_categories.order', 'asc')
             ->select($select);
 
+        $query = $query->selectRaw('(SELECT COUNT(`ec_product_category_product`.`product_id`) 
+        FROM `ec_product_category_product` 
+        JOIN `ec_products` ON ec_products.`id` = ec_product_category_product.`product_id` 
+        WHERE ec_product_categories.id = ec_product_category_product.category_id AND ec_products.`is_variation` = 0 AND `ec_products`.`ptype` = "R" AND `ec_products`.`status` = "'.BaseStatusEnum::ACTIVE.'") AS prod_count');
+
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -145,8 +150,9 @@ class ProductCategoryTable extends TableAbstract
                 'title' => 'Is Plus Category',
                 'width' => '100px',
                 'class' => 'text-left',
-            ], 'product'  => [
-                'name'  => 'product',
+            ],
+            'prod_count'  => [
+                'name'  => 'ec_product_categories.name',
                 'title' => 'Active Product',
                 'width' => '100px',
                 'class' => 'text-left',
