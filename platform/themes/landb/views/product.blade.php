@@ -121,11 +121,11 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <p class="detail-size-p mb-2 font-bold">
-                        <a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal"
-                           data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp;
-                            Size Chart</a>
-                    </p>
+{{--                    <p class="detail-size-p mb-2 font-bold">--}}
+{{--                        <a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal"--}}
+{{--                           data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp;--}}
+{{--                            Size Chart</a>--}}
+{{--                    </p>--}}
                 </div>
             </div>
 
@@ -145,7 +145,7 @@
 
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
-            
+
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
                     <label class="">
