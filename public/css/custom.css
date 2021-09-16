@@ -1181,6 +1181,10 @@ tbody>tr>:nth-child(3) span{
   .ft-12 {
     font-size: 12px !important;
   }
-.column-key-id {
-  display:flex !important;
+.column-key-id  i {
+  position: absolute !important;
+}
+
+.column-key-id  span {
+  color: #000 !important;
 }
