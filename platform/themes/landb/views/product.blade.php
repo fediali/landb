@@ -57,7 +57,7 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="content-carousel product-carousel">
                 <div class="owl-carousel ">
                     @if(count($product->images))
@@ -93,6 +93,7 @@
     </div>  -->
         </div>
 
+        <div class="col-lg-1"></div>
         <div class="col-lg-6">
             {{--        <p class="pre-label-detail">Pre-Order</p>--}}
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
