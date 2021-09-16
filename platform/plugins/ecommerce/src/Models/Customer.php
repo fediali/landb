@@ -131,7 +131,7 @@ class Customer extends Authenticatable
      */
     public function addresses()
     {
-        return $this->hasMany(Address::class, 'customer_id', 'id')->where('type', 'shipping');
+        return $this->hasMany(Address::class, 'customer_id', 'id');
     }
 
     /**
