@@ -93,6 +93,7 @@ class Product extends BaseModel
         'sizes',
         'product_label_id',
         'schedule_date',
+        'color_name'
     ];
 
     /**
