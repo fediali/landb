@@ -74,7 +74,7 @@ class ProductCategoryTable extends TableAbstract
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
             })->editColumn('product', function ($item) {
-                return $item->products->count();
+                return $item->products->where('ptype', 'R')->where('status', '!=', BaseStatusEnum::HIDE);->count();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
