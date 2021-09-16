@@ -248,7 +248,7 @@ class CheckoutController extends Controller
 
     public function charge(Request $request)
     {
-        $response = [];
+
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta'              => [
@@ -281,9 +281,7 @@ class CheckoutController extends Controller
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
-            $response['message'] = 'Try Again';
             $response = json_decode($response, true);
-
             $status = [];
             $status['transaction_error'] = $response['message'];
             $status['status'] = 'Declined';
