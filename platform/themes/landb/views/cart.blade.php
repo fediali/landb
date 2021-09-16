@@ -28,8 +28,9 @@
 
         </div>
     </div>
-    @php $grand_total = 0;
-
+    @php
+        $grand_total = 0;
+        $discount = 0.00;
     @endphp
     @foreach($cart->products as $cartItem)
 
@@ -38,6 +39,11 @@
             $promotion = null;
             if($cartItem->product->promotions && isset($cartItem->product->promotions[0])){
                 $promotion = $cartItem->product->promotions[0];
+                if($promotion->type_option == 'percentage'){
+                    $discount += ($cartItem->price * $promotion->value/100) * $cartItem->qty;
+                }elseif($promotion->type_option == 'amount'){
+                    $discount += $promotion->value * $cartItem->qty;
+                }
             }
         @endphp
         <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
@@ -70,12 +76,7 @@
             </div>
             <div class="col-lg-2 mt-2 text-center">
                 <p class="mt-2"><b class="cart-m-title">Price</b>
-                    @if(!is_null($promotion))
-                        <del>${{ $cartItem->price }}</del>&nbsp;
-                        <span>${{ ($promotion->type_option) == 'percentage' ? $cartItem->price - ($cartItem->price * $promotion->value/100) : (($promotion->type_option) == 'amount' ? $cartItem->price - $promotion->value : $cartItem->price) }}</span>
-                    @else
                         ${{ $cartItem->price }}
-                    @endif
                 </p>
             </div>
             <div class="col-lg-2 mt-2">
@@ -161,6 +162,14 @@
                     </div>
                     <div class="col-lg-4 col-5">
                         <p class="total-para">$ <span id="total-cart-price">{{ $grand_total }}</span></p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-7">
+                        <p class="total-head">Discount</p>
+                    </div>
+                    <div class="col-lg-4 col-5">
+                        <p class="total-para">$ {{ $discount }}</p>
                     </div>
                 </div>
                 <div class="row mt-4">
