@@ -16,7 +16,9 @@
                 :order_type="'{{ $order->order_type }}'"
                 :payment_method="'{{$order->payment ? $order->payment->payment_channel : 'cod'}}'"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
+                :customer_billing_addresses="{{ json_encode($customerBillingAddresses) }}"
                 :customer_address="{{ $customerAddress }}"
+                :customer_billing_address="{{ $customerBillingAddress }}"
                 :sub_amount="{{ $order->sub_total }}"
                 :total_amount="{{ /*$order->payment->amount ??*/ $order->amount }}"
                 :discount_amount="{{ $order->discount_amount }}"
@@ -54,12 +56,12 @@
                                     {!!Form::select('order_card', $cards, @$order->order_card, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
                                 </label>
                             </div>
-                            <div class="row group m-0 pt-4 ">
+                            {{--<div class="row group m-0 pt-4 ">
                                 <label class="col-lg-12 ">
                                     <span class="mb-2">Billing Address</span>
                                     {!! Form::select('billing_address',$order->user->billingAddress->pluck('address', 'id'), @$order->billingAddress->customer_address_id ,['class' => 'form-control','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address', ]) !!}
                                 </label>
-                            </div>
+                            </div>--}}
                             <div class="add_card">
                                 <div class="group row m-0">
                                     <label class="col-lg-12">

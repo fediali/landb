@@ -2022,6 +2022,9 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .filterbar .rightbar {
+        display: none;
+  }
     .toggle-menu {
         display: none;
     }
@@ -3299,6 +3302,9 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .chk label {
+        font-size: 0.9rem !important;
+    }
     .owl-carousel .owl-dots { 
         margin-top: 5px;
     }
@@ -4876,3 +4882,9 @@ html { scroll-behavior: smooth;}
       .magnify-footer .magnify-toolbar {
         background-color: transparent;
       }
+
+      @media screen and (min-width: 540px) and (max-width: 767px){
+    .detail-h1 {
+        margin-top: 155px !important;
+    }
+}

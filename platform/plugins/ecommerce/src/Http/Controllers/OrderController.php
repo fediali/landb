@@ -540,7 +540,22 @@ class OrderController extends BaseController
                 ], $meta_condition);
             }
 
-            if ($request->input('billing_address')) {
+            if ($request->input('customer_billing_address.name')) {
+                $this->orderAddressRepository->createOrUpdate([
+                    'customer_address_id' => $request->input('customer_billing_address.id'),
+                    'name' => $request->input('customer_billing_address.name'),
+                    'phone' => $request->input('customer_billing_address.phone'),
+                    'email' => $request->input('customer_billing_address.email'),
+                    'state' => $request->input('customer_billing_address.state'),
+                    'city' => $request->input('customer_billing_address.city'),
+                    'zip_code' => $request->input('customer_billing_address.zip_code'),
+                    'country' => $request->input('customer_billing_address.country'),
+                    'address' => $request->input('customer_billing_address.address'),
+                    'order_id' => $order->id,
+                    'type' => 'billing',
+                ], $meta_condition);
+            }
+            /*if ($request->input('billing_address')) {
                 $address = $this->addressRepository->findById($request->input('billing_address'));
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $address->id,
@@ -555,7 +570,7 @@ class OrderController extends BaseController
                     'order_id' => $order->id,
                     'type' => 'billing',
                 ], $meta_condition);
-            }
+            }*/
 
             foreach ($request->input('products', []) as $productItem) {
                 $product = $this->productRepository->findById(Arr::get($productItem, 'id'));
@@ -1399,18 +1414,19 @@ class OrderController extends BaseController
 
         $customer = null;
         $customerAddresses = [];
+        $customerBillingAddresses = [];
         $customerOrderNumbers = 0;
         if ($order->user_id) {
             $customer = $this->customerRepository->findById($order->user_id);
-
             if ($customer) {
                 $customerOrderNumbers = $customer->orders()->count();
                 $customer->avatar = (string)$customer->avatar_url;
                 $customerAddresses = $customer->addresses->toArray();
+                $customerBillingAddresses = $customer->billing_addresses->toArray();
             }
-
         }
         $customerAddress = $order->address;
+        $customerBillingAddress = $order->billingAddress;
 
         Assets::addStylesDirectly(['vendor/core/plugins/ecommerce/css/ecommerce.css'])
             ->addScriptsDirectly([
@@ -1455,7 +1471,9 @@ class OrderController extends BaseController
             'productIds',
             'customer',
             'customerAddresses',
+            'customerBillingAddresses',
             'customerAddress',
+            'customerBillingAddress',
             'customerOrderNumbers',
             'cards'
         ));
@@ -1510,6 +1528,7 @@ class OrderController extends BaseController
 
         $customer = null;
         $customerAddresses = [];
+        $customerBillingAddresses = [];
         $customerOrderNumbers = 0;
         if ($order->user_id) {
             $customer = $this->customerRepository->findById($order->user_id);
@@ -1537,6 +1556,7 @@ class OrderController extends BaseController
             'customer',
             'customerAddresses',
             'customerAddress',
+            'customerBillingAddresses',
             'customerOrderNumbers'
         ));
     }

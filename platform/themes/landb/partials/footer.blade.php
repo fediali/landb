@@ -320,8 +320,6 @@
         // activate pay button
         //payButton.disabled = false;
         var billing = $("#billing_address option:selected").text();
-
-
             tokenizeButton.disabled = billing === 'Select Address';
             console.log(message);
         });
