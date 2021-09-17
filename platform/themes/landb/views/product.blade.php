@@ -57,7 +57,7 @@
 </section>
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="content-carousel product-carousel">
                 <div class="owl-carousel ">
                     @if(count($product->images))
@@ -93,6 +93,7 @@
     </div>  -->
         </div>
 
+        <div class="col-lg-1"></div>
         <div class="col-lg-6">
             {{--        <p class="pre-label-detail">Pre-Order</p>--}}
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
@@ -121,11 +122,11 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                    <p class="detail-size-p mb-2 font-bold">
-                        <a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal"
-                           data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp;
-                            Size Chart</a>
-                    </p>
+{{--                    <p class="detail-size-p mb-2 font-bold">--}}
+{{--                        <a style="text-decoration:none !important" href="#" class="size-chart-a" data-toggle="modal"--}}
+{{--                           data-target="#myModal"><i class="fa fa-bar-chart" aria-hidden="true"></i> &nbsp;--}}
+{{--                            Size Chart</a>--}}
+{{--                    </p>--}}
                 </div>
             </div>
 
@@ -145,7 +146,7 @@
 
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
-            
+
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
                     <label class="">
@@ -314,7 +315,7 @@
     <div class="row">
         <div class="col-lg-12 mt-4">
             <ul class="nav nav-tabs tabs-product mt-4">
-                <li><a class="active" data-toggle="tab" href="#home">Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <li><a class="active" data-toggle="tab" href="#home"></a>
                 </li>
                 {{--<li><a data-toggle="tab" href="#menu1">Product Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
@@ -323,7 +324,7 @@
 
             <div class="tab-content product-tab-content">
                 <div id="home" class="tab-pane fade in active show">
-                    {!! $product->description !!}
+                    {!! $product->content !!}
                 </div>
                 {{--<div id="menu1" class="tab-pane fade">
                     <div class="row mt-4">

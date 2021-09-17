@@ -77,8 +77,8 @@ class CheckoutController extends Controller
             $query->with(['product']);
         }])->first();
 
-        if(!count($cart->products)){
-          return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
+        if (!count($cart->products)) {
+            return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
         }
 
         foreach ($cart->products as $cartProduct) {
@@ -140,8 +140,8 @@ class CheckoutController extends Controller
         ];
 
         $order = Order::with('products')->find($request->input('order_id'));
-        if($order->is_finished == 1){
-          return redirect()->route('public.products')->with('error', 'Order is already been placed');
+        if ($order->is_finished == 1) {
+            return redirect()->route('public.products')->with('error', 'Order is already been placed');
         }
         $order->update(['notes' => $request->notes]);
 
@@ -248,6 +248,7 @@ class CheckoutController extends Controller
 
     public function charge(Request $request)
     {
+
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta'              => [
@@ -261,7 +262,7 @@ class CheckoutController extends Controller
         ];
         $url = (env("OMNI_URL") . "charge/");
         list($response, $info) = omni_api($url, $data, 'POST');
-     /* dd($response, $info);*/
+        /* dd($response, $info);*/
         $status = $info['http_code'];
 
         if (floatval($status) == 200) {
@@ -280,9 +281,7 @@ class CheckoutController extends Controller
                 401 => 'The account is not yet activated or ready to process payments.',
                 500 => 'Unknown issue - Please contact Fattmerchant'
             ];
-            $response['message'] = 'Try Again';
             $response = json_decode($response, true);
-
             $status = [];
             $status['transaction_error'] = $response['message'];
             $status['status'] = 'Declined';
@@ -303,7 +302,7 @@ class CheckoutController extends Controller
 
         if (isset($shipping[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'shipping'], [
-                'name'     => $shipping[0]->first_name. ' ' . $shipping[0]->last_name,
+                'name'     => $shipping[0]->first_name . ' ' . $shipping[0]->last_name,
                 'phone'    => $shipping[0]->phone,
                 'email'    => $shipping[0]->email,
                 'country'  => $shipping[0]->country,
@@ -315,7 +314,7 @@ class CheckoutController extends Controller
         }
         if (isset($billing[0])) {
             OrderAddress::updateOrCreate(['order_id' => $id, 'type' => 'billing'], [
-                'name'     => $billing[0]->first_name. ' ' . $billing[0]->last_name,
+                'name'     => $billing[0]->first_name . ' ' . $billing[0]->last_name,
                 'phone'    => $billing[0]->phone,
                 'email'    => $billing[0]->email,
                 'country'  => $billing[0]->country,
@@ -359,8 +358,8 @@ class CheckoutController extends Controller
                 }
                 $orderTotal = $orderTotal + $product->price;
                 OrderProduct::find($product->id)->update(['order_id' => $preOrderId]);
-            }else{
-              $includesNormals = true;
+            } else {
+                $includesNormals = true;
             }
             $parent = get_parent_product_by_variant($product->product_id);
             $logParam = [
@@ -374,15 +373,15 @@ class CheckoutController extends Controller
         }
 
         if (!is_null($preOrderId)) {
-          if($includesNormals){
-            Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1]);
-            $current = Order::find($id);
-            $current->update(['amount' => $current->amount - $orderTotal, 'sub_total' => $current->amount - $orderTotal]);
-          }else{
-            Order::where('id', $id)->update(['status' => 'pre-order', 'order_type'      => 'pre_order']);
-            OrderProduct::where('order_id', $preOrderId)->update(['order_id' => $id]);
-            Order::find($preOrderId)->delete();
-          }
+            if ($includesNormals) {
+                Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1]);
+                $current = Order::find($id);
+                $current->update(['amount' => $current->amount - $orderTotal, 'sub_total' => $current->amount - $orderTotal]);
+            } else {
+                Order::where('id', $id)->update(['status' => 'pre-order', 'order_type' => 'pre_order']);
+                OrderProduct::where('order_id', $preOrderId)->update(['order_id' => $id]);
+                Order::find($preOrderId)->delete();
+            }
 
         }
 
@@ -468,8 +467,6 @@ class CheckoutController extends Controller
         }
         return false;
     }
-
-
 
 
 }

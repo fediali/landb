@@ -4695,6 +4695,7 @@ html {
 
 .color-area img {
     border-radius: 30px !important;
+    object-fit: cover;
 }
 
 .color-area label {
@@ -4706,6 +4707,8 @@ html {
     font-family: Madeglin;
     font-style: normal;
     font-weight: bold;
+    font-size: 13px !important;  
+
 }
 
 .image-set img {

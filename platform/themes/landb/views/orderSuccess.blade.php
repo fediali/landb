@@ -152,7 +152,7 @@
                             <p class="cart-product-size invoice-final-p mt-1">TYPE: {{ $variation->title }}</p>
                             <p class="cart-product-size invoice-final-p mt-1">SIZE: {{ $order_product->product->sizes }}</p>
                             <p class="cart-product-size invoice-final-p mt-1">Pieces Per Pack: {{ $order_product->product->prod_pieces }}</p>
-                            <p class="cart-product-size invoice-final-p mt-1"><b>Price Per Pack:</b>  ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
+                            <p class="cart-product-size invoice-final-p mt-1"><b>Price Per Piece:</b>  ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
                                </p>
                             @else
                                 <p style="font-size:12px;" class="cart-product-size mb-2">

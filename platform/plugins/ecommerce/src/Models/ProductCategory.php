@@ -70,6 +70,14 @@ class ProductCategory extends BaseModel
             ->where('is_variation', 0);
     }
 
+    public function count()
+    {
+        return $this
+            ->belongsToMany(Product::class, 'ec_product_category_product', 'category_id', 'product_id')
+            ->where(['is_variation' => 0, 'ptype' => 'R','status'=>BaseStatusEnum::ACTIVE]);
+
+    }
+
     /**
      * @return BelongsTo
      */
