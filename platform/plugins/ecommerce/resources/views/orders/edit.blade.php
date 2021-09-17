@@ -725,6 +725,7 @@
                                                         <button type="submit" class="btn btn-info">Create Payment</button>
                                                     </form>
                                                 </div>
+
                                             @elseif($order_card_preauth->status == 0 && $order_card_preauth->transaction_id)
                                                 <div class="pd-all-20">
                                                     <form action="{{route('orders.capture')}}" method="POST">
@@ -774,7 +775,7 @@
                                 <div class="wrapper-content bg-gray-white mb20">
 
                                     <!-- card -->
-                                    @if($order->preauth == null)
+                                    @if($order->preauth == null || !$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))
                                         <div class="row m-0 pt-4 bg-white">
                                             <div class="col-lg-12 ">
                                                 <span class="mb-2">Card</span>
@@ -846,7 +847,9 @@
                                                 <button type="submit" class="btn btn-info">Create Payment</button>
                                             </form>
                                         </div>
-                                    @elseif($order->preauth->status == 0)
+
+                                    @elseif($order->order_cards_preauth()->where('transaction_id', '!=', "")->value('status') == 0)
+
                                         <div class="capture_card">
                                             <div class="row group"></div>
                                             <div class="group row"></div>
@@ -854,15 +857,14 @@
                                         <div class="pd-all-20">
                                             <form action="{{route('orders.capture')}}" method="POST">
                                                 @csrf
-                                                <input type="hidden" value="{{$order->preauth->transaction_id}}"
-                                                       name="transaction_id">
+            <input type="hidden" value="{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}" name="transaction_id">
                                                 <input type="hidden" value="{{$order->amount}}" name="amount">
                                                 <label class="col-lg-12"> <strong>Transaction ID
-                                                        : </strong>{{$order->preauth->transaction_id}}</label>
+                                                        : </strong>{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}</label>
                                                 <button type="submit" class="btn btn-info">Capture Payment</button>
                                             </form>
                                         </div>
-                                    @else
+                                    @else($order->preauth->status == 1)
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="pd-all-20">
                                                 <div class="p-b10">
