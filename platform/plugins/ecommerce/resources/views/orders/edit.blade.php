@@ -725,7 +725,7 @@
                                                         <button type="submit" class="btn btn-info">Create Payment</button>
                                                     </form>
                                                 </div>
-                                            @elseif($order_card_preauth->status == 0)
+                                            @elseif($order_card_preauth->status == 0 && $order_card_preauth->transaction_id)
                                                 <div class="pd-all-20">
                                                     <form action="{{route('orders.capture')}}" method="POST">
                                                         @csrf
