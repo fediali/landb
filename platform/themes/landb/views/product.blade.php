@@ -406,6 +406,7 @@
     </div>
     {!! Theme::partial('related-products', ['product' => $product]) !!}
     {!! Theme::partial('cross-products', ['product' => $product]) !!}
+    {!! Theme::partial('like-products', ['product' => $product]) !!}
 </section>
 
 <!-- Modal Size Chart Kids -->
