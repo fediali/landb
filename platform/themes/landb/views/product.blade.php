@@ -154,7 +154,7 @@
                     ?>
                 @if($default && $default->product->quantity > 0)
                     <label class="">
-                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}">
+                        <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}" class=" @if($color->id == $product->id) selected-color @endif ">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
                             @if(!empty($color->color_print))
                                 {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
