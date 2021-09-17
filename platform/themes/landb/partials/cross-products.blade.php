@@ -1,16 +1,17 @@
 <?php
-$related = get_related_products_modded($product);
+$cross_related = get_cross_selling_products_modded($product);
 ?>
-@if(count($related))
+@if(count($cross_related))
     <div class="row">
         <div class="col-lg-12 mt-4">
-            <h1 class="detail-subheading mt-4">Related Products</h1>
+            <h1 class="detail-subheading mt-4">Cross-Selling Products</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12 mt-4">
             <div class="shoplisting detail-listing detail-shoplist">
-                @foreach($related as $key => $product)
+                @foreach($cross_related as $key => $product)
+                    @if($loop->iteration < 5)
                     @php
                         $variationData = \Botble\Ecommerce\Models\ProductVariation::join('ec_products as ep', 'ep.id', 'ec_product_variations.product_id')
                                             ->where('ep.quantity', '>', 0)
@@ -25,6 +26,7 @@ $related = get_related_products_modded($product);
 
                     @endphp
                     {!! Theme::partial('product-card', ['product' => $product , 'col' => '']) !!}
+                    @endif
                 @endforeach
             </div>
         </div>
