@@ -1110,7 +1110,13 @@ section.parallax_video video {
     font-weight: 600;
     margin: 15px;
     color: #000;
-    min-height: 50px;
+    min-height: 73px;
+    -webkit-line-clamp: 3;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
 }
 
 .shoplisting .listbox .caption .price {
@@ -4821,6 +4827,9 @@ html { scroll-behavior: smooth;}
     left: 0px;
     width: 20%;
 	height: 100%;
+    min-height: 500px;
+    overflow-y: scroll;
+    
 }
 .owl-carousel .owl-dot {
     margin-bottom: 5px;
@@ -4911,3 +4920,4 @@ html { scroll-behavior: smooth;}
 .selected-color img {
     border: 2px solid #5a595a !important;
 }
+ 
