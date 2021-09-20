@@ -122,7 +122,7 @@
                                             <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_1_heading" type="text" value="{{ setting('theme-landb-home_section_1_heading') }}" id="home_section_1_heading">
                                         </div>--}}
                                         <div class="form-group form-group-no-margin">
-                                            <label for="home_section_1_link" class="control-label">Products(Max: 4)</label>
+                                            <label for="home_section_1_link" class="control-label">Categories</label>
                                             <div class="multi-choices-widget list-item-checkbox">
                                                 {!! Form::customSelect("home_browse_section[]", $categories, json_decode(setting('theme-landb-home_browse_section')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                             </div>
