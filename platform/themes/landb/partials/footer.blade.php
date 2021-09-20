@@ -60,7 +60,8 @@
                         <h6>Need Help</h6>
                         <ul>
                             <li><a href="/wholesale-info">Wholesale Info</a></li>
-                            <li><a href="#">Faqs</a></li>
+                            <li><a href="/refund-policy">Refund Policy</a></li>
+                            <li><a href="/faqs">Faqs</a></li>
                             <li><a href="/login">Login</a></li>
 
                         </ul>
