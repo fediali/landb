@@ -118,8 +118,6 @@ class AuthController extends Controller
                 Customer::where('email', $email)->update(['old_customer' => 0, 'password' => $pwd]);
                 $request->password = $pwd;
             }
-        } else {
-
         }
 
         $this->validateLogin($request);

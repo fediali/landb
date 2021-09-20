@@ -116,7 +116,8 @@ class RegisterController extends Controller
             'first_name'  => $data['first_name'],
             'last_name'   => $data['last_name'],
             'document'    => $doc_url,
-            'status'    => BaseStatusEnum::DISABLED
+            'status'    => BaseStatusEnum::DISABLED,
+            'old_customer'    => 0
         ]);
         if($customer){
           $cutomer_details = CustomerDetail::create([
