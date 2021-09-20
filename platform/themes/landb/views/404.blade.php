@@ -21,6 +21,10 @@
         color: var(--color-1st);
     }
 
+    .error-page {
+        margin-top: 140px !important;
+    }
+
     .error-page ul li {
         margin-bottom : 5px;
         font-size: 18px;
