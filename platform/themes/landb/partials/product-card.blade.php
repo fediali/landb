@@ -29,7 +29,7 @@
             @else
                 @php
                     $images1 = str_replace('.JPG', '.jpg', @$product->images[0]);
-                    $images1 = str_replace('.jpg', '.JPG', @$product->images[0]);
+                    $images2 = str_replace('.jpg', '.JPG', @$product->images[0]);
                 @endphp
                 @if (file_exists(asset('storage/'. $images1)))
                     {!! image_html_generator($images1) !!}
