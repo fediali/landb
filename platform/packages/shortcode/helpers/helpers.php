@@ -69,7 +69,7 @@ if (!function_exists('image_html_generator')) {
         $html = '<img
               ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
               ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
-              src="' . asset('storage/'. $img) . '"
+              src="' . asset('storage/'. str_replace('.JPG', '.jpg', $img)) . '"
               alt="' . (!is_null($alt) ? $alt : 'No image') . '"
               loading="lazy"
               class=" ' . $class . '"
