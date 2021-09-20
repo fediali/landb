@@ -872,13 +872,15 @@ class ProductController extends BaseController
      */
     public function getListProductForSearch($id, Request $request, BaseHttpResponse $response)
     {
+
         $availableProducts = $this->productRepository
             ->advancedGet([
                 'condition' => [
                     'status' => BaseStatusEnum::ACTIVE,
                     ['is_variation', '<>', 1],
                     ['id', '<>', $id],
-                    ['name', 'LIKE', '%' . $request->input('keyword') . '%'],
+//                    ['sku', 'LIKE', '%' . $request->input('keyword') . '%'],
+                    ['sku', 'LIKE', '%' . $request->input('keyword') . '%'],
                 ],
                 'select'    => [
                     'id',

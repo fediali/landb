@@ -74,7 +74,7 @@ class AuthController extends Controller
             'password' => $password,
         );
         $post_data = json_encode($post_data);
-        $token = base64_encode('vanessa.abrego@landbapparel.com:Hv5ta08hZ4FXh9P0Fa8CAA5Q2L3Z3955');
+        $token = base64_encode('amir@landbapparel.com:6sHei1lh9D3ixRMR43L265fat481bJwD');
         $header = array(
             'Authorization:Basic ' . $token . '',
             'Content-Type: application/json'
