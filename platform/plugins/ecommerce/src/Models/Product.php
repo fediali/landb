@@ -692,7 +692,7 @@ class Product extends BaseModel
         }else{
           $colors = $color;
         }
-        return $this->whereIn('id', $colors)->with('slugable')
+        return $this->whereIn('id', $colors)->with('slugable')->where(['status'=>BaseStatusEnum::ACTIVE])
 //            ->select('id', 'color_print', 'name')
             ->get();
     }
