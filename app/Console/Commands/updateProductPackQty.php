@@ -63,7 +63,18 @@ class updateProductPackQty extends Command
                         $product->extra_qty = $getProd->amount;
                     }
                     $product->save();
-                    echo $product->sku.'<br>';
+                    echo 'Qty==>'.$product->sku.'<br>';
+                }
+                $sizes = DB::table('hw_product_options')
+                    ->selectRaw('hw_product_option_variants_descriptions.variant_name')
+                    ->leftJoin('hw_product_option_variants', 'hw_product_option_variants.option_id', 'hw_product_options.option_id')
+                    ->leftJoin('hw_product_option_variants_descriptions', 'hw_product_option_variants_descriptions.variant_id', 'hw_product_option_variants.variant_id')
+                    ->where('hw_product_options.product_id', $product->id)
+                    ->orderBy('hw_product_options.product_id', 'ASC')
+                    ->get();
+                if (isset($sizes[0]->variant_name)) {
+                    $product->sizes = $sizes[0]->variant_name;
+                    echo 'Sizes==>'.$product->sizes.'<br>';
                 }
             }
         }
