@@ -676,7 +676,7 @@ class OrderController extends BaseController
                 $this->promotion_service->applyPromotionIfAvailable($order->id);
             }
 
-            //Mail::to($order->user->email)->send(new OrderCreate([]));
+            Mail::to($order->user->email)->send(new OrderCreate([]));
         }
 
         return $response
