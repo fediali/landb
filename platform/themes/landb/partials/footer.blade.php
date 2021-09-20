@@ -115,6 +115,22 @@
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
 <script src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
   <script>
     $('[data-magnify]').magnify({
       resizable: false,
@@ -519,8 +535,19 @@
 
     </script> -->
     <script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
+
     <script>
 		$(document).ready(function () {
+            $(window).scroll(function() {     
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= 100) {
+                $(".topbar").addClass("d-none"); 
+            }
+            else {
+            $(".topbar").removeClass("d-none"); 
+            }
+            });
 			$('.vg-nav').vegasMenu();
 		})
         @if(is_null(@request()->segments()[0]))

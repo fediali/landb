@@ -5029,3 +5029,30 @@ h4 {
     margin-right: 15px
 }
 /************* fAQS CSS END ***************/
+
+.content-coll { 
+    display: none; 
+  }
+ 
+  .content-always { 
+    padding: 10px 25px;
+    color: #888;
+  }
+
+.a-coll {
+    display: block;
+    padding: 12px 30px;
+    background: #fff;
+    color: #313131;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.a-coll:hover {
+    color: #000;
+}
+
+.a-coll i {
+    position: absolute;
+    right: 30px;
+    font-size: 23px;
+ }
