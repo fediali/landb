@@ -130,14 +130,15 @@
      $not_in = $products1->pluck('id')->toArray();
     }
     $products2 = get_latest_products(6, $not_in);*/
-        $categories = \Botble\Ecommerce\Models\ProductCategory::with(['products' ])->withCount('products')
-            ->orderBy('products_count', 'DESC')
-            ->orderBy('order', 'ASC')
-            ->limit(7)
-            ->get();
+    $categories = [];
+    $categoryIds = setting('theme-landb-home_browse_section');
+    if($categoryIds){
+     $categories = \Botble\Ecommerce\Models\ProductCategory::whereIn('id', json_decode(setting('theme-landb-home_browse_section')))->with(['products' ])->get();
+    }
+
 @endphp
 
-@if(count($categories) > 5 && setting('theme-landb-home_section_2_status') == 1)
+@if(count($categories) && setting('theme-landb-home_browse_section_status') == 1)
     <div class="row">
         <div class="col-lg-12">
             <h4 class="text-center font-quiche mb-2"> BROWSE COLLECTION </h4>
