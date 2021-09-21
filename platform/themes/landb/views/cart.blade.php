@@ -169,7 +169,7 @@
                         <p class="total-head">Discount</p>
                     </div>
                     <div class="col-lg-4 col-5">
-                        <p class="total-para">$ {{ $discount }}</p>
+                        <p class="total-para">{{ $discount > 0 ? 'Discount will be applied at checkout' : '$0.0' }}</p>
                     </div>
                 </div>
                 <div class="row mt-4">
