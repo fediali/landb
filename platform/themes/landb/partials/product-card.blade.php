@@ -8,10 +8,11 @@
                         ->get();
     $default = $variationData->first();
     $promotion = null;
-    if($default->product->promotions && isset($default->product->promotions[0])){
-        $promotion = $default->product->promotions[0];
+    if($default){
+        if($default->product->promotions && isset($default->product->promotions[0])){
+            $promotion = $default->product->promotions[0];
+        }
     }
-
 /* $productVariationsInfo = app(\Botble\Ecommerce\Repositories\Interfaces\ProductVariationItemInterface::class)
                              ->getVariationsInfo($variationData->pluck('id')->toArray());*/
 
