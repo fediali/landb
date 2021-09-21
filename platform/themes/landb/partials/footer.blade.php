@@ -556,17 +556,28 @@ for (i = 0; i < coll.length; i++) {
           function dp_scroll_text() {
             $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide up-top");
             $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide up-top");
-            var images = $("p.dp-run-script.dp-animate-2").next().data('products');
-            //console.log(images)
+            var products = $("p.dp-run-script.dp-animate-2").next().data('products');
+            //console.log(products[0].images[0])
             $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
             $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
             //console.log('first: '+images[0][0])
-            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/'+images[0][0]);
-            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/'+images[1][0]);
-            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/'+images[2][0]);
-            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/'+images[3][0]);
-            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/'+images[4][0]);
-            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/'+images[5][0]);
+            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/'+products[0].images[0]);
+            $('#vslider1').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[0].slugable.key);
+
+            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/'+products[1].images[0]);
+            $('#vslider2').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[1].slugable.key);
+
+            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/'+products[2].images[0]);
+            $('#vslider3').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[2].slugable.key);
+
+            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/'+products[3].images[0]);
+            $('#vslider4').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[3].slugable.key);
+
+            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/'+products[4].images[0]);
+            $('#vslider5').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[4].slugable.key);
+
+            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/'+products[5].images[0]);
+            $('#vslider6').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[5].slugable.key);
 
 
             $.each($('.dp-run-script'), function (index, runscript) {
