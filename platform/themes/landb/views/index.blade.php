@@ -148,17 +148,17 @@
 
         <div class="t-one">
             <div class="ml-2 mr-2">
-                    {{--{!! image_html_generator(@$categories[0]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}--}}
-                <img src="{{ asset('storage/'.@$categories[0]->products[0]->images[0]) }}" class="w-100 slidert-left-img" id="vslider1">
+                    {!! image_html_generator(@$categories[0]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}
+                {{--<img src="{{ asset('storage/'.@$categories[0]->products[0]->images[0]) }}" class="w-100 slidert-left-img" id="vslider1">--}}
             </div>
         </div>
         <div class="t-two">
             <div class="ml-2 mr-2">
-                   {{-- {!! image_html_generator(@$categories[0]->products[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}
-                    {!! image_html_generator(@$categories[0]->products[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}--}}
+                    {!! image_html_generator(@$categories[0]->products[1]->images[1], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}
+                    {!! image_html_generator(@$categories[0]->products[2]->images[2], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}
 
-                <img src="{{ asset('storage/'.@$categories[0]->products[1]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider2">
-                <img src="{{ asset('storage/'.@$categories[0]->products[2]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider3">
+                {{--<img src="{{ asset('storage/'.@$categories[0]->products[1]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider2">
+                <img src="{{ asset('storage/'.@$categories[0]->products[2]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider3">--}}
             </div>
         </div>
         <div class="t-three">
@@ -172,17 +172,17 @@
         </div>
         <div class="t-four">
             <div class="ml-2 mr-2">
-                    {{--{!! image_html_generator(@$categories[0]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}
-                    {!! image_html_generator(@$categories[0]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}--}}
+                    {!! image_html_generator(@$categories[0]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}
+                    {!! image_html_generator(@$categories[0]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}
 
-                <img src="{{ asset('storage/'.@$categories[0]->products[3]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider4">
-                <img src="{{ asset('storage/'.@$categories[0]->products[4]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider5">
+               {{-- <img src="{{ asset('storage/'.@$categories[0]->products[3]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider4">
+                <img src="{{ asset('storage/'.@$categories[0]->products[4]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider5">--}}
             </div>
         </div>
         <div class="t-five">
             <div class="ml-2 mr-2">
-                    {{--{!! image_html_generator(@$categories[0]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}--}}
-                <img src="{{ asset('storage/'.@$categories[0]->products[5]->images[0]) }}" class="w-100 slidert-left-img" id="vslider6">
+                    {!! image_html_generator(@$categories[0]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}
+                {{--<img src="{{ asset('storage/'.@$categories[0]->products[5]->images[0]) }}" class="w-100 slidert-left-img" id="vslider6">--}}
             </div>
         </div>
     </div>
