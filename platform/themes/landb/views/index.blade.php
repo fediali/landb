@@ -32,19 +32,19 @@
         </a>
     </div>
 </div>
-<div class="row mt-5 mb-3">
+<div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8 text-center">
         <h2 class="font-north western-txt">
             {!! setting('theme-landb-home_main_section_heading') !!}
         </h2>
-        <p class="mt-2 font-madeg ft-20">{!! setting('theme-landb-home_main_section_description') !!}</p>
+        <p class="font-madeg ft-20">{!! setting('theme-landb-home_main_section_description') !!}</p>
     </div>
     <div class="col-lg-2"></div>
 </div>
 <section>
     @if(setting('theme-landb-home_section_1_status') == 1)
-        <div class="row mt-2 mb-5">
+        <div class="row mb-5 mobile-margin-bottom">
             <div class="col-lg-12">
                 <h2 class="text-center just-head">
                     New Arrivals
@@ -194,7 +194,7 @@
 @endif
 @if(setting('theme-landb-home_section_2_status') == 1)
     <section>
-        <div class="ml-5 mt-5 mr-5">
+        <div class="mobile-margin-top mb-5 ml-5 mt-5 mr-5">
             <div class="row"> 
                 <div class="col-md-6">
                 <h1 class="mt-0 revealUp hey-text text-center"

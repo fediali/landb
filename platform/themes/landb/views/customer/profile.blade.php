@@ -15,9 +15,9 @@
                 <button class="tablinks" onclick="openCity(event, 'Dashboard')" id="defaultOpen">Dashboard</button>
                 <button class="tablinks" onclick="openCity(event, 'Orders')">Orders</button>
                 <button class="tablinks" onclick="openCity(event, 'Addresses')">Addresses</button>
-                <button class="tablinks" onclick="openCity(event, 'Account')">Account details</button>
+                <button class="tablinks" onclick="openCity(event, 'Account')">Account<span class="cl-white">.</span>Details</button>
                 <a href="{{ route('customer.edit-account') }}">
-                    <button class="tablinks">Edit Account</button>
+                    <button class="tablinks">Edit<span class="cl-white">.</span>Account</button>
                 </a>
                 <a href="{{ route('public.logout') }}">
                     <button class="tablinks">Logout</button>
