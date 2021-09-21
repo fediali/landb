@@ -107,6 +107,7 @@ class Order extends BaseModel
         'split_payment',
         'created_at',
         'updated_at',
+        'order_completion_date',
     ];
 
     /**

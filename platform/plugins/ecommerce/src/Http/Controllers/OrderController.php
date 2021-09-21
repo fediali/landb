@@ -955,6 +955,9 @@ class OrderController extends BaseController
     )
     {
         $order = $this->orderRepository->findOrFail($id);
+        $order->order_completion_date = Carbon::now();
+        $order->save();
+
         $result = $response;
         $products = [];
         $weight = 0;
