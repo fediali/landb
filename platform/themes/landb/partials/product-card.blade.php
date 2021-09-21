@@ -24,19 +24,20 @@
             {{--<img src="{{asset('storage/' . $product->images[0])}}">--}}
             {!! image_html_generator(@$product->images[0]) !!}
 
-{{--            @if (file_exists(asset('storage/'. @$product->images[0])))--}}
-{{--                {!! image_html_generator(@$product->images[0]) !!}--}}
-{{--            @else--}}
-{{--                @php--}}
-{{--                    $images1 = str_replace('.JPG', '.jpg', @$product->images[0]);--}}
-{{--                    $images2 = str_replace('.jpg', '.JPG', @$product->images[0]);--}}
-{{--                @endphp--}}
-{{--                @if (file_exists(asset('storage/'. $images1)))--}}
-{{--                    {!! image_html_generator($images1) !!}--}}
-{{--                @elseif(file_exists(asset('storage/'. $images2)))--}}
-{{--                    {!! image_html_generator($images2) !!}--}}
-{{--                @endif--}}
-{{--            @endif--}}
+
+            @if (@getimagesize(asset('storage/'. @$product->images[0])))
+                {!! image_html_generator(@$product->images[0]) !!}
+            @else
+                @php
+                    $images1 = str_replace('.JPG', '.jpg', @$product->images[0]);
+                    $images2 = str_replace('.jpg', '.JPG', @$product->images[0]);
+                @endphp
+                @if (@getimagesize(asset('storage/'. $images1)))
+                    {!! image_html_generator($images1) !!}
+                @elseif(@getimagesize(asset('storage/'. $images2)))
+                    {!! image_html_generator($images2) !!}
+                @endif
+            @endif
 
 
             {{--<div class="caro_text">
