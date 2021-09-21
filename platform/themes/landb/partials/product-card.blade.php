@@ -22,7 +22,7 @@
     <a href="{!! generate_product_url('detail', $product->id, $product->product_slug) !!}">
         <div class="img">
             {{--<img src="{{asset('storage/' . $product->images[0])}}">--}}
-            {!! image_html_generator(@$product->images[0]) !!}
+            {{--{!! image_html_generator(@$product->images[0]) !!}--}}
 
 
             @if (@getimagesize(asset('storage/'. @$product->images[0])))
