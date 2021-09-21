@@ -53,6 +53,7 @@ class importOrders extends Command
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
+                    $pre = 0;
                     if ($order->status == 'C') {
                         $order->status = 'shipping complete';
                     } else if ($order->status == 'O') {
@@ -139,6 +140,8 @@ class importOrders extends Command
                         $order->status = 'Delinquent';
                     } else if ($order->status == 'AW') {
                         $order->status = 'Ready to Charge';
+                    } else if ($order->status == 'B') {
+                        $pre = 1;
                     } else {
                         $order->status = 'Failed Preauth';
                     }
@@ -146,7 +149,7 @@ class importOrders extends Command
                         'id' => $order->order_id,
                         'user_id' => $order->user_id,
                         'status' => $order->status,
-                        'order_type' => ($order->status == 'B') ? Order::PRE_ORDER : Order::NORMAL,
+                        'order_type' => ($pre) ? Order::PRE_ORDER : Order::NORMAL,
                         'platform' => $order->location ? $order->location : ($order->online_order ? 'online' : 'backorder'),
                         'amount' => $order->total,
                         'currency_id' => 1,

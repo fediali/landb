@@ -282,17 +282,24 @@ class OrderTable extends TableAbstract
                 'width' => '20px',
                 'class' => 'text-left',
             ],
+            'status'          => [
+                'name'  => 'ec_orders.status',
+                'title' => trans('core/base::tables.status'),
+                'class' => 'text-center',
+            ],
+            'created_at'      => [
+                'name'  => 'ec_orders.created_at',
+                'title' => trans('core/base::tables.created_at'),
+                'width' => '100px',
+                'class' => 'text-left',
+            ],
 
 //            'salesperson_id' => [
 //                'name'  => 'ec_orders.salesperson_id',
 //                'title' => 'Salesperson',
 //                'class' => 'text-left',
 //            ],
-            'amount'         => [
-                'name'  => 'ec_orders.amount',
-                'title' => trans('plugins/ecommerce::order.amount'),
-                'class' => 'text-center',
-            ],
+
         ];
 
 //        if (EcommerceHelper::isTaxEnabled()) {
@@ -309,22 +316,20 @@ class OrderTable extends TableAbstract
 //                'title' => trans('plugins/ecommerce::order.shipping_amount'),
 //                'class' => 'text-center',
 //            ],
-            'status'          => [
-                'name'  => 'ec_orders.status',
-                'title' => trans('core/base::tables.status'),
-                'class' => 'text-center',
-            ],
-            'payment_method'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_method'),
-                'class' => 'text-center',
-            ],
 
             'user_id'        => [
                 'name'  => 'ec_orders.user_id',
                 'title' => 'Company',
                 'class' => 'text-left',
             ],
+
+            'payment_method'  => [
+                'name'  => 'ec_orders.id',
+                'title' => trans('plugins/ecommerce::order.payment_method'),
+                'class' => 'text-center',
+            ],
+
+
 
 //            'payment_status'  => [
 //                'name'  => 'ec_orders.id',
@@ -337,11 +342,11 @@ class OrderTable extends TableAbstract
                 'title' => 'Order Type',
                 'class' => 'text-center',
             ],
-            'created_at'      => [
-                'name'  => 'ec_orders.created_at',
-                'title' => trans('core/base::tables.created_at'),
-                'width' => '100px',
-                'class' => 'text-left',
+
+            'amount'         => [
+                'name'  => 'ec_orders.amount',
+                'title' => trans('plugins/ecommerce::order.amount'),
+                'class' => 'text-center',
             ],
         ];
 
