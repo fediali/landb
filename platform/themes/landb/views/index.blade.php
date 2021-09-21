@@ -67,7 +67,20 @@
                         <div class="listbox">
                             <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
                                 <div class="img">
-                                    {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
+                                    {{--{!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}--}}
+                                    @if (@getimagesize(asset('storage/'. @$product->images[0])))
+                                        {!! image_html_generator(@$product->images[0], null, null, null, true, 'bone') !!}
+                                    @else
+                                        @php
+                                            $images1 = str_replace('.JPG', '.jpg', @$product->images[0]);
+                                            $images2 = str_replace('.jpg', '.JPG', @$product->images[0]);
+                                        @endphp
+                                        @if (@getimagesize(asset('storage/'. $images1)))
+                                            {!! image_html_generator($images1, null, null, null, true, 'bone') !!}
+                                        @elseif(@getimagesize(asset('storage/'. $images2)))
+                                            {!! image_html_generator($images2, null, null, null, true, 'bone') !!}
+                                        @endif
+                                    @endif
 
                                     <span>New</span>
                                     <div class="imgoverlay">
@@ -195,10 +208,10 @@
 @if(setting('theme-landb-home_section_2_status') == 1)
     <section>
         <div class="ml-5 mt-5 mr-5">
-            <div class="row"> 
+            <div class="row">
                 <div class="col-md-6">
                 <h1 class="mt-0 revealUp hey-text text-center"
-                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>      
+                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>
                     <p class="mt-3 font-madeg ft-20">
                         We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide
                         fashion-forward, comfortable styles that give a nod to the American west. We are confident our
