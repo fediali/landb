@@ -162,7 +162,7 @@ class importOrders extends Command
                         'created_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                         'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
-                    Order::create($orderData);
+                    DB::table('ec_orders')->insert($orderData);
 
                     $orderProducts = DB::table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
@@ -177,7 +177,7 @@ class importOrders extends Command
                             $qty = $packQty;
 
                             $looseQty = $packQty * $productObj->prod_pieces;
-                            $diff = $qty - $looseQty;
+                            $diff = $orderProduct->amount - $looseQty;
                         }
                         $orderProductData = [
                             'order_id' => $orderProduct->order_id,
