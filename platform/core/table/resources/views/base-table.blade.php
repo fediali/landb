@@ -41,6 +41,11 @@
             </div>
         </div>
     </div>
+    @if (@$table->hasCustomBottom)
+        <div class="table-configuration-wrap" style="display: block;">
+            {!! $table->renderCustomBottom() !!}
+        </div>
+    @endif
 </div>
 @include('core/table::modal')
 
