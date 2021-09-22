@@ -1951,6 +1951,10 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 992px) and (max-width: 5000px) {
+    .dp-scroll-text p:first-child {
+        top: -50px !important;
+    }
+    
     #exzoom {
         display: flex !important;
         margin-left: -20%;
@@ -3348,6 +3352,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+    
     .previews{
         position: absolute;
         bottom: -310px;
@@ -3603,6 +3608,9 @@ table.shop_table tr th {
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
+    .dp-scroll-text p:first-child {
+        top: -50px !important;
+    }
     .shipping-checkbox-area input[type="radio"] {
         width: 25px !important;
         height: 25px;
@@ -4948,8 +4956,7 @@ html { scroll-behavior: smooth;}
     font-size: 16px;
 }
 
-.dp-scroll-text p:first-child {
-    top: -50px !important;
+.dp-scroll-text p:first-child { 
     position: absolute;
 }
 
@@ -5095,4 +5102,10 @@ h4 {
 
  .cl-white {
      color: #fff;
+ }
+
+ .new-label {
+    position: absolute !important;
+    left: 12px !important;
+    right: auto !important;
  }
