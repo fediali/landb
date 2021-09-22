@@ -502,7 +502,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Shipping Address</p>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 p-0 mt-2">
                             @isset($user_info->shippingAddress[0])
                                 <span class="note-product-name">
                                     <p>
@@ -534,7 +534,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-7">
                         <p class="cout-note  mt-5">Billing Address</p>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 p-0 mt-2">
                             @isset($user_info->billingAddress[0])
                                 <span class="note-product-name">
                                     <p>
