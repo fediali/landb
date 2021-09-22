@@ -175,9 +175,10 @@
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
-                                            <label for="home_section_3_video" class="control-label">Images</label>
+                                            <label for="home_section_3_video" class="control-label">Products (Total: 2)</label>
                                             {{--<input class="form-control" placeholder="Link" data-counter="120" name="home_section_3_images" type="text" value="{{ setting('theme-landb-home_section_3_images') }}" id="home_section_3_images">--}}
-                                            @include('core/base::forms.partials.images', ['name' => 'home_section_3_images[]', 'values' => setting('theme-landb-home_section_3_images')])
+                                            {{--@include('core/base::forms.partials.images', ['name' => 'home_section_3_images[]', 'values' => setting('theme-landb-home_section_3_images')])--}}
+                                            {!! Form::customSelect("home_section_3_products[]", $products, json_decode(setting('theme-landb-home_section_3_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                         </div>
                                     </div>
                                 </div>

@@ -223,29 +223,32 @@
     </section>
 @endif
 @if(setting('theme-landb-home_section_3_status') == 1)
-
+    @php
+        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(2)->pluck('id')->all()));
+        $product_ids = json_decode($product_ids);
+        $products = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->limit(2)->get();
+    @endphp
+    @if(count($products) == 2)
     <section>
         <div class="ml-5 mr-5">
             <div class="row">
                 <div class="col-md-6">
 
                     <div class="collection_img home-overlap">
-                        <div class="collec-imgbox">
-                            {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[0], null, null, null, true, 'ls-is-cached') !!}
-                            <div class="imgcaption">
-                                <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
-                                <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                        <div class="overlap">
+                        <a href="{{ generate_product_url('detail', @$products[0]->id, @$products[0]->slugable->key) }}">
                             <div class="collec-imgbox">
-                                {!! image_html_generator(@json_decode(setting('theme-landb-home_section_3_images'))[1], null, null, null, true, 'imgtop ls-is-cached') !!}
-                                <div class="imgcaption">
-                                    <a href="#" class="save"><i class="fas fa-save" aria-hidden="true"></i> Save</a>
-                                    <a href="#" class="search"><i class="fal fa-search" aria-hidden="true"></i></a>
+                                {!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}
+                            </div>
+                        </a>
+
+                        <a href="{{ generate_product_url('detail', @$products[1]->id, @$products[1]->slugable->key) }}">
+                            <div class="overlap">
+                                <div class="collec-imgbox">
+                                    {!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}
                                 </div>
                             </div>
-                        </div>
+                        </a>
+
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -262,6 +265,7 @@
             </div>
         </div>
     </section>
+        @endif
 @endif
 @if(setting('theme-landb-home_section_4_status') == 1)
 
