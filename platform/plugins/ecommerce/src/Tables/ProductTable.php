@@ -85,6 +85,8 @@ class ProductTable extends TableAbstract
                 return Html::link(route('products.edit', $item->id), $item->name);
             })
             ->editColumn('image', function ($item) {
+
+        return  $item->image;
                 if ($this->request()->input('action') == 'csv') {
                     return RvMedia::getImageUrl($item->image, null, false, RvMedia::getDefaultImage());
                 }
@@ -194,11 +196,11 @@ class ProductTable extends TableAbstract
                     $singleSkuQty = Product::where('id', $getSingleId)->select('sku', 'quantity')->first();
                     if ($singleSkuQty) {
                         $singleQty += $singleSkuQty->quantity;
-                        $skuQty .= explode('-single-', $singleSkuQty->sku)[1].':'.$singleSkuQty->quantity.' | ';
+                        $skuQty .= explode('-single-', $singleSkuQty->sku)[1] . ':' . $singleSkuQty->quantity . ' | ';
                     }
                 }
                 Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
-                return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
+                return '<span title="' . $skuQty . '" style="cursor:pointer">' . $singleQty . '</span>';
             })
             ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
@@ -287,7 +289,7 @@ class ProductTable extends TableAbstract
         $query = $model
             ->select($select)
             ->where(['is_variation' => 0,
-                     'ptype' => 'R'
+                     'ptype'        => 'R'
             ])
             ->where('status', '!=', BaseStatusEnum::HIDE);
 
@@ -305,11 +307,11 @@ class ProductTable extends TableAbstract
 
         if (!empty($search_items)) {
             $query->when(isset($search_items['product_min_price']), function ($q) use ($search_items) {
-                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) >= '.$search_items['product_min_price']);
+                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) >= ' . $search_items['product_min_price']);
                 //$q->where('ec_products.price', '>=', $search_items['product_min_price']);
             });
             $query->when(isset($search_items['product_max_price']), function ($q) use ($search_items) {
-                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) <= '.$search_items['product_max_price']);
+                $q->whereRaw('(ec_products.price * ec_products.prod_pieces) <= ' . $search_items['product_max_price']);
                 //$q->where('ec_products.price', '<=', $search_items['product_max_price']);
             });
             $query->when(isset($search_items['prod_sec']), function ($q) use ($search_items) {
@@ -361,12 +363,12 @@ class ProductTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'            => [
-                'name'  => 'ec_products.id',
-                'title' => trans('core/base::tables.id'),
-                'width' => '20px',
+            'id'         => [
+                'name'       => 'ec_products.id',
+                'title'      => trans('core/base::tables.id'),
+                'width'      => '20px',
                 'searchable' => 'true',
-                'visible' => false,
+                'visible'    => false,
             ],
             'image'      => [
                 'name'  => 'ec_products.images',
@@ -410,7 +412,7 @@ class ProductTable extends TableAbstract
                 'title' => 'Pack Qty',
                 'class' => 'text-left',
             ],
-            'extra_qty'      => [
+            'extra_qty'     => [
                 'name'  => 'ec_products.extra_qty',
                 'title' => 'Extra Qty',
                 'class' => 'text-left red_font',
