@@ -601,7 +601,8 @@ class Product extends BaseModel
                                  */
                                 return $subSub
                                     ->where('target', 'specific-product')
-                                    ->orWhere('target', 'product-variant');
+                                    ->orWhere('target', 'product-variant')
+                                    ->orWhere('target', 'category');
                             })
                             ->where('ec_discount_products.product_id', $this->id);
                     })
