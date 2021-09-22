@@ -224,7 +224,7 @@
 @endif
 @if(setting('theme-landb-home_section_3_status') == 1)
     @php
-        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->limit(2)->pluck('id')->all()));
+        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->where('status', \Botble\Base\Enums\BaseStatusEnum::ACTIVE)->latest()->limit(2)->pluck('id')->all()));
         $product_ids = json_decode($product_ids);
         $products = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->limit(2)->get();
     @endphp
