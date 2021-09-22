@@ -149,9 +149,9 @@
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
                     <?php
-                        $default = $color->variations()->orderBy('is_default', 'desc')->first();
+                        $default_color = $color->variations()->orderBy('is_default', 'desc')->first();
                     ?>
-                @if($default && $default->product->quantity > 0)
+                @if($default_color && $default_color->product->quantity > 0)
                     <label class="">
                         <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}" class=" @if($color->id == $product->id) selected-color @endif ">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
