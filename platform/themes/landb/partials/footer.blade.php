@@ -53,7 +53,7 @@
                         <ul>
                             <li><a href="/about-us">About</a></li>
                             <!-- <li><a href="/about-us">Trade Shows</a></li> -->
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/contact-us">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-4">
@@ -87,7 +87,7 @@
         </div>
         <div class="copyright">
             <p>All rights reserved - 2021 © Lucky and Blessed</p>
-            <p>Terms & Conditions</p>
+            <!-- <p>Terms & Conditions</p> -->
             <!-- <p> Website by xyz</p> -->
         </div>
     </div>
