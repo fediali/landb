@@ -1476,6 +1476,7 @@ export default {
         },
         updateOrderAddress: function ($event) {
             $event.preventDefault();
+            let context = this;
 
             if (this.child_customer) {
                 $($event.target).find('.btn-primary').addClass('button-loading');
@@ -1491,12 +1492,13 @@ export default {
                 this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val();
 
                 // this.loadCountries();
-                this.$root.$emit('bv::hide::modal', 'edit-address');
+                context.$root.$emit('bv::hide::modal', 'edit-address');
                 $($event.target).find('.btn-primary').removeClass('button-loading');
             }
         },
         updateOrderBillingAddress: function ($event) {
             $event.preventDefault();
+            let context = this;
 
             if (this.child_customer) {
                 $($event.target).find('.btn-primary').addClass('button-loading');
@@ -1510,7 +1512,7 @@ export default {
                 this.child_customer_billing_address.state = $modal.find('.customer-address-state').val();
                 this.child_customer_billing_address.zip_code = $modal.find('.customer-address-zip-code').val();
 
-                this.$root.$emit('bv::hide::modal', 'edit-billing-address');
+                context.$root.$emit('bv::hide::modal', 'edit-billing-address');
                 $($event.target).find('.btn-primary').removeClass('button-loading');
             }
         },
