@@ -816,7 +816,7 @@
         </b-modal>
 
         <!--@shown="loadCountries()" -->
-        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel" @ok="updateOrderAddress($event)">
+        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel" @shown="loadCountries()" @ok="updateOrderAddress($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
@@ -879,7 +879,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="edit-billing-address" title="Update Billing address" ok-title="Save" cancel-title="Cancel" @ok="updateOrderBillingAddress($event)">
+        <b-modal id="edit-billing-address" title="Update Billing address" ok-title="Save" cancel-title="Cancel" @shown="loadCountries()" @ok="updateOrderBillingAddress($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">

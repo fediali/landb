@@ -1526,7 +1526,6 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.child_customer) {
         $($event.target).find('.btn-primary').addClass('button-loading');
-        console.log($event.target, "--------------");
         var $modal = $(event.target).closest('.modal-dialog');
         this.child_customer_address.name = $modal.find('.customer-address-name').val();
         this.child_customer_address.email = $modal.find('.customer-address-email').val();
@@ -1539,7 +1538,6 @@ __webpack_require__.r(__webpack_exports__);
 
         this.$root.$emit('bv::hide::modal', 'edit-address');
         $($event.target).find('.btn-primary').removeClass('button-loading');
-        console.log(this.child_customer, "==------==");
       }
     },
     updateOrderBillingAddress: function updateOrderBillingAddress($event) {
@@ -11089,6 +11087,9 @@ var render = function() {
             "cancel-title": "Cancel"
           },
           on: {
+            shown: function($event) {
+              return _vm.loadCountries()
+            },
             ok: function($event) {
               return _vm.updateOrderAddress($event)
             }
@@ -11274,6 +11275,9 @@ var render = function() {
             "cancel-title": "Cancel"
           },
           on: {
+            shown: function($event) {
+              return _vm.loadCountries()
+            },
             ok: function($event) {
               return _vm.updateOrderBillingAddress($event)
             }
