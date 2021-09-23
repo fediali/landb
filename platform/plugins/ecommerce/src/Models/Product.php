@@ -405,6 +405,14 @@ class Product extends BaseModel
       }
     }
 
+    public function getNewSalePriceAttribute(){
+      if(!is_null($this->sale_price)) {
+        return $this->sale_price;
+      }else{
+        return $this->price;
+      }
+    }
+
     /**
      * @param string $value
      * @return mixed
