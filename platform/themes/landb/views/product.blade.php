@@ -6,8 +6,10 @@
     $sale_price = null;
     $default_price = $product->final_price;
     $fixed_price = null;
+    $currentVariation = null;
     foreach ($productVariations as $variation){
         if($variation->is_default == 1){
+            $currentVariation = $variation;
             $default = $variation->product_id;
             $default_max = $variation->product->quantity;
             $default_price = $variation->product->final_price;
@@ -17,7 +19,7 @@
     }
     if($default == 0 && count($productVariations)){
         $variation = $productVariations->first();
-
+        $currentVariation = $variation;
         $default = $variation->product_id;
         $default_max = $variation->product->quantity;
         $default_price = $variation->product->final_price;
@@ -120,7 +122,22 @@
                         <del>${{ format_price($fixed_price / $product->prod_pieces)  }} </del>
                         $ {{ format_price($sale_price/ $product->prod_pieces) }}
                     @endif
-                        <span class="pack-per-price"><b>$ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}}</b> (${{$default_price}} pack price)</span></span>
+                    <span class="pack-per-price">
+                        <b>
+                            @if($productVariations->first())
+                                @if($currentVariation->product->promotions && isset($currentVariation->product->promotions[0]))
+                                    <del>${{($product->prod_pieces) ?$fixed_price / $product->prod_pieces: $fixed_price }}</del>
+                                @endif
+                            @endif
+                                $ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}}
+                        </b> (
+                        @if($productVariations->first())
+                        @if($currentVariation->product->promotions && isset($currentVariation->product->promotions[0]))
+                            <del>${{ $fixed_price }}</del>
+                        @endif
+                        @endif
+                        ${{$default_price}} pack price)</span>
+                    </span>
             </p>
             <p class="short-description mb-2">{!! $product->description !!} </p>
             <div class="row mt-3">
