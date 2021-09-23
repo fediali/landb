@@ -16,9 +16,11 @@
                 :order_type="'{{ $order->order_type }}'"
                 :payment_method="'{{$order->payment ? $order->payment->payment_channel : 'cod'}}'"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
-                :customer_billing_addresses="{{ json_encode($customerBillingAddresses) }}"
+                :customer_billing_addresses="{{ !empty($customerBillingAddresses) ? json_encode($customerBillingAddresses) : [] }}"
                 :customer_address="{{ $customerAddress }}"
+                @if ($customerBillingAddress)
                 :customer_billing_address="{{ $customerBillingAddress }}"
+                @endif
                 :sub_amount="{{ $order->sub_total }}"
                 :total_amount="{{ /*$order->payment->amount ??*/ $order->amount }}"
                 :discount_amount="{{ $order->discount_amount }}"
