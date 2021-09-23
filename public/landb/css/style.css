@@ -2050,7 +2050,7 @@ input.qtyminus {
         margin-top: 330px !important;
     }
     .pro-text {
-        margin-top: 0px !important;
+        margin-top: 10px !important;
     }
     .verify-img {
         width: 100% !important;
@@ -2114,7 +2114,7 @@ input.qtyminus {
         font-size: 15px !important;
     }
     .navbar-brand img {
-        width: 65% !important;
+        width: 50% !important;
         margin: 15px 0px;
     }
     .add_to_cart_form .col-lg-4 {
@@ -2137,21 +2137,33 @@ input.qtyminus {
     }
     .t-one {
         width: 100% !important;
+        padding-left: 25px;
+          padding-right: 25px;
+          margin-top: 15px;
     }
     .t-two {
         width: 100% !important;
+        padding-left: 25px;
+         padding-right: 25px;
+         margin-top: 15px;
+
     }
     .t-three {
         width: 100% !important;
     }
     .t-four {
         width: 100% !important;
+        padding-left: 25px;
+    padding-right: 25px;
     }
     .t-five {
         width: 100% !important;
+        padding-left: 25px;
+    padding-right: 25px;
+    margin-top: 15px;
     }
     .dp-scroll-text {
-        height: 600px !important;
+        height: 440px !important;
     }
     .header-col .navbar-parent .mega-ul {
         overflow-x: scroll !important;
@@ -2782,6 +2794,7 @@ div.circTxt2 p {
 
 ::-webkit-scrollbar {
     width: 10px;
+    height: 7px;
 }
 
 
@@ -3304,6 +3317,18 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .dp-scroll-text p:first-child {
+        top: -90px !important;
+    }
+    .mobile-margin-top {
+        margin-top: 0px !important;
+    }
+    .mobile-margin-bottom {
+        margin-bottom: 0px !important;
+    }
+    .home-listing .listbox {
+        margin-top: 40px !important;
+    }
     .chk label {
         font-size: 0.9rem !important;
     }
@@ -3371,6 +3396,12 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .footer_sec {
+        margin-top: 35px !important;
+    }
+    .signin-head {
+        margin-top: -30px !important;
+    }
     .dp-scroll-text :nth-child(2){
          font-size: 40px !important;
     }
@@ -3593,7 +3624,7 @@ table.shop_table tr th {
         display: none;
     }
     .navbar-brand img {
-        height: 66px !important;
+        height: 50px !important;
     }
 
     .shoplisting .listbox .img {
@@ -3604,6 +3635,11 @@ table.shop_table tr th {
 }
 .tab {
     width: 100% !important;
+    display: flex;
+    overflow-x: scroll;
+}
+.tab button { 
+    padding: 5px 15px !important;
 }
 .grid-container {
     display: none !important;
@@ -5055,4 +5091,8 @@ h4 {
     position: absolute;
     right: 30px;
     font-size: 23px;
+ }
+
+ .cl-white {
+     color: #fff;
  }

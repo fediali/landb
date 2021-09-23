@@ -62,12 +62,31 @@
                 <div class="owl-carousel ">
                     @if(count($product->images))
                         @foreach($product->images as $image)
-                            <div class="image-set">
-                                <a data-magnify="gallery" href="{{ asset('storage/'.$image) }}">
-                                    <img class="" src="{{ asset('storage/'.$image) }}"/>
-                                </a>
-                            <!-- {!! image_html_generator($image, $product->name, null, null, true, 'product-zoomer', '') !!} -->
-                            </div>
+                            @if (@getimagesize(asset('storage/'. $image)))
+                                <div class="image-set">
+                                    <a data-magnify="gallery" href="{{ asset('storage/'.$image) }}">
+                                        <img class="" src="{{ asset('storage/'.$image) }}"/>
+                                    </a>
+                                </div>
+                            @else
+                                @php
+                                    $image1 = str_replace('.JPG', '.jpg', $image);
+                                    $image2 = str_replace('.jpg', '.JPG', $image);
+                                @endphp
+                                @if (@getimagesize(asset('storage/'. $image1)))
+                                    <div class="image-set">
+                                        <a data-magnify="gallery" href="{{ asset('storage/'.$image1) }}">
+                                            <img class="" src="{{ asset('storage/'.$image1) }}"/>
+                                        </a>
+                                    </div>
+                                @elseif(@getimagesize(asset('storage/'. $image2)))
+                                    <div class="image-set">
+                                        <a data-magnify="gallery" href="{{ asset('storage/'.$image2) }}">
+                                            <img class="" src="{{ asset('storage/'.$image2) }}"/>
+                                        </a>
+                                    </div>
+                                @endif
+                            @endif
                         @endforeach
                     @else
                         <div><img src="{{ asset('images/default.jpg') }}"/></div>
@@ -92,7 +111,7 @@
         </div>
     </div>  -->
         </div>
- 
+
         <div class="col-lg-7 margin-left-pro-detail">
             {{--        <p class="pre-label-detail">Pre-Order</p>--}}
             <h1 class="detail-h1 mb-2"> {{ $product->name }}</h1>
@@ -158,7 +177,20 @@
                             @if(!empty($color->color_print))
                                 {!! image_html_generator($color->color_print, $color->name, 40, 40) !!}
                             @else
-                                {!! image_html_generator(@$color->images[0], $color->name, 40, 40) !!}
+                                {{--{!! image_html_generator(@$color->images[0], $color->name, 40, 40) !!}--}}
+                                @if (@getimagesize(asset('storage/'. @$color->images[0])))
+                                    {!! image_html_generator(@$color->images[0], $color->name, 40, 40) !!}
+                                @else
+                                    @php
+                                        $images1 = str_replace('.JPG', '.jpg', @$color->images[0]);
+                                        $images2 = str_replace('.jpg', '.JPG', @$color->images[0]);
+                                    @endphp
+                                    @if (@getimagesize(asset('storage/'. $images1)))
+                                        {!! image_html_generator($images1, $color->name, 40, 40) !!}
+                                    @elseif(@getimagesize(asset('storage/'. $images2)))
+                                        {!! image_html_generator($images2, $color->name, 40, 40) !!}
+                                    @endif
+                                @endif
                             @endif
                         </a>
                     <span class="d-block color-name">{{ $color->color_name }}</span>

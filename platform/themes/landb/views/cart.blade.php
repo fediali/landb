@@ -49,7 +49,21 @@
         <div class="row cart-area mb-4 mt-4 cartitem-{{ $cartItem->id }}">
             <div class="col-lg-6 mt-2">
                 <div class="d-flex">
-                    {!! image_html_generator(@$cartItem->product->images[0], @$cartItem->product->name, '95px', '75px' ) !!}
+                    @if (@getimagesize(asset('storage/'. $cartItem->product->images[0])))
+                        {!! image_html_generator(@$cartItem->product->images[0], @$cartItem->product->name, '95px', '75px' ) !!}
+                    @else
+                        @php
+                            $image1 = str_replace('.JPG', '.jpg', @$cartItem->product->images[0]);
+                            $image2 = str_replace('.jpg', '.JPG', @$cartItem->product->images[0]);
+                        @endphp
+                        @if (@getimagesize(asset('storage/'. $image1)))
+                            {!! image_html_generator($image1, @$cartItem->product->name, '95px', '75px' ) !!}
+                        @elseif(@getimagesize(asset('storage/'. $image2)))
+                            {!! image_html_generator($image2, @$cartItem->product->name, '95px', '75px' ) !!}
+                        @endif
+                    @endif
+
+
                     <div class="ml-3">
                         <a href="{!! generate_product_url('detail',
                         $parent->id,

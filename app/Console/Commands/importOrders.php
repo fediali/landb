@@ -53,6 +53,7 @@ class importOrders extends Command
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
+                    $pre = 0;
                     if ($order->status == 'C') {
                         $order->status = 'shipping complete';
                     } else if ($order->status == 'O') {
@@ -139,6 +140,8 @@ class importOrders extends Command
                         $order->status = 'Delinquent';
                     } else if ($order->status == 'AW') {
                         $order->status = 'Ready to Charge';
+                    } else if ($order->status == 'B') {
+                        $pre = 1;
                     } else {
                         $order->status = 'Failed Preauth';
                     }
@@ -146,7 +149,7 @@ class importOrders extends Command
                         'id' => $order->order_id,
                         'user_id' => $order->user_id,
                         'status' => $order->status,
-                        'order_type' => ($order->status == 'B') ? Order::PRE_ORDER : Order::NORMAL,
+                        'order_type' => ($pre) ? Order::PRE_ORDER : Order::NORMAL,
                         'platform' => $order->location ? $order->location : ($order->online_order ? 'online' : 'backorder'),
                         'amount' => $order->total,
                         'currency_id' => 1,
@@ -162,7 +165,7 @@ class importOrders extends Command
                         'created_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                         'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
-                    Order::create($orderData);
+                    DB::table('ec_orders')->insert($orderData);
 
                     $orderProducts = DB::table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
@@ -177,7 +180,7 @@ class importOrders extends Command
                             $qty = $packQty;
 
                             $looseQty = $packQty * $productObj->prod_pieces;
-                            $diff = $qty - $looseQty;
+                            $diff = $orderProduct->amount - $looseQty;
                         }
                         $orderProductData = [
                             'order_id' => $orderProduct->order_id,

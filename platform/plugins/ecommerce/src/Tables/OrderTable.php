@@ -41,9 +41,19 @@ class OrderTable extends TableAbstract
     public $hasCustomFilter = true;
 
     /**
+     * @var bool
+     */
+    public $hasCustomBottom = true;
+
+    /**
      * @var string
      */
     protected $customFilterTemplate = 'plugins/ecommerce::orders.filter';
+
+    /**
+     * @var string
+     */
+    protected $customBottomTemplate = 'plugins/ecommerce::orders.bottom';
 
     /**
      * OrderTable constructor.
@@ -282,17 +292,24 @@ class OrderTable extends TableAbstract
                 'width' => '20px',
                 'class' => 'text-left',
             ],
+            'status'          => [
+                'name'  => 'ec_orders.status',
+                'title' => trans('core/base::tables.status'),
+                'class' => 'text-center',
+            ],
+            'created_at'      => [
+                'name'  => 'ec_orders.created_at',
+                'title' => trans('core/base::tables.created_at'),
+                'width' => '100px',
+                'class' => 'text-left',
+            ],
 
 //            'salesperson_id' => [
 //                'name'  => 'ec_orders.salesperson_id',
 //                'title' => 'Salesperson',
 //                'class' => 'text-left',
 //            ],
-            'amount'         => [
-                'name'  => 'ec_orders.amount',
-                'title' => trans('plugins/ecommerce::order.amount'),
-                'class' => 'text-center',
-            ],
+
         ];
 
 //        if (EcommerceHelper::isTaxEnabled()) {
@@ -309,22 +326,20 @@ class OrderTable extends TableAbstract
 //                'title' => trans('plugins/ecommerce::order.shipping_amount'),
 //                'class' => 'text-center',
 //            ],
-            'status'          => [
-                'name'  => 'ec_orders.status',
-                'title' => trans('core/base::tables.status'),
-                'class' => 'text-center',
-            ],
-            'payment_method'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_method'),
-                'class' => 'text-center',
-            ],
 
             'user_id'        => [
                 'name'  => 'ec_orders.user_id',
                 'title' => 'Company',
                 'class' => 'text-left',
             ],
+
+            'payment_method'  => [
+                'name'  => 'ec_orders.id',
+                'title' => trans('plugins/ecommerce::order.payment_method'),
+                'class' => 'text-center',
+            ],
+
+
 
 //            'payment_status'  => [
 //                'name'  => 'ec_orders.id',
@@ -337,11 +352,11 @@ class OrderTable extends TableAbstract
                 'title' => 'Order Type',
                 'class' => 'text-center',
             ],
-            'created_at'      => [
-                'name'  => 'ec_orders.created_at',
-                'title' => trans('core/base::tables.created_at'),
-                'width' => '100px',
-                'class' => 'text-left',
+
+            'amount'         => [
+                'name'  => 'ec_orders.amount',
+                'title' => trans('plugins/ecommerce::order.amount'),
+                'class' => 'text-center',
             ],
         ];
 
@@ -463,5 +478,47 @@ class OrderTable extends TableAbstract
         $data['search_items'] = $search_items;
 
         return view($this->customFilterTemplate, compact('searches', 'data'))->render();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasCustomBottom(): bool
+    {
+        return $this->hasCustomBottom;
+    }
+
+    /**
+     * @return string
+     * @throws Throwable
+     */
+    public function renderCustomBottom(): string
+    {
+        $data = ['gross_total' => 0, 'total_paid_real' => 0, 'total_shipping_cost' => 0];
+
+        $search_items = $this->request()->all();
+        $from_date = false;
+        if (isset($search_items['order_from_date'])) {
+            $from_date = Carbon::createFromFormat('m-d-Y', $search_items['order_from_date'])->format('Y-m-d');
+        }
+        $to_date = false;
+        if (isset($search_items['order_to_date'])) {
+            $to_date = Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d');
+        }
+
+        $data['gross_total'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
+            $q->whereDate('ec_orders.created_at', '>=', $from_date);
+            $q->whereDate('ec_orders.created_at', '<=', $to_date);
+        })->where('ec_orders.is_finished', 1)->sum('amount');
+        $data['total_paid_real'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
+            $q->whereDate('ec_orders.created_at', '>=', $from_date);
+            $q->whereDate('ec_orders.created_at', '<=', $to_date);
+        })->where('ec_orders.is_finished', 1)->sum('sub_total');
+        $data['total_shipping_cost'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
+            $q->whereDate('ec_orders.created_at', '>=', $from_date);
+            $q->whereDate('ec_orders.created_at', '<=', $to_date);
+        })->where('ec_orders.is_finished', 1)->sum('shipping_amount');
+
+        return view($this->customBottomTemplate, compact('data'))->render();
     }
 }

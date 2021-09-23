@@ -105,6 +105,9 @@ class Order extends BaseModel
         'promotion_applied',
         'promotion_amount',
         'split_payment',
+        'created_at',
+        'updated_at',
+        'order_completion_date',
     ];
 
     /**

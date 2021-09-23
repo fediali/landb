@@ -20,6 +20,7 @@ class CustomerCreateRequest extends Request
             'password'              => 'required|min:6',
             'password_confirmation' => 'required|same:password',
             'customer_type' => 'required',
+            'status' => 'required',
         ];
     }
 }
