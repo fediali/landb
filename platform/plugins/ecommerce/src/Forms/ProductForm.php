@@ -234,7 +234,7 @@ class ProductForm extends FormAbstract
                 ],
             ])->add('sizes', 'text', [
                 'label'      => 'Sizes',
-                'label_attr' => ['class' => 'control-label'],
+                'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder' => 'Sizes',
                 ],
@@ -258,7 +258,7 @@ class ProductForm extends FormAbstract
             ])
             ->add('prod_pieces', 'number', [
                 'label'      => 'Pack Product Pieces',
-                'label_attr' => ['class' => 'control-label'],
+                'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder' => 'Pack Product Pieces',
                 ],
