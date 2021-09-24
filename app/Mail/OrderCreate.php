@@ -34,6 +34,6 @@ class OrderCreate extends Mailable
             //->from('')
             ->subject('[L&B New Order Created]')
             //->replyTo($this->data['email'])
-            ->with(['data' => $this->data]);
+            ->with(['order' => $this->data]);
     }
 }
