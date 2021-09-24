@@ -1150,6 +1150,12 @@ __webpack_require__.r(__webpack_exports__);
         return false;
       }
     },
+    can_price_edit: {
+      type: Number,
+      "default": function _default() {
+        return 0;
+      }
+    },
     shipping_method_name: {
       type: String,
       "default": function _default() {
@@ -1239,6 +1245,7 @@ __webpack_require__.r(__webpack_exports__);
       child_shipping_option: this.shipping_option,
       child_shipping_method_name: this.shipping_method_name,
       child_is_selected_shipping: this.is_selected_shipping,
+      child_can_price_edit: this.can_price_edit,
       child_payment_method: this.payment_method,
       creating_order: false
     };
@@ -8041,45 +8048,83 @@ var render = function() {
                                         "div",
                                         { staticClass: "d-flex dropdown" },
                                         [
-                                          _c(
-                                            "span",
-                                            {
-                                              staticStyle: {
-                                                "margin-top": "8px !important",
-                                                "margin-right": "5px !important"
-                                              }
-                                            },
-                                            [_vm._v(_vm._s(_vm.currency))]
-                                          ),
+                                          _vm.child_can_price_edit == 0
+                                            ? _c(
+                                                "a",
+                                                {
+                                                  staticClass:
+                                                    "wordwrap hide-print"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(variant.price) +
+                                                      " " +
+                                                      _vm._s(_vm.currency)
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
                                           _vm._v(" "),
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: variant.price,
-                                                expression: "variant.price"
-                                              }
-                                            ],
-                                            staticClass: "next-input p-none-r",
-                                            attrs: { type: "number", min: "1" },
-                                            domProps: { value: variant.price },
-                                            on: {
-                                              change: function($event) {
-                                                return _vm.handleChangeQuantity()
-                                              },
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  variant,
-                                                  "price",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
+                                          _vm.child_can_price_edit == 1
+                                            ? _c("div", [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticStyle: {
+                                                      "margin-top":
+                                                        "8px !important",
+                                                      "margin-right":
+                                                        "5px !important"
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                    " +
+                                                        _vm._s(_vm.currency) +
+                                                        "\n                                                "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("input", {
+                                                  directives: [
+                                                    {
+                                                      name: "model",
+                                                      rawName: "v-model",
+                                                      value: variant.price,
+                                                      expression:
+                                                        "variant.price"
+                                                    }
+                                                  ],
+                                                  staticClass:
+                                                    "next-input p-none-r",
+                                                  attrs: {
+                                                    type: "number",
+                                                    min: "1"
+                                                  },
+                                                  domProps: {
+                                                    value: variant.price
+                                                  },
+                                                  on: {
+                                                    change: function($event) {
+                                                      return _vm.handleChangeQuantity()
+                                                    },
+                                                    input: function($event) {
+                                                      if (
+                                                        $event.target.composing
+                                                      ) {
+                                                        return
+                                                      }
+                                                      _vm.$set(
+                                                        variant,
+                                                        "price",
+                                                        $event.target.value
+                                                      )
+                                                    }
+                                                  }
+                                                })
+                                              ])
+                                            : _vm._e()
                                         ]
                                       )
                                     ]
