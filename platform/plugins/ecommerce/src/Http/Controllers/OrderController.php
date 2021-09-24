@@ -1395,7 +1395,7 @@ class OrderController extends BaseController
             ->get();
 
         foreach ($products as &$availableProduct) {
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null,
                 false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->product_name = $availableProduct->name;
@@ -1510,7 +1510,7 @@ class OrderController extends BaseController
             ->get();
 
         foreach ($products as &$availableProduct) {
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null,
                 false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->product_name = $availableProduct->name;
