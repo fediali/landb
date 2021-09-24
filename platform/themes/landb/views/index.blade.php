@@ -227,8 +227,8 @@
                     </p>
                 </div>
                 <div class="col-md-6">
-                <!-- {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!} -->
-                    <img class="w-100" src="{{ asset('landb/img/product.jpg') }}"/>
+                    {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!}
+                   {{-- <img class="w-100" src="{{ asset('landb/img/product.jpg') }}"/>--}}
                 </div>
             </div>
         </div>
