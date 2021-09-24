@@ -3,13 +3,10 @@
 namespace App\Console\Commands;
 
 use Botble\Base\Enums\BaseStatusEnum;
-use Botble\Ecommerce\Cart\Cart;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
-use Botble\Ecommerce\Models\Product;
-use Botble\Ecommerce\Models\ProductCategory;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+
 
 class remDisabledProdFromCart extends Command
 {
