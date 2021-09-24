@@ -1002,6 +1002,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7972,6 +7993,34 @@ var render = function() {
                                         ),
                                         0
                                       )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  variant.product
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "\n                                        SKU : " +
+                                            _vm._s(
+                                              variant.product.sku
+                                                ? variant.product.sku
+                                                : "No SKU"
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  variant.product
+                                    ? _c("p", [
+                                        _vm._v(
+                                          "\n                                        ID : " +
+                                            _vm._s(
+                                              variant.product.sku
+                                                ? variant.product.id
+                                                : "No SKU"
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
                                     : _vm._e(),
                                   _vm._v(" "),
                                   variant.product &&
