@@ -54,7 +54,7 @@
                 @if($product->product_label_id == 3)
                     <img class="usa-label" src="{{ asset('landb/img/usa-label.svg') }}"/>
                 @else
-                    <span>{{$product->label->name}}</span>
+                    <span class="new-label">{{$product->label->name}}</span>
                 @endif()
             @endif()
 

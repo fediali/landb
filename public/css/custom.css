@@ -1188,3 +1188,12 @@ tbody>tr>:nth-child(3) span{
 .column-key-id  span {
   color: #000 !important;
 }
+
+.title-text-second {
+  font-weight: 600;
+}
+
+.hover-underline {
+  margin-bottom: 15px;
+  display: block;
+}

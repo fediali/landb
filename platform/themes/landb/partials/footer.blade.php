@@ -53,13 +53,14 @@
                         <ul>
                             <li><a href="/about-us">About</a></li>
                             <!-- <li><a href="/about-us">Trade Shows</a></li> -->
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="/contact-us">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-4">
                         <h6>Need Help</h6>
                         <ul>
                             <li><a href="/wholesale-info">Wholesale Info</a></li>
+                            <li><a href="/size-chart">Size Chart</a></li>
                             <li><a href="/refund-policy">Refund Policy</a></li>
                             <li><a href="/faqs">Faqs</a></li>
                             <li><a href="/login">Login</a></li>
@@ -87,7 +88,7 @@
         </div>
         <div class="copyright">
             <p>All rights reserved - 2021 © Lucky and Blessed</p>
-            <p>Terms & Conditions</p>
+            <!-- <p>Terms & Conditions</p> -->
             <!-- <p> Website by xyz</p> -->
         </div>
     </div>
