@@ -38,6 +38,13 @@
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
+
+                                        <p v-if="variant.product">
+                                            SKU : {{
+                                                variant.product.sku ? variant.product.sku : 'No SKU'
+                                            }}
+                                        </p>
+
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{
                                                 variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty
@@ -49,6 +56,7 @@
                                                 variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
                                             }}
                                         </p>
+
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Sizes : {{
                                                 variant.product.sizes ? variant.product.sizes : variant.packSizes

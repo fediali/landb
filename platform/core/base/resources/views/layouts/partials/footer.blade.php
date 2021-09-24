@@ -307,6 +307,7 @@
     }
 
     function getbillingadress() {
+        //need fixing
         console.log($("#billing_address option:selected").val(), "===");
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
