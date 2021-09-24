@@ -67,13 +67,13 @@
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
-                                                <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
-                                                <span
-                                                    style=" margin-top: 8px !important; margin-right: 5px !important;">{{
-                                                        currency
-                                                    }}</span>
-                                                <input class="next-input p-none-r" v-model="variant.price" type="number"
-                                                       min="1" @change="handleChangeQuantity()">
+                                                <a v-if="child_can_price_edit == 0" class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>
+                                                <div v-if="child_can_price_edit == 1">
+                                                    <span style=" margin-top: 8px !important; margin-right: 5px !important;">
+                                                        {{currency}}
+                                                    </span>
+                                                    <input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -1114,6 +1114,10 @@ export default {
             type: Boolean,
             default: () => false,
         },
+        can_price_edit: {
+            type: Number,
+            default: () => 0,
+        },
         shipping_method_name: {
             type: String,
             default: () => 'Default',
@@ -1193,6 +1197,7 @@ export default {
             child_shipping_option: this.shipping_option,
             child_shipping_method_name: this.shipping_method_name,
             child_is_selected_shipping: this.is_selected_shipping,
+            child_can_price_edit: this.can_price_edit,
             child_payment_method: this.payment_method,
 
             creating_order: false,
