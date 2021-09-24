@@ -411,7 +411,7 @@
         console.log('customer data', customer.data)
         console.log('customer address', address)
         setTimeout(function () {
-            var extraDetails = {
+             extraDetails = {
                 firstname: customer.data.detail.first_name,
                 lastname: customer.data.detail.last_name,
                 email: customer.data.email,
