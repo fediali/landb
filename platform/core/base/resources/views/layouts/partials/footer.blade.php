@@ -77,7 +77,8 @@
                                 <label for="name" class="control-label" aria-required="true">Customer List</label>
                                 <input type="hidden" name="user_id_one" id="user_id_one">
                                 <div class="d-flex">
-                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2" style="width: 400px"></select>
+                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2"
+                                            style="width: 400px"></select>
                                     <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
                                 </div>
                             </div>
@@ -103,12 +104,11 @@
 </div>
 
 
-
 <script>
 
     var address = '';
     var customer = '';
-
+    var extraDetails = '';
     $(document).ready(function () {
 
         $('#merge_customer_list').select2({
@@ -123,7 +123,10 @@
                 },
                 processResults: function (data) {
                     return {
-                        results: $.map(data.data, function (obj) { obj.text = obj.text || obj.name; return obj; })
+                        results: $.map(data.data, function (obj) {
+                            obj.text = obj.text || obj.name;
+                            return obj;
+                        })
                     };
                 },
             }
@@ -325,7 +328,7 @@
     });
 
     function getCustomer() {
-        console.log('===',$('#customer_id').val());
+        console.log('===', $('#customer_id').val());
 
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
@@ -402,29 +405,29 @@
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
         console.log('customer address', address)
-setTimeout(function (){
-    var extraDetails = {
-        firstname: customer.data.detail.first_name,
-        lastname: customer.data.detail.last_name,
-        email: customer.data.email,
-        method: "card",
-        month: month,
-        year: year,
-        phone: customer.data.detail.phone,
-        address_1: address.data?.address,
-        address_city: address.data?.city,
-        address_state: address.data?.state,
-        address_zip: address.data?.zip_code,
-        address_country: address.data?.country,
-        url: "https://omni.fattmerchant.com/#/bill/",
-        validate: false,
-    };
-    //console.log(extraDetails)
-    // call tokenize api
+        setTimeout(function () {
+            extraDetails = {
+                firstname: customer.data.detail.first_name,
+                lastname: customer.data.detail.last_name,
+                email: customer.data.email,
+                method: "card",
+                month: month,
+                year: year,
+                phone: customer.data.detail.phone,
+                address_1: address.data?.address,
+                address_city: address.data?.city,
+                address_state: address.data?.state,
+                address_zip: address.data?.zip_code,
+                address_country: address.data?.country,
+                url: "https://omni.fattmerchant.com/#/bill/",
+                validate: false,
+            };
+            //console.log(extraDetails)
+            // call tokenize api
 
-},1500)
+        }, 1500)
 
-        setTimeout(function(){
+        setTimeout(function () {
             fattJs.tokenize(extraDetails).then((result) => {
                 console.log(result);
                 if (result) {
@@ -439,7 +442,7 @@ setTimeout(function (){
                 errorElement.classList.add('visible');
                 loaderElement.classList.remove('visible');
             });
-        },2000)
+        }, 2000)
     });
 
     function functionAddCard(result, customer_id) {
@@ -722,14 +725,13 @@ setTimeout(function (){
         $('.dt-length-style > select').append(new Option("100", "100"));
 
 
-
-        $("form").submit(function(){
-            $(this).find('input:submit').val('Please wait ...').attr('disabled','disabled');
+        $("form").submit(function () {
+            $(this).find('input:submit').val('Please wait ...').attr('disabled', 'disabled');
         });
-        $(document).ajaxComplete(function(){
+        $(document).ajaxComplete(function () {
             $(".btn").removeAttr("disabled");
         });
-        var mybutton_counter=0;
+        var mybutton_counter = 0;
         // $(".btn").click(function(e) {
         //     if (mybutton_counter > 0){
         //         $(this).prop('disabled', 'disabled');
@@ -744,7 +746,6 @@ setTimeout(function (){
         //     }
         //     $(".btn").removeAttr("disabled");
         // }, 6000);
-
 
 
     });
