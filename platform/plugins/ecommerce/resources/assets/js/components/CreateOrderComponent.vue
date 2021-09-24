@@ -34,7 +34,7 @@
                                         <p class="type-subdued"
                                            v-if="variant.variation_items && variant.variation_items.length">
                                             <span v-for="(productItem, index) in variant.variation_items">
-                                                {{ productItem.attribute_title }}
+                                                Type: {{ productItem.attribute_title }}
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
@@ -44,11 +44,7 @@
                                                 variant.product.sku ? variant.product.sku : 'No SKU'
                                             }}
                                         </p>
-                                        <p v-if="variant.product">
-                                            ID : {{
-                                                variant.product.sku ? variant.product.id : 'No SKU'
-                                            }}
-                                        </p>
+
 
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{

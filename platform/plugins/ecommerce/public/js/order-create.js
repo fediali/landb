@@ -1019,10 +1019,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7978,7 +7974,7 @@ var render = function() {
                                           function(productItem, index) {
                                             return _c("span", [
                                               _vm._v(
-                                                "\n                                            " +
+                                                "\n                                            Type: " +
                                                   _vm._s(
                                                     productItem.attribute_title
                                                   ) +
@@ -8002,20 +7998,6 @@ var render = function() {
                                             _vm._s(
                                               variant.product.sku
                                                 ? variant.product.sku
-                                                : "No SKU"
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  variant.product
-                                    ? _c("p", [
-                                        _vm._v(
-                                          "\n                                        ID : " +
-                                            _vm._s(
-                                              variant.product.sku
-                                                ? variant.product.id
                                                 : "No SKU"
                                             ) +
                                             "\n                                    "
