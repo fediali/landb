@@ -319,7 +319,7 @@
                 address = data;
             },
             error: function (request, status, error) {
-                toastr['warning']('No Address', 'Reading Error');
+                //toastr['warning']('No Address', 'Reading Error');
             }
         });
     }

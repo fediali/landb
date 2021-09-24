@@ -9752,7 +9752,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("li", { staticClass: "text-infor-subdued mt15" }, [
-                      _vm.child_customer_addresses.length > 1
+                      _vm.child_customer_addresses.length > 0
                         ? _c("div", [
                             _c("div", { staticClass: "ui-select-wrapper" }, [
                               _c(
@@ -9955,7 +9955,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("li", { staticClass: "text-infor-subdued mt15" }, [
-                      _vm.child_customer_billing_addresses.length > 1
+                      _vm.child_customer_billing_addresses.length > 0
                         ? _c("div", [
                             _c("div", { staticClass: "ui-select-wrapper" }, [
                               _c(

@@ -505,7 +505,7 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div v-if="child_customer_addresses.length > 1">
+                                <div v-if="child_customer_addresses.length > 0">
                                     <div class="ui-select-wrapper">
                                         <select class="ui-select" @change="selectCustomerAddress($event)">
                                             <option v-for="address_item in child_customer_addresses"
@@ -565,7 +565,7 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div v-if="child_customer_billing_addresses.length > 1">
+                                <div v-if="child_customer_billing_addresses.length > 0">
                                     <div class="ui-select-wrapper">
                                         <select class="ui-select" @change="selectCustomerBillingAddress($event)" id="billing_address">
                                             <option v-for="address_item in child_customer_billing_addresses"
