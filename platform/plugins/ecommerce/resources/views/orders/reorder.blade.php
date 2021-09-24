@@ -3,7 +3,7 @@
 @section('content')
     <div class="max-width-1200" id="main-order">
         <create-order
-                :can_price_edit="{{Auth::user()->hasPermission('orders.edit_price')}}"
+                :can_price_edit="{{Auth::user()->hasPermission('orders.edit_price') ? 1 : 0}}"
                 :products="{{ json_encode($products->toArray()) }}"
                 :product_ids="{{ json_encode($productIds) }}"
                 @if ($customer)

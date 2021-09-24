@@ -4,7 +4,7 @@
 
     <div class="max-width-1200" id="main-order">
         <create-order
-                :can_price_edit="{{Auth::user()->hasPermission('orders.edit_price')}}"
+                :can_price_edit="{{Auth::user()->hasPermission('orders.edit_price') ? 1 : 0}}"
                 :currency="'{{ get_application_currency()->symbol }}'"
                 :zip_code_enabled="{{ (int)EcommerceHelper::isZipCodeEnabled() }}"
                 :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
