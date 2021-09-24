@@ -49,6 +49,6 @@ class EcommerceHelper
      */
     public function isZipCodeEnabled(): bool
     {
-        return get_ecommerce_setting('zip_code_enabled', '0') == '1';
+        return get_ecommerce_setting('zip_code_enabled', '0');
     }
 }
