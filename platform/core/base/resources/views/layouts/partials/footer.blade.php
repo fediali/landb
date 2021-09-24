@@ -108,7 +108,7 @@
 
     var address = '';
     var customer = '';
-
+    var extraDetails = '';
     $(document).ready(function () {
 
         $('#merge_customer_list').select2({
@@ -307,6 +307,7 @@
     }
 
     function getbillingadress() {
+        //need fixing
         console.log($("#billing_address option:selected").val(), "===");
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
@@ -428,6 +429,9 @@
             };
             //console.log(extraDetails)
             // call tokenize api
+        }, 1500);
+
+        setTimeout(function () {
             fattJs.tokenize(extraDetails).then((result) => {
                 console.log(result);
                 if (result) {
@@ -442,7 +446,7 @@
                 errorElement.classList.add('visible');
                 loaderElement.classList.remove('visible');
             });
-        }, 1500)
+        }, 2000)
     });
 
     function functionAddCard(result, customer_id) {
