@@ -421,21 +421,25 @@ setTimeout(function (){
     };
     //console.log(extraDetails)
     // call tokenize api
-    fattJs.tokenize(extraDetails).then((result) => {
-        console.log(result);
-        if (result) {
-            successElement.querySelector('.token').textContent = result.id;
-            successElement.classList.add('visible');
-            functionAddCard(result, customer.data.id);
-        }
-        loaderElement.classList.remove('visible');
-    }).catch(err => {
-        console.log(err)
-        errorElement.textContent = err.message;
-        errorElement.classList.add('visible');
-        loaderElement.classList.remove('visible');
-    });
+
 },1500)
+
+        setTimout(function(){
+            fattJs.tokenize(extraDetails).then((result) => {
+                console.log(result);
+                if (result) {
+                    successElement.querySelector('.token').textContent = result.id;
+                    successElement.classList.add('visible');
+                    functionAddCard(result, customer.data.id);
+                }
+                loaderElement.classList.remove('visible');
+            }).catch(err => {
+                console.log(err)
+                errorElement.textContent = err.message;
+                errorElement.classList.add('visible');
+                loaderElement.classList.remove('visible');
+            });
+        },2000)
     });
 
     function functionAddCard(result, customer_id) {
