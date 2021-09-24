@@ -424,7 +424,7 @@ setTimeout(function (){
 
 },1500)
 
-        setTimout(function(){
+        setTimeout(function(){
             fattJs.tokenize(extraDetails).then((result) => {
                 console.log(result);
                 if (result) {
