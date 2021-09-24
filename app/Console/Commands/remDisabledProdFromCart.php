@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Cart\Cart;
 use Botble\Ecommerce\Models\Order;
+use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Illuminate\Console\Command;
@@ -43,7 +45,15 @@ class remDisabledProdFromCart extends Command
      */
     public function handle()
     {
-        $carts = Order::where('is_finished')->get();
-            //echo $cat.'<br>';
+        $carts = Order::where('is_finished', 0)->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products as $product) {
+                if ($product->product->status != BaseStatusEnum::ACTIVE) {
+                    OrderProduct::where(['order_id' => $cart->id, 'product_id' => $product->product_id])->delete();
+                }
+                echo 'Order Product#'.$product->product_id.'<br>';
+            }
+            echo 'Order#'.$cart->id.'<br>';
+        }
     }
 }
