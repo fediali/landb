@@ -9931,6 +9931,7 @@ var render = function() {
                                 "select",
                                 {
                                   staticClass: "ui-select",
+                                  attrs: { id: "billing_address" },
                                   on: {
                                     change: function($event) {
                                       return _vm.selectCustomerBillingAddress(

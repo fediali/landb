@@ -26,7 +26,7 @@
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Share Quantity <span
-                            class="variation-name"></span></h4>
+                                class="variation-name"></span></h4>
                     <div></div>
                 </div>
             </div>
@@ -77,7 +77,8 @@
                                 <label for="name" class="control-label" aria-required="true">Customer List</label>
                                 <input type="hidden" name="user_id_one" id="user_id_one">
                                 <div class="d-flex">
-                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2" style="width: 400px"></select>
+                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2"
+                                            style="width: 400px"></select>
                                     <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
                                 </div>
                             </div>
@@ -103,7 +104,6 @@
 </div>
 
 
-
 <script>
 
     var address = '';
@@ -123,7 +123,10 @@
                 },
                 processResults: function (data) {
                     return {
-                        results: $.map(data.data, function (obj) { obj.text = obj.text || obj.name; return obj; })
+                        results: $.map(data.data, function (obj) {
+                            obj.text = obj.text || obj.name;
+                            return obj;
+                        })
                     };
                 },
             }
@@ -325,7 +328,7 @@
     });
 
     function getCustomer() {
-        console.log('===',$('#customer_id').val());
+        console.log('===', $('#customer_id').val());
 
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
@@ -390,6 +393,10 @@
 
     $('button#tokenizebutton').on('click', () => {
         getCustomer();
+        setTimeout(function () {
+            getbillingadress();
+        }, 500);
+
         var month = $('.month').val();
         var year = $('.year').val();
         successElement = document.querySelector('.success');
@@ -402,40 +409,40 @@
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
         console.log('customer address', address)
-setTimeout(function (){
-    var extraDetails = {
-        firstname: customer.data.detail.first_name,
-        lastname: customer.data.detail.last_name,
-        email: customer.data.email,
-        method: "card",
-        month: month,
-        year: year,
-        phone: customer.data.detail.phone,
-        address_1: address.data?.address,
-        address_city: address.data?.city,
-        address_state: address.data?.state,
-        address_zip: address.data?.zip_code,
-        address_country: address.data?.country,
-        url: "https://omni.fattmerchant.com/#/bill/",
-        validate: false,
-    };
-    //console.log(extraDetails)
-    // call tokenize api
-    fattJs.tokenize(extraDetails).then((result) => {
-        console.log(result);
-        if (result) {
-            successElement.querySelector('.token').textContent = result.id;
-            successElement.classList.add('visible');
-            functionAddCard(result, customer.data.id);
-        }
-        loaderElement.classList.remove('visible');
-    }).catch(err => {
-        console.log(err)
-        errorElement.textContent = err.message;
-        errorElement.classList.add('visible');
-        loaderElement.classList.remove('visible');
-    });
-},1500)
+        setTimeout(function () {
+            var extraDetails = {
+                firstname: customer.data.detail.first_name,
+                lastname: customer.data.detail.last_name,
+                email: customer.data.email,
+                method: "card",
+                month: month,
+                year: year,
+                phone: customer.data.detail.phone,
+                address_1: address.data?.address,
+                address_city: address.data?.city,
+                address_state: address.data?.state,
+                address_zip: address.data?.zip_code,
+                address_country: address.data?.country,
+                url: "https://omni.fattmerchant.com/#/bill/",
+                validate: false,
+            };
+            //console.log(extraDetails)
+            // call tokenize api
+            fattJs.tokenize(extraDetails).then((result) => {
+                console.log(result);
+                if (result) {
+                    successElement.querySelector('.token').textContent = result.id;
+                    successElement.classList.add('visible');
+                    functionAddCard(result, customer.data.id);
+                }
+                loaderElement.classList.remove('visible');
+            }).catch(err => {
+                console.log(err)
+                errorElement.textContent = err.message;
+                errorElement.classList.add('visible');
+                loaderElement.classList.remove('visible');
+            });
+        }, 1500)
     });
 
     function functionAddCard(result, customer_id) {
@@ -718,14 +725,13 @@ setTimeout(function (){
         $('.dt-length-style > select').append(new Option("100", "100"));
 
 
-
-        $("form").submit(function(){
-            $(this).find('input:submit').val('Please wait ...').attr('disabled','disabled');
+        $("form").submit(function () {
+            $(this).find('input:submit').val('Please wait ...').attr('disabled', 'disabled');
         });
-        $(document).ajaxComplete(function(){
+        $(document).ajaxComplete(function () {
             $(".btn").removeAttr("disabled");
         });
-        var mybutton_counter=0;
+        var mybutton_counter = 0;
         // $(".btn").click(function(e) {
         //     if (mybutton_counter > 0){
         //         $(this).prop('disabled', 'disabled');
@@ -740,7 +746,6 @@ setTimeout(function (){
         //     }
         //     $(".btn").removeAttr("disabled");
         // }, 6000);
-
 
 
     });

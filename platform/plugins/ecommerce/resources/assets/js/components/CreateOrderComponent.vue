@@ -555,7 +555,7 @@
                             <li class="text-infor-subdued mt15">
                                 <div v-if="child_customer_billing_addresses.length > 1">
                                     <div class="ui-select-wrapper">
-                                        <select class="ui-select" @change="selectCustomerBillingAddress($event)">
+                                        <select class="ui-select" @change="selectCustomerBillingAddress($event)" id="billing_address">
                                             <option v-for="address_item in child_customer_billing_addresses"
                                                     :value="address_item.id"
                                                     :selected="parseInt(address_item.id) === parseInt(customer_address.email)">
