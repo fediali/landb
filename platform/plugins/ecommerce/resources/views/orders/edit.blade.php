@@ -865,7 +865,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if($order->preauth != null || $order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))
+{{--                                        @if($order->preauth != null || $order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))--}}
                                             <div class="pd-all-20 bg-white">
                                                 <form action="{{route('orders.charge')}}" method="POST">
                                                     @csrf
@@ -877,7 +877,7 @@
                                                     <button type="submit" class="btn btn-info">Create Payment</button>
                                                 </form>
                                             </div>
-                                        @endif()
+{{--                                        @endif()--}}
 
                                     @elseif($order->order_cards_preauth()->where('transaction_id', '!=', "")->value('status') == 0)
 
