@@ -134,7 +134,7 @@ class CustomerController extends BaseController
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     if ($card) {
-                        $cards = collect(json_decode($card))->pluck('nickname', 'id');
+                        $cards = collect(json_decode($card));
                     }
                 }
             }
