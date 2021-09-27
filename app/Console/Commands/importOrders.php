@@ -163,7 +163,7 @@ class importOrders extends Command
                         'salesperson_id' => $order->issuer_id,
                         'po_number' => $order->po_number,
                         'order_completion_date' => $order->complete_date,
-                        'created_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
+                        'created_at' => date('Y-m-d H:i:s', $order->timestamp),
                         'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
                     DB::table('ec_orders')->insert($orderData);
