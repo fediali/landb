@@ -10,6 +10,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/forget-password', 'AuthController@postForgetPassword')
       ->name('public.post-forget-password');
 
+    Route::get('/password/reset/{token}', 'AuthController@resetPassword')->middleware('guest')->name('customer.password.reset');
+    Route::post('/password/reset', 'AuthController@postResetPassword')->middleware('guest')->name('password.post.reset');
+
     Route::get('/orderr', 'LandbController@orderSuccess');
 
     /*Route::get('/product-timeline', 'ProductsController@timeline')
