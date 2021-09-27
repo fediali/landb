@@ -93,6 +93,7 @@
         </div>
     </div>
 </footer>
+
 <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
