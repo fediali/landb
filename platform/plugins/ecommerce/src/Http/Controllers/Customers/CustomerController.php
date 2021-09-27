@@ -129,16 +129,21 @@ class CustomerController extends BaseController
         $cards = [];
         if ($customer->card->count() > 0) {
             $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
+
             foreach ($omniId as $item) {
                 if ($item->customer_omni_id) {
+
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+
                     list($card, $info) = omni_api($url);
+
                     if ($card) {
                         $cards = collect(json_decode($card))->pluck('nickname', 'id');
                     }
                 }
             }
         }
+
 
         return view('plugins/ecommerce::customers.edit', compact('customer', 'cards'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
