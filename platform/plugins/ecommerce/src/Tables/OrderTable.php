@@ -506,11 +506,24 @@ class OrderTable extends TableAbstract
             $to_date = Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d');
         }
 
+        $paid_statuses[] = 'paid in full'; //Paid in Full
+        $paid_statuses[] = 'shipping complete'; //Shipping Complete
+        $paid_statuses[] = 'exchange'; //Exchange
+        $paid_statuses[] = 'store credit'; //Store Credit
+        $paid_statuses[] = 'in store complete'; //In Store Complete
+        $paid_statuses[] = 'refund'; //REFUND
+        $paid_statuses[] = 'fashiongo complete'; //FashionGo Complete
+        $paid_statuses[] = 'lashowroom complete'; //LAShowroom Complete
+        $paid_statuses[] = 'orangeshine complete'; //ORANGESHINE COMPLETE
+        $paid_statuses[] = 'model purchase'; //Model Purchase
+        $paid_statuses[] = 'employee uniform'; //Employee Uniform
+        $paid_statuses[] = 'fashiondomino complete'; //FashionDomino Complete
+
         $data['gross_total'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
             $q->whereDate('ec_orders.created_at', '>=', $from_date);
             $q->whereDate('ec_orders.created_at', '<=', $to_date);
         })->where('ec_orders.is_finished', 1)->sum('amount');
-        $data['total_paid'] = Order::whereNotNull('order_completion_date')
+        $data['total_paid'] = Order::whereNotNull('order_completion_date')->whereIn('status', $paid_statuses)
             ->when($from_date && $to_date, function($q) use($from_date, $to_date) {
                 $q->whereDate('ec_orders.created_at', '>=', $from_date);
                 $q->whereDate('ec_orders.created_at', '<=', $to_date);
