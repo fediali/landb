@@ -93,6 +93,7 @@
         </div>
     </div>
 </footer>
+<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <script src='https://unpkg.com/xzoom/dist/xzoom.min.js'></script>
@@ -597,7 +598,27 @@ for (i = 0; i < coll.length; i++) {
         @endif
 
 	</script>
+    <script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
 
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    }
+    </script>
 
 @if(session()->has('success'))
     <script>
