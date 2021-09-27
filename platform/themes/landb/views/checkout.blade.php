@@ -1,13 +1,4 @@
-<section class="breadcrumb_wrap">
-    <div class="pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item active" aria-current="page"><b>Edit Profile</b></li>
-            </ol>
-        </nav>
-    </div>
-</section>
+{!! Theme::partial('breadcrumb') !!}
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
     <div class="row">
         <div class="col-lg-7">
