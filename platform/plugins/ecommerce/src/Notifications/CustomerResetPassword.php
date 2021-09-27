@@ -45,7 +45,7 @@ class CustomerResetPassword extends Notification
     {
         return (new MailMessage)
             ->view('plugins/ecommerce::emails.reminder', [
-                'link' => route('customer.password.reset.update', ['token' => $this->token]),
+                'link' => route('customer.password.reset', ['token' => $this->token]),
             ]);
     }
 }
