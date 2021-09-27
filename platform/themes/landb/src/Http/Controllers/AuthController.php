@@ -10,6 +10,10 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use SeoHelper;
 use Symfony\Component\HttpFoundation\Response;
@@ -194,5 +198,23 @@ class AuthController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $user->update(['last_visit' => Carbon::now()]);
+    }
+
+    public function forgetPassword(){
+      return Theme::scope('auth.forget-password', [])->render();
+    }
+
+    public function postForgetPassword(Request $request)
+    {
+        $request->validate(['email' => 'required|email|exists:ec_customers']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+
+      /*return back()->with('message', 'We have e-mailed your password reset link!');*/
     }
 }
