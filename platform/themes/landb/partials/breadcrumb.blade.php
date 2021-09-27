@@ -10,10 +10,10 @@
                     @endphp
                     @foreach(request()->segments() as $segment)
                         @if($loop->last)
-                            @if(isset($category))
-                                <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
+                            @if(isset($category) && !empty($category))
+                                <li class="breadcrumb-item active" aria-current="page">{{ @$category->name }}</li>
                             @elseif(isset($product))
-                                <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ @$product->name }}</li>
                             @else
                                 <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</li>
                             @endif
