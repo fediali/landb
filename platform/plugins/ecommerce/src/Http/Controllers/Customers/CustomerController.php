@@ -121,26 +121,28 @@ class CustomerController extends BaseController
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
         $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate', 'card'])->findOrFail($id);
-        //dd($customer);
+
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
-//        $card = 0;
+
         $customer->password = null;
 
-        $card = [];
+        $cards = [
+            '0' => 'Add New Card'
+        ];
         if ($customer->card->count() > 0) {
             $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
             foreach ($omniId as $item) {
                 if ($item->customer_omni_id) {
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
-                    $card = collect(json_decode($card));
+                    if ($card) {
+                        $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+                    }
                 }
             }
-
-
         }
 
-        return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
+        return view('plugins/ecommerce::customers.edit', compact('customer', 'cards'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
     }
 
