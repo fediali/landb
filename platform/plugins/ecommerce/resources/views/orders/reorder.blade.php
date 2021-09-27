@@ -3,6 +3,7 @@
 @section('content')
     <div class="max-width-1200" id="main-order">
         <create-order
+                :can_price_edit="{{Auth::user()->hasPermission('orders.edit_price') ? 1 : 0}}"
                 :products="{{ json_encode($products->toArray()) }}"
                 :product_ids="{{ json_encode($productIds) }}"
                 @if ($customer)
@@ -16,9 +17,11 @@
                 :order_type="'{{ $order->order_type }}'"
                 :payment_method="'{{$order->payment ? $order->payment->payment_channel : 'cod'}}'"
                 :customer_addresses="{{ json_encode($customerAddresses) }}"
-                :customer_billing_addresses="{{ json_encode($customerBillingAddresses) }}"
+                :customer_billing_addresses="{{ !empty($customerBillingAddresses) ? json_encode($customerBillingAddresses) : [] }}"
                 :customer_address="{{ $customerAddress }}"
+                @if ($customerBillingAddress)
                 :customer_billing_address="{{ $customerBillingAddress }}"
+                @endif
                 :sub_amount="{{ $order->sub_total }}"
                 :total_amount="{{ /*$order->payment->amount ??*/ $order->amount }}"
                 :discount_amount="{{ $order->discount_amount }}"

@@ -1,10 +1,12 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <link media="all" type="text/css" rel="stylesheet" href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
-    <script src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
+    <link media="all" type="text/css" rel="stylesheet"
+          href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
+    <script
+        src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
     <script>
-        setTimeout(()=>{
+        setTimeout(() => {
             $(".editable").editable();
         }, 200);
     </script>
@@ -211,18 +213,24 @@
                                                     <td class="text-right color-subtext mt10">
                                                         @if ($order->coupon_code)
                                                             <p class="mb0">
-                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
+                                                                <i class="fa fa-trash"
+                                                                   style="cursor: pointer; color: red"
+                                                                   onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
                                                                 {!! trans('plugins/ecommerce::order.coupon_code', ['code' => Html::tag('strong', $order->coupon_code)->toHtml()])  !!}
                                                             </p>
                                                         @elseif ($order->discount_description)
                                                             <p class="mb0">
-                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
+                                                                <i class="fa fa-trash"
+                                                                   style="cursor: pointer; color: red"
+                                                                   onclick="event.preventDefault(); document.getElementById('remove-discount').submit();"></i>
                                                                 {{ $order->discount_description }}
                                                             </p>
                                                         @endif
                                                         @if ($order->promotion_applied)
                                                             <p class="mb0">
-                                                                <i class="fa fa-trash" style="cursor: pointer; color: red" onclick="event.preventDefault(); document.getElementById('discount-type-ip').value = 'promotion'; document.getElementById('remove-discount').submit();"></i>
+                                                                <i class="fa fa-trash"
+                                                                   style="cursor: pointer; color: red"
+                                                                   onclick="event.preventDefault(); document.getElementById('discount-type-ip').value = 'promotion'; document.getElementById('remove-discount').submit();"></i>
                                                                 Promotion Discount
                                                             </p>
                                                         @endif
@@ -237,8 +245,11 @@
                                                         @endif
                                                         <p class="mb0">{{ format_price($order->discount_amount) }}</p>
 
-                                                        <form id="remove-discount" action="{{ route('orders.remove-discount', $order->id) }}" style="display:none;">
-                                                            <input type="hidden" name="discount_type" value="coupon" id="discount-type-ip">
+                                                        <form id="remove-discount"
+                                                              action="{{ route('orders.remove-discount', $order->id) }}"
+                                                              style="display:none;">
+                                                            <input type="hidden" name="discount_type" value="coupon"
+                                                                   id="discount-type-ip">
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -642,19 +653,24 @@
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
                                 @if($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status != 'completed')
-                                    <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}" class="btn btn-primary mb-2">
+                                    <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}"
+                                       class="btn btn-primary mb-2">
                                         {{$order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->paypal_invoice_id ? 'Order Reminder' : 'Order Invoice'}}
                                     </a>&nbsp;&nbsp;
                                 @elseif($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status == 'completed')
-                                    <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid</button>
+                                    <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid
+                                    </button>
                                 @endif
                                 @if($order->shipping_amount > 0)
                                     @if($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status != 'completed')
-                                        <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}" class="btn btn-warning mb-2">
+                                        <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}"
+                                           class="btn btn-warning mb-2">
                                             {{$order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->paypal_invoice_id ? 'Shipping Reminder' : 'Shipping Invoice'}}
                                         </a>&nbsp;&nbsp;
                                     @elseif($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status == 'completed')
-                                        <button type="button" class="btn btn-outline-success mb-2">Shipping Invoice Paid</button>
+                                        <button type="button" class="btn btn-outline-success mb-2">Shipping Invoice
+                                            Paid
+                                        </button>
                                     @endif
                                 @endif
 
@@ -696,7 +712,8 @@
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
                                                 <div class="col-lg-10">
-                                                    <strong class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
+                                                    <strong
+                                                        class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
@@ -718,11 +735,16 @@
                                                 <div class="pd-all-20 bg-white">
                                                     <form action="{{route('orders.charge')}}" method="POST">
                                                         @csrf
-                                                        <input type="hidden" value="{{str_replace('card_', '', $split_payment->payment_type)}}" name="payment_id">
+                                                        <input type="hidden"
+                                                               value="{{str_replace('card_', '', $split_payment->payment_type)}}"
+                                                               name="payment_id">
                                                         <input type="hidden" value="{{$order->id}}" name="order_id">
-                                                        <input type="hidden" value="{{$split_payment->amount}}" name="sub_total">
-                                                        <input type="hidden" value="{{$split_payment->amount}}" name="amount">
-                                                        <button type="submit" class="btn btn-info">Create Payment</button>
+                                                        <input type="hidden" value="{{$split_payment->amount}}"
+                                                               name="sub_total">
+                                                        <input type="hidden" value="{{$split_payment->amount}}"
+                                                               name="amount">
+                                                        <button type="submit" class="btn btn-info">Create Payment
+                                                        </button>
                                                     </form>
                                                 </div>
 
@@ -730,10 +752,16 @@
                                                 <div class="pd-all-20">
                                                     <form action="{{route('orders.capture')}}" method="POST">
                                                         @csrf
-                                                        <input type="hidden" value="{{$order_card_preauth->transaction_id}}" name="transaction_id">
-                                                        <input type="hidden" value="{{$split_payment->amount}}" name="amount">
-                                                        <label class="col-lg-12"> <strong>Transaction ID : </strong>{{$order_card_preauth->transaction_id}}</label>
-                                                        <button type="submit" class="btn btn-info">Capture Payment</button>
+                                                        <input type="hidden"
+                                                               value="{{$order_card_preauth->transaction_id}}"
+                                                               name="transaction_id">
+                                                        <input type="hidden" value="{{$split_payment->amount}}"
+                                                               name="amount">
+                                                        <label class="col-lg-12"> <strong>Transaction ID
+                                                                : </strong>{{$order_card_preauth->transaction_id}}
+                                                        </label>
+                                                        <button type="submit" class="btn btn-info">Capture Payment
+                                                        </button>
                                                     </form>
                                                 </div>
                                             @else
@@ -759,7 +787,8 @@
                                                             <strong>Declined Reason</strong>
                                                             <ul class="p-sm-r mb-0">
                                                                 <li class="ws-nm">
-                                                                    <span class="ww-bw text-no-bold">{{$order_card_preauth->response}}</span>
+                                                                    <span
+                                                                        class="ww-bw text-no-bold">{{$order_card_preauth->response}}</span>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -836,17 +865,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="pd-all-20 bg-white">
-                                            <form action="{{route('orders.charge')}}" method="POST">
-                                                @csrf
-                                                <input type="hidden" value="" name="payment_id" class="payment_id">
-                                                <input type="hidden" value="{{$order->id}}" name="order_id"
-                                                       class="order_id">
-                                                <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
-                                                <input type="hidden" value="{{$order->amount}}" name="amount">
-                                                <button type="submit" class="btn btn-info">Create Payment</button>
-                                            </form>
-                                        </div>
+                                        @if($order->preauth != null || $order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))
+                                            <div class="pd-all-20 bg-white">
+                                                <form action="{{route('orders.charge')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" value="" name="payment_id" class="payment_id">
+                                                    <input type="hidden" value="{{$order->id}}" name="order_id"
+                                                           class="order_id">
+                                                    <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
+                                                    <input type="hidden" value="{{$order->amount}}" name="amount">
+                                                    <button type="submit" class="btn btn-info">Create Payment</button>
+                                                </form>
+                                            </div>
+                                        @endif()
 
                                     @elseif($order->order_cards_preauth()->where('transaction_id', '!=', "")->value('status') == 0)
 
@@ -857,10 +888,13 @@
                                         <div class="pd-all-20">
                                             <form action="{{route('orders.capture')}}" method="POST">
                                                 @csrf
-            <input type="hidden" value="{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}" name="transaction_id">
+                                                <input type="hidden"
+                                                       value="{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}"
+                                                       name="transaction_id">
                                                 <input type="hidden" value="{{$order->amount}}" name="amount">
                                                 <label class="col-lg-12"> <strong>Transaction ID
-                                                        : </strong>{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}</label>
+                                                        : </strong>{{$order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id')}}
+                                                </label>
                                                 <button type="submit" class="btn btn-info">Capture Payment</button>
                                             </form>
                                         </div>
@@ -889,7 +923,7 @@
                                                     <ul class="p-sm-r mb-0">
                                                         <li class="ws-nm">
                                             <span
-                                                    class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
                                                         </li>
                                                     </ul>
                                                 </div>

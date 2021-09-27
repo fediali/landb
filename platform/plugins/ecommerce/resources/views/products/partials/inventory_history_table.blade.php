@@ -61,9 +61,10 @@
                                     <p class="muted">
                                         <small>Status: ThreadOrder &gt; {{ $history->thread_order->status }}</small>
                                     </p>
-                                @elseif(!empty(@$history->order_id))
-                                    <a href="{{ route('orders.edit', @$history->order->id) }}" target="_blank">Order
-                                        #{{ @$history->order->id }}</a>
+                                @elseif(@$history->order_id)
+                                    <a href="{{ route('orders.edit', @$history->order_id) }}" target="_blank">
+                                        Order #{{ @$history->order_id }}
+                                    </a>
                                     <p class="muted">
                                         <small>Status: Order &gt; {{ @$history->order->status }}</small>
                                     </p>

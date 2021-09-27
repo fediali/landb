@@ -21,6 +21,16 @@ class OrderIncompleteTable extends OrderTable
     protected $hasActions = true;
 
     /**
+     * @var bool
+     */
+    public $hasCustomFilter = false;
+
+    /**
+     * @var bool
+     */
+    public $hasCustomBottom = false;
+
+    /**
      * {@inheritDoc}
      */
     public function ajax()

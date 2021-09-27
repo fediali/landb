@@ -435,7 +435,9 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-12">
-                                    <p class="textbox-label">Customer Type</p>
+                                    <p class="textbox-label">Customer
+
+                                        Type</p>
                                     @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
                                         <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
                                                @if(in_array($type, json_decode($user->details->customer_type)) || old('customer_type') == $type) checked @endif>

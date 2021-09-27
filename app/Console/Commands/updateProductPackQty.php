@@ -75,6 +75,12 @@ class updateProductPackQty extends Command
                 if (isset($sizes[0]->variant_name)) {
                     $product->sizes = $sizes[0]->variant_name;
                     $product->save();
+
+                    foreach ($product->variations as $variation) {
+                        $variation->product->sizes = $sizes[0]->variant_name;
+                        $variation->product->save();
+                    }
+
                     echo 'Sizes==>'.$product->sizes.'<br>';
                 }
             }

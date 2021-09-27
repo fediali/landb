@@ -249,14 +249,40 @@
                     <div class="collection_img home-overlap">
                         <a href="{{ generate_product_url('detail', @$products[0]->id, @$products[0]->slugable->key) }}">
                             <div class="collec-imgbox">
-                                {!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}
+                                {{--{!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}--}}
+                                @if (@getimagesize(asset('storage/'. @$products[0]->images[0])))
+                                    {!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}
+                                @else
+                                    @php
+                                        $images1 = str_replace('.JPG', '.jpg', @$products[0]->images[0]);
+                                        $images2 = str_replace('.jpg', '.JPG', @$products[0]->images[0]);
+                                    @endphp
+                                    @if (@getimagesize(asset('storage/'. $images1)))
+                                        {!! image_html_generator($images1, null, null, null, true, 'ls-is-cached') !!}
+                                    @elseif(@getimagesize(asset('storage/'. $images2)))
+                                        {!! image_html_generator($images2, null, null, null, true, 'ls-is-cached') !!}
+                                    @endif
+                                @endif
                             </div>
                         </a>
 
                         <a href="{{ generate_product_url('detail', @$products[1]->id, @$products[1]->slugable->key) }}">
                             <div class="overlap">
                                 <div class="collec-imgbox">
-                                    {!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}
+                                    {{--{!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}--}}
+                                    @if (@getimagesize(asset('storage/'. @$products[1]->images[0])))
+                                        {!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}
+                                    @else
+                                        @php
+                                            $images1 = str_replace('.JPG', '.jpg', @$products[1]->images[0]);
+                                            $images2 = str_replace('.jpg', '.JPG', @$products[1]->images[0]);
+                                        @endphp
+                                        @if (@getimagesize(asset('storage/'. $images1)))
+                                            {!! image_html_generator($images1, null, null, null, true, 'ls-is-cached') !!}
+                                        @elseif(@getimagesize(asset('storage/'. $images2)))
+                                            {!! image_html_generator($images2, null, null, null, true, 'ls-is-cached') !!}
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </a>

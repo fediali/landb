@@ -236,6 +236,11 @@ return [
         'parent_flag' => 'orders.index',
     ],
     [
+        'name'        => 'Edit Order Product Price',
+        'flag'        => 'orders.edit_price',
+        'parent_flag' => 'orders.index',
+    ],
+    [
         'name'        => 'Discounts',
         'flag'        => 'discounts.index',
         'parent_flag' => 'plugins.ecommerce',
