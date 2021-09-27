@@ -1197,3 +1197,10 @@ tbody>tr>:nth-child(3) span{
   margin-bottom: 15px;
   display: block;
 }
+.total-green {
+  font-weight: 600;
+}
+
+.total-green span {
+ color: #19af19;
+}

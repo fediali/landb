@@ -76,6 +76,7 @@
     <div class="row">
         <div class="col-lg-3"></div>
         <div class="col-lg-6">
+            <div class="pl-3 pr-3">
             <h2 class="mt-5 mb-4 text-center signin-head">CONTACT</h2>
             <div class="row">
                 <div class="col-lg-12">
@@ -117,7 +118,7 @@
                     <button type="submit" class=" btn cart-btn w-100">Submit</button>
                 </div>
             </div>
-
+            </div>
         </div>
         <div class="col-lg-3"></div>
     </div>
