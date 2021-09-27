@@ -376,12 +376,12 @@
                                 <div class="bg-white">
                                     <div class="card_fields">
                                         <input type="hidden" value="{{$customer->id}}" id="customer_id">
-                                        {{--<div class="row group m-0 pt-4 ">
+                                        <div class="row group m-0 pt-4 ">
                                             <label class="col-lg-12 ">
                                                 <span class="mb-2">Credit Card</span>
-                                                {!!Form::select('order_card', $cards, null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
+                                                {!!Form::select('order_card', ['Add New Card'], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
                                             </label>
-                                        </div>--}}
+                                        </div>
                                         <div class="row group m-0 pt-4 ">
                                             <label class="col-lg-12 ">
                                                 <span class="mb-2">Billing Address</span>

@@ -126,9 +126,7 @@ class CustomerController extends BaseController
 
         $customer->password = null;
 
-        $cards = [
-            '0' => 'Add New Card'
-        ];
+        $cards = [];
         if ($customer->card->count() > 0) {
             $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
             foreach ($omniId as $item) {
@@ -136,7 +134,7 @@ class CustomerController extends BaseController
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     if ($card) {
-                        $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+                        $cards = collect(json_decode($card))->pluck('nickname', 'id');
                     }
                 }
             }
