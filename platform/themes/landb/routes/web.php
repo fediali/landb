@@ -3,6 +3,16 @@
 // Custom routes
 // You can delete this route group if you don't need to add your custom routes.
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
+
+    Route::get('/forget-password', 'AuthController@forgetPassword')
+      ->name('public.forget-password');
+
+    Route::post('/forget-password', 'AuthController@postForgetPassword')
+      ->name('public.post-forget-password');
+
+    Route::get('/password/reset/{token}', 'AuthController@resetPassword')->middleware('guest')->name('customer.password.reset');
+    Route::post('/password/reset', 'AuthController@postResetPassword')->middleware('guest')->name('password.post.reset');
+
     Route::get('/orderr', 'LandbController@orderSuccess');
 
     /*Route::get('/product-timeline', 'ProductsController@timeline')
@@ -121,7 +131,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
         Route::get('/register', 'RegisterController@showRegisterForm')
             ->name('public.register');
-
 
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
