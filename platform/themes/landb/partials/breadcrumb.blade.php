@@ -9,23 +9,25 @@
                         $url = URL::to('/').'/';
                     @endphp
                     @foreach(request()->segments() as $segment)
-                        @if($loop->last)
-                            @if(isset($category) && !empty($category))
-                                <li class="breadcrumb-item active" aria-current="page">{{ @$category->name }}</li>
-                            @elseif(isset($product))
-                                <li class="breadcrumb-item active" aria-current="page">{{ @$product->name }}</li>
+                        @if($segment != 'search')
+                            @if($loop->last)
+                                @if(isset($category) && !empty($category))
+                                    <li class="breadcrumb-item active" aria-current="page">{{ @$category->name }}</li>
+                                @elseif(isset($product))
+                                    <li class="breadcrumb-item active" aria-current="page">{{ @$product->name }}</li>
+                                @else
+                                    <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</li>
+                                @endif
                             @else
-                                <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</li>
-                            @endif
-                        @else
-                            @php
-                                $url .= $segment.'/';
-                            @endphp
-                            @if($segment == 'checkout')
-                                <li class="breadcrumb-item" aria-current="page">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</li>
-                                @break
-                            @else
-                                <li class="breadcrumb-item" aria-current="page"><a href="{{ $url }}">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</a></li>
+                                @php
+                                    $url .= $segment.'/';
+                                @endphp
+                                @if($segment == 'checkout')
+                                    <li class="breadcrumb-item" aria-current="page">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</li>
+                                    @break
+                                @else
+                                    <li class="breadcrumb-item" aria-current="page"><a href="{{ $url }}">{{ ucfirst(str_replace(['-', '_'], ' ', $segment)) }}</a></li>
+                                @endif
                             @endif
                         @endif
                     @endforeach
