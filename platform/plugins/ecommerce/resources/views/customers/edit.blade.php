@@ -263,10 +263,10 @@
     </form>
 
     <div class="row">
+
         <div class="col-lg-6">
             <div class="p-3 bg-white">
                 {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
-
                 <div class="row">
                     <div class="col-lg-6 mt-2">
                         <label for="name">{{ __('Full Name') }}:</label>
@@ -343,9 +343,6 @@
                     {!! Form::error('address', $errors) !!}
 
 
-
-
-
                     <div class="form-group col-lg-12">
                         <div class="ps-checkbox mt-3">
                             <input class="ml-2" type="checkbox" value="1" name="is_default" id="is-default">
@@ -366,65 +363,81 @@
                 {!! Form::close() !!}
             </div>
         </div>
+
         <div class="col-lg-6">
             <div class="p-3 bg-white">
-
-
-                <form onsubmit="return false;">
-                    <!--      Make your own form or copy this one -->
-                    {{--<div class="row group">
-                        @isset($customer->billingAddress)
-                            <label class="col-lg-12">
-                                <span>Billing Address</span>
-                                {!!
-                        Form::select('billing_address', $customer->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
-                        ])
-                    !!}
-                            </label>
-                        @endisset
-                    </div>--}}
-                    <div class="group row">
-                        <label class="col-lg-12">
-
-                            <div id="card-element" class="field">
-                                <span>Card</span>
-                                <div id="fattjs-number" style="height: 35px"></div>
-                                <span class="mt-2">CVV</span>
-                                <div id="fattjs-cvv" style="height: 35px"></div>
+                <div id="main-order">
+                    <div class="flexbox-grid no-pd-none">
+                        <div class="flexbox-content">
+                            <div class="wrapper-content bg-gray-white mb20">
+                                <button class="btn btn-info btn-card credit_card">
+                                    Credit Card
+                                </button>
+                                <div class="bg-white">
+                                    <div class="card_fields">
+                                        <input type="hidden" value="{{$customer->id}}" id="customer_id">
+                                        {{--<div class="row group m-0 pt-4 ">
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Credit Card</span>
+                                                {!!Form::select('order_card', $cards, null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
+                                            </label>
+                                        </div>--}}
+                                        <div class="row group m-0 pt-4 ">
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Billing Address</span>
+                                                {!! Form::select('billing_address',$customer->billing_addresses->pluck('address', 'id'), null ,['class' => 'form-control','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address', ]) !!}
+                                            </label>
+                                        </div>
+                                        <div class="add_card">
+                                            <div class="group row m-0">
+                                                <label class="col-lg-12">
+                                                    <div id="card-element" class="field">
+                                                        <span>Card</span>
+                                                        <div id="fattjs-number" style="height: 35px"></div>
+                                                        <span class="mt-2">CVV</span>
+                                                        <div id="fattjs-cvv" style="height: 35px"></div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-3">
+                                                    <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
+                                                </div>
+                                                <p class="mt-2"> / </p>
+                                                <div class="col-lg-3">
+                                                    <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
+                                                </div>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-6">
+                                                    <button class="btn btn-success mt-3" id="tokenizebutton">
+                                                        Add Credit Card
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-12">
+                                                    <div class="outcome">
+                                                        <div class="error"></div>
+                                                        <div class="success">
+                                                            Successful! The ID is
+                                                            <span class="token"></span>
+                                                        </div>
+                                                        <div class="loader" style="margin: auto"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
-                        </div>
-                        <p class="mt-2"> / </p>
-                        <div class="col-lg-3">
-                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
                         </div>
                     </div>
-                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
-                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
-                    <div class="outcome">
-                        <div class="error"></div>
-                        <div class="success">
-                            Successful! The ID is
-                            <span class="token"></span>
-                        </div>
-                        <div class="loader" style="margin: auto">
-                        </div>
-                    </div>
-                </form>
-                {{--                <form method="POST" action="{{route('thread.testingPayment')}}">--}}
-                {{--                    @csrf--}}
-                {{--                    <button class="btn btn-info mt-3 ">Pay $1</button>--}}
-                {{--                </form>--}}
+                </div>
             </div>
-
         </div>
 
     </div>
-
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
@@ -492,26 +505,22 @@
                         </tr>
                         </thead>
                         <tbody>
-
-                        @if(isset($card))
-                            @foreach($card as $cards)
+                        @if(isset($cards))
+                            @foreach($cards as $card)
                                 <tr>
-                                    <td>{{@$cards->person_name}}</td>
-                                    <td>{{@$cards->card_exp}}</td>
-                                    <td>{{@$cards->card_last_four}}</td>
-                                    {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
-
-                                    {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                    <td>{{@$card->person_name}}</td>
+                                    <td>{{@$card->card_exp}}</td>
+                                    <td>{{@$card->card_last_four}}</td>
+                                    {{--<td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                                    {{--&nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                                 </tr>
                             @endforeach
                         @endif
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <div class="mt20 mb20">
@@ -559,7 +568,7 @@
                     <div class="d-flex w-100">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                         <h4 class="modal-title text-center w-100 thread-pop-head">Edit Address <span
-                                class="variation-name"></span></h4>
+                                    class="variation-name"></span></h4>
                         <div></div>
                     </div>
                 </div>
@@ -570,15 +579,15 @@
                             <div class="col-lg-6">
                                 <p class="textbox-label">First Name</p>
                                 <input
-                                    class="input-textbox form-control @error('address_first_name') is-invalid @enderror"
-                                    type="text" name="address_first_name" value=""/>
+                                        class="input-textbox form-control @error('address_first_name') is-invalid @enderror"
+                                        type="text" name="address_first_name" value=""/>
 
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Last Name</p>
                                 <input
-                                    class="input-textbox form-control @error('address_last_name') is-invalid @enderror"
-                                    type="text" name="address_last_name" value=""/>
+                                        class="input-textbox form-control @error('address_last_name') is-invalid @enderror"
+                                        type="text" name="address_last_name" value=""/>
                                 @error('address_last_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -626,8 +635,8 @@
                                 </select>--}}
                                 {{--<input class="input-textbox form-control @error('address_country') is-invalid @enderror" type="text"  name="address_country" value="{{ old('address_country',@$customer->addresses[0]->country) }}"/>--}}
                                 <select
-                                    class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror"
-                                    name="address_country">
+                                        class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror"
+                                        name="address_country">
                                     <option selected hidden disabled>Select a Country</option>
                                 </select>
                                 @error('address_country')
@@ -651,9 +660,9 @@
                             <div class="col-lg-6">
                                 <p class="textbox-label">Zip/Postal Code</p>
                                 <input
-                                    class="input-textbox form-control @error('address_zip_code') is-invalid @enderror"
-                                    type="text" name="address_zip_code"
-                                    value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
+                                        class="input-textbox form-control @error('address_zip_code') is-invalid @enderror"
+                                        type="text" name="address_zip_code"
+                                        value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -662,17 +671,17 @@
                                 <p class="textbox-label">Type</p>
                                 <div class="d-flex">
                                     <input
-                                        class="input-textbox mt-1"
-                                        type="radio" name="address_type"
-                                        placeholder="Shipping" id="shipping_type" value="shipping"/>
+                                            class="input-textbox mt-1"
+                                            type="radio" name="address_type"
+                                            placeholder="Shipping" id="shipping_type" value="shipping"/>
                                     <p>Shipping</p>
                                 </div>
 
                                 <div class="d-flex">
                                     <input
-                                        class="input-textbox mt-1"
-                                        type="radio" name="address_type"
-                                        placeholder="Billing" id="billing_type" value="billling"/>
+                                            class="input-textbox mt-1"
+                                            type="radio" name="address_type"
+                                            placeholder="Billing" id="billing_type" value="billling"/>
                                     <p>Billing</p>
                                 </div>
 
@@ -691,6 +700,7 @@
 
         </div>
     </div>
+
     <div class="modal fade" id="certificate_modal" role="dialog">
         <div class="modal-dialog modal-lg">
 
@@ -700,7 +710,7 @@
                     <div class="d-flex w-100">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                         <h4 class="modal-title text-center w-100 thread-pop-head">Tax Certificate <span
-                                class="variation-name"></span></h4>
+                                    class="variation-name"></span></h4>
                         <div></div>
                     </div>
                 </div>
@@ -882,9 +892,9 @@
                                     <div class="col-lg-7">
                                         <p class="textbox-label">Title</p>
                                         <input
-                                            class="input-textbox bg-white form-control @error('title') is-invalid @enderror"
-                                            type="text" name="title"
-                                            value="{{ old('title',@$customer->taxCertificate->title) }}"/>
+                                                class="input-textbox bg-white form-control @error('title') is-invalid @enderror"
+                                                type="text" name="title"
+                                                value="{{ old('title',@$customer->taxCertificate->title) }}"/>
                                         @error('title')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -892,9 +902,9 @@
                                     <div class="col-lg-5">
                                         <p class="textbox-label">Date</p>
                                         <input
-                                            class="input-textbox bg-white form-control @error('date') is-invalid @enderror"
-                                            type="date" name="date"
-                                            value="{{ old('date',@$customer->taxCertificate->date) }}"/>
+                                                class="input-textbox bg-white form-control @error('date') is-invalid @enderror"
+                                                type="date" name="date"
+                                                value="{{ old('date',@$customer->taxCertificate->date) }}"/>
                                         @error('date')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -932,13 +942,13 @@
 
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             $('select[name="country"]').on('change', function () {
                 get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
             });
-
-        })
+        });
 
         function get_states(thiss, country, url) {
             $.ajax({
@@ -950,7 +960,6 @@
                 beforeSend: function () {
                     toggle_loader(true);
                 },
-
                 success: function (result) {
                     thiss.find('option').remove();
                     jQuery.each(result, function (state, index) {
