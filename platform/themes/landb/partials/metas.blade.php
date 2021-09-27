@@ -1,6 +1,9 @@
 <?php
     $metas = null;
     $category = null;
+
+    $meta_title = 'LandBAppreal';
+    $meta_description = 'LandBAppreal';
     $product_slug = (count(request()->segments()) > 1 ? (request()->segment(1) == 'products' ? request()->segment(2) : null) : null);
 
     if(empty($product_slug)){
@@ -21,18 +24,25 @@
         }
       }
     }
+
+if(!empty($metas)){
+    $meta_title = $metas->meta_value[0]['seo_title'];
+    $meta_description = $metas->meta_value[0]['seo_description'];
+}else{
+    $meta_title = setting('theme-landb-site_title', 'LandBAppreal');
+    $meta_description = setting('theme-landb-seo_description', 'LandBAppreal');
+}
     /*dd($metas, $product);*/
 
 ?>
-@if(!empty($metas))
-<title>{{ $metas->meta_value[0]['seo_title'] }}</title>
-<meta name="description" content="{{ $metas->meta_value[0]['seo_description'] }}">
+<title>{{ $meta_title }}</title>
+<meta name="description" content="{{ $meta_description }}">
 <link rel="canonical" href="{{ url()->current() }}"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="og:site_name" content="">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="{{ $metas->meta_value[0]['seo_title'] }}">
-<meta property="og:description" content="{{ $metas->meta_value[0]['seo_description'] }}">
+<meta property="og:title" content="{{ $meta_title }}">
+<meta property="og:description" content="{{ $meta_description }}">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:type" content="website">
-@endif
+
