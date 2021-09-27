@@ -31944,3 +31944,8 @@ span.lb-dis {
   background-color: #36c6d3 !important;
   color: #fff !important;
 }
+
+.text-infor-subdued .ui-select-wrapper {
+  height: 45px;
+  margin-top: 0px !important;
+}
