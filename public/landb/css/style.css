@@ -2033,6 +2033,17 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .topnav ul li a {
+        font-size: 12px !important;
+    }
+    .mainslide .carousel-control-next-icon {
+        height: 25px !important;
+    width: 25px !important;
+    }
+    .mainslide .carousel-control-prev-icon {
+        height: 25px !important;
+        width: 25px !important;
+    }
     .filterbar .rightbar {
         display: none;
   }
@@ -2061,7 +2072,7 @@ input.qtyminus {
         width: 100% !important;
     }
     .banner {
-        margin-top: 335px;
+        margin-top: 250px;
     }
     .custom-breadcrumb {
         margin-top: 315px !important;
