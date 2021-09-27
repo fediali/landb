@@ -138,7 +138,7 @@ class CustomerController extends BaseController
                     list($card, $info) = omni_api($url);
 
                     if ($card) {
-                        $cards = collect(json_decode($card))->pluck('nickname', 'id');
+                        $cards = collect(json_decode($card));
                     }
                 }
             }
