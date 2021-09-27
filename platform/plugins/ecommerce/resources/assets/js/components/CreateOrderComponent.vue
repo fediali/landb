@@ -376,6 +376,7 @@
                                                         </div>
                                                         <div class="flexbox-auto-content-right">
                                                             <div class="overflow-ellipsis">{{ customer.name }}</div>
+                                                            <div class="overflow-ellipsis">{{ customer.detail.company }}</div>
                                                             <div class="overflow-ellipsis">
                                                                 <a :href="'mailto:' + customer.email">
                                                                     <span class="asd">{{
