@@ -168,7 +168,9 @@ class ProductController extends BaseController
         $product = $service->execute($request, $product);
         $storeProductTagService->execute($request, $product);
 
-        $this->updateColors($product->id, @$request->color_products);
+        if (isset($request->color_products) && $request->color_products) {
+            $this->updateColors($product->id, $request->color_products);
+        }
 
         /*$addedAttributes = $request->input('added_attributes', []);
 
@@ -256,10 +258,16 @@ class ProductController extends BaseController
                             $packAllProd = Product::where('id', $prodId)->first();
 
                             $barcodePackAll = get_barcode();
-                            $packAllProd->upc = $barcodePackAll['upc'];
-                            $packAllProd->barcode = $barcodePackAll['barcode'];
+                            $packAllProd->upc = $product->upc = $barcodePackAll['upc'];
+                            $packAllProd->barcode = $product->barcode = $barcodePackAll['barcode'];
                             $packAllProd->private_label = $product->private_label;
+                            $packAllProd->prod_pieces = $product->prod_pieces;
                             $packAllProd->save();
+
+                            $product->sku = $packAllProd->sku;
+                            $product->upc = $packAllProd->upc;
+                            $product->barcode = $packAllProd->barcode;
+                            $product->save();
                         }
 
                         if (count($getSizeAttrs)) {
@@ -292,6 +300,14 @@ class ProductController extends BaseController
                 }
             }
         }
+
+
+        foreach ($product->variations as $variation) {
+            $variation->product->ptype = 'R';
+            $variation->product->save();
+        }
+        $product->ptype = 'R';
+        $product->save();
 
 
         return $response
@@ -518,7 +534,9 @@ class ProductController extends BaseController
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
         }
 
-        $this->updateColors($product->id, @$request->color_products);
+        if (isset($request->color_products) && $request->color_products) {
+            $this->updateColors($product->id, $request->color_products);
+        }
 
         return $response
             ->setPreviousUrl(route('products.index'))
@@ -1150,17 +1168,24 @@ class ProductController extends BaseController
             $product = Product::find($id);
             $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
             $n = array_merge($product_colors, $ids);
-            $product->color_products = json_encode($n);
+            $array = array_filter($n, function($a) { if($a !== 0) return $a; });
+            $array = array_unique($array);
+            $array = array_values($array);
+            $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
             $product->save();
 
             foreach ($ids as $colorId) {
                 if ($colorId) {
                     $product = Product::find($colorId);
                     $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+                    $product_colors = (array) $product_colors;
                     if (!in_array($id, $product_colors)) {
                         array_push($product_colors, $id);
                     }
-                    $product->color_products = json_encode($product_colors);
+                    $array = array_filter($product_colors, function($a) { if($a !== 0) return $a; });
+                    $array = array_unique($array);
+                    $array = array_values($array);
+                    $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
                     $product->save();
                 }
             }

@@ -101,7 +101,7 @@ class ProductForm extends FormAbstract
             ])
             ->add('description', 'editor', [
                 'label'      => trans('core/base::forms.description'),
-                'label_attr' => ['class' => 'control-label'],
+                'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'rows'         => 2,
                     'placeholder'  => trans('core/base::forms.description_placeholder'),
@@ -150,7 +150,7 @@ class ProductForm extends FormAbstract
             ])
             ->add('color_name', 'text', [
                 'label'      => __('Color Name'),
-                'label_attr' => ['class' => 'required'],
+                //'label_attr' => ['class' => 'required'],
                 'attr'       => [
                     'placeholder'  => __('Color Name'),
                     'data-counter' => 120,
@@ -170,7 +170,7 @@ class ProductForm extends FormAbstract
             ])
             ->add('creation_date', 'text', [
                 'label'         => 'Creation date',
-                'label_attr'    => ['class' => 'control-label'],
+                'label_attr'    => ['class' => 'control-label required'],
                 'attr'          => [
                     'class'            => 'form-control datepicker',
                     'data-date-format' => 'd M, yyyy',
@@ -185,7 +185,7 @@ class ProductForm extends FormAbstract
             ])
             ->add('categories', 'customSelect', [
                 'label'         => trans('plugins/ecommerce::products.form.categories'),
-                'label_attr'    => ['class' => 'control-label'],
+                'label_attr'    => ['class' => 'control-label required'],
                 'choices'       => get_product_categories_with_children_pluck(),
                 'default_value' => old('categories', $selectedCategories),
                 'attr'          => [
@@ -232,7 +232,8 @@ class ProductForm extends FormAbstract
                     'placeholder' => trans('plugins/ecommerce::products.form.write_some_tags'),
                     'data-url'    => route('product-tag.all'),
                 ],
-            ])->add('sizes', 'text', [
+            ])
+            ->add('sizes', 'text', [
                 'label'      => 'Sizes',
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [

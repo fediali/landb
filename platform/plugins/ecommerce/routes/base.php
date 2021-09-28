@@ -180,7 +180,7 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::post('change-status', [
                 'as'         => 'changeStatus',
                 'uses'       => 'ProductController@changeStatus',
-                'permission' => 'products.status',
+                'permission' => 'products.edit',
             ]);
         });
 
