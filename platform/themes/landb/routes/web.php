@@ -116,12 +116,12 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/customer/verify', [
             'as'   => 'customer.pendingNotification',
             'uses' => 'CustomerController@pendingNotification'
-        ]);
+        ])->middleware('customer');
 
         Route::get('customer/contract-form', [
             'as'   => 'customer.contract-form',
             'uses' => 'CustomerController@contractForm'
-        ]);
+        ])->middleware('customer');
 
         Route::get('/', 'LandbController@getIndex')
             ->name('public.index');
