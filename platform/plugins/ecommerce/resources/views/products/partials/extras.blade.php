@@ -3,28 +3,23 @@
         <h4><span>{{ trans('plugins/ecommerce::products.related_products') }}</span></h4>
     </div>
     <div class="widget-body">
+
         <div class="form-group">
             <label class="control-label">Color Product</label>
-            @php  if ($product) {
-
-    $color = json_decode($product->color_products);
-    $colors = (isset($color)) ?  array_map('intval', explode(',', $color[0])):[];
-   // dd($product->product_colors(), 'sasd',$product->crossSales);
-}
-
+            @php
+                if ($product) {
+                $color = json_decode($product->color_products);
+                $colors = (isset($color)) ?  array_map('intval', explode(',', $color[0])):[];
+                }
             @endphp
-
-            <input type="hidden" name="color_products[]"
-                   value="@if ($product) {{implode(',', $colors) }} @endif"/>
+            <input type="hidden" name="color_products[]" value="@if ($product) {{implode(',', $colors) }} @endif"/>
             <div class="box-search-advance product">
                 <div>
                     <input type="text" class="next-input textbox-advancesearch"
                            placeholder="{{ trans('plugins/ecommerce::products.search_products') }}"
                            data-target="{{ route('products.get-list-product-for-search', $product ? $product->id : 0) }}">
                 </div>
-                <div class="panel panel-default">
-
-                </div>
+                <div class="panel panel-default"></div>
             </div>
             @include('plugins/ecommerce::products.partials.selected-products-list', ['products' => $product ? $product->product_colors() : collect([]), 'includeVariation' => false])
         </div>
