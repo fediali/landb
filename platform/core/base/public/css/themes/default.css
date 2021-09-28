@@ -1026,6 +1026,7 @@ Customized Bootstrap Modal
 
 .modal-header h4 {
   font-weight: 600;
+  margin: auto;
   font-size: 13px;
 }
 .modal-header h4 .til_img {

@@ -1,6 +1,6 @@
-<div class="wrapper-filter pull-right">
+<div class="wrapper-filter text-right">
     <p>Gross Total : $ {{number_format($data['gross_total'])}}</p>
-    <p>Total Paid : $ {{number_format($data['total_paid'])}}</p>
+    <p class="total-green">Total Paid : <span>$ {{number_format($data['total_paid'])}}</span></p>
     <p>Total Shipping Cost : $ {{number_format($data['total_shipping_cost'])}}</p>
 </div>
 

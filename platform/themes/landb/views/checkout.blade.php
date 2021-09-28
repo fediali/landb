@@ -10,11 +10,11 @@
                         </li>
                         <li class=""><a id="shipping-tab"
                                         class="{!! ((!empty($user_info->details)) && !isset($user_info->shippingAddress[0])) ? 'active':'' !!}"
-                                        data-toggle="tab" href="#menu1">Shipping Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                                        data-toggle="tab" href="#menu1">Shipping<span class="cl-white">.</span>Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                         </li>
                         <li class=""><a id="billing-tab"
                                         class="{!! ((!empty($user_info->details)) && isset($user_info->shippingAddress[0]) && !isset($user_info->billingAddress[0])) ? 'active': '' !!}"
-                                        data-toggle="tab" href="#menu2">Billing Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                                        data-toggle="tab" href="#menu2">Billing<span class="cl-white">.</span>Address&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
                         </li>
                         <li class="payment-tab"><a
                                 class="{!! (!empty($user_info->details) && isset($user_info->shippingAddress[0]) && isset($user_info->billingAddress[0])) ? 'active':'' !!}"

@@ -2033,6 +2033,17 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .tabs-product {
+        flex-wrap: initial !important;
+        overflow-x: scroll;
+    }
+    .cart-form {
+        margin-top: 10px;
+    }
+    .cart-padding
+    {
+        padding: 0px !important;
+    }
     .topnav ul li a {
         font-size: 12px !important;
     }
@@ -4776,7 +4787,7 @@ html {
     font-style: normal;
     font-weight: bold;
     font-size: 13px !important;
-    position: absolute;
+    text-align: center;
 }
 
 .image-set img {
@@ -5124,6 +5135,6 @@ h4 {
     position: absolute !important;
     left: 12px !important;
     right: auto !important;
-    
+
  }
 

@@ -110,7 +110,7 @@
                     border-radius: 30px;
                     font-size: 12px;
                     /* vertical-align: -webkit-baseline-middle; */
-                    /* display: inherit; */
+                    padding-top: 2px
                     margin: a;
                     margin-top: -10px;
                 " id="user-cart-count">{{ cart_count() }}</span>

@@ -1199,8 +1199,19 @@ tbody>tr>:nth-child(3) span{
 }
 .total-green {
   font-weight: 600;
+
 }
 
 .total-green span {
  color: #19af19;
+
+} 
+
+.split-payment {
+  background: #ececec;
+  padding: 10px;
+  box-shadow: 1px 3px 16px -6px rgb(0 0 0 / 75%);
+  -webkit-box-shadow: 1px 3px 16px -6px rgb(0 0 0 / 75%);
+  -moz-box-shadow: 1px 3px 16px -6px rgba(0,0,0,0.75);
+  margin-bottom: 20px;
 }

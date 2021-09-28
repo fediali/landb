@@ -711,11 +711,11 @@
                                     @if(in_array($split_payment->payment_type, ['cash_payment','cheque_payment']))
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
-                                                <div class="col-lg-10">
+                                                <div class="col-lg-9">
                                                     <strong
                                                         class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
                                                 </div>
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-3 text-right">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
                                                 </div>
                                             </div>
@@ -723,10 +723,10 @@
                                     @else
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
-                                                <div class="col-lg-10">
+                                                <div class="col-lg-9">
                                                     <strong>{{$cards[str_replace('card_', '', $split_payment->payment_type)]}}</strong>
                                                 </div>
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-3 text-right">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
                                                 </div>
                                             </div>
@@ -1121,17 +1121,17 @@
                 <form method="post" action="{{route('orders.split.payment', $order->id)}}">
                     @csrf
                     <div class="modal-body">
-                        <div class="col-md-12">
+                        <div class="col-md-12 split-payment">
                             <label>Cash $</label>
                             {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 split-payment">
                             <label>Cheque $</label>
                             {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
                         </div>
                         @foreach($cards as $key => $value)
                             @if($key)
-                                <div class="col-md-12">
+                                <div class="col-md-12 split-payment">
                                     <label>{{$value}} $</label>
                                     {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
                                 </div>

@@ -170,13 +170,13 @@
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
 
-            <div class="color-area mt-2">
+            <div class="color-area d-flex mt-2">
                 @foreach($product->product_colors() as $color)
                     <?php
                         $default_color = $color->variations()->orderBy('is_default', 'desc')->first();
                     ?>
                 @if($default_color && $default_color->product->quantity > 0)
-                    <label class="">
+                    <div class="mr-2">
                         <a href="{!! generate_product_url('detail', $color->id, $color->product_slug) !!}" class=" @if($color->id == $product->id) selected-color @endif ">
                             {{--<img src="{{ URL::to('storage/'.$color->color_print) }}" height="40" width="40">--}}
                             @if(!empty($color->color_print))
@@ -199,7 +199,7 @@
                             @endif
                         </a>
                     <span class="d-block color-name">{{ $color->color_name }}</span>
-                    </label>
+                    </div>
                 @endif
                 @endforeach
                 {{--<label class="container-check">
