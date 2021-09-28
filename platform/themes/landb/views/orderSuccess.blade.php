@@ -191,6 +191,15 @@
         </div>--}}
         <div class="row">
             <div class="col-lg-6 col-6">
+                <p class="mt-2">Notes</p>
+            </div>
+            <div class="col-lg-6 col-6 text-right">
+                <p class="mt-2">{{ $order->notes }}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 col-6">
                 <p class="mt-2">Subtotal</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
