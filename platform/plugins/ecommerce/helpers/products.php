@@ -382,15 +382,23 @@ function get_related_products_modded($product, $limit = 4)
 {
 
   $relatedIds = app(ProductInterface::class)->getRelatedProductIds($product);
+  if(empty($relatedIds)){
+      $categoryIds = $product->categories->pluck('id');
+      if(count($categoryIds)){
+          $relatedIds = \Illuminate\Support\Facades\DB::table('ec_product_category_product')->whereIn('category_id', $categoryIds)->pluck('product_id');
+      }
+  }
 
   return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
       ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
       ->where('ep.quantity', '>', 0)
       ->join('ec_products as ep', 'epv.product_id', 'ep.id')
       ->where('ec_products.is_variation' , 0)
+      ->where('ec_products.id' ,'!=', $product->id)
       ->whereIn('ec_products.id' , $relatedIds)
       ->orderBy('ec_products.order','ASC')
       ->orderBy('ec_products.created_at','DESC')
+      ->groupBy('ec_products.id')
       ->select('ec_products.*')
       ->limit($limit)
       ->get();
