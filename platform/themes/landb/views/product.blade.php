@@ -44,19 +44,7 @@
 //dd($productVariationsInfo, $productVariations);
 @endphp
 
-<section class="breadcrumb_wrap">
-    <div class="pl-3 pr-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item active" aria-current="page">Shop</li>
-                <li class="breadcrumb-item active" aria-current="page">{{ @$product->categories[0]->name }}</li>
-                {{--<li class="breadcrumb-item active" aria-current="page">Plus Top</li>--}}
-                <li class="breadcrumb-item active" aria-current="page"><b>{{ @$product->name }}</b></li>
-            </ol>
-        </nav>
-    </div>
-</section>
+{!! Theme::partial('breadcrumb', ['product' =>  $product]) !!}
 <section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-2 mbtb-pr-2">
     <div class="row">
         <div class="col-lg-5">

@@ -2,16 +2,7 @@
 @php $col='3'; @endphp
 @if(auth('customer')->user())
 
-    <section class="breadcrumb_wrap">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Home</li>
-                    <li class="breadcrumb-item active" aria-current="page"></li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+    {!! Theme::partial('breadcrumb', ['category' =>  get_category(request()->path('c_slug'))]) !!}
     <?php /*dd(request()->getQueryString()); */?>
     <section class="shoplisting_wrap">
         <div class="container">
