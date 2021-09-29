@@ -743,11 +743,13 @@ class OrderController extends BaseController
         }
 
         $split_payments = [];
+        $paidAmount = 0;
         if ($order->split_payment) {
             $split_payments = $order->split_payments->pluck('amount', 'payment_type')->all();
+            $paidAmount = $order->split_payments->where('status', 'paid')->sum('amount');
         }
 
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep', 'split_payments'));
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep', 'split_payments', 'paidAmount'));
     }
 
 
