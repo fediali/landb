@@ -114,10 +114,10 @@
                         <b>
                             @if($productVariations->first())
                                 @if($currentVariation->product->promotions && isset($currentVariation->product->promotions[0]))
-                                    <del>${{($product->prod_pieces) ?$fixed_price / $product->prod_pieces: $fixed_price }}</del>
+                                    <del>${{($product->prod_pieces) ?format_price($fixed_price / $product->prod_pieces): $fixed_price }}</del>
                                 @endif
                             @endif
-                                $ {{($product->prod_pieces) ?$default_price / $product->prod_pieces: $default_price}}
+                                $ {{($product->prod_pieces) ?format_price($default_price / $product->prod_pieces): $default_price}}
                         </b> (
                         @if($productVariations->first())
                         @if($currentVariation->product->promotions && isset($currentVariation->product->promotions[0]))
@@ -244,7 +244,11 @@
             <p class="mt-4 detail-basic">Basic Code: &nbsp;&nbsp;&nbsp;<span
                     class="detail-basic-p">{{ $product->sku }}</span></p>
             <p class="detail-category mt-2">Category: &nbsp;&nbsp;&nbsp;<span
-                    class="detail-category-p mt-2">{{ @$product->category->name }}</span></p>
+                    class="detail-category-p mt-2">
+                    @foreach($product->categories as $category)
+                        {{ $category->name }} {{ (!$loop->last) ? ',' : '' }}
+                    @endforeach
+                </span></p>
         </div>
 
     <!-- <div class="col-lg-1">
