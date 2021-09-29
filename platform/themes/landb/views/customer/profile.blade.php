@@ -53,7 +53,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($user->orders()->where('is_finished','=', 1)->get() as $order)
+                            @foreach($user->orders->where('is_finished','=', 1) as $order)
                                 <tr>
                                     <th scope="row"><a
                                             href="{{ route('public.order.status', ['id' => $order->id]) }}">{{ $order->id }}</a>
