@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrderSplitPayment extends Model
 {
     protected $table = 'order_split_payments';
-    protected $fillable = ['order_id', 'payment_type', 'amount'];
+    protected $fillable = ['order_id', 'payment_type', 'amount', 'status'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

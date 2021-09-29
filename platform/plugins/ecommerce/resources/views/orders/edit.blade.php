@@ -226,7 +226,7 @@
                                                                 {{ $order->discount_description }}
                                                             </p>
                                                         @endif
-                                                        @if ($order->promotion_applied)
+                                                        @if ($order->promotion_applied && $order->promotion_amount)
                                                             <p class="mb0">
                                                                 <i class="fa fa-trash"
                                                                    style="cursor: pointer; color: red"
@@ -240,7 +240,7 @@
                                                         @if ($order->coupon_code)
                                                             <p class="mb0">{{ format_price($order->discount_amount - $order->promotion_amount) }}</p>
                                                         @endif
-                                                        @if ($order->promotion_applied)
+                                                        @if ($order->promotion_applied && $order->promotion_amount)
                                                             <p class="text-right p-none-b pl10 mb0">{{ format_price($order->promotion_amount) }}</p>
                                                         @endif
                                                         <p class="mb0">{{ format_price($order->discount_amount) }}</p>
@@ -1142,10 +1142,17 @@
                             {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
                         </div>
                         @foreach($cards as $key => $value)
+                            @php
+                                $checkPaid = \App\Models\OrderSplitPayment::where(['order_id' => $order->id, 'payment_type' => 'card_'.$key])->value('status');
+                            @endphp
                             @if($key)
                                 <div class="col-md-12 split-payment">
                                     <label>{{$value}} $</label>
-                                    {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
+                                    @if($checkPaid == 'paid')
+                                        {{@$split_payments['card_'.$key]}} (paid)
+                                    @else
+                                        {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
+                                    @endif
                                 </div>
                             @endif
                         @endforeach

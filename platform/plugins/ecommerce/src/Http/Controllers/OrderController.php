@@ -1455,9 +1455,8 @@ class OrderController extends BaseController
                     $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
                 }
             }
-
-
         }
+
 //        if (!$order->user->card->isEmpty()) {
 //            $omniId = $order->user->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
 //            if ($omniId) {
@@ -2268,7 +2267,6 @@ class OrderController extends BaseController
 
     public function charge(Request $request)
     {
-
         $data = [
             'payment_method_id' => $request->payment_id,
             'meta' => [
@@ -2326,6 +2324,12 @@ class OrderController extends BaseController
             $order['status'] = 1;
             $order['payment_status'] = 1;
             CardPreAuth::where('transaction_id', $request->transaction_id)->update($order);
+
+            $getCard = CardPreAuth::where('transaction_id', $request->transaction_id)->first();
+            if ($getCard) {
+                OrderSplitPayment::where(['order_id' => $getCard->order_id, 'payment_type' => 'card_'.$getCard->card_id])->update(['status' => 'paid']);
+            }
+
         } else {
             $errors = [
                 422 => 'The transaction didn\'t reach a gateway',
