@@ -135,7 +135,7 @@
             </div>
         </div>
         @foreach($order->products as $order_product)
-            <div class="row mb-4 mt-4">
+            <div class="row order-view-box mb-4 mt-4">
             <div class="col-lg-7 mt-2">
                 <div class="d-flex">
                     {!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}
@@ -164,19 +164,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-1 mt-2 text-center">
+            <div class="col-lg-1 col-2 mt-2 text-center">
                 <p class="mt-2">{{ $order_product->qty }}</p>
             </div>
-            <div class="col-lg-1 mt-2">
+            <div class="col-lg-1 col-3 mt-2">
                 <p class="mt-2">$ {{ $order_product->price }}</p>
             </div>
-            <div class="col-lg-1 mt-2 mb-txt-center text-center">
+            <div class="col-lg-1 col-2 mt-2 mb-txt-center text-center">
                 <p class="mt-2">-</p>
             </div>
-            <div class="col-lg-1 mt-2 text-center">
+            <div class="col-lg-1 col-2 mt-2 text-center">
                 <p class="mt-2">-</p>
             </div>
-            <div class="col-lg-1 mt-2">
+            <div class="col-lg-1 col-3 mt-2">
                 <p class="mt-2">$ {{ $order_product->qty*$order_product->price  }}</p>
             </div>
         </div>
