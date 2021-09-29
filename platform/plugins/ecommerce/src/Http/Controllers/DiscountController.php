@@ -109,14 +109,15 @@ class DiscountController extends BaseController
             $productCategories = $request->input('product_categories');
             if ($productCategories) {
                 if (!is_array($productCategories)) {
-                    // $productCategories = [$productCategories];
+                    $productCategories = [$productCategories];
+
                     $products = DB::table('ec_product_category_product')->where('category_id', $productCategories)->pluck('product_id')->all();
                     foreach ($products as $product){
                       $variants = Product::find($product)->variations()->pluck('product_id')->all();
                       $discount->products()->attach($variants);
                     }
-
                 }
+                $discount->categories()->attach($productCategories);
             }
 
             $productCollections = $request->input('product_collections');

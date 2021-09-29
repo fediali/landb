@@ -39,6 +39,7 @@ use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
+use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderAddressInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderHistoryInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
@@ -140,6 +141,11 @@ class OrderController extends BaseController
     protected $promotion_service;
 
     /**
+     * @var DiscountInterface
+     */
+    protected $discountRepository;
+
+    /**
      * @param OrderInterface $orderRepository
      * @param CustomerInterface $customerRepository
      * @param OrderHistoryInterface $orderHistoryRepository
@@ -162,7 +168,8 @@ class OrderController extends BaseController
         StoreLocatorInterface $storeLocatorRepository,
         OrderProductInterface $orderProductRepository,
         AddressInterface $addressRepository,
-        HandleApplyPromotionsService $applyPromotionsService
+        HandleApplyPromotionsService $applyPromotionsService,
+        DiscountInterface $discountRepository
     )
     {
         $this->orderRepository = $orderRepository;
@@ -176,6 +183,7 @@ class OrderController extends BaseController
         $this->orderProductRepository = $orderProductRepository;
         $this->addressRepository = $addressRepository;
         $this->promotion_service = $applyPromotionsService;
+        $this->discountRepository = $discountRepository;
     }
 
     /**
@@ -672,6 +680,13 @@ class OrderController extends BaseController
                 }
             }
 
+            $promotions = $this->discountRepository->getAvailablePromotions();
+            foreach ($promotions as $promotion) {
+                if ($promotion->target == 'category') {
+                    $applyPromotion = false;
+                }
+            }
+
             if ($applyPromotion) {
                 $this->promotion_service->applyPromotionIfAvailable($order->id);
             }
@@ -743,11 +758,13 @@ class OrderController extends BaseController
         }
 
         $split_payments = [];
+        $paidAmount = 0;
         if ($order->split_payment) {
             $split_payments = $order->split_payments->pluck('amount', 'payment_type')->all();
+            $paidAmount = $order->split_payments->where('status', 'paid')->sum('amount');
         }
 
-        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep', 'split_payments'));
+        return view('plugins/ecommerce::orders.edit', compact('order', 'weight', 'defaultStore', 'cards', 'salesRep', 'split_payments', 'paidAmount'));
     }
 
 
