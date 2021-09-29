@@ -166,9 +166,10 @@
                      @endforeach
                  @endforeach
              </select>--}}
-
+@if($product->product_colors()->count())
             <p class="mt-4 detail-color-text"> Color &nbsp;&nbsp;&nbsp;
             </p>
+@endif
 
             <div class="color-area mt-2">
                 @foreach($product->product_colors() as $color)
