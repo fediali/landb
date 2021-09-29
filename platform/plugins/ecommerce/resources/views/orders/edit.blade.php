@@ -652,25 +652,28 @@
                         </div>
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
-                                @if($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status != 'completed')
-                                    <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}"
-                                       class="btn btn-primary mb-2">
-                                        {{$order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->paypal_invoice_id ? 'Order Reminder' : 'Order Invoice'}}
-                                    </a>&nbsp;&nbsp;
-                                @elseif($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status == 'completed')
-                                    <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid
-                                    </button>
-                                @endif
-                                @if($order->shipping_amount > 0)
-                                    @if($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status != 'completed')
-                                        <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}"
-                                           class="btn btn-warning mb-2">
-                                            {{$order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->paypal_invoice_id ? 'Shipping Reminder' : 'Shipping Invoice'}}
+
+                                @if($order->payment->payment_channel->label() == 'paypal')
+                                    @if($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status != 'completed')
+                                        <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}"
+                                           class="btn btn-primary mb-2">
+                                            {{$order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->paypal_invoice_id ? 'Order Reminder' : 'Order Invoice'}}
                                         </a>&nbsp;&nbsp;
-                                    @elseif($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status == 'completed')
-                                        <button type="button" class="btn btn-outline-success mb-2">Shipping Invoice
-                                            Paid
-                                        </button>
+                                    @elseif($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status == 'completed')
+                                        <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid</button>
+                                    @endif
+
+                                    @if($order->shipping_amount > 0)
+                                        @if($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status != 'completed')
+                                            <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 0]) }}"
+                                               class="btn btn-warning mb-2">
+                                                {{$order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->paypal_invoice_id ? 'Shipping Reminder' : 'Shipping Invoice'}}
+                                            </a>&nbsp;&nbsp;
+                                        @elseif($order->payment && @$order->payments()->where('type', 0)->latest('id')->first()->status == 'completed')
+                                            <button type="button" class="btn btn-outline-success mb-2">Shipping Invoice
+                                                Paid
+                                            </button>
+                                        @endif
                                     @endif
                                 @endif
 
@@ -712,8 +715,7 @@
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
                                                 <div class="col-lg-9">
-                                                    <strong
-                                                        class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
+                                                    <strong class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
                                                 </div>
                                                 <div class="col-lg-3 text-right">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
@@ -747,7 +749,6 @@
                                                         </button>
                                                     </form>
                                                 </div>
-
                                             @elseif($order_card_preauth->status == 0 && $order_card_preauth->transaction_id)
                                                 <div class="pd-all-20">
                                                     <form action="{{route('orders.capture')}}" method="POST">
@@ -757,14 +758,16 @@
                                                                name="transaction_id">
                                                         <input type="hidden" value="{{$split_payment->amount}}"
                                                                name="amount">
-                                                        <label class="col-lg-12"> <strong>Transaction ID
-                                                                : </strong>{{$order_card_preauth->transaction_id}}
+                                                        <label class="col-lg-12">
+                                                            <strong>Transaction ID : </strong>
+                                                            {{$order_card_preauth->transaction_id}}
                                                         </label>
-                                                        <button type="submit" class="btn btn-info">Capture Payment
+                                                        <button type="submit" class="btn btn-info">
+                                                            Capture Payment
                                                         </button>
                                                     </form>
                                                 </div>
-                                            @else
+                                            @elseif($order_card_preauth->status == 1)
                                                 <div class="wrapper-content bg-gray-white mb20">
                                                     <div class="pd-all-20">
                                                         <div class="p-b10">
@@ -787,8 +790,9 @@
                                                             <strong>Declined Reason</strong>
                                                             <ul class="p-sm-r mb-0">
                                                                 <li class="ws-nm">
-                                                                    <span
-                                                                        class="ww-bw text-no-bold">{{$order_card_preauth->response}}</span>
+                                                                    <span class="ww-bw text-no-bold">
+                                                                        {{$order_card_preauth->response}}
+                                                                    </span>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -940,11 +944,19 @@
                                         </div>
                                     </div>
                                 </div>
-                            @else
+                            @elseif($order->payment->payment_channel->label() != "")
                                 <div class="wrapper-content bg-gray-white mb20">
                                     <div class="row m-0 pt-3 pb-3 bg-white">
                                         <div class="col-lg-12 ">
                                             <strong class="mb-2">{{$order->payment->payment_channel->label()}}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="wrapper-content bg-gray-white mb20">
+                                    <div class="row m-0 pt-3 pb-3 bg-white">
+                                        <div class="col-lg-12 ">
+                                            <strong class="mb-2">Cash on Delivery</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -1123,17 +1135,17 @@
                     <div class="modal-body">
                         <div class="col-md-12 split-payment">
                             <label>Cash $</label>
-                            {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
+                            {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
                         </div>
                         <div class="col-md-12 split-payment">
                             <label>Cheque $</label>
-                            {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
+                            {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
                         </div>
                         @foreach($cards as $key => $value)
                             @if($key)
                                 <div class="col-md-12 split-payment">
                                     <label>{{$value}} $</label>
-                                    {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'steps' => 0.1, 'max' => $order->amount]) !!}
+                                    {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'step' => 0.1, 'max' => $order->amount]) !!}
                                 </div>
                             @endif
                         @endforeach

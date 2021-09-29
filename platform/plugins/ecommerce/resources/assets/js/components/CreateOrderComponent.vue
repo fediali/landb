@@ -53,9 +53,8 @@
 
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price : ${{
-                                                variant.product.prod_pieces ? variant.price / variant.product.prod_pieces : variant.price / variant.packQty
-                                            }}
+                                            Piece Price :
+                                            ${{variant.product.prod_pieces ? parseFloat(variant.price / variant.product.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
                                         </p>
 
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
@@ -72,7 +71,7 @@
                                                     <span style=" margin-top: 8px !important; margin-right: 5px !important;">
                                                         {{currency}}
                                                     </span>
-                                                    <input class="next-input p-none-r" v-model="variant.price" type="number" min="1" @change="handleChangeQuantity()">
+                                                    <input class="next-input p-none-r" v-model="variant.price" type="number" step="0.1" min="1" @change="handleChangeQuantity()">
                                                 </div>
                                             </div>
                                         </div>
@@ -83,7 +82,7 @@
                                                min="1" @change="handleChangeQuantity()">
                                     </td>
                                     <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">
-                                        {{ variant.select_qty * variant.price }}
+                                        {{ parseFloat(variant.select_qty * variant.price).toFixed(2) }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">

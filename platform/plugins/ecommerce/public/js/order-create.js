@@ -1019,7 +1019,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -8032,13 +8031,18 @@ var render = function() {
                                   !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
-                                          "\n                                        Piece Price : $" +
+                                          "\n                                        Piece Price :\n                                        $" +
                                             _vm._s(
                                               variant.product.prod_pieces
-                                                ? variant.price /
-                                                    variant.product.prod_pieces
-                                                : variant.price /
-                                                    variant.packQty
+                                                ? parseFloat(
+                                                    variant.price /
+                                                      variant.product
+                                                        .prod_pieces
+                                                  ).toFixed(2)
+                                                : parseFloat(
+                                                    variant.price /
+                                                      variant.packQty
+                                                  ).toFixed(2)
                                             ) +
                                             "\n                                    "
                                         )
@@ -8132,6 +8136,7 @@ var render = function() {
                                                     "next-input p-none-r",
                                                   attrs: {
                                                     type: "number",
+                                                    step: "0.1",
                                                     min: "1"
                                                   },
                                                   domProps: {
@@ -8222,7 +8227,9 @@ var render = function() {
                                   _vm._v(
                                     "\n                                    " +
                                       _vm._s(
-                                        variant.select_qty * variant.price
+                                        parseFloat(
+                                          variant.select_qty * variant.price
+                                        ).toFixed(2)
                                       ) +
                                       "\n                                    " +
                                       _vm._s(_vm.currency) +

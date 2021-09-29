@@ -9,22 +9,24 @@
         <br>
         <div class="container">
 
-            <div class="timeline-item">
-                <h6>Add Product Demand</h6>
-                <form class="d-flex" action="{{route('products.add-product-demand', $data[0]->product->id)}}" method="POST">
-                    <input type="hidden" name="_token" value="{{@csrf_token()}}">
-                    <label>Add Demand Qty</label>
-                    <select name="customer_id" required>
-                        <option value="" selected disabled>Select Customer</option>
-                        @foreach(get_customers() as $id => $name)
-                            <option value="{{$id}}">{{$name}}</option>
-                        @endforeach
-                    </select>
-                    <label>Add Demand Qty</label>
-                    <input type="number" name="demand_qty" value="0" required>
-                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> Submit</button>
-                </form>
-            </div>
+            @if(isset($data[0]->product->id))
+                <div class="timeline-item">
+                    <h6>Add Product Demand</h6>
+                    <form class="d-flex" action="{{route('products.add-product-demand', @$data[0]->product->id)}}" method="POST">
+                        <input type="hidden" name="_token" value="{{@csrf_token()}}">
+                        <label>Add Demand Qty</label>
+                        <select name="customer_id" required>
+                            <option value="" selected disabled>Select Customer</option>
+                            @foreach(get_customers() as $id => $name)
+                                <option value="{{$id}}">{{$name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Add Demand Qty</label>
+                        <input type="number" name="demand_qty" value="0" required>
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-check"></i> Submit</button>
+                    </form>
+                </div>
+            @endif
 
             @foreach($data as $history)
                 <div class="timeline-item">
