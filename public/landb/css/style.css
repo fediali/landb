@@ -2082,9 +2082,7 @@ input.qtyminus {
     .verify-img {
         width: 100% !important;
     }
-    .banner {
-        margin-top: 250px;
-    }
+   
     .custom-breadcrumb {
         margin-top: 315px !important;
         padding: 10px 0px;
@@ -3344,6 +3342,9 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
 
 
 @media screen and (min-width: 320px) and (max-width: 767px) {
+    .banner {
+        margin-top: 275px;
+    }
     .owl-carousel .owl-dot {
         height: 100% !important;
     }
@@ -3637,6 +3638,14 @@ table.shop_table tr th {
 }
 
 @media screen and (min-width: 768px) and (max-width: 991px) {
+    .banner {
+        margin-top: 298px !important;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 991px) {
+    .banner {
+        margin-top: 245px;
+    }
     .dp-scroll-text p:first-child {
         top: -50px !important;
     }
@@ -3657,6 +3666,10 @@ table.shop_table tr th {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .order-view-box {
+        box-shadow: 8px 12px 23px #00000029 !important;
+        border: 1px solid #e2e2e2 !important;
+    }
     .breadcrumb_wrap div {
         display: none;
     }
@@ -3674,6 +3687,7 @@ table.shop_table tr th {
     width: 100% !important;
     display: flex;
     overflow-x: scroll;
+    margin-top: 30px;
 }
 .tab button { 
     padding: 5px 15px !important;
