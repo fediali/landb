@@ -1018,7 +1018,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -8195,7 +8194,11 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "next-input p-none-r",
-                                    attrs: { type: "number", min: "1" },
+                                    attrs: {
+                                      type: "number",
+                                      step: "1",
+                                      min: "1"
+                                    },
                                     domProps: { value: variant.select_qty },
                                     on: {
                                       change: function($event) {
@@ -8228,7 +8231,8 @@ var render = function() {
                                     "\n                                    " +
                                       _vm._s(
                                         parseFloat(
-                                          variant.select_qty * variant.price
+                                          parseInt(variant.select_qty) *
+                                            variant.price
                                         ).toFixed(2)
                                       ) +
                                       "\n                                    " +

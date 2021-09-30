@@ -78,11 +78,10 @@
                                     </td>
                                     <td class="pl5 p-r5 width-20-px min-width-20-px text-center"> x</td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
-                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number"
-                                               min="1" @change="handleChangeQuantity()">
+                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number" step="1" min="1" @change="handleChangeQuantity()">
                                     </td>
                                     <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">
-                                        {{ parseFloat(variant.select_qty * variant.price).toFixed(2) }}
+                                        {{ parseFloat(parseInt(variant.select_qty) * variant.price).toFixed(2) }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
