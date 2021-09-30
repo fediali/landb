@@ -726,7 +726,7 @@
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
                                                 <div class="col-lg-9">
-                                                    <strong>{{$cards[str_replace('card_', '', $split_payment->payment_type)]}}</strong>
+                                                    <strong>{{$cards[str_replace('card_', '', $split_payment->payment_type)]??''}}</strong>
                                                 </div>
                                                 <div class="col-lg-3 text-right">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
