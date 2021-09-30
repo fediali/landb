@@ -940,7 +940,6 @@
                                     <div class="row m-0 pt-4 bg-white">
                                         <div class="col-lg-12 ">
                                             <strong class="mb-2">Paid with Paypal</strong>
-                                            <strong class="mb-2">{{$order->payment->paypal_email}}</strong>
                                             <a href="{{'mailto:'.$order->payment->paypal_email}}">
                                                 <span class="asd">{{$order->payment->paypal_email}}</span>
                                             </a>
