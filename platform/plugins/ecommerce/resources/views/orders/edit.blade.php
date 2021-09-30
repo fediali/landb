@@ -653,7 +653,7 @@
                         <div class="wrapper-content bg-gray-white mb20">
                             <div class="pd-all-20">
 
-                                @if($order->payment->payment_channel->label() == 'paypal')
+                                @if($order->payment->payment_channel == 'paypal')
                                     @if($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status != 'completed')
                                         <a href="{{ route('orders.orderInvoice', ['id' => $order->id, 'type' => 1]) }}"
                                            class="btn btn-primary mb-2">
