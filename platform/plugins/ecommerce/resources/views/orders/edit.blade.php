@@ -926,8 +926,7 @@
                                                     <strong>Declined Reason</strong>
                                                     <ul class="p-sm-r mb-0">
                                                         <li class="ws-nm">
-                                            <span
-                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                            <span class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -936,11 +935,15 @@
                                     @endif
 
                                 </div>
-                            @elseif($order->payment->payment_channel->label() == 'paypal')
+                            @elseif($order->payment->payment_channel == 'paypal')
                                 <div class="wrapper-content bg-gray-white mb20">
                                     <div class="row m-0 pt-4 bg-white">
                                         <div class="col-lg-12 ">
                                             <strong class="mb-2">Paid with Paypal</strong>
+                                            <strong class="mb-2">{{$order->payment->paypal_email}}</strong>
+                                            <a href="{{'mailto:'.$order->payment->paypal_email}}">
+                                                <span class="asd">{{$order->payment->paypal_email}}</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

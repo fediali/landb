@@ -11,7 +11,7 @@
                 @endif
                 :order_id="{{ $order->id }}"
                 :customer_id="{{ $order->user_id }}"
-                :paypal_email_prop="{{$order->payment ? json_encode($order->payment->paypal_email) : ''}}"
+                :paypal_email_prop="{{$order->payment->paypal_email ? json_encode($order->payment->paypal_email) : json_encode($order->user->email)}}"
                 :order_types="{{ json_encode(\Botble\Ecommerce\Models\Order::$ORDER_TYPES) }}"
                 :payment_methods="{{ json_encode(get_payment_methods()) }}"
                 :order_type="'{{ $order->order_type }}'"
