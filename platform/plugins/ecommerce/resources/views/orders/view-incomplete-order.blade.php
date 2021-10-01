@@ -193,20 +193,20 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div>{{ $order->shippingAddress->name }}</div>
+                                <div>{{ @$order->user->shippingAddress->name }}</div>
                                 <div>
-                                    <a href="tel:{{ $order->shippingAddress->phone }}">
+                                    <a href="tel:{{ @$order->user->shippingAddress->phone }}">
                                         <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                        <span>{{ $order->shippingAddress->phone }}</span>
+                                        <span>{{ @$order->user->shippingAddress->phone }}</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <div>{{ $order->shippingAddress->address }}</div>
-                                    <div>{{ $order->shippingAddress->city }}</div>
-                                    <div>{{ $order->shippingAddress->state }}</div>
-                                    <div>{{ $order->shippingAddress->country_name }}</div>
+                                    <div>{{ @$order->user->shippingAddress->address }}</div>
+                                    <div>{{ @$order->user->shippingAddress->city }}</div>
+                                    <div>{{ @$order->user->shippingAddress->state }}</div>
+                                    <div>{{ @$order->user->shippingAddress->country_name }}</div>
                                     <div>
-                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ $order->shippingAddress->address }}, {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->state }}, {{ $order->shippingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->shippingAddress->address }}, {{ @$order->user->shippingAddress->city }}, {{ @$order->user->shippingAddress->state }}, {{ @$order->user->shippingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
                                     </div>
                                 </div>
                             </li>
@@ -220,20 +220,20 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div>{{ $order->billingAddress->name }}</div>
+                                <div>{{ @$order->user->billingAddress->name }}</div>
                                 <div>
-                                    <a href="tel:{{ $order->billingAddress->phone }}">
+                                    <a href="tel:{{ @$order->billingAddress->phone }}">
                                         <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                        <span>{{ $order->billingAddress->phone }}</span>
+                                        <span>{{ @$order->user->billingAddress->phone }}</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <div>{{ $order->billingAddress->address }}</div>
-                                    <div>{{ $order->billingAddress->city }}</div>
-                                    <div>{{ $order->billingAddress->state }}</div>
-                                    <div>{{ $order->billingAddress->country_name }}</div>
+                                    <div>{{ @$order->user->billingAddress->address }}</div>
+                                    <div>{{ @$order->user->billingAddress->city }}</div>
+                                    <div>{{ @$order->user->billingAddress->state }}</div>
+                                    <div>{{ @$order->user->billingAddress->country_name }}</div>
                                     <div>
-                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ $order->billingAddress->address }}, {{ $order->billingAddress->city }}, {{ $order->billingAddress->state }}, {{ $order->billingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->billingAddress->address }}, {{ @$order->user->billingAddress->city }}, {{ @$order->user->billingAddress->state }}, {{ @$order->user->billingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
                                     </div>
                                 </div>
                             </li>
