@@ -60,7 +60,7 @@
                                                 <tr>
                                                     <td class="width-60-px min-width-60-px">
                                                         <div class="wrap-img">
-                                                            <img class="thumb-image thumb-image-cartorderlist" src="{{ image_fallback(RvMedia::getDefaultImage()) }}" alt="{{ $product->name }}">
+                                                            <img class="thumb-image thumb-image-cartorderlist" src="{{ image_fallback($product->original_product->image) }}" alt="{{ $product->name }}">
                                                         </div>
                                                     </td>
                                                     <td class="pl5 p-r5">
@@ -193,20 +193,20 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div>{{ @$order->user->shippingAddress->name }}</div>
+                                <div>{{ @$order->user->shippingAddress[0]->name }}</div>
                                 <div>
-                                    <a href="tel:{{ @$order->user->shippingAddress->phone }}">
+                                    <a href="tel:{{ @$order->user->shippingAddress[0]->phone }}">
                                         <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                        <span>{{ @$order->user->shippingAddress->phone }}</span>
+                                        <span>{{ @$order->user->shippingAddress[0]->phone }}</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <div>{{ @$order->user->shippingAddress->address }}</div>
-                                    <div>{{ @$order->user->shippingAddress->city }}</div>
-                                    <div>{{ @$order->user->shippingAddress->state }}</div>
-                                    <div>{{ @$order->user->shippingAddress->country_name }}</div>
+                                    <div>{{ @$order->user->shippingAddress[0]->address }}</div>
+                                    <div>{{ @$order->user->shippingAddress[0]->city }}</div>
+                                    <div>{{ @$order->user->shippingAddress[0]->state }}</div>
+                                    <div>{{ @$order->user->shippingAddress[0]->country_name }}</div>
                                     <div>
-                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->shippingAddress->address }}, {{ @$order->user->shippingAddress->city }}, {{ @$order->user->shippingAddress->state }}, {{ @$order->user->shippingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->shippingAddress[0]->address }}, {{ @$order->user->shippingAddress[0]->city }}, {{ @$order->user->shippingAddress[0]->state }}, {{ @$order->user->shippingAddress[0]->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
                                     </div>
                                 </div>
                             </li>
@@ -220,20 +220,20 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div>{{ @$order->user->billingAddress->name }}</div>
+                                <div>{{ @$order->user->billingAddress[0]->name }}</div>
                                 <div>
-                                    <a href="tel:{{ @$order->billingAddress->phone }}">
+                                    <a href="tel:{{ @$order->billingAddress[0]->phone }}">
                                         <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                        <span>{{ @$order->user->billingAddress->phone }}</span>
+                                        <span>{{ @$order->user->billingAddress[0]->phone }}</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <div>{{ @$order->user->billingAddress->address }}</div>
-                                    <div>{{ @$order->user->billingAddress->city }}</div>
-                                    <div>{{ @$order->user->billingAddress->state }}</div>
-                                    <div>{{ @$order->user->billingAddress->country_name }}</div>
+                                    <div>{{ @$order->user->billingAddress[0]->address }}</div>
+                                    <div>{{ @$order->user->billingAddress[0]->city }}</div>
+                                    <div>{{ @$order->user->billingAddress[0]->state }}</div>
+                                    <div>{{ @$order->user->billingAddress[0]->country_name }}</div>
                                     <div>
-                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->billingAddress->address }}, {{ @$order->user->billingAddress->city }}, {{ @$order->user->billingAddress->state }}, {{ @$order->user->billingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ @$order->user->billingAddress[0]->address }}, {{ @$order->user->billingAddress[0]->city }}, {{ @$order->user->billingAddress[0]->state }}, {{ @$order->user->billingAddress[0]->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
                                     </div>
                                 </div>
                             </li>
