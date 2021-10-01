@@ -45,6 +45,23 @@ if (!function_exists('generate_shortcode')) {
         return shortcode()->generateShortcode($name, $attributes);
     }
 }
+
+if (!function_exists('image_fallback')) {
+    function image_fallback($image_url){
+        if (@getimagesize(asset('storage/'. $image_url))) {
+            return $image_url;
+        } else {
+            $images1 = str_replace('.JPG', '.jpg', $image_url);
+            $images2 = str_replace('.jpg', '.JPG', $image_url);
+            if (@getimagesize(asset('storage/'. $images1))) {
+                return $images1;
+            } elseif (@getimagesize(asset('storage/'. $images2))) {
+                return $images2;
+            }
+        }
+    }
+}
+
 if (!function_exists('image_html_generator')) {
     /**
      * @param string $name

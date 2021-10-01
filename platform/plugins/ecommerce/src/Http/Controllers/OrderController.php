@@ -2516,6 +2516,8 @@ class OrderController extends BaseController
         $payment = $this->paymentRepository->createOrUpdate($paymentData);
 
         $new_order->payment_id = $payment->id;
+        $new_order->coupon_code = NULL;
+        $new_order->discount_amount = 0;
         $new_order->save();
 
         $histories = $order->histories;
@@ -2583,6 +2585,8 @@ class OrderController extends BaseController
         $orderObj->amount = $orderTotal;
 
         $orderObj->save();
+
+        $this->promotion_service->applyPromotionIfAvailable($orderObj->id);
     }
 
     public function splitPayment($id, Request $request, BaseHttpResponse $response)

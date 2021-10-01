@@ -59,7 +59,9 @@
                                             @if ($product)
                                                 <tr>
                                                     <td class="width-60-px min-width-60-px">
-                                                        <div class="wrap-img"><img class="thumb-image thumb-image-cartorderlist" src="{{ RvMedia::getImageUrl($product->original_product->image, 'thumb', false, RvMedia::getDefaultImage()) }}" alt="{{ $product->name }}"></div>
+                                                        <div class="wrap-img">
+                                                            <img class="thumb-image thumb-image-cartorderlist" src="{{ image_fallback(RvMedia::getDefaultImage()) }}" alt="{{ $product->name }}">
+                                                        </div>
                                                     </td>
                                                     <td class="pl5 p-r5">
                                                         <a target="_blank" href="{{ route('products.edit', $product->original_product->id) }}" title="{{ $orderProduct->product_name }}">{{ $orderProduct->product_name }}</a>
@@ -104,17 +106,27 @@
                                             <td></td>
                                             <td></td>
                                             <td class="text-right p-sm-r">
-                                                {{ trans('plugins/ecommerce::order.order_amount') }}:
+                                                Sub amount:
                                             </td>
-                                            {{--<td class="text-right p-r5">{{ format_price($order->amount) }}</td>--}}
                                             <td class="text-right p-r5">{{ format_price($order->sub_total) }}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="3" class="text-right p-sm-r">
-                                                {{ trans('plugins/ecommerce::order.total_amount') }}:
+                                                Discount:
                                             </td>
-                                            {{--<td class="text-right p-r5">{{ format_price($order->amount + $order->shipping_amount - $order->discount_amount) }}</td>--}}
-                                            <td class="text-right p-r5">{{ format_price($order->amount + $order->shipping_amount) }}</td>
+                                            <td class="text-right p-r5">{{ format_price($order->discount_amount) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right p-sm-r">
+                                                Shipping fee:
+                                            </td>
+                                            <td class="text-right p-r5">{{ format_price($order->shipping_amount) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right p-sm-r">
+                                                Total amount:
+                                            </td>
+                                            <td class="text-right p-r5">{{ format_price($order->amount) }}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -181,20 +193,47 @@
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div>{{ $order->address->name }}</div>
+                                <div>{{ $order->shippingAddress->name }}</div>
                                 <div>
-                                    <a href="tel:{{ $order->address->phone }}">
+                                    <a href="tel:{{ $order->shippingAddress->phone }}">
                                         <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                        <span>{{ $order->address->phone }}</span>
+                                        <span>{{ $order->shippingAddress->phone }}</span>
                                     </a>
                                 </div>
                                 <div>
-                                    <div>{{ $order->address->address }}</div>
-                                    <div>{{ $order->address->city }}</div>
-                                    <div>{{ $order->address->state }}</div>
-                                    <div>{{ $order->address->country_name }}</div>
+                                    <div>{{ $order->shippingAddress->address }}</div>
+                                    <div>{{ $order->shippingAddress->city }}</div>
+                                    <div>{{ $order->shippingAddress->state }}</div>
+                                    <div>{{ $order->shippingAddress->country_name }}</div>
                                     <div>
-                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ $order->address->address }}, {{ $order->address->city }}, {{ $order->address->state }}, {{ $order->address->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ $order->shippingAddress->address }}, {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->state }}, {{ $order->shippingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="ws-nm">
+                            <li class="clearfix">
+                                <div class="flexbox-grid-default">
+                                    <div class="flexbox-auto-content">
+                                        <label class="title-text-second"><strong>Billing address</strong></label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="text-infor-subdued mt15">
+                                <div>{{ $order->billingAddress->name }}</div>
+                                <div>
+                                    <a href="tel:{{ $order->billingAddress->phone }}">
+                                        <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
+                                        <span>{{ $order->billingAddress->phone }}</span>
+                                    </a>
+                                </div>
+                                <div>
+                                    <div>{{ $order->billingAddress->address }}</div>
+                                    <div>{{ $order->billingAddress->city }}</div>
+                                    <div>{{ $order->billingAddress->state }}</div>
+                                    <div>{{ $order->billingAddress->country_name }}</div>
+                                    <div>
+                                        <a target="_blank" class="hover-underline" href="https://maps.google.com/?q={{ $order->billingAddress->address }}, {{ $order->billingAddress->city }}, {{ $order->billingAddress->state }}, {{ $order->billingAddress->country_name }}">{{ trans('plugins/ecommerce::order.see_maps') }}</a>
                                     </div>
                                 </div>
                             </li>
