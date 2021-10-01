@@ -2536,13 +2536,21 @@ class OrderController extends BaseController
                     $productData = $product->replicate();
                     $productData->order_id = $new_order->id;
                     $productData->qty = (int)$qty;
-                    $this->orderProductRepository->createOrUpdate($productData);
+                    if ($productData->qty > 0) {
+                        $this->orderProductRepository->createOrUpdate($productData);
+                    }
 
                     $product->qty -= (int)$qty;
-                    $product->save();
+                    if ($product->qty <= 0) {
+                        $product->delete();
+                    } else {
+                        $product->save();
+                    }
                 }
             }
         }
+
+        $new_order = $this->orderRepository->findById($new_order->id);
 
         $this->updateOrderTotal($order);
         $this->updateOrderTotal($new_order);
