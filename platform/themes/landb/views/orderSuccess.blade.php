@@ -237,7 +237,7 @@
         </div>
         <div class="row mt-3">
             <div class="col-lg-12 col-12">
-                <p class="mt-2"> For return policy please visit landapparel.com/faq.html
+                <p class="mt-2"> For return policy please visit <a href="https://www.landapparel.com/page/refund-policy">landapparel.com/page/refund-policy</a>
                 </p>
             </div>
         </div>
