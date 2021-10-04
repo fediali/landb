@@ -1,4 +1,3 @@
-
 <div class="banner">
     <!-- <img src="landb/img/Banner.png" alt=""> -->
     <div id="demo" class="carousel slide mainslide" data-ride="carousel">
@@ -107,11 +106,18 @@
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <h4 class="text-center">{{ $product->name }}</h4>
-                                    <div class="price">
-                                        @if(!empty($default->product->sale_price))<del>${{ format_price($default->product->price / $product->prod_pieces)  }} </del>&nbsp;@endif
-                                        ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
-                                    </div>
+                                    <a href="{!! generate_product_url('detail', $product->id, $product->product_slug)  !!}">
+                                        <h4 class="text-center">{{ $product->name }}</h4>
+                                        @if(auth('customer')->user())
+
+                                            <div class="price">
+                                                @if(!empty($default->product->sale_price))
+                                                    <del>
+                                                        ${{ format_price($default->product->price / $product->prod_pieces)  }} </del>
+                                                    &nbsp;@endif
+                                                ${{ format_price(($product->prod_pieces) ? @$default->product->final_price/$product->prod_pieces : @$default->product->final_price) }}
+                                            </div>
+                                    </a>
                                     <form id='myform-{{$product->id}}' class="add_to_cart_form"
                                           data-id="{{ @$default->product_id }}" method='POST'
                                           action='{{ route('public.cart.add_to_cart') }}'>
@@ -123,10 +129,16 @@
                                            id="cart-icon-{{$product->id}}"
                                            onclick="$('#myform-{{$product->id}}').trigger('submit');"
                                            href="javascript:void(0);">ADD TO BAG &nbsp;&nbsp;<i
-                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                                                class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
                                     </form>{{--
                                     <button style="padding: 12px 20px;" class="mt-2 w-auto addTobag product-tile__add-to-cart"  >ADD TO BAG &nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
                                     </button>--}}
+
+                                    @else
+                                        <a href="{{ route('customer.login') }}">
+                                            <button class="product-tile__add-to-cart">Sign in to view price</button>
+                                        </a>
+                                    @endif
                                 </div>
                             </a>
                         </div>
@@ -164,14 +176,14 @@
 
         <div class="t-one">
             <div class="ml-2 mr-2">
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[0]->id, @$categories[2]->products[0]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[0]->id, @$categories[2]->products[0]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}</a>
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[0]->images[0]) }}" class="w-100 slidert-left-img" id="vslider1">--}}
             </div>
         </div>
         <div class="t-two">
             <div class="ml-2 mr-2">
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[1]->id, @$categories[2]->products[1]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[1]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}</a>
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[2]->id, @$categories[2]->products[2]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[2]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[1]->id, @$categories[2]->products[1]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[1]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[2]->id, @$categories[2]->products[2]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[2]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}</a>
 
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[1]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider2">
                 <img src="{{ asset('storage/'.@$categories[0]->products[2]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider3">--}}
@@ -183,23 +195,24 @@
                     @foreach($categories as $category)
                         <?php /*dd($category->products()->select('ec_products.id', 'ec_products.images')->with('slugable')->limit(6)->get()); */?>
                         {{--<p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}" data-products="{{ $category->products->pluck('images')->take(6) }}"> {{ $category->name }}</p>--}}
-                        <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}" data-products="{{ $category->products()->select('ec_products.id', 'ec_products.images')->with('slugable')->limit(6)->get() }}"> {{ $category->name }}</p>
+                        <p class="{!! (!$loop->first) ? 'dp-run-script  dp-animate-'.($loop->iteration-1) : '' !!}"
+                           data-products="{{ $category->products()->select('ec_products.id', 'ec_products.images')->with('slugable')->limit(6)->get() }}"> {{ $category->name }}</p>
                     @endforeach
                 </div>
             </div>
         </div>
         <div class="t-four">
             <div class="ml-2 mr-2">
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[3]->id, @$categories[2]->products[3]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}</a>
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[4]->id, @$categories[2]->products[4]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[3]->id, @$categories[2]->products[3]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[4]->id, @$categories[2]->products[4]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}</a>
 
-               {{-- <img src="{{ asset('storage/'.@$categories[0]->products[3]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider4">
-                <img src="{{ asset('storage/'.@$categories[0]->products[4]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider5">--}}
+                {{-- <img src="{{ asset('storage/'.@$categories[0]->products[3]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider4">
+                 <img src="{{ asset('storage/'.@$categories[0]->products[4]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider5">--}}
             </div>
         </div>
         <div class="t-five">
             <div class="ml-2 mr-2">
-                    <a href="{{ generate_product_url('detail', @$categories[2]->products[5]->id, @$categories[2]->products[5]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[5]->id, @$categories[2]->products[5]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}</a>
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[5]->images[0]) }}" class="w-100 slidert-left-img" id="vslider6">--}}
             </div>
         </div>
@@ -210,7 +223,7 @@
         <div class="mobile-margin-top mb-5 ml-5 mt-5 mr-5">
             <div class="row">
                 <div class="col-md-6">
-                <h1 class="mt-0 revealUp hey-text text-center"
+                    <h1 class="mt-0 revealUp hey-text text-center"
                         style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);"> Hey Y'all! </h1>
                     <p class="mt-3 font-madeg ft-20">
                         We are Lucky & Blessed, a Texas-based western wholesale clothing vendor. We provide
@@ -228,7 +241,7 @@
                 </div>
                 <div class="col-md-6">
                     {!! image_html_generator(@json_decode(setting('theme-landb-home_section_2_image'))[0], null, null, null, true, 'w-100') !!}
-                   {{-- <img class="w-100" src="{{ asset('landb/img/product.jpg') }}"/>--}}
+                    {{-- <img class="w-100" src="{{ asset('landb/img/product.jpg') }}"/>--}}
                 </div>
             </div>
         </div>
@@ -241,41 +254,21 @@
         $products = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->limit(2)->get();
     @endphp
     @if(count($products) == 2)
-    <section>
-        <div class="ml-5 mr-5">
-            <div class="row">
-                <div class="col-md-6">
+        <section>
+            <div class="ml-5 mr-5">
+                <div class="row">
+                    <div class="col-md-6">
 
-                    <div class="collection_img home-overlap">
-                        <a href="{{ generate_product_url('detail', @$products[0]->id, @$products[0]->slugable->key) }}">
-                            <div class="collec-imgbox">
-                                {{--{!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}--}}
-                                @if (@getimagesize(asset('storage/'. @$products[0]->images[0])))
-                                    {!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}
-                                @else
-                                    @php
-                                        $images1 = str_replace('.JPG', '.jpg', @$products[0]->images[0]);
-                                        $images2 = str_replace('.jpg', '.JPG', @$products[0]->images[0]);
-                                    @endphp
-                                    @if (@getimagesize(asset('storage/'. $images1)))
-                                        {!! image_html_generator($images1, null, null, null, true, 'ls-is-cached') !!}
-                                    @elseif(@getimagesize(asset('storage/'. $images2)))
-                                        {!! image_html_generator($images2, null, null, null, true, 'ls-is-cached') !!}
-                                    @endif
-                                @endif
-                            </div>
-                        </a>
-
-                        <a href="{{ generate_product_url('detail', @$products[1]->id, @$products[1]->slugable->key) }}">
-                            <div class="overlap">
+                        <div class="collection_img home-overlap">
+                            <a href="{{ generate_product_url('detail', @$products[0]->id, @$products[0]->slugable->key) }}">
                                 <div class="collec-imgbox">
-                                    {{--{!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}--}}
-                                    @if (@getimagesize(asset('storage/'. @$products[1]->images[0])))
-                                        {!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}
+                                    {{--{!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}--}}
+                                    @if (@getimagesize(asset('storage/'. @$products[0]->images[0])))
+                                        {!! image_html_generator(@$products[0]->images[0], null, null, null, true, 'ls-is-cached') !!}
                                     @else
                                         @php
-                                            $images1 = str_replace('.JPG', '.jpg', @$products[1]->images[0]);
-                                            $images2 = str_replace('.jpg', '.JPG', @$products[1]->images[0]);
+                                            $images1 = str_replace('.JPG', '.jpg', @$products[0]->images[0]);
+                                            $images2 = str_replace('.jpg', '.JPG', @$products[0]->images[0]);
                                         @endphp
                                         @if (@getimagesize(asset('storage/'. $images1)))
                                             {!! image_html_generator($images1, null, null, null, true, 'ls-is-cached') !!}
@@ -284,26 +277,48 @@
                                         @endif
                                     @endif
                                 </div>
-                            </div>
-                        </a>
+                            </a>
 
+                            <a href="{{ generate_product_url('detail', @$products[1]->id, @$products[1]->slugable->key) }}">
+                                <div class="overlap">
+                                    <div class="collec-imgbox">
+                                        {{--{!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}--}}
+                                        @if (@getimagesize(asset('storage/'. @$products[1]->images[0])))
+                                            {!! image_html_generator(@$products[1]->images[0], null, null, null, true, 'imgtop ls-is-cached') !!}
+                                        @else
+                                            @php
+                                                $images1 = str_replace('.JPG', '.jpg', @$products[1]->images[0]);
+                                                $images2 = str_replace('.jpg', '.JPG', @$products[1]->images[0]);
+                                            @endphp
+                                            @if (@getimagesize(asset('storage/'. $images1)))
+                                                {!! image_html_generator($images1, null, null, null, true, 'ls-is-cached') !!}
+                                            @elseif(@getimagesize(asset('storage/'. $images2)))
+                                                {!! image_html_generator($images2, null, null, null, true, 'ls-is-cached') !!}
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h1 class="revealUp pro-text"
+                            style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Products </h1>
+                        <p class="mt-3 font-madeg ft-20">
+                            Our main offering is western wholesale clothing, of course, but we pride ourselves in
+                            providing
+                            a creative, quality range of products to cover the western lifestyle. We have accessories,
+                            handbags, and home products in addition to our clothing line, which features women’s denim,
+                            dresses, outerwear, loungewear, and more in regular and plus sizes. We also offer an
+                            extensive
+                            kid’s line of clothes.
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <h1 class="revealUp pro-text"
-                        style="opacity: 1; visibility: inherit; transform: translate(0px, 0px);">Our Products </h1>
-                    <p class="mt-3 font-madeg ft-20">
-                        Our main offering is western wholesale clothing, of course, but we pride ourselves in providing
-                        a creative, quality range of products to cover the western lifestyle. We have accessories,
-                        handbags, and home products in addition to our clothing line, which features women’s denim,
-                        dresses, outerwear, loungewear, and more in regular and plus sizes. We also offer an extensive
-                        kid’s line of clothes.
-                    </p>
-                </div>
             </div>
-        </div>
-    </section>
-        @endif
+        </section>
+    @endif
 @endif
 @if(setting('theme-landb-home_section_4_status') == 1)
 
