@@ -6,24 +6,25 @@
     </p>
 
     <ul class="nav nav-tabs" id="prodSkuTab" role="tablist">
-        @foreach($prodSkus as $sku)
+        @foreach($prodVariations as $variation)
             <li class="nav-item" role="presentation">
-                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$sku}}-tab" data-toggle="tab" href="#{{$sku}}"><strong>{{ $sku }}</strong></button>
+                <button class="nav-link {{$loop->first ? 'active' : ''}}" id="{{$variation->sku}}-tab" data-toggle="tab" href="#{{$variation->sku}}"><strong>{{ $variation->sku }}</strong></button>
             </li>
         @endforeach
     </ul>
 
     <div class="tab-content" id="prodSkuTabContent">
-        @foreach($prodSkus as $sku)
-            @php $histories = $data->inventory_history()->where('sku', $sku)->orderBy('id', 'DESC')->get(); @endphp
-            <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$sku}}" role="tabpanel"
-                 aria-labelledby="{{$sku}}-tab">
+        @foreach($prodVariations as $variation)
+            @php $histories = $data->inventory_history()->where('product_id', $variation->id)->orderBy('id', 'DESC')->get(); @endphp
+            <div class="tab-pane fade show {{$loop->first ? 'active' : ''}}" id="{{$variation->sku}}" role="tabpanel" aria-labelledby="{{$variation->sku}}-tab">
                 @php
-                    $qty = \Botble\Ecommerce\Models\Product::where('sku', $sku)->orderBy('id', 'DESC')->value('quantity');
-                    $soldQty = \Botble\Ecommerce\Models\Product::join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
-                    ->join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')->where('ec_orders.order_type',\Botble\Ecommerce\Models\Order::NORMAL)->where('ec_orders.status' ,'!=',\Botble\Base\Enums\BaseStatusEnum::CANCELLED)->where('ec_products.sku', $sku)->sum('ec_order_product.qty');
+                    $soldQty = \Botble\Ecommerce\Models\Order::join('ec_order_product', 'ec_orders.id', 'ec_order_product.order_id')
+                    ->where('ec_orders.order_type',\Botble\Ecommerce\Models\Order::NORMAL)
+                    ->where('ec_orders.status' ,'!=',\Botble\Base\Enums\BaseStatusEnum::CANCELLED)
+                    ->where('ec_order_product.product_id', $variation->id)
+                    ->sum('ec_order_product.qty');
                 @endphp
-                <span>In Stock : {{$qty}} qty</span><br>
+                <span>In Stock : {{$variation->quantity}} qty</span><br>
                 <span>Sold : {{$soldQty}} qty</span>
                 <table width="100%" class="table table-middle">
                     <thead>

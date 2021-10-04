@@ -1115,8 +1115,8 @@ class ProductController extends BaseController
     {
         $data = Product::with(['inventory_history'])->where('id', $id)->first();
         $varIds = $data->variations()->pluck('product_id')->all();
-        $prodSkus = Product::whereIn('id', $varIds)->orderBy('id', 'ASC')->pluck('sku')->all();
-        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data', 'prodSkus'));
+        $prodVariations = Product::whereIn('id', $varIds)->orderBy('id', 'ASC')->get();//->pluck('sku')->all();
+        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data', 'prodVariations'));
     }
 
     public function product_timeline($id)
