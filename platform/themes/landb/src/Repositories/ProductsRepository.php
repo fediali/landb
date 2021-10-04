@@ -106,7 +106,7 @@ class ProductsRepository
             })
             ->when((!is_null($category_id) && !in_array($category_slug, ['new-arrival', 'new-arrivals', 'pre-order'])), function ($query) use ($category_id) {
                 $category = ProductCategory::where('parent_id', $category_id)->pluck('id')->toArray();
-                 array_push($category, $category_id);
+                array_push($category, $category_id);
                 /* $query->where($this->model->getTable().'.category_id', $category_id);*/
                 $query->join('ec_product_category_product as epcp', 'epcp.product_id', $this->model->getTable() . '.id')->whereIn('epcp.category_id', $category);
             })
@@ -130,7 +130,7 @@ class ProductsRepository
                 }
             })
             ->when(!is_null($search), function ($query) use ($search) {
-              $query->whereRaw('ec_products.name LIKE "%' . $search . '%" || ec_products.sku LIKE "%' . $search . '%"');
+                $query->where(['ec_products.status' => BaseStatusEnum::ACTIVE, 'ec_products.is_variation' => 0])->whereRaw('ec_products.name LIKE "%' . $search . '%" || ec_products.sku LIKE "%' . $search . '%"');
             })
             ->when(!is_null($size_id), function ($query) use ($size_id) {
                 $query->join('product_categories_sizes as psizes', 'psizes.product_category_id', 'ec_products.category_id')->where('category_size_id', $size_id);
@@ -140,7 +140,7 @@ class ProductsRepository
             })
             ->when(!is_null($sort_by) && !is_null($sort_key) && !is_null($sort_type), function ($query) use ($sort_key, $sort_type) {
                 $query->orderBy($this->model->getTable() . '.' . $sort_key, $sort_type);
-            })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)->where($this->model->getTable() . '.is_variation' , 0);
+            })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)->where($this->model->getTable() . '.is_variation', 0);
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
             $data = $data->simplePaginate(48);

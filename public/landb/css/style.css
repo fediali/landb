@@ -5153,3 +5153,9 @@ h4 {
 
  }
 
+ #toast-container {
+    top: auto !important;
+    left: auto !important;
+    bottom: 2%;
+    right:1%;  
+  }

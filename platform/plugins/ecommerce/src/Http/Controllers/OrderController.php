@@ -1663,7 +1663,6 @@ class OrderController extends BaseController
     {
         $import = null;
         $import_errors = $request->import_errors;
-
         if ($request->import) {
             $importOrder = OrderImport::where('order_import_upload_id', $request->import)->pluck('order_id');
             $import = Order::whereIN('id', $importOrder)->get();
