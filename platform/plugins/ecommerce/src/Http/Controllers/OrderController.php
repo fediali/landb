@@ -2530,6 +2530,13 @@ class OrderController extends BaseController
         $addressData->order_id = $new_order->id;
         $this->orderAddressRepository->createOrUpdate($addressData);
 
+        $this->orderHistoryRepository->createOrUpdate([
+            'action' => 'split_order',
+            'description' => 'Order split by %user_name%.',
+            'order_id' => $id,
+            'user_id' => Auth::user()->getKey(),
+        ], []);
+
         $products = $order->products;
         foreach ($products as $product) {
             foreach ($params['order_prod_move'] as $prodId => $qty) {
@@ -2541,12 +2548,44 @@ class OrderController extends BaseController
                         $this->orderProductRepository->createOrUpdate($productData);
                     }
 
+
+                    $this->orderHistoryRepository->createOrUpdate([
+                        'action' => 'order_product_qty_changed',
+                        'description' => 'Order product ' . $product->product_name . ' qty changed from ' . $product->qty . ' to ' . ($product->qty - (int)$qty) . ' by %user_name%.',
+                        'order_id' => $order->id,
+                        'user_id' => Auth::user()->getKey(),
+                    ], []);
+
+                    $getParentProdId = ProductVariation::where('product_id', $product->product_id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id' => $product->product_id,
+                        'sku' => $product->product->sku,
+                        'quantity' => (int)$qty,
+                        'new_stock' => $product->product->quantity + (int)$qty,
+                        'old_stock' => $product->product->quantity,
+                        'order_id' => $order->id,
+                        'created_by' => Auth::user()->id,
+                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                    ];
+                    log_product_history($logParam);
+
+
                     $product->qty -= (int)$qty;
                     if ($product->qty <= 0) {
                         $product->delete();
                     } else {
                         $product->save();
                     }
+
+                    if ($order->order_type != Order::PRE_ORDER) {
+                        $this->productRepository
+                            ->getModel()
+                            ->where('id', $product->product_id)
+                            ->where('with_storehouse_management', 1)
+                            ->increment('quantity', (int)$qty);
+                    }
+
                 }
             }
         }
@@ -2557,13 +2596,6 @@ class OrderController extends BaseController
         $this->updateOrderTotal($new_order);
 
         /*************** Replication End ****************/
-
-        $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'split_order',
-            'description' => 'Order split by %user_name%.',
-            'order_id' => $id,
-            'user_id' => Auth::user()->getKey(),
-        ], []);
 
         return $response->setData($new_order)->setMessage(trans('core/base::notices.create_success_message'));
     }
