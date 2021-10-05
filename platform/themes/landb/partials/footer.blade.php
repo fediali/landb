@@ -100,7 +100,7 @@
 <script defer src='https://unpkg.com/xzoom/dist/xzoom.min.js'></script>
 <script defer src="{{ asset('landb/js/popper.js') }}"></script>
 <script defer src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
-<script defer src="{{ asset('landb/js/bootstrap.js') }}"></script>
+<script src="{{ asset('landb/js/bootstrap.js') }}"></script>
 <script defer src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
@@ -108,42 +108,42 @@
 <script defer src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+<script  src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous"></script>
 <script defer type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<![endif]-->
+
 <script defer src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
-<script defer src="{{ asset('landb/js/custom.js') }}"></script>
+<script src="{{ asset('landb/js/custom.js') }}"></script>
 <script defer src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
 <script defer src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
 <script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
 
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
     }
-  });
-}
 </script>
-  <script>
+<script>
     $('[data-magnify]').magnify({
-      resizable: false,
-      initMaximized: true,
-      headerToolbar: [
-        'close'
-      ],
+        resizable: false,
+        initMaximized: true,
+        headerToolbar: [
+            'close'
+        ],
     });
 
-  </script>
+</script>
 <script>
 
 
@@ -336,10 +336,10 @@ for (i = 0; i < coll.length; i++) {
                 // reinit form
             });
 
-    fattJs.on('card_form_complete', (message) => {
-        // activate pay button
-        //payButton.disabled = false;
-        var billing = $("#billing_address option:selected").text();
+        fattJs.on('card_form_complete', (message) => {
+            // activate pay button
+            //payButton.disabled = false;
+            var billing = $("#billing_address option:selected").text();
             tokenizeButton.disabled = billing === 'Select Address';
             console.log(message);
         });
@@ -525,38 +525,37 @@ for (i = 0; i < coll.length; i++) {
             });
           }
 */
-        }); //closing our doc ready
-    </script>
-    <!-- <script type="text/javascript">
+    }); //closing our doc ready
+</script>
+<!-- <script type="text/javascript">
 
-    $('.containert').imagesLoaded( function() {
-    $("#exzoom").exzoom({
-        autoPlay: false,
-    });
-    $("#exzoom").removeClass('hidden')
-    });
+$('.containert').imagesLoaded( function() {
+$("#exzoom").exzoom({
+    autoPlay: false,
+});
+$("#exzoom").removeClass('hidden')
+});
 
-    </script> -->
-    <script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
+</script> -->
+<script src="{{ asset('landb/js/vgnav.min.js') }}"></script>
 
-    <script>
-		$(document).ready(function () {
-            $(window).scroll(function() {
+<script>
+    $(document).ready(function () {
+        $(window).scroll(function () {
             var scroll = $(window).scrollTop();
 
             if (scroll >= 100) {
                 $(".topbar").addClass("d-none");
+            } else {
+                $(".topbar").removeClass("d-none");
             }
-            else {
-            $(".topbar").removeClass("d-none");
-            }
-            });
-			$('.vg-nav').vegasMenu();
-		})
-        @if(is_null(@request()->segments()[0]))
-        $(document).ready(function () {
+        });
+        $('.vg-nav').vegasMenu();
+    })
+    @if(is_null(@request()->segments()[0]))
+    $(document).ready(function () {
 
-          function dp_scroll_text() {
+        function dp_scroll_text() {
             $(".dp-animate-hide").appendTo(".dp-scroll-text").removeClass("dp-animate-hide up-top");
             $(".dp-scroll-text p:first-child").removeClass("dp-run-script dp-animate-1").addClass("dp-animate-hide up-top");
             var products = $("p.dp-run-script.dp-animate-2").next().data('products');
@@ -564,78 +563,80 @@ for (i = 0; i < coll.length; i++) {
             $("p.dp-run-script.dp-animate-4").next().addClass("dp-run-script dp-animate-4");
             $(".dp-run-script").removeClass("dp-animate-1 dp-animate-2 dp-animate-3 dp-animate-4");
             //console.log('first: '+images[0][0])
-            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/'+products[0].images[0]);
-            $('#vslider1').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[0].slugable.key);
+            $('#vslider1').attr("src", '{{ URL::to("/") }}/storage/' + products[0].images[0]);
+            $('#vslider1').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[0].slugable.key);
 
-            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/'+products[1].images[0]);
-            $('#vslider2').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[1].slugable.key);
+            $('#vslider2').attr("src", '{{ URL::to("/") }}/storage/' + products[1].images[0]);
+            $('#vslider2').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[1].slugable.key);
 
-            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/'+products[2].images[0]);
-            $('#vslider3').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[2].slugable.key);
+            $('#vslider3').attr("src", '{{ URL::to("/") }}/storage/' + products[2].images[0]);
+            $('#vslider3').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[2].slugable.key);
 
-            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/'+products[3].images[0]);
-            $('#vslider4').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[3].slugable.key);
+            $('#vslider4').attr("src", '{{ URL::to("/") }}/storage/' + products[3].images[0]);
+            $('#vslider4').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[3].slugable.key);
 
-            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/'+products[4].images[0]);
-            $('#vslider5').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[4].slugable.key);
+            $('#vslider5').attr("src", '{{ URL::to("/") }}/storage/' + products[4].images[0]);
+            $('#vslider5').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[4].slugable.key);
 
-            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/'+products[5].images[0]);
-            $('#vslider6').parent('a').attr('href' , '{{URL::to("/")}}/products/'+products[5].slugable.key);
+            $('#vslider6').attr("src", '{{ URL::to("/") }}/storage/' + products[5].images[0]);
+            $('#vslider6').parent('a').attr('href', '{{URL::to("/")}}/products/' + products[5].slugable.key);
 
 
             $.each($('.dp-run-script'), function (index, runscript) {
-              index++;
-              $(runscript).addClass('dp-animate-' + index);
+                index++;
+                $(runscript).addClass('dp-animate-' + index);
             });
-          }
+        }
 
-          setInterval(function () {
+        setInterval(function () {
             dp_scroll_text();
-          }, 10000);
+        }, 10000);
 
 
-        });
+    });
 
-        @endif
+    @endif
 
-	</script>
-    <script>
+</script>
+<script>
     //Get the button
     var mybutton = document.getElementById("myBtn");
 
     // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
+    window.onscroll = function () {
+        scrollFunction()
+    };
 
     function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        mybutton.style.display = "block";
-    } else {
-        mybutton.style.display = "none";
-    }
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
     }
 
     // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
     }
-    </script>
+</script>
 
 @if(session()->has('success'))
     <script>
-      toastr['success']("{{ session()->get('success') }}", 'Success!');
+        toastr['success']("{{ session()->get('success') }}", 'Success!');
     </script>
 @elseif(session()->has('error'))
     <script>
-      toastr['error']("{{ session()->get('error') }}", 'Error!');
+        toastr['error']("{{ session()->get('error') }}", 'Error!');
     </script>
 @endif
 
 @if(isset(request()->payment) && request()->payment == 'false')
-      <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
-@endif
+    <script>toastr['error']('Sorry! The Payment was cancelled', 'Payment Error');</script>
+    @endif
 
 
-</body>
+    </body>
 
-</html>
+    </html>
