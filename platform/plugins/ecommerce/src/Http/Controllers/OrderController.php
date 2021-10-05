@@ -259,6 +259,7 @@ class OrderController extends BaseController
                     ], []);
 
                     if ($request->input('order_type') != Order::PRE_ORDER) {
+//                        10 12
                         if ($demandQty > $getOrderProd->qty) {
                             $diff = $demandQty - $getOrderProd->qty;
                             $logParam = [
@@ -273,7 +274,9 @@ class OrderController extends BaseController
                                 'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
-                        } elseif ($demandQty < $getOrderProd->qty) {
+                        }
+//                        12 10
+                        elseif ($demandQty < $getOrderProd->qty) {
                             $diff = $getOrderProd->qty - $demandQty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
