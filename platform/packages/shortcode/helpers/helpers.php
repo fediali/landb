@@ -47,16 +47,17 @@ if (!function_exists('generate_shortcode')) {
 }
 
 if (!function_exists('image_fallback')) {
-    function image_fallback($image_url){
-        if (@getimagesize(asset('storage/'. $image_url))) {
-            return asset('storage/'. $image_url);
+    function image_fallback($image_url)
+    {
+        if (@getimagesize(asset('storage/' . $image_url))) {
+            return asset('storage/' . $image_url);
         } else {
             $images1 = str_replace('.JPG', '.jpg', $image_url);
             $images2 = str_replace('.jpg', '.JPG', $image_url);
-            if (@getimagesize(asset('storage/'. $images1))) {
-                return asset('storage/'. $images1);
-            } elseif (@getimagesize(asset('storage/'. $images2))) {
-                return asset('storage/'. $images2);
+            if (@getimagesize(asset('storage/' . $images1))) {
+                return asset('storage/' . $images1);
+            } elseif (@getimagesize(asset('storage/' . $images2))) {
+                return asset('storage/' . $images2);
             }
         }
     }
@@ -71,7 +72,7 @@ if (!function_exists('image_html_generator')) {
     function image_html_generator($img, $alt = null, $height = null, $width = null, $lazy = true, $class = '', $id = '', $original = '')
     {
 
-        /*$html = '<img
+        $html = '<img
             ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
             ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
             src="' . asset('landb/defaultLogo.png') . '"
@@ -81,17 +82,18 @@ if (!function_exists('image_html_generator')) {
             id="' . $id . '"
             xoriginal="' . (!empty($original) ? asset('storage/' . $img) : '') . '"
             data-src="' . (!empty($img) ? asset('storage/' . $img) : asset('images/default.jpg')) . '"
-            onerror = "this.src=\'' . asset('images/default.jpg') . '\'">';*/
+            onerror = "this.src=\'' . asset('images/oops.png') . '\'">';
 
-        $html = '<img
-              ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
-              ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
-              src="' . asset('storage/'. $img) . '"
-              alt="' . (!is_null($alt) ? $alt : 'No image') . '"
-              loading="lazy"
-              class=" ' . $class . '"
-              id="' . $id . '"
-              onerror = "this.src=\'' . asset('images/oops.png') . '\'">';
+//        $html = '<img
+//              ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
+//              ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
+//              src="' . asset('storage/' . $img) . '"
+//              alt="' . (!is_null($alt) ? $alt : 'No image') . '"
+//              loading="lazy"
+//              class="lazyload ' . $class . '"
+//              id="' . $id . '"
+//              onerror = "this.src=\'' . asset('images/oops.png') . '\'">';
+
 
         return $html;
     }

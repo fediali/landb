@@ -72,10 +72,12 @@ class CheckoutController extends Controller
 
     public function getCheckoutIndex($token)
     {
+
         $this->promotion_service->applyPromotionIfAvailable(auth('customer')->user()->getUserCart(), $token);
         $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
+
 
         if (!count($cart->products)) {
             return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
@@ -105,6 +107,7 @@ class CheckoutController extends Controller
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
+
                 }
                 else {
                     $cards = collect()->push('Add New Card');
@@ -113,6 +116,7 @@ class CheckoutController extends Controller
         } else {
             $cards = collect()->push('Add New Card');
         }
+
         return Theme::scope('checkout', ['cart' => $cart, 'user_info' => $user, 'token' => $token, 'cards' => $cards])->render();
     }
 
