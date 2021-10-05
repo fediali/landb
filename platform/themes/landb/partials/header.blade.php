@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+    $product_detail = (request()->segment(1) == 'products' && !empty(request()->segment(2))) ? true : false;
+    $home = empty(request()->segment(1)) ? true : false;
+?>
 <head>
     <meta charset="UTF-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -10,10 +13,11 @@
 {!! Theme::partial('metas') !!}
      <link rel="icon" href="{{asset('public/images/favicon.png')}}" sizes="36x36" type="image/png">
     <!--    Font Awesome 5.9-->
-    <script async src="https://kit.fontawesome.com/9c7309bfe2.js"></script>
+<!--    <script async src="https://kit.fontawesome.com/9c7309bfe2.js"></script>-->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css">
-
+    @if($home)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    @endif
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
@@ -21,19 +25,24 @@
     <!-- Custom Style Sheet -->
     <link rel="stylesheet" type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css'>
+    @if($home)
+<!--    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css'>-->
+    @endif
+    @if(request()->segment(1) == 'checkout')
     <script async src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
+    @endif
     {{--<script src="{{ asset('js/barcodeScanner.js') }}"></script>--}}
 {{--    <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">--}}
 {{--    <script async src="{{ asset('landb/js/datepickk.min.js') }}"></script>--}}
     <script async src="{{ asset('landb/js/lazyload.min.js') }}"></script>
-    <link rel="stylesheet" href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
-    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
-    <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
+<!--    <link rel="stylesheet" href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
+<!--    <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
+    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">-->
+    @if($product_detail)
+        <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
+    @endif
 
-
-    <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>
+<!--    <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>-->
     <title>LandBAppreal</title>
     <style>
         .loading-overlay {
