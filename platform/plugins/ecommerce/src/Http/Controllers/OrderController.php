@@ -248,6 +248,9 @@ class OrderController extends BaseController
             $curOrderProdIds[] = $product->id;
 
             if ($request->input('order_id') && $request->input('order_id') > 0) {
+
+                $order = Order::where('id', $request->input('order_id'))->first();
+
                 $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                 $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
                 if ($getOrderProd && $demandQty != $getOrderProd->qty) {
@@ -258,8 +261,7 @@ class OrderController extends BaseController
                         'user_id' => Auth::user()->getKey(),
                     ], []);
 
-                    if ($request->input('order_type') != Order::PRE_ORDER) {
-//                        10 12
+                    if ($request->input('order_type') != Order::PRE_ORDER && $order->order_type == Order::NORMAL) {
                         if ($demandQty > $getOrderProd->qty) {
                             $diff = $demandQty - $getOrderProd->qty;
                             $logParam = [
@@ -274,9 +276,7 @@ class OrderController extends BaseController
                                 'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
-                        }
-//                        12 10
-                        elseif ($demandQty < $getOrderProd->qty) {
+                        } elseif ($demandQty < $getOrderProd->qty) {
                             $diff = $getOrderProd->qty - $demandQty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
@@ -291,6 +291,19 @@ class OrderController extends BaseController
                             ];
                             log_product_history($logParam);
                         }
+                    } elseif ($request->input('order_type') != Order::PRE_ORDER && $order->order_type == Order::PRE_ORDER) {
+                        $logParam = [
+                            'parent_product_id' => $getParentProdId,
+                            'product_id' => $product->id,
+                            'sku' => $product->sku,
+                            'quantity' => $demandQty,
+                            'new_stock' => $product->quantity - $demandQty,
+                            'old_stock' => $product->quantity,
+                            'order_id' => $order->id,
+                            'created_by' => Auth::user()->id,
+                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                        ];
+                        log_product_history($logParam);
                     }
 
                 } elseif (!$getOrderProd) {
@@ -2593,18 +2606,18 @@ class OrderController extends BaseController
             }
         }
 
-        $new_order = $this->orderRepository->findById($new_order->id);
-
-        $this->updateOrderTotal($order);
-        $this->updateOrderTotal($new_order);
+        $this->updateOrderTotal($order->id);
+        $this->updateOrderTotal($new_order->id);
 
         /*************** Replication End ****************/
 
-        return $response->setData($new_order)->setMessage(trans('core/base::notices.create_success_message'));
+        return $response->setData($order)->setMessage(trans('core/base::notices.create_success_message'));
     }
 
-    public function updateOrderTotal($orderObj)
+    public function updateOrderTotal($orderId)
     {
+        $orderObj = Order::where('id', $orderId)->first();
+
         $orderTotal = 0;
         $products = $orderObj->products;
         foreach ($products as $product) {
@@ -2618,7 +2631,7 @@ class OrderController extends BaseController
 
         $orderObj->amount = $orderTotal;
 
-        $orderObj->save();
+        Order::where('id', $orderId)->update(['sub_total' => $orderObj->sub_total, 'amount' => $orderObj->amount]);
 
         $this->promotion_service->applyPromotionIfAvailable($orderObj->id);
     }

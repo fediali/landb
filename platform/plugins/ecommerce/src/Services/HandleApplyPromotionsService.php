@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Services;
 
 use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\DiscountProduct;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
@@ -95,12 +96,12 @@ class HandleApplyPromotionsService
                             $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
                             break;
                         case 'product-variant' || 'category':
-                            foreach ($promotion->products as $p_product){
-                              foreach ($cart->products as $c_product){
-                                if($p_product->id == $c_product->product_id){
-                                  $promotionDiscountAmount += ($c_product->qty * $c_product->price) * $promotion->value / 100;
+                            //TODO::fix this loop
+                            foreach ($cart->products as $c_product){
+                                $check = DiscountProduct::where(['discount_id' => $promotion->id, 'product_id' => $c_product->product_id])->value('product_id');
+                                if($check == $c_product->product_id){
+                                    $promotionDiscountAmount += ($c_product->qty * $c_product->price) * $promotion->value / 100;
                                 }
-                              }
                             }
                             break;
                         default:
@@ -157,9 +158,9 @@ class HandleApplyPromotionsService
 
         $promotionAmount = $this->execute($token, $orderId);
 
-        $order = Order::find($orderId);
+        $order = Order::where('id', $orderId)->first();
         if (!$order->promotion_applied) {
-            $order->discount_amount = !empty($order->coupon_code) ? $order->discount_amount + $promotionAmount : $promotionAmount;
+            $order->discount_amount = !empty($order->coupon_code) ? ($order->discount_amount + $promotionAmount) : $promotionAmount;
             $order->amount = $order->sub_total - $order->discount_amount;
             $order->promotion_amount = $promotionAmount;
             $order->promotion_applied = 1;
@@ -169,7 +170,7 @@ class HandleApplyPromotionsService
 
     public function removePromotionIfAvailable($orderId)
     {
-        $order = Order::find($orderId);
+        $order = Order::where('id', $orderId)->first();
         if ($order->promotion_applied) {
             $order->discount_amount -= $order->promotion_amount;
             if ($order->discount_amount < 0) {
