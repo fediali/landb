@@ -37,7 +37,7 @@
         <h2 class="font-north western-txt">
             {!! setting('theme-landb-home_main_section_heading') !!}
         </h2>
-        <p class="font-madeg ft-20">{!! setting('theme-landb-home_main_section_description') !!}</p>
+        <p class="font-madeg ft-20 western-p">{!! setting('theme-landb-home_main_section_description') !!}</p>
     </div>
     <div class="col-lg-2"></div>
 </div>
