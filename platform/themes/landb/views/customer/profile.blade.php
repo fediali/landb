@@ -8,7 +8,7 @@
         </nav>
     </div>
 </section>
-<section class="shoplisting_wrap pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
+<section class="shoplisting_wrap pt-0 pl-5 pr-5 mbtb-pl-1 mbtb-pr-1">
     <div class="row">
         <div class="col-lg-12 mt-2">
             <div class="tab">

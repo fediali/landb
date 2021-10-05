@@ -2034,6 +2034,12 @@ input.qtyminus {
 }
 
 @media screen and (min-width: 320px) and (max-width: 991px) {
+    .collection_img .overlap {
+        display: none !important;
+    }
+    .western-p {
+        font-size: 18px !important;
+    }
     .tabs-product {
         flex-wrap: initial !important;
         overflow-x: scroll;
@@ -3348,6 +3354,8 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
     }
     .owl-carousel .owl-dot {
         height: 100% !important;
+        width: 18% !important;
+        background-position: left !important;
     }
     .owl-carousel .owl-dots {
         height: 15% !important;
@@ -3687,8 +3695,7 @@ table.shop_table tr th {
 .tab {
     width: 100% !important;
     display: flex;
-    overflow-x: scroll;
-    margin-top: 30px;
+    overflow-x: scroll; 
 }
 .tab button { 
     padding: 5px 15px !important;
