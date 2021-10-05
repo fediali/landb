@@ -95,29 +95,29 @@
 </footer>
 
 <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>
-<script src="{{ asset('landb/js/jquery.js') }}"></script>
-<script src='https://unpkg.com/xzoom/dist/xzoom.min.js'></script>
-<script src="{{ asset('landb/js/popper.js') }}"></script>
-<script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
-<script src="{{ asset('landb/js/bootstrap.js') }}"></script>
-<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script defer src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>
+<script defer src="{{ asset('landb/js/jquery.js') }}"></script>
+<script defer src='https://unpkg.com/xzoom/dist/xzoom.min.js'></script>
+<script defer src="{{ asset('landb/js/popper.js') }}"></script>
+<script defer src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
+<script defer src="{{ asset('landb/js/bootstrap.js') }}"></script>
+<script defer src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
+<script defer src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
+<script defer src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous"></script>
-<script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 <![endif]-->
-<script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
-<script src="{{ asset('landb/js/custom.js') }}"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
-<script src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
+<script defer src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+<script defer src="{{ asset('landb/js/custom.js') }}"></script>
+<script defer src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
+<script defer src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
 <script>
 var coll = document.getElementsByClassName("collapsible");
 var i;
@@ -541,14 +541,14 @@ for (i = 0; i < coll.length; i++) {
 
     <script>
 		$(document).ready(function () {
-            $(window).scroll(function() {     
+            $(window).scroll(function() {
             var scroll = $(window).scrollTop();
 
             if (scroll >= 100) {
-                $(".topbar").addClass("d-none"); 
+                $(".topbar").addClass("d-none");
             }
             else {
-            $(".topbar").removeClass("d-none"); 
+            $(".topbar").removeClass("d-none");
             }
             });
 			$('.vg-nav').vegasMenu();
