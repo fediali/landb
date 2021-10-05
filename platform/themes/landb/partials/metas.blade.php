@@ -2,8 +2,8 @@
     $metas = null;
     $category = null;
 
-    $meta_title = 'LandBAppreal';
-    $meta_description = 'LandBAppreal';
+    $meta_title = 'Lucky and Blessed';
+    $meta_description = 'Lucky and Blessed';
     $product_slug = (count(request()->segments()) > 1 ? (request()->segment(1) == 'products' ? request()->segment(2) : null) : null);
 
     if(empty($product_slug)){
