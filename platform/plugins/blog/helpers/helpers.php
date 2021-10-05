@@ -799,6 +799,7 @@ if (!function_exists('create_customer')) {
 if (!function_exists('omni_api')) {
     function omni_api($url, $data = [], $type = 'GET')
     {
+
         $curl = curl_init();
         $request = [
             CURLOPT_URL            => $url,
@@ -822,6 +823,7 @@ if (!function_exists('omni_api')) {
         $response = curl_exec($curl);
         $info = curl_getinfo($curl);
         curl_close($curl);
+
         return [$response, $info];
     }
 }

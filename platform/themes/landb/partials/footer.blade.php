@@ -36,6 +36,10 @@
         </div>
     </div>
 </section> -->
+<?php
+$product_detail = (request()->segment(1) == 'products' && !empty(request()->segment(2))) ? true : false;
+$home = empty(request()->segment(1)) ? true : false;
+?>
 <footer class="footer_sec">
     <div class="container">
         <div class="row">
@@ -98,26 +102,31 @@
 <!--<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/164071/Drift.min.js"></script>-->
 <script src="{{ asset('landb/js/jquery.js') }}"></script>
 <!--<script src='https://unpkg.com/xzoom/dist/xzoom.min.js'></script>-->
-<script src="{{ asset('landb/js/popper.js') }}"></script>
-<script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>
+<!--<script src="{{ asset('landb/js/popper.js') }}"></script>-->
+<!--<script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>-->
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
-<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>
+<!--<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>-->
+@if($home)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+@endif
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
-<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
+<!--<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.3/MotionPathPlugin.min.js"></script>-->
 
 <script  src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous"></script>
-<script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
+@if(request()->segment(1) == 'customer' && request()->segment(2) == 'contract-form')
+<script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+@endif
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>-->
+@if($product_detail)
 <script src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
+@endif
 <script>
     var coll = document.getElementsByClassName("collapsible");
     var i;
