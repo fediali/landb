@@ -14,8 +14,8 @@
      <link rel="icon" href="{{asset('public/images/favicon.png')}}" sizes="36x36" type="image/png">
     <!--    Font Awesome 5.9-->
 <!--    <script async src="https://kit.fontawesome.com/9c7309bfe2.js"></script>-->
-<!--    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css">-->
-    @if($home)
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css">
+    @if($home || $product_detail)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     @endif
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->

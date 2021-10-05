@@ -97,7 +97,7 @@ $('.explore_seasonal .owl-carousel').owlCarousel({
 })
 
 // animation js
-
+/*
 gsap.registerPlugin(ScrollTrigger);
 // REVEAL //
 gsap.utils.toArray(".revealUp").forEach(function (elem) {
@@ -151,7 +151,7 @@ gsap.utils.toArray("section").forEach((elem) => {
         },
     })
         .from(elem, {y: 50, duration: 1, ease: 'none'})
-});
+});*/
 
 
 $(document).ready(function () {
