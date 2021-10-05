@@ -1142,11 +1142,11 @@
                         </div>
                         <div class="col-md-12 split-payment">
                             <label>Cash $</label>
-                            {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'step' => 0.1, 'max' => ($order->amount - $paidAmount)]) !!}
+                            {!! Form::number('cash_payment', @$split_payments['cash_payment'], ['class' => 'form-control', 'placeholder'=>'Cash Payment', 'step' => 0.01, 'max' => ($order->amount - $paidAmount)]) !!}
                         </div>
                         <div class="col-md-12 split-payment">
                             <label>Cheque $</label>
-                            {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'step' => 0.1, 'max' => ($order->amount - $paidAmount)]) !!}
+                            {!! Form::number('cheque_payment', @$split_payments['cheque_payment'], ['class' => 'form-control', 'placeholder'=>'Cheque Payment', 'step' => 0.0, 'max' => ($order->amount - $paidAmount)]) !!}
                         </div>
                         @foreach($cards as $key => $value)
                             @php
@@ -1158,7 +1158,7 @@
                                     @if($checkPaid == 'paid')
                                         {{@$split_payments['card_'.$key]}} (paid)
                                     @else
-                                        {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'step' => 0.1, 'max' => ($order->amount - $paidAmount)]) !!}
+                                        {!! Form::number('card_'.$key, @$split_payments['card_'.$key], ['class' => 'form-control', 'placeholder'=>'Enter Payment', 'step' => 0.01, 'max' => ($order->amount - $paidAmount)]) !!}
                                     @endif
                                 </div>
                             @endif
