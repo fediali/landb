@@ -106,7 +106,7 @@ $home = empty(request()->segment(1)) ? true : false;
 <!--<script src="{{ asset('landb/js/jquery.fancybox.js?v=2.1.4') }}"></script>-->
 <script src="{{ asset('landb/js/bootstrap.js') }}"></script>
 <!--<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>-->
-@if($home)
+@if($home || $product_detail)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 @endif
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
