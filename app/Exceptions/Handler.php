@@ -3,8 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Throwable;
+
 
 class Handler extends ExceptionHandler
 {
@@ -37,14 +39,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+//        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+//            if ($e->getStatusCode() == 419) {
+//                return redirect($request->fullUrl())->with('csrf_error',"Oops! Seems you couldn't submit form for a long time. Please try again.");
+//            }
+//        });
     }
 
-//    public function render($request, Exception $e)
-//    {
-////        dd('s');
-////        if ($e instanceof Symfony\Component\HttpKernel\Exception\HttpException) {
-////            return route('public.index');
-////        }
-////        return parent::render($request, $e);
-//    }
+
 }

@@ -43,11 +43,12 @@ class CartController extends Controller
     private $user;
     protected $coupan_service;
     protected $promotion_service;
+
     public function __construct(HandleApplyCouponService $applyCouponService, HandleApplyPromotionsService $applyPromotionsService)
     {
         $this->user = auth('customer')->user();
-      $this->coupan_service = $applyCouponService;
-      $this->promotion_service = $applyPromotionsService;
+        $this->coupan_service = $applyCouponService;
+        $this->promotion_service = $applyPromotionsService;
     }
 
     public function getIndex(Request $request)
@@ -190,33 +191,33 @@ class CartController extends Controller
             'sub_total' => $amount,
             'amount'    => $amount
         ]);
-      $promotionAmount = $this->promotion_service->execute();
+        $promotionAmount = $this->promotion_service->execute();
 
-      $order = Order::find($orderId);
-      /*if($order->promotion_applied == 1){
-        $order->discount_amount = $promotionAmount;
-        $order->amount = $order->sub_total - $order->discount_amount;
-        $order->promotion_applied = 1;
-      }*/
-      $order->promotion_applied = 0;
+        $order = Order::find($orderId);
+        /*if($order->promotion_applied == 1){
+          $order->discount_amount = $promotionAmount;
+          $order->amount = $order->sub_total - $order->discount_amount;
+          $order->promotion_applied = 1;
+        }*/
+        $order->promotion_applied = 0;
 
-        if(!empty($coupon_code)){
-          $applyCoupon = $this->coupan_service->execute($order->coupon_code);
+        if (!empty($coupon_code)) {
+            $applyCoupon = $this->coupan_service->execute($order->coupon_code);
 
-          if(!$applyCoupon['error']){
-            if (count($products)){
-              $order->discount_amount =  $applyCoupon['data']['discount_amount'];
-              $order->amount = $order->sub_total - $order->discount_amount;
-            }else {
-              $order->coupon_code = null;
-              $order->discount_amount = 0.00;
-              $order->amount = $order->sub_total;
+            if (!$applyCoupon['error']) {
+                if (count($products)) {
+                    $order->discount_amount = $applyCoupon['data']['discount_amount'];
+                    $order->amount = $order->sub_total - $order->discount_amount;
+                } else {
+                    $order->coupon_code = null;
+                    $order->discount_amount = 0.00;
+                    $order->amount = $order->sub_total;
+                }
+            } else {
+                $order->coupon_code = null;
+                $order->discount_amount = 0.00;
+                $order->amount = $order->sub_total;
             }
-          }else{
-            $order->coupon_code = null;
-            $order->discount_amount = 0.00;
-            $order->amount = $order->sub_total;
-          }
         }
 
         $order->save();
@@ -252,12 +253,16 @@ class CartController extends Controller
         }
     }
 
-    public function checkIfPreOrder($productId){
-      $product = Product::where($this->model->getTable().'.id', $productId)
-                  ->join('ec_product_tag_product as eptp', 'eptp.product_id',$this->model->getTable().'.id')
-                  ->where('tag_id', 3)->first();
+    public function checkIfPreOrder($productId)
+    {
+        $product = Product::where($this->model->getTable() . '.id', $productId)
+            ->join('ec_product_tag_product as eptp', 'eptp.product_id', $this->model->getTable() . '.id')
+            ->where('tag_id', 3)->first();
 
-      if($product){ return true; }
-      else{ return false; }
+        if ($product) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

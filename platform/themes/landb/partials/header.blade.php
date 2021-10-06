@@ -42,8 +42,8 @@
         <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
     @endif
 
-<!--    <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>-->
-    <title>LandBAppreal</title>
+{{--  <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>--}}
+
     <style>
         .loading-overlay {
             display: none;

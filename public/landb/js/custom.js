@@ -428,6 +428,7 @@ $(document).ready(function () {
     });
 
     setTimeout(function () {
+
         jQuery('.owl-dot').each(function () {
             grab = jQuery(this).data('info');
             slidegrab = jQuery('.slidenumber' + grab + ' img').attr('src');
