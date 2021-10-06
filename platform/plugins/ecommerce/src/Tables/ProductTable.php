@@ -136,9 +136,9 @@ class ProductTable extends TableAbstract
                         </form>';
                 return $html;
             })
-            ->editColumn('order', function ($item) {
+            /*->editColumn('order', function ($item) {
                 return view('plugins/ecommerce::products.partials.sort-order', compact('item'))->render();
-            })
+            })*/
             ->editColumn('in_cart_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
                 $getProdIds[] = $item->id;
@@ -260,7 +260,7 @@ class ProductTable extends TableAbstract
         $select = [
             'ec_products.id',
             'ec_products.name',
-            'ec_products.order',
+            //'ec_products.order',
             'ec_products.created_at',
             'ec_products.status',
             'ec_products.product_type',
@@ -276,10 +276,10 @@ class ProductTable extends TableAbstract
             'ec_products.images',
             'ec_products.price',
             'ec_products.sale_price',
-            'ec_products.sale_type',
-            'ec_products.start_date',
-            'ec_products.end_date',
-            'ec_products.oos_date',
+            //'ec_products.sale_type',
+            //'ec_products.start_date',
+            //'ec_products.end_date',
+            //'ec_products.oos_date',
             'ec_products.prod_pieces',
             'ec_products.cost_price',
         ];
