@@ -118,9 +118,10 @@ $home = empty(request()->segment(1)) ? true : false;
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-
+@if(request()->segment(1) == 'customer' && request()->segment(2) == 'contract-form')
 <script type="text/javascript" src="{{ asset('landb/jsignature/flashcanvas.js') }}"></script>
 <script src="{{ asset('landb/jsignature/jSignature.min.js') }}"></script>
+@endif
 <script src="{{ asset('landb/js/custom.js') }}"></script>
 <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>-->
 @if($product_detail)
