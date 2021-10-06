@@ -1127,48 +1127,49 @@ class OrderController extends BaseController
     {
         $order = $this->orderRepository->findOrFail($id);
 
-        $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::CANCELED, 'is_confirmed' => true],
-            compact('id'));
+        if($order->status != OrderStatusEnum::CANCELED) {
+            $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::CANCELED, 'is_confirmed' => true], compact('id'));
 
-        $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'cancel_order',
-            'description' => trans('plugins/ecommerce::order.order_was_canceled_by'),
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
-        ]);
+            $this->orderHistoryRepository->createOrUpdate([
+                'action' => 'cancel_order',
+                'description' => trans('plugins/ecommerce::order.order_was_canceled_by'),
+                'order_id' => $order->id,
+                'user_id' => Auth::user()->getKey(),
+            ]);
 
-        if ($order->order_type != Order::PRE_ORDER) {
-            $order_products = OrderProduct::where('order_id', $order->id)->get();
-            foreach ($order_products as $order_product) {
-                $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
-                $logParam = [
-                    'parent_product_id' => $getParentProdId,
-                    'product_id' => $order_product->product_id,
-                    'sku' => $order_product->product->sku,
-                    'quantity' => $order_product->qty,
-                    'new_stock' => $order_product->product->quantity + $order_product->qty,
-                    'old_stock' => $order_product->product->quantity,
-                    'order_id' => $order->id,
-                    'created_by' => Auth::user()->id,
-                    'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
-                ];
-                log_product_history($logParam);
+            if ($order->order_type != Order::PRE_ORDER) {
+                $order_products = OrderProduct::where('order_id', $order->id)->get();
+                foreach ($order_products as $order_product) {
+                    $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id' => $order_product->product_id,
+                        'sku' => $order_product->product->sku,
+                        'quantity' => $order_product->qty,
+                        'new_stock' => $order_product->product->quantity + $order_product->qty,
+                        'old_stock' => $order_product->product->quantity,
+                        'order_id' => $order->id,
+                        'created_by' => Auth::user()->id,
+                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                    ];
+                    log_product_history($logParam);
 
-                $this->productRepository
-                    ->getModel()
-                    ->where('id', $order_product->product_id)
-                    ->where('with_storehouse_management', 1)
-                    ->increment('quantity', $order_product->qty);
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $order_product->product_id)
+                        ->where('with_storehouse_management', 1)
+                        ->increment('quantity', $order_product->qty);
+                }
             }
-        }
 
-        $mailer = EmailHandler::setModule(ECOMMERCE_MODULE_SCREEN_NAME);
-        if ($mailer->templateEnabled('customer_cancel_order')) {
-            OrderHelper::setEmailVariables($order);
-            $mailer->sendUsingTemplate(
-                'customer_cancel_order',
-                $order->user->email ? $order->user->email : $order->address->email
-            );
+            $mailer = EmailHandler::setModule(ECOMMERCE_MODULE_SCREEN_NAME);
+            if ($mailer->templateEnabled('customer_cancel_order')) {
+                OrderHelper::setEmailVariables($order);
+                $mailer->sendUsingTemplate(
+                    'customer_cancel_order',
+                    $order->user->email ? $order->user->email : $order->address->email
+                );
+            }
         }
 
         return $response->setMessage(trans('plugins/ecommerce::order.customer.messages.cancel_success'));
