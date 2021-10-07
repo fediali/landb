@@ -2396,19 +2396,7 @@ class OrderController extends BaseController
         $requestData['status'] = $request->input('value');
         $requestData['updated_by'] = auth()->user()->id;
 
-        $order->fill($requestData);
-
-        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $order));
-        $this->orderRepository->createOrUpdate($order);
-
-        $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'order_status_changed',
-            'description' => 'Order status changed to ' . $requestData['status'] . ' by %user_name%.',
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
-        ], []);
-
-        if($requestData['status'] != OrderStatusEnum::CANCELED) {
+        if($order->status == OrderStatusEnum::CANCELED && $requestData['status'] != OrderStatusEnum::CANCELED) {
             if ($order->order_type != Order::PRE_ORDER) {
                 $order_products = OrderProduct::where('order_id', $order->id)->get();
                 foreach ($order_products as $order_product) {
@@ -2434,6 +2422,18 @@ class OrderController extends BaseController
                 }
             }
         }
+
+        $order->fill($requestData);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $order));
+        $this->orderRepository->createOrUpdate($order);
+
+        $this->orderHistoryRepository->createOrUpdate([
+            'action' => 'order_status_changed',
+            'description' => 'Order status changed to ' . $requestData['status'] . ' by %user_name%.',
+            'order_id' => $order->id,
+            'user_id' => Auth::user()->getKey(),
+        ], []);
 
         return $response;
     }
