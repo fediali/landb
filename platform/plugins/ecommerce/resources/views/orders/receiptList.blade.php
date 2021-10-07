@@ -9,4 +9,4 @@
         {!! $orderHtml !!}
     </div>
 </body>
-</html>w
+</html>

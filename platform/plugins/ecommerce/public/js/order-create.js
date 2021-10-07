@@ -8101,65 +8101,70 @@ var render = function() {
                                             : _vm._e(),
                                           _vm._v(" "),
                                           _vm.child_can_price_edit == 1
-                                            ? _c("div", [
-                                                _c(
-                                                  "span",
-                                                  {
-                                                    staticStyle: {
-                                                      "margin-top":
-                                                        "8px !important",
-                                                      "margin-right":
-                                                        "5px !important"
-                                                    }
-                                                  },
-                                                  [
-                                                    _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(_vm.currency) +
-                                                        "\n                                                "
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c("input", {
-                                                  directives: [
+                                            ? _c(
+                                                "div",
+                                                { staticClass: "d-flex" },
+                                                [
+                                                  _c(
+                                                    "span",
                                                     {
-                                                      name: "model",
-                                                      rawName: "v-model",
-                                                      value: variant.price,
-                                                      expression:
-                                                        "variant.price"
-                                                    }
-                                                  ],
-                                                  staticClass:
-                                                    "next-input p-none-r",
-                                                  attrs: {
-                                                    type: "number",
-                                                    step: "0.1",
-                                                    min: "1"
-                                                  },
-                                                  domProps: {
-                                                    value: variant.price
-                                                  },
-                                                  on: {
-                                                    change: function($event) {
-                                                      return _vm.handleChangeQuantity()
-                                                    },
-                                                    input: function($event) {
-                                                      if (
-                                                        $event.target.composing
-                                                      ) {
-                                                        return
+                                                      staticStyle: {
+                                                        "margin-top":
+                                                          "8px !important",
+                                                        "margin-right":
+                                                          "5px !important"
                                                       }
-                                                      _vm.$set(
-                                                        variant,
-                                                        "price",
-                                                        $event.target.value
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(_vm.currency) +
+                                                          "\n                                                "
                                                       )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value: variant.price,
+                                                        expression:
+                                                          "variant.price"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "next-input p-none-r",
+                                                    attrs: {
+                                                      type: "number",
+                                                      step: "0.1",
+                                                      min: "1"
+                                                    },
+                                                    domProps: {
+                                                      value: variant.price
+                                                    },
+                                                    on: {
+                                                      change: function($event) {
+                                                        return _vm.handleChangeQuantity()
+                                                      },
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          variant,
+                                                          "price",
+                                                          $event.target.value
+                                                        )
+                                                      }
                                                     }
-                                                  }
-                                                })
-                                              ])
+                                                  })
+                                                ]
+                                              )
                                             : _vm._e()
                                         ]
                                       )

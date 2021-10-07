@@ -5176,3 +5176,7 @@ h4 {
         height: 15px !important; 
       }
 }
+
+.product-carousel .owl-carousel {
+    width: 100% !important;
+}
