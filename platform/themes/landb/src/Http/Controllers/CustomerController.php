@@ -61,6 +61,7 @@ class CustomerController extends Controller
         break;
       case 'tax_certificate':
         $this->updateTaxCertificate($request);
+        return redirect('/');
         break;
       case 'store_locator':
         $this->updateStoreLocator($request);
