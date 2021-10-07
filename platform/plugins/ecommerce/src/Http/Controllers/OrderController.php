@@ -236,10 +236,16 @@ class OrderController extends BaseController
 //            } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
 //                $stockQty = $product->in_person_sales_qty;
 //            } else {
+
             $stockQty = $product->quantity;
+
 //            }
 
             if ($request->input('order_type') != Order::PRE_ORDER) {
+                if ($request->input('order_id') && $request->input('order_id') > 0) {
+                    $getOrderProdQty = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->value('qty');
+                    $stockQty += $getOrderProdQty;
+                }
                 if ($stockQty < $demandQty) {
                     return $response->setCode(406)->setError()->setMessage($product->sku . ' is not available in this Qty!');
                 }
