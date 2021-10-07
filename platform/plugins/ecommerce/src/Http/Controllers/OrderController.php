@@ -2406,11 +2406,11 @@ class OrderController extends BaseController
                         'product_id' => $order_product->product_id,
                         'sku' => $order_product->product->sku,
                         'quantity' => $order_product->qty,
-                        'new_stock' => $order_product->product->quantity + $order_product->qty,
+                        'new_stock' => $order_product->product->quantity - $order_product->qty,
                         'old_stock' => $order_product->product->quantity,
                         'order_id' => $order->id,
                         'created_by' => Auth::user()->id,
-                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                        'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                     ];
                     log_product_history($logParam);
 
@@ -2418,7 +2418,7 @@ class OrderController extends BaseController
                         ->getModel()
                         ->where('id', $order_product->product_id)
                         ->where('with_storehouse_management', 1)
-                        ->increment('quantity', $order_product->qty);
+                        ->decrement('quantity', $order_product->qty);
                 }
             }
         }
