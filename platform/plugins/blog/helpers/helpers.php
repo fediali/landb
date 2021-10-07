@@ -16,6 +16,7 @@ use Botble\Paymentmethods\Models\Paymentmethods;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Twilio\Rest\Client;
@@ -879,6 +880,17 @@ if (!function_exists('set_product_oos_date')) {
                     'reference'         => InventoryHistory::PROD_OSS
                 ];
                 log_product_history($logParam);
+
+                $subject = "Product Out Of Stock " . $product->product_code . ' ' . $product->description->product;
+                $name = $product->product_code;
+                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com','alexis.guerrero'];
+                Mail::send('emails.oos', ['name' => $name],
+                    function ($mail) use ($emails, $name, $subject) {
+                        $mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
+                        $mail->to($emails, $name);
+                        $mail->subject($subject);
+                    });
+
             }
         } else {
             DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => NULL]);
