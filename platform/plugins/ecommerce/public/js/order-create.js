@@ -8092,9 +8092,9 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    _vm._s(_vm.currency) +
+                                                    _vm._s(variant.price) +
                                                       " " +
-                                                      _vm._s(variant.price)
+                                                      _vm._s(_vm.currency)
                                                   )
                                                 ]
                                               )
@@ -8234,14 +8234,14 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                    " +
-                                      _vm._s(_vm.currency) +
-                                      "\n                                    " +
                                       _vm._s(
                                         parseFloat(
                                           parseInt(variant.select_qty) *
                                             variant.price
                                         ).toFixed(2)
                                       ) +
+                                      "\n                                    " +
+                                      _vm._s(_vm.currency) +
                                       "\n                                "
                                   )
                                 ]
@@ -8930,11 +8930,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
-                              _vm._s(_vm.currency) +
+                              _vm._s(
+                                _vm._f("formatPrice")(_vm.child_sub_amount)
+                              ) +
                                 " " +
-                                _vm._s(
-                                  _vm._f("formatPrice")(_vm.child_sub_amount)
-                                )
+                                _vm._s(_vm.currency)
                             )
                           ])
                         ]),
@@ -8985,8 +8985,6 @@ var render = function() {
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
                               "\n                                        " +
-                                _vm._s(_vm.currency) +
-                                "\n                                        " +
                                 _vm._s(
                                   _vm._f("formatPrice")(
                                     _vm.has_applied_discount
@@ -8994,6 +8992,8 @@ var render = function() {
                                       : 0
                                   )
                                 ) +
+                                "\n                                        " +
+                                _vm._s(_vm.currency) +
                                 "\n                                    "
                             )
                           ])
@@ -9033,13 +9033,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
-                              _vm._s(_vm.currency) +
+                              _vm._s(
+                                _vm._f("formatPrice")(_vm.child_shipping_amount)
+                              ) +
                                 " " +
-                                _vm._s(
-                                  _vm._f("formatPrice")(
-                                    _vm.child_shipping_amount
-                                  )
-                                )
+                                _vm._s(_vm.currency)
                             )
                           ])
                         ]),
@@ -9049,11 +9047,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", { staticClass: "pl10" }, [
                             _vm._v(
-                              _vm._s(_vm.currency) +
+                              _vm._s(
+                                _vm._f("formatPrice")(_vm.child_total_amount)
+                              ) +
                                 " " +
-                                _vm._s(
-                                  _vm._f("formatPrice")(_vm.child_total_amount)
-                                )
+                                _vm._s(_vm.currency)
                             )
                           ])
                         ])
@@ -11668,9 +11666,9 @@ var render = function() {
             _vm._v(_vm._s(_vm.__("Paid amount")) + " : "),
             _c("span", [
               _vm._v(
-                _vm._s(_vm.currency) +
+                _vm._s(_vm._f("formatPrice")(_vm.child_total_amount)) +
                   " " +
-                  _vm._s(_vm._f("formatPrice")(_vm.child_total_amount))
+                  _vm._s(_vm.currency)
               )
             ])
           ])
@@ -11777,9 +11775,9 @@ var render = function() {
             _vm._v(_vm._s(_vm.__("Pending amount")) + " : "),
             _c("span", [
               _vm._v(
-                _vm._s(_vm.currency) +
+                _vm._s(_vm._f("formatPrice")(_vm.child_total_amount)) +
                   " " +
-                  _vm._s(_vm._f("formatPrice")(_vm.child_total_amount))
+                  _vm._s(_vm.currency)
               )
             ])
           ])

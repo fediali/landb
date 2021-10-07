@@ -31551,7 +31551,7 @@ svg:not(:root) {
   box-sizing: border-box;
   max-width: none;
   display: block;
-  height: 45px !important;
+  height: 34px !important;
   outline: none !important;
 }
 

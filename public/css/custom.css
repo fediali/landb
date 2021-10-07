@@ -1223,3 +1223,7 @@ tbody>tr>:nth-child(3) span{
 #header_inbox_bar .message{
 display: none !important;
 }
+
+.table-order .mb-0 small{
+display: block !important;
+}
