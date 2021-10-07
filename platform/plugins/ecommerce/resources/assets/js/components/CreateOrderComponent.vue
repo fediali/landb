@@ -67,7 +67,7 @@
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
                                                 <a v-if="child_can_price_edit == 0" class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>
-                                                <div v-if="child_can_price_edit == 1">
+                                                <div class="d-flex" v-if="child_can_price_edit == 1">
                                                     <span style=" margin-top: 8px !important; margin-right: 5px !important;">
                                                         {{currency}}
                                                     </span>
