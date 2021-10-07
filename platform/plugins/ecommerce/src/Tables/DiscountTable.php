@@ -130,6 +130,12 @@ class DiscountTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::discount.end_date'),
                 'class' => 'text-center',
             ],
+            'status'    => [
+                'name'  => 'ec_discounts.status',
+                'title' => trans('core/base::tables.status'),
+                'width' => '100px',
+                'class' => 'text-center',
+            ],
         ];
     }
 
