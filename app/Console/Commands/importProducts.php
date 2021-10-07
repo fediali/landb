@@ -101,25 +101,25 @@ class importProducts extends Command
         $this->bounds();
     }
 
-//    public function bounds()
-//    {
-//        $products = Product::all();
-//
-//        foreach ($products as $product) {
-//            $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
-//            if ($getBound) {
-//                $getBoundProducts = DB::table('hw_hw_bounded_products')
-//                    ->where('bound_id', $getBound->bound_id)
-//                    ->where('product_id', '!=', $product->id)
-//                    ->pluck('product_id')
-//                    ->all();
-//                if (count($getBoundProducts)) {
-//                    Product::where('id', $product->id)->update(['color_products' => json_encode($getBoundProducts)]);
-//                }
-//            }
-//            echo $product->sku . '<br>';
-//        }
-//    }
+    public function bounds()
+    {
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
+            if ($getBound) {
+                $getBoundProducts = DB::table('hw_hw_bounded_products')
+                    ->where('bound_id', $getBound->bound_id)
+                    ->where('product_id', '!=', $product->id)
+                    ->pluck('product_id')
+                    ->all();
+                if (count($getBoundProducts)) {
+                    Product::where('id', $product->id)->update(['color_products' => json_encode($getBoundProducts)]);
+                }
+            }
+            echo $product->sku . '<br>';
+        }
+    }
 
     public function insertProducts($data)
     {
