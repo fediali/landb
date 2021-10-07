@@ -182,6 +182,9 @@ class CustomerController extends Controller
         'title' => 'required|max:255',
         'date' => 'required',
         'purchaser_sign' => $sign,
+        'first_check' => 'required',
+        'second_check' => 'required',
+        'last_check' => 'required',
     ]);
     $data = $request->all();
     if(!$cert){
