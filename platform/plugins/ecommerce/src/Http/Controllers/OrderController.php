@@ -2408,6 +2408,33 @@ class OrderController extends BaseController
             'user_id' => Auth::user()->getKey(),
         ], []);
 
+        if($requestData['status'] != OrderStatusEnum::CANCELED) {
+            if ($order->order_type != Order::PRE_ORDER) {
+                $order_products = OrderProduct::where('order_id', $order->id)->get();
+                foreach ($order_products as $order_product) {
+                    $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id' => $order_product->product_id,
+                        'sku' => $order_product->product->sku,
+                        'quantity' => $order_product->qty,
+                        'new_stock' => $order_product->product->quantity + $order_product->qty,
+                        'old_stock' => $order_product->product->quantity,
+                        'order_id' => $order->id,
+                        'created_by' => Auth::user()->id,
+                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                    ];
+                    log_product_history($logParam);
+
+                    $this->productRepository
+                        ->getModel()
+                        ->where('id', $order_product->product_id)
+                        ->where('with_storehouse_management', 1)
+                        ->increment('quantity', $order_product->qty);
+                }
+            }
+        }
+
         return $response;
     }
 
