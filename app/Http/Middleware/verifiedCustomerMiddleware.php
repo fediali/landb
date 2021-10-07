@@ -17,6 +17,7 @@ class verifiedCustomerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+//        dd(auth('customer')->user());
       if(auth('customer')->user() && auth('customer')->user()->status != BaseStatusEnum::ACTIVE){
         return redirect()->route('customer.pendingNotification');
       }

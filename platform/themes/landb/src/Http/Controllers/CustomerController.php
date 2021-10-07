@@ -197,10 +197,12 @@ class CustomerController extends Controller
       unset($data['_token']);
 
 
-     //dd($data);
+
 
     $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
 return $submit;
+
+
   }
 
   public function updateStoreLocator($request) {
