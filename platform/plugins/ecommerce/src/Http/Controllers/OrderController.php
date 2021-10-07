@@ -2311,6 +2311,16 @@ class OrderController extends BaseController
             'total' => $request->amount,
             'pre_auth' => 1
         ];
+
+        $orderProducts = OrderProduct::where('order_id', $request->order_id)->get()->toArray();
+        foreach ($orderProducts as $p) {
+            $data['meta']['lineItems'][] = [
+                'price' => $p['price'],
+                'quantity' => $p['qty'],
+                'item' => $p['product_name'],
+            ];
+        }
+
         $url = (env("OMNI_URL") . "charge/");
         list($response, $info) = omni_api($url, $data, 'POST');
 
