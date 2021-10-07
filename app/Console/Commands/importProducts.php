@@ -94,7 +94,7 @@ class importProducts extends Command
 //        $this->insertProducts($data);
 //        echo 'success-active';
 
-        $file = File::get(public_path('lnb_products_43131.json'));
+        $file = File::get(public_path('lnb_prods_43131.json'));
         $data = json_decode(utf8_encode($file), true);
         $this->insertProducts($data);
         echo 'success-inactive';
