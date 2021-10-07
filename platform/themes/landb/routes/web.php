@@ -31,6 +31,14 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('logout', 'AuthController@logout')->name('public.logout');
 });
 
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
+    Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+        Route::post('/edit-account/{type}', [
+            'as'   => 'edit-account-post',
+            'uses' => 'CustomerController@update'
+        ]);
+    });
+});
 
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']], function () {
 
@@ -94,10 +102,10 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'uses' => 'CustomerController@updateDefaultById'
         ]);
 
-        Route::post('/edit-account/{type}', [
+        /*Route::post('/edit-account/{type}', [
             'as'   => 'edit-account-post',
             'uses' => 'CustomerController@update'
-        ]);
+        ]);*/
 
         Route::post('create-customer-payment', [
             'as'   => 'create-customer-payment',
