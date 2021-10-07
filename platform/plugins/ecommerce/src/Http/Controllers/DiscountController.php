@@ -5,6 +5,7 @@ namespace Botble\Ecommerce\Http\Controllers;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
+use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Http\Requests\DiscountRequest;
@@ -223,4 +224,25 @@ class DiscountController extends BaseController
 
         return $response->setData($code);
     }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->discountRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $product->fill($requestData);
+
+        $this->discountRepository->createOrUpdate($product);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $product));
+
+        return $response;
+    }
+
 }

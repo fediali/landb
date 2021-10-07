@@ -45,10 +45,13 @@ class BaseStatusEnum extends Enum
         'Disabled' => self::DISABLED,
         //'Published' => self::PUBLISHED,
     ];
+    public static $Discount = [
+        'Active'   => self::ACTIVE,
+        'Disabled' => self::DISABLED,
+    ];
     public static $SCHEDULE = [
         'schedule'  => self::SCHEDULE,
         'published' => self::PUBLISHED,
-
     ];
     public static $DEFAULT = [
         'published' => self::PUBLISHED,

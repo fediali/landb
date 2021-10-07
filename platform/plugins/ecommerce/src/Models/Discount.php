@@ -4,9 +4,11 @@ namespace Botble\Ecommerce\Models;
 
 use Botble\Base\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends BaseModel
 {
+    use SoftDeletes;
 
     /**
      * @var string
@@ -31,6 +33,7 @@ class Discount extends BaseModel
         'min_order_price',
         'discount_on',
         'product_quantity',
+        'status',
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Services;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
@@ -209,6 +210,7 @@ class  HandleApplyCouponService
             ->where('code', $couponCode)
             ->where('type', 'coupon')
             ->where('start_date', '<=', now())
+            ->where('status', BaseStatusEnum::$Discount['Active'])
             ->where(function ($query) use ($sessionData) {
                 /**
                  * @var Builder $query
