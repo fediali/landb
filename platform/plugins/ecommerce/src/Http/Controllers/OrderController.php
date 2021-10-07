@@ -2525,6 +2525,7 @@ class OrderController extends BaseController
         /*************** Replication Start ****************/
         $orderData = $order->replicate();
         $orderData->order_type = Order::PRE_ORDER;
+        //$orderData->status = 'New';
         $new_order = $this->orderRepository->createOrUpdate($orderData);
 
         $paymentData = $order->payment->replicate();

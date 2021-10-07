@@ -66,7 +66,7 @@
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
-                                                <a v-if="child_can_price_edit == 0" class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>
+                                                <a v-if="child_can_price_edit == 0" class="wordwrap hide-print">{{ currency }} {{ variant.price }}</a>
                                                 <div v-if="child_can_price_edit == 1">
                                                     <span style=" margin-top: 8px !important; margin-right: 5px !important;">
                                                         {{currency}}
@@ -81,8 +81,8 @@
                                         <input class="next-input p-none-r" v-model="variant.select_qty" type="number" step="1" min="1" @change="handleChangeQuantity()">
                                     </td>
                                     <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">
-                                        {{ parseFloat(parseInt(variant.select_qty) * variant.price).toFixed(2) }}
                                         {{ currency }}
+                                        {{ parseFloat(parseInt(variant.select_qty) * variant.price).toFixed(2) }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
                                         <a href="#" @click="handleRemoveVariant($event, variant)">
@@ -244,7 +244,7 @@
                                     <tbody>
                                     <tr>
                                         <td class="color-subtext">{{ __('Amount') }}</td>
-                                        <td class="pl10">{{ child_sub_amount | formatPrice }} {{ currency }}</td>
+                                        <td class="pl10">{{ currency }} {{ child_sub_amount | formatPrice }}</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -259,8 +259,8 @@
                                                 }}</p>
                                         </td>
                                         <td class="pl10">
-                                            {{ has_applied_discount ? child_discount_amount : 0 | formatPrice }}
                                             {{ currency }}
+                                            {{ has_applied_discount ? child_discount_amount : 0 | formatPrice }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -275,18 +275,18 @@
                                             <p class="mb0 font-size-12px" v-if="child_shipping_method_name">
                                                 {{child_shipping_method_name }}
                                             </p>
-                                        </td><td class="pl10">{{ shipping_amount | formatPrice }} {{ currency }}</td>-->
+                                        </td><td class="pl10">{{ currency }} {{ shipping_amount | formatPrice }}</td>-->
                                         <span>
                                             <i class="fa fa-plus-circle"></i>
                                             {{ __('Add shipping fee') }}
                                         </span>
                                         <input class="next-input p-none-r" v-model="child_shipping_amount" type="number"
                                                min="1">
-                                        <td class="pl10">{{ child_shipping_amount | formatPrice }} {{ currency }}</td>
+                                        <td class="pl10">{{ currency }} {{ child_shipping_amount | formatPrice }}</td>
                                     </tr>
                                     <tr class="text-no-bold">
                                         <td>{{ __('Total amount') }}</td>
-                                        <td class="pl10">{{ child_total_amount | formatPrice }} {{ currency }}</td>
+                                        <td class="pl10">{{ currency }} {{ child_total_amount | formatPrice }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -977,7 +977,7 @@
                 </svg>
             </div>
             <br/>
-            <p>{{ __('Paid amount') }} : <span>{{ child_total_amount | formatPrice }} {{ currency }}</span></p>
+            <p>{{ __('Paid amount') }} : <span>{{ currency }} {{ child_total_amount | formatPrice }}</span></p>
         </b-modal>
 
         <b-modal id="make-pending" title="Create a new order" ok-title="Create order" cancel-title="Close"
@@ -998,7 +998,7 @@
                 </svg>
             </div>
             <br/>
-            <p>{{ __('Pending amount') }} : <span>{{ child_total_amount | formatPrice }} {{ currency }}</span></p>
+            <p>{{ __('Pending amount') }} : <span>{{ currency }} {{ child_total_amount | formatPrice }}</span></p>
         </b-modal>
 
     </div>
