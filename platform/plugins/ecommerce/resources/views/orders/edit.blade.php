@@ -119,19 +119,18 @@
                                                                     @php $attributes = get_product_attributes($product->id) @endphp
                                                                     @if (!empty($attributes))
                                                                         @foreach ($attributes as $attribute)
-
                                                                             @if($attribute->attribute_set_title !== 'Size')
-                                                                                {{ $attribute->attribute_set_title }}
-                                                                                : {{ $attribute->title }}@if (!$loop->last)
-                                                                                @endif
+                                                                                {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
                                                                                 @if($attribute->title !== 'Single')
-                                                                                    , Size : {{$product->sizes}}
+                                                                                    </small><small>
+                                                                                    Size : {{$product->sizes}}
                                                                                 @endif
                                                                             @endif
                                                                         @endforeach
                                                                     @endif
-                                                                    , Per Piece:
-                                                                    ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                </small>
+                                                                <small>
+                                                                    Per Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                 </small>
                                                             </p>
                                                         @endif
