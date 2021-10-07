@@ -70,6 +70,9 @@ class DiscountTable extends TableAbstract
                     return '-';
                 }
                 return $item->end_date;
+            })
+            ->editColumn('status', function ($item) {
+                return view('plugins/ecommerce::discounts.discountStatus', ['item' => $item])->render();
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())

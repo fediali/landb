@@ -16,6 +16,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'DiscountController@postGenerateCoupon',
                 'permission' => 'discounts.create',
             ]);
+
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'DiscountController@changeStatus',
+                'permission' => 'discounts.create',
+            ]);
         });
     });
 });

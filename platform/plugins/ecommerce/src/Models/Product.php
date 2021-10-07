@@ -39,6 +39,7 @@ class Product extends BaseModel
         'description',
         'content',
         'status',
+        'thumb_image',
         'images',
         'sku',
         'warehouse_sec',
