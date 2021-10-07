@@ -75,7 +75,7 @@ if (!function_exists('image_html_generator')) {
         $html = '<img
             ' . (!is_null($height) ? 'height="' . $height . 'px"' : '') . '
             ' . (!is_null($width) ? 'width="' . $width . 'px"' : '') . '
-            src="' . asset('landb/defaultLogo.png') . '"
+            src="' . asset('landb/loader.jpg') . '"
             alt="' . (!is_null($alt) ? $alt : 'Product image') . '"
             loading="lazy"
             class="lazyload ' . $class . '"

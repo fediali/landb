@@ -36,14 +36,14 @@
 {{--    <script async src="{{ asset('landb/js/datepickk.min.js') }}"></script>--}}
     <script async src="{{ asset('landb/js/lazyload.min.js') }}"></script>
 <!--    <link rel="stylesheet" href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
-<!--    <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
-    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">-->
+ <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
+    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
     @if($product_detail)
         <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
     @endif
 
-<!--    <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>-->
-    <title>LandBAppreal</title>
+{{--  <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>--}}
+
     <style>
         .loading-overlay {
             display: none;

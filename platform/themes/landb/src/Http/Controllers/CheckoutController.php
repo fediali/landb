@@ -100,16 +100,13 @@ class CheckoutController extends Controller
 
         if ($user->card->count() > 0) {
             $omniId = $user->card()->whereNotNull('customer_omni_id')->get();
-
             foreach ($omniId as $item) {
-
                 if ($item->customer_omni_id) {
                     $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
                     list($card, $info) = omni_api($url);
                     $cards = collect(json_decode($card))->pluck('nickname', 'id')->push('Add New Card');
-
-                }
-                else {
+                    break;
+                } else {
                     $cards = collect()->push('Add New Card');
                 }
             }
