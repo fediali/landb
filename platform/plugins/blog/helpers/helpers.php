@@ -886,7 +886,7 @@ if (!function_exists('set_product_oos_date')) {
                 $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com','alexis.guerrero'];
                 Mail::send('emails.oos', ['name' => $name],
                     function ($mail) use ($emails, $name, $subject) {
-                        $mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
+                        //$mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
                         $mail->to($emails, $name);
                         $mail->subject($subject);
                     });
