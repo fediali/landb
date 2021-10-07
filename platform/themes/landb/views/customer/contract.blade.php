@@ -15,7 +15,7 @@
         <div class="col-lg-2 mt-2"></div>
         <div class="col-lg-8 mt-2">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12 pl-3 pr-3">
                     <h4 class="text-center txt mb-5 mt-5">
                         TEXAS SALES AND USE TAX RESALE CERTIFICATE
                     </h4>
