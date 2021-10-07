@@ -208,6 +208,7 @@ class AuthController extends Controller
 
     public function postForgetPassword(Request $request)
     {
+
         $request->validate(['email' => 'required|email|exists:ec_customers']);
 
         $status = Password::sendResetLink(
