@@ -5,6 +5,7 @@
 .DS_Store
 Thumbs.db
 /bower_components
+.htaccess
 .env
 .env.backup
 /.idea

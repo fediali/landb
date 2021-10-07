@@ -238,7 +238,7 @@ class CheckoutController extends Controller
 
         $payment = Payment::where('charge_id', $chargeId)->first();
         //dd($payment);
-        $order->update(['is_finished' => 1, 'payment_id' => $payment->id]);
+        $order->update(['is_finished' => 1, 'payment_id' => $payment->id,'status'=> 'new']);
 
 
         OrderHelper::clearSessions($token);

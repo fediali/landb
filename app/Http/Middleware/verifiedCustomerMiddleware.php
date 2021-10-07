@@ -20,6 +20,10 @@ class verifiedCustomerMiddleware
       if(auth('customer')->user() && auth('customer')->user()->status != BaseStatusEnum::ACTIVE){
         return redirect()->route('customer.pendingNotification');
       }
+
+        if(!auth('customer')->user()->taxCertificate){
+            return redirect()->route('customer.contract-form');
+        }
         return $next($request);
     }
 }
