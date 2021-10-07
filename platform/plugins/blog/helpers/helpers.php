@@ -883,7 +883,7 @@ if (!function_exists('set_product_oos_date')) {
 
                 $subject = "Product Out Of Stock " . $product->sku;
                 $name = $product->sku;
-                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com','alexis.guerrero'];
+                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com','alexis.guerrero@landbapparel.com'];
                 Mail::send('emails.oos', ['name' => $name],
                     function ($mail) use ($emails, $name, $subject) {
                         //$mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
