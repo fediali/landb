@@ -101,6 +101,14 @@ class DiscountTable extends TableAbstract
     /**
      * {@inheritDoc}
      */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function columns()
     {
         return [
