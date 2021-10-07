@@ -49,52 +49,7 @@ $('.toggle-menu').click(function () {
 });
 
 
-$('.luxurious_wrap .owl-carousel').owlCarousel({
-    center: true,
-    loop: true,
-    items: 5,
-    autoplay: true,
-    autoplayHoverPause: true,
-    margin: 10,
-    slideTransition: 'linear',
-    autoplayTimeout: 3000,
-    autoplaySpeed: 3000,
-    responsive: {
-        0: {
-            items: 1
-        },
-        768: {
-            items: 2
-        },
-        1170: {
-            items: 5
-        }
-    }
-})
 
-
-$('.explore_seasonal .owl-carousel').owlCarousel({
-    center: true,
-    loop: true,
-    items: 3,
-    autoplay: true,
-    autoplayHoverPause: true,
-    margin: 10,
-    slideTransition: 'linear',
-    autoplayTimeout: 3000,
-    autoplaySpeed: 3000,
-    responsive: {
-        0: {
-            items: 1
-        },
-        768: {
-            items: 1
-        },
-        1170: {
-            items: 3
-        }
-    }
-})
 
 // animation js
 /*
@@ -156,6 +111,7 @@ gsap.utils.toArray("section").forEach((elem) => {
 
 $(document).ready(function () {
     $(document).on('submit', 'form.add_to_cart_form', function (e) {
+        console.log('clicked')
         e.preventDefault();
         var id = $(this).attr('data-id');
         var qty = $(this).find('input[name="quantity"]').val();
@@ -401,13 +357,7 @@ function topFunction() {
 
 $(document).ready(function () {
 
-    $(".owl-carousel").owlCarousel({
-        loop: true,
-        items: 1,
-        margin: 0,
-        stagePadding: 0,
-        autoplay: false
-    });
+
 
     dotcount = 1;
 

@@ -108,6 +108,61 @@ $home = empty(request()->segment(1)) ? true : false;
 <!--<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>-->
 @if($home || $product_detail)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script>
+        $('.luxurious_wrap .owl-carousel').owlCarousel({
+            center: true,
+            loop: true,
+            items: 5,
+            autoplay: true,
+            autoplayHoverPause: true,
+            margin: 10,
+            slideTransition: 'linear',
+            autoplayTimeout: 3000,
+            autoplaySpeed: 3000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                1170: {
+                    items: 5
+                }
+            }
+        })
+
+
+        $('.explore_seasonal .owl-carousel').owlCarousel({
+            center: true,
+            loop: true,
+            items: 3,
+            autoplay: true,
+            autoplayHoverPause: true,
+            margin: 10,
+            slideTransition: 'linear',
+            autoplayTimeout: 3000,
+            autoplaySpeed: 3000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 1
+                },
+                1170: {
+                    items: 3
+                }
+            }
+        })
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            items: 1,
+            margin: 0,
+            stagePadding: 0,
+            autoplay: false
+        });
+    </script>
 @endif
 <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
 <!--<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/gsap-latest-beta.min.js"></script>
@@ -126,6 +181,16 @@ $home = empty(request()->segment(1)) ? true : false;
 <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>-->
 @if($product_detail)
 <script src="{{ asset('landb/js/jquery.magnify.js') }}"></script>
+<script>
+    $('[data-magnify]').magnify({
+        resizable: false,
+        initMaximized: true,
+        headerToolbar: [
+            'close'
+        ],
+    });
+
+</script>
 @endif
 <script>
     var coll = document.getElementsByClassName("collapsible");
@@ -143,16 +208,7 @@ $home = empty(request()->segment(1)) ? true : false;
         });
     }
 </script>
-<script>
-    $('[data-magnify]').magnify({
-        resizable: false,
-        initMaximized: true,
-        headerToolbar: [
-            'close'
-        ],
-    });
 
-</script>
 <script>
 
 
@@ -164,6 +220,7 @@ $home = empty(request()->segment(1)) ? true : false;
                 $('.tax-submit-btn').attr('disabled', false)
             }
         });
+        @if(request()->segment(1) == 'customer' && request()->segment(2) == 'contract-form')
         $("#signature").jSignature({
             // line width
             lineWidth: 2,
@@ -175,6 +232,7 @@ $home = empty(request()->segment(1)) ? true : false;
 
 
         });
+        @endif
         $("#undo-sign").on('click', function () {
             $("#signature").jSignature('reset');
         });
@@ -192,7 +250,7 @@ $home = empty(request()->segment(1)) ? true : false;
             $(this).toggleClass("on");
             $("#filtermenu").slideToggle();
         });
-        $("input[name='shipping_postal_code']").mask('99999?-9999');
+        /*$("input[name='shipping_postal_code']").mask('99999?-9999');*/
 
         $('select[name="shipping_country"]').on('change', function () {
             get_states($('select[name="shipping_state"]'), this.value, '{{ route('ajax.getStates') }}');
