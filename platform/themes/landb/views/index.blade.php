@@ -33,7 +33,7 @@
 </div>
 <div class="row">
     <div class="col-lg-2"></div>
-    <div class="col-lg-8 text-center">
+    <div class="col-lg-8 text-center mr-3 ml-3">
         <h2 class="font-north western-txt">
             {!! setting('theme-landb-home_main_section_heading') !!}
         </h2>

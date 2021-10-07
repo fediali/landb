@@ -94,32 +94,32 @@ class importProducts extends Command
 //        $this->insertProducts($data);
 //        echo 'success-active';
 
-        $file = File::get(public_path('lnb_products_43131.json'));
+        $file = File::get(public_path('lnb_prods_43131.json'));
         $data = json_decode(utf8_encode($file), true);
         $this->insertProducts($data);
         echo 'success-inactive';
         $this->bounds();
     }
 
-//    public function bounds()
-//    {
-//        $products = Product::all();
-//
-//        foreach ($products as $product) {
-//            $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
-//            if ($getBound) {
-//                $getBoundProducts = DB::table('hw_hw_bounded_products')
-//                    ->where('bound_id', $getBound->bound_id)
-//                    ->where('product_id', '!=', $product->id)
-//                    ->pluck('product_id')
-//                    ->all();
-//                if (count($getBoundProducts)) {
-//                    Product::where('id', $product->id)->update(['color_products' => json_encode($getBoundProducts)]);
-//                }
-//            }
-//            echo $product->sku . '<br>';
-//        }
-//    }
+    public function bounds()
+    {
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
+            if ($getBound) {
+                $getBoundProducts = DB::table('hw_hw_bounded_products')
+                    ->where('bound_id', $getBound->bound_id)
+                    ->where('product_id', '!=', $product->id)
+                    ->pluck('product_id')
+                    ->all();
+                if (count($getBoundProducts)) {
+                    Product::where('id', $product->id)->update(['color_products' => json_encode($getBoundProducts)]);
+                }
+            }
+            echo $product->sku . '<br>';
+        }
+    }
 
     public function insertProducts($data)
     {
