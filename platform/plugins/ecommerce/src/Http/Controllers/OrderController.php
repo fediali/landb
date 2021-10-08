@@ -1881,6 +1881,21 @@ class OrderController extends BaseController
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+
+                            $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                            $logParam = [
+                                'parent_product_id' => $getParentProdId,
+                                'product_id' => $product->id,
+                                'sku' => $product->sku,
+                                'quantity' => $orderProduct->qty,
+                                'new_stock' => $product->quantity - $orderProduct->qty,
+                                'old_stock' => $product->quantity,
+                                'order_id' => $orderProduct->order_id,
+                                'created_by' => Auth::user()->id,
+                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            ];
+                            log_product_history($logParam);
+
                         }
 
                         if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
@@ -2085,6 +2100,21 @@ class OrderController extends BaseController
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+
+                            $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                            $logParam = [
+                                'parent_product_id' => $getParentProdId,
+                                'product_id' => $product->id,
+                                'sku' => $product->sku,
+                                'quantity' => $orderProduct->qty,
+                                'new_stock' => $product->quantity - $orderProduct->qty,
+                                'old_stock' => $product->quantity,
+                                'order_id' => $orderProduct->order_id,
+                                'created_by' => Auth::user()->id,
+                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            ];
+                            log_product_history($logParam);
+
                         }
 
                         if ($orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
@@ -2286,6 +2316,21 @@ class OrderController extends BaseController
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
+
+                            $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                            $logParam = [
+                                'parent_product_id' => $getParentProdId,
+                                'product_id' => $product->id,
+                                'sku' => $product->sku,
+                                'quantity' => $orderProduct->qty,
+                                'new_stock' => $product->quantity - $orderProduct->qty,
+                                'old_stock' => $product->quantity,
+                                'order_id' => $orderProduct->order_id,
+                                'created_by' => Auth::user()->id,
+                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            ];
+                            log_product_history($logParam);
+
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::PRE_ORDER) {
