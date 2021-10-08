@@ -1811,7 +1811,7 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
-                        } else if ($product) {
+                        } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['original_amount']);;
                             $iorder['currency_id'] = 1;
@@ -1833,7 +1833,7 @@ class OrderController extends BaseController
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
-                                if ($orderProduct) {
+                                if ($importOrder) {
                                     $orderInfo['order_id'] = $importOrder->id;
                                     $orderInfo['po_number'] = $row['po'];
                                     $orderInfo['order_date'] = $row['order_date'];
@@ -1844,8 +1844,10 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        if (isset($importOrder->id)) {
+                        if (isset($importOrder->id) && count($errors)) {
                             $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        } elseif (isset($orderPo->order_id) && count($errors)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2014,7 +2016,7 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
-                        } else if ($product) {
+                        } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = str_replace('$', '', $row['order_amt']);;
                             $iorder['currency_id'] = 1;
@@ -2036,7 +2038,7 @@ class OrderController extends BaseController
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
-                                if ($orderProduct) {
+                                if ($importOrder) {
                                     $orderInfo['order_id'] = $importOrder->id;
                                     $orderInfo['po_number'] = $row['invoice'];
                                     $orderInfo['order_date'] = $row['order_date'];
@@ -2047,8 +2049,10 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        if (isset($importOrder->id)) {
-                            $errors[] = '<a target="_blank" href="' . route('orders.editOrder', [$importOrder->id]) . '">click here to edit order.</a>';
+                        if (isset($importOrder->id) && count($errors)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        } elseif (isset($orderPo->order_id) && count($errors)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2213,7 +2217,7 @@ class OrderController extends BaseController
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
-                        } else if ($product) {
+                        } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
                             $iorder['amount'] = $iorder['sub_total'] = str_replace('$', '', $row['totalamount']);;
                             $iorder['currency_id'] = 1;
@@ -2235,7 +2239,7 @@ class OrderController extends BaseController
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
-                                if ($orderProduct) {
+                                if ($importOrder) {
                                     $orderInfo['order_id'] = $importOrder->id;
                                     $orderInfo['po_number'] = $row['ponumber'];
                                     $orderInfo['order_date'] = $row['orderdate'];
@@ -2246,8 +2250,10 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        if (isset($importOrder->id)) {
-                            $errors[] = '<a target="_blank" href="' . route('orders.editOrder', [$importOrder->id]) . '">click here to edit order.</a>';
+                        if (isset($importOrder->id) && count($errors)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        } elseif (isset($orderPo->order_id) && count($errors)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
