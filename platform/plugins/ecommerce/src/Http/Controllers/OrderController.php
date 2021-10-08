@@ -1844,7 +1844,7 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
+                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
 
@@ -2045,7 +2045,7 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
+                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
 
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2243,7 +2243,7 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
+                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
 
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
