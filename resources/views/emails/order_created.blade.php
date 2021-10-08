@@ -35,10 +35,10 @@
                         <b>{{@$order->shippingAddress->name}}</b>
                     </p>
                     <p style="" class="m-0">
-                        {{$order->shippingAddress->zip_code}}, {{$order->shippingAddress->city}},<br/> {{$order->shippingAddress->address}}, {{$order->shippingAddress->state}}<br/> {{$order->shippingAddress->zip_code}} {{$order->shippingAddress->country}}
+                        {{@$order->shippingAddress->zip_code}}, {{@$order->shippingAddress->city}},<br/> {{@$order->shippingAddress->address}}, {{@$order->shippingAddress->state}}<br/> {{@$order->shippingAddress->zip_code}} {{@$order->shippingAddress->country}}
                     </p>
                     <p style="" class="m-0">
-                        {{$order->shippingAddress->phone}}
+                        {{@$order->shippingAddress->phone}}
                     </p>
                 </div>
             </div>
