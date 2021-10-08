@@ -1844,7 +1844,9 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        if (isset($importOrder->id)) {
+                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
 
@@ -2045,8 +2047,9 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
-
+                        if (isset($importOrder->id)) {
+                            $errors[] = '<a target="_blank" href="' . route('orders.editOrder', [$importOrder->id]) . '">click here to edit order.</a>';
+                        }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
@@ -2243,8 +2246,9 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
-
+                        if (isset($importOrder->id)) {
+                            $errors[] = '<a target="_blank" href="' . route('orders.editOrder', [$importOrder->id]) . '">click here to edit order.</a>';
+                        }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
