@@ -62,7 +62,7 @@
                                 <td><input type="checkbox"/></td>
                                 <td>
                                     <p class="m-0">
-                                        <a target="_blank" href="{{route('orders.edit-order',[$order->id])}}">{{$order->id}}</a>
+                                        <a target="_blank" href="{{route('orders.editOrder',[$order->id])}}">{{$order->id}}</a>
                                     </p>
                                     {{--<p style="font-size:12px" class="m-0">--}}
                                     {{--Street, Rochester, IN, 40975, US--}}
@@ -84,7 +84,7 @@
                                 </td>
                                 <td>{{$order->import->not_found_skus}}</td>
                                 <td>
-                                    <p class="m-0"><a target="_blank" href="{{route('orders.edit-order',[$order->id])}}">Edit Order</a></p>
+                                    <p class="m-0"><a target="_blank" href="{{route('orders.editOrder',[$order->id])}}">Edit Order</a></p>
                                 </td>
                             </tr>
                         @endforeach
