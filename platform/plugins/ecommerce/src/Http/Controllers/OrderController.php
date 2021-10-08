@@ -2140,7 +2140,7 @@ class OrderController extends BaseController
 //                            $prodSKU .= '-pack-all';
 //                        }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
-                        dd($product);
+
                         if ($product) {
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
