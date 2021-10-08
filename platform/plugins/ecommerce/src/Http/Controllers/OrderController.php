@@ -1685,12 +1685,12 @@ class OrderController extends BaseController
             $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $request->file('file')->getClientOriginalName());
             $order = Excel::toCollection(new OrderImportFile(), $move);
-            $filecheck = OrderImportUpload::where('file', $move)->first();
-            if ($filecheck != null) {
-                return $response
-                    ->setError()
-                    ->setMessage('File Already Exist');
-            }
+//            $filecheck = OrderImportUpload::where('file', $move)->first();
+//            if ($filecheck != null) {
+//                return $response
+//                    ->setError()
+//                    ->setMessage('File Already Exist');
+//            }
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
@@ -1749,9 +1749,9 @@ class OrderController extends BaseController
 
                         //Finding Product For Order
                         $prodSKU = $row['style_no'];
-                        if (!str_contains($prodSKU, 'pack-all')) {
-                            $prodSKU .= '-pack-all';
-                        }
+//                        if (!str_contains($prodSKU, 'pack-all')) {
+//                            $prodSKU .= '-pack-all';
+//                        }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
                             //count pack quantity for product
@@ -1943,9 +1943,9 @@ class OrderController extends BaseController
                         $checkProdQty = false;
                         //Finding Product For Order
                         $prodSKU = $row['style'];
-                        if (!str_contains($prodSKU, 'pack-all')) {
-                            $prodSKU .= '-pack-all';
-                        }
+//                        if (!str_contains($prodSKU, 'pack-all')) {
+//                            $prodSKU .= '-pack-all';
+//                        }
 
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
                         if ($product) {
@@ -2136,10 +2136,11 @@ class OrderController extends BaseController
                         $checkProdQty = false;
                         //Finding Product For Order
                         $prodSKU = $row['styleno'];
-                        if (!str_contains($prodSKU, 'pack-all')) {
-                            $prodSKU .= '-pack-all';
-                        }
+//                        if (!str_contains($prodSKU, 'pack-all')) {
+//                            $prodSKU .= '-pack-all';
+//                        }
                         $product = Product::where(['sku' => $prodSKU, 'status' => BaseStatusEnum::ACTIVE])->where(['ptype' => 'R'])->latest()->first();
+                        dd($product);
                         if ($product) {
                             //count pack quantity for product
 //                            $pack = quantityCalculate($product['category_id']);
