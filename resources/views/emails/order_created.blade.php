@@ -32,7 +32,7 @@
                         <b>SHIP TO</b>
                     </h6>
                     <p style="" class="m-0">
-                        <b>{{$order->shippingAddress->name}}</b>
+                        <b>{{@$order->shippingAddress->name}}</b>
                     </p>
                     <p style="" class="m-0">
                         {{$order->shippingAddress->zip_code}}, {{$order->shippingAddress->city}},<br/> {{$order->shippingAddress->address}}, {{$order->shippingAddress->state}}<br/> {{$order->shippingAddress->zip_code}} {{$order->shippingAddress->country}}
