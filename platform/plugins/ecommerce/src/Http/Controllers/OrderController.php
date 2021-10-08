@@ -1694,6 +1694,7 @@ class OrderController extends BaseController
             $upload = OrderImportUpload::create(['file' => $move]);
 
             $errors = [];
+            $notFoundSkus = '';
             $orderProduct = 0;
             if ($request->market_place == Order::LASHOWROOM) {
 
@@ -1760,7 +1761,7 @@ class OrderController extends BaseController
                             if (!$pack) {
                                 return $response
                                     ->setError()
-                                    ->setMessage('Please add Peices in Product ' . $row['style']);
+                                    ->setMessage('Please add Pieces in Product ' . $row['style']);
                             }
                             $orderQuantity = $row['original_qty'] / $pack;
 
@@ -1787,15 +1788,18 @@ class OrderController extends BaseController
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
                                 $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['style_no'].', ';
                             }
 //                            }
 
                         } else {
                             $errors[] = $row['style_no'] . ' product is not found.';
+                            $notFoundSkus .= $row['style_no'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
                             $errors[] = $row['style_no'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['style_no'].', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
@@ -1835,10 +1839,12 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['order_date'];
                                     $orderInfo['type'] = Order::LASHOWROOM;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
+                                    $orderInfo['not_found_skus'] = $notFoundSkus;
                                     OrderImport::create($orderInfo);
                                 }
                             }
                         }
+                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
 
@@ -1849,7 +1855,7 @@ class OrderController extends BaseController
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                            /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
                                     ->getModel()
                                     ->where('id', $product->id)
@@ -1864,7 +1870,7 @@ class OrderController extends BaseController
                                     ->where('with_storehouse_management', 1)
                                     ->where('in_person_sales_qty', '>', 0)
                                     ->decrement('in_person_sales_qty', $orderQuantity);
-                            }
+                            }*/
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
@@ -1983,15 +1989,18 @@ class OrderController extends BaseController
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
                                 $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['style'].', ';
                             }
 //                            }
 
                         } else {
                             $errors[] = $row['style'] . ' product is not found.';
+                            $notFoundSkus .= $row['style'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
                             $errors[] = $row['style'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['style'].', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
@@ -2031,10 +2040,12 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['order_date'];
                                     $orderInfo['type'] = Order::ORANGESHINE;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
+                                    $orderInfo['not_found_skus'] = $notFoundSkus;
                                     OrderImport::create($orderInfo);
                                 }
                             }
                         }
+                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
 
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2045,7 +2056,7 @@ class OrderController extends BaseController
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                            /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
                                     ->getModel()
                                     ->where('id', $product->id)
@@ -2060,7 +2071,7 @@ class OrderController extends BaseController
                                     ->where('with_storehouse_management', 1)
                                     ->where('in_person_sales_qty', '>', 0)
                                     ->decrement('in_person_sales_qty', $orderQuantity);
-                            }
+                            }*/
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
@@ -2175,15 +2186,18 @@ class OrderController extends BaseController
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
                                 $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['styleno'].', ';
                             }
 //                            }
 
                         } else {
                             $errors[] = $row['styleno'] . ' product is not found.';
+                            $notFoundSkus .= $row['styleno'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
                             $errors[] = $row['styleno'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['styleno'].', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
@@ -2224,10 +2238,12 @@ class OrderController extends BaseController
                                     $orderInfo['order_date'] = $row['orderdate'];
                                     $orderInfo['type'] = Order::FASHIONGO;
                                     $orderInfo['order_import_upload_id'] = $upload->id;
+                                    $orderInfo['not_found_skus'] = $notFoundSkus;
                                     OrderImport::create($orderInfo);
                                 }
                             }
                         }
+                        $errors[] = '<a target="_blank" href="'.route('orders.edit-order',[$importOrder->id]).'">click here to edit order.</a>';
 
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2238,7 +2254,7 @@ class OrderController extends BaseController
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
 
-                            if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
+                            /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
                                     ->getModel()
                                     ->where('id', $product->id)
@@ -2253,7 +2269,7 @@ class OrderController extends BaseController
                                     ->where('with_storehouse_management', 1)
                                     ->where('in_person_sales_qty', '>', 0)
                                     ->decrement('in_person_sales_qty', $orderQuantity);
-                            }
+                            }*/
 
                             $productN = $this->productRepository->findById($product->id);
                             set_product_oos_date($orderProduct->order_id, $productN, $orderQuantity, $product->quantity);
