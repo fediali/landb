@@ -108,6 +108,7 @@ $home = empty(request()->segment(1)) ? true : false;
 <!--<script src="{{ asset('landb/js/jquery-mask.min.js') }}"></script>-->
 @if($home || $product_detail)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js'></script>
     <script>
         $('.luxurious_wrap .owl-carousel').owlCarousel({
             center: true,
