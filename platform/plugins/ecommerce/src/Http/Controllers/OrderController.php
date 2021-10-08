@@ -1730,6 +1730,7 @@ class OrderController extends BaseController
                             $baddress['phone'] = $row['phone_number'];
                             $baddress['country'] = $row['billing_county'];
                             $baddress['name'] = $row['business_contact_name'];
+                            $baddress['type'] = 'billing';
 
                             $billing = Address::create($baddress);
 
