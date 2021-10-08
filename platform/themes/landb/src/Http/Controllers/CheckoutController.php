@@ -38,6 +38,7 @@ use Botble\Payment\Services\Gateways\PayPalPaymentService;
 use Botble\Theme\Events\RenderingSingleEvent;
 use Botble\Theme\Events\RenderingHomePageEvent;
 use Botble\Theme\Events\RenderingSiteMapEvent;
+use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -186,7 +187,7 @@ class CheckoutController extends Controller
                     //dd($payment);
                     $pre = $this->checkIfPreOrder($order->id);
                     $this->checkDiscount($order->id);
-                    $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id]);
+                    $order = auth('customer')->user()->pendingOrder()->update(['is_finished' => 1, 'payment_id' => $payment->id, 'status'=> 'new', 'created_at' => Carbon::now()]);
                     return redirect()->route('public.order.success', ['id' => $payment->order_id]);
                 }
                 break;
@@ -238,7 +239,7 @@ class CheckoutController extends Controller
 
         $payment = Payment::where('charge_id', $chargeId)->first();
         //dd($payment);
-        $order->update(['is_finished' => 1, 'payment_id' => $payment->id,'status'=> 'new']);
+        $order->update(['is_finished' => 1, 'payment_id' => $payment->id,'status'=> 'new', 'created_at' => Carbon::now()]);
 
 
         OrderHelper::clearSessions($token);
@@ -288,7 +289,7 @@ class CheckoutController extends Controller
             ];
             $response = json_decode($response, true);
             $status = [];
-            $status['transaction_error'] = $response['message'];
+            $status['transaction_error'] = @$response['message'];
             $status['status'] = 'Declined';
             Order::where('id', $request->order_id)->update($status);
 //            CardPreAuth::updateOrCreate(['order_id' => $request->order_id, 'card_id' => $request->payment_id], ['response' => $response['message'], 'payment_status' => 'Declined']);
@@ -379,7 +380,7 @@ class CheckoutController extends Controller
 
         if (!is_null($preOrderId)) {
             if ($includesNormals) {
-                Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1]);
+                Order::where('id', $preOrderId)->update(['amount' => $orderTotal, 'sub_total' => $orderTotal, 'is_finished' => 1, 'created_at' => Carbon::now()]);
                 $current = Order::find($id);
                 $current->update(['amount' => $current->amount - $orderTotal, 'sub_total' => $current->amount - $orderTotal]);
             } else {

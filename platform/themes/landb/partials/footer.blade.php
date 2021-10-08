@@ -215,12 +215,12 @@ $home = empty(request()->segment(1)) ? true : false;
 
     $(document).ready(function () {
 
-        $('.checkk').on('click', function () {
-            /* console.log($('#check1').prop("checked")+ ' : asdadad')*/
+        /*$('.checkk').on('click', function () {
+            /!* console.log($('#check1').prop("checked")+ ' : asdadad')*!/
             if ($('#check1').prop("checked") == true && $('#check2').prop("checked") == true && $('#check3').prop("checked") == true) {
                 $('.tax-submit-btn').attr('disabled', false)
             }
-        });
+        });*/
         @if(request()->segment(1) == 'customer' && request()->segment(2) == 'contract-form')
         $("#signature").jSignature({
             // line width
