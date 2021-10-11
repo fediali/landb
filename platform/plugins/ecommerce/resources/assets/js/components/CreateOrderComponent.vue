@@ -31,36 +31,32 @@
                                     <td class="pl5 p-r5 min-width-200-px">
                                         <!--<a class="hover-underline pre-line" :href="variant.product_link" target="_blank">{{ variant.product_name }}</a>-->
                                         <a class="hover-underline pre-line" href="#">{{ variant.product_name }}</a>
-                                        <p class="type-subdued"
-                                           v-if="variant.variation_items && variant.variation_items.length">
+                                        <p class="type-subdued" v-if="variant.variation_items && variant.variation_items.length">
                                             <span v-for="(productItem, index) in variant.variation_items">
                                                 Type: {{ productItem.attribute_title }}
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-
-                                        <p v-if="variant.product">
-                                            SKU : {{
-                                                variant.product.sku ? variant.product.sku : 'No SKU'
-                                            }}
-                                        </p>
-
-
-                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Total Pieces : {{
-                                                variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty
-                                            }}
-
+                                        <p>
+                                            SKU : {{ variant.product ? (variant.product.sku ? variant.product.sku : 'No SKU') : (variant.sku ? variant.sku : 'No SKU') }}
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price :
-                                            ${{variant.product.prod_pieces ? parseFloat(variant.price / variant.product.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
+                                            Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
                                         </p>
-
+                                        <p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
+                                        </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Sizes : {{
-                                                (variant.product.sizes) ? variant.product.sizes : variant.packSizes
-                                            }}
+                                            Piece Price : ${{ variant.product.prod_pieces ? parseFloat(variant.price / variant.product.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
+                                        </p>
+                                        <p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Piece Price : ${{ variant.prod_pieces ? parseFloat(variant.price / variant.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
+                                        </p>
+                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
+                                            Sizes : {{ (variant.product.sizes) ? variant.product.sizes : variant.packSizes }}
+                                        </p>
+                                        <p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Sizes : {{ (variant.sizes) ? variant.sizes : variant.packSizes }}
                                         </p>
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
@@ -87,8 +83,7 @@
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
                                         <a href="#" @click="handleRemoveVariant($event, variant)">
                                             <svg class="svg-next-icon svg-next-icon-size-12">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                     xlink:href="#next-remove"></use>
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                             </svg>
                                         </a>
                                     </td>

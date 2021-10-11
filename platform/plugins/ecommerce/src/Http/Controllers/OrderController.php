@@ -1435,8 +1435,7 @@ class OrderController extends BaseController
             ->get();
 
         foreach ($products as &$availableProduct) {
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null,
-                false, RvMedia::getDefaultImage());
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null, false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->product_name = $availableProduct->name;
             $availableProduct->product_link = route('products.edit', $availableProduct->id);
@@ -1448,7 +1447,16 @@ class OrderController extends BaseController
                 $availableProduct->price = $orderProduct->price;
             }
             foreach ($availableProduct->variations as &$variation) {
-                $variation->price = $variation->product->front_sale_price;
+                $variation->per_piece_price = $variation->price = $variation->product->front_sale_price;
+                $variation->packQty = 0;
+                $variation->packSizes = '';
+                if ($variation->product->sku && !str_contains($variation->product->sku, 'single')) {
+                    $variation->packQty = $availableProduct->prod_pieces ? $availableProduct->prod_pieces : packProdQtyCalculate($variation->product->category_id);
+                    $variation->packSizes = packProdSizes($variation->product->category_id);
+                    if ($variation->packQty) {
+                        $variation->per_piece_price = round($variation->price / $variation->packQty, 2);
+                    }
+                }
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = $variationItem->attribute->title;
                 }
@@ -2643,7 +2651,7 @@ class OrderController extends BaseController
         /*************** Replication Start ****************/
         $orderData = $order->replicate();
         $orderData->order_type = Order::PRE_ORDER;
-        //$orderData->status = 'New';
+        $orderData->status = 'new';
         $new_order = $this->orderRepository->createOrUpdate($orderData);
 
         $paymentData = $order->payment->replicate();

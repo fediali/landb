@@ -1040,16 +1040,14 @@ class ProductController extends BaseController
             ])
             ->distinct('ec_products.id')
             ->leftJoin('ec_product_variations', 'ec_product_variations.configurable_product_id', '=', 'ec_products.id')
-            ->leftJoin('ec_product_variation_items', 'ec_product_variation_items.variation_id', '=',
-                'ec_product_variations.id')
+            ->leftJoin('ec_product_variation_items', 'ec_product_variation_items.variation_id', '=', 'ec_product_variations.id')
             ->simplePaginate(15);
 
         foreach ($availableProducts as $pk => &$availableProduct) {
             /**
              * @var Product $availableProduct
              */
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null,
-                false, RvMedia::getDefaultImage());
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null, false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
             foreach ($availableProduct->variations as $k => &$variation) {
@@ -1062,7 +1060,7 @@ class ProductController extends BaseController
                     $variation->packQty = $availableProduct->prod_pieces ? $availableProduct->prod_pieces : packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
                     if ($variation->packQty) {
-                        $variation->per_piece_price = $variation->price / $variation->packQty;
+                        $variation->per_piece_price = round($variation->price / $variation->packQty, 2);
                     }
                 }
 

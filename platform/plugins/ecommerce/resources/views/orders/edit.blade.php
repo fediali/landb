@@ -522,7 +522,7 @@
                                                                             @endif
                                                                         </div>
                                                                         <time class="timeline__time">
-                                                                            <span>{{ $history->created_at }}</span>
+                                                                            <span>{{ date('d M, Y', strtotime($history->created_at)) }}</span>
                                                                         </time>
                                                                     </div>
                                                                 </div>
@@ -561,7 +561,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <th>{{ trans('plugins/ecommerce::order.refund_date') }}</th>
-                                                                            <td>{{ $history->created_at }}</td>
+                                                                            <td>{{ date('d M, Y', strtotime($history->created_at)) }}</td>
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>
@@ -605,7 +605,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <th>{{ trans('plugins/ecommerce::order.payment_date') }}</th>
-                                                                            <td>{{ $history->created_at }}</td>
+                                                                            <td>{{ date('d M, Y', strtotime($history->created_at)) }}</td>
                                                                         </tr>
                                                                         </tbody>
                                                                     </table>

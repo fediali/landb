@@ -1013,11 +1013,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -7997,19 +7992,21 @@ var render = function() {
                                       )
                                     : _vm._e(),
                                   _vm._v(" "),
-                                  variant.product
-                                    ? _c("p", [
-                                        _vm._v(
-                                          "\n                                        SKU : " +
-                                            _vm._s(
-                                              variant.product.sku
-                                                ? variant.product.sku
-                                                : "No SKU"
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    : _vm._e(),
+                                  _c("p", [
+                                    _vm._v(
+                                      "\n                                        SKU : " +
+                                        _vm._s(
+                                          variant.product
+                                            ? variant.product.sku
+                                              ? variant.product.sku
+                                              : "No SKU"
+                                            : variant.sku
+                                            ? variant.sku
+                                            : "No SKU"
+                                        ) +
+                                        "\n                                    "
+                                    )
+                                  ]),
                                   _vm._v(" "),
                                   variant.product &&
                                   !variant.product.sku.includes("single")
@@ -8021,16 +8018,26 @@ var render = function() {
                                                 ? variant.product.prod_pieces
                                                 : variant.packQty
                                             ) +
-                                            "\n\n                                    "
+                                            "\n                                    "
                                         )
                                       ])
-                                    : _vm._e(),
+                                    : _c("p", [
+                                        _vm._v(
+                                          "\n                                        Total Pieces : " +
+                                            _vm._s(
+                                              variant.prod_pieces
+                                                ? variant.prod_pieces
+                                                : variant.packQty
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ]),
                                   _vm._v(" "),
                                   variant.product &&
                                   !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
-                                          "\n                                        Piece Price :\n                                        $" +
+                                          "\n                                        Piece Price : $" +
                                             _vm._s(
                                               variant.product.prod_pieces
                                                 ? parseFloat(
@@ -8046,7 +8053,23 @@ var render = function() {
                                             "\n                                    "
                                         )
                                       ])
-                                    : _vm._e(),
+                                    : _c("p", [
+                                        _vm._v(
+                                          "\n                                        Piece Price : $" +
+                                            _vm._s(
+                                              variant.prod_pieces
+                                                ? parseFloat(
+                                                    variant.price /
+                                                      variant.prod_pieces
+                                                  ).toFixed(2)
+                                                : parseFloat(
+                                                    variant.price /
+                                                      variant.packQty
+                                                  ).toFixed(2)
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ]),
                                   _vm._v(" "),
                                   variant.product &&
                                   !variant.product.sku.includes("single")
@@ -8061,7 +8084,17 @@ var render = function() {
                                             "\n                                    "
                                         )
                                       ])
-                                    : _vm._e()
+                                    : _c("p", [
+                                        _vm._v(
+                                          "\n                                        Sizes : " +
+                                            _vm._s(
+                                              variant.sizes
+                                                ? variant.sizes
+                                                : variant.packSizes
+                                            ) +
+                                            "\n                                    "
+                                        )
+                                      ])
                                 ]
                               ),
                               _vm._v(" "),
