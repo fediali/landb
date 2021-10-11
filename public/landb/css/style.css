@@ -5180,3 +5180,82 @@ h4 {
 .product-carousel .owl-carousel {
     width: 100% !important;
 }
+
+.private {
+    font-weight: 800;
+    font-size: 64px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #171589;
+    font-family: Raleway;
+    margin-top: 30px;
+}
+
+.private-p {
+    text-align: center;
+    text-transform: capitalize;
+    color: #171589;
+    font-family: Raleway;
+    font-size: 45.9629px;
+    font-style: normal;
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+.private-first-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 129.25%; 
+    color: #000000;
+}
+
+.private-first p {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 188.75%;
+}
+
+.private-section2 {
+    background: url(https://revamp.landbw.co/storage/recyled-paper-seamless-5-1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-bottom: 120px;
+}
+
+.private-second-head {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 129.25%;
+    color: #000000;
+    margin-top: 20px;
+}
+
+.second-priv {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 80.4%;
+    margin-top: 20px;
+    color: #000000;
+}
+
+.second-priv-para {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 188.75%;
+    color: #000000;
+    margin-top: 20px;
+}
+
+.private-section2 img {
+    margin-bottom: -70px;
+}
