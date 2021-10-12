@@ -356,93 +356,118 @@
                             </div>
 
 
-                            @if(count($order->refund_products))
-                                <div class="pd-all-20 p-none-t border-top-title-main">
-                                <div class="flexbox-auto-right ml15 mr15 text-upper">
-                                    <span>Refunded Products</span>
-                                </div>
-                                <div class="table-wrap">
-                                    <table class="table-order table-divided">
-                                        <tbody>
-                                        @foreach ($order->refund_products as $orderProduct)
-                                            @php
-                                                $product = get_products([
-                                                    'condition' => [
-                                                        'ec_products.id' => $orderProduct->product_id,
-                                                    ],
-                                                    'take' => 1,
-                                                    'select' => [
-                                                        'ec_products.id',
-                                                        'ec_products.images',
-                                                        'ec_products.name',
-                                                        'ec_products.price',
-                                                        'ec_products.sale_price',
-                                                        'ec_products.sale_type',
-                                                        'ec_products.start_date',
-                                                        'ec_products.end_date',
-                                                        'ec_products.sku',
-                                                        'ec_products.is_variation',
-                                                        'ec_products.sizes',
-                                                        'ec_products.prod_pieces',
-                                                    ],
-                                                ]);
-                                            @endphp
 
-                                            <tr>
-                                                @if ($product)
-                                                    <td class="width-60-px min-width-60-px vertical-align-t">
-                                                        <div class="wrap-img">
-                                                            <img class="thumb-image thumb-image-cartorderlist" src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}">
+                            @if(count($order->refund_products) && $order->order_type == \Botble\Ecommerce\Models\Order::NORMAL)
+                                <div class="pd-all-20 p-none-t border-top-title-main">
+                                    <div class="flexbox-auto-right ml15 mr15 text-upper">
+                                        <span>Refunded Products</span>
+                                    </div>
+                                    <div class="table-wrap">
+                                        <table class="table-order table-divided">
+                                            <tbody>
+                                            @php $refund_total = 0; @endphp
+                                            @foreach ($order->refund_products as $orderProduct)
+                                                @php
+                                                    $product = get_products([
+                                                        'condition' => [
+                                                            'ec_products.id' => $orderProduct->product_id,
+                                                        ],
+                                                        'take' => 1,
+                                                        'select' => [
+                                                            'ec_products.id',
+                                                            'ec_products.images',
+                                                            'ec_products.name',
+                                                            'ec_products.price',
+                                                            'ec_products.sale_price',
+                                                            'ec_products.sale_type',
+                                                            'ec_products.start_date',
+                                                            'ec_products.end_date',
+                                                            'ec_products.sku',
+                                                            'ec_products.is_variation',
+                                                            'ec_products.sizes',
+                                                            'ec_products.prod_pieces',
+                                                        ],
+                                                    ]);
+                                                @endphp
+                                                <tr>
+                                                    @if ($product)
+                                                        <td class="width-60-px min-width-60-px vertical-align-t">
+                                                            <div class="wrap-img">
+                                                                <img class="thumb-image thumb-image-cartorderlist" src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}">
+                                                            </div>
+                                                        </td>
+                                                    @endif
+                                                    <td class="pl5 p-r5 min-width-200-px">
+                                                        {{ $orderProduct->product_name }}
+                                                        @if ($product)
+                                                            @if ($product->sku)
+                                                                ({{ trans('plugins/ecommerce::order.sku') }} :
+                                                                <strong>{{ $product->sku }}</strong>)
+                                                            @endif
+                                                            @if ($product->is_variation)
+                                                                <p class="mb-0">
+                                                                    <small>
+                                                                        @php $attributes = get_product_attributes($product->id) @endphp
+                                                                        @if (!empty($attributes))
+                                                                            @foreach ($attributes as $attribute)
+                                                                                @if($attribute->attribute_set_title !== 'Size')
+                                                                                    {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                                                    @if($attribute->title !== 'Single')
+                                                                                        </small><small>
+                                                                                        Size : {{$product->sizes}}
+                                                                                    @endif
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </small>
+                                                                    <small>
+                                                                        Per Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                    </small>
+                                                                </p>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td class="pl5 p-r5 text-right">
+                                                        <div class="inline_block">
+                                                            <span>{{ format_price($orderProduct->price) }}</span>
                                                         </div>
                                                     </td>
-                                                @endif
-                                                <td class="pl5 p-r5 min-width-200-px">
-                                                    {{ $orderProduct->product_name }}
-                                                    @if ($product)
-                                                        @if ($product->sku)
-                                                            ({{ trans('plugins/ecommerce::order.sku') }} :
-                                                            <strong>{{ $product->sku }}</strong>)
-                                                        @endif
-                                                        @if ($product->is_variation)
-                                                            <p class="mb-0">
-                                                                <small>
-                                                                    @php $attributes = get_product_attributes($product->id) @endphp
-                                                                    @if (!empty($attributes))
-                                                                        @foreach ($attributes as $attribute)
-                                                                            @if($attribute->attribute_set_title !== 'Size')
-                                                                                {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
-                                                                                @if($attribute->title !== 'Single')
-                                                                                    </small><small>
-                                                                                    Size : {{$product->sizes}}
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endif
-                                                                </small>
-                                                                <small>
-                                                                    Per Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
-                                                                </small>
-                                                            </p>
-                                                        @endif
-                                                    @endif
-                                                </td>
-                                                <td class="pl5 p-r5 text-right">
-                                                    <div class="inline_block">
-                                                        <span>{{ format_price($orderProduct->price) }}</span>
-                                                    </div>
-                                                </td>
-                                                <td class="pl5 p-r5 text-center">x</td>
-                                                <td class="pl5 p-r5">
-                                                    <span>{{ $orderProduct->qty }}</span>
-                                                </td>
-                                                <td class="pl5 text-right">{{ format_price($orderProduct->price * $orderProduct->qty) }}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                                    <td class="pl5 p-r5 text-center">x</td>
+                                                    <td class="pl5 p-r5">
+                                                        <span>{{ $orderProduct->qty }}</span>
+                                                    </td>
+                                                    <td class="pl5 text-right">{{ format_price($orderProduct->price * $orderProduct->qty) }}</td>
+                                                    <td class="pl5 p-r5 text-center">
+                                                        <a class="btn btn-primary" href="{{route('orders.order.revert.refund.product', ['order_id' => $order->id, 'prod_id' => $orderProduct->product_id])}}">Revert</a>
+                                                    </td>
+                                                </tr>
+                                                @php $refund_total += ($orderProduct->price * $orderProduct->qty); @endphp
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="pd-all-20 p-none-t">
+                                    <div class="flexbox-grid-default block-rps-768">
+                                        <div class="flexbox-auto-right p-r5"></div>
+                                        <div class="flexbox-auto-right pl5">
+                                            <div class="table-wrap">
+                                                <table class="table-normal table-none-border table-color-gray-text">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="text-right color-subtext">{{ trans('plugins/ecommerce::order.total_amount') }}</td>
+                                                        <td class="text-right pl10">
+                                                            <span>{{ format_price($refund_total) }}</span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
+
 
 
                             <div class="pd-all-20 border-top-title-main">
@@ -766,9 +791,12 @@
                                     @endif
                                 @endif
 
-                                <button type="button" class="btn btn-outline-primary mb-2" data-toggle="modal"
-                                        data-target="#modal_order_refund_product">Refund Order
-                                </button>
+                                @if($order->order_type == \Botble\Ecommerce\Models\Order::NORMAL)
+                                    <button type="button" class="btn btn-outline-primary mb-2" data-toggle="modal"
+                                            data-target="#modal_order_refund_product">Refund Order
+                                    </button>
+                                @endif
+
                                 <button type="button" class="btn btn-outline-warning mb-2" data-toggle="modal"
                                         data-target="#modal_split_payment">Split Payment
                                 </button>
