@@ -53,7 +53,7 @@ class importProductBound extends Command
             if ($getBound) {
                 $getBoundProducts = DB::table('hw_hw_bounded_products')
                     ->where('bound_id', $getBound->bound_id)
-                    ->where('product_id', '!=', $product->id)
+                   // ->where('product_id', '!=', $product->id)
                     ->pluck('product_id')
                     ->all();
                 if (count($getBoundProducts)) {
