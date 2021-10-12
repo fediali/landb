@@ -189,8 +189,15 @@ class Order extends BaseModel
      */
     public function products()
     {
-
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function refund_products()
+    {
+        return $this->hasMany(OrderRefundProduct::class, 'order_id')->with(['product']);
     }
 
     /**
@@ -295,6 +302,5 @@ class Order extends BaseModel
     {
         return Order::where('id', '>', $this->id)->min('id');
     }
-
 
 }
