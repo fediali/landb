@@ -33,6 +33,7 @@ use Botble\Ecommerce\Models\Discount;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\OrderProductShipmentVerify;
+use Botble\Ecommerce\Models\OrderRefundProduct;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Models\UserSearch;
@@ -2622,6 +2623,132 @@ class OrderController extends BaseController
         }
     }
 
+    public function orderRevertRefundProduct($id, $prod_id, Request $request, BaseHttpResponse $response)
+    {
+        $order = $this->orderRepository->findById($id);
+
+        $getOrderRefProd = OrderRefundProduct::where(['order_id' => $order->id, 'product_id' => $prod_id])->first();
+
+        if ($getOrderRefProd) {
+            $this->orderHistoryRepository->createOrUpdate([
+                'action' => 'order_revert_refund_product',
+                'description' => 'Order Revert Refund Product by %user_name%.',
+                'order_id' => $id,
+                'user_id' => Auth::user()->getKey(),
+            ], []);
+
+            $getOrderProd = OrderProduct::where(['order_id' => $order->id, 'product_id' => $prod_id])->first();
+            if ($getOrderProd) {
+                $getOrderProd->qty += $getOrderRefProd->qty;
+                $getOrderProd->save();
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action' => 'order_product_qty_changed',
+                    'description' => 'Order product ' . $getOrderRefProd->product_name . ' qty changed to ' . $getOrderProd->qty . ' by %user_name%.',
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
+                ], []);
+            } else {
+                $orderProd = $getOrderRefProd->replicate();
+                $this->orderProductRepository->createOrUpdate($orderProd);
+                $this->orderHistoryRepository->createOrUpdate([
+                    'action' => 'order_product_qty_changed',
+                    'description' => 'Order product ' . $getOrderRefProd->product_name . ' qty changed to ' . $getOrderRefProd->qty . ' by %user_name%.',
+                    'order_id' => $order->id,
+                    'user_id' => Auth::user()->getKey(),
+                ], []);
+            }
+
+            $getOrderRefProd->delete();
+
+            $checkOrderProdCnt = OrderProduct::where('order_id', $order->id)->sum('qty');
+            if ($checkOrderProdCnt && $order->status == OrderStatusEnum::REFUND) {
+                $order->status = OrderStatusEnum::NEW_ORDER;
+                $order->save();
+            }
+
+            $this->updateOrderTotal($order->id);
+        }
+
+        return $response->setData($order)->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    public function orderRefundProduct($id, Request $request, BaseHttpResponse $response)
+    {
+        $params = $request->all();
+
+        $order = $this->orderRepository->findById($id);
+
+        /*************** Validation Start ****************/
+        $checkProd = false;
+        $products = $order->products->pluck('qty', 'product_id')->all();
+        foreach ($products as $productId => $quantity) {
+            foreach ($params['order_refund_prod_move'] as $prodId => $qty) {
+                if ($productId == $prodId && (int)$qty > $quantity) {
+                    return $response->setCode(406)->setError()->setMessage('Product Qty is not available!');
+                }
+                if ($productId == $prodId) {
+                    $checkProd = true;
+                }
+            }
+        }
+
+        if (!$checkProd) {
+            return $response->setCode(406)->setError()->setMessage('Product is not available!');
+        }
+        /*************** Validation End ****************/
+
+        $this->orderHistoryRepository->createOrUpdate([
+            'action' => 'order_refund_product',
+            'description' => 'Order Refund Products by %user_name%.',
+            'order_id' => $id,
+            'user_id' => Auth::user()->getKey(),
+        ], []);
+
+        $products = $order->products;
+        foreach ($products as $product) {
+            foreach ($params['order_refund_prod_move'] as $prodId => $qty) {
+                if ($product->product_id == $prodId && (int)$qty <= $product->qty) {
+                    $productData = $product->replicate();
+                    $productData->qty = (int)$qty;
+                    if ($productData->qty > 0) {
+                        $getOrderRefProd = OrderRefundProduct::where(['order_id' => $order->id, 'product_id' => $product->product_id])->first();
+                        if ($getOrderRefProd) {
+                            $getOrderRefProd->qty += $productData->qty;
+                            $getOrderRefProd->save();
+                        } else {
+                            OrderRefundProduct::create($productData->toArray());
+                        }
+                    }
+
+                    $this->orderHistoryRepository->createOrUpdate([
+                        'action' => 'order_product_qty_changed',
+                        'description' => 'Order product ' . $product->product_name . ' qty changed from ' . $product->qty . ' to ' . ($product->qty - (int)$qty) . ' by %user_name%.',
+                        'order_id' => $order->id,
+                        'user_id' => Auth::user()->getKey(),
+                    ], []);
+
+                    $product->qty -= (int)$qty;
+                    if ($product->qty <= 0) {
+                        $product->delete();
+                    } else {
+                        $product->save();
+                    }
+
+                }
+            }
+        }
+
+        $checkOrderProdCnt = OrderProduct::where('order_id', $order->id)->sum('qty');
+        if (!$checkOrderProdCnt) {
+            $order->status = OrderStatusEnum::REFUND;
+            $order->save();
+        }
+
+        $this->updateOrderTotal($order->id);
+
+        return $response->setData($order)->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
     public function splitOrder($id, Request $request, BaseHttpResponse $response)
     {
         $params = $request->all();
@@ -2787,10 +2914,9 @@ class OrderController extends BaseController
 
     public function quicksearch(Request $request, BaseHttpResponse $response)
     {
-//        dd($request->all());
         $order = $this->orderRepository->findOrFail($request->quicksearch);
         if ($order) {
-//            redirect(route('order'))
+            //redirect(route('order'))
         }
         return $response->setData(Helper::countries());
     }

@@ -157,6 +157,16 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('revert-order-refund-product/{order_id}/{prod_id}', [
+                'as'         => 'order.revert.refund.product',
+                'uses'       => 'OrderController@orderRevertRefundProduct',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('order-refund-product/{id}', [
+                'as'         => 'order.refund.product',
+                'uses'       => 'OrderController@orderRefundProduct',
+                'permission' => 'orders.create',
+            ]);
             Route::post('split-order/{id}', [
                 'as'         => 'split.order',
                 'uses'       => 'OrderController@splitOrder',
