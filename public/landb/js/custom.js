@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     var tag = jQuery.parseJSON($('#tag').val());
     console.log(tag, 'asd');
