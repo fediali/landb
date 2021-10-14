@@ -1334,6 +1334,9 @@ __webpack_require__.r(__webpack_exports__);
         }, 500);
       }
     },
+    changeOrderType: function changeOrderType() {
+      this.loadListProductsAndVariations();
+    },
     selectProductVariant: function selectProductVariant(product) {
       var variation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -7880,19 +7883,22 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: { id: "order-type" },
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.order_type = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    }
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.order_type = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      },
+                      _vm.changeOrderType
+                    ]
                   }
                 },
                 [

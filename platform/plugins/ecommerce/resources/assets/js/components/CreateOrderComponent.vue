@@ -10,7 +10,7 @@
 
                     <div class="form-group">
                         <label class="text-title-field">Select Order Type</label>
-                        <select class="form-control" id="order-type" v-model="order_type">
+                        <select class="form-control" id="order-type" v-model="order_type" @change="changeOrderType">
                             <option value="" :disabled="true" :selected="true">Select Order Type</option>
                             <option v-for="(value, index) in order_types" :value="index">
                                 {{ value }}
@@ -1268,6 +1268,9 @@ export default {
                     context.loadListProductsAndVariations(1, true);
                 }, 500);
             }
+        },
+        changeOrderType: function () {
+            this.loadListProductsAndVariations();
         },
         selectProductVariant: function (product, variation = null) {
             if ((!_.isEmpty(variation) && variation.is_out_of_stock) || (_.isEmpty(variation) && product.is_out_of_stock)) {
