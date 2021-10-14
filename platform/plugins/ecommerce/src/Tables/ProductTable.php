@@ -360,7 +360,7 @@ class ProductTable extends TableAbstract
      */
     public function columns()
     {
-        return [
+        $arr = [
             'id'            => [
                 'name'  => 'ec_products.id',
                 'title' => trans('core/base::tables.id'),
@@ -398,7 +398,6 @@ class ProductTable extends TableAbstract
                 'title' => trans('plugins/ecommerce::products.price'),
                 'class' => 'text-left',
             ],
-
             'warehouse_sec' => [
                 'name'  => 'ec_products.warehouse_sec',
                 'title' => 'SEC',
@@ -471,6 +470,17 @@ class ProductTable extends TableAbstract
                 'class' => 'text-center',
             ],
         ];
+
+        if (in_array(auth()->user()->roles[0]->slug, ['sales-manager', 'admin'])) {
+            /*$arr['cost_price'] = [
+                'name'  => 'ec_products.cost_price',
+                'title' => 'Cost Price',
+                'class' => 'text-left',
+                'width' => '100px',
+            ];*/
+        }
+
+        return $arr;
     }
 
     /**
