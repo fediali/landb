@@ -96,7 +96,7 @@ class ProductTable extends TableAbstract
                     return view('plugins/ecommerce::products.partials.thumbnail', compact('item'))->render();
                 }
                 else{
-                    return 'no-image';
+                    return view('plugins/ecommerce::products.partials.noimage', compact('item'))->render();
                 }
             })
             ->editColumn('checkbox', function ($item) {
