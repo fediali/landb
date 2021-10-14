@@ -89,14 +89,14 @@ class OrderTable extends TableAbstract
 
                 return $html;
 
-            })->editColumn('user_id', function ($item) {
+            })->editColumn('company', function ($item) {
                 // return $item->user->name ?? $item->address->name;
 //                return Html::link(route('customer.edit', $item->user_id), $item->user->name);
 
 //                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
 
 
-                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->detail->company . '</a>';
+                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->company . '</a>';
 
                     return $customer;
 
@@ -162,6 +162,7 @@ class OrderTable extends TableAbstract
             'ec_orders.status',
             'ec_orders.order_type',
             'ec_orders.user_id',
+            'ec_customer_detail.company',
             'ec_orders.created_at',
             'ec_orders.amount',
             'ec_orders.platform',
@@ -176,6 +177,7 @@ class OrderTable extends TableAbstract
         $query = $model
             ->select($select)
             ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
+            ->leftJoin('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
             ->with(['user', 'payment'])
             ->where('ec_orders.is_finished', 1);
 
@@ -327,8 +329,8 @@ class OrderTable extends TableAbstract
 //                'class' => 'text-center',
 //            ],
 
-            'user_id'        => [
-                'name'  => 'ec_orders.user_id',
+            'company'        => [
+                'name'  => 'ec_customer_detail.company',
                 'title' => 'Company',
                 'class' => 'text-left',
             ],

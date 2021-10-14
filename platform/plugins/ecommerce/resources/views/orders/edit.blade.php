@@ -49,19 +49,17 @@
                                 </div>
                                 <div class="mt20">
                                     @if ($order->shipment->id)
-                                        <svg
-                                            class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="#next-orders"></use>
+                                        <svg class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-orders"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @else
                                         <svg class="svg-next-icon svg-next-icon-size-16 svg-next-icon-gray">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="#next-order-unfulfilled-16"></use>
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-order-unfulfilled-16"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @endif
+                                    <strong class="ml5">{{ $order->order_completion_date ? date('d M, Y', strtotime($order->order_completion_date)) : 'N/A' }}</strong>
                                 </div>
                             </div>
                             <div class="pd-all-20 p-none-t border-top-title-main">

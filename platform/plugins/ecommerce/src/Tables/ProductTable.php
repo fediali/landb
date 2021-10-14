@@ -88,7 +88,6 @@ class ProductTable extends TableAbstract
                 if ($this->request()->input('action') == 'csv') {
                     return RvMedia::getImageUrl($item->image, null, false, RvMedia::getDefaultImage());
                 }
-
                 if ($this->request()->input('action') == 'excel') {
                     return RvMedia::getImageUrl($item->image, 'thumb', false, RvMedia::getDefaultImage());
                 }
@@ -396,6 +395,7 @@ class ProductTable extends TableAbstract
                 'title' => 'Cost Price',
                 'class' => 'text-left',
                 'width' => '100px',
+                'visible' => (in_array(@auth()->user()->roles[0]->slug, ['sales-manager', 'admin']) || @auth()->user()->super_user) ? true : false,
             ],
             'price'      => [
                 'name'  => 'ec_products.price',
@@ -474,15 +474,6 @@ class ProductTable extends TableAbstract
                 'class' => 'text-center',
             ],
         ];
-
-        if (in_array(auth()->user()->roles[0]->slug, ['sales-manager', 'admin'])) {
-            /*$arr['cost_price'] = [
-                'name'  => 'ec_products.cost_price',
-                'title' => 'Cost Price',
-                'class' => 'text-left',
-                'width' => '100px',
-            ];*/
-        }
 
         return $arr;
     }

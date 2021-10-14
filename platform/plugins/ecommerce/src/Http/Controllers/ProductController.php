@@ -1028,8 +1028,8 @@ class ProductController extends BaseController
             ->getModel()
             ->when($excludeOOS == true, function ($q) {
                 $q->where('quantity', '>', 0);
+                $q->where('status', BaseStatusEnum::ACTIVE);
             })
-            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
                 $q->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
