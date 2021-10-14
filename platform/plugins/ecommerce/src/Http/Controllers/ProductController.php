@@ -1216,14 +1216,14 @@ class ProductController extends BaseController
         $product = $this->productRepository->findOrFail($product_id);
         $html = '';
         if (@getimagesize(asset('storage/'. $product->image))) {
-            $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($product->image, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>;";
+            $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($product->image, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
         } else {
             $image1 = str_replace('.JPG', '.jpg', @$product->image);
             $image2 = str_replace('.jpg', '.JPG', @$product->image);
             if (@getimagesize(asset('storage/'. $image1))) {
-                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image1, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>;";
+                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image1, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
             } elseif(@getimagesize(asset('storage/'. $image2))) {
-                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image2, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>;";
+                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image2, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
             }
         }
         return $html;
