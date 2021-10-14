@@ -1,8 +1,10 @@
 @extends('core/base::layouts.master')
 
 @section('content')
-    <link media="all" type="text/css" rel="stylesheet" href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
-    <script src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
+    <link media="all" type="text/css" rel="stylesheet"
+          href="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/css/bootstrap-editable.css')}}">
+    <script
+        src="{{asset('vendor/core/core/base/libraries/bootstrap3-editable/js/bootstrap-editable.min.js')}}"></script>
     <script>
         setTimeout(() => {
             $(".editable").editable();
@@ -119,17 +121,19 @@
                                                                     @if (!empty($attributes))
                                                                         @foreach ($attributes as $attribute)
                                                                             @if($attribute->attribute_set_title !== 'Size')
-                                                                                {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                                                {{ $attribute->attribute_set_title }}
+                                                                                : {{ $attribute->title }}
                                                                                 @if($attribute->title !== 'Single')
-                                                                                    </small><small>
-                                                                                    Size : {{$product->sizes}}
-                                                                                @endif
-                                                                            @endif
-                                                                        @endforeach
+                                                                </small><small>
+                                                                    Size : {{$product->sizes}}
+                                                                    @endif
+                                                                    @endif
+                                                                    @endforeach
                                                                     @endif
                                                                 </small>
                                                                 <small>
-                                                                    Per Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                    Per Piece:
+                                                                    ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                 </small>
                                                             </p>
                                                         @endif
@@ -161,10 +165,12 @@
                                                                         <span class="bull">↳</span>
                                                                         <span
                                                                             class="black">{{ trans('plugins/ecommerce::order.shipping') }} </span>
+
                                                                         <a class="text-underline bold-light"
                                                                            target="_blank"
                                                                            title="{{ $order->shipping_method_name }}"
                                                                            href="{{ route('ecommerce.shipments.edit', $order->shipment->id) }}">{{ $order->shipping_method_name }}</a>
+
                                                                     </li>
                                                                     <li class="ws-nm">
                                                                         <span class="bull">↳</span>
@@ -356,7 +362,6 @@
                             </div>
 
 
-
                             @if(count($order->refund_products) && $order->order_type == \Botble\Ecommerce\Models\Order::NORMAL)
                                 <div class="pd-all-20 p-none-t border-top-title-main">
                                     <div class="flexbox-auto-right ml15 mr15 text-upper">
@@ -393,7 +398,8 @@
                                                     @if ($product)
                                                         <td class="width-60-px min-width-60-px vertical-align-t">
                                                             <div class="wrap-img">
-                                                                <img class="thumb-image thumb-image-cartorderlist" src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}">
+                                                                <img class="thumb-image thumb-image-cartorderlist"
+                                                                     src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}">
                                                             </div>
                                                         </td>
                                                     @endif
@@ -411,17 +417,19 @@
                                                                         @if (!empty($attributes))
                                                                             @foreach ($attributes as $attribute)
                                                                                 @if($attribute->attribute_set_title !== 'Size')
-                                                                                    {{ $attribute->attribute_set_title }}: {{ $attribute->title }}
+                                                                                    {{ $attribute->attribute_set_title }}
+                                                                                    : {{ $attribute->title }}
                                                                                     @if($attribute->title !== 'Single')
-                                                                                        </small><small>
-                                                                                        Size : {{$product->sizes}}
-                                                                                    @endif
-                                                                                @endif
-                                                                            @endforeach
+                                                                    </small><small>
+                                                                        Size : {{$product->sizes}}
+                                                                        @endif
+                                                                        @endif
+                                                                        @endforeach
                                                                         @endif
                                                                     </small>
                                                                     <small>
-                                                                        Per Piece: ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                        Per Piece:
+                                                                        ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
                                                                     </small>
                                                                 </p>
                                                             @endif
@@ -438,7 +446,8 @@
                                                     </td>
                                                     <td class="pl5 text-right">{{ format_price($orderProduct->price * $orderProduct->qty) }}</td>
                                                     <td class="pl5 p-r5 text-center">
-                                                        <a class="btn btn-primary" href="{{route('orders.order.revert.refund.product', ['order_id' => $order->id, 'prod_id' => $orderProduct->product_id])}}">Revert</a>
+                                                        <a class="btn btn-primary"
+                                                           href="{{route('orders.order.revert.refund.product', ['order_id' => $order->id, 'prod_id' => $orderProduct->product_id])}}">Revert</a>
                                                     </td>
                                                 </tr>
                                                 @php $refund_total += ($orderProduct->price * $orderProduct->qty); @endphp
@@ -467,7 +476,6 @@
                                     </div>
                                 </div>
                             @endif
-
 
 
                             <div class="pd-all-20 border-top-title-main">
@@ -601,7 +609,9 @@
                                 @if (!$order->shipment->id)
                                     <div class="shipment-create-wrap hidden"></div>
                                 @else
-                                    @include('plugins/ecommerce::orders.shipment-detail', ['shipment' => $order->shipment])
+                                    @if($order->products->count() > 0)
+                                        @include('plugins/ecommerce::orders.shipment-detail', ['shipment' => $order->shipment])
+                                    @endif
                                 @endif
                             @endif
 
@@ -774,7 +784,8 @@
                                             {{$order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->paypal_invoice_id ? 'Order Reminder' : 'Order Invoice'}}
                                         </a>&nbsp;&nbsp;
                                     @elseif($order->payment && @$order->payments()->where('type', 1)->latest('id')->first()->status == 'completed')
-                                        <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid</button>
+                                        <button type="button" class="btn btn-outline-success mb-2">Order Invoice Paid
+                                        </button>
                                     @endif
 
                                     @if($order->shipping_amount > 0)
@@ -835,7 +846,8 @@
                                         <div class="wrapper-content bg-gray-white mb20">
                                             <div class="row m-0 pt-3 pb-3 bg-white">
                                                 <div class="col-lg-9">
-                                                    <strong class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
+                                                    <strong
+                                                        class="mb-2">{{str_replace('_payment', '', ucwords($split_payment->payment_type))}}</strong>
                                                 </div>
                                                 <div class="col-lg-3 text-right">
                                                     <strong class="mb-2">$ {{$split_payment->amount}}</strong>
@@ -989,19 +1001,19 @@
                                                 </div>
                                             </div>
                                         </div>
-{{--                                        @if($order->preauth != null || $order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))--}}
-                                            <div class="pd-all-20 bg-white">
-                                                <form action="{{route('orders.charge')}}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" value="" name="payment_id" class="payment_id">
-                                                    <input type="hidden" value="{{$order->id}}" name="order_id"
-                                                           class="order_id">
-                                                    <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
-                                                    <input type="hidden" value="{{$order->amount}}" name="amount">
-                                                    <button type="submit" class="btn btn-info">Create Payment</button>
-                                                </form>
-                                            </div>
-{{--                                        @endif()--}}
+                                        {{--                                        @if($order->preauth != null || $order->order_cards_preauth()->where('transaction_id', '!=', "")->value('transaction_id'))--}}
+                                        <div class="pd-all-20 bg-white">
+                                            <form action="{{route('orders.charge')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="" name="payment_id" class="payment_id">
+                                                <input type="hidden" value="{{$order->id}}" name="order_id"
+                                                       class="order_id">
+                                                <input type="hidden" value="{{$order->sub_total}}" name="sub_total">
+                                                <input type="hidden" value="{{$order->amount}}" name="amount">
+                                                <button type="submit" class="btn btn-info">Create Payment</button>
+                                            </form>
+                                        </div>
+                                        {{--                                        @endif()--}}
 
                                     @elseif($order->order_cards_preauth()->where('transaction_id', '!=', "")->value('status') == 0)
 
@@ -1046,7 +1058,8 @@
                                                     <strong>Declined Reason</strong>
                                                     <ul class="p-sm-r mb-0">
                                                         <li class="ws-nm">
-                                                            <span class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
+                                                            <span
+                                                                class="ww-bw text-no-bold">{{$order->transaction_error}}</span>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -1462,7 +1475,8 @@
                                     <td class="text-center">
                                         <input name="order_refund_prod[{{$product->id}}]" type="number" step="1" min="0"
                                                max="{{ $orderProduct->qty }}" value="{{ $orderProduct->qty }}"
-                                               data-refund-prod-id="{{$product->id}}" data-refund-prod-qty="{{$orderProduct->qty}}"
+                                               data-refund-prod-id="{{$product->id}}"
+                                               data-refund-prod-qty="{{$orderProduct->qty}}"
                                                id="split-refund-input-{{$product->id}}" class="split-refund-input"/>
                                     </td>
                                     <td class="text-center">
@@ -1471,8 +1485,10 @@
                                         </button>
                                     </td>
                                     <td class="text-center">
-                                        <input name="order_refund_prod_move[{{$product->id}}]" type="number" step="1" min="0"
-                                               max="{{ $orderProduct->qty }}" value="0" data-refund-prod-id="{{$product->id}}"
+                                        <input name="order_refund_prod_move[{{$product->id}}]" type="number" step="1"
+                                               min="0"
+                                               max="{{ $orderProduct->qty }}" value="0"
+                                               data-refund-prod-id="{{$product->id}}"
                                                id="split-refund-input2-{{$product->id}}" class="split-refund-input2"/>
                                     </td>
                                 </tr>
