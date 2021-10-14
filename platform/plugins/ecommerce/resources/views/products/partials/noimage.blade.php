@@ -1,28 +1,21 @@
-<a href="javascript:void(0)" class="noImg"><img src="https://revamp.landbw.co/storage/img.jpg"/></a>
-
-<a class="product-gif" href="{{ route('products.edit', $item->id) }}" title="{{ $item->name }}" style="display: none;">
-    @if (@getimagesize(asset('storage/'. $item->image)))
-        <img width="50" src="{{ asset('landb/defaultLogo.png') }}" alt="Product image" loading="lazy" class="lazyload " data-src="{{ RvMedia::getImageUrl($item->image, null , false, RvMedia::getDefaultImage()) }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
-    @else
-        @php
-            $image1 = str_replace('.JPG', '.jpg', @$item->image);
-            $image2 = str_replace('.jpg', '.JPG', @$item->image);
-        @endphp
-        @if (@getimagesize(asset('storage/'. $image1)))
-            <img width="50" src="{{ asset('landb/defaultLogo.png') }}" alt="Product image" loading="lazy" class="lazyload " data-src="{{ RvMedia::getImageUrl($image1, null , false, RvMedia::getDefaultImage()) }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
-        @elseif(@getimagesize(asset('storage/'. $image2)))
-            <img width="50" src="{{ asset('landb/defaultLogo.png') }}" alt="Product image" loading="lazy" class="lazyload " data-src="{{ RvMedia::getImageUrl($image2, null , false, RvMedia::getDefaultImage()) }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
-        @endif
-    @endif
-</a>
-
-{{--<img class="product-gif " style="display: none;" src="https://revamp.landbw.co/storage/double-ring-1s-200px.gif"/>--}}
+<a href="javascript:void(0)" class="noImg" id="prod-img-{{$item->id}}"><img src="https://revamp.landbw.co/storage/img.jpg"/></a>
+<img class="product-gif " style="display: none;" src="https://revamp.landbw.co/storage/double-ring-1s-200px.gif"/>
+<a class="show-image" style="display: none;" href="{{ route('products.edit', $item->id) }}" title="{{ $item->name }}"></a>
 
 <script>
     $(document).ready(function () {
-        $(".noImg").click(function () {
+        $("#prod-img-{{$item->id}}").click(function () {
             $(this).parent().find('.product-gif').show();
             $(this).parent().find('.noImg').hide();
+            $.ajax({
+                url: '{{ route('products.loadProductImage', $item->id) }}',
+                success: function (data) {
+                    $('a.show-image').html(data);
+                    $('img.product-gif').hide();
+                    $('a.show-image').show();
+                },
+                error: function (request, status, error) {}
+            });
         });
     });
 </script>
