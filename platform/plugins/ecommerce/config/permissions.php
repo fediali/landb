@@ -36,6 +36,11 @@ return [
         'flag'        => 'products.destroy',
         'parent_flag' => 'products.index',
     ],
+    [
+        'name'        => 'Cost Price',
+        'flag'        => 'products.costprice',
+        'parent_flag' => 'products.index',
+    ],
     /**
      * Categories
      */

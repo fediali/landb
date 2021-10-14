@@ -395,7 +395,7 @@ class ProductTable extends TableAbstract
                 'title' => 'Cost Price',
                 'class' => 'text-left',
                 'width' => '100px',
-                'visible' => (in_array(@auth()->user()->roles[0]->slug, ['sales-manager', 'admin']) || @auth()->user()->super_user) ? true : false,
+                'visible' => ((Auth::user()->hasPermission(['products.costprice'])) || @auth()->user()->super_user) ? true : false,
             ],
             'price'      => [
                 'name'  => 'ec_products.price',

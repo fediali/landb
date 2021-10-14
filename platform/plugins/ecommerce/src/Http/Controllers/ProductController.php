@@ -1077,7 +1077,7 @@ class ProductController extends BaseController
                     $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
                 }
 
-                if ($variation->product->status != BaseStatusEnum::ACTIVE) {
+                if ($variation->product->status != BaseStatusEnum::ACTIVE && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
