@@ -41,7 +41,7 @@
     </div>
     <div class="col-lg-2"></div>
 </div>
-<section>
+<section class="container">
     @if(setting('theme-landb-home_section_1_status') == 1)
         <div class="row mb-5 mobile-margin-bottom">
             <div class="col-lg-12">

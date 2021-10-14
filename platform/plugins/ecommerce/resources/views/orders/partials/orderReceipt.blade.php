@@ -18,7 +18,7 @@
             </p>
         </div>
     </div>
-    <div style="display:flex" class="row mt-5">
+    <div style="display:flex" class="row">
         <div style="width:34%">
             <div style="background: #eaeaea;" class="p-3">
                 <h6>
@@ -123,16 +123,16 @@
             <tr>
                 <td >
 
-                    <img style="max-width: 80px;" class="split-img"
+                    <img style="max-width: 50px;" class="split-img"
                          src="{{ RvMedia::getImageUrl($order_product->product->image, null, false, RvMedia::getDefaultImage()) }}"/>
                 </td>
                 <td>
                     {{--{!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}--}}
                     <div class="ml-3">
                         <p style="font-size:12px;"
-                           class="cart-product-name mt-2 mb-2">{{ $order_product->product->name }}</p>
-                        <p style="font-size:12px;" class="cart-product-code mb-2">
-                            CODE: {{ $order_product->product->sku }}</p>
+                           class="cart-product-name m-0">{{ $order_product->product->name }}</p>
+                        <p style="font-size:12px;" class="cart-product-code m-0">
+                        <strong>CODE:</strong> {{ $order_product->product->sku }}</p>
                         @php $sizes = get_category_sizes_by_id($order_product->product->category_id); @endphp
                         @php
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
@@ -140,19 +140,19 @@
                         @endphp
                         @if($variation)
                             @if($variation->title == 'Pack')
-                                <p style="font-size:12px;" class="cart-product-size mb-2">
-                                    Type: {{ $variation->title }}</p>
+                                <p style="font-size:12px;" class="cart-product-size m-0">
+                                <strong>Type:</strong> {{ $variation->title }}</p>
                                 <p style="font-size:12px;"
-                                   class="cart-product-size mb-2">
-                                    SIZE: {{ $order_product->product->sizes }}</p>
-                                <p style="font-size:14px;">
+                                   class="cart-product-size m-0">
+                                   <strong>SIZE:</strong> {{ $order_product->product->sizes }}</p>
+                                <p style="font-size:14px; margin:0px;">
                                     <strong>Price Per Piece:
                                         ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
                                 </p></strong>
                             @else
-                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                <p style="font-size:12px;" class="cart-product-size m-0">
                                     Type: Single</p>
-                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                <p style="font-size:12px;" class="cart-product-size m-0">
                                     Size: {{ substr($variation->title,0,-3) }}</p>
                             @endif
                         @endif
