@@ -92,8 +92,12 @@ class ProductTable extends TableAbstract
                 if ($this->request()->input('action') == 'excel') {
                     return RvMedia::getImageUrl($item->image, 'thumb', false, RvMedia::getDefaultImage());
                 }
-
-                return view('plugins/ecommerce::products.partials.thumbnail', compact('item'))->render();
+                if ($item->status == BaseStatusEnum::ACTIVE) {
+                    return view('plugins/ecommerce::products.partials.thumbnail', compact('item'))->render();
+                }
+                else{
+                    return 'no-image';
+                }
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
