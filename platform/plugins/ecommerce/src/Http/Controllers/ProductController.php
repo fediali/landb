@@ -110,8 +110,7 @@ class ProductController extends BaseController
     {
         page_title()->setTitle(trans('plugins/ecommerce::products.name'));
 
-        Assets::addScripts(['bootstrap-editable'])
-            ->addStyles(['bootstrap-editable']);
+        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
 
         return $dataTable->renderTable();
     }
