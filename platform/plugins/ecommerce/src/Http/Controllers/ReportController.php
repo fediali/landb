@@ -237,8 +237,6 @@ class ReportController extends BaseController
     {
         page_title()->setTitle('Top Customers');
 
-        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
-
         return $topCustomersTable->renderTable();
     }
 
