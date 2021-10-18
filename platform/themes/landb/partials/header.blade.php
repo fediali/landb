@@ -86,7 +86,7 @@
 
             <ul>
                 <li>
-                    <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>972-243-7860
+                    <a href="tel:+9722437860"><i class="fal fa-phone-alt"></i> <span>972-243-7860
 
 </span></a>
                 </li>
