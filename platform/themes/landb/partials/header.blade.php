@@ -260,7 +260,7 @@
   background: #bbb;
 }
 </style> -->
-<script src="{{ asset('landb/js/flipbook.js') }}"></script>
+{{--<script src="{{ asset('landb/js/flipbook.js') }}"></script>--}}
 
 <!-- <script>
 function openSearch() {
