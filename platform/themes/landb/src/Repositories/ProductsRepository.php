@@ -143,7 +143,7 @@ class ProductsRepository
             })->where($this->model->getTable() . '.status', BaseStatusEnum::ACTIVE)->where($this->model->getTable() . '.is_variation', 0);
         $data = $data->select('ec_products.*')->groupBy('ec_products.id');
         if ($paginate) {
-            $data = $data->simplePaginate(48);
+            $data = $data->simplePaginate(24);
         } elseif ($simplePaginate) {
             $data = $data->simplePaginate();
         } elseif ($first) {
