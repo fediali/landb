@@ -11,6 +11,11 @@ use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
+use Botble\Ecommerce\Tables\Reports\PreOrdersTable;
+use Botble\Ecommerce\Tables\Reports\ReturnReportsTable;
+use Botble\Ecommerce\Tables\Reports\TopCustomersTable;
+use Botble\Ecommerce\Tables\Reports\TopInventoriesTable;
+use Botble\Ecommerce\Tables\Reports\TopOrdersTable;
 use Botble\Ecommerce\Tables\Reports\TopSellingProductsTable;
 use Botble\Payment\Enums\PaymentStatusEnum;
 use Carbon\Carbon;
@@ -208,4 +213,57 @@ class ReportController extends BaseController
                     ->render()
             );
     }
+
+
+
+    /**
+     * @param TopInventoriesTable $topInventoriesTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopInventories(TopInventoriesTable $topInventoriesTable)
+    {
+        return $topInventoriesTable->renderTable();
+    }
+
+    /**
+     * @param TopCustomersTable $topCustomersTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopCustomers(TopCustomersTable $topCustomersTable)
+    {
+        return $topCustomersTable->renderTable();
+    }
+
+    /**
+     * @param TopInventoriesTable $returnReportsTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getReturnReports(ReturnReportsTable $returnReportsTable)
+    {
+        return $returnReportsTable->renderTable();
+    }
+
+    /**
+     * @param PreOrdersTable $preOrdersTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getPreOrders(PreOrdersTable $preOrdersTable)
+    {
+        return $preOrdersTable->renderTable();
+    }
+
+    /**
+     * @param TopOrdersTable $topOrdersTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopOrders(TopOrdersTable $topOrdersTable)
+    {
+        return $topOrdersTable->renderTable();
+    }
+
 }

@@ -306,6 +306,37 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             ]);
         });
 
+
+
+        Route::group(['prefix' => 'custom-reports'], function () {
+            Route::get('top-inventories', [
+                'as'         => 'ecommerce.custom-report.top-inventories',
+                'uses'       => 'ReportController@getTopInventories',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-customers', [
+                'as'         => 'ecommerce.custom-report.top-customers',
+                'uses'       => 'ReportController@getTopCustomers',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('return-reports', [
+                'as'         => 'ecommerce.custom-report.return-reports',
+                'uses'       => 'ReportController@getReturnReports',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('pre-orders', [
+                'as'         => 'ecommerce.custom-report.pre-orders',
+                'uses'       => 'ReportController@getPreOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-orders', [
+                'as'         => 'ecommerce.custom-report.top-orders',
+                'uses'       => 'ReportController@getTopOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+        });
+
+
     });
 });
 
