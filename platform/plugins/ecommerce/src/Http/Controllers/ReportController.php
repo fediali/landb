@@ -225,8 +225,6 @@ class ReportController extends BaseController
     {
         page_title()->setTitle('Top Inventories');
 
-        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
-
         return $topInventoriesTable->renderTable();
     }
 
