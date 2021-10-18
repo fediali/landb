@@ -3,90 +3,86 @@
 namespace Theme\Landb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-/*use Botble\Theme\Theme;*/
+
 use BaseHelper;
 use Botble\Page\Models\Page;
-use Botble\Page\Services\PageService;
 use Botble\SimpleSlider\Models\SimpleSlider;
 use Botble\Theme\Events\RenderingSingleEvent;
-use Botble\Theme\Events\RenderingHomePageEvent;
-use Botble\Theme\Events\RenderingSiteMapEvent;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Arr;
 use Theme\Landb\Repositories\ProductsRepository;
 use Response;
 use SeoHelper;
 use SiteMapManager;
 use SlugHelper;
 use Theme;
-/*use Botble\Theme\Http\Controllers\PublicController;*/
 
 class LandbController extends Controller
 {
-  private $productRepo;
-  protected $homeSliderKey = 'home-slider';
+    private $productRepo;
+    protected $homeSliderKey = 'home-slider';
 
-  public function __construct(ProductsRepository $productsRepo) {
-    $this->productRepo = $productsRepo;
-  }
-
-  public function getIndex(){
-
-    $data = [
-        'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 15, 'array' => true]),
-        'latest_collection'=> $this->productRepo->getProductsByParams(['latest' => true, 'limit' => 20, 'array' => true]),
-        'slider' => $this->getHomeSlideshow()
-    ];
-    //dd($data['latest_collection']);
-   return Theme::scope('index', $data)->render();
-  }
-
-  public function orderSuccess(){
-    return Theme::scope('orderSuccess', [])->render();
-  }
-
-  public function getHomeSlideshow(){
-    $data = SimpleSlider::where('key' ,  $this->homeSliderKey)->with(['sliderItems'])->first();
-    return $data;
-  }
-
-  public function getView($key = null)
-  {
-    if (empty($key)) {
-      return $this->getIndex();
+    public function __construct(ProductsRepository $productsRepo)
+    {
+        $this->productRepo = $productsRepo;
     }
 
-    $slug = SlugHelper::getSlug($key, '');
-
-    if (!$slug) {
-      abort(404);
+    public function getIndex()
+    {
+        $data = [
+            'home_featured' => $this->productRepo->getProductsByParams(['is_featured' => true, 'limit' => 15, 'array' => true]),
+            'latest_collection' => $this->productRepo->getProductsByParams(['latest' => true, 'limit' => 20, 'array' => true]),
+            'slider' => $this->getHomeSlideshow()
+        ];
+        return Theme::scope('index', $data)->render();
     }
 
-    if (defined('PAGE_MODULE_SCREEN_NAME')) {
-      if ($slug->reference_type == Page::class && BaseHelper::isHomepage($slug->reference_id)) {
-        return redirect()->to('/');
-      }
+    public function orderSuccess()
+    {
+        return Theme::scope('orderSuccess', [])->render();
     }
 
-    $result = apply_filters(BASE_FILTER_PUBLIC_SINGLE_DATA, $slug);
-
-    if (isset($result['slug']) && $result['slug'] == 'faqs') {
-      $faq = Theme::partial('short-codes.faqs');
-
-      $result['data']['page']->content = str_replace('[faqs][/faqs]', $faq, $result['data']['page']->content);
+    public function getHomeSlideshow()
+    {
+        $data = SimpleSlider::where('key', $this->homeSliderKey)->with(['sliderItems'])->first();
+        return $data;
     }
 
-    if (isset($result['slug']) && $result['slug'] !== $key) {
-      return redirect()->route('public.single', $result['slug']);
-    }
+    public function getView($key = null)
+    {
+        if (empty($key)) {
+            return $this->getIndex();
+        }
 
-    event(new RenderingSingleEvent($slug));
-//dd($result['data']);
-    if (!empty($result) && is_array($result)) {
-      return Theme::scope($result['view'], $result['data'])->render();
-    }
+        $slug = SlugHelper::getSlug($key, '');
 
-    abort(404);
-  }
+        if (!$slug) {
+            abort(404);
+        }
+
+        if (defined('PAGE_MODULE_SCREEN_NAME')) {
+            if ($slug->reference_type == Page::class && BaseHelper::isHomepage($slug->reference_id)) {
+                return redirect()->to('/');
+            }
+        }
+
+        $result = apply_filters(BASE_FILTER_PUBLIC_SINGLE_DATA, $slug);
+
+        if (isset($result['slug']) && $result['slug'] == 'faqs') {
+            $faq = Theme::partial('short-codes.faqs');
+
+            $result['data']['page']->content = str_replace('[faqs][/faqs]', $faq, $result['data']['page']->content);
+        }
+
+        if (isset($result['slug']) && $result['slug'] !== $key) {
+            return redirect()->route('public.single', $result['slug']);
+        }
+
+        event(new RenderingSingleEvent($slug));
+
+        if (!empty($result) && is_array($result)) {
+            return Theme::scope($result['view'], $result['data'])->render();
+        }
+
+        abort(404);
+    }
 
 }
