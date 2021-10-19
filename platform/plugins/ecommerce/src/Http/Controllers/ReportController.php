@@ -249,8 +249,6 @@ class ReportController extends BaseController
     {
         page_title()->setTitle('Return Reports');
 
-        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
-
         return $returnReportsTable->renderTable();
     }
 
@@ -263,8 +261,6 @@ class ReportController extends BaseController
     {
         page_title()->setTitle('Pre Orders');
 
-        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
-
         return $preOrdersTable->renderTable();
     }
 
@@ -276,8 +272,6 @@ class ReportController extends BaseController
     public function getTopOrders(TopOrdersTable $topOrdersTable)
     {
         page_title()->setTitle('Top Orders');
-
-        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
 
         return $topOrdersTable->renderTable();
     }
