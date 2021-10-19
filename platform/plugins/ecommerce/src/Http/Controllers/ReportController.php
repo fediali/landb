@@ -17,6 +17,7 @@ use Botble\Ecommerce\Tables\Reports\TopCustomersTable;
 use Botble\Ecommerce\Tables\Reports\TopInventoriesTable;
 use Botble\Ecommerce\Tables\Reports\TopOrdersTable;
 use Botble\Ecommerce\Tables\Reports\TopSellingProductsTable;
+use Botble\Ecommerce\Tables\Reports\TopSoldProductsTable;
 use Botble\Payment\Enums\PaymentStatusEnum;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
@@ -274,6 +275,18 @@ class ReportController extends BaseController
         page_title()->setTitle('Top Orders');
 
         return $topOrdersTable->renderTable();
+    }
+
+    /**
+     * @param TopSoldProductsTable $topSoldProductsTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopSoldProducts(TopSoldProductsTable $topSoldProductsTable)
+    {
+        page_title()->setTitle('Top Sold Products');
+
+        return $topSoldProductsTable->renderTable();
     }
 
 }

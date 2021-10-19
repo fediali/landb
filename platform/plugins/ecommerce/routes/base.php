@@ -334,6 +334,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ReportController@getTopOrders',
                 'permission' => 'ecommerce.report.index',
             ]);
+            Route::get('top-sold-products', [
+                'as'         => 'ecommerce.custom-report.top-sold-products',
+                'uses'       => 'ReportController@getTopSoldProducts',
+                'permission' => 'ecommerce.report.index',
+            ]);
         });
 
 
