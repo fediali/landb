@@ -312,7 +312,7 @@ class ReportController extends BaseController
      */
     public function getTopSoldOutProducts(TopSoldOutProductsTable $topSoldOutProductsTable)
     {
-        page_title()->setTitle('Top Sold Products');
+        page_title()->setTitle('Top Sold Out Products');
 
         return $topSoldOutProductsTable->renderTable();
     }

@@ -37,7 +37,7 @@ class TopSoldOutProductsTable extends TableAbstract
     /**
      * @var string
      */
-    protected $customFilterTemplate = 'plugins/ecommerce::products.topSoldProductFilter';
+    protected $customFilterTemplate = 'plugins/ecommerce::products.topSoldOutProductFilter';
 
     /**
      * ProductTable constructor.
@@ -85,25 +85,24 @@ class TopSoldOutProductsTable extends TableAbstract
             'ec_products.name',
             'ec_products.sku',
             'ec_products.category_id',
-            'ec_order_product.qty AS sold_qty',
+            'ec_products.oos_date',
         ];
 
         $query = $model->select($select)
-            ->join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
-            //->where(['is_variation' => 0, 'ptype' => 'R'])
-            ->where('ec_order_product.qty', '>', 0)
-            //->where('ec_products.sold_qty', '>', 0)
+            ->join('ec_product_variations', 'ec_product_variations.configurable_product_id', 'ec_products.id')
+            //->where(['is_variation' => 1, 'ptype' => 'R'])
+            ->where('ec_product_variations.is_default', 1)
+            ->where('ec_products.quantity', 0)
             ->where('status', '!=', BaseStatusEnum::HIDE)
-            ->orderBy('ec_order_product.created_at', 'DESC');
-        //dd($query->toSql());
+            ->orderBy('ec_products.oos_date', 'DESC');
 
         $search_items = $this->request()->all();
         if (!empty($search_items)) {
             if (isset($search_items['from_date'])) {
-                $query->whereDate('ec_order_product.created_at', '>=', Carbon::createFromFormat('m-d-Y', $search_items['from_date'])->format('Y-m-d'));
+                $query->whereDate('ec_products.oos_date', '>=', Carbon::createFromFormat('m-d-Y', $search_items['from_date'])->format('Y-m-d'));
             }
             if (isset($search_items['to_date'])) {
-                $query->whereDate('ec_order_product.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['to_date'])->format('Y-m-d'));
+                $query->whereDate('ec_products.oos_date', '<=', Carbon::createFromFormat('m-d-Y', $search_items['to_date'])->format('Y-m-d'));
             }
         }
 
@@ -119,37 +118,30 @@ class TopSoldOutProductsTable extends TableAbstract
             'id'            => [
                 'name'  => 'ec_products.id',
                 'title' => trans('core/base::tables.id'),
-                //'width' => '20px',
                 'searchable' => 'true',
-                //'visible' => false,
             ],
             'sku'        => [
                 'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
-                //'width' => '100px',
             ],
             'name'       => [
                 'name'      => 'ec_products.name',
                 'title'     => trans('core/base::tables.name'),
                 'class'     => 'text-left',
-                //'width'     => '200px',
                 'font-size' => '15px',
             ],
             'category_id'       => [
                 'name'      => 'ec_products.category_id',
                 'title'     => 'Category',
                 'class'     => 'text-left',
-                //'width'     => '100px',
                 'font-size' => '15px',
             ],
-            'sold_qty'       => [
-                'name'      => 'ec_products.sold_qty',
-                'title'     => 'Sold Qty',
-                'class'     => 'text-left',
-                //'width'     => '100px',
-                'font-size' => '15px',
-            ]
+            'oos_date'      => [
+                'name'  => 'ec_orders.oos_date',
+                'title' => 'OOS Date',
+                'class' => 'text-left',
+            ],
         ];
 
         return $arr;
