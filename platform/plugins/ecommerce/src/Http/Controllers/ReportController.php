@@ -11,12 +11,16 @@ use Botble\Ecommerce\Enums\OrderStatusEnum;
 use Botble\Ecommerce\Repositories\Interfaces\CustomerInterface;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
+use Botble\Ecommerce\Tables\Reports\MostOrdersStatesTable;
 use Botble\Ecommerce\Tables\Reports\PreOrdersTable;
 use Botble\Ecommerce\Tables\Reports\ReturnReportsTable;
 use Botble\Ecommerce\Tables\Reports\TopCustomersTable;
 use Botble\Ecommerce\Tables\Reports\TopInventoriesTable;
 use Botble\Ecommerce\Tables\Reports\TopOrdersTable;
+use Botble\Ecommerce\Tables\Reports\TopProductsStatusesTable;
+use Botble\Ecommerce\Tables\Reports\TopSalesRepOrdersTable;
 use Botble\Ecommerce\Tables\Reports\TopSellingProductsTable;
+use Botble\Ecommerce\Tables\Reports\TopSoldOutProductsTable;
 use Botble\Ecommerce\Tables\Reports\TopSoldProductsTable;
 use Botble\Payment\Enums\PaymentStatusEnum;
 use Carbon\Carbon;
@@ -287,6 +291,54 @@ class ReportController extends BaseController
         page_title()->setTitle('Top Sold Products');
 
         return $topSoldProductsTable->renderTable();
+    }
+
+    /**
+     * @param TopSalesRepOrdersTable $topSalesRepOrdersTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopSalesRepOrders(TopSalesRepOrdersTable $topSalesRepOrdersTable)
+    {
+        page_title()->setTitle('Top Sales Rep Orders');
+
+        return $topSalesRepOrdersTable->renderTable();
+    }
+
+    /**
+     * @param TopSoldOutProductsTable $topSoldOutProductsTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopSoldOutProducts(TopSoldOutProductsTable $topSoldOutProductsTable)
+    {
+        page_title()->setTitle('Top Sold Products');
+
+        return $topSoldOutProductsTable->renderTable();
+    }
+
+    /**
+     * @param MostOrdersStatesTable $mostOrdersStatesTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getMostOrdersStates(MostOrdersStatesTable $mostOrdersStatesTable)
+    {
+        page_title()->setTitle('Most Orders States');
+
+        return $mostOrdersStatesTable->renderTable();
+    }
+
+    /**
+     * @param TopProductsStatusesTable $topProductsStatusesTable
+     * @return JsonResponse|View
+     * @throws Throwable
+     */
+    public function getTopProductsStatuses(TopProductsStatusesTable $topProductsStatusesTable)
+    {
+        page_title()->setTitle('Top Products Statuses');
+
+        return $topProductsStatusesTable->renderTable();
     }
 
 }

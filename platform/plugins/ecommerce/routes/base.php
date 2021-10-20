@@ -339,6 +339,26 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ReportController@getTopSoldProducts',
                 'permission' => 'ecommerce.report.index',
             ]);
+            Route::get('sales-rep-orders', [
+                'as'         => 'ecommerce.custom-report.sales-rep-orders',
+                'uses'       => 'ReportController@getTopSalesRepOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('sold-out-products', [
+                'as'         => 'ecommerce.custom-report.sold-out-products',
+                'uses'       => 'ReportController@getTopSoldOutProducts',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('most-orders-states', [
+                'as'         => 'ecommerce.custom-report.most-orders-states',
+                'uses'       => 'ReportController@getMostOrdersStates',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-products-statuses', [
+                'as'         => 'ecommerce.custom-report.top-products-statuses',
+                'uses'       => 'ReportController@getTopProductsStatuses',
+                'permission' => 'ecommerce.report.index',
+            ]);
         });
 
 
