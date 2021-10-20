@@ -37,7 +37,7 @@ class TopProductsStatusesTable extends TableAbstract
     /**
      * @var string
      */
-    protected $customFilterTemplate = 'plugins/ecommerce::products.topSoldProductFilter';
+    protected $customFilterTemplate = 'plugins/ecommerce::products.topProductStatusFilter';
 
     /**
      * ProductTable constructor.
@@ -65,8 +65,8 @@ class TopProductsStatusesTable extends TableAbstract
             ->editColumn('sku', function ($item) {
                 return $item->sku ? $item->sku : '&mdash;';
             })
-            ->editColumn('category_id', function ($item) {
-                return $item->category_id ? @$item->category->name : '&mdash;';
+            ->editColumn('created_at', function ($item) {
+                return BaseHelper::formatDate($item->created_at);
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -84,26 +84,22 @@ class TopProductsStatusesTable extends TableAbstract
             'ec_products.id',
             'ec_products.name',
             'ec_products.sku',
-            'ec_products.category_id',
-            'ec_order_product.qty AS sold_qty',
+            'inventory_history.reference',
+            'inventory_history.created_at',
         ];
 
         $query = $model->select($select)
-            ->join('ec_order_product', 'ec_order_product.product_id', 'ec_products.id')
+            ->join('inventory_history', 'inventory_history.product_id', 'ec_products.id');
             //->where(['is_variation' => 0, 'ptype' => 'R'])
-            ->where('ec_order_product.qty', '>', 0)
-            //->where('ec_products.sold_qty', '>', 0)
-            ->where('status', '!=', BaseStatusEnum::HIDE)
-            ->orderBy('ec_order_product.created_at', 'DESC');
-        //dd($query->toSql());
+            //->where('status', '!=', BaseStatusEnum::HIDE);
 
         $search_items = $this->request()->all();
         if (!empty($search_items)) {
             if (isset($search_items['from_date'])) {
-                $query->whereDate('ec_order_product.created_at', '>=', Carbon::createFromFormat('m-d-Y', $search_items['from_date'])->format('Y-m-d'));
+                $query->whereDate('inventory_history.created_at', '>=', Carbon::createFromFormat('m-d-Y', $search_items['from_date'])->format('Y-m-d'));
             }
             if (isset($search_items['to_date'])) {
-                $query->whereDate('ec_order_product.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['to_date'])->format('Y-m-d'));
+                $query->whereDate('inventory_history.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['to_date'])->format('Y-m-d'));
             }
         }
 
@@ -119,36 +115,28 @@ class TopProductsStatusesTable extends TableAbstract
             'id'            => [
                 'name'  => 'ec_products.id',
                 'title' => trans('core/base::tables.id'),
-                //'width' => '20px',
                 'searchable' => 'true',
-                //'visible' => false,
             ],
             'sku'        => [
                 'name'  => 'ec_products.sku',
                 'title' => trans('plugins/ecommerce::products.sku'),
                 'class' => 'text-left',
-                //'width' => '100px',
             ],
             'name'       => [
                 'name'      => 'ec_products.name',
                 'title'     => trans('core/base::tables.name'),
                 'class'     => 'text-left',
-                //'width'     => '200px',
                 'font-size' => '15px',
             ],
-            'category_id'       => [
-                'name'      => 'ec_products.category_id',
-                'title'     => 'Category',
+            'reference'       => [
+                'name'      => 'inventory_history.reference',
+                'title'     => 'Status',
                 'class'     => 'text-left',
-                //'width'     => '100px',
-                'font-size' => '15px',
             ],
-            'sold_qty'       => [
-                'name'      => 'ec_products.sold_qty',
-                'title'     => 'Sold Qty',
+            'created_at'       => [
+                'name'      => 'inventory_history.created_at',
+                'title'     => 'Date',
                 'class'     => 'text-left',
-                //'width'     => '100px',
-                'font-size' => '15px',
             ]
         ];
 
