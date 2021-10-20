@@ -2,16 +2,17 @@
 
 namespace Botble\Ecommerce\Tables\Reports;
 
-use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
-use Botble\Orderstatuses\Models\Orderstatuses;
-use Botble\Table\Abstracts\TableAbstract;
-use Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\Carbon;
-use Throwable;
+use Botble\Table\Abstracts\TableAbstract;
+use Botble\Ecommerce\Models\Order;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Carbon;
+use Botble\ACL\Models\Role;
+use Throwable;
 use BaseHelper;
+use Html;
+
 
 class TopSalesRepOrdersTable extends TableAbstract
 {
@@ -26,7 +27,7 @@ class TopSalesRepOrdersTable extends TableAbstract
     /**
      * @var string
      */
-    protected $customFilterTemplate = 'plugins/ecommerce::orders.topOrderFilter';
+    protected $customFilterTemplate = 'plugins/ecommerce::orders.topSalesRepOrderFilter';
 
     /**
      * OrderTable constructor.
@@ -51,30 +52,8 @@ class TopSalesRepOrdersTable extends TableAbstract
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
-            ->editColumn('id', function ($item) {
-                $html = '<span data-toggle="tooltip">' . $item->id . '</span>' . (($item->platform == "online") ? ' <i class="badge bg-success ml-1">online</i>' : '');
-                return $html;
-            })
-            ->editColumn('company', function ($item) {
-                return $item->company;
-            })
             ->editColumn('salesperson_id', function ($item) {
                 return $item->salesperson ? $item->salesperson->getFullName() : 'N/A';
-            })
-            ->editColumn('payment_status', function ($item) {
-                return $item->payment->status->label() ? $item->payment->status->toHtml() : '&mdash;';
-            })
-            ->editColumn('payment_method', function ($item) {
-                return $item->payment->payment_channel->label() ? $item->payment->payment_channel->label() : '&mdash;';
-            })
-            ->editColumn('order_type', function ($item) {
-                return $item->order_type_html;
-            })
-            ->editColumn('amount', function ($item) {
-                return format_price($item->amount, $item->currency_id);
-            })
-            ->editColumn('status', function ($item) {
-                return $item->status->toHtml();
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -93,22 +72,18 @@ class TopSalesRepOrdersTable extends TableAbstract
         $model = $this->repository->getModel();
         $select = [
             'ec_orders.id',
-            'ec_orders.status',
-            'ec_orders.order_type',
-            'ec_orders.user_id',
-            'ec_customer_detail.company',
-            'ec_orders.created_at',
-            'ec_orders.amount',
-            'ec_orders.payment_id',
             'ec_orders.salesperson_id',
+            'ec_orders.created_at'
         ];
 
         $query = $model
             ->select($select)
-            ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
-            ->leftJoin('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
-            ->with(['user', 'payment'])
-            ->where('ec_orders.is_finished', 1);
+            ->selectRaw('SUM(ec_orders.sub_total) AS sales_amount')
+            ->selectRaw('COUNT(ec_orders.id) AS sales_order_count')
+            ->where('ec_orders.is_finished', 1)
+            ->where('ec_orders.salesperson_id', '>', 0)
+            ->whereNotNull('ec_orders.salesperson_id')
+            ->groupBy('ec_orders.salesperson_id');
 
         $search_items = $this->request()->all();
         if (!empty($search_items)) {
@@ -118,8 +93,8 @@ class TopSalesRepOrdersTable extends TableAbstract
             if (isset($search_items['to_date'])) {
                 $query->whereDate('ec_orders.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['to_date'])->format('Y-m-d'));
             }
-            if (isset($search_items['order_status'])) {
-                $query->where('ec_orders.status', $search_items['order_status']);
+            if (isset($search_items['salesperson_id'])) {
+                $query->where('ec_orders.salesperson_id', $search_items['salesperson_id']);
             }
         }
 
@@ -132,51 +107,24 @@ class TopSalesRepOrdersTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'             => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('core/base::tables.id'),
-                'width' => '20px',
-                'class' => 'text-left',
-            ],
-            'company'        => [
-                'name'  => 'ec_customer_detail.company',
-                'title' => 'Company',
-                'class' => 'text-left',
-            ],
             'salesperson_id' => [
                 'name'  => 'ec_orders.salesperson_id',
                 'title' => 'Salesperson',
                 'class' => 'text-left',
             ],
-            'payment_method'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_method'),
-                'class' => 'text-center',
+            'sales_order_count' => [
+                'name'  => 'ec_orders.sales_order_count',
+                'title' => 'Order Count',
+                'class' => 'text-left',
             ],
-            'payment_status'  => [
-                'name'  => 'ec_orders.id',
-                'title' => trans('plugins/ecommerce::order.payment_status_label'),
-                'class' => 'text-center',
-            ],
-            'order_type'      => [
-                'name'  => 'ec_orders.order_type',
-                'title' => 'Order Type',
-                'class' => 'text-center',
-            ],
-            'amount'         => [
-                'name'  => 'ec_orders.amount',
-                'title' => trans('plugins/ecommerce::order.amount'),
-                'class' => 'text-center',
-            ],
-            'status'          => [
-                'name'  => 'ec_orders.status',
-                'title' => trans('core/base::tables.status'),
-                'class' => 'text-center',
+            'sales_amount' => [
+                'name'  => 'ec_orders.sales_amount',
+                'title' => 'Sales Amount',
+                'class' => 'text-left',
             ],
             'created_at'      => [
                 'name'  => 'ec_orders.created_at',
                 'title' => trans('core/base::tables.created_at'),
-                'width' => '100px',
                 'class' => 'text-left',
             ],
         ];
@@ -219,7 +167,12 @@ class TopSalesRepOrdersTable extends TableAbstract
      */
     public function renderCustomFilter(): string
     {
-        $data['order_statuses'] = Orderstatuses::where('status', BaseStatusEnum::PUBLISHED)->pluck('name')->all();
+        $data['salesperson'] = Order::join('role_users', 'role_users.user_id', 'ec_orders.salesperson_id')
+            ->join('roles', 'roles.id', 'role_users.role_id')
+            ->join('users', 'users.id', 'role_users.user_id')
+            ->whereIn('roles.slug', [Role::ONLINE_SALES,Role::IN_PERSON_SALES])
+            ->pluck('users.username', 'users.id')
+            ->all();
 
         $search_items = $this->request()->all();
         $data['search_items'] = $search_items;
