@@ -2,27 +2,15 @@
 
 namespace Botble\Ecommerce\Tables\Reports;
 
-use Botble\Base\Enums\BaseStatusEnum;
-use Botble\Ecommerce\Enums\OrderStatusEnum;
-use Botble\Ecommerce\Exports\ProductExport;
-use Botble\Ecommerce\Models\Order;
-use Botble\Ecommerce\Models\OrderProduct;
-use Botble\Ecommerce\Models\Product;
-use Botble\Ecommerce\Models\ProductCategory;
-use Botble\Ecommerce\Models\ProductVariation;
-use Botble\Ecommerce\Models\UserSearch;
-use Botble\Ecommerce\Models\UserSearchItem;
-use Botble\Ecommerce\Repositories\Interfaces\OrderInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
-use Botble\Orderstatuses\Models\Orderstatuses;
-use Botble\Payment\Enums\PaymentStatusEnum;
 use Botble\Table\Abstracts\TableAbstract;
 use Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Throwable;
 use Yajra\DataTables\DataTables;
+use BaseHelper;
+
 
 class TopProductsStatusesTable extends TableAbstract
 {
