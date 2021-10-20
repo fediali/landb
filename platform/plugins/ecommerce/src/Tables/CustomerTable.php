@@ -342,6 +342,7 @@ class CustomerTable extends TableAbstract
                 'title' => 'Text',
                 'class' => 'text-left',
                 'width' => '100px',
+                'visible' => false,
             ],
             'order_count' => [
                 'name' => 'order_count',
