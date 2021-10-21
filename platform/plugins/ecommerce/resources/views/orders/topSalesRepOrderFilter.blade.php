@@ -4,7 +4,7 @@
     {{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}
     <div class="filter_list inline-block filter-items-wrap">
         <div class="filter-item form-filter filter-item-default">
-            <div class="col-md-12 mb-3">
+            <div class="col-md-12 p-0 mb-3">
                 <label class="font-bold mb-0">Date:</label>
                 <div class="w-100 c-datepicker-date-editor  J-datepicker-range-day">
                     <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>

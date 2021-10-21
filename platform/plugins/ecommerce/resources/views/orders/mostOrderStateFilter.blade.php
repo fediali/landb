@@ -4,7 +4,7 @@
     {{ Form::open(['method' => 'GET', 'class' => 'filter-form']) }}
     <div class="filter_list inline-block filter-items-wrap">
         <div class="filter-item form-filter filter-item-default">
-            <div class="col-md-12 mb-3">
+            <div class="col-md-12 p-0 mb-3">
                 <label class="font-bold mb-0">Date:</label>
                 <div class="w-100 c-datepicker-date-editor  J-datepicker-range-day">
                     <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
@@ -15,7 +15,7 @@
             </div>
             {{--<div class="col-md-12">
                 <label class="mt-4 font-bold">Order Status:</label><br>
-                <select class="form-control" name="order_status" style="width: 100%">
+                <select class="form-control mb-3" name="order_status" style="width: 100%">
                     <option selected="selected" value="" disabled="">Select Order Status</option>
                     @foreach($data['order_statuses'] as $order_status)
                         <option value="{{strtolower($order_status)}}" {{@$data['search_items']['order_status'] == strtolower($order_status) ? 'selected' : ''}}>{{ $order_status }}</option>
