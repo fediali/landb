@@ -3397,7 +3397,7 @@ HTML CSS JSResult Skip Results Iframe EDIT ON .gridBlock {
         bottom: -310px;
     }
     .detail-h1 {
-        padding-top: 175px !important;
+        padding-top: 350px !important;
     }
     .grid-container {
         height: 1200vh !important;
@@ -4365,9 +4365,7 @@ html {
     cursor: zoom-in !important;
   }
 
-  .shoplisting .col-lg-3 .img {
-    height: 380px !important;
-  }
+
   .shoplisting .col-lg-custom-5 .img {
     height: 328px !important;
   }
@@ -4885,6 +4883,9 @@ html { scroll-behavior: smooth;}
 
 /******* PRODUCT SLIDER CSS **********/
 @media screen and (min-width: 992px) and (max-width: 5000px) {
+    .shoplisting .col-lg-3 .img {
+        height: 380px !important;
+      }
     .owl-stage-outer {
         width: 65% !important;
         margin-left: 21%;
@@ -5171,6 +5172,9 @@ h4 {
       font-size: 20px;
   } 
   @media screen and (min-width: 320px) and (max-width: 991px){
+    .shoplisting .col-lg-3 .img {
+        height: auto !important;
+      }
     .checkbox-contract input[type=checkbox] {
         width: 40% !important;
         height: 15px !important; 
