@@ -613,6 +613,7 @@ class OrderController extends BaseController
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'product_name' => $product->name,
+                    'product_sizes' => $product->sizes,
                     'qty' => floor(Arr::get($productItem, 'quantity', 1)),
                     'weight' => $product->weight,
                     'price' => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
