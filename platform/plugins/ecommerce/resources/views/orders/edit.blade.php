@@ -123,7 +123,7 @@
                                                                                 : {{ $attribute->title }}
                                                                                 @if($attribute->title !== 'Single')
                                                                 </small><small>
-                                                                    Size : {{$product->sizes}}
+                                                                    Size : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
                                                                     @endif
                                                                     @endif
                                                                     @endforeach
@@ -419,7 +419,7 @@
                                                                                     : {{ $attribute->title }}
                                                                                     @if($attribute->title !== 'Single')
                                                                     </small><small>
-                                                                        Size : {{$product->sizes}}
+                                                                        Size : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
                                                                         @endif
                                                                         @endif
                                                                         @endforeach
