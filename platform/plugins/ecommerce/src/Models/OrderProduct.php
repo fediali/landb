@@ -20,6 +20,7 @@ class OrderProduct extends BaseModel
         'order_id',
         'product_id',
         'product_name',
+        'product_sizes',
         'qty',
         'is_pack',
         'weight',
