@@ -15,8 +15,8 @@ class UserStatusEnum extends Enum
     public const DEACTIVATED = 'deactivated';
 
     public static $STATUSES = [
-        self::ACTIVATED   => self::ACTIVATED,
-        self::DEACTIVATED => self::DEACTIVATED,
+        self::ACTIVATED   => 'Activated',
+        self::DEACTIVATED => 'Deactivated',
     ];
 
     /**

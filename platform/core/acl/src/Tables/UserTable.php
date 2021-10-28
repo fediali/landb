@@ -289,6 +289,8 @@ class UserTable extends TableAbstract
                 } else {
                     app(ActivationInterface::class)->remove($user);
                 }
+                $user->status = $inputValue;
+                $user->save();
                 event(new UpdatedContentEvent(USER_MODULE_SCREEN_NAME, request(), $user));
             }
 
