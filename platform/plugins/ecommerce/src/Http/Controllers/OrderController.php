@@ -1706,10 +1706,12 @@ class OrderController extends BaseController
             $errors = [];
             $notFoundSkus = '';
             $orderProduct = 0;
-            if ($request->market_place == Order::LASHOWROOM) {
 
+            if ($request->market_place == Order::LASHOWROOM) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+
+                        $newError = [];
 
                         if (!isset($row['po'])) {
                             return $response
@@ -1799,18 +1801,18 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                $errors[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                /*$errors[] = */$newError[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
                                 $notFoundSkus .= $row['style_no'].', ';
                             }
 //                            }
 
                         } else {
-                            $errors[] = $row['style_no'] . ' product is not found.';
+                            /*$errors[] = */$newError[] = $row['style_no'] . ' product is not found.';
                             $notFoundSkus .= $row['style_no'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            $errors[] = $row['style_no'] . ' product is out of stock.';
+                            /*$errors[] = */$newError[] = $row['style_no'] . ' product is out of stock.';
                             $notFoundSkus .= $row['style_no'].', ';
                         }
 
@@ -1858,9 +1860,9 @@ class OrderController extends BaseController
                             }
                         }
                         if (isset($importOrder->id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
                         } elseif (isset($orderPo->order_id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -1926,6 +1928,8 @@ class OrderController extends BaseController
             } elseif ($request->market_place == Order::ORANGESHINE) {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+
+                        $newError = [];
 
                         if (!isset($row['invoice'])) {
                             return $response
@@ -2020,18 +2024,18 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                $errors[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                /*$errors[] = */$newError[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
                                 $notFoundSkus .= $row['style'].', ';
                             }
 //                            }
 
                         } else {
-                            $errors[] = $row['style'] . ' product is not found.';
+                            /*$errors[] = */$newError[] = $row['style'] . ' product is not found.';
                             $notFoundSkus .= $row['style'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            $errors[] = $row['style'] . ' product is out of stock.';
+                            /*$errors[] = */$newError[] = $row['style'] . ' product is out of stock.';
                             $notFoundSkus .= $row['style'].', ';
                         }
 
@@ -2078,9 +2082,9 @@ class OrderController extends BaseController
                             }
                         }
                         if (isset($importOrder->id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
                         } elseif (isset($orderPo->order_id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
@@ -2145,6 +2149,7 @@ class OrderController extends BaseController
             } else {
                 foreach ($order as $od) {
                     foreach ($od as $row) {
+                        $newError = [];
 
                         if (!isset($row['ponumber'])) {
                             return $response
@@ -2235,18 +2240,18 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                $errors[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                /*$errors[] = */$newError[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
                                 $notFoundSkus .= $row['styleno'].', ';
                             }
 //                            }
 
                         } else {
-                            $errors[] = $row['styleno'] . ' product is not found.';
+                            /*$errors[] = */$newError[] = $row['styleno'] . ' product is not found.';
                             $notFoundSkus .= $row['styleno'].', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            $errors[] = $row['styleno'] . ' product is out of stock.';
+                            /*$errors[] = */$newError[] = $row['styleno'] . ' product is out of stock.';
                             $notFoundSkus .= $row['styleno'].', ';
                         }
 
@@ -2293,10 +2298,10 @@ class OrderController extends BaseController
                                 }
                             }
                         }
-                        if (isset($importOrder->id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
-                        } elseif (isset($orderPo->order_id) && count($errors)) {
-                            $errors[] = '<a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                        if (isset($importOrder->id) && count($newError)) {
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                        } elseif (isset($orderPo->order_id) && count($newError)) {
+                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
                         }
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
