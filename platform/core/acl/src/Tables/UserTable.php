@@ -90,11 +90,11 @@ class UserTable extends TableAbstract
                 return $item->super_user ? trans('core/base::base.yes') : trans('core/base::base.no');
             })
             ->editColumn('status', function ($item) {
-                if (app(ActivationInterface::class)->completed($item)) {
+                /*if (app(ActivationInterface::class)->completed($item)) {
                     return UserStatusEnum::ACTIVATED()->toHtml();
                 }
-
-                return UserStatusEnum::DEACTIVATED()->toHtml();
+                return UserStatusEnum::DEACTIVATED()->toHtml();*/
+                return view('core/acl::users.partials.status', ['item' => $item])->render();
             })
             ->removeColumn('role_id');
 
@@ -134,6 +134,7 @@ class UserTable extends TableAbstract
             'users.updated_at',
             'users.created_at',
             'users.super_user',
+            'users.status',
         ];
 
         $query = $model->leftJoin('role_users', 'users.id', '=', 'role_users.user_id')

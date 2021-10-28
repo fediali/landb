@@ -50,6 +50,7 @@ class User extends Authenticatable
         'salesperson_id',
         'twilio_number',
         'phone_number',
+        'status',
     ];
 
     /**

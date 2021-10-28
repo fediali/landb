@@ -426,4 +426,25 @@ class UserController extends BaseController
             ->setNextUrl(route('users.index'))
             ->setMessage(trans('core/base::system.supper_revoked'));
     }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $user = $this->userRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        //$requestData['updated_by'] = auth()->user()->id;
+
+        $user->fill($requestData);
+
+        $this->userRepository->createOrUpdate($user);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $user));
+
+        return $response;
+    }
+
 }
