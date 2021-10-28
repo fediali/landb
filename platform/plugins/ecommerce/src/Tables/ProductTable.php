@@ -79,10 +79,12 @@ class ProductTable extends TableAbstract
         $data = $this->table
             ->eloquent($this->query())
             ->editColumn('name', function ($item) {
-                if (!Auth::user()->hasPermission('products.edit')) {
+                /*if (!Auth::user()->hasPermission('products.edit')) {
                     return $item->name;
                 }
-                return Html::link(route('products.edit', $item->id), $item->name);
+                return Html::link(route('products.edit', $item->id), $item->name);*/
+
+                return '<a href="' . route('products.edit', $item->id) . '">' . $item->name . '</a><i class="badge bg-success ml-1">'.$item->label_name.'</i>';
             })
             ->editColumn('image', function ($item) {
                 if ($this->request()->input('action') == 'csv') {
@@ -285,14 +287,16 @@ class ProductTable extends TableAbstract
             //'ec_products.oos_date',
             'ec_products.prod_pieces',
             'ec_products.cost_price',
+            'product_labels.name AS label_name',
         ];
 
         $query = $model
             ->select($select)
-            ->where(['is_variation' => 0,
-                     'ptype' => 'R'
+            ->leftJoin('product_labels', 'product_labels.id', 'ec_products.product_label_id')
+            ->where(['ec_products.is_variation' => 0,
+                     'ec_products.ptype' => 'R'
             ])
-            ->where('status', '!=', BaseStatusEnum::HIDE);
+            ->where('ec_products.status', '!=', BaseStatusEnum::HIDE);
 
 
         if ($this->request()->has('search_id')) {
