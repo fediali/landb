@@ -1143,6 +1143,30 @@ class ProductController extends BaseController
         return $response->setMessage(trans('core/base::notices.update_success_message'));
     }
 
+    public function updateProductPackQty($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->quantity = $request->input('product_pack_qty', 0);
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['quantity' => $product->quantity]);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function updateProductExtraQty($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->extra_qty = $request->input('product_extra_qty', 0);
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['extra_qty' => $product->extra_qty]);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
     public function addCustomerProductDemandQty($id, Request $request, BaseHttpResponse $response)
     {
         $product = $this->productRepository->findOrFail($id);

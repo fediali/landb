@@ -181,7 +181,43 @@ class ProductTable extends TableAbstract
                 $getPackId = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 1)->value('product_id');
                 $packQty = Product::where('id', $getPackId)->value('quantity');
                 Product::where('id', $item->id)->update(['quantity' => $packQty]);
-                return $packQty;
+
+
+                $quantity = '<form id="upd-pack-qty-form-' . $item->id . '" class="d-flex" action="' . route('products.update-product-pack-qty', $item->id) . '" method="POST">
+                                <input type="hidden" name="_token" value="' . @csrf_token() . '">
+                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" id="prod-pack-qty-tbl-' . $item->id . '" name="product_pack_qty" value="' . $packQty . '" required>
+                          </form>
+                          <script>
+                          $("input#prod-pack-qty-tbl-' . $item->id . '").focusout(function() { $.ajax({
+                                type: "POST",
+                                url: "' . route('products.update-product-pack-qty', $item->id) . '",
+                                data: {product_pack_qty: $("input#prod-pack-qty-tbl-' . $item->id . '").val()},
+                                contentType: "application/x-www-form-urlencoded",
+                                success: function (result) {
+                                    toastr["success"](result.message, "Success");
+                                },
+                          }) });
+                          </script>';
+
+                return $quantity;
+            })
+            ->editColumn('extra_qty', function ($item) {
+                $extraQty = '<form id="upd-extra-qty-form-' . $item->id . '" class="d-flex" action="' . route('products.update-product-extra-qty', $item->id) . '" method="POST">
+                                <input type="hidden" name="_token" value="' . @csrf_token() . '">
+                                <input style="width: 70px; height: 35px; margin-right:5px;" class="ui-text-area textarea-auto-height" id="prod-extra-qty-tbl-' . $item->id . '" name="product_extra_qty" value="' . $item->extra_qty . '" required>
+                          </form>
+                          <script>
+                          $("input#prod-extra-qty-tbl-' . $item->id . '").focusout(function() { $.ajax({
+                                type: "POST",
+                                url: "' . route('products.update-product-extra-qty', $item->id) . '",
+                                data: {product_extra_qty: $("input#prod-extra-qty-tbl-' . $item->id . '").val()},
+                                contentType: "application/x-www-form-urlencoded",
+                                success: function (result) {
+                                    toastr["success"](result.message, "Success");
+                                },
+                          }) });
+                          </script>';
+                return $extraQty;
             })
             ->editColumn('single_qty', function ($item) {
                 /*$getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
@@ -290,12 +326,11 @@ class ProductTable extends TableAbstract
             'product_labels.name AS label_name',
         ];
 
+
         $query = $model
             ->select($select)
             ->leftJoin('product_labels', 'product_labels.id', 'ec_products.product_label_id')
-            ->where(['ec_products.is_variation' => 0,
-                     'ec_products.ptype' => 'R'
-            ])
+            ->where(['ec_products.is_variation' => 0, 'ec_products.ptype' => 'R'])
             ->where('ec_products.status', '!=', BaseStatusEnum::HIDE);
 
 
