@@ -1135,7 +1135,7 @@ class OrderController extends BaseController
     {
         $order = $this->orderRepository->findOrFail($id);
 
-        if($order->status != OrderStatusEnum::CANCELED) {
+        if ($order->status != OrderStatusEnum::CANCELED) {
             $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::CANCELED, 'is_confirmed' => true], compact('id'));
 
             $this->orderHistoryRepository->createOrUpdate([
@@ -1691,8 +1691,8 @@ class OrderController extends BaseController
     {
         //TODO Refactor the code
         if ($request->hasfile('file')) {
-            $type = strtolower($request['file']->getClientOriginalExtension());
-            $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
+            // $type = strtolower($request['file']->getClientOriginalExtension());
+            // $image = str_replace(' ', '_', rand(1, 100) . '_' . substr(microtime(), 2, 7)) . '.' . $type;
             $move = $request->file('file')->move(public_path('storage/importorders'), $request->file('file')->getClientOriginalName());
             $order = Excel::toCollection(new OrderImportFile(), $move);
 //            $filecheck = OrderImportUpload::where('file', $move)->first();
@@ -1801,39 +1801,42 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                /*$errors[] = */$newError[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
-                                $notFoundSkus .= $row['style_no'].', ';
+                                /*$errors[] = */
+                                $newError[] = $row['style_no'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['style_no'] . ', ';
                             }
 //                            }
 
                         } else {
-                            /*$errors[] = */$newError[] = $row['style_no'] . ' product is not found.';
-                            $notFoundSkus .= $row['style_no'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['style_no'] . ' product is not found.';
+                            $notFoundSkus .= $row['style_no'] . ', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            /*$errors[] = */$newError[] = $row['style_no'] . ' product is out of stock.';
-                            $notFoundSkus .= $row['style_no'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['style_no'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['style_no'] . ', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['po'])->first();
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
-                            $detail['price'] = intval(str_replace(['$',','], '', $row['sub_total'])) / $orderQuantity;
+                            $detail['price'] = intval(str_replace(['$', ','], '', $row['sub_total'])) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
-                            $iorder['amount'] = str_replace(['$',','], '', $row['original_amount']);;
-                            $iorder['sub_total'] = str_replace(['$',','], '', $row['sub_total']);;
+                            $iorder['amount'] = str_replace(['$', ','], '', $row['original_amount']);;
+                            $iorder['sub_total'] = str_replace(['$', ','], '', $row['sub_total']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
-                            $iorder['discount_amount'] = str_replace(['$',','], '', $row['discount']);;
-                            $iorder['shipping_amount'] = str_replace(['$',','], '', $row['shipping_cost']);;
+                            $iorder['discount_amount'] = str_replace(['$', ','], '', $row['discount']);;
+                            $iorder['shipping_amount'] = str_replace(['$', ','], '', $row['shipping_cost']);;
                             $iorder['tax_amount'] = 0;
                             $iorder['platform'] = 'online';
                             $iorder['salesperson_id'] = @auth()->user()->id;
@@ -1844,7 +1847,7 @@ class OrderController extends BaseController
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::LASHOWROOM]);
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
-                                $detail['price'] = intval(str_replace(['$',','], '', $row['sub_total'])) / $orderQuantity;
+                                $detail['price'] = intval(str_replace(['$', ','], '', $row['sub_total'])) / $orderQuantity;
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
@@ -1859,11 +1862,20 @@ class OrderController extends BaseController
                                 }
                             }
                         }
+
                         if (isset($importOrder->id) && count($errors)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                            $errors[$importOrder->id][] = implode('/', $newError);
                         } elseif (isset($orderPo->order_id) && count($errors)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                            $errors[$orderPo->order_id][] = implode('/', $newError);
                         }
+
+
+                        if (isset($importOrder->id)) {
+                            $this->updateOrderTotal($importOrder->id, false);
+                        } elseif (isset($orderPo->order_id)) {
+                            $this->updateOrderTotal($orderPo->order_id, false);
+                        }
+
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
 
@@ -2024,33 +2036,36 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                /*$errors[] = */$newError[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
-                                $notFoundSkus .= $row['style'].', ';
+                                /*$errors[] = */
+                                $newError[] = $row['style'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['style'] . ', ';
                             }
 //                            }
 
                         } else {
-                            /*$errors[] = */$newError[] = $row['style'] . ' product is not found.';
-                            $notFoundSkus .= $row['style'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['style'] . ' product is not found.';
+                            $notFoundSkus .= $row['style'] . ', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            /*$errors[] = */$newError[] = $row['style'] . ' product is out of stock.';
-                            $notFoundSkus .= $row['style'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['style'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['style'] . ', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['invoice'])->first();
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
-                            $detail['price'] = str_replace(['$',','], '', $row['sub_total']) / $orderQuantity;
+                            $detail['price'] = str_replace(['$', ','], '', $row['sub_total']) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
-                            $iorder['amount'] = str_replace(['$',','], '', $row['order_amt']);;
+                            $iorder['amount'] = str_replace(['$', ','], '', $row['order_amt']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
@@ -2066,7 +2081,7 @@ class OrderController extends BaseController
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::ORANGESHINE]);
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
-                                $detail['price'] = str_replace(['$',','], '', $row['sub_total']) / $orderQuantity;
+                                $detail['price'] = str_replace(['$', ','], '', $row['sub_total']) / $orderQuantity;
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
@@ -2081,11 +2096,20 @@ class OrderController extends BaseController
                                 }
                             }
                         }
+
                         if (isset($importOrder->id) && count($errors)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                            $errors[$importOrder->id][] = implode('/', $newError);
                         } elseif (isset($orderPo->order_id) && count($errors)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                            $errors[$orderPo->order_id][] = implode('/', $newError);
                         }
+
+
+                        if (isset($importOrder->id)) {
+                            $this->updateOrderTotal($importOrder->id, false);
+                        } elseif (isset($orderPo->order_id)) {
+                            $this->updateOrderTotal($orderPo->order_id, false);
+                        }
+
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
@@ -2240,19 +2264,22 @@ class OrderController extends BaseController
                             } elseif ($product->quantity > 0) {
                                 $remQty = $orderQuantity - $product->quantity;
                                 $orderQuantity = $product->quantity;
-                                /*$errors[] = */$newError[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
-                                $notFoundSkus .= $row['styleno'].', ';
+                                /*$errors[] = */
+                                $newError[] = $row['styleno'] . ' product is short in ' . $remQty . ' quantity.';
+                                $notFoundSkus .= $row['styleno'] . ', ';
                             }
 //                            }
 
                         } else {
-                            /*$errors[] = */$newError[] = $row['styleno'] . ' product is not found.';
-                            $notFoundSkus .= $row['styleno'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['styleno'] . ' product is not found.';
+                            $notFoundSkus .= $row['styleno'] . ', ';
                         }
 
                         if (!$checkProdQty && $product) {
-                            /*$errors[] = */$newError[] = $row['styleno'] . ' product is out of stock.';
-                            $notFoundSkus .= $row['styleno'].', ';
+                            /*$errors[] = */
+                            $newError[] = $row['styleno'] . ' product is out of stock.';
+                            $notFoundSkus .= $row['styleno'] . ', ';
                         }
 
                         $orderPo = DB::table('ec_order_import')->where('po_number', $row['ponumber'])->first();
@@ -2260,14 +2287,14 @@ class OrderController extends BaseController
                         if ($orderPo != null && $product && $checkProdQty) {
                             $detail['order_id'] = $orderPo->order_id;
                             $detail['qty'] = $orderQuantity;
-                            $detail['price'] = str_replace(['$',','], '', $row['subtotal']) / $orderQuantity;
+                            $detail['price'] = str_replace(['$', ','], '', $row['subtotal']) / $orderQuantity;
                             $detail['product_id'] = $product->id;
                             $detail['product_name'] = $product->name;
                             $orderProduct = OrderProduct::create($detail);
                             //import record
                         } else /*if ($product)*/ {
                             $iorder['user_id'] = $customer->id;
-                            $iorder['amount'] = $iorder['sub_total'] = str_replace(['$',','], '', $row['totalamount']);;
+                            $iorder['amount'] = $iorder['sub_total'] = str_replace(['$', ','], '', $row['totalamount']);;
                             $iorder['currency_id'] = 1;
                             $iorder['is_confirmed'] = 1;
                             $iorder['is_finished'] = 1;
@@ -2283,7 +2310,7 @@ class OrderController extends BaseController
                                 $this->addOrderImportHistory($importOrder->id, Order::$MARKETPLACE[Order::FASHIONGO]);
                                 $detail['order_id'] = $importOrder->id;
                                 $detail['qty'] = $orderQuantity;
-                                $detail['price'] = str_replace(['$',','], '', $row['subtotal']) / $orderQuantity;
+                                $detail['price'] = str_replace(['$', ','], '', $row['subtotal']) / $orderQuantity;
                                 $detail['product_id'] = $product->id;
                                 $detail['product_name'] = $product->name;
                                 $orderProduct = OrderProduct::create($detail);
@@ -2298,11 +2325,20 @@ class OrderController extends BaseController
                                 }
                             }
                         }
+
                         if (isset($importOrder->id) && count($newError)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$importOrder->id]).'">click here to edit order.</a>';
+                            $errors[$importOrder->id][] = implode('/', $newError);
                         } elseif (isset($orderPo->order_id) && count($newError)) {
-                            $errors[] = implode('/', $newError).' <a target="_blank" href="'.route('orders.editOrder',[$orderPo->order_id]).'">click here to edit order.</a>';
+                            $errors[$orderPo->order_id][] = implode('/', $newError);
                         }
+
+
+                        if (isset($importOrder->id)) {
+                            $this->updateOrderTotal($importOrder->id, false);
+                        } elseif (isset($orderPo->order_id)) {
+                            $this->updateOrderTotal($orderPo->order_id, false);
+                        }
+
 
                         if ($product && $orderProduct && $orderProduct->order->order_type == Order::NORMAL) {
                             $this->productRepository
@@ -2466,7 +2502,7 @@ class OrderController extends BaseController
 
             $getCard = CardPreAuth::where('transaction_id', $request->transaction_id)->first();
             if ($getCard) {
-                OrderSplitPayment::where(['order_id' => $getCard->order_id, 'payment_type' => 'card_'.$getCard->card_id])->update(['status' => 'paid']);
+                OrderSplitPayment::where(['order_id' => $getCard->order_id, 'payment_type' => 'card_' . $getCard->card_id])->update(['status' => 'paid']);
             }
 
         } else {
@@ -2492,7 +2528,7 @@ class OrderController extends BaseController
         $requestData['status'] = $request->input('value');
         $requestData['updated_by'] = auth()->user()->id;
 
-        if($order->status == OrderStatusEnum::CANCELED && $requestData['status'] != OrderStatusEnum::CANCELED) {
+        if ($order->status == OrderStatusEnum::CANCELED && $requestData['status'] != OrderStatusEnum::CANCELED) {
             if ($order->order_type != Order::PRE_ORDER) {
                 $order_products = OrderProduct::where('order_id', $order->id)->get();
                 foreach ($order_products as $order_product) {
@@ -2875,7 +2911,7 @@ class OrderController extends BaseController
         return $response->setData($order)->setMessage(trans('core/base::notices.create_success_message'));
     }
 
-    public function updateOrderTotal($orderId)
+    public function updateOrderTotal($orderId, $checkPromotion = true)
     {
         $orderObj = Order::where('id', $orderId)->first();
 
@@ -2894,7 +2930,9 @@ class OrderController extends BaseController
 
         Order::where('id', $orderId)->update(['sub_total' => $orderObj->sub_total, 'amount' => $orderObj->amount]);
 
-        $this->promotion_service->applyPromotionIfAvailable($orderObj->id);
+        if ($checkPromotion) {
+            $this->promotion_service->applyPromotionIfAvailable($orderObj->id);
+        }
     }
 
     public function splitPayment($id, Request $request, BaseHttpResponse $response)

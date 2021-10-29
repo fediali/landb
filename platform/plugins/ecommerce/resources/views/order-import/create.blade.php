@@ -27,12 +27,15 @@
         {!! Form::close() !!}
     </div>
     <br>
+
     @if($import_errors && count($import_errors))
         <div class="col-md-12">
             <div class="row">
                 <ul>
-                    @foreach($import_errors as $error)
-                        <li style="color: red">{{$loop->iteration}}. {!! $error !!}</li>
+                    @foreach($import_errors as $key => $error)
+                        <li style="color: red">
+                            {{$loop->iteration}}. <a target="_blank" href="{{route('orders.editOrder', [$key])}}"> {{implode(' || ', $error)}} click here to edit order.</a>
+                        </li>
                     @endforeach
                 </ul>
             </div>
