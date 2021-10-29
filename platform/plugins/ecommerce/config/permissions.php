@@ -41,6 +41,11 @@ return [
         'flag'        => 'products.costprice',
         'parent_flag' => 'products.index',
     ],
+    [
+        'name'        => 'Qty Edit',
+        'flag'        => 'products.editqty',
+        'parent_flag' => 'products.index',
+    ],
     /**
      * Categories
      */
