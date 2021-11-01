@@ -16,6 +16,7 @@ $related = get_like_products_modded($product);
                                             ->where('ep.quantity', '>', 0)
                                             ->where('ec_product_variations.configurable_product_id', $product->id)
                                             ->orderBy('ec_product_variations.is_default', 'desc')
+                                            ->where('ec_product_variations.is_default', 1)
                                             ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
                                             ->get();
                         $default = $variationData->first();
