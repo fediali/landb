@@ -106,9 +106,9 @@ class importProducts extends Command
         $products = Product::all();
 
         foreach ($products as $product) {
-            $getBound = DB::table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
+            $getBound = DB::connection('mysql2')->table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
             if ($getBound) {
-                $getBoundProducts = DB::table('hw_hw_bounded_products')
+                $getBoundProducts = DB::connection('mysql2')->table('hw_hw_bounded_products')
                     ->where('bound_id', $getBound->bound_id)
                     //->where('product_id', '!=', $product->id)
                     ->pluck('product_id')
@@ -190,7 +190,7 @@ class importProducts extends Command
 
                     // if ($row['image_id'] && $row['image_path']) {
 
-                    $getProdImages = DB::table('hw_images_links')
+                    $getProdImages = DB::connection('mysql2')->table('hw_images_links')
                         ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
                         ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
                         ->where('hw_images_links.object_type', 'product')
