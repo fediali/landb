@@ -163,7 +163,7 @@ class fetchOrders extends Command
                     ];
                     DB::table('ec_orders')->insert($orderData);
 
-                    $orderProducts = DB::table('hw_order_details')->where('order_id', $order->order_id)->get();
+                    $orderProducts = DB::connection('mysql2')->table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
                         //$productName = Product::where('id', $orderProduct->product_id)->value('name');
                         $productObj = Product::where('id', $orderProduct->product_id)->first();
@@ -269,7 +269,7 @@ class fetchOrders extends Command
                     OrderAddress::create($shippingAddress);
 
 
-                    DB::table('hw_orders')->where('hw_orders.fetch_status', 0)->where('order_id', $order->order_id)->update(['hw_orders.fetch_status' => 1]);
+                    DB::connection('mysql2')->table('hw_orders')->where('hw_orders.fetch_status', 0)->where('order_id', $order->order_id)->update(['hw_orders.fetch_status' => 1]);
                 }
             });
 
