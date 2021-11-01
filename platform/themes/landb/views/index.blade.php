@@ -250,7 +250,7 @@
 @endif
 @if(setting('theme-landb-home_section_3_status') == 1)
     @php
-        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->where('status', \Botble\Base\Enums\BaseStatusEnum::ACTIVE)->where('quantity', '>' , 0)->latest()->limit(2)->pluck('id')->all()));
+        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->join('ec_product_variations', 'ec_product_variations.configurable_product_id', 'ec_products.id')->where('ec_product_variations.is_default', 1)->where('ec_products.status', \Botble\Base\Enums\BaseStatusEnum::ACTIVE)->where('ec_products.quantity', '>' , 0)->latest()->limit(2)->pluck('ec_products.id')->all()));
         $product_ids = json_decode($product_ids);
         $products = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->limit(2)->get();
     @endphp
