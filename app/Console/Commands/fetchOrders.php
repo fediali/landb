@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\CustomerCard;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Address;
 use Botble\Ecommerce\Models\Order;
@@ -44,7 +45,7 @@ class fetchOrders extends Command
      */
     public function handle()
     {
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'],)->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
+        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -166,40 +167,50 @@ class fetchOrders extends Command
                     $orderProducts = DB::connection('mysql2')->table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
                         //$productName = Product::where('id', $orderProduct->product_id)->value('name');
-                        $productObj = Product::where('id', $orderProduct->product_id)->first();
-                        $diff = 0;
-                        $isPack = 0;
-                        $qty = $orderProduct->amount;
-                        if ($productObj && $productObj->prod_pieces) {
+
+                        $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
+                            ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
+                            ->where('ec_product_variations.is_default', 1)
+                            ->first();
+
+                        $qty = $orderProduct->amount;//8
+                        if ($productObj && $productObj->prod_pieces) {//3
                             $isPack = 1;
-                            $packQty = floor($qty / $productObj->prod_pieces);
-                            $qty = $packQty;
+                            $packQty = floor($qty / $productObj->prod_pieces);//2.6
+                            $qty = $packQty;//2
 
-                            $looseQty = $packQty * $productObj->prod_pieces;
-                            $diff = $orderProduct->amount - $looseQty;
+                            $looseQty = $packQty * $productObj->prod_pieces;//6
+                            $diff = $orderProduct->amount - $looseQty;//2
+
+                            if ($qty > 0) {
+                                $orderProductData = [
+                                    'order_id'     => $orderProduct->order_id,
+                                    'qty'          => $qty,
+                                    'is_pack'      => $isPack,
+                                    'price'        => round($orderProduct->price * $productObj->prod_pieces, 2),
+                                    'product_id'   => $productObj->product_id,
+                                    'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                                ];
+                                OrderProduct::create($orderProductData);
+
+                            } elseif ($diff > 0) {
+                                $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
+                                    ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
+                                    ->where('ec_product_variations.is_default', 0)
+                                    ->first();
+                                $isPack = 0;
+                                $orderProductData = [
+                                    'order_id'     => $orderProduct->order_id,
+                                    'qty'          => $diff,
+                                    'is_pack'      => $isPack,
+                                    'price'        => $orderProduct->price,
+                                    'product_id'   => $productObj->product_id,
+                                    'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                                ];
+                                OrderProduct::create($orderProductData);
+                            }
+
                         }
-                        $orderProductData = [
-                            'order_id'     => $orderProduct->order_id,
-                            'qty'          => $qty,
-                            'is_pack'      => $isPack,
-                            'price'        => $orderProduct->price,
-                            'product_id'   => $orderProduct->product_id,
-                            'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-                        ];
-                        OrderProduct::create($orderProductData);
-
-//                        if ($diff) {
-//                            $isPack = 0;
-//                            $orderProductData = [
-//                                'order_id'     => $orderProduct->order_id,
-//                                'qty'          => $diff,
-//                                'is_pack'      => $isPack,
-//                                'price'        => $orderProduct->price,
-//                                'product_id'   => $orderProduct->product_id,
-//                                'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-//                            ];
-//                            OrderProduct::create($orderProductData);
-//                        }
 
                     }
 
@@ -270,6 +281,14 @@ class fetchOrders extends Command
 
 
                     DB::connection('mysql2')->table('hw_orders')->where('hw_orders.fetch_status', 0)->where('order_id', $order->order_id)->update(['hw_orders.fetch_status' => 1]);
+
+
+                    $userOmniId = DB::connection('mysql2')->table('hw_users')->where('user_id', $order->user_id)->value('omni_customer_id');
+                    if ($userOmniId) {
+                        $data = ['customer_id' => $order->user_id, 'customer_omni_id' => $userOmniId];
+                        CustomerCard::updateOrCreate($data,$data);
+                    }
+
                 }
             });
 
