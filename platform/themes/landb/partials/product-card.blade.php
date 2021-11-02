@@ -5,6 +5,7 @@
                         ->orderBy('ec_product_variations.is_default', 'desc')
                         ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
                         ->with(['product'])
+                        ->where('ec_product_variations.is_default', 1)
                         ->get();
     $default = $variationData->first();
     $promotion = null;

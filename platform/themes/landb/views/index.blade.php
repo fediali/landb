@@ -59,6 +59,7 @@
                                                 ->where('ec_product_variations.configurable_product_id', $product->id)
                                                 ->orderBy('ec_product_variations.is_default', 'desc')
                                                 ->select('ec_product_variations.id','ec_product_variations.product_id', 'ep.price' )
+                                                ->where('ec_product_variations.is_default', 1)
                                                 ->get();
                             $default = $variationData->first();
 
@@ -176,14 +177,20 @@
 
         <div class="t-one">
             <div class="ml-2 mr-2">
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[0]->id, @$categories[2]->products[0]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[0]->id, @$categories[2]->products[0]->slugable->key) }}">
+                    {!! image_html_generator(@$categories[2]->products[0]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider1') !!}
+                </a>
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[0]->images[0]) }}" class="w-100 slidert-left-img" id="vslider1">--}}
             </div>
         </div>
         <div class="t-two">
             <div class="ml-2 mr-2">
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[1]->id, @$categories[2]->products[1]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[1]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}</a>
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[2]->id, @$categories[2]->products[2]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[2]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[1]->id, @$categories[2]->products[1]->slugable->key) }}">
+                    {!! image_html_generator(@$categories[2]->products[1]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider2') !!}
+                </a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[2]->id, @$categories[2]->products[2]->slugable->key) }}">
+                    {!! image_html_generator(@$categories[2]->products[2]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img', 'vslider3') !!}
+                </a>
 
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[1]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider2">
                 <img src="{{ asset('storage/'.@$categories[0]->products[2]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider3">--}}
@@ -203,8 +210,12 @@
         </div>
         <div class="t-four">
             <div class="ml-2 mr-2">
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[3]->id, @$categories[2]->products[3]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}</a>
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[4]->id, @$categories[2]->products[4]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[3]->id, @$categories[2]->products[3]->slugable->key) }}">
+                    {!! image_html_generator(@$categories[2]->products[3]->images[0], null, null, null, true, 'w-100 slidert-slim-img', 'vslider4') !!}
+                </a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[4]->id, @$categories[2]->products[4]->slugable->key) }}">
+                    {!! image_html_generator(@$categories[2]->products[4]->images[0], null, null, null, true, 'w-100 mt-3 slidert-slim-img' , 'vslider5') !!}
+                </a>
 
                 {{-- <img src="{{ asset('storage/'.@$categories[0]->products[3]->images[0]) }}" class="w-100 slidert-slim-img" id="vslider4">
                  <img src="{{ asset('storage/'.@$categories[0]->products[4]->images[0]) }}" class="w-100 mt-3 slidert-slim-img" id="vslider5">--}}
@@ -212,7 +223,21 @@
         </div>
         <div class="t-five">
             <div class="ml-2 mr-2">
-                <a href="{{ generate_product_url('detail', @$categories[2]->products[5]->id, @$categories[2]->products[5]->slugable->key) }}">{!! image_html_generator(@$categories[2]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}</a>
+                <a href="{{ generate_product_url('detail', @$categories[2]->products[5]->id, @$categories[2]->products[5]->slugable->key) }}">
+                    @if (@getimagesize(asset('storage/'. @$categories[2]->products[5]->images[0])))
+                        {!! image_html_generator(@$categories[2]->products[5]->images[0], null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}
+                    @else
+                        @php
+                            $images1 = str_replace('.JPG', '.jpg', @$categories[2]->products[5]->images[0]);
+                            $images2 = str_replace('.jpg', '.JPG', @$categories[2]->products[5]->images[0]);
+                        @endphp
+                        @if (@getimagesize(asset('storage/'. $images1)))
+                            {!! image_html_generator($images1, null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}
+                        @elseif(@getimagesize(asset('storage/'. $images2)))
+                            {!! image_html_generator($images2, null, null, null, true, 'w-100 slidert-left-img', 'vslider6') !!}
+                        @endif
+                    @endif
+                </a>
                 {{--<img src="{{ asset('storage/'.@$categories[0]->products[5]->images[0]) }}" class="w-100 slidert-left-img" id="vslider6">--}}
             </div>
         </div>
@@ -249,7 +274,7 @@
 @endif
 @if(setting('theme-landb-home_section_3_status') == 1)
     @php
-        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->where('status', \Botble\Base\Enums\BaseStatusEnum::ACTIVE)->where('quantity', '>' , 0)->latest()->limit(2)->pluck('id')->all()));
+        $product_ids = setting('theme-landb-home_section_3_products', json_encode(\Botble\Ecommerce\Models\Product::inRandomOrder()->join('ec_product_variations', 'ec_product_variations.configurable_product_id', 'ec_products.id')->where('ec_product_variations.is_default', 1)->where('ec_products.status', \Botble\Base\Enums\BaseStatusEnum::ACTIVE)->where('ec_products.quantity', '>' , 0)->latest()->limit(2)->pluck('ec_products.id')->all()));
         $product_ids = json_decode($product_ids);
         $products = \Botble\Ecommerce\Models\Product::whereIn('id', $product_ids)->limit(2)->get();
     @endphp
