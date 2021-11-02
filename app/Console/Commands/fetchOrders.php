@@ -204,7 +204,7 @@ class fetchOrders extends Command
                                     ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
                                     ->where('ec_product_variations.is_default', 0)
                                     ->first();
-                                var_dump($productObj);
+                                dd($orderProduct->product_id);
                                 exit();
                                 $isPack = 0;
                                 $orderProductData = [
