@@ -195,27 +195,26 @@ class fetchOrders extends Command
                                     'is_pack'      => $isPack,
                                     'price'        => round($orderProduct->price * $productObj->prod_pieces, 2),
                                     'product_id'   => $productObj->product_id,
-                                    'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                                    'product_name' => $productObj->name
                                 ];
                                 OrderProduct::create($orderProductData);
 
                             } elseif ($diff > 0) {
-                                $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
+                                $productObjS = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
                                     ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
                                     ->where('ec_product_variations.is_default', 0)
                                     ->first();
-                                if ($productObj) {
-                                    $isPack = 0;
-                                    $orderProductData = [
-                                        'order_id'     => $orderProduct->order_id,
-                                        'qty'          => $diff,
-                                        'is_pack'      => $isPack,
-                                        'price'        => $orderProduct->price,
-                                        'product_id'   => $productObj->product_id,
-                                        'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-                                    ];
-                                    OrderProduct::create($orderProductData);
-                                }
+
+                                $isPack = 0;
+                                $orderProductData = [
+                                    'order_id'     => $orderProduct->order_id,
+                                    'qty'          => $diff,
+                                    'is_pack'      => $isPack,
+                                    'price'        => $orderProduct->price,
+                                    'product_id'   => $productObjS ? $productObjS->product_id : $productObj->product_id,
+                                    'product_name' => $productObjS ? $productObjS->name : $productObj->name
+                                ];
+                                OrderProduct::create($orderProductData);
 
                             }
 
