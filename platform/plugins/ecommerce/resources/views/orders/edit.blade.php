@@ -93,6 +93,12 @@
                                                         'ec_products.prod_pieces',
                                                     ],
                                                 ]);
+                                            if($product->is_variation){
+                                             $url = $product->variations->configurable_product_id;
+                                            }
+                                            else{
+                                                $url = $product->id;
+                                            }
                                             @endphp
 
                                             <tr>
