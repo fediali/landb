@@ -45,7 +45,13 @@ class fetchOrders extends Command
      */
     public function handle()
     {
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
+
+        DB::table('ec_order_addresses')->truncate();
+        DB::table('ec_order_histories')->truncate();
+        DB::table('ec_order_product')->truncate();
+        DB::table('ec_orders')->truncate();
+
+        DB::connection('mysql2')->table('hw_orders')/*->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])*/ ->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -198,16 +204,19 @@ class fetchOrders extends Command
                                     ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
                                     ->where('ec_product_variations.is_default', 0)
                                     ->first();
-                                $isPack = 0;
-                                $orderProductData = [
-                                    'order_id'     => $orderProduct->order_id,
-                                    'qty'          => $diff,
-                                    'is_pack'      => $isPack,
-                                    'price'        => $orderProduct->price,
-                                    'product_id'   => $productObj->product_id,
-                                    'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-                                ];
-                                OrderProduct::create($orderProductData);
+                                if ($productObj) {
+                                    $isPack = 0;
+                                    $orderProductData = [
+                                        'order_id'     => $orderProduct->order_id,
+                                        'qty'          => $diff,
+                                        'is_pack'      => $isPack,
+                                        'price'        => $orderProduct->price,
+                                        'product_id'   => $productObj->product_id,
+                                        'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                                    ];
+                                    OrderProduct::create($orderProductData);
+                                }
+
                             }
 
                         }
@@ -286,7 +295,7 @@ class fetchOrders extends Command
                     $userOmniId = DB::connection('mysql2')->table('hw_users')->where('user_id', $order->user_id)->value('omni_customer_id');
                     if ($userOmniId) {
                         $data = ['customer_id' => $order->user_id, 'customer_omni_id' => $userOmniId];
-                        CustomerCard::updateOrCreate($data,$data);
+                        CustomerCard::updateOrCreate($data, $data);
                     }
 
                 }
