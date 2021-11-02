@@ -470,12 +470,16 @@ class OrderController extends BaseController
             'discount_description' => $request->input('discount_description'),
             'description' => $request->input('note'),
             'is_confirmed' => 1,
-            'status' => OrderStatusEnum::NEW_ORDER,
+            //'status' => OrderStatusEnum::NEW_ORDER,
             'order_type' => $request->input('order_type'),
             'notes' => $request->input('customer_notes'),
             'order_card' => $request->input('order_card'),
             'platform' => isset($order->platform) ? $order->platform : 'back-office'
         ]);
+
+        if (!$request->input('order_id', 0)) {
+            $request['status'] = OrderStatusEnum::NEW_ORDER;
+        }
 
         $order = $this->orderRepository->createOrUpdate($request->input(), $condition);
 
