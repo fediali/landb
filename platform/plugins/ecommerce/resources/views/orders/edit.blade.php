@@ -94,8 +94,8 @@
                                                     ],
                                                 ]);
                                             if($product->is_variation){
-                                                dd($product->variations);
-                                             $url = $product->variations->configurable_product_id;
+                                             $pro = \Botble\Ecommerce\Models\ProductVariation::where('product_id',$product->id)->first();
+                                             $url = $pro->configurable_product_id;
                                             }
                                             else{
                                                 $url = $product->id;
@@ -108,7 +108,7 @@
                                                     <td class="width-60-px min-width-60-px vertical-align-t">
                                                         <div class="wrap-img">
                                                             <a target="_blank"
-                                                               href="{{route('products.edit',[$product->id])}}">
+                                                               href="{{route('products.edit',[$url])}}">
                                                                 <img
                                                                     class="thumb-image thumb-image-cartorderlist"
                                                                     src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
@@ -120,7 +120,7 @@
 
                                                 @endif
                                                 <td class="pl5 p-r5 min-width-200-px">
-                                                    <a target="_blank" href="{{route('products.edit',[$product->id])}}">
+                                                    <a target="_blank" href="{{route('products.edit',[$url])}}">
                                                         {{ $orderProduct->product_name }}
                                                     </a>
                                                     {{--<a class="text-underline hover-underline pre-line" target="_blank" href="{{ route('products.edit', $orderProduct->product_id) }}" title="{{ $orderProduct->product_name }}">
