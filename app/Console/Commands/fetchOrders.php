@@ -178,28 +178,28 @@ class fetchOrders extends Command
                             $looseQty = $packQty * $productObj->prod_pieces;
                             $diff = $orderProduct->amount - $looseQty;
                         }
-//                        $orderProductData = [
-//                            'order_id'     => $orderProduct->order_id,
-//                            'qty'          => $qty,
-//                            'is_pack'      => $isPack,
-//                            'price'        => $orderProduct->price,
-//                            'product_id'   => $orderProduct->product_id,
-//                            'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-//                        ];
-//                        OrderProduct::create($orderProductData);
+                        $orderProductData = [
+                            'order_id'     => $orderProduct->order_id,
+                            'qty'          => $qty,
+                            'is_pack'      => $isPack,
+                            'price'        => $orderProduct->price,
+                            'product_id'   => $orderProduct->product_id,
+                            'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+                        ];
+                        OrderProduct::create($orderProductData);
 
-                        if ($diff) {
-                            $isPack = 0;
-                            $orderProductData = [
-                                'order_id'     => $orderProduct->order_id,
-                                'qty'          => $diff,
-                                'is_pack'      => $isPack,
-                                'price'        => $orderProduct->price,
-                                'product_id'   => $orderProduct->product_id,
-                                'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
-                            ];
-                            OrderProduct::create($orderProductData);
-                        }
+//                        if ($diff) {
+//                            $isPack = 0;
+//                            $orderProductData = [
+//                                'order_id'     => $orderProduct->order_id,
+//                                'qty'          => $diff,
+//                                'is_pack'      => $isPack,
+//                                'price'        => $orderProduct->price,
+//                                'product_id'   => $orderProduct->product_id,
+//                                'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
+//                            ];
+//                            OrderProduct::create($orderProductData);
+//                        }
 
                     }
 
