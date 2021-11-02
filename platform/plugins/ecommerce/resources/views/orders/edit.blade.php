@@ -49,17 +49,21 @@
                                 </div>
                                 <div class="mt20">
                                     @if ($order->shipment->id)
-                                        <svg class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-orders"></use>
+                                        <svg
+                                            class="svg-next-icon svg-next-icon-size-16 next-icon--right-spacing-quartered">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="#next-orders"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @else
                                         <svg class="svg-next-icon svg-next-icon-size-16 svg-next-icon-gray">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-order-unfulfilled-16"></use>
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="#next-order-unfulfilled-16"></use>
                                         </svg>
                                         <strong class="ml5">{{ trans('plugins/ecommerce::order.completed') }}</strong>
                                     @endif
-                                    <strong class="ml5">{{ $order->order_completion_date ? date('d M, Y', strtotime($order->order_completion_date)) : 'N/A' }}</strong>
+                                    <strong
+                                        class="ml5">{{ $order->order_completion_date ? date('d M, Y', strtotime($order->order_completion_date)) : 'N/A' }}</strong>
                                 </div>
                             </div>
                             <div class="pd-all-20 p-none-t border-top-title-main">
@@ -93,16 +97,25 @@
 
                                             <tr>
                                                 @if ($product)
+
                                                     <td class="width-60-px min-width-60-px vertical-align-t">
-                                                        <div class="wrap-img"><img
-                                                                class="thumb-image thumb-image-cartorderlist"
-                                                                src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
-                                                            ">
+                                                        <div class="wrap-img">
+                                                            <a target="_blank"
+                                                               href="{{route('products.edit',[$product->id])}}">
+                                                                <img
+                                                                    class="thumb-image thumb-image-cartorderlist"
+                                                                    src="{{ RvMedia::getImageUrl($product->original_product->image, null, false, RvMedia::getDefaultImage()) }}"
+                                                                ">
+                                                            </a>
                                                         </div>
                                                     </td>
+
+
                                                 @endif
                                                 <td class="pl5 p-r5 min-width-200-px">
-                                                    {{ $orderProduct->product_name }}
+                                                    <a target="_blank" href="{{route('products.edit',[$product->id])}}">
+                                                        {{ $orderProduct->product_name }}
+                                                    </a>
                                                     {{--<a class="text-underline hover-underline pre-line" target="_blank" href="{{ route('products.edit', $orderProduct->product_id) }}" title="{{ $orderProduct->product_name }}">
                                                         {{ $orderProduct->product_name }}
                                                     </a>--}}
@@ -123,7 +136,8 @@
                                                                                 : {{ $attribute->title }}
                                                                                 @if($attribute->title !== 'Single')
                                                                 </small><small>
-                                                                    Size : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
+                                                                    Size
+                                                                    : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
                                                                     @endif
                                                                     @endif
                                                                     @endforeach
@@ -419,7 +433,8 @@
                                                                                     : {{ $attribute->title }}
                                                                                     @if($attribute->title !== 'Single')
                                                                     </small><small>
-                                                                        Size : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
+                                                                        Size
+                                                                        : {{$orderProduct->product_sizes ? $orderProduct->product_sizes : $product->sizes}}
                                                                         @endif
                                                                         @endif
                                                                         @endforeach
