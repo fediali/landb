@@ -94,6 +94,7 @@
                                                     ],
                                                 ]);
                                             if($product->is_variation){
+                                                dd($product->variations);
                                              $url = $product->variations->configurable_product_id;
                                             }
                                             else{
