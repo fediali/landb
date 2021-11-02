@@ -200,11 +200,12 @@ class fetchOrders extends Command
                                 OrderProduct::create($orderProductData);
 
                             } elseif ($diff > 0) {
-                                echo $orderProduct->product_id;
                                 $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
                                     ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
                                     ->where('ec_product_variations.is_default', 0)
                                     ->first();
+                                var_dump($productObj);
+                                exit();
                                 $isPack = 0;
                                 $orderProductData = [
                                     'order_id'     => $orderProduct->order_id,
