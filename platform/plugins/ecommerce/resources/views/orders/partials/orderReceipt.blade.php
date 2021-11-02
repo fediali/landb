@@ -47,6 +47,9 @@
                     </h6>
                     <hr style="border: 2px solid #DDD;">
                     <p style="font-size:12px;" class="m-0">
+                        {{ $order->user->detail->company}}
+                    </p>
+                    <p style="font-size:12px;" class="m-0">
                         {{ $order->billingAddress->name.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                     </p>
                     <p style="font-size:12px;" class="m-0">
