@@ -208,10 +208,11 @@ class fetchCustomers extends Command
                             DB::connection('mysql2')->table('hw_users')->where('hw_users.fetch_status', 0)->where('user_id', $row['user_id'])->update(['hw_users.fetch_status' => 1]);
 
                         } else {
+                            DB::connection('mysql2')->table('hw_users')->where('hw_users.fetch_status', 0)->where('user_id', $row['user_id'])->update(['hw_users.fetch_status' => 1]);
                             echo $row['user_id'].'----------';
                         }
                     } else {
-                        DB::connection('mysql2')->table('hw_users')->where('hw_users.fetch_status', 0)->where('user_id', $row['user_id'])->update(['hw_users.fetch_status' => 1]);
+
                         echo $row['user_id'].'==========';
                     }
                 }
