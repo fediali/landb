@@ -44,7 +44,7 @@ class fetchOrders extends Command
      */
     public function handle()
     {
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'],)->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
+        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;

@@ -49,7 +49,7 @@ class importOrders extends Command
         DB::table('ec_order_product')->truncate();
         DB::table('ec_orders')->truncate();
 
-        $orders = DB::table('hw_orders')->orderBy('hw_orders.order_id', 'ASC')->chunk(100,
+        $orders = DB::table('hw_orders')->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
