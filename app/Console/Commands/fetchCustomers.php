@@ -61,22 +61,22 @@ class fetchCustomers extends Command
             ->where('hw_users.fetch_status', 0)
             ->groupBy('hw_users.user_id')
             ->orderBy('hw_users.user_id', 'ASC')
-            ->selectRaw('hw_users.user_id, hw_users.email, hw_users.password, hw_users.firstname, hw_users.lastname, hw_users.company, hw_users.phone AS user_phone, 
-                        hw_users.srep_id, hw_users.srep_date,hw_users.profile_image, hw_users.omni_customer_id, hw_users.`status` AS user_status, 
-                        hw_user_profiles.b_firstname, hw_user_profiles.b_lastname, hw_user_profiles.b_address, hw_user_profiles.b_address_2, hw_user_profiles.b_city, 
+            ->selectRaw('hw_users.user_id, hw_users.email, hw_users.password, hw_users.firstname, hw_users.lastname, hw_users.company, hw_users.phone AS user_phone,
+                        hw_users.srep_id, hw_users.srep_date,hw_users.profile_image, hw_users.omni_customer_id, hw_users.`status` AS user_status,
+                        hw_user_profiles.b_firstname, hw_user_profiles.b_lastname, hw_user_profiles.b_address, hw_user_profiles.b_address_2, hw_user_profiles.b_city,
                         hw_user_profiles.b_country, hw_user_profiles.b_phone, hw_user_profiles.b_state, hw_user_profiles.b_zipcode,
-                        hw_user_profiles.s_firstname, hw_user_profiles.s_lastname, hw_user_profiles.s_address, hw_user_profiles.s_address_2, hw_user_profiles.s_city, 
+                        hw_user_profiles.s_firstname, hw_user_profiles.s_lastname, hw_user_profiles.s_address, hw_user_profiles.s_address_2, hw_user_profiles.s_city,
                         hw_user_profiles.s_country, hw_user_profiles.s_phone, hw_user_profiles.s_state, hw_user_profiles.s_zipcode,
-                        hw_hw_resale_certificate.name AS cert_name, 
-                        hw_hw_resale_certificate.phone AS cert_phone, 
-                        hw_hw_resale_certificate.address AS cert_address, 
-                        hw_hw_resale_certificate.address2 AS cert_address2, 
-                        hw_hw_resale_certificate.tax_number AS cert_tax_number, 
-                        hw_hw_resale_certificate.registration_number AS cert_registration_number, 
-                        hw_hw_resale_certificate.business_description AS cert_business_description, 
-                        hw_hw_resale_certificate.products_description AS cert_products_description, 
-                        hw_hw_resale_certificate.title AS cert_title, 
-                        hw_hw_resale_certificate.date AS cert_date, 
+                        hw_hw_resale_certificate.name AS cert_name,
+                        hw_hw_resale_certificate.phone AS cert_phone,
+                        hw_hw_resale_certificate.address AS cert_address,
+                        hw_hw_resale_certificate.address2 AS cert_address2,
+                        hw_hw_resale_certificate.tax_number AS cert_tax_number,
+                        hw_hw_resale_certificate.registration_number AS cert_registration_number,
+                        hw_hw_resale_certificate.business_description AS cert_business_description,
+                        hw_hw_resale_certificate.products_description AS cert_products_description,
+                        hw_hw_resale_certificate.title AS cert_title,
+                        hw_hw_resale_certificate.date AS cert_date,
                         hw_hw_resale_certificate.signature AS cert_signature,
                         hw_hw_user_extra_fields.type_western,hw_hw_user_extra_fields.type_boho,hw_hw_user_extra_fields.type_contemporary,
                         hw_hw_user_extra_fields.type_conservative,hw_hw_user_extra_fields.type_other')
@@ -208,9 +208,11 @@ class fetchCustomers extends Command
                             DB::connection('mysql2')->table('hw_users')->where('hw_users.fetch_status', 0)->where('user_id', $row['user_id'])->update(['hw_users.fetch_status' => 1]);
 
                         } else {
+                            DB::connection('mysql2')->table('hw_users')->where('hw_users.fetch_status', 0)->where('user_id', $row['user_id'])->update(['hw_users.fetch_status' => 1]);
                             echo $row['user_id'].'----------';
                         }
                     } else {
+
                         echo $row['user_id'].'==========';
                     }
                 }
