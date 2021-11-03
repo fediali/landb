@@ -384,6 +384,9 @@ class fetchProducts extends Command
 
                             DB::connection('mysql2')->table('hw_products')->where('hw_products.fetch_status', 0)->where('product_id', $row['product_id'])->update(['hw_products.fetch_status' => 1]);
                         }
+                        else{
+                            DB::connection('mysql2')->table('hw_products')->where('hw_products.fetch_status', 0)->where('product_id', $row['product_id'])->update(['hw_products.fetch_status' => 1]);
+                        }
 
                         //echo $check ? $check->sku : $row['product_code'].'\n';
                         echo isset($product) ? $row['product_id'] : $row['product_id'] . '====';
