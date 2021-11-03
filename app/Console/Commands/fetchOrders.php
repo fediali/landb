@@ -177,7 +177,9 @@ class fetchOrders extends Command
                         'created_at'            => date('Y-m-d H:i:s', $order->timestamp),
                         'updated_at'            => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
-                    $neworder = DB::table('ec_orders')->insert($orderData);
+                     DB::table('ec_orders')->insert($orderData);
+                    $neworder = Order::where('id', $order->order_id)->first();
+
 
                     $orderProducts = DB::connection('mysql2')->table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
