@@ -53,10 +53,10 @@ class fetchOrders extends Command
     public function handle()
     {
 //
-//        DB::table('ec_order_addresses')->truncate();
-//        DB::table('ec_order_histories')->truncate();
-//        DB::table('ec_order_product')->truncate();
-//        DB::table('ec_orders')->truncate();
+        DB::table('ec_order_addresses')->truncate();
+        DB::table('ec_order_histories')->truncate();
+        DB::table('ec_order_product')->truncate();
+        DB::table('ec_orders')->truncate();
         $meta_condition = [];
         DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
