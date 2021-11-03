@@ -219,10 +219,10 @@ class fetchOrders extends Command
                                         'order_id'        => $order->order_id,
                                         'charge_id'       => Str::upper(Str::random(10)),
                                     ], $meta_condition);
-
+                                    Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
                                 }
 
-                                Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
+
 
                             } elseif ($diff > 0) {
                                 $productObjS = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
@@ -252,10 +252,10 @@ class fetchOrders extends Command
                                         'order_id'        => $order->order_id,
                                         'charge_id'       => Str::upper(Str::random(10)),
                                     ], $meta_condition);
-
+                                    Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
                                 }
 
-                                Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
+
                             }
 
                         }
