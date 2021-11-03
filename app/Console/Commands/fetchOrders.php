@@ -58,7 +58,7 @@ class fetchOrders extends Command
 //        DB::table('ec_order_product')->truncate();
 //        DB::table('ec_orders')->truncate();
         $meta_condition = [];
-        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/ 'hw_orders.order_id' => 120593])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -176,7 +176,7 @@ class fetchOrders extends Command
                         'created_at'            => date('Y-m-d H:i:s', $order->timestamp),
                         'updated_at'            => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
-                    DB::table('ec_orders')->insert($orderData);
+                    $neworder = DB::table('ec_orders')->insert($orderData);
 
                     $orderProducts = DB::connection('mysql2')->table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
@@ -221,6 +221,20 @@ class fetchOrders extends Command
                                     ], $meta_condition);
                                     Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
                                 }
+                                elseif($order->payment_id == 20){
+                                    $meta_condition = ['order_id' => $order->order_id];
+                                    $payment = $this->paymentRepository->createOrUpdate([
+                                        'amount'          => round($orderProduct->price * $productObj->prod_pieces, 2),
+                                        'currency'        => get_application_currency()->title,
+                                        'payment_channel' => 'paypal', //$order->payment->payment_channel,
+                                        'paypal_email'    => $neworder->user->email,
+                                        'status'          => PaymentStatusEnum::PENDING,
+                                        'payment_type'    => 'confirm',
+                                        'order_id'        => $order->order_id,
+                                        'charge_id'       => Str::upper(Str::random(10)),
+                                    ], $meta_condition);
+                                    Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+                                }
 
 
                             } elseif ($diff > 0) {
@@ -246,6 +260,20 @@ class fetchOrders extends Command
                                         'currency'        => get_application_currency()->title,
                                         'payment_channel' => 'omni-payment', //$order->payment->payment_channel,
                                         'paypal_email'    => '',
+                                        'status'          => PaymentStatusEnum::PENDING,
+                                        'payment_type'    => 'confirm',
+                                        'order_id'        => $order->order_id,
+                                        'charge_id'       => Str::upper(Str::random(10)),
+                                    ], $meta_condition);
+                                    Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+                                }
+                                elseif($order->payment_id == 20){
+                                    $meta_condition = ['order_id' => $order->order_id];
+                                    $payment = $this->paymentRepository->createOrUpdate([
+                                        'amount'          => $orderProduct->price,
+                                        'currency'        => get_application_currency()->title,
+                                        'payment_channel' => 'paypal', //$order->payment->payment_channel,
+                                        'paypal_email'    => $neworder->user->email,
                                         'status'          => PaymentStatusEnum::PENDING,
                                         'payment_type'    => 'confirm',
                                         'order_id'        => $order->order_id,
