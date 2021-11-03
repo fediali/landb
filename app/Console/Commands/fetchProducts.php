@@ -70,7 +70,7 @@ class fetchProducts extends Command
     {
         $this->insertProducts();
         echo 'success-inactive';
-        $this->bounds();
+//        $this->bounds();
     }
 
     public function bounds()
