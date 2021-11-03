@@ -9,8 +9,11 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
+use Botble\Payment\Enums\PaymentStatusEnum;
+use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class fetchOrders extends Command
 {
@@ -33,9 +36,13 @@ class fetchOrders extends Command
      *
      * @return void
      */
-    public function __construct()
+
+    protected $paymentRepository;
+
+    public function __construct(PaymentInterface $paymentRepository)
     {
         parent::__construct();
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
@@ -50,8 +57,8 @@ class fetchOrders extends Command
 //        DB::table('ec_order_histories')->truncate();
 //        DB::table('ec_order_product')->truncate();
 //        DB::table('ec_orders')->truncate();
-
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ']) ->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        $meta_condition = [];
+        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/'hw_orders.order_id' => 120592])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -147,6 +154,7 @@ class fetchOrders extends Command
                     } else {
                         $order->status = 'Failed Preauth';
                     }
+
                     $orderData = [
                         'id'                    => $order->order_id,
                         'user_id'               => $order->user_id,
@@ -199,6 +207,23 @@ class fetchOrders extends Command
                                 ];
                                 OrderProduct::create($orderProductData);
 
+                                if ($order->payment_id == 41) {
+                                    $meta_condition = ['order_id' => $order->order_id];
+                                    $payment = $this->paymentRepository->createOrUpdate([
+                                        'amount'          => round($orderProduct->price * $productObj->prod_pieces, 2),
+                                        'currency'        => get_application_currency()->title,
+                                        'payment_channel' => 'omni-payment', //$order->payment->payment_channel,
+                                        'paypal_email'    => '',
+                                        'status'          => PaymentStatusEnum::PENDING,
+                                        'payment_type'    => 'confirm',
+                                        'order_id'        => $order->order_id,
+                                        'charge_id'       => Str::upper(Str::random(10)),
+                                    ], $meta_condition);
+
+                                }
+
+                                Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
+
                             } elseif ($diff > 0) {
                                 $productObjS = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
                                     ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
@@ -215,7 +240,22 @@ class fetchOrders extends Command
                                     'product_name' => $productObjS ? $productObjS->name : $productObj->name
                                 ];
                                 OrderProduct::create($orderProductData);
+                                if ($order->payment_id == 41) {
+                                    $meta_condition = ['order_id' => $order->order_id];
+                                    $payment = $this->paymentRepository->createOrUpdate([
+                                        'amount'          => $orderProduct->price,
+                                        'currency'        => get_application_currency()->title,
+                                        'payment_channel' => 'omni-payment', //$order->payment->payment_channel,
+                                        'paypal_email'    => '',
+                                        'status'          => PaymentStatusEnum::PENDING,
+                                        'payment_type'    => 'confirm',
+                                        'order_id'        => $order->order_id,
+                                        'charge_id'       => Str::upper(Str::random(10)),
+                                    ], $meta_condition);
 
+                                }
+
+                                Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
                             }
 
                         }
