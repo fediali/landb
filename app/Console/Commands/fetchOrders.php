@@ -58,7 +58,7 @@ class fetchOrders extends Command
 //        DB::table('ec_order_product')->truncate();
 //        DB::table('ec_orders')->truncate();
         $meta_condition = [];
-        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/'hw_orders.order_id' => 120592])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/'hw_orders.order_id' => 120593])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
