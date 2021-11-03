@@ -58,7 +58,7 @@ class fetchOrders extends Command
 //        DB::table('ec_order_product')->truncate();
 //        DB::table('ec_orders')->truncate();
         $meta_condition = [];
-        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/'hw_orders.order_id' => 120593])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        DB::connection('mysql2')->table('hw_orders')->where([/*'hw_orders.fetch_status' => 0, 'status' => 'AJ'*/ 'hw_orders.order_id' => 120593])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -219,9 +219,8 @@ class fetchOrders extends Command
                                         'order_id'        => $order->order_id,
                                         'charge_id'       => Str::upper(Str::random(10)),
                                     ], $meta_condition);
-                                    Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
+                                    Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
                                 }
-
 
 
                             } elseif ($diff > 0) {
@@ -252,7 +251,7 @@ class fetchOrders extends Command
                                         'order_id'        => $order->order_id,
                                         'charge_id'       => Str::upper(Str::random(10)),
                                     ], $meta_condition);
-                                    Order::where('id', $order->order_id)->update(['payment_id', $payment->id]);
+                                    Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
                                 }
 
 
