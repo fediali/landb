@@ -209,6 +209,14 @@ class fetchOrders extends Command
                                     'product_name' => $productObj->name
                                 ];
                                 OrderProduct::create($orderProductData);
+//36 showroom
+//37 Split
+//29 Store Credit
+//17 COD
+//6 Cash
+//9 Business Check
+//35 Gift Cert
+
 
                                 if ($order->payment_id == 41) {
                                     $meta_condition = ['order_id' => $order->order_id];
