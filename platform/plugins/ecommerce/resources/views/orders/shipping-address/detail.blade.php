@@ -1,3 +1,4 @@
+<li>{{ @$company }}</li>
 <li>{{ $address->name }}</li>
 @if ($address->phone)
     <li>

@@ -1185,13 +1185,14 @@
                                 </div>
                                 <div>
                                     <ul class="ws-nm text-infor-subdued shipping-address-info">
-                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->address])
+                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->address,'company'=>@$order->user->detail->company])
 
                                         <hr>
                                         <div class="flexbox-auto-content-left">
                                             <label
                                                 class="title-text-second"><strong>Billing Address</strong></label>
                                         </div>
+                                        <li>{{ @$order->user->detail->company }}</li>
                                         <li>{{ @$order->billingAddress->name }}</li>
                                         @if (@$order->billingAddress->phone)
                                             <li>
