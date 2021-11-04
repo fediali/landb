@@ -56,7 +56,8 @@ class fetchOrders extends Command
 
 
         $meta_condition = [];
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        $status = ['AJ', 'AY '];
+        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0])->whereIn('status', $status)->orderBy('hw_orders . order_id', 'ASC')->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     echo $order->order_id;
@@ -86,15 +87,15 @@ class fetchOrders extends Command
                     } else if ($order->status == 'K') {
                         $order->status = 'lashowroom complete';
                     } else if ($order->status == 'L') {
-                        $order->status = 'online pre-order';
+                        $order->status = 'online pre - order';
                     } else if ($order->status == 'Q') {
                         $order->status = 'paid in full';
                     } else if ($order->status == 'R') {
                         $order->status = 'orangeshine complete';
                     } else if ($order->status == 'S') {
-                        $order->status = 'atlanta pre-order';
+                        $order->status = 'atlanta pre - order';
                     } else if ($order->status == 'U') {
-                        $order->status = 'dallas pre-order';
+                        $order->status = 'dallas pre - order';
                     } else if ($order->status == 'V') {
                         $order->status = 'pita va';
                     } else if ($order->status == 'W') {
@@ -104,7 +105,7 @@ class fetchOrders extends Command
                     } else if ($order->status == 'T') {
                         $order->status = 'send to model';
                     } else if ($order->status == 'AA') {
-                        $order->status = 'las vegas pre-order';
+                        $order->status = 'las vegas pre - order';
                     } else if ($order->status == 'AB') {
                         $order->status = 'on hold';
                     } else if ($order->status == 'AC') {
@@ -112,7 +113,7 @@ class fetchOrders extends Command
                     } else if ($order->status == 'AE') {
                         $order->status = 'picking complete';
                     } else if ($order->status == 'AF') {
-                        $order->status = 'dallas kids pre-order';
+                        $order->status = 'dallas kids pre - order';
                     } else if ($order->status == 'AG') {
                         $order->status = 'showroom';
                     } else if ($order->status == 'AH') {
@@ -132,12 +133,12 @@ class fetchOrders extends Command
                     } else if ($order->status == 'AP') {
                         $order->status = 'Western MKT Pre Order';
                     } else if ($order->status == 'M') {
-                        $order->status = 'Orangeshine Pre-Order';
+                        $order->status = 'Orangeshine Pre - Order';
                     } else if ($order->status == 'AQ') {
-                        $order->status = 'LA Showroom Pre-Order';
+                        $order->status = 'LA Showroom Pre - Order';
                     } else if ($order->status == 'AR') {
-                        $order->status = 'FashionGO Pre-Order';
-                    } else if ($order->status == 'AS') {
+                        $order->status = 'FashionGO Pre - Order';
+                    } else if ($order->status == 'as') {
                         $order->status = 'Sample Sent';
                     } else if ($order->status == 'AT') {
                         $order->status = 'Pickup & Process';
@@ -171,8 +172,8 @@ class fetchOrders extends Command
                         'salesperson_id' => $order->issuer_id,
                         'po_number' => $order->po_number,
                         'order_completion_date' => $order->complete_date,
-                        'created_at' => date('Y-m-d H:i:s', $order->timestamp),
-                        'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
+                        'created_at' => date('Y - m - d H:i:s', $order->timestamp),
+                        'updated_at' => date('Y - m - d H:i:s', $order->last_status_change_date),
                     ];
                     DB::table('ec_orders')->insert($orderData);
                     $neworder = Order::where('id', $order->order_id)->first();
@@ -182,9 +183,9 @@ class fetchOrders extends Command
                     foreach ($orderProducts as $orderProduct) {
                         //$productName = Product::where('id', $orderProduct->product_id)->value('name');
 
-                        $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
-                            ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
-                            ->where('ec_product_variations.is_default', 1)
+                        $productObj = Product::join('ec_product_variations', 'ec_product_variations . product_id', 'ec_products . id')
+                            ->where('ec_product_variations . configurable_product_id', $orderProduct->product_id)
+                            ->where('ec_product_variations . is_default', 1)
                             ->first();
 
                         $qty = $orderProduct->amount;//8
@@ -220,7 +221,7 @@ class fetchOrders extends Command
                                 ];
 
                                 if ($order->payment_id == 41) {
-                                    $paymentData['payment_channel'] = 'omni-payment';
+                                    $paymentData['payment_channel'] = 'omni - payment';
                                 } elseif ($order->payment_id == 20) {
                                     $paymentData['payment_channel'] = 'paypal';
                                     $paymentData['paypal_email'] = $neworder->user->email;
@@ -245,9 +246,9 @@ class fetchOrders extends Command
 
 
                             } elseif ($diff > 0) {
-                                $productObjS = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
-                                    ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
-                                    ->where('ec_product_variations.is_default', 0)
+                                $productObjS = Product::join('ec_product_variations', 'ec_product_variations . product_id', 'ec_products . id')
+                                    ->where('ec_product_variations . configurable_product_id', $orderProduct->product_id)
+                                    ->where('ec_product_variations . is_default', 0)
                                     ->first();
 
                                 $isPack = 0;
@@ -265,7 +266,7 @@ class fetchOrders extends Command
                                     $payment = $this->paymentRepository->createOrUpdate([
                                         'amount' => $orderProduct->price,
                                         'currency' => get_application_currency()->title,
-                                        'payment_channel' => 'omni-payment', //$order->payment->payment_channel,
+                                        'payment_channel' => 'omni - payment', //$order->payment->payment_channel,
                                         'paypal_email' => '',
                                         'status' => PaymentStatusEnum::PENDING,
                                         'payment_type' => 'confirm',
@@ -361,7 +362,7 @@ class fetchOrders extends Command
                     OrderAddress::create($shippingAddress);
 
 
-                    DB::connection('mysql2')->table('hw_orders')->where('hw_orders.fetch_status', 0)->where('order_id', $order->order_id)->update(['hw_orders.fetch_status' => 1]);
+                    DB::connection('mysql2')->table('hw_orders')->where('hw_orders . fetch_status', 0)->where('order_id', $order->order_id)->update(['hw_orders . fetch_status' => 1]);
 
 
                     $userOmniId = DB::connection('mysql2')->table('hw_users')->where('user_id', $order->user_id)->value('omni_customer_id');
