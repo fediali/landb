@@ -3219,8 +3219,6 @@ class OrderController extends BaseController
     {
         $order = DB::connection('mysql2')
             ->table('hw_orders')
-            ->where('status', 'AJ')
-            ->orWhere('status', 'AY')
             ->orderBy('hw_orders.order_id', 'ASC')
             ->where('hw_orders.order_id', $id)
             ->first();
