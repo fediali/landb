@@ -124,7 +124,7 @@
         <tbody>
         @foreach($order->products as $order_product)
             <tr>
-                <td >
+                <td>
 
                     <img style="max-width: 50px;" class="split-img"
                          src="{{ RvMedia::getImageUrl($order_product->product->image, null, false, RvMedia::getDefaultImage()) }}"/>
@@ -135,19 +135,22 @@
                         <p style="font-size:12px;"
                            class="cart-product-name m-0">{{ $order_product->product->name }}</p>
                         <p style="font-size:12px;" class="cart-product-code m-0">
-                        <strong>CODE:</strong> {{ $order_product->product->sku }}</p>
+                            <strong>CODE:</strong> {{ $order_product->product->sku }}</p>
                         @php $sizes = get_category_sizes_by_id($order_product->product->category_id); @endphp
                         @php
                             $variation = \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product_id)->join('ec_product_variation_items as epvi', 'epvi.variation_id', 'ec_product_variations.id')->join('ec_product_attributes as epa', 'epa.id', 'epvi.attribute_id')->where('epa.attribute_set_id', 2)->select('epa.*')->first();
-
+if($order_product->product){
+    $proID= \Botble\Ecommerce\Models\ProductVariation::where('product_id', $order_product->product->id)->value('configurable_product_id');
+    $sec = \Botble\Ecommerce\Models\Product::where('id',$proID )->value('warehouse_sec');
+}
                         @endphp
                         @if($variation)
                             @if($variation->title == 'Pack')
                                 <p style="font-size:12px;" class="cart-product-size m-0">
-                                <strong>Type:</strong> {{ $variation->title }}</p>
+                                    <strong>Type:</strong> {{ $variation->title }}</p>
                                 <p style="font-size:12px;"
                                    class="cart-product-size m-0">
-                                   <strong>SIZE:</strong> {{ $order_product->product->sizes }}</p>
+                                    <strong>SIZE:</strong> {{ $order_product->product->sizes }}</p>
                                 <p style="font-size:14px; margin:0px;">
                                     <strong>Price Per Piece:
                                         ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
@@ -161,7 +164,8 @@
                         @endif
                     </div>
                 </td>
-                <td style="font-size:12px;">{{ $order_product->product->warehouse_sec }}</td>
+
+                <td style="font-size:12px;">{{ ($order_product->product->warehouse_sec) ? $order_product->product->warehouse_sec : $sec }}</td>
                 <td style="font-size:12px;">{{ $order_product->qty }}</td>
                 <td style="font-size:12px;">$ {{ $order_product->price  }}</td>
 
@@ -200,7 +204,8 @@
             </p>
         </div>
     </div>
-    <hr> <div class="row">
+    <hr>
+    <div class="row">
         <div class="col-lg-6 col-6">
             <h3 style="font-size:16px;">
                 <b>TOTAL</b>
