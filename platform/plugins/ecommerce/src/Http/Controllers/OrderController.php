@@ -3041,7 +3041,7 @@ class OrderController extends BaseController
             $apiContext->setConfig(
                 array(
                     'mode' => env('PAYPAL_MODE', 'live'),
-                    'log.LogEnabled' => true,
+                    'log.LogEnabled' => false,
                     'log.FileName' => '../PayPal.log',
                     'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 )
