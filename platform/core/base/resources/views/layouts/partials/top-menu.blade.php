@@ -3,14 +3,13 @@
         @auth
             <li class="dropdown">
                 <form method="get" id="mt-quick-search-form">
-                    <input type="text" class="mt-quick-search" id="mt-quick-search" name="quick_search" required>
+                    <input type="text" class="mt-quick-search" id="mt-quick-search" name="quick_search" required value="{{request('order_ids')}}">
                 </form>
                 <script>
                     $('form#mt-quick-search-form').submit(function(e) {
                         e.preventDefault();
                         let ids = $('input#mt-quick-search').val();
                         let idsArr = ids.split(',');
-                        console.log(idsArr, "=====", idsArr.length);
                         if (idsArr.length > 1) {
                             window.location.href = "{{url('/admin/orders')}}" + '?order_ids=' + ids;
                         } else {
