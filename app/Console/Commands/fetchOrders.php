@@ -265,33 +265,42 @@ class fetchOrders extends Command
                                         'product_name' => $productObjS ? $productObjS->name : $productObj->name
                                     ];
                                     OrderProduct::create($orderProductData);
+
+
+                                    $meta_condition = ['order_id' => $order->order_id];
+                                    $paymentData = [
+                                        'amount' => round($orderProduct->price * $productObj->prod_pieces, 2),
+                                        'currency' => get_application_currency()->title,
+                                        'paypal_email' => '',
+                                        'status' => PaymentStatusEnum::PENDING,
+                                        'payment_type' => 'confirm',
+                                        'order_id' => $order->order_id,
+                                        'charge_id' => Str::upper(Str::random(10))
+                                    ];
+
                                     if ($order->payment_id == 41) {
-                                        $meta_condition = ['order_id' => $order->order_id];
-                                        $payment = $this->paymentRepository->createOrUpdate([
-                                            'amount' => $orderProduct->price,
-                                            'currency' => get_application_currency()->title,
-                                            'payment_channel' => 'omni-payment', //$order->payment->payment_channel,
-                                            'paypal_email' => '',
-                                            'status' => PaymentStatusEnum::PENDING,
-                                            'payment_type' => 'confirm',
-                                            'order_id' => $order->order_id,
-                                            'charge_id' => Str::upper(Str::random(10)),
-                                        ], $meta_condition);
-                                        Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+                                        $paymentData['payment_channel'] = 'omni-payment';
                                     } elseif ($order->payment_id == 20) {
-                                        $meta_condition = ['order_id' => $order->order_id];
-                                        $payment = $this->paymentRepository->createOrUpdate([
-                                            'amount' => $orderProduct->price,
-                                            'currency' => get_application_currency()->title,
-                                            'payment_channel' => 'paypal', //$order->payment->payment_channel,
-                                            'paypal_email' => $neworder->user->email,
-                                            'status' => PaymentStatusEnum::PENDING,
-                                            'payment_type' => 'confirm',
-                                            'order_id' => $order->order_id,
-                                            'charge_id' => Str::upper(Str::random(10)),
-                                        ], $meta_condition);
-                                        Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+                                        $paymentData['payment_channel'] = 'paypal';
+                                        $paymentData['paypal_email'] = $neworder->user->email;
+                                    } elseif ($order->payment_id == 36) {
+                                        $paymentData['payment_channel'] = 'showroom';
+                                    } elseif ($order->payment_id == 37) {
+                                        $paymentData['payment_channel'] = 'Split';
+                                    } elseif ($order->payment_id == 29) {
+                                        $paymentData['payment_channel'] = 'Store Credit';
+                                    } elseif ($order->payment_id == 17) {
+                                        $paymentData['payment_channel'] = 'COD';
+                                    } elseif ($order->payment_id == 6) {
+                                        $paymentData['payment_channel'] = 'Cash';
+                                    } elseif ($order->payment_id == 9) {
+                                        $paymentData['payment_channel'] = 'Business Check';
+                                    } elseif ($order->payment_id == 35) {
+                                        $paymentData['payment_channel'] = 'Gift Cert';
                                     }
+
+                                    $payment = $this->paymentRepository->createOrUpdate($paymentData, $meta_condition);
+                                    Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
 
 
                                 }
