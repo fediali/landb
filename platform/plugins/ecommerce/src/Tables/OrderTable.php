@@ -185,6 +185,7 @@ class OrderTable extends TableAbstract
         $product_id = $this->request()->input('product_id', false);
         $order_id = $this->request()->input('order_id', false);
         $user_id = $this->request()->input('user_id', false);
+        $order_ids = $this->request()->input('order_ids', false);
 
         if ($user_id) {
             $merge = MergeAccount::where('user_id_one', $user_id)->pluck('user_id_two');
@@ -206,6 +207,9 @@ class OrderTable extends TableAbstract
         }
         if($order_id){
           $query->where('ec_orders.id', $order_id);
+        }
+        if($order_ids){
+            $query->whereIn('ec_orders.id', explode(',', $order_ids));
         }
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');

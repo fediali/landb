@@ -8,7 +8,14 @@
                 <script>
                     $('form#mt-quick-search-form').submit(function(e) {
                         e.preventDefault();
-                        window.location.href = "{{url('/admin/orders/edit')}}" + '/' + $('input#mt-quick-search').val();
+                        let ids = $('input#mt-quick-search').val();
+                        let idsArr = ids.split(',');
+                        console.log(idsArr, "=====", idsArr.length);
+                        if (idsArr.length > 1) {
+                            window.location.href = "{{url('/admin/orders')}}" + '?order_ids=' + ids;
+                        } else {
+                            window.location.href = "{{url('/admin/orders/edit')}}" + '/' + ids;
+                        }
                     });
                 </script>
             </li>
