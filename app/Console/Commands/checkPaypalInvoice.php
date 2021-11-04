@@ -43,18 +43,10 @@ class checkPaypalInvoice extends Command
     public function handle()
     {
         //LIVE
-//        $apiContext = new \PayPal\Rest\ApiContext(
-//            new \PayPal\Auth\OAuthTokenCredential(
-//                env('PAYPAL_SANDBOX_CLIENT_ID', 'AciZq5ZxzoDCQB03f_TzwP9dC6UB2GqihP4s_gu3DJLfcVryAB8sf2UFTCWXl5rSSagaKXHYDpwL_xpP'),     // ClientID
-//                env('PAYPAL_SANDBOX_CLIENT_SECRET', 'EHgN0b0AItivo9SztzVFr5ZUVshS_MdagqUcaHHjX-QLdNRbbPZGeKdVZDA2ebr9JRjyCeMDKJSrQgdQ')     // ClientSecret
-//            )
-//        );
-
-        //SANDBOX
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
-                'AQX1TpbTGqjgE56LJL0M880xBPBIHKSY8wMT1Ehk8Po_fkIjGAqTbrOPZVNuea1OgjuLE-qZOjb3eysv',     // ClientID
-                'EAZWdCMjo7OK1ndf-4658vQ5Xt9HII_cnwhJqRrKlDf0sfUEqrvJqIlFXJ8RtmyvUGuqeLzS4mbRyNXT'     // ClientSecret
+                env('PAYPAL_SANDBOX_CLIENT_ID', 'AciZq5ZxzoDCQB03f_TzwP9dC6UB2GqihP4s_gu3DJLfcVryAB8sf2UFTCWXl5rSSagaKXHYDpwL_xpP'),     // ClientID
+                env('PAYPAL_SANDBOX_CLIENT_SECRET', 'EHgN0b0AItivo9SztzVFr5ZUVshS_MdagqUcaHHjX-QLdNRbbPZGeKdVZDA2ebr9JRjyCeMDKJSrQgdQ')     // ClientSecret
             )
         );
 
