@@ -52,11 +52,12 @@ class fetchOrders extends Command
      */
     public function handle()
     {
-//
-
-
-        $meta_condition = [];
-        DB::connection('mysql2')->table('hw_orders')->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])->orWhere(['hw_orders.fetch_status' => 0, 'status' => 'AY'])->orderBy('hw_orders.order_id', 'ASC')->chunk(500,
+        DB::connection('mysql2')
+            ->table('hw_orders')
+            ->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])
+            ->orWhere(['hw_orders.fetch_status' => 0, 'status' => 'AY'])
+            ->orderBy('hw_orders.order_id', 'ASC')
+            ->chunk(500,
             function ($orders) {
                 foreach ($orders as $order) {
                     $checkOrders = Order::where('id',$order->order_id)->first();

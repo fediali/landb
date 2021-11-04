@@ -195,6 +195,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('fetch-old-system-order/{id}', [
+                'as'         => 'fetchOldSystemOrder',
+                'uses'       => 'OrderController@fetchOldSystemOrder',
+                'permission' => 'orders.edit',
+            ]);
+
         });
 
         Route::group(['prefix' => 'incomplete-orders', 'as' => 'orders.'], function () {
