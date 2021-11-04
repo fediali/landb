@@ -50,7 +50,7 @@
                         {{ $order->user->detail->company}}
                     </p>
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->billingAddress->name.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
+                        {{ $order->billingAddress->name.', '. $order->billingAddress->address.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                     </p>
                     <p style="font-size:12px;" class="m-0">
                         {{ $order->billingAddress->phone }}
@@ -75,7 +75,7 @@
                         {{ $order->user->detail->company}}
                     </p>
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->shippingAddress->name.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
+                        {{ $order->shippingAddress->name.', '.$order->shippingAddress->address.','.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
                     </p>
                     <p style="font-size:12px;" class="m-0">
                         {{ $order->shippingAddress->phone }}
