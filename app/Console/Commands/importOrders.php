@@ -8,8 +8,11 @@ use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
+use Botble\Payment\Enums\PaymentStatusEnum;
+use Botble\Payment\Repositories\Interfaces\PaymentInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class importOrders extends Command
 {
@@ -27,14 +30,17 @@ class importOrders extends Command
      */
     protected $description = 'Import Orders';
 
+    protected $paymentRepository;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PaymentInterface $paymentRepository)
     {
         parent::__construct();
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
@@ -167,6 +173,7 @@ class importOrders extends Command
                         'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
                     ];
                     DB::table('ec_orders')->insert($orderData);
+                    $neworder = Order::where('id', $order->order_id)->first();
 
                     $orderProducts = DB::table('hw_order_details')->where('order_id', $order->order_id)->get();
                     foreach ($orderProducts as $orderProduct) {
@@ -193,6 +200,43 @@ class importOrders extends Command
                         ];
                         OrderProduct::create($orderProductData);
 
+
+                        $meta_condition = ['order_id' => $order->order_id];
+                        $paymentData = [
+                            'amount' => round($orderProduct->price * $productObj->prod_pieces, 2),
+                            'currency' => get_application_currency()->title,
+                            'paypal_email' => '',
+                            'status' => PaymentStatusEnum::PENDING,
+                            'payment_type' => 'confirm',
+                            'order_id' => $order->order_id,
+                            'charge_id' => Str::upper(Str::random(10))
+                        ];
+
+                        if ($order->payment_id == 41) {
+                            $paymentData['payment_channel'] = 'omni-payment';
+                        } elseif ($order->payment_id == 20) {
+                            $paymentData['payment_channel'] = 'paypal';
+                            $paymentData['paypal_email'] = $neworder->user->email;
+                        } elseif ($order->payment_id == 36) {
+                            $paymentData['payment_channel'] = 'showroom';
+                        } elseif ($order->payment_id == 37) {
+                            $paymentData['payment_channel'] = 'Split';
+                        } elseif ($order->payment_id == 29) {
+                            $paymentData['payment_channel'] = 'Store Credit';
+                        } elseif ($order->payment_id == 17) {
+                            $paymentData['payment_channel'] = 'COD';
+                        } elseif ($order->payment_id == 6) {
+                            $paymentData['payment_channel'] = 'Cash';
+                        } elseif ($order->payment_id == 9) {
+                            $paymentData['payment_channel'] = 'Business Check';
+                        } elseif ($order->payment_id == 35) {
+                            $paymentData['payment_channel'] = 'Gift Cert';
+                        }
+
+                        $payment = $this->paymentRepository->createOrUpdate($paymentData, $meta_condition);
+                        Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+
+
                         if ($diff) {
                             $isPack = 0;
                             $orderProductData = [
@@ -204,6 +248,44 @@ class importOrders extends Command
                                 'product_name' => $productObj ? $productObj->name : $orderProduct->product_code
                             ];
                             OrderProduct::create($orderProductData);
+
+
+                            $meta_condition = ['order_id' => $order->order_id];
+                            $paymentData = [
+                                'amount' => round($orderProduct->price * $productObj->prod_pieces, 2),
+                                'currency' => get_application_currency()->title,
+                                'paypal_email' => '',
+                                'status' => PaymentStatusEnum::PENDING,
+                                'payment_type' => 'confirm',
+                                'order_id' => $order->order_id,
+                                'charge_id' => Str::upper(Str::random(10))
+                            ];
+
+                            if ($order->payment_id == 41) {
+                                $paymentData['payment_channel'] = 'omni-payment';
+                            } elseif ($order->payment_id == 20) {
+                                $paymentData['payment_channel'] = 'paypal';
+                                $paymentData['paypal_email'] = $neworder->user->email;
+                            } elseif ($order->payment_id == 36) {
+                                $paymentData['payment_channel'] = 'showroom';
+                            } elseif ($order->payment_id == 37) {
+                                $paymentData['payment_channel'] = 'Split';
+                            } elseif ($order->payment_id == 29) {
+                                $paymentData['payment_channel'] = 'Store Credit';
+                            } elseif ($order->payment_id == 17) {
+                                $paymentData['payment_channel'] = 'COD';
+                            } elseif ($order->payment_id == 6) {
+                                $paymentData['payment_channel'] = 'Cash';
+                            } elseif ($order->payment_id == 9) {
+                                $paymentData['payment_channel'] = 'Business Check';
+                            } elseif ($order->payment_id == 35) {
+                                $paymentData['payment_channel'] = 'Gift Cert';
+                            }
+
+                            $payment = $this->paymentRepository->createOrUpdate($paymentData, $meta_condition);
+                            Order::where('id', $order->order_id)->update(['payment_id' => $payment->id]);
+
+
                         }
 
                     }
