@@ -857,6 +857,7 @@
                                 </a>
 
                                 <a href="{{ route('orders.fetchOldSystemOrder', ['id' => $order->id]) }}" class="btn btn-warning mb-2">Fetch Order</a>
+                                <a href="{{ route('orders.fetchOldSystemOrder', ['id' => $order->id]) }}" class="btn btn-warning mb-2">Fetch Card</a>
 
                             </div>
                         </div>

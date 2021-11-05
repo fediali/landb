@@ -200,6 +200,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@fetchOldSystemOrder',
                 'permission' => 'orders.edit',
             ]);
+            Route::get('fetch-old-system-card/{id}', [
+                'as'         => 'fetchOldSystemCard',
+                'uses'       => 'OrderController@fetchOldSystemCard',
+                'permission' => 'orders.edit',
+            ]);
 
         });
 
