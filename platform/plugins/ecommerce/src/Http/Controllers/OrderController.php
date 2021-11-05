@@ -2573,6 +2573,9 @@ class OrderController extends BaseController
             'user_id' => Auth::user()->getKey(),
         ], []);
 
+        $getOldSystemStatus = newToOldStatus($requestData['status']);
+        DB::connection('mysql2')->table('hw_orders')->where('order_id', $order->id)->update(['hw_orders.status' => $getOldSystemStatus]);
+
         return $response;
     }
 

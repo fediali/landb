@@ -987,4 +987,200 @@ if (!function_exists('filter_product_sku')) {
     }
 }
 
+if (!function_exists('oldToNewStatus')) {
+    function oldToNewStatus($status)
+    {
+        if ($status == 'C') {
+            $status = 'shipping complete';
+        } else if ($status == 'O') {
+            $status = 'processing';
+        } else if ($status == 'F') {
+            $status = 'in store complete';
+        } else if ($status == 'D') {
+            $status = 'declined';
+        } else if ($status == 'I') {
+            $status = 'cancelled';
+        } else if ($status == 'Y') {
+            $status = 'pick up';
+        } else if ($status == 'A') {
+            $status = 'tradeshow';
+        } else if ($status == 'E') {
+            $status = 'exchange';
+        } else if ($status == 'G') {
+            $status = 'awaiting payment';
+        } else if ($status == 'H') {
+            $status = 'net accounts';
+        } else if ($status == 'J') {
+            $status = 'fashiongo complete';
+        } else if ($status == 'K') {
+            $status = 'lashowroom complete';
+        } else if ($status == 'L') {
+            $status = 'online pre-order';
+        } else if ($status == 'Q') {
+            $status = 'paid in full';
+        } else if ($status == 'R') {
+            $status = 'orangeshine complete';
+        } else if ($status == 'S') {
+            $status = 'atlanta pre-order';
+        } else if ($status == 'U') {
+            $status = 'dallas pre-order';
+        } else if ($status == 'V') {
+            $status = 'pita va';
+        } else if ($status == 'W') {
+            $status = 'pita personal';
+        } else if ($status == 'X') {
+            $status = 'store credit';
+        } else if ($status == 'T') {
+            $status = 'send to model';
+        } else if ($status == 'AA') {
+            $status = 'las vegas pre-order';
+        } else if ($status == 'AB') {
+            $status = 'on hold';
+        } else if ($status == 'AC') {
+            $status = 'model purchase';
+        } else if ($status == 'AE') {
+            $status = 'picking complete';
+        } else if ($status == 'AF') {
+            $status = 'dallas kids pre-order';
+        } else if ($status == 'AG') {
+            $status = 'showroom';
+        } else if ($status == 'AH') {
+            $status = 'refund';
+        } else if ($status == 'AD') {
+            $status = 'need tax ID';
+        } else if ($status == 'AI') {
+            $status = 'factory';
+        } else if ($status == 'AJ') {
+            $status = 'ready 2 ship';
+        } else if ($status == 'AM') {
+            $status = 'lashowroom processing';
+        } else if ($status == 'AN') {
+            $status = 'orangeshine processing';
+        } else if ($status == 'AO') {
+            $status = 'pending shipment';
+        } else if ($status == 'AP') {
+            $status = 'Western MKT Pre Order';
+        } else if ($status == 'M') {
+            $status = 'Orangeshine Pre-Order';
+        } else if ($status == 'AQ') {
+            $status = 'LA Showroom Pre-Order';
+        } else if ($status == 'AR') {
+            $status = 'FashionGO Pre-Order';
+        } else if ($status == 'AS') {
+            $status = 'Sample Sent';
+        } else if ($status == 'AT') {
+            $status = 'Pickup & Process';
+        } else if ($status == 'AU') {
+            $status = 'Donation / Gift';
+        } else if ($status == 'AV') {
+            $status = 'Delinquent';
+        } else if ($status == 'AW') {
+            $status = 'Ready to Charge';
+        } else if ($status == 'AY') {
+            $status = 'R2SO';
+        } else {
+            $status = 'Failed Preauth';
+        }
+        return $status;
+    }
+}
+
+if (!function_exists('newToOldStatus')) {
+    function newToOldStatus($status)
+    {
+        if ($status == 'shipping complete') {
+            $status = 'C';
+        } else if ($status == 'processing') {
+            $status = 'O';
+        } else if ($status == 'in store complete') {
+            $status = 'F';
+        } else if ($status == 'declined') {
+            $status = 'D';
+        } else if ($status == 'cancelled') {
+            $status = 'I';
+        } else if ($status == 'pick up') {
+            $status = 'Y';
+        } else if ($status == 'tradeshow') {
+            $status = 'A';
+        } else if ($status == 'exchange') {
+            $status = 'E';
+        } else if ($status == 'awaiting payment') {
+            $status = 'G';
+        } else if ($status == 'net accounts') {
+            $status = 'H';
+        } else if ($status == 'fashiongo complete') {
+            $status = 'J';
+        } else if ($status == 'lashowroom complete') {
+            $status = 'K';
+        } else if ($status == 'online pre-order') {
+            $status = 'L';
+        } else if ($status == 'paid in full') {
+            $status = 'Q';
+        } else if ($status == 'orangeshine complete') {
+            $status = 'R';
+        } else if ($status == 'atlanta pre-order') {
+            $status = 'S';
+        } else if ($status == 'dallas pre-order') {
+            $status = 'U';
+        } else if ($status == 'pita va') {
+            $status = 'V';
+        } else if ($status == 'pita personal') {
+            $status = 'W';
+        } else if ($status == 'store credit') {
+            $status = 'X';
+        } else if ($status == 'send to model') {
+            $status = 'T';
+        } else if ($status == 'las vegas pre-order') {
+            $status = 'AA';
+        } else if ($status == 'on hold') {
+            $status = 'AB';
+        } else if ($status == 'model purchase') {
+            $status = 'AC';
+        } else if ($status == 'picking complete') {
+            $status = 'AE';
+        } else if ($status == 'dallas kids pre-order') {
+            $status = 'AF';
+        } else if ($status == 'showroom') {
+            $status = 'AG';
+        } else if ($status == 'refund') {
+            $status = 'AH';
+        } else if ($status == 'need tax ID') {
+            $status = 'AD';
+        } else if ($status == 'factory') {
+            $status = 'AI';
+        } else if ($status == 'ready 2 ship') {
+            $status = 'AJ';
+        } else if ($status == 'lashowroom processing') {
+            $status = 'AM';
+        } else if ($status == 'orangeshine processing') {
+            $status = 'AN';
+        } else if ($status == 'pending shipment') {
+            $status = 'AO';
+        } else if ($status == 'Western MKT Pre Order') {
+            $status = 'AP';
+        } else if ($status == 'Orangeshine Pre-Order') {
+            $status = 'M';
+        } else if ($status == 'LA Showroom Pre-Order') {
+            $status = 'AQ';
+        } else if ($status == 'FashionGO Pre-Order') {
+            $status = 'AR';
+        } else if ($status == 'Sample Sent') {
+            $status = 'AS';
+        } else if ($status == 'Pickup & Process') {
+            $status = 'AT';
+        } else if ($status == 'Donation / Gift') {
+            $status = 'AU';
+        } else if ($status == 'Delinquent') {
+            $status = 'AV';
+        } else if ($status == 'Ready to Charge') {
+            $status = 'AW';
+        } else if ($status == 'R2SO') {
+            $status = 'AY';
+        } else {
+            $status = 'Failed Preauth';
+        }
+        return $status;
+    }
+}
+
 //Utils
