@@ -52,6 +52,7 @@ class updateProductPackQtyActive extends Command
             $getProd = Product::where('id', $product->product_id)->first();
             if ($getProd) {
                 if ($product->amount) {
+                    $getProd->single_qty = 0;
                     $getProd->quantity = 0;
                     if ($product->min_qty) {
                         $packQty = floor($product->amount / $product->min_qty);
