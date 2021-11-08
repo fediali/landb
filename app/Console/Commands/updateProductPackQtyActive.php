@@ -80,6 +80,10 @@ class updateProductPackQtyActive extends Command
 
                     foreach ($getProd->variations as $variation) {
                         $variation->product->sizes = $sizes[0]->variant_name;
+                        $variation->product->quantity = 0;
+                        if ($variation->product->sku == $getProd->sku) {
+                            $variation->product->quantity = $getProd->quantity;
+                        }
                         $variation->product->save();
                     }
 
