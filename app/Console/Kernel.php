@@ -25,8 +25,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('update:product-qty')->hourly();
         $schedule->command('active:scheduled-product')->hourly();
+
+        $schedule->command('update:active-product-qty')->everyMinute();
+        $schedule->command('update:hidden-product-qty')->everyThirtyMinutes();
     }
 
     /**

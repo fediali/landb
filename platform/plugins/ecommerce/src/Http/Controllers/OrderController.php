@@ -394,6 +394,8 @@ class OrderController extends BaseController
                         ->where('id', $order_product->product_id)
                         ->where('with_storehouse_management', 1)
                         ->increment('quantity', $order_product->qty);
+
+                    updateOldSystemProdQty($order_product->product, $order_product->qty, $order->id, true);
                 }
             }
 
@@ -643,12 +645,15 @@ class OrderController extends BaseController
                 $preQty = $product->quantity;
 
                 if ($order->order_type == Order::NORMAL) {
+                    $orderedQty = Arr::get($productItem, 'quantity', 1);
                     $this->productRepository
                         ->getModel()
                         ->where('id', $product->id)
                         ->where('with_storehouse_management', 1)
                         ->where('quantity', '>', 0)
-                        ->decrement('quantity', Arr::get($productItem, 'quantity', 1));
+                        ->decrement('quantity', $orderedQty);
+
+                    updateOldSystemProdQty($product, $orderedQty, $order->id);
 
                     if (!$request->input('order_id', 0)) {
                         $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');

@@ -12,21 +12,21 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class updateProductPackQty extends Command
+class updateProductPackQtyHidden extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'update:prod-qty';
+    protected $signature = 'update:hidden-prod-qty';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update Product Qty';
+    protected $description = 'Update Hidden Product Qty';
 
 
     /**
@@ -46,43 +46,46 @@ class updateProductPackQty extends Command
      */
     public function handle()
     {
-        $products = Product::all();
+        $products = DB::connection('mysql2')->table('hw_products')->where('status', 'H')->get();
 
         foreach ($products as $product) {
-            $getProd = DB::table('hw_products')->where('product_id', $product->id)->first();
+            $getProd = Product::where('id', $product->product_id)->first();
             if ($getProd) {
-                if ($getProd->amount) {
-                    $product->quantity = 0;
-                    if ($getProd->min_qty) {
-                        $packQty = floor($getProd->amount / $getProd->min_qty);
-                        $looseQty = $packQty * $getProd->min_qty;
-                        $diff = $getProd->amount - $looseQty;
-                        $product->quantity = $packQty;
-                        $product->extra_qty = $diff;
+                if ($product->amount) {
+                    $getProd->quantity = 0;
+                    if ($product->min_qty) {
+                        $packQty = floor($product->amount / $product->min_qty);
+                        $looseQty = $packQty * $product->min_qty;
+                        $diff = $product->amount - $looseQty;
+                        $getProd->quantity = $packQty;
+                        $getProd->extra_qty = $diff;
                     } else {
-                        $product->extra_qty = $getProd->amount;
+                        $getProd->extra_qty = $product->amount;
                     }
-                    $product->save();
-                    echo 'Qty==>'.$product->sku.'<br>';
+                    $getProd->save();
+                    echo 'Qty==>'.$getProd->sku.'<br>';
                 }
-                $sizes = DB::table('hw_product_options')
+
+                $sizes = DB::connection('mysql2')->table('hw_product_options')
                     ->selectRaw('hw_product_option_variants_descriptions.variant_name')
                     ->leftJoin('hw_product_option_variants', 'hw_product_option_variants.option_id', 'hw_product_options.option_id')
                     ->leftJoin('hw_product_option_variants_descriptions', 'hw_product_option_variants_descriptions.variant_id', 'hw_product_option_variants.variant_id')
-                    ->where('hw_product_options.product_id', $product->id)
+                    ->where('hw_product_options.product_id', $product->product_id)
                     ->orderBy('hw_product_options.product_id', 'ASC')
                     ->get();
-                if (isset($sizes[0]->variant_name)) {
-                    $product->sizes = $sizes[0]->variant_name;
-                    $product->save();
 
-                    foreach ($product->variations as $variation) {
+                if (isset($sizes[0]->variant_name)) {
+                    $getProd->sizes = $sizes[0]->variant_name;
+                    $getProd->save();
+
+                    foreach ($getProd->variations as $variation) {
                         $variation->product->sizes = $sizes[0]->variant_name;
                         $variation->product->save();
                     }
 
-                    echo 'Sizes==>'.$product->sizes.'<br>';
+                    echo 'Sizes==>'.$getProd->sizes.'<br>';
                 }
+
             }
         }
 
