@@ -264,10 +264,10 @@ class OrderController extends BaseController
                 $getOrderProd = OrderProduct::where('order_id', $request->input('order_id'))->where('product_id', $product->id)->first();
                 if ($getOrderProd && $demandQty != $getOrderProd->qty) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'order_product_qty_changed',
+                        'action'      => 'order_product_qty_changed',
                         'description' => 'Order product ' . $getOrderProd->product_name . ' qty changed from ' . $getOrderProd->qty . ' to ' . $demandQty . ' by %user_name%.',
-                        'order_id' => $request->input('order_id'),
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $request->input('order_id'),
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
 
                     if ($request->input('order_type') != Order::PRE_ORDER && $order->order_type == Order::NORMAL) {
@@ -275,42 +275,42 @@ class OrderController extends BaseController
                             $diff = $demandQty - $getOrderProd->qty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id' => $product->id,
-                                'sku' => $product->sku,
-                                'quantity' => $diff,
-                                'new_stock' => $product->quantity - $diff,
-                                'old_stock' => $product->quantity,
-                                'order_id' => $request->input('order_id'),
-                                'created_by' => Auth::user()->id,
-                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $diff,
+                                'new_stock'         => $product->quantity - $diff,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $request->input('order_id'),
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
                         } elseif ($demandQty < $getOrderProd->qty) {
                             $diff = $getOrderProd->qty - $demandQty;
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id' => $product->id,
-                                'sku' => $product->sku,
-                                'quantity' => $diff,
-                                'new_stock' => $product->quantity + $diff,
-                                'old_stock' => $product->quantity,
-                                'order_id' => $request->input('order_id'),
-                                'created_by' => Auth::user()->id,
-                                'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $diff,
+                                'new_stock'         => $product->quantity + $diff,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $request->input('order_id'),
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
                             ];
                             log_product_history($logParam);
                         }
                     } elseif ($request->input('order_type') != Order::PRE_ORDER && $order->order_type == Order::PRE_ORDER) {
                         $logParam = [
                             'parent_product_id' => $getParentProdId,
-                            'product_id' => $product->id,
-                            'sku' => $product->sku,
-                            'quantity' => $demandQty,
-                            'new_stock' => $product->quantity - $demandQty,
-                            'old_stock' => $product->quantity,
-                            'order_id' => $order->id,
-                            'created_by' => Auth::user()->id,
-                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            'product_id'        => $product->id,
+                            'sku'               => $product->sku,
+                            'quantity'          => $demandQty,
+                            'new_stock'         => $product->quantity - $demandQty,
+                            'old_stock'         => $product->quantity,
+                            'order_id'          => $order->id,
+                            'created_by'        => Auth::user()->id,
+                            'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                         ];
                         log_product_history($logParam);
                     }
@@ -319,14 +319,14 @@ class OrderController extends BaseController
                     if ($request->input('order_type') != Order::PRE_ORDER) {
                         $logParam = [
                             'parent_product_id' => $getParentProdId,
-                            'product_id' => $product->id,
-                            'sku' => $product->sku,
-                            'quantity' => $demandQty,
-                            'new_stock' => $product->quantity - $demandQty,
-                            'old_stock' => $product->quantity,
-                            'order_id' => $request->input('order_id'),
-                            'created_by' => Auth::user()->id,
-                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            'product_id'        => $product->id,
+                            'sku'               => $product->sku,
+                            'quantity'          => $demandQty,
+                            'new_stock'         => $product->quantity - $demandQty,
+                            'old_stock'         => $product->quantity,
+                            'order_id'          => $request->input('order_id'),
+                            'created_by'        => Auth::user()->id,
+                            'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                         ];
                         log_product_history($logParam);
                     }
@@ -334,10 +334,10 @@ class OrderController extends BaseController
 
                 if ($getOrderProd && $getOrderProd->price != Arr::get($productItem, 'sale_price', 1)) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'product_price_change_on_order',
+                        'action'      => 'product_price_change_on_order',
                         'description' => $product->name . ' product price change in order from $' . $getOrderProd->price . ' to $' . Arr::get($productItem, 'sale_price', 1) . ' by %user_name%.',
-                        'order_id' => $request->input('order_id'),
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $request->input('order_id'),
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
                 }
             }
@@ -360,10 +360,10 @@ class OrderController extends BaseController
 
             if ($order->order_type != $request->input('order_type')) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'order_type_changed',
+                    'action'      => 'order_type_changed',
                     'description' => 'Order type changes from ' . $order->order_type . ' to ' . $request->input('order_type') . ' by %user_name%.',
-                    'order_id' => $request->input('order_id'),
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $request->input('order_id'),
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
 
                 if ($request->input('order_type') == Order::PRE_ORDER) {
@@ -372,14 +372,14 @@ class OrderController extends BaseController
                         $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
                         $logParam = [
                             'parent_product_id' => $getParentProdId,
-                            'product_id' => $order_product->product_id,
-                            'sku' => $order_product->product->sku,
-                            'quantity' => $order_product->qty,
-                            'new_stock' => $order_product->product->quantity + $order_product->qty,
-                            'old_stock' => $order_product->product->quantity,
-                            'order_id' => $request->input('order_id'),
-                            'created_by' => Auth::user()->id,
-                            'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                            'product_id'        => $order_product->product_id,
+                            'sku'               => $order_product->product->sku,
+                            'quantity'          => $order_product->qty,
+                            'new_stock'         => $order_product->product->quantity + $order_product->qty,
+                            'old_stock'         => $order_product->product->quantity,
+                            'order_id'          => $request->input('order_id'),
+                            'created_by'        => Auth::user()->id,
+                            'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
                         ];
                         log_product_history($logParam);
                     }
@@ -407,14 +407,14 @@ class OrderController extends BaseController
                     $getParentProdId = ProductVariation::where('product_id', $getOrderProd->product_id)->value('configurable_product_id');
                     $logParam = [
                         'parent_product_id' => $getParentProdId,
-                        'product_id' => $getOrderProd->product_id,
-                        'sku' => $getOrderProd->product->sku,
-                        'quantity' => $getOrderProd->qty,
-                        'new_stock' => $getOrderProd->product->quantity,
-                        'old_stock' => $getOrderProd->product->quantity - $getOrderProd->qty,
-                        'order_id' => $request->input('order_id'),
-                        'created_by' => Auth::user()->id,
-                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                        'product_id'        => $getOrderProd->product_id,
+                        'sku'               => $getOrderProd->product->sku,
+                        'quantity'          => $getOrderProd->qty,
+                        'new_stock'         => $getOrderProd->product->quantity,
+                        'old_stock'         => $getOrderProd->product->quantity - $getOrderProd->qty,
+                        'order_id'          => $request->input('order_id'),
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
                     ];
                     log_product_history($logParam);
                 }
@@ -424,61 +424,61 @@ class OrderController extends BaseController
 
             if (!check_array_equal($curOrderProdIds, $prevOrderProdIds)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'product_change_on_order',
+                    'action'      => 'product_change_on_order',
                     'description' => 'Product(s) change in order by %user_name%.',
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($order->discount_amount != $request->input('discount_amount')) {
                 if ($request->input('discount_amount') > $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'add_discount_on_order',
+                        'action'      => 'add_discount_on_order',
                         'description' => '$' . $request->input('discount_amount') . ' discount added on order by %user_name%.',
-                        'order_id' => $order->id,
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $order->id,
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
                 } elseif ($request->input('discount_amount') < $order->discount_amount) {
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'remove_discount_on_order',
+                        'action'      => 'remove_discount_on_order',
                         'description' => '$' . $request->input('discount_amount') . ' discount removed from order by %user_name%.',
-                        'order_id' => $order->id,
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $order->id,
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
                 }
             }
 
             if ($order->user_id != $request->input('customer_id')) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'order_customer_changed',
+                    'action'      => 'order_customer_changed',
                     'description' => 'Customer changed in order by %user_name%.',
-                    'order_id' => $request->input('order_id'),
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $request->input('order_id'),
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
         }
 
         $request->merge([
-            'amount' => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
-            'currency_id' => get_application_currency_id(),
-            'user_id' => $request->input('customer_id') ?? 0,
-            'shipping_method' => $request->input('shipping_method', ShippingMethodEnum::DEFAULT),
-            'shipping_option' => $request->input('shipping_option'),
-            'shipping_amount' => $request->input('shipping_amount'),
-            'tax_amount' => session('tax_amount', 0),
-            'sub_total' => $request->input('amount'),
-            'coupon_code' => $request->input('coupon_code'),
-            'discount_amount' => $request->input('discount_amount'),
+            'amount'               => $request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount'),
+            'currency_id'          => get_application_currency_id(),
+            'user_id'              => $request->input('customer_id') ?? 0,
+            'shipping_method'      => $request->input('shipping_method', ShippingMethodEnum::DEFAULT),
+            'shipping_option'      => $request->input('shipping_option'),
+            'shipping_amount'      => $request->input('shipping_amount'),
+            'tax_amount'           => session('tax_amount', 0),
+            'sub_total'            => $request->input('amount'),
+            'coupon_code'          => $request->input('coupon_code'),
+            'discount_amount'      => $request->input('discount_amount'),
             'discount_description' => $request->input('discount_description'),
-            'description' => $request->input('note'),
-            'is_confirmed' => 1,
+            'description'          => $request->input('note'),
+            'is_confirmed'         => 1,
             //'status' => OrderStatusEnum::NEW_ORDER,
-            'order_type' => $request->input('order_type'),
-            'notes' => $request->input('customer_notes'),
-            'order_card' => $request->input('order_card'),
-            'platform' => isset($order->platform) ? $order->platform : 'back-office'
+            'order_type'           => $request->input('order_type'),
+            'notes'                => $request->input('customer_notes'),
+            'order_card'           => $request->input('order_card'),
+            'platform'             => isset($order->platform) ? $order->platform : 'back-office'
         ]);
 
         if (!$request->input('order_id', 0)) {
@@ -491,44 +491,44 @@ class OrderController extends BaseController
 
             if (!$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'create_order_from_payment_page',
+                    'action'      => 'create_order_from_payment_page',
                     'description' => trans('plugins/ecommerce::order.create_order_from_payment_page'),
-                    'order_id' => $order->id,
+                    'order_id'    => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'create_order',
+                    'action'      => 'create_order',
                     'description' => trans('plugins/ecommerce::order.new_order',
                         ['order_id' => get_order_code($order->id)]),
-                    'order_id' => $order->id,
+                    'order_id'    => $order->id,
                 ], []);
 
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'confirm_order',
+                    'action'      => 'confirm_order',
                     'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($order->discount_amount > 0 && !$request->input('order_id', 0)) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'add_discount_on_order',
+                    'action'      => 'add_discount_on_order',
                     'description' => '$' . $order->discount_amount . ' discount added on order by %user_name%.',
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
             $payment = $this->paymentRepository->createOrUpdate([
-                'amount' => $order->amount,
-                'currency' => get_application_currency()->title,
+                'amount'          => $order->amount,
+                'currency'        => get_application_currency()->title,
                 'payment_channel' => $request->input('payment_method'), //$order->payment->payment_channel,
-                'paypal_email' => $request->input('paypal_email'),
-                'status' => $request->input('payment_status', PaymentStatusEnum::PENDING),
-                'payment_type' => 'confirm',
-                'order_id' => $order->id,
-                'charge_id' => Str::upper(Str::random(10)),
+                'paypal_email'    => $request->input('paypal_email'),
+                'status'          => $request->input('payment_status', PaymentStatusEnum::PENDING),
+                'payment_type'    => 'confirm',
+                'order_id'        => $order->id,
+                'charge_id'       => Str::upper(Str::random(10)),
             ], $meta_condition);
 
             $order->payment_id = $payment->id;
@@ -547,34 +547,34 @@ class OrderController extends BaseController
 
             if ($request->input('payment_status') === PaymentStatusEnum::COMPLETED) {
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'confirm_payment',
+                    'action'      => 'confirm_payment',
                     'description' => trans('plugins/ecommerce::order.payment_was_confirmed_by', [
                         'money' => format_price($order->amount, $order->currency_id),
                     ]),
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
             if ($request->input('customer_address.name')) {
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_address.id'),
-                    'name' => $request->input('customer_address.name'),
-                    'phone' => $request->input('customer_address.phone'),
-                    'email' => $request->input('customer_address.email'),
-                    'state' => $request->input('customer_address.state'),
-                    'city' => $request->input('customer_address.city'),
-                    'zip_code' => $request->input('customer_address.zip_code'),
-                    'country' => $request->input('customer_address.country'),
-                    'address' => $request->input('customer_address.address'),
-                    'order_id' => $order->id
+                    'name'                => $request->input('customer_address.name'),
+                    'phone'               => $request->input('customer_address.phone'),
+                    'email'               => $request->input('customer_address.email'),
+                    'state'               => $request->input('customer_address.state'),
+                    'city'                => $request->input('customer_address.city'),
+                    'zip_code'            => $request->input('customer_address.zip_code'),
+                    'country'             => $request->input('customer_address.country'),
+                    'address'             => $request->input('customer_address.address'),
+                    'order_id'            => $order->id
                 ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
                 $this->orderAddressRepository->createOrUpdate([
-                    'name' => $customer->name,
-                    'phone' => $customer->phone,
-                    'email' => $customer->email,
+                    'name'     => $customer->name,
+                    'phone'    => $customer->phone,
+                    'email'    => $customer->email,
                     'order_id' => $order->id,
                 ], $meta_condition);
             }
@@ -582,16 +582,16 @@ class OrderController extends BaseController
             if ($request->input('customer_billing_address.name')) {
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_billing_address.id'),
-                    'name' => $request->input('customer_billing_address.name'),
-                    'phone' => $request->input('customer_billing_address.phone'),
-                    'email' => $request->input('customer_billing_address.email'),
-                    'state' => $request->input('customer_billing_address.state'),
-                    'city' => $request->input('customer_billing_address.city'),
-                    'zip_code' => $request->input('customer_billing_address.zip_code'),
-                    'country' => $request->input('customer_billing_address.country'),
-                    'address' => $request->input('customer_billing_address.address'),
-                    'order_id' => $order->id,
-                    'type' => 'billing',
+                    'name'                => $request->input('customer_billing_address.name'),
+                    'phone'               => $request->input('customer_billing_address.phone'),
+                    'email'               => $request->input('customer_billing_address.email'),
+                    'state'               => $request->input('customer_billing_address.state'),
+                    'city'                => $request->input('customer_billing_address.city'),
+                    'zip_code'            => $request->input('customer_billing_address.zip_code'),
+                    'country'             => $request->input('customer_billing_address.country'),
+                    'address'             => $request->input('customer_billing_address.address'),
+                    'order_id'            => $order->id,
+                    'type'                => 'billing',
                 ], $meta_condition);
             }
             /*if ($request->input('billing_address')) {
@@ -618,15 +618,15 @@ class OrderController extends BaseController
                 }
 
                 $data = [
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'product_name' => $product->name,
+                    'order_id'      => $order->id,
+                    'product_id'    => $product->id,
+                    'product_name'  => $product->name,
                     'product_sizes' => $product->sizes,
-                    'qty' => floor(Arr::get($productItem, 'quantity', 1)),
-                    'weight' => $product->weight,
-                    'price' => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
-                    'tax_amount' => 0,
-                    'options' => [],
+                    'qty'           => floor(Arr::get($productItem, 'quantity', 1)),
+                    'weight'        => $product->weight,
+                    'price'         => Arr::get($productItem, 'sale_price', 1), //$product->front_sale_price,
+                    'tax_amount'    => 0,
+                    'options'       => [],
                 ];
 
                 $this->orderProductRepository->create($data);
@@ -634,10 +634,10 @@ class OrderController extends BaseController
                 if (!$request->input('order_id', 0)) {
                     if ($product->front_sale_price != $data['price']) {
                         $this->orderHistoryRepository->createOrUpdate([
-                            'action' => 'product_price_change_on_order',
+                            'action'      => 'product_price_change_on_order',
                             'description' => $product->name . ' product price change in order from $' . $product->front_sale_price . ' to $' . $data['price'] . ' by %user_name%.',
-                            'order_id' => $order->id,
-                            'user_id' => Auth::user()->getKey(),
+                            'order_id'    => $order->id,
+                            'user_id'     => Auth::user()->getKey(),
                         ], []);
                     }
                 }
@@ -659,14 +659,14 @@ class OrderController extends BaseController
                         $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                         $logParam = [
                             'parent_product_id' => $getParentProdId,
-                            'product_id' => $product->id,
-                            'sku' => $product->sku,
-                            'quantity' => $data['qty'],
-                            'new_stock' => $product->quantity - $data['qty'],
-                            'old_stock' => $product->quantity,
-                            'order_id' => $order->id,
-                            'created_by' => Auth::user()->id,
-                            'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                            'product_id'        => $product->id,
+                            'sku'               => $product->sku,
+                            'quantity'          => $data['qty'],
+                            'new_stock'         => $product->quantity - $data['qty'],
+                            'old_stock'         => $product->quantity,
+                            'order_id'          => $order->id,
+                            'created_by'        => Auth::user()->id,
+                            'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                         ];
                         log_product_history($logParam);
                     }
@@ -893,10 +893,10 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'confirm_order',
+            'action'      => 'confirm_order',
             'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $order->id,
+            'user_id'     => Auth::user()->getKey(),
         ]);
 
         $payment = $this->paymentRepository->getFirstBy(['order_id' => $order->id]);
@@ -969,11 +969,11 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shippingData = [
-            'address' => $order->address->address,
-            'country' => $order->address->country,
-            'state' => $order->address->state,
-            'city' => $order->address->city,
-            'weight' => $weight,
+            'address'     => $order->address->address,
+            'country'     => $order->address->country,
+            'state'       => $order->address->state,
+            'city'        => $order->address->city,
+            'weight'      => $weight,
             'order_total' => $order->amount,
         ];
 
@@ -1015,8 +1015,8 @@ class OrderController extends BaseController
         $weight = 0;
         foreach ($order->products as $orderProduct) {
             $products[] = [
-                'name' => $orderProduct->product_name,
-                'weight' => $orderProduct->weight ?? 0.1,
+                'name'     => $orderProduct->product_name,
+                'weight'   => $orderProduct->weight ?? 0.1,
                 'quantity' => $orderProduct->qty,
             ];
             $weight += $orderProduct->weight ?? 0.1;
@@ -1025,17 +1025,17 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shipment = [
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
-            'weight' => $weight,
-            'note' => $request->input('note'),
+            'order_id'   => $order->id,
+            'user_id'    => Auth::user()->getKey(),
+            'weight'     => $weight,
+            'note'       => $request->input('note'),
             'cod_amount' => $request->input('cod_amount') ?? ($order->payment->status !== PaymentStatusEnum::COMPLETED ? $order->amount : 0),
             'cod_status' => 'pending',
-            'type' => $request->input('method'),
+            'type'       => $request->input('method'),
             // 'status'     => ShippingStatusEnum::DELIVERING,
-            'status' => ShippingStatusEnum::PICKING,
-            'price' => $order->shipping_amount,
-            'store_id' => $request->input('store_id'),
+            'status'     => ShippingStatusEnum::PICKING,
+            'price'      => $order->shipping_amount,
+            'store_id'   => $request->input('store_id'),
         ];
 
         $store = $this->storeLocatorRepository->findById($request->input('store_id'));
@@ -1053,7 +1053,7 @@ class OrderController extends BaseController
 
         if (!$result->isError()) {
             $this->orderRepository->createOrUpdate([
-                'status' => OrderStatusEnum::DELIVERING,
+                'status'          => OrderStatusEnum::DELIVERING,
                 'shipping_method' => $request->input('method'),
                 'shipping_option' => $request->input('option'),
             ], compact('id'));
@@ -1070,18 +1070,18 @@ class OrderController extends BaseController
             }
 
             $this->orderHistoryRepository->createOrUpdate([
-                'action' => 'create_shipment',
+                'action'      => 'create_shipment',
                 'description' => $result->getMessage() . ' ' . trans('plugins/ecommerce::order.by_username'),
-                'order_id' => $id,
-                'user_id' => Auth::user()->getKey(),
+                'order_id'    => $id,
+                'user_id'     => Auth::user()->getKey(),
             ]);
 
             $shipmentHistoryRepository->createOrUpdate([
-                'action' => 'create_from_order',
+                'action'      => 'create_from_order',
                 'description' => trans('plugins/ecommerce::order.shipping_was_created_from'),
                 'shipment_id' => $shipment->id,
-                'order_id' => $id,
-                'user_id' => Auth::user()->getKey(),
+                'order_id'    => $id,
+                'user_id'     => Auth::user()->getKey(),
             ]);
         }
 
@@ -1099,15 +1099,15 @@ class OrderController extends BaseController
             compact('id'));
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'cancel_shipment',
+            'action'      => 'cancel_shipment',
             'description' => trans('plugins/ecommerce::order.shipping_was_canceled_by'),
-            'order_id' => $shipment->order_id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $shipment->order_id,
+            'user_id'     => Auth::user()->getKey(),
         ]);
 
         return $response
             ->setData([
-                'status' => ShippingStatusEnum::CANCELED,
+                'status'      => ShippingStatusEnum::CANCELED,
                 'status_text' => ShippingStatusEnum::CANCELED()->label(),
             ])
             ->setMessage(trans('plugins/ecommerce::order.shipping_was_canceled_success'));
@@ -1130,7 +1130,7 @@ class OrderController extends BaseController
 
         return $response
             ->setData([
-                'line' => view('plugins/ecommerce::orders.shipping-address.line', compact('address'))->render(),
+                'line'   => view('plugins/ecommerce::orders.shipping-address.line', compact('address'))->render(),
                 'detail' => view('plugins/ecommerce::orders.shipping-address.detail', compact('address'))->render(),
             ])
             ->setMessage(trans('plugins/ecommerce::order.update_shipping_address_success'));
@@ -1150,10 +1150,10 @@ class OrderController extends BaseController
             $this->orderRepository->createOrUpdate(['status' => OrderStatusEnum::CANCELED, 'is_confirmed' => true], compact('id'));
 
             $this->orderHistoryRepository->createOrUpdate([
-                'action' => 'cancel_order',
+                'action'      => 'cancel_order',
                 'description' => trans('plugins/ecommerce::order.order_was_canceled_by'),
-                'order_id' => $order->id,
-                'user_id' => Auth::user()->getKey(),
+                'order_id'    => $order->id,
+                'user_id'     => Auth::user()->getKey(),
             ]);
 
             if ($order->order_type != Order::PRE_ORDER) {
@@ -1162,14 +1162,14 @@ class OrderController extends BaseController
                     $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
                     $logParam = [
                         'parent_product_id' => $getParentProdId,
-                        'product_id' => $order_product->product_id,
-                        'sku' => $order_product->product->sku,
-                        'quantity' => $order_product->qty,
-                        'new_stock' => $order_product->product->quantity + $order_product->qty,
-                        'old_stock' => $order_product->product->quantity,
-                        'order_id' => $order->id,
-                        'created_by' => Auth::user()->id,
-                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                        'product_id'        => $order_product->product_id,
+                        'sku'               => $order_product->product->sku,
+                        'quantity'          => $order_product->qty,
+                        'new_stock'         => $order_product->product->quantity + $order_product->qty,
+                        'old_stock'         => $order_product->product->quantity,
+                        'order_id'          => $order->id,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
                     ];
                     log_product_history($logParam);
 
@@ -1227,12 +1227,12 @@ class OrderController extends BaseController
         }
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'confirm_payment',
+            'action'      => 'confirm_payment',
             'description' => trans('plugins/ecommerce::order.payment_was_confirmed_by', [
                 'money' => format_price($order->amount),
             ]),
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $order->id,
+            'user_id'     => Auth::user()->getKey(),
         ]);
 
         return $response->setMessage(trans('plugins/ecommerce::order.confirm_payment_success'));
@@ -1263,7 +1263,7 @@ class OrderController extends BaseController
         foreach ($request->input('products', []) as $productId => $quantity) {
             $orderProduct = $this->orderProductRepository->getFirstBy([
                 'product_id' => $productId,
-                'order_id' => $id,
+                'order_id'   => $id,
             ]);
             if ($quantity > ($orderProduct->qty - $orderProduct->restock_quantity)) {
                 $hasError = true;
@@ -1301,7 +1301,7 @@ class OrderController extends BaseController
 
             $orderProduct = $this->orderProductRepository->getFirstBy([
                 'product_id' => $productId,
-                'order_id' => $id,
+                'order_id'   => $id,
             ]);
             if ($orderProduct) {
                 $orderProduct->restock_quantity += $quantity;
@@ -1311,13 +1311,13 @@ class OrderController extends BaseController
 
         if ($request->input('refund_amount', 0) > 0) {
             $this->orderHistoryRepository->createOrUpdate([
-                'action' => 'refund',
+                'action'      => 'refund',
                 'description' => trans('plugins/ecommerce::order.refund_success_with_price', [
                     'price' => format_price($request->input('refund_amount')),
                 ]),
-                'order_id' => $order->id,
-                'user_id' => Auth::user()->getKey(),
-                'extras' => json_encode([
+                'order_id'    => $order->id,
+                'user_id'     => Auth::user()->getKey(),
+                'extras'      => json_encode([
                     'amount' => $request->input('refund_amount'),
                     'method' => $payment->payment_channel ?? PaymentMethodEnum::COD,
                 ]),
@@ -1353,11 +1353,11 @@ class OrderController extends BaseController
         $weight = $weight > 0.1 ? $weight : 0.1;
 
         $shippingData = [
-            'address' => $request->input('address'),
-            'country' => $request->input('country'),
-            'state' => $request->input('state'),
-            'city' => $request->input('city'),
-            'weight' => $weight,
+            'address'     => $request->input('address'),
+            'country'     => $request->input('country'),
+            'state'       => $request->input('state'),
+            'city'        => $request->input('city'),
+            'weight'      => $weight,
             'order_total' => $orderAmount,
         ];
 
@@ -1367,7 +1367,7 @@ class OrderController extends BaseController
         foreach ($shipping as $key => $shippingItem) {
             foreach ($shippingItem as $subKey => $subShippingItem) {
                 $result[$key . ';' . $subKey . ';' . $subShippingItem['price']] = [
-                    'name' => $subShippingItem['name'],
+                    'name'  => $subShippingItem['name'],
                     'price' => format_price($subShippingItem['price'], null, true),
                 ];
             }
@@ -1920,14 +1920,14 @@ class OrderController extends BaseController
                             $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id' => $product->id,
-                                'sku' => $product->sku,
-                                'quantity' => $orderProduct->qty,
-                                'new_stock' => $product->quantity - $orderProduct->qty,
-                                'old_stock' => $product->quantity,
-                                'order_id' => $orderProduct->order_id,
-                                'created_by' => Auth::user()->id,
-                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $orderProduct->qty,
+                                'new_stock'         => $product->quantity - $orderProduct->qty,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $orderProduct->order_id,
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
 
@@ -2153,14 +2153,14 @@ class OrderController extends BaseController
                             $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id' => $product->id,
-                                'sku' => $product->sku,
-                                'quantity' => $orderProduct->qty,
-                                'new_stock' => $product->quantity - $orderProduct->qty,
-                                'old_stock' => $product->quantity,
-                                'order_id' => $orderProduct->order_id,
-                                'created_by' => Auth::user()->id,
-                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $orderProduct->qty,
+                                'new_stock'         => $product->quantity - $orderProduct->qty,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $orderProduct->order_id,
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
 
@@ -2382,14 +2382,14 @@ class OrderController extends BaseController
                             $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
                             $logParam = [
                                 'parent_product_id' => $getParentProdId,
-                                'product_id' => $product->id,
-                                'sku' => $product->sku,
-                                'quantity' => $orderProduct->qty,
-                                'new_stock' => $product->quantity - $orderProduct->qty,
-                                'old_stock' => $product->quantity,
-                                'order_id' => $orderProduct->order_id,
-                                'created_by' => Auth::user()->id,
-                                'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                                'product_id'        => $product->id,
+                                'sku'               => $product->sku,
+                                'quantity'          => $orderProduct->qty,
+                                'new_stock'         => $product->quantity - $orderProduct->qty,
+                                'old_stock'         => $product->quantity,
+                                'order_id'          => $orderProduct->order_id,
+                                'created_by'        => Auth::user()->id,
+                                'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                             ];
                             log_product_history($logParam);
 
@@ -2422,22 +2422,22 @@ class OrderController extends BaseController
     public function addOrderImportHistory($orderId, $sheet)
     {
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'import_order',
+            'action'      => 'import_order',
             'description' => 'This Order has been imported from ' . $sheet . '  by %user_name%.',
-            'order_id' => $orderId,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $orderId,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'create_order',
+            'action'      => 'create_order',
             'description' => trans('plugins/ecommerce::order.new_order',
                 ['order_id' => get_order_code($orderId)]),
-            'order_id' => $orderId,
+            'order_id'    => $orderId,
         ], []);
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'confirm_order',
+            'action'      => 'confirm_order',
             'description' => trans('plugins/ecommerce::order.order_was_verified_by'),
-            'order_id' => $orderId,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $orderId,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
     }
 
@@ -2445,22 +2445,22 @@ class OrderController extends BaseController
     {
         $data = [
             'payment_method_id' => $request->payment_id,
-            'meta' => [
+            'meta'              => [
                 'reference' => $request->order_id,
-                'tax' => 0,
-                'subtotal' => $request->sub_total,
+                'tax'       => 0,
+                'subtotal'  => $request->sub_total,
                 'lineItems' => []
             ],
-            'total' => $request->amount,
-            'pre_auth' => 1
+            'total'             => $request->amount,
+            'pre_auth'          => 1
         ];
 
         $orderProducts = OrderProduct::where('order_id', $request->order_id)->get()->toArray();
         foreach ($orderProducts as $p) {
             $data['meta']['lineItems'][] = [
-                'price' => $p['price'],
+                'price'    => $p['price'],
                 'quantity' => $p['qty'],
-                'item' => $p['product_name'],
+                'item'     => $p['product_name'],
             ];
         }
 
@@ -2546,14 +2546,14 @@ class OrderController extends BaseController
                     $getParentProdId = ProductVariation::where('product_id', $order_product->product_id)->value('configurable_product_id');
                     $logParam = [
                         'parent_product_id' => $getParentProdId,
-                        'product_id' => $order_product->product_id,
-                        'sku' => $order_product->product->sku,
-                        'quantity' => $order_product->qty,
-                        'new_stock' => $order_product->product->quantity - $order_product->qty,
-                        'old_stock' => $order_product->product->quantity,
-                        'order_id' => $order->id,
-                        'created_by' => Auth::user()->id,
-                        'reference' => InventoryHistory::PROD_ORDER_QTY_DEDUCT
+                        'product_id'        => $order_product->product_id,
+                        'sku'               => $order_product->product->sku,
+                        'quantity'          => $order_product->qty,
+                        'new_stock'         => $order_product->product->quantity - $order_product->qty,
+                        'old_stock'         => $order_product->product->quantity,
+                        'order_id'          => $order->id,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_DEDUCT
                     ];
                     log_product_history($logParam);
 
@@ -2572,10 +2572,10 @@ class OrderController extends BaseController
         $this->orderRepository->createOrUpdate($order);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'order_status_changed',
+            'action'      => 'order_status_changed',
             'description' => 'Order status changed to ' . $requestData['status'] . ' by %user_name%.',
-            'order_id' => $order->id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $order->id,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
 
         $getOldSystemStatus = newToOldStatus($requestData['status']);
@@ -2687,10 +2687,10 @@ class OrderController extends BaseController
 
         if ($getOrderRefProd) {
             $this->orderHistoryRepository->createOrUpdate([
-                'action' => 'order_revert_refund_product',
+                'action'      => 'order_revert_refund_product',
                 'description' => 'Order Revert Refund Product by %user_name%.',
-                'order_id' => $id,
-                'user_id' => Auth::user()->getKey(),
+                'order_id'    => $id,
+                'user_id'     => Auth::user()->getKey(),
             ], []);
 
             $getOrderProd = OrderProduct::where(['order_id' => $order->id, 'product_id' => $prod_id])->first();
@@ -2698,19 +2698,19 @@ class OrderController extends BaseController
                 $getOrderProd->qty += $getOrderRefProd->qty;
                 $getOrderProd->save();
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'order_product_qty_changed',
+                    'action'      => 'order_product_qty_changed',
                     'description' => 'Order product ' . $getOrderRefProd->product_name . ' qty changed to ' . $getOrderProd->qty . ' by %user_name%.',
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             } else {
                 $orderProd = $getOrderRefProd->replicate();
                 $this->orderProductRepository->createOrUpdate($orderProd);
                 $this->orderHistoryRepository->createOrUpdate([
-                    'action' => 'order_product_qty_changed',
+                    'action'      => 'order_product_qty_changed',
                     'description' => 'Order product ' . $getOrderRefProd->product_name . ' qty changed to ' . $getOrderRefProd->qty . ' by %user_name%.',
-                    'order_id' => $order->id,
-                    'user_id' => Auth::user()->getKey(),
+                    'order_id'    => $order->id,
+                    'user_id'     => Auth::user()->getKey(),
                 ], []);
             }
 
@@ -2754,10 +2754,10 @@ class OrderController extends BaseController
         /*************** Validation End ****************/
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'order_refund_product',
+            'action'      => 'order_refund_product',
             'description' => 'Order Refund Products by %user_name%.',
-            'order_id' => $id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $id,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
 
         $products = $order->products;
@@ -2777,10 +2777,10 @@ class OrderController extends BaseController
                     }
 
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'order_product_qty_changed',
+                        'action'      => 'order_product_qty_changed',
                         'description' => 'Order product ' . $product->product_name . ' qty changed from ' . $product->qty . ' to ' . ($product->qty - (int)$qty) . ' by %user_name%.',
-                        'order_id' => $order->id,
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $order->id,
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
 
                     $product->qty -= (int)$qty;
@@ -2858,10 +2858,10 @@ class OrderController extends BaseController
         $this->orderAddressRepository->createOrUpdate($addressData);
 
         $this->orderHistoryRepository->createOrUpdate([
-            'action' => 'split_order',
+            'action'      => 'split_order',
             'description' => 'Order split by %user_name%.',
-            'order_id' => $id,
-            'user_id' => Auth::user()->getKey(),
+            'order_id'    => $id,
+            'user_id'     => Auth::user()->getKey(),
         ], []);
 
         $products = $order->products;
@@ -2877,23 +2877,23 @@ class OrderController extends BaseController
 
 
                     $this->orderHistoryRepository->createOrUpdate([
-                        'action' => 'order_product_qty_changed',
+                        'action'      => 'order_product_qty_changed',
                         'description' => 'Order product ' . $product->product_name . ' qty changed from ' . $product->qty . ' to ' . ($product->qty - (int)$qty) . ' by %user_name%.',
-                        'order_id' => $order->id,
-                        'user_id' => Auth::user()->getKey(),
+                        'order_id'    => $order->id,
+                        'user_id'     => Auth::user()->getKey(),
                     ], []);
 
                     $getParentProdId = ProductVariation::where('product_id', $product->product_id)->value('configurable_product_id');
                     $logParam = [
                         'parent_product_id' => $getParentProdId,
-                        'product_id' => $product->product_id,
-                        'sku' => $product->product->sku,
-                        'quantity' => (int)$qty,
-                        'new_stock' => $product->product->quantity + (int)$qty,
-                        'old_stock' => $product->product->quantity,
-                        'order_id' => $order->id,
-                        'created_by' => Auth::user()->id,
-                        'reference' => InventoryHistory::PROD_ORDER_QTY_ADD
+                        'product_id'        => $product->product_id,
+                        'sku'               => $product->product->sku,
+                        'quantity'          => (int)$qty,
+                        'new_stock'         => $product->product->quantity + (int)$qty,
+                        'old_stock'         => $product->product->quantity,
+                        'order_id'          => $order->id,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_ORDER_QTY_ADD
                     ];
                     log_product_history($logParam);
 
@@ -3013,10 +3013,10 @@ class OrderController extends BaseController
             $order->save();
 
             $this->orderHistoryRepository->createOrUpdate([
-                'action' => 'remove_discount_on_order',
+                'action'      => 'remove_discount_on_order',
                 'description' => '$' . $order->discount_amount . ' discount removed from order by %user_name%.',
-                'order_id' => $order->id,
-                'user_id' => Auth::user()->getKey(),
+                'order_id'    => $order->id,
+                'user_id'     => Auth::user()->getKey(),
             ], []);
 
         } elseif ($getType == 'promotion') {
@@ -3050,10 +3050,10 @@ class OrderController extends BaseController
 
             $apiContext->setConfig(
                 array(
-                    'mode' => env('PAYPAL_MODE', 'live'),
+                    'mode'           => env('PAYPAL_MODE', 'live'),
                     'log.LogEnabled' => false,
-                    'log.FileName' => '../PayPal.log',
-                    'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                    'log.FileName'   => '../PayPal.log',
+                    'log.LogLevel'   => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 )
             );
 
@@ -3091,7 +3091,7 @@ class OrderController extends BaseController
                 ->setCountryCode("US");
 
             $billing = $invoice->getBillingInfo();
-            $billing[0]->setEmail($user->paypal_email);
+            $billing[0]->setEmail(($order->payments) ?$order->payments[0]->paypal_email : $user->email);
 
 
             $items = array();
@@ -3198,10 +3198,10 @@ class OrderController extends BaseController
 
         $apiContext->setConfig(
             array(
-                'mode' => env('PAYPAL_MODE', 'live'),
+                'mode'           => env('PAYPAL_MODE', 'live'),
                 'log.LogEnabled' => true,
-                'log.FileName' => '../PayPal.log',
-                'log.LogLevel' => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'log.FileName'   => '../PayPal.log',
+                'log.LogLevel'   => 'INFO', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
             )
         );
 
@@ -3331,20 +3331,20 @@ class OrderController extends BaseController
             }
 
             $orderData = [
-                'user_id' => $order->user_id,
-                'status' => $order->status,
-                'order_type' => ($pre) ? Order::PRE_ORDER : Order::NORMAL,
-                'platform' => $order->location ? $order->location : ($order->online_order ? 'online' : 'backorder'),
-                'amount' => $order->total,
-                'shipping_amount' => $order->shipping_cost,
-                'description' => $order->notes,
-                'discount_amount' => $order->subtotal_discount,
-                'sub_total' => $order->subtotal,
-                'salesperson_id' => $order->issuer_id,
-                'po_number' => $order->po_number,
+                'user_id'               => $order->user_id,
+                'status'                => $order->status,
+                'order_type'            => ($pre) ? Order::PRE_ORDER : Order::NORMAL,
+                'platform'              => $order->location ? $order->location : ($order->online_order ? 'online' : 'backorder'),
+                'amount'                => $order->total,
+                'shipping_amount'       => $order->shipping_cost,
+                'description'           => $order->notes,
+                'discount_amount'       => $order->subtotal_discount,
+                'sub_total'             => $order->subtotal,
+                'salesperson_id'        => $order->issuer_id,
+                'po_number'             => $order->po_number,
                 'order_completion_date' => $order->complete_date,
-                'created_at' => date('Y-m-d H:i:s', $order->timestamp),
-                'updated_at' => date('Y-m-d H:i:s', $order->last_status_change_date),
+                'created_at'            => date('Y-m-d H:i:s', $order->timestamp),
+                'updated_at'            => date('Y-m-d H:i:s', $order->last_status_change_date),
             ];
             DB::table('ec_orders')->where('id', $id)->update($orderData);
 
@@ -3372,11 +3372,11 @@ class OrderController extends BaseController
 
                     if ($qty > 0) {
                         $orderProductData = [
-                            'order_id' => $orderProduct->order_id,
-                            'qty' => $qty,
-                            'is_pack' => $isPack,
-                            'price' => round($orderProduct->price * $productObj->prod_pieces, 2),
-                            'product_id' => $productObj->product_id,
+                            'order_id'     => $orderProduct->order_id,
+                            'qty'          => $qty,
+                            'is_pack'      => $isPack,
+                            'price'        => round($orderProduct->price * $productObj->prod_pieces, 2),
+                            'product_id'   => $productObj->product_id,
                             'product_name' => $productObj->name
                         ];
                         OrderProduct::create($orderProductData);
@@ -3384,13 +3384,13 @@ class OrderController extends BaseController
 
                         $meta_condition = ['order_id' => $order->order_id];
                         $paymentData = [
-                            'amount' => round($orderProduct->price * $productObj->prod_pieces, 2),
-                            'currency' => get_application_currency()->title,
+                            'amount'       => round($orderProduct->price * $productObj->prod_pieces, 2),
+                            'currency'     => get_application_currency()->title,
                             'paypal_email' => '',
-                            'status' => PaymentStatusEnum::PENDING,
+                            'status'       => PaymentStatusEnum::PENDING,
                             'payment_type' => 'confirm',
-                            'order_id' => $order->order_id,
-                            'charge_id' => Str::upper(Str::random(10))
+                            'order_id'     => $order->order_id,
+                            'charge_id'    => Str::upper(Str::random(10))
                         ];
 
                         if ($order->payment_id == 41) {
@@ -3426,24 +3426,24 @@ class OrderController extends BaseController
 
                         $isPack = 0;
                         $orderProductData = [
-                            'order_id' => $orderProduct->order_id,
-                            'qty' => $diff,
-                            'is_pack' => $isPack,
-                            'price' => $orderProduct->price,
-                            'product_id' => $productObjS ? $productObjS->product_id : $productObj->product_id,
+                            'order_id'     => $orderProduct->order_id,
+                            'qty'          => $diff,
+                            'is_pack'      => $isPack,
+                            'price'        => $orderProduct->price,
+                            'product_id'   => $productObjS ? $productObjS->product_id : $productObj->product_id,
                             'product_name' => $productObjS ? $productObjS->name : $productObj->name
                         ];
                         OrderProduct::create($orderProductData);
 
                         $meta_condition = ['order_id' => $order->order_id];
                         $paymentData = [
-                            'amount' => round($orderProduct->price * $productObj->prod_pieces, 2),
-                            'currency' => get_application_currency()->title,
+                            'amount'       => round($orderProduct->price * $productObj->prod_pieces, 2),
+                            'currency'     => get_application_currency()->title,
                             'paypal_email' => '',
-                            'status' => PaymentStatusEnum::PENDING,
+                            'status'       => PaymentStatusEnum::PENDING,
                             'payment_type' => 'confirm',
-                            'order_id' => $order->order_id,
-                            'charge_id' => Str::upper(Str::random(10))
+                            'order_id'     => $order->order_id,
+                            'charge_id'    => Str::upper(Str::random(10))
                         ];
 
                         if ($order->payment_id == 41) {
@@ -3477,66 +3477,66 @@ class OrderController extends BaseController
             }
 
             $custAddB = [
-                'name' => $order->b_firstname . ' ' . $order->b_lastname,
-                'email' => $order->email,
-                'phone' => $order->b_phone,
-                'country' => $order->b_country,
-                'state' => $order->b_state,
-                'city' => $order->b_city,
-                'address' => $order->b_address_2,
+                'name'        => $order->b_firstname . ' ' . $order->b_lastname,
+                'email'       => $order->email,
+                'phone'       => $order->b_phone,
+                'country'     => $order->b_country,
+                'state'       => $order->b_state,
+                'city'        => $order->b_city,
+                'address'     => $order->b_address_2,
                 'customer_id' => $order->user_id,
-                'zip_code' => $order->b_zipcode,
-                'first_name' => $order->b_firstname,
-                'last_name' => $order->b_lastname,
-                'company' => $order->company,
-                'type' => 'billing',
+                'zip_code'    => $order->b_zipcode,
+                'first_name'  => $order->b_firstname,
+                'last_name'   => $order->b_lastname,
+                'company'     => $order->company,
+                'type'        => 'billing',
             ];
             $custBA = Address::create($custAddB);
 
             $billingAddress = [
-                'name' => $order->b_firstname . ' ' . $order->b_lastname,
-                'phone' => $order->b_phone,
-                'email' => $order->email,
-                'country' => $order->b_country,
-                'state' => $order->b_state,
-                'city' => $order->b_city,
-                'address' => $order->b_address_2,
-                'order_id' => $order->order_id,
-                'zip_code' => $order->b_zipcode,
-                'type' => 'billing',
+                'name'                => $order->b_firstname . ' ' . $order->b_lastname,
+                'phone'               => $order->b_phone,
+                'email'               => $order->email,
+                'country'             => $order->b_country,
+                'state'               => $order->b_state,
+                'city'                => $order->b_city,
+                'address'             => $order->b_address_2,
+                'order_id'            => $order->order_id,
+                'zip_code'            => $order->b_zipcode,
+                'type'                => 'billing',
                 'customer_address_id' => $custBA->id,
             ];
             OrderAddress::create($billingAddress);
 
 
             $custAddS = [
-                'name' => $order->s_firstname . ' ' . $order->s_lastname,
-                'email' => $order->email,
-                'phone' => $order->s_phone,
-                'country' => $order->s_country,
-                'state' => $order->s_state,
-                'city' => $order->s_city,
-                'address' => $order->s_address_2,
+                'name'        => $order->s_firstname . ' ' . $order->s_lastname,
+                'email'       => $order->email,
+                'phone'       => $order->s_phone,
+                'country'     => $order->s_country,
+                'state'       => $order->s_state,
+                'city'        => $order->s_city,
+                'address'     => $order->s_address_2,
                 'customer_id' => $order->user_id,
-                'zip_code' => $order->s_zipcode,
-                'first_name' => $order->s_firstname,
-                'last_name' => $order->s_lastname,
-                'company' => $order->company,
-                'type' => 'shipping',
+                'zip_code'    => $order->s_zipcode,
+                'first_name'  => $order->s_firstname,
+                'last_name'   => $order->s_lastname,
+                'company'     => $order->company,
+                'type'        => 'shipping',
             ];
             $custSA = Address::create($custAddS);
 
             $shippingAddress = [
-                'name' => $order->s_firstname . ' ' . $order->s_lastname,
-                'phone' => $order->s_phone,
-                'email' => $order->email,
-                'country' => $order->s_country,
-                'state' => $order->s_state,
-                'city' => $order->s_city,
-                'address' => $order->s_address_2,
-                'order_id' => $order->order_id,
-                'zip_code' => $order->s_zipcode,
-                'type' => 'shipping',
+                'name'                => $order->s_firstname . ' ' . $order->s_lastname,
+                'phone'               => $order->s_phone,
+                'email'               => $order->email,
+                'country'             => $order->s_country,
+                'state'               => $order->s_state,
+                'city'                => $order->s_city,
+                'address'             => $order->s_address_2,
+                'order_id'            => $order->order_id,
+                'zip_code'            => $order->s_zipcode,
+                'type'                => 'shipping',
                 'customer_address_id' => $custSA->id,
             ];
             OrderAddress::create($shippingAddress);
