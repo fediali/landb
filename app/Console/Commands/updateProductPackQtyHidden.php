@@ -80,6 +80,7 @@ class updateProductPackQtyHidden extends Command
 
                     foreach ($getProd->variations as $variation) {
                         $variation->product->sizes = $sizes[0]->variant_name;
+                        $variation->product->single_qty = 0;
                         $variation->product->quantity = 0;
                         if ($variation->product->sku == $getProd->sku) {
                             $variation->product->quantity = $getProd->quantity;
