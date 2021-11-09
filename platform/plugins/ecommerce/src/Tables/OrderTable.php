@@ -529,7 +529,7 @@ class OrderTable extends TableAbstract
             $q->whereDate('ec_orders.created_at', '>=', $from_date);
             $q->whereDate('ec_orders.created_at', '<=', $to_date);
         })->where('ec_orders.is_finished', 1)->sum('amount');
-        $data['total_paid'] = Order::whereNotNull('order_completion_date')->whereIn('status', $paid_statuses)
+        $data['total_paid'] = Order::whereIn('status', $paid_statuses)
             ->when($from_date && $to_date, function($q) use($from_date, $to_date) {
                 $q->whereDate('ec_orders.created_at', '>=', $from_date);
                 $q->whereDate('ec_orders.created_at', '<=', $to_date);
