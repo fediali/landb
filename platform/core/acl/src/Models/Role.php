@@ -54,6 +54,7 @@ class Role extends BaseModel
     const ONLINE_SALES = 'onlines-sales';
     const IN_PERSON_SALES = 'inpersons-sales';
     const SALES_MANAGER = 'sales-manager';
+    const ASS_SALES_MANAGER = 'assistant-sales-manager';
 
     /**
      * @param string $value
