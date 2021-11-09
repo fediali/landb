@@ -1026,7 +1026,10 @@ class ProductController extends BaseController
         $availableProducts = $this->productRepository
             ->getModel()
             ->when($excludeOOS == true, function ($q) {
-                $q->where('quantity', '>', 0);
+//                $single_qty = $q->where('quantity', '>', 0);
+//                if()
+//                $q->where('quantity', '>', 0);
+
                 $q->where('status', BaseStatusEnum::ACTIVE);
 
             })
@@ -1070,7 +1073,7 @@ class ProductController extends BaseController
 //                    $variation->quantity = $variation->product->in_person_sales_qty;
 //                }
 //                else {
-                    $variation->quantity = $variation->product->quantity;
+                $variation->quantity = $variation->product->quantity;
 //                }
 
                 foreach ($variation->variationItems as &$variationItem) {
@@ -1186,12 +1189,14 @@ class ProductController extends BaseController
     public function updateColors($id, $ids)
     {
         if ($ids) {
-            $ids = array_map('intval',explode(',', $ids[0]));
+            $ids = array_map('intval', explode(',', $ids[0]));
 
             $product = Product::find($id);
             $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
             $n = array_merge($product_colors, $ids);
-            $array = array_filter($n, function($a) { if($a !== 0) return $a; });
+            $array = array_filter($n, function ($a) {
+                if ($a !== 0) return $a;
+            });
             $array = array_unique($array);
             $array = array_values($array);
             $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
@@ -1201,11 +1206,13 @@ class ProductController extends BaseController
                 if ($colorId) {
                     $product = Product::find($colorId);
                     $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
-                    $product_colors = (array) $product_colors;
+                    $product_colors = (array)$product_colors;
                     if (!in_array($id, $product_colors)) {
                         array_push($product_colors, $id);
                     }
-                    $array = array_filter($product_colors, function($a) { if($a !== 0) return $a; });
+                    $array = array_filter($product_colors, function ($a) {
+                        if ($a !== 0) return $a;
+                    });
                     $array = array_unique($array);
                     $array = array_values($array);
                     $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
@@ -1239,15 +1246,15 @@ class ProductController extends BaseController
     {
         $product = $this->productRepository->findOrFail($product_id);
         $html = '';
-        if (@getimagesize(asset('storage/'. $product->image))) {
-            $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($product->image, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
+        if (@getimagesize(asset('storage/' . $product->image))) {
+            $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($product->image, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
         } else {
             $image1 = str_replace('.JPG', '.jpg', @$product->image);
             $image2 = str_replace('.jpg', '.JPG', @$product->image);
-            if (@getimagesize(asset('storage/'. $image1))) {
-                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image1, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
-            } elseif(@getimagesize(asset('storage/'. $image2))) {
-                $html = "<img width='50' src='".asset('landb/defaultLogo.png')."' alt='Product image' loading='lazy' class='lazyload ' data-src='".RvMedia::getImageUrl($image2, null , false, RvMedia::getDefaultImage())."' onerror='this.src='".asset('images/default.jpg')."''>";
+            if (@getimagesize(asset('storage/' . $image1))) {
+                $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($image1, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
+            } elseif (@getimagesize(asset('storage/' . $image2))) {
+                $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($image2, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
             }
         }
         return $html;
