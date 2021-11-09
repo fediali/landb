@@ -1028,7 +1028,7 @@ class ProductController extends BaseController
             ->when($excludeOOS == true, function ($q) {
                 $q->where('quantity', '>', 0);
                 $q->where('status', BaseStatusEnum::ACTIVE)->orWhere('status', BaseStatusEnum::HIDDEN);
-              ;
+
             })
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
