@@ -319,7 +319,7 @@ if (!function_exists('get_salesperson')) {
     {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
-            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES,\Botble\ACL\Models\Role::SALES_MANAGER, \Botble\ACL\Models\Role::SALES_MANAGER ])
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES,\Botble\ACL\Models\Role::SALES_MANAGER, \Botble\ACL\Models\Role::ASS_SALES_MANAGER ])
             ->pluck('users.username', 'users.id')->all();
     }
 }
