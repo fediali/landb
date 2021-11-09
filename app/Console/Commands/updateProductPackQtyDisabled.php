@@ -51,8 +51,9 @@ class updateProductPackQtyDisabled extends Command
         foreach ($products as $product) {
             $getProd = Product::where('id', $product->product_id)->first();
             if ($getProd) {
-
+dd($product->amount);
                 if ($product->amount) {
+                    dd();
                     $getProd->single_qty = 0;
                     $getProd->quantity = 0;
                     if ($product->min_qty) {
