@@ -213,7 +213,7 @@ class AccountingsystemTable extends TableAbstract
     public function renderCustomFilter(): string
     {
         $data['totalCash'] = Accountingsystem::where(['money' => 'in'])->whereDate('created_at', request('sel_date', date('Y-m-d')))->value('amount');
-        $data['leftover'] = Accountingsystem::where(['money' => 'in'])->whereDate('created_at', request('sel_date', date('Y-m-d')))->sum('amount');
+        $data['leftover'] = Accountingsystem::where(['money' => 'out'])->whereDate('created_at', request('sel_date', date('Y-m-d')))->sum('amount');
         $data['diff'] = $data['totalCash'] - $data['leftover'];
         return view($this->customFilterTemplate, compact('data'))->render();
     }
