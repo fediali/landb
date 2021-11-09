@@ -396,7 +396,7 @@ class OrderTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-//        return $this->addDeleteAction(route('orders.deletes'), 'orders.destroy', parent::bulkActions());
+        return $this->addDeleteAction(route('orders.deletes'), 'orders.destroy', parent::bulkActions());
         return parent::bulkActions();
     }
 
