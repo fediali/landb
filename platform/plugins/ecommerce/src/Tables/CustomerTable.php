@@ -368,12 +368,12 @@ class CustomerTable extends TableAbstract
                 'class' => 'text-left',
                 'searchable' => false
             ],
-            'last_order_date' => [
-                'name' => 'last_order_date',
-                'title' => 'Last order',
-                'class' => 'text-left',
-                'searchable' => false
-            ],
+//            'last_order_date' => [
+//                'name' => 'last_order_date',
+//                'title' => 'Last order',
+//                'class' => 'text-left',
+//                'searchable' => false
+//            ],
             'last_visit' => [
                 'name' => 'last_visit',
                 'title' => 'Last visit',
