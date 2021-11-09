@@ -350,12 +350,12 @@ class CustomerTable extends TableAbstract
                 'class' => 'text-left',
                 'searchable' => false
             ],
-            'order_spend' => [
-                'name' => 'order_spend',
-                'title' => 'Spend',
-                'class' => 'text-left',
-                'searchable' => false
-            ],
+//            'order_spend' => [
+//                'name' => 'order_spend',
+//                'title' => 'Spend',
+//                'class' => 'text-left',
+//                'searchable' => false
+//            ],
             'abandon_products' => [
                 'name' => 'abandon_products',
                 'title' => 'Abandoned',
