@@ -223,12 +223,12 @@ class CustomerTable extends TableAbstract
 
         //$query = $query->selectRaw('(SELECT COUNT(`ec_orders`.`id`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id AND DATE(ec_orders.created_at) >= "' . $from_date . '" AND DATE(ec_orders.created_at) <= "' . $to_date . '") AS order_count');
 
-        $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
+//        $query = $query->selectRaw('(SELECT SUM(`ec_orders`.`amount`) FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id) AS order_spend');
 
-        $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
-        $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
+//        $query = $query->selectRaw('(SELECT COUNT(`ec_order_product`.`product_id`) FROM `ec_orders` JOIN `ec_order_product` ON ec_orders.`id` = ec_order_product.`order_id` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id) AS abandon_products');
+//        $query = $query->selectRaw('(SELECT `ec_orders`.`id` FROM `ec_orders` WHERE ec_orders.`is_finished` = 0 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS abandon_order_id');
 
-        $query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
+//        $query = $query->selectRaw('(SELECT `ec_orders`.`created_at` FROM `ec_orders` WHERE ec_orders.`is_finished` = 1 AND `ec_orders`.`user_id` = ec_customers.id ORDER BY ec_orders.`id` DESC LIMIT 1) AS last_order_date');
 
         //$query->selectRaw('SELECT COUNT(`ec_orders`.`id`) AS order_type FROM `ec_orders` WHERE `ec_orders`.`user_id` = ec_customers.id');
 
@@ -344,24 +344,24 @@ class CustomerTable extends TableAbstract
                 'width' => '100px',
                 'visible' => false,
             ],
-            'order_count' => [
-                'name' => 'order_count',
-                'title' => 'Order Count',
-                'class' => 'text-left',
-                'searchable' => false
-            ],
+//            'order_count' => [
+//                'name' => 'order_count',
+//                'title' => 'Order Count',
+//                'class' => 'text-left',
+//                'searchable' => false
+//            ],
 //            'order_spend' => [
 //                'name' => 'order_spend',
 //                'title' => 'Spend',
 //                'class' => 'text-left',
 //                'searchable' => false
 //            ],
-            'abandon_products' => [
-                'name' => 'abandon_products',
-                'title' => 'Abandoned',
-                'class' => 'text-left',
-                'searchable' => false
-            ],
+//            'abandon_products' => [
+//                'name' => 'abandon_products',
+//                'title' => 'Abandoned',
+//                'class' => 'text-left',
+//                'searchable' => false
+//            ],
             'status' => [
                 'name' => 'status',
                 'title' => 'Validation',
