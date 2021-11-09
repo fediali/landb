@@ -46,14 +46,14 @@ class updateProductPackQtyDisabled extends Command
      */
     public function handle()
     {
-        $products = DB::connection('mysql2')->table('hw_products')->where(/*'status', 'D'*/ 'product_id', 91010)->get();
+        $products = DB::connection('mysql2')->table('hw_products')->where('status', 'D' )->get();
 
         foreach ($products as $product) {
             $getProd = Product::where('id', $product->product_id)->first();
             if ($getProd) {
-dd($product->amount);
-                if ($product->amount) {
-                    dd();
+
+//                if ($product->amount) {
+//                    dd();
                     $getProd->single_qty = 0;
                     $getProd->quantity = 0;
                     if ($product->min_qty) {
@@ -62,13 +62,15 @@ dd($product->amount);
                         $diff = $product->amount - $looseQty;
                         $getProd->quantity = $packQty;
                         $getProd->extra_qty = $diff;
+                        $getProd->status = 'Disabled';
                     } else {
                         $getProd->extra_qty = $product->amount;
+                        $getProd->status = 'Disabled';
                     }
-                    dd($getProd);
+//                    dd($getProd);
                     $getProd->save();
                     echo 'Qty==>'.$getProd->sku.'<br>';
-                }
+//                }
 
                 $sizes = DB::connection('mysql2')->table('hw_product_options')
                     ->selectRaw('hw_product_option_variants_descriptions.variant_name')
