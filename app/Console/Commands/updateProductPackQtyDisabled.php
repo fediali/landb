@@ -46,7 +46,7 @@ class updateProductPackQtyDisabled extends Command
      */
     public function handle()
     {
-        $products = DB::connection('mysql2')->table('hw_products')->where('status', 'D')->get();
+        $products = DB::connection('mysql2')->table('hw_products')->where(/*'status', 'D'*/ 'product_id', 91010)->get();
 
         foreach ($products as $product) {
             $getProd = Product::where('id', $product->product_id)->first();
