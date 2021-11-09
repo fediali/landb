@@ -6,12 +6,10 @@ use Botble\ACL\Models\User;
 use Botble\Base\Traits\EnumCastable;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Models\BaseModel;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Accountingsystem extends BaseModel
 {
     use EnumCastable;
-    use SoftDeletes;
 
     /**
      * The database table used by the model.
