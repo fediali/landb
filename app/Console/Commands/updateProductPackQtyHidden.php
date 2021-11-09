@@ -19,7 +19,7 @@ class updateProductPackQtyHidden extends Command
      *
      * @var string
      */
-    protected $signature = 'update:hidden-prod-qty';
+        protected $signature = 'update:hidden-prod-qty';
 
     /**
      * The console command description.

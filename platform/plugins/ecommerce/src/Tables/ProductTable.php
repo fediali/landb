@@ -334,7 +334,7 @@ class ProductTable extends TableAbstract
             ->select($select)
             ->leftJoin('product_labels', 'product_labels.id', 'ec_products.product_label_id')
             ->where(['ec_products.is_variation' => 0, 'ec_products.ptype' => 'R'])
-            ->when()
+//
             ->where('ec_products.status', '!=', BaseStatusEnum::HIDE);
 
 
