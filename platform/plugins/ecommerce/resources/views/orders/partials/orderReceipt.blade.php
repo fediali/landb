@@ -26,7 +26,7 @@
                 </h6>
                 <hr style="border: 2px solid;">
                 <p style="font-size:12px;" class="m-0">
-                    12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
+                    12801 N, Stemmons Fwt, Suite 710 Farmers Branch,</br> Texas 78865 United States
                 </p>
                 <p style="font-size:12px;" class="m-0">
                     97251235552
@@ -47,10 +47,12 @@
                     </h6>
                     <hr style="border: 2px solid #DDD;">
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->user->detail->company}}
+                        <strong>{{ $order->user->detail->company}}</strong> </br>
+                        {{ $order->billingAddress->name}}
                     </p>
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->billingAddress->name.', '. $order->billingAddress->address.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
+                        {{$order->billingAddress->address}}</br>
+                        {{$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                     </p>
                     <p style="font-size:12px;" class="m-0">
                         {{ $order->billingAddress->phone }}
@@ -72,10 +74,12 @@
                     </h6>
                     <hr style="border: 2px solid #DDD;">
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->user->detail->company}}
+                        <strong> {{ $order->user->detail->company}}</strong> </br>
+                        {{$order->shippingAddress->name}}
                     </p>
                     <p style="font-size:12px;" class="m-0">
-                        {{ $order->shippingAddress->name.', '.$order->shippingAddress->address.','.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
+                        {{$order->shippingAddress->address}}</br>
+                        {{$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
                     </p>
                     <p style="font-size:12px;" class="m-0">
                         {{ $order->shippingAddress->phone }}

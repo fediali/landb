@@ -54,8 +54,8 @@ class fetchOrders extends Command
     {
         DB::connection('mysql2')
             ->table('hw_orders')
-            ->where(['hw_orders.fetch_status' => 0, 'status' => 'AJ'])
-            ->orWhere(['hw_orders.fetch_status' => 0, 'status' => 'AY'])
+            ->where(['hw_orders.fetch_status' => 0, /*'status' => 'AJ'*/])
+//            ->orWhere(['hw_orders.fetch_status' => 0, 'status' => 'AY'])
             ->orderBy('hw_orders.order_id', 'ASC')
             ->chunk(500,
             function ($orders) {
