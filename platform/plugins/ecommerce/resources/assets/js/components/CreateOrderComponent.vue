@@ -1230,13 +1230,11 @@ export default {
             $('.textbox-advancesearch.product').closest('.box-search-advance.product').find('.panel').addClass('active');
             if (_.isEmpty(context.list_products.data) || force) {
                 context.loading = true;
-                let axiosSource = axios.CancelToken.source();
                 axios
                     .get(route('products.get-all-products-and-variations', {
                         keyword: context.product_keyword,
                         order_type: context.order_type,
-                        page: page,
-                        cancelToken: axiosSource.token,
+                        page: page
                     }))
                     .then(res => {
                         context.list_products = res.data.data;
