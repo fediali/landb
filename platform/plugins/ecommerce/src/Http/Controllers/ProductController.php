@@ -1084,6 +1084,8 @@ class ProductController extends BaseController
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
+
+                $availableProduct->variations = array_values($availableProduct->variations);
             }
 
             if (!count($availableProducts[$pk]->variations)) {
@@ -1091,7 +1093,6 @@ class ProductController extends BaseController
                 continue;
             }
 
-            $availableProducts = array_values($availableProducts);
         }
         return $response->setData($availableProducts);
     }
