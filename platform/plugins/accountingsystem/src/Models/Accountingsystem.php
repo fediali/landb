@@ -25,6 +25,7 @@ class Accountingsystem extends BaseModel
         'money',
         'description',
         'amount',
+        'order_id',
         'business_id',
         'created_by',
         'updated_by',

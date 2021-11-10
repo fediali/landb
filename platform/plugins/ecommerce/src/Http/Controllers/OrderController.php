@@ -12,6 +12,7 @@ use App\Models\OrderImport;
 use App\Models\OrderImportUpload;
 use App\Models\OrderSplitPayment;
 use Assets;
+use Botble\Accountingsystem\Models\Accountingsystem;
 use Botble\ACL\Models\Role;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\DeletedContentEvent;
@@ -458,6 +459,22 @@ class OrderController extends BaseController
                 ], []);
             }
 
+            if ($order->payment->payment_channel != strtolower($request->input('payment_method'))) {
+                if ($order->payment->payment_channel == 'cash') {
+                    Accountingsystem::where('order_id', $order->id)->delete();
+                }
+                if ($request->input('payment_method') == 'cash') {
+                    $accountData = [
+                        'money' => 'in',
+                        'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
+                        'amount' => ($request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount')),
+                        'order_id' => $order->id,
+                        'created_by' => auth()->user()->id,
+                        'updated_by' => auth()->user()->id,
+                    ];
+                    Accountingsystem::create($accountData);
+                }
+            }
         }
 
         $request->merge([
@@ -509,6 +526,18 @@ class OrderController extends BaseController
                     'order_id'    => $order->id,
                     'user_id'     => Auth::user()->getKey(),
                 ], []);
+
+                if (strtolower($request->input('payment_method')) == 'cash') {
+                    $accountData = [
+                        'money' => 'in',
+                        'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
+                        'amount' => $order->amount,
+                        'order_id' => $order->id,
+                        'created_by' => auth()->user()->id,
+                        'updated_by' => auth()->user()->id,
+                    ];
+                    Accountingsystem::create($accountData);
+                }
             }
 
             if ($order->discount_amount > 0 && !$request->input('order_id', 0)) {
