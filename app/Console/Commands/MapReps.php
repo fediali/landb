@@ -58,7 +58,17 @@ class MapReps extends Command
             ->orderBy('hw_users.user_id', 'ASC')
             ->where(['hw_users.user_type' => 'C', 'srep_id' => '98'])->get();
 
-        echo '<pre>' . $customers . '</pre>';
+        $count = DB::connection('mysql2')
+            ->table('hw_users')
+            ->orderBy('hw_users.user_id', 'ASC')
+            ->where(['hw_users.user_type' => 'C', 'srep_id' => '98'])->count();
+        echo $count;
+        foreach ($customers as $customer) {
+            echo '<pre>' . $customer->user_id . '</pre>';
+            $rep['salesperson_id'] = 75;
+            Customer::where('id', $customer->user_id)->update($rep);
+        }
+
 
     }
 }
