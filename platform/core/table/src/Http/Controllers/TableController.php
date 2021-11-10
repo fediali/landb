@@ -7,6 +7,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Table\Http\Requests\BulkChangeRequest;
 use Botble\Table\Http\Requests\FilterRequest;
 use Botble\Table\TableBuilder;
+use Carbon\Carbon;
 use Exception;
 use Form;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -122,8 +123,14 @@ class TableController extends Controller
 
             if ($request->input('class') == 'Botble\Ecommerce\Tables\OrderIncompleteTable' && $inputKey == 'ec_orders.salesperson_id') {
                 $object->saveBulkChanges($ids, 'temp_sales_rep', 1);
-            } if ($request->input('class') == 'Botble\Ecommerce\Tables\CustomerTable' && $inputKey == 'ec_customers.salesperson_id') {
+            }
+            if ($request->input('class') == 'Botble\Ecommerce\Tables\CustomerTable' && $inputKey == 'ec_customers.salesperson_id') {
                 $object->saveBulkChanges($ids, 'salesperson_id', $inputValue);
+            }
+            if ($request->input('class') == 'Botble\Ecommerce\Tables\OrderTable' && $inputKey == 'ec_orders.status') {
+                if($inputValue == 'Shipping Complete') {
+                    $object->saveBulkChanges($ids, 'order_completion_date', Carbon::now());
+                }
             }
 
 
