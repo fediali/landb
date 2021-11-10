@@ -180,8 +180,8 @@ if (!function_exists('updateOldSystemProdQty')) {
                     $oldSystemUpdQty = $oldSystemQty - $orderedQty;
                 }
                 DB::connection('mysql2')->table('hw_products')->where('product_id', $getParentProd->id)->update(['amount' => $oldSystemUpdQty]);
-                $orderedQty *= (-1);
-                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $orderedQty);
+                $oldSystemUpdQty *= (-1);
+                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $oldSystemUpdQty);
             } elseif ($sum && $orderedQty) {
                 if ($checkPackProd && $product->prod_pieces) {
                     $oldSystemUpdQty = $oldSystemQty + ($orderedQty * $product->prod_pieces);
@@ -189,7 +189,7 @@ if (!function_exists('updateOldSystemProdQty')) {
                     $oldSystemUpdQty = $oldSystemQty + $orderedQty;
                 }
                 DB::connection('mysql2')->table('hw_products')->where('product_id', $getParentProd->id)->update(['amount' => $oldSystemUpdQty]);
-                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $orderedQty);
+                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $oldSystemUpdQty);
             }
         }
     }
