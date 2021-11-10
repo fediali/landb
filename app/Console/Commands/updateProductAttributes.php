@@ -43,7 +43,7 @@ class updateProductAttributes extends Command
     public function handle()
     {
         $getAttributeSets = ProductAttributeSet::whereIn('slug', ['size', 'type'])->pluck('id')->all();
-        $products = Product::where('is_variation', 0)->where('id', 113456)->get();
+        $products = Product::where('is_variation', 0)/*->where('id', 113456)*/->get();
         foreach ($products as $product) {
             if ($product->productAttributeSets->pluck('attribute_set_id')->all() != $getAttributeSets) {
                 $product->productAttributeSets()->sync($getAttributeSets);
