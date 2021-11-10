@@ -1,10 +1,10 @@
 <div class="variation-form-wrapper">
     <div class="row">
-        @if(request('debug') == 1)
-            {{dd($productAttributeSets)}}
-        @endif
         @foreach ($productAttributeSets as $attributeSet)
             @if ($attributeSet->is_selected)
+                @if(request('debug') == 1)
+                    {{dump($attributeSet)}}
+                @endif
                 <div class="col-md-4 col-sm-6">
                     <div class="form-group">
                         <label for="attribute-{{ $attributeSet->slug }}" class="text-title-field required">{{ $attributeSet->title }}</label>
