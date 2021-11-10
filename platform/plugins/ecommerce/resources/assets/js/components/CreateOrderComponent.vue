@@ -1180,6 +1180,8 @@ export default {
             child_payment_method: this.payment_method,
 
             creating_order: false,
+
+            cancelSource: null,
         }
     },
     mounted: function () {
@@ -1230,13 +1232,16 @@ export default {
             $('.textbox-advancesearch.product').closest('.box-search-advance.product').find('.panel').addClass('active');
             if (_.isEmpty(context.list_products.data) || force) {
                 context.loading = true;
-                let axiosSource = axios.CancelToken.source();
+                if(context.cancelSource) {
+                    context.cancelSource.cancel('Start new search, stop active search');
+                }
+                context.cancelSource = axios.CancelToken.source();
                 axios
                     .get(route('products.get-all-products-and-variations', {
                         keyword: context.product_keyword,
                         order_type: context.order_type,
                         page: page,
-                    }), {cancelToken: axiosSource.token})
+                    }), {cancelToken: context.cancelSource.token})
                     .then(res => {
                         context.list_products = res.data.data;
                         context.loading = false;
