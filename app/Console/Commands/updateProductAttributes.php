@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Models\ProductAttributeSet;
 use Botble\Ecommerce\Models\ProductCategory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -41,9 +42,12 @@ class updateProductAttributes extends Command
      */
     public function handle()
     {
-        $products = Product::all();
+        $getAttributeSets = ProductAttributeSet::whereIn('type', ['size', 'type'])->pluck('id')->all();
+        $products = Product::where('is_variation', 0)->where('id', 113456)->get();
         foreach ($products as $product) {
-
+            if ($product->productAttributeSets->pluck('attribute_set_id')->all() != $getAttributeSets) {
+                $product->productAttributeSets()->sync($getAttributeSets);
+            }
         }
     }
 }
