@@ -1,5 +1,8 @@
 <div class="variation-form-wrapper">
     <div class="row">
+        @if(request('debug') == 1)
+            {{dd($productAttributeSets)}}
+        @endif
         @foreach ($productAttributeSets as $attributeSet)
             @if ($attributeSet->is_selected)
                 <div class="col-md-4 col-sm-6">
