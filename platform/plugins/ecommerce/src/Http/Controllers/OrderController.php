@@ -459,11 +459,6 @@ class OrderController extends BaseController
                 ], []);
             }
 
-            if ($order->id == 121003) {
-                dump($order->payment->payment_channel->label());
-                dump($request->input('payment_method'));
-            }
-
             if ($order->payment->payment_channel->label() != strtolower($request->input('payment_method'))) {
                 if ($order->payment->payment_channel->label() == 'cash') {
                     Accountingsystem::where('order_id', $order->id)->delete();
