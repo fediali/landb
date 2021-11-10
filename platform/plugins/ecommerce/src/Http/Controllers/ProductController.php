@@ -1026,12 +1026,8 @@ class ProductController extends BaseController
         $availableProducts = $this->productRepository
             ->getModel()
             ->when($excludeOOS == true, function ($q) {
-//                $single_qty = $q->where('quantity', '>', 0);
-//                if()
-//                $q->where('quantity', '>', 0);
-
-                $q->where('status', BaseStatusEnum::ACTIVE);
-
+                $q->where('quantity', '>', 0);
+                $q->whereIn('status', [BaseStatusEnum::ACTIVE, BaseStatusEnum::HIDDEN]);
             })
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
@@ -1080,7 +1076,7 @@ class ProductController extends BaseController
                     $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
                 }
 
-                if ($variation->product->status != BaseStatusEnum::ACTIVE && $excludeOOS) {
+                if (!in_array($variation->product->status, [BaseStatusEnum::ACTIVE, BaseStatusEnum::HIDDEN])  && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
