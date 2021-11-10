@@ -1080,12 +1080,12 @@ class ProductController extends BaseController
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
-                if ($variation->quantity < 1 && $excludeOOS) {
+
+                /*if ($variation->quantity < 1 && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
-                }
+                }*/
 
-                $availableProduct->variations = array_values( (array) $availableProduct->variations);
             }
 
             if (!count($availableProducts[$pk]->variations)) {
