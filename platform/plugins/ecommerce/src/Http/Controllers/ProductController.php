@@ -1026,7 +1026,7 @@ class ProductController extends BaseController
         $availableProducts = $this->productRepository
             ->getModel()
             ->when($excludeOOS == true, function ($q) {
-                $q->where('quantity', '>', 0);
+                //$q->where('quantity', '>', 0);
                 $q->whereIn('status', [BaseStatusEnum::ACTIVE, BaseStatusEnum::HIDDEN]);
             })
             ->where('is_variation', '<>', 1)
