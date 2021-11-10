@@ -537,6 +537,12 @@ class ProductController extends BaseController
             $this->updateColors($product->id, $request->color_products);
         }
 
+
+        $product->defaultVariation->product = $product->replicate();
+        $product->defaultVariation->product->is_variation = 1;
+        $product->defaultVariation->product->save();
+
+
         return $response
             ->setPreviousUrl(route('products.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
