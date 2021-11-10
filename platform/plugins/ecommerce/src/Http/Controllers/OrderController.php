@@ -459,11 +459,11 @@ class OrderController extends BaseController
                 ], []);
             }
 
-            if ($order->payment->payment_channel != strtolower($request->input('payment_method'))) {
-                if ($order->payment->payment_channel == 'cash') {
+            if ($order->payment->payment_channel->label() != strtolower($request->input('payment_method'))) {
+                if ($order->payment->payment_channel->label() == 'cash') {
                     Accountingsystem::where('order_id', $order->id)->delete();
                 }
-                if ($request->input('payment_method') == 'cash') {
+                if (strtolower($request->input('payment_method')) == 'cash') {
                     $accountData = [
                         'money' => 'in',
                         'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
