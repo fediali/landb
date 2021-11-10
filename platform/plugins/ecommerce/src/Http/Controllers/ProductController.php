@@ -1085,7 +1085,7 @@ class ProductController extends BaseController
                     continue;
                 }
 
-                $availableProduct->variations = array_values($availableProduct->variations);
+                $availableProduct->variations = array_values( (array) $availableProduct->variations);
             }
 
             if (!count($availableProducts[$pk]->variations)) {
