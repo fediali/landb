@@ -1090,6 +1090,8 @@ class ProductController extends BaseController
                 unset($availableProducts[$pk]);
                 continue;
             }
+
+            $availableProducts = array_values($availableProducts);
         }
         return $response->setData($availableProducts);
     }
