@@ -53,21 +53,32 @@ class MapReps extends Command
      */
     public function handle()
     {
-        $customers = DB::connection('mysql2')
-            ->table('hw_users')
-            ->orderBy('hw_users.user_id', 'ASC')
-            ->where(['hw_users.user_type' => 'C', 'srep_id' => '98'])->get();
+//        $customers = DB::connection('mysql2')
+//            ->table('hw_users')
+//            ->orderBy('hw_users.user_id', 'ASC')
+//            ->where(['hw_users.user_type' => 'C', 'srep_id' => '100'])->get();
+//
+//        $count = DB::connection('mysql2')
+//            ->table('hw_users')
+//            ->orderBy('hw_users.user_id', 'ASC')
+//            ->where(['hw_users.user_type' => 'C', 'srep_id' => '100'])->count();
+//        echo $count;
+//        foreach ($customers as $customer) {
+//            echo '<pre>' . $customer->user_id . '</pre>';
+//            $rep['salesperson_id'] = 87;
+//            Customer::where('id', $customer->user_id)->update($rep);
+//        }
 
-        $count = DB::connection('mysql2')
-            ->table('hw_users')
-            ->orderBy('hw_users.user_id', 'ASC')
-            ->where(['hw_users.user_type' => 'C', 'srep_id' => '98'])->count();
-        echo $count;
-        foreach ($customers as $customer) {
-            echo '<pre>' . $customer->user_id . '</pre>';
-            $rep['salesperson_id'] = 75;
-            Customer::where('id', $customer->user_id)->update($rep);
-        }
+//        $orders = DB::connection('mysql2')
+//            ->table('hw_orders')
+//            ->orderBy('hw_orders.order_id', 'ASC')
+//            ->where(['issuer_id' => '16397'])->get();
+
+//        foreach ($orders as $order) {
+//            echo '<pre>' . $order->order_id . '</pre>';
+//            $rep['salesperson_id'] = 87;
+//            Order::where('id', $order->order_id)->update($rep);
+//        }
 
 
     }

@@ -205,6 +205,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'OrderController@fetchOldSystemCard',
                 'permission' => 'orders.edit',
             ]);
+            Route::get('send-invoice/{id}', [
+                'as'         => 'sendInvoice',
+                'uses'       => 'OrderController@sendInvoice',
+                'permission' => 'orders.edit',
+            ]);
 
         });
 
