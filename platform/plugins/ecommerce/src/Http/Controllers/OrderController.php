@@ -2618,7 +2618,7 @@ class OrderController extends BaseController
             'user_id'     => Auth::user()->getKey(),
         ], []);
 
-        if ($requestData['status'] == 'Shipping Complete') {
+        if(in_array($requestData['status'], ['Shipping Complete', 'In Store Complete'])) {
             $order->order_completion_date = Carbon::now();
             $order->save();
         }

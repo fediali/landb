@@ -128,7 +128,7 @@ class TableController extends Controller
                 $object->saveBulkChanges($ids, 'salesperson_id', $inputValue);
             }
             if ($request->input('class') == 'Botble\Ecommerce\Tables\OrderTable' && $inputKey == 'ec_orders.status') {
-                if($inputValue == 'Shipping Complete') {
+                if(in_array($inputValue, ['Shipping Complete', 'In Store Complete'])) {
                     $object->saveBulkChanges($ids, 'order_completion_date', Carbon::now());
                 }
             }
