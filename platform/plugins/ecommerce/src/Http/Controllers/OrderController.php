@@ -3623,7 +3623,7 @@ class OrderController extends BaseController
     public function sendInvoice($id, BaseHttpResponse $response)
     {
         $order = Order::where('id', $id)->first();
-        Mail::to('farhad.ali@landbapparel.com')->send(new OrderCreate($order));
+        Mail::to($order->user->email)->send(new OrderCreate($order));
         return $response
             ->setData($order)
             ->setMessage('Invoice Sent');
