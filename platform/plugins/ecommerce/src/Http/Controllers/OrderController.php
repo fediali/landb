@@ -597,6 +597,7 @@ class OrderController extends BaseController
             }
 
             if ($request->input('customer_address.name')) {
+                $meta_condition['type'] = 'shipping';
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_address.id'),
                     'name'                => $request->input('customer_address.name'),
@@ -607,7 +608,8 @@ class OrderController extends BaseController
                     'zip_code'            => $request->input('customer_address.zip_code'),
                     'country'             => $request->input('customer_address.country'),
                     'address'             => $request->input('customer_address.address'),
-                    'order_id'            => $order->id
+                    'order_id'            => $order->id,
+                    'type'                => 'shipping',
                 ], $meta_condition);
             } elseif ($request->input('customer_id')) {
                 $customer = $this->customerRepository->findById($request->input('customer_id'));
@@ -620,6 +622,7 @@ class OrderController extends BaseController
             }
 
             if ($request->input('customer_billing_address.name')) {
+                $meta_condition['type'] = 'billing';
                 $this->orderAddressRepository->createOrUpdate([
                     'customer_address_id' => $request->input('customer_billing_address.id'),
                     'name'                => $request->input('customer_billing_address.name'),
