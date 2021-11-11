@@ -95,7 +95,7 @@
                         <div>
                             @foreach($data['order_statuses'] as $order_status)
                                 <div style="display:inline-flex" class="chk-orders">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="order_status[]" class="form-control" value="{{strtolower($order_status)}}" {{@$data['search_items']['order_status'] == strtolower($order_status) ? 'checked' : ''}}>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="order_status[]" class="form-control" value="{{strtolower($order_status)}}" {{ isset($data['search_items']['order_status']) ? (in_array(strtolower($order_status), $data['search_items']['order_status']) ? 'checked' : '' ) : ''}}>
                                     <p class="mr-1">{{$order_status}}</p>
                                 </div>
                             @endforeach

@@ -1939,6 +1939,7 @@ class OrderController extends BaseController
                                 ->where('with_storehouse_management', 1)
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
+                            updateOldSystemProdQty($product, $orderQuantity, $orderPo->order_id);
 
                             /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
@@ -2172,6 +2173,7 @@ class OrderController extends BaseController
                                 ->where('with_storehouse_management', 1)
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
+                            updateOldSystemProdQty($product, $orderQuantity, $orderPo->order_id);
 
                             /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
@@ -2401,6 +2403,7 @@ class OrderController extends BaseController
                                 ->where('with_storehouse_management', 1)
                                 ->where('quantity', '>', 0)
                                 ->decrement('quantity', $orderQuantity);
+                            updateOldSystemProdQty($product, $orderQuantity, $orderPo->order_id);
 
                             /*if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES || @auth()->user()->roles[0]->slug == Role::ADMIN) {
                                 $this->productRepository
