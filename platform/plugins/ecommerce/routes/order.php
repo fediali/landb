@@ -195,6 +195,11 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('push-order-to-old-system/{id}', [
+                'as'         => 'pushOrderToOldSystem',
+                'uses'       => 'OrderController@pushOrderToOldSystem',
+                'permission' => 'orders.edit',
+            ]);
             Route::get('fetch-old-system-order/{id}', [
                 'as'         => 'fetchOldSystemOrder',
                 'uses'       => 'OrderController@fetchOldSystemOrder',

@@ -864,14 +864,17 @@
                                     {{ strtoupper($order->status) }}
                                 </a>
 
+                                <a href="{{ route('orders.pushOrderToOldSystem', ['id' => $order->id]) }}"
+                                   class="btn btn-warning mb-2">Push Order to Old System</a>
+
                                 <a href="{{ route('orders.fetchOldSystemOrder', ['id' => $order->id]) }}"
                                    class="btn btn-warning mb-2">Fetch Order</a>
+
                                 <a href="{{ route('orders.fetchOldSystemCard', ['id' => $order->id]) }}"
                                    class="btn btn-warning mb-2">Fetch Card</a>
 
                                     <a href="{{ route('orders.sendInvoice', ['id' => $order->id]) }}"
                                        class="btn btn-warning mb-2">Send Invoice</a>
-
                             </div>
                         </div>
 
