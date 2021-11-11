@@ -3325,18 +3325,27 @@ class OrderController extends BaseController
             's_address_2'   => $sAddress->address,
             's_zipcode'     => $sAddress->zip_code,
         ];
-        $oldSystemOrder = DB::connection('mysql2')->table('hw_orders')->insert($orderData);
 
+        $checkOldSystemOrder = DB::connection('mysql2')->table('hw_orders')->where('order_id', $newSystemOrder->old_system_order_id)->first();
+        if ($checkOldSystemOrder) {
+            $oldSystemOrderId = $newSystemOrder->old_system_order_id;
+            DB::connection('mysql2')->table('hw_order_details')->where('order_id', $oldSystemOrderId)->delete();
+            DB::connection('mysql2')->table('hw_orders')->where('hw_orders.order_id', $oldSystemOrderId)->update($orderData);
+        } else {
+            $oldSystemOrderId = DB::connection('mysql2')->table('hw_orders')->insertGetId($orderData);
+
+            $newSystemOrder->old_system_order_id = $oldSystemOrderId;
+            $newSystemOrder->save();
+        }
 
         foreach ($newSystemOrder->products as $orderProduct) {
-
             $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
                 ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
                 ->where('ec_product_variations.is_default', 1)
                 ->first();
 
             $orderProductData = [
-                'order_id'     => $oldSystemOrder->order_id,
+                'order_id'     => $oldSystemOrderId,
                 'amount'       => $productObj->prod_pieces ? ($productObj->prod_pieces * $orderProduct->qty) : $orderProduct->qty,
                 'price'        => $productObj->prod_pieces ? round($orderProduct->price / $productObj->prod_pieces, 2) : $orderProduct->price,
                 'product_id'   => $productObj->product_id,
@@ -3344,14 +3353,11 @@ class OrderController extends BaseController
             ];
 
             DB::connection('mysql2')->table('hw_order_details')->insert($orderProductData);
-
         }
-
 
         $userOmniId = CustomerCard::where('customer_id', $newSystemOrder->user_id)->value('customer_omni_id');
         $data = ['omni_customer_id' => $userOmniId];
         DB::connection('mysql2')->table('hw_users')->where('user_id', $newSystemOrder->user_id)->update($data);
-
 
         return $response
             ->setData($newSystemOrder)

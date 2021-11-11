@@ -108,6 +108,7 @@ class Order extends BaseModel
         'created_at',
         'updated_at',
         'order_completion_date',
+        'old_system_order_id',
     ];
 
     /**
