@@ -634,7 +634,7 @@ class OrderController extends BaseController
                     'country'             => $request->input('customer_billing_address.country'),
                     'address'             => $request->input('customer_billing_address.address'),
                     'order_id'            => $order->id,
-                    'type'                => 'billing', 
+                    'type'                => 'billing',
                 ], $meta_condition);
             }
             /*if ($request->input('billing_address')) {
