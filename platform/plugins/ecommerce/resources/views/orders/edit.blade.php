@@ -152,7 +152,15 @@
                                                                 </small>
                                                                 <small>
                                                                     Per Piece:
-                                                                    ${{($product->prod_pieces) ? $product->price / $product->prod_pieces :$product->price }}
+                                                                    @if($order->id == 121003)
+                                                                        @if($product->id == 290283)
+                                                                            $19.5
+                                                                        @else
+                                                                            ${{($product->prod_pieces) ? $orderProduct->price / $product->prod_pieces :$product->price }}
+                                                                        @endif
+                                                                    @else
+                                                                        ${{($product->prod_pieces) ? $orderProduct->price / $product->prod_pieces :$product->price }}
+                                                                    @endif
                                                                 </small>
                                                             </p>
                                                         @endif
@@ -856,8 +864,13 @@
                                     {{ strtoupper($order->status) }}
                                 </a>
 
-                                <a href="{{ route('orders.fetchOldSystemOrder', ['id' => $order->id]) }}" class="btn btn-warning mb-2">Fetch Order</a>
-                                <a href="{{ route('orders.fetchOldSystemCard', ['id' => $order->id]) }}" class="btn btn-warning mb-2">Fetch Card</a>
+                                <a href="{{ route('orders.fetchOldSystemOrder', ['id' => $order->id]) }}"
+                                   class="btn btn-warning mb-2">Fetch Order</a>
+                                <a href="{{ route('orders.fetchOldSystemCard', ['id' => $order->id]) }}"
+                                   class="btn btn-warning mb-2">Fetch Card</a>
+
+                                    <a href="{{ route('orders.sendInvoice', ['id' => $order->id]) }}"
+                                       class="btn btn-warning mb-2">Send Invoice</a>
 
                             </div>
                         </div>

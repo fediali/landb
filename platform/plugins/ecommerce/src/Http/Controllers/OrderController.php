@@ -465,24 +465,24 @@ class OrderController extends BaseController
                 }
                 if (strtolower($request->input('payment_method')) == 'cash') {
                     $accountData = [
-                        'money' => 'in',
-                        'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
-                        'amount' => ($request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount')),
-                        'order_id' => $order->id,
-                        'created_by' => auth()->user()->id,
-                        'updated_by' => auth()->user()->id,
+                        'money'       => 'in',
+                        'description' => 'IN: Order ID #' . $order->id . ' / In-Store Complete / Cash',
+                        'amount'      => ($request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount')),
+                        'order_id'    => $order->id,
+                        'created_by'  => auth()->user()->id,
+                        'updated_by'  => auth()->user()->id,
                     ];
                     Accountingsystem::create($accountData);
                 }
             } elseif (strtolower($request->input('payment_method')) == 'cash') {
                 Accountingsystem::where('order_id', $order->id)->delete();
                 $accountData = [
-                    'money' => 'in',
-                    'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
-                    'amount' => ($request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount')),
-                    'order_id' => $order->id,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
+                    'money'       => 'in',
+                    'description' => 'IN: Order ID #' . $order->id . ' / In-Store Complete / Cash',
+                    'amount'      => ($request->input('amount') + $request->input('shipping_amount') - $request->input('discount_amount')),
+                    'order_id'    => $order->id,
+                    'created_by'  => auth()->user()->id,
+                    'updated_by'  => auth()->user()->id,
                 ];
                 Accountingsystem::create($accountData);
             }
@@ -540,12 +540,12 @@ class OrderController extends BaseController
 
                 if (strtolower($request->input('payment_method')) == 'cash') {
                     $accountData = [
-                        'money' => 'in',
-                        'description' => 'IN: Order ID #'.$order->id.' / In-Store Complete / Cash',
-                        'amount' => $order->amount,
-                        'order_id' => $order->id,
-                        'created_by' => auth()->user()->id,
-                        'updated_by' => auth()->user()->id,
+                        'money'       => 'in',
+                        'description' => 'IN: Order ID #' . $order->id . ' / In-Store Complete / Cash',
+                        'amount'      => $order->amount,
+                        'order_id'    => $order->id,
+                        'created_by'  => auth()->user()->id,
+                        'updated_by'  => auth()->user()->id,
                     ];
                     Accountingsystem::create($accountData);
                 }
@@ -2621,7 +2621,11 @@ class OrderController extends BaseController
             'user_id'     => Auth::user()->getKey(),
         ], []);
 
-        if(in_array($requestData['status'], ['Shipping Complete', 'In Store Complete'])) {
+
+        if ($requestData['status'] == 'shipping complete') {
+            $order->order_completion_date = Carbon::now();
+            $order->save();
+        } elseif ($requestData['status'] == 'in store complete') {
             $order->order_completion_date = Carbon::now();
             $order->save();
         }
@@ -3140,7 +3144,7 @@ class OrderController extends BaseController
                 ->setCountryCode("US");
 
             $billing = $invoice->getBillingInfo();
-            $billing[0]->setEmail(($order->payments) ?$order->payments[0]->paypal_email : $user->email);
+            $billing[0]->setEmail(($order->payments) ? $order->payments[0]->paypal_email : $user->email);
 
 
             $items = array();
@@ -3617,6 +3621,15 @@ class OrderController extends BaseController
         return $response
             ->setData($order)
             ->setMessage(trans('core/base::notices.create_success_message'));
+    }
+
+    public function sendInvoice($id, BaseHttpResponse $response)
+    {
+        $order = Order::where('id', $id)->first();
+        Mail::to($order->user->email)->send(new OrderCreate($order));
+        return $response
+            ->setData($order)
+            ->setMessage('Invoice Sent');
     }
 
 }
