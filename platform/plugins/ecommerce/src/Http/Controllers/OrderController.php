@@ -3301,8 +3301,8 @@ class OrderController extends BaseController
             'issuer_id'                 => $newSystemOrder->salesperson_id,
             'po_number'                 => $newSystemOrder->po_number,
             'complete_date'             => $newSystemOrder->order_completion_date,
-            'timestamp'                 => date('Y-m-d H:i:s', $newSystemOrder->created_at),
-            'last_status_change_date'   => date('Y-m-d H:i:s', $newSystemOrder->updated_at),
+            'timestamp'                 => date('Y-m-d H:i:s', strtotime($newSystemOrder->created_at)),
+            'last_status_change_date'   => date('Y-m-d H:i:s', strtotime($newSystemOrder->updated_at)),
 
             'email'   => $newSystemOrder->user->email,
             'company'   => '',
