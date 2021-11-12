@@ -1205,7 +1205,8 @@
                                 </div>
                                 <div>
                                     <ul class="ws-nm text-infor-subdued shipping-address-info">
-                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->address,'company'=>@$order->user->detail->company])
+{{--                                        @dd($order->shippingAddress)--}}
+                                        @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->shippingAddress,'company'=>@$order->user->detail->company])
 
                                         <hr>
                                         <div class="flexbox-auto-content-left">
