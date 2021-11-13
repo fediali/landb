@@ -3282,7 +3282,7 @@ class OrderController extends BaseController
     public function pushOrderToOldSystem($id, BaseHttpResponse $response)
     {
         $newSystemOrder = Order::where('id', $id)->first();
-
+;
         $bAddress = OrderAddress::where(['order_id' => $id, 'type' => 'billing'])->first();
 
         $sAddress = OrderAddress::where(['order_id' => $id, 'type' => 'shipping'])->first();
@@ -3290,40 +3290,43 @@ class OrderController extends BaseController
         $status = newToOldStatus($newSystemOrder->status);
 
         $orderData = [
-            'user_id'                   => $newSystemOrder->user_id,
-            'status'                    => $status,
-            'location'                  => $newSystemOrder->platform,
-            'total'                     => $newSystemOrder->amount,
-            'shipping_cost'             => $newSystemOrder->shipping_amount,
-            'notes'                     => $newSystemOrder->description,
-            'subtotal_discount'         => $newSystemOrder->discount_amount,
-            'subtotal'                  => $newSystemOrder->sub_total,
-            'issuer_id'                 => $newSystemOrder->salesperson_id,
-            'po_number'                 => $newSystemOrder->po_number,
-            'complete_date'             => $newSystemOrder->order_completion_date,
-            'timestamp'                 => date('Y-m-d H:i:s', strtotime($newSystemOrder->created_at)),
-            'last_status_change_date'   => date('Y-m-d H:i:s', strtotime($newSystemOrder->updated_at)),
+            'user_id'                 => $newSystemOrder->user_id,
+            'status'                  => ($newSystemOrder->order_type == 'normal') ? $status : 'B',
+            'location'                => 'new portal id ' . $id,
+            'total'                   => $newSystemOrder->amount,
+            'shipping_cost'           => $newSystemOrder->shipping_amount,
+            'notes'                   => $newSystemOrder->description,
+            'subtotal_discount'       => $newSystemOrder->discount_amount,
+            'subtotal'                => $newSystemOrder->sub_total,
+            'issuer_id'               => $newSystemOrder->salesperson_id,
+            'po_number'               => $newSystemOrder->po_number,
+            'complete_date'           => $newSystemOrder->order_completion_date,
+//            'timestamp'               => date('Y-m-d H:i:s', strtotime($newSystemOrder->created_at)),
+            'timestamp'               => $newSystemOrder->created_at->getTimestamp(),
+            'last_status_change_date' => $newSystemOrder->updated_at->getTimestamp(),
 
-            'email'   => $newSystemOrder->user->email,
-            'company'   => '',
+            'email'      => $newSystemOrder->user->email,
+            'company'    => '',
+            'company_id' => 1
+            ,
 
-            'b_firstname'   => $bAddress->name,
-            'b_lastname'    => $bAddress->name,
-            'b_phone'       => $bAddress->phone,
-            'b_country'     => $bAddress->country,
-            'b_state'       => $bAddress->state,
-            'b_city'        => $bAddress->city,
-            'b_address_2'   => $bAddress->address,
-            'b_zipcode'     => $bAddress->zip_code,
+            'b_firstname' => @$bAddress->name,
+            'b_lastname'  => @$bAddress->name,
+            'b_phone'     => @$bAddress->phone,
+            'b_country'   => @$bAddress->country,
+            'b_state'     => @$bAddress->state,
+            'b_city'      => @$bAddress->city,
+            'b_address_2' => @$bAddress->address,
+            'b_zipcode'   => @$bAddress->zip_code,
 
-            's_firstname'   => $sAddress->name,
-            's_lastname'    => $sAddress->name,
-            's_phone'       => $sAddress->phone,
-            's_country'     => $sAddress->country,
-            's_state'       => $sAddress->state,
-            's_city'        => $sAddress->city,
-            's_address_2'   => $sAddress->address,
-            's_zipcode'     => $sAddress->zip_code,
+            's_firstname' => @$sAddress->name,
+            's_lastname'  => @$sAddress->name,
+            's_phone'     => @$sAddress->phone,
+            's_country'   => @$sAddress->country,
+            's_state'     => @$sAddress->state,
+            's_city'      => @$sAddress->city,
+            's_address_2' => @$sAddress->address,
+            's_zipcode'   => @$sAddress->zip_code,
         ];
 
         $checkOldSystemOrder = DB::connection('mysql2')->table('hw_orders')->where('order_id', $newSystemOrder->old_system_order_id)->first();
@@ -3338,17 +3341,21 @@ class OrderController extends BaseController
             $newSystemOrder->save();
         }
 
-        foreach ($newSystemOrder->products as $orderProduct) {
+
+        foreach ($newSystemOrder->products as $key => $orderProduct) {
             $productObj = Product::join('ec_product_variations', 'ec_product_variations.product_id', 'ec_products.id')
-                ->where('ec_product_variations.configurable_product_id', $orderProduct->product_id)
+                ->where('ec_product_variations.product_id', $orderProduct->product_id)
                 ->where('ec_product_variations.is_default', 1)
                 ->first();
 
+            $item_id = rand(000000000,000000000)+ $key;
+
             $orderProductData = [
+                'item_id'      => $item_id,
                 'order_id'     => $oldSystemOrderId,
                 'amount'       => $productObj->prod_pieces ? ($productObj->prod_pieces * $orderProduct->qty) : $orderProduct->qty,
                 'price'        => $productObj->prod_pieces ? round($orderProduct->price / $productObj->prod_pieces, 2) : $orderProduct->price,
-                'product_id'   => $productObj->product_id,
+                'product_id'   => $productObj->configurable_product_id,
                 'product_code' => $productObj->sku
             ];
 

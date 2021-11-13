@@ -115,7 +115,7 @@ class Order extends BaseModel
      * @var string[]
      */
     protected $casts = [
-        'status'          => OrderStatusEnum::class,
+//        'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
 

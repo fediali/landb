@@ -319,7 +319,7 @@ if (!function_exists('get_salesperson')) {
     {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
-            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES,\Botble\ACL\Models\Role::SALES_MANAGER, \Botble\ACL\Models\Role::ASS_SALES_MANAGER ])
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES, \Botble\ACL\Models\Role::SALES_MANAGER, \Botble\ACL\Models\Role::ASS_SALES_MANAGER])
             ->pluck('users.username', 'users.id')->all();
     }
 }
@@ -834,10 +834,9 @@ if (!function_exists('get_order_statuses')) {
     {
         $pl = [];
         if ($data) {
-            $statuses = Orderstatuses::where('status', 'published')->pluck('name','name');
+            $statuses = Orderstatuses::where('status', 'published')->pluck('name', 'name');
             return $statuses;
-        }
-        else{
+        } else {
             $statuses = Orderstatuses::where('status', 'published')->get();
             foreach ($statuses as $status) {
                 $pl[] = [
@@ -883,7 +882,7 @@ if (!function_exists('set_product_oos_date')) {
 
                 $subject = "Product Out Of Stock " . $product->sku;
                 $name = $product->sku;
-                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com','alexis.guerrero@landbapparel.com'];
+                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com', 'alexis.guerrero@landbapparel.com'];
                 Mail::send('emails.oos', ['name' => $name],
                     function ($mail) use ($emails, $name, $subject) {
                         //$mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
@@ -1088,23 +1087,24 @@ if (!function_exists('oldToNewStatus')) {
 if (!function_exists('newToOldStatus')) {
     function newToOldStatus($status)
     {
-        if ($status == 'shipping complete') {
+        if ($status == 'Shipping Complete') {
+
             $status = 'C';
-        } else if ($status == 'processing') {
+        } else if ($status == 'Processing') {
             $status = 'O';
-        } else if ($status == 'in store complete') {
+        } else if ($status == 'In Store Complete') {
             $status = 'F';
-        } else if ($status == 'declined') {
+        } else if ($status == 'Declined') {
             $status = 'D';
         } else if ($status == 'cancelled') {
             $status = 'I';
-        } else if ($status == 'pick up') {
+        } else if ($status == 'Pick up') {
             $status = 'Y';
         } else if ($status == 'tradeshow') {
             $status = 'A';
         } else if ($status == 'exchange') {
             $status = 'E';
-        } else if ($status == 'awaiting payment') {
+        } else if ($status == 'Awaiting Payment') {
             $status = 'G';
         } else if ($status == 'net accounts') {
             $status = 'H';
@@ -1136,7 +1136,7 @@ if (!function_exists('newToOldStatus')) {
             $status = 'AB';
         } else if ($status == 'model purchase') {
             $status = 'AC';
-        } else if ($status == 'picking complete') {
+        } else if ($status == 'Picking Complete') {
             $status = 'AE';
         } else if ($status == 'dallas kids pre-order') {
             $status = 'AF';
@@ -1154,7 +1154,7 @@ if (!function_exists('newToOldStatus')) {
             $status = 'AM';
         } else if ($status == 'orangeshine processing') {
             $status = 'AN';
-        } else if ($status == 'pending shipment') {
+        } else if ($status == 'Pending Shipment') {
             $status = 'AO';
         } else if ($status == 'Western MKT Pre Order') {
             $status = 'AP';
@@ -1166,7 +1166,7 @@ if (!function_exists('newToOldStatus')) {
             $status = 'AR';
         } else if ($status == 'Sample Sent') {
             $status = 'AS';
-        } else if ($status == 'Pickup & Process') {
+        } else if ($status == 'Pick up & Process') {
             $status = 'AT';
         } else if ($status == 'Donation / Gift') {
             $status = 'AU';
@@ -1177,6 +1177,7 @@ if (!function_exists('newToOldStatus')) {
         } else if ($status == 'R2SO') {
             $status = 'AY';
         } else {
+
             $status = 'Failed Preauth';
         }
         return $status;
