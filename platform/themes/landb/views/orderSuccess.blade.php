@@ -37,7 +37,7 @@
                     customerservice@landapparel.com
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -58,7 +58,7 @@
                     {{ $order->billingAddress->email }}
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -80,7 +80,7 @@
                     {{ $order->shippingAddress->email }}
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -101,7 +101,7 @@
                     customerservice@landapparel.com
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>  --}}
