@@ -496,7 +496,7 @@ class OrderTable extends TableAbstract
      */
     public function renderCustomBottom(): string
     {
-        $data = ['gross_total' => 0, 'total_paid' => 0, 'total_shipping_cost' => 0];
+        $data = ['gross_total' => 0, 'total_paid' => 0, 'total_shipping_cost' => 0, 'discount' => 0];
 
         $search_items = $this->request()->all();
         $from_date = false;
@@ -532,6 +532,14 @@ class OrderTable extends TableAbstract
             $q->whereDate('ec_orders.created_at', '>=', $from_date);
             $q->whereDate('ec_orders.created_at', '<=', $to_date);
         })->where('ec_orders.is_finished', 1)->sum('amount');
+
+        $data['discount'] = Order::when($from_date && $to_date, function ($q) use ($from_date, $to_date, $status) {
+            if ($status) {
+                $q->where('status', $status);
+            }
+            $q->whereDate('ec_orders.created_at', '>=', $from_date);
+            $q->whereDate('ec_orders.created_at', '<=', $to_date);
+        })->where('ec_orders.is_finished', 1)->sum('discount_amount');
         $data['total_paid'] = Order::whereIn('status', $paid_statuses)
             ->when($from_date && $to_date, function ($q) use ($from_date, $to_date, $status) {
                 $q->whereDate('ec_orders.created_at', '>=', $from_date);
