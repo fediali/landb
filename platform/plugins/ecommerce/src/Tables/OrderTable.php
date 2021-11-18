@@ -96,9 +96,9 @@ class OrderTable extends TableAbstract
 //                return $html = '<div class="d-flex"><a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->user->name . '</a>' . (($item->salesperson) ? ' <i class="badge bg-success ml-1">'.$item->salesperson->getFullName().'</i>' : '</div>');
 
 
-                    $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->company . '</a>';
+                $customer = '<a href="' . route('customer.edit', $item->user_id) . '" data-toggle="tooltip">' . $item->company . '</a>';
 
-                    return $customer;
+                return $customer;
 
 
             })
@@ -121,7 +121,6 @@ class OrderTable extends TableAbstract
             ->editColumn('shipping_amount', function ($item) {
                 return format_price($item->shipping_amount, $item->currency_id);
             })
-
             ->editColumn('salesperson_id', function ($item) {
                 return $item->salesperson ? $item->salesperson->getFullName() : 'N/A';
             })
@@ -139,7 +138,7 @@ class OrderTable extends TableAbstract
             ->addColumn('operations', function ($item) {
                 $html = '';
                 if (Auth::user()->hasPermission('orders.edit')) {
-                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED, 'shipping complete' ])) {
+                    if (!in_array($item->status, [\Botble\Ecommerce\Enums\OrderStatusEnum::CANCELED, \Botble\Ecommerce\Enums\OrderStatusEnum::COMPLETED, 'shipping complete'])) {
                         $html .= '<a href="' . route('orders.editOrder', $item->id) . '" class="btn btn-icon btn-sm btn-warning" data-toggle="tooltip" data-original-title="Edit Order"><i class="fa fa-edit"></i></a>';
                     }
                     $html .= '<a href="' . route('orders.edit', $item->id) . '" class="btn btn-icon btn-sm btn-primary" data-toggle="tooltip" data-original-title="View Order"><i class="fa fa-eye"></i></a>';
@@ -205,10 +204,10 @@ class OrderTable extends TableAbstract
                 ->whereIn('ec_order_product.product_id', $getProdIds)
                 ->whereNotIn('ec_orders.status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING]);
         }
-        if($order_id){
-          $query->where('ec_orders.id', $order_id);
+        if ($order_id) {
+            $query->where('ec_orders.id', $order_id);
         }
-        if($order_ids){
+        if ($order_ids) {
             $query->whereIn('ec_orders.id', explode(',', $order_ids));
         }
         if ($this->request()->has('search_id')) {
@@ -248,10 +247,9 @@ class OrderTable extends TableAbstract
                 $query->whereDate('ec_orders.created_at', '<=', Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d'));
             }
             $query->when(isset($search_items['order_status']), function ($q) use ($search_items) {
-                if(is_array($search_items['order_status'])){
-                    $q->whereIn('ec_orders.status',  $search_items['order_status']);
-                }
-                else{
+                if (is_array($search_items['order_status'])) {
+                    $q->whereIn('ec_orders.status', $search_items['order_status']);
+                } else {
                     $q->whereIn('ec_orders.status', explode(',', $search_items['order_status']));
                 }
 //                $q->whereIn('ec_orders.status', $search_items['order_status']);
@@ -261,10 +259,9 @@ class OrderTable extends TableAbstract
             });
             $query->when(isset($search_items['payment_method']), function ($q) use ($search_items) {
                 $q->leftJoin('payments', 'payments.id', 'ec_orders.payment_id');
-                if(is_array($search_items['payment_method'])){
-                    $q->whereIn('payments.payment_channel',  $search_items['payment_method']);
-                }
-                else{
+                if (is_array($search_items['payment_method'])) {
+                    $q->whereIn('payments.payment_channel', $search_items['payment_method']);
+                } else {
                     $q->whereIn('payments.payment_channel', explode(',', $search_items['payment_method']));
                 }
                 //$q->where('payments.payment_channel', $search_items['payment_method']);
@@ -292,18 +289,18 @@ class OrderTable extends TableAbstract
     public function columns()
     {
         $columns = [
-            'id'             => [
+            'id'         => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'status'          => [
+            'status'     => [
                 'name'  => 'ec_orders.status',
                 'title' => trans('core/base::tables.status'),
                 'class' => 'text-center',
             ],
-            'created_at'      => [
+            'created_at' => [
                 'name'  => 'ec_orders.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
@@ -333,18 +330,17 @@ class OrderTable extends TableAbstract
 //                'class' => 'text-center',
 //            ],
 
-            'company'        => [
+            'company' => [
                 'name'  => 'ec_customer_detail.company',
                 'title' => 'Company',
                 'class' => 'text-left',
             ],
 
-            'payment_method'  => [
+            'payment_method' => [
                 'name'  => 'ec_orders.id',
                 'title' => trans('plugins/ecommerce::order.payment_method'),
                 'class' => 'text-center',
             ],
-
 
 
 //            'payment_status'  => [
@@ -353,13 +349,13 @@ class OrderTable extends TableAbstract
 //                'class' => 'text-center',
 //            ],
 
-            'order_type'      => [
+            'order_type' => [
                 'name'  => 'ec_orders.order_type',
                 'title' => 'Order Type',
                 'class' => 'text-center',
             ],
 
-            'amount'         => [
+            'amount' => [
                 'name'  => 'ec_orders.amount',
                 'title' => trans('plugins/ecommerce::order.amount'),
                 'class' => 'text-center',
@@ -406,20 +402,20 @@ class OrderTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'ec_orders.status'     => [
-                'title'    => trans('core/base::tables.status'),
-                'type'     => 'select',
-                'choices'  => get_order_statuses(1),
+            'ec_orders.status' => [
+                'title'   => trans('core/base::tables.status'),
+                'type'    => 'select',
+                'choices' => get_order_statuses(1),
                 //'validate' => 'required|in:' . json_encode(get_order_statuses()),
             ],
 //            'ec_orders.created_at' => [
 //                'title' => trans('core/base::tables.created_at'),
 //                'type'  => 'date',
 //            ],
-            'ec_orders.id' => [
-                'title' => 'Print',
-                'type' => 'select',
-                'choices'  => ['print_now' => 'Print Now!'],
+            'ec_orders.id'     => [
+                'title'   => 'Print',
+                'type'    => 'select',
+                'choices' => ['print_now' => 'Print Now!'],
             ],
         ];
     }
@@ -511,6 +507,10 @@ class OrderTable extends TableAbstract
         if (isset($search_items['order_to_date'])) {
             $to_date = Carbon::createFromFormat('m-d-Y', $search_items['order_to_date'])->format('Y-m-d');
         }
+        $status = false;
+        if (isset($search_items['order_status'])) {
+            $status = $search_items['order_status'];
+        }
 
         $paid_statuses[] = 'paid in full'; //Paid in Full
         $paid_statuses[] = 'shipping complete'; //Shipping Complete
@@ -525,17 +525,20 @@ class OrderTable extends TableAbstract
         $paid_statuses[] = 'employee uniform'; //Employee Uniform
         $paid_statuses[] = 'fashiondomino complete'; //FashionDomino Complete
 
-        $data['gross_total'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
+        $data['gross_total'] = Order::when($from_date && $to_date, function ($q) use ($from_date, $to_date, $status) {
+            if ($status) {
+                $q->where('status', $status);
+            }
             $q->whereDate('ec_orders.created_at', '>=', $from_date);
             $q->whereDate('ec_orders.created_at', '<=', $to_date);
         })->where('ec_orders.is_finished', 1)->sum('amount');
         $data['total_paid'] = Order::whereIn('status', $paid_statuses)
-            ->when($from_date && $to_date, function($q) use($from_date, $to_date) {
+            ->when($from_date && $to_date, function ($q) use ($from_date, $to_date) {
                 $q->whereDate('ec_orders.created_at', '>=', $from_date);
                 $q->whereDate('ec_orders.created_at', '<=', $to_date);
             })
             ->where('ec_orders.is_finished', 1)->sum('sub_total');
-        $data['total_shipping_cost'] = Order::when($from_date && $to_date, function($q) use($from_date, $to_date) {
+        $data['total_shipping_cost'] = Order::when($from_date && $to_date, function ($q) use ($from_date, $to_date) {
             $q->whereDate('ec_orders.created_at', '>=', $from_date);
             $q->whereDate('ec_orders.created_at', '<=', $to_date);
         })->where('ec_orders.is_finished', 1)->sum('shipping_amount');
