@@ -3299,7 +3299,7 @@ class OrderController extends BaseController
             'subtotal'                => $newSystemOrder->sub_total,
             'issuer_id'               => $newSystemOrder->salesperson_id,
             'po_number'               => $newSystemOrder->po_number,
-            'complete_date'           => $newSystemOrder->order_completion_date->getTimestamp(),
+            'complete_date'           => ($newSystemOrder->order_completion_date) ? $newSystemOrder->order_completion_date->getTimestamp() : 0,
 //            'timestamp'               => date('Y-m-d H:i:s', strtotime($newSystemOrder->created_at)),
             'timestamp'               => $newSystemOrder->created_at->getTimestamp(),
             'last_status_change_date' => $newSystemOrder->updated_at->getTimestamp(),
@@ -3347,7 +3347,7 @@ class OrderController extends BaseController
                 ->where('ec_product_variations.is_default', 1)
                 ->first();
 
-            $item_id = rand(000000000,000000000)+ $key;
+            $item_id = rand(000000000, 000000000) + $key;
 
             $orderProductData = [
                 'item_id'      => $item_id,
