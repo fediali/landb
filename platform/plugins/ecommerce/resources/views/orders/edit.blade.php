@@ -1208,40 +1208,42 @@
 {{--                                        @dd($order->shippingAddress)--}}
                                         @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->shippingAddress,'company'=>@$order->user->detail->company])
 
-                                        <hr>
-                                        <div class="flexbox-auto-content-left">
-                                            <label
-                                                class="title-text-second"><strong>Billing Address</strong></label>
-                                        </div>
-                                        <li>{{ @$order->user->detail->company }}</li>
-                                        <li>{{ @$order->billingAddress->name }}</li>
-                                        @if (@$order->billingAddress->phone)
-                                            <li>
-                                                <a href="tel:{{ @$order->billingAddress->phone }}">
-                                                    <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
-                                                    <span>{{ @$order->billingAddress->phone }}</span>
-                                                </a>
-                                            </li>
-                                        @endif
-                                        <li>
-                                            @if (@$order->billingAddress->address)
-                                                <div>{{ $order->billingAddress->address }}</div>
-                                            @endif
-                                            @if (@$order->billingAddress->city)
-                                                <div>{{ $order->billingAddress->city }}</div>
-                                            @endif
-                                            @if (@$order->billingAddress->state)
-                                                <div>{{ $order->billingAddress->state }}</div>
-                                            @endif
-                                            @if (@$order->billingAddress->country_name)
-                                                <div>{{ $order->billingAddress->country_name }}</div>
-                                            @endif
-                                            @if (@$order->billingAddress->zip_code)
-                                                <div>{{ $order->billingAddress->zip_code }}</div>
-                                            @endif
 
-                                        </li>
                                     </ul>
+
+                                    <hr>
+                                    <div class="flexbox-auto-content-left">
+                                        <label
+                                            class="title-text-second"><strong>Billing Address</strong></label>
+                                    </div>
+                                    <li>{{ @$order->user->detail->company }}</li>
+                                    <li>{{ @$order->billingAddress->name }}</li>
+                                    @if (@$order->billingAddress->phone)
+                                        <li>
+                                            <a href="tel:{{ @$order->billingAddress->phone }}">
+                                                <span><i class="fa fa-phone-square cursor-pointer mr5"></i></span>
+                                                <span>{{ @$order->billingAddress->phone }}</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                    <li>
+                                        @if (@$order->billingAddress->address)
+                                            <div>{{ $order->billingAddress->address }}</div>
+                                        @endif
+                                        @if (@$order->billingAddress->city)
+                                            <div>{{ $order->billingAddress->city }}</div>
+                                        @endif
+                                        @if (@$order->billingAddress->state)
+                                            <div>{{ $order->billingAddress->state }}</div>
+                                        @endif
+                                        @if (@$order->billingAddress->country_name)
+                                            <div>{{ $order->billingAddress->country_name }}</div>
+                                        @endif
+                                        @if (@$order->billingAddress->zip_code)
+                                            <div>{{ $order->billingAddress->zip_code }}</div>
+                                        @endif
+
+                                    </li>
                                 </div>
 
                             </div>

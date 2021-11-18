@@ -1165,6 +1165,8 @@ class OrderController extends BaseController
      */
     public function postUpdateShippingAddress($id, AddressRequest $request, BaseHttpResponse $response)
     {
+
+        $order_id = $request->order_id;
         $address = $this->orderAddressRepository->createOrUpdate($request->input(), compact('id'));
 
         if (!$address) {
