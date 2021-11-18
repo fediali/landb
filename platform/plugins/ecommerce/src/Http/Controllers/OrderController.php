@@ -3287,7 +3287,7 @@ class OrderController extends BaseController
         $sAddress = OrderAddress::where(['order_id' => $id, 'type' => 'shipping'])->first();
 
         $status = newToOldStatus($newSystemOrder->status);
-
+    dd($newSystemOrder->order_completion_date);
         $orderData = [
             'user_id'                 => $newSystemOrder->user_id,
             'status'                  => ($newSystemOrder->order_type == 'normal') ? $status : 'B',
