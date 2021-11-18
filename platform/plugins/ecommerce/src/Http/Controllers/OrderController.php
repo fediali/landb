@@ -3282,7 +3282,6 @@ class OrderController extends BaseController
     public function pushOrderToOldSystem($id, BaseHttpResponse $response)
     {
         $newSystemOrder = Order::where('id', $id)->first();
-;
         $bAddress = OrderAddress::where(['order_id' => $id, 'type' => 'billing'])->first();
 
         $sAddress = OrderAddress::where(['order_id' => $id, 'type' => 'shipping'])->first();
@@ -3300,7 +3299,7 @@ class OrderController extends BaseController
             'subtotal'                => $newSystemOrder->sub_total,
             'issuer_id'               => $newSystemOrder->salesperson_id,
             'po_number'               => $newSystemOrder->po_number,
-            'complete_date'           => $newSystemOrder->order_completion_date,
+            'complete_date'           => $newSystemOrder->order_completion_date->getTimestamp(),
 //            'timestamp'               => date('Y-m-d H:i:s', strtotime($newSystemOrder->created_at)),
             'timestamp'               => $newSystemOrder->created_at->getTimestamp(),
             'last_status_change_date' => $newSystemOrder->updated_at->getTimestamp(),
