@@ -534,9 +534,6 @@ class OrderTable extends TableAbstract
         })->where('ec_orders.is_finished', 1)->sum('amount');
         $data['total_paid'] = Order::whereIn('status', $paid_statuses)
             ->when($from_date && $to_date, function ($q) use ($from_date, $to_date, $status) {
-                if ($status) {
-                    $q->where('status', $status);
-                }
                 $q->whereDate('ec_orders.created_at', '>=', $from_date);
                 $q->whereDate('ec_orders.created_at', '<=', $to_date);
             })
