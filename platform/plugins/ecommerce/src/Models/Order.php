@@ -125,7 +125,7 @@ class Order extends BaseModel
     protected $dates = [
         'created_at',
         'updated_at',
-        'complete_date',
+        'order_completion_date',
     ];
 
     protected static function boot()
