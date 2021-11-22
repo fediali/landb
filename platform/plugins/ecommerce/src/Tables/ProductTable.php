@@ -221,28 +221,31 @@ class ProductTable extends TableAbstract
                           </script>';
                 return $extraQty;
             })
-//            ->editColumn('single_qty', function ($item) {
-//                /*$getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
-//                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-//                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('online_sales_qty');
-//                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-//                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('in_person_sales_qty');
-//                } else {
-//                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
-//                }*/
-//                $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
-//                $singleQty = 0;
-//                $skuQty = '';
-//                foreach ($getSingleIds as $getSingleId) {
-//                    $singleSkuQty = Product::where('id', $getSingleId)->select('sku', 'quantity')->first();
-//                    if ($singleSkuQty) {
-//                        $singleQty += $singleSkuQty->quantity;
-//                        $skuQty .= explode('-single-', $singleSkuQty->sku)[1].':'.$singleSkuQty->quantity.' | ';
-//                    }
-//                }
-//                Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
-//                return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
-//            })
+            ->editColumn('single_qty', function ($item) {
+                /*$getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
+                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('online_sales_qty');
+                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('in_person_sales_qty');
+                } else {
+                    $singleQty = Product::whereIn('id', $getSingleIds)->sum('quantity');
+                }*/
+                $getSingleIds = ProductVariation::where('configurable_product_id', $item->id)->where('is_default', 0)->pluck('product_id')->all();
+                $singleQty = 0;
+                $skuQty = '';
+                foreach ($getSingleIds as $getSingleId) {
+                    $singleSkuQty = Product::where('id', $getSingleId)->select('sku', 'quantity')->first();
+                    if ($singleSkuQty) {
+                        $singleQty += $singleSkuQty->quantity;
+                        $explode = explode('-single-', $singleSkuQty->sku);
+                        if (isset($explode[1])) {
+                            $skuQty .= $explode[1].':'.$singleSkuQty->quantity.' | ';
+                        }
+                    }
+                }
+                Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
+                return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
+            })
             ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
                 $getProdIds[] = $item->id;
@@ -334,9 +337,7 @@ class ProductTable extends TableAbstract
             ->select($select)
             ->leftJoin('product_labels', 'product_labels.id', 'ec_products.product_label_id')
             ->where(['ec_products.is_variation' => 0, 'ec_products.ptype' => 'R'])
-//
             ->where('ec_products.status', '!=', BaseStatusEnum::HIDE);
-
 
         if ($this->request()->has('search_id')) {
             $search_id = (int)$this->request()->input('search_id');
@@ -461,11 +462,11 @@ class ProductTable extends TableAbstract
                 'title' => 'Extra Qty',
                 'class' => 'text-left red_font',
             ],
-//            'single_qty'    => [
-//                'name'  => 'ec_products.single_qty',
-//                'title' => 'Single Qty',
-//                'class' => 'text-left',
-//            ],
+            'single_qty'    => [
+                'name'  => 'ec_products.single_qty',
+                'title' => 'Single Qty',
+                'class' => 'text-left',
+            ],
             'product_type'  => [
                 'name'  => 'ec_products.product_type',
                 'title' => 'Type',
