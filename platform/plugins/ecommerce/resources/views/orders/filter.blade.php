@@ -107,7 +107,7 @@
                         <div>
                             @foreach($data['payment_methods'] as $key => $payment_method)
                                 <div style="display:inline-flex">
-                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="payment_method[]" class="form-control" value="{{$key}}" {{@$data['search_items']['payment_method'] == $key ? 'checked' : ''}}>
+                                    <input style="width: auto; margin: -7px 0.5rem 0 0;" type="checkbox" name="payment_method[]" class="form-control" value="{{strtolower($payment_method)}}" {{ isset($data['search_items']['payment_method']) ? (in_array(strtolower($payment_method), $data['search_items']['payment_method']) ? 'checked' : '' ) : ''}}>
                                     <p class="mr-1">{{$payment_method}}</p>
                                 </div>
                             @endforeach
