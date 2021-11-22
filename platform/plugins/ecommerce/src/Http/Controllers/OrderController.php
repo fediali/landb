@@ -1165,18 +1165,18 @@ class OrderController extends BaseController
      */
     public function postUpdateShippingAddress($id, AddressRequest $request, BaseHttpResponse $response)
     {
-
-        $order_id = $request->order_id;
         $address = $this->orderAddressRepository->createOrUpdate($request->input(), compact('id'));
 
         if (!$address) {
             abort(404);
         }
 
+        $company = $address->order->user->detail->company;
+
         return $response
             ->setData([
                 'line'   => view('plugins/ecommerce::orders.shipping-address.line', compact('address'))->render(),
-                'detail' => view('plugins/ecommerce::orders.shipping-address.detail', compact('address'))->render(),
+                'detail' => view('plugins/ecommerce::orders.shipping-address.detail', compact('address', 'company'))->render(),
             ])
             ->setMessage(trans('plugins/ecommerce::order.update_shipping_address_success'));
     }

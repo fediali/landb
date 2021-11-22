@@ -1188,16 +1188,13 @@
                             <div class="next-card-section">
                                 <div class="flexbox-grid-default flexbox-align-items-center">
                                     <div class="flexbox-auto-content-left">
-                                        <label
-                                            class="title-text-second"><strong>{{ trans('plugins/ecommerce::order.shipping_address') }}</strong></label>
+                                        <label class="title-text-second"><strong>{{ trans('plugins/ecommerce::order.shipping_address') }}</strong></label>
                                     </div>
                                     <div class="flexbox-auto-content-right text-right">
                                         <a href="#" class="btn-trigger-update-shipping-address">
-                                        <span data-placement="top" title="" data-toggle="tooltip"
-                                              data-original-title="{{ trans('plugins/ecommerce::order.update_address') }}">
+                                        <span data-placement="top" title="" data-toggle="tooltip" data-original-title="{{ trans('plugins/ecommerce::order.update_address') }}">
                                             <svg class="svg-next-icon svg-next-icon-size-12">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                     xlink:href="#next-edit"></use>
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
                                             </svg>
                                         </span>
                                         </a>
@@ -1205,16 +1202,11 @@
                                 </div>
                                 <div>
                                     <ul class="ws-nm text-infor-subdued shipping-address-info">
-{{--                                        @dd($order->shippingAddress)--}}
                                         @include('plugins/ecommerce::orders.shipping-address.detail', ['address' => $order->shippingAddress,'company'=>@$order->user->detail->company])
-
-
                                     </ul>
-
                                     <hr>
                                     <div class="flexbox-auto-content-left">
-                                        <label
-                                            class="title-text-second"><strong>Billing Address</strong></label>
+                                        <label class="title-text-second"><strong>Billing Address</strong></label>
                                     </div>
                                     <li>{{ @$order->user->detail->company }}</li>
                                     <li>{{ @$order->billingAddress->name }}</li>
@@ -1242,10 +1234,8 @@
                                         @if (@$order->billingAddress->zip_code)
                                             <div>{{ $order->billingAddress->zip_code }}</div>
                                         @endif
-
                                     </li>
                                 </div>
-
                             </div>
                         </div>
 
