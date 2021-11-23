@@ -47,6 +47,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use RvMedia;
 use Throwable;
@@ -1276,13 +1277,27 @@ class ProductController extends BaseController
         if (count($prods)) {
             foreach ($prods as $id => $qty) {
                 $product = $this->productRepository->findOrFail($id);
-                $requestData['quantity'] = $qty;
-                $requestData['updated_by'] = auth()->user()->id;
-                $product->fill($requestData);
-                $this->productRepository->createOrUpdate($product);
+                if ($product->quantity != $qty) {
+                    $requestData['quantity'] = $qty;
+                    $requestData['updated_by'] = auth()->user()->id;
+                    $product->fill($requestData);
+                    $this->productRepository->createOrUpdate($product);
+
+                    $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id'        => $product->id,
+                        'sku'               => $product->sku,
+                        'quantity'          => $qty,
+                        'new_stock'         => $qty,
+                        'old_stock'         => $product->quantity,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_STOCK_UPDATED
+                    ];
+                    log_product_history($logParam);
+                }
             }
         }
-
         return $response->setMessage('Updated Successfully!');
     }
 
