@@ -1,4 +1,8 @@
-<span data-toggle="modal" data-target="#prodVarModal-{{$item->id}}" title="{{$skuQty}}" style="cursor:pointer">{{$singleQty}}</span>
+@if(Auth::user()->hasPermission('products.editProdVarQty'))
+    <span data-toggle="modal" data-target="#prodVarModal-{{$item->id}}" title="{{$skuQty}}" style="cursor:pointer">{{$singleQty}}</span>
+@else
+    <span title="{{$skuQty}}" style="cursor:pointer">{{$singleQty}}</span>
+@endif
 
 
 <div class="modal fade in" id="prodVarModal-{{$item->id}}" style="display: none; padding-right: 17px;">
