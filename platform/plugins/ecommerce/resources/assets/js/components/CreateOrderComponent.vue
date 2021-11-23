@@ -42,22 +42,24 @@
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
-                                        </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
-                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
-                                        </p>
-                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price : ${{ variant.product.prod_pieces ? parseFloat(variant.price / variant.product.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
-                                        </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
-                                            Piece Price : ${{ variant.prod_pieces ? parseFloat(variant.price / variant.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
-                                        </p>
-                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
+                                            <span v-show="child_can_price_edit == 0">
+                                                Piece Price : ${{ variant.product.per_piece_price }}
+                                            </span>
+                                            <span v-show="child_can_price_edit == 1">
+                                                Piece Price : <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
                                             Sizes : {{ (variant.product.sizes) ? variant.product.sizes : variant.packSizes }}
                                         </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
+                                        <!--<p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
+                                            <span v-show="child_can_price_edit == 0">
+                                                Piece Price : ${{ variant.per_piece_price }}
+                                            </span>
+                                            <span v-show="child_can_price_edit == 1">
+                                                Piece Price : <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
                                             Sizes : {{ (variant.sizes) ? variant.sizes : variant.packSizes }}
-                                        </p>
+                                        </p>-->
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
@@ -1347,6 +1349,7 @@ export default {
                     id: (item.configurable_product_id ? item.product_id : item.id),
                     quantity: item.select_qty,
                     sale_price: item.price,
+                    per_piece_price: item.per_piece_price,
                 });
             });
 
@@ -1716,6 +1719,18 @@ export default {
             }
         },
         handleChangeQuantity: function () {
+            this.calculateAmount(this.child_products);
+        },
+        handleChangePerPiecePrice: function () {
+            let context = this;
+            let products = this.child_products;
+            _.each(products, function (item) {
+                console.log(item.per_piece_price, "===");
+                if (item.packQty) {
+                    item.price = parseFloat(item.per_piece_price) * parseInt(item.packQty);
+                }
+            });
+            this.child_products = products;
             this.calculateAmount(this.child_products);
         },
         resetProductData: function () {

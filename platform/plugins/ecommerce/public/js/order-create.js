@@ -981,38 +981,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1258,7 +1226,8 @@ __webpack_require__.r(__webpack_exports__);
       child_is_selected_shipping: this.is_selected_shipping,
       child_can_price_edit: this.can_price_edit,
       child_payment_method: this.payment_method,
-      creating_order: false
+      creating_order: false,
+      cancelSource: null
     };
   },
   mounted: function mounted() {
@@ -1313,11 +1282,19 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_.isEmpty(context.list_products.data) || force) {
         context.loading = true;
+
+        if (context.cancelSource) {
+          context.cancelSource.cancel('Start new search, stop active search');
+        }
+
+        context.cancelSource = axios.CancelToken.source();
         axios.get(route('products.get-all-products-and-variations', {
           keyword: context.product_keyword,
           order_type: context.order_type,
           page: page
-        })).then(function (res) {
+        }), {
+          cancelToken: context.cancelSource.token
+        }).then(function (res) {
           context.list_products = res.data.data;
           context.loading = false;
         })["catch"](function (res) {
@@ -1439,7 +1416,8 @@ __webpack_require__.r(__webpack_exports__);
         products.push({
           id: item.configurable_product_id ? item.product_id : item.id,
           quantity: item.select_qty,
-          sale_price: item.price
+          sale_price: item.price,
+          per_piece_price: item.per_piece_price
         });
       });
 
@@ -1775,6 +1753,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleChangeQuantity: function handleChangeQuantity() {
+      this.calculateAmount(this.child_products);
+    },
+    handleChangePerPiecePrice: function handleChangePerPiecePrice() {
+      var context = this;
+      var products = this.child_products;
+
+      _.each(products, function (item) {
+        console.log(item.per_piece_price, "===");
+
+        if (item.packQty) {
+          item.price = parseFloat(item.per_piece_price) * parseInt(item.packQty);
+        }
+      });
+
+      this.child_products = products;
       this.calculateAmount(this.child_products);
     },
     resetProductData: function resetProductData() {
@@ -8024,62 +8017,91 @@ var render = function() {
                                                 ? variant.product.prod_pieces
                                                 : variant.packQty
                                             ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    : _c("p", [
-                                        _vm._v(
-                                          "\n                                        Total Pieces : " +
-                                            _vm._s(
-                                              variant.prod_pieces
-                                                ? variant.prod_pieces
-                                                : variant.packQty
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ]),
-                                  _vm._v(" "),
-                                  variant.product &&
-                                  !variant.product.sku.includes("single")
-                                    ? _c("p", [
-                                        _vm._v(
-                                          "\n                                        Piece Price : $" +
-                                            _vm._s(
-                                              variant.product.prod_pieces
-                                                ? parseFloat(
-                                                    variant.price /
-                                                      variant.product
-                                                        .prod_pieces
-                                                  ).toFixed(2)
-                                                : parseFloat(
-                                                    variant.price /
-                                                      variant.packQty
-                                                  ).toFixed(2)
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    : _c("p", [
-                                        _vm._v(
-                                          "\n                                        Piece Price : $" +
-                                            _vm._s(
-                                              variant.prod_pieces
-                                                ? parseFloat(
-                                                    variant.price /
-                                                      variant.prod_pieces
-                                                  ).toFixed(2)
-                                                : parseFloat(
-                                                    variant.price /
-                                                      variant.packQty
-                                                  ).toFixed(2)
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ]),
-                                  _vm._v(" "),
-                                  variant.product &&
-                                  !variant.product.sku.includes("single")
-                                    ? _c("p", [
+                                            "\n                                        "
+                                        ),
+                                        _c(
+                                          "span",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value:
+                                                  _vm.child_can_price_edit == 0,
+                                                expression:
+                                                  "child_can_price_edit == 0"
+                                              }
+                                            ]
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                            Piece Price : $" +
+                                                _vm._s(
+                                                  variant.product
+                                                    .per_piece_price
+                                                ) +
+                                                "\n                                        "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value:
+                                                  _vm.child_can_price_edit == 1,
+                                                expression:
+                                                  "child_can_price_edit == 1"
+                                              }
+                                            ]
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                            Piece Price : "
+                                            ),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    variant.per_piece_price,
+                                                  expression:
+                                                    "variant.per_piece_price"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "next-input p-none-r",
+                                              attrs: {
+                                                type: "number",
+                                                step: "0.1",
+                                                min: "1"
+                                              },
+                                              domProps: {
+                                                value: variant.per_piece_price
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  return _vm.handleChangePerPiecePrice()
+                                                },
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    variant,
+                                                    "per_piece_price",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]
+                                        ),
                                         _vm._v(
                                           "\n                                        Sizes : " +
                                             _vm._s(
@@ -8090,17 +8112,7 @@ var render = function() {
                                             "\n                                    "
                                         )
                                       ])
-                                    : _c("p", [
-                                        _vm._v(
-                                          "\n                                        Sizes : " +
-                                            _vm._s(
-                                              variant.sizes
-                                                ? variant.sizes
-                                                : variant.packSizes
-                                            ) +
-                                            "\n                                    "
-                                        )
-                                      ])
+                                    : _vm._e()
                                 ]
                               ),
                               _vm._v(" "),
