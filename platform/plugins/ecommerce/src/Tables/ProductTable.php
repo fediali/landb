@@ -244,7 +244,8 @@ class ProductTable extends TableAbstract
                     }
                 }
                 Product::where('id', $item->id)->update(['single_qty' => $singleQty]);
-                return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
+                // return '<span title="'.$skuQty.'" style="cursor:pointer">'.$singleQty.'</span>';
+                return view('plugins/ecommerce::products.productVariationQty', ['item' => $item, 'singleQty' => $singleQty, 'skuQty' => $skuQty])->render();
             })
             ->editColumn('pre_order_qty', function ($item) {
                 $getProdIds = ProductVariation::where('configurable_product_id', $item->id)->pluck('product_id')->all();
