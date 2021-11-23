@@ -194,11 +194,19 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'uses'       => 'ProductController@changeStatus',
                 'permission' => 'products.edit',
             ]);
+
             Route::get('load-product-image/{id}', [
                 'as'         => 'loadProductImage',
                 'uses'       => 'ProductController@loadProductImage',
                 'permission' => 'products.index',
             ]);
+
+            Route::post('update-product-var-qty', [
+                'as'         => 'update.prod.var.qty',
+                'uses'       => 'ProductController@updateProdVarQty',
+                'permission' => 'products.edit',
+            ]);
+
         });
 
         Route::group(['prefix' => 'product-categories', 'as' => 'product-categories.'], function () {

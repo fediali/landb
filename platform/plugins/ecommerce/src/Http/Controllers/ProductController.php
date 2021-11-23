@@ -1265,4 +1265,26 @@ class ProductController extends BaseController
         return $html;
     }
 
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function updateProdVarQty(Request $request, BaseHttpResponse $response)
+    {
+        $prods = $request->get('product_qty', []);
+        if (count($prods)) {
+            foreach ($prods as $id => $qty) {
+                $product = $this->productRepository->findOrFail($id);
+                $requestData['quantity'] = $qty;
+                $requestData['updated_by'] = auth()->user()->id;
+                $product->fill($requestData);
+                $this->productRepository->createOrUpdate($product);
+            }
+        }
+
+        return $response->setMessage('Updated Successfully!');
+    }
+
+
 }
