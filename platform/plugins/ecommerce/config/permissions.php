@@ -51,6 +51,11 @@ return [
         'flag'        => 'products.editproddetailqty',
         'parent_flag' => 'products.index',
     ],
+    [
+        'name'        => 'Product Var Qty Edit',
+        'flag'        => 'products.editProdVarQty',
+        'parent_flag' => 'products.index',
+    ],
     /**
      * Categories
      */

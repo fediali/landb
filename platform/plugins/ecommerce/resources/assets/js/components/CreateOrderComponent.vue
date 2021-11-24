@@ -42,22 +42,24 @@
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
-                                        </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
-                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
-                                        </p>
-                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
-                                            Piece Price : ${{ variant.product.prod_pieces ? parseFloat(variant.price / variant.product.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
-                                        </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
-                                            Piece Price : ${{ variant.prod_pieces ? parseFloat(variant.price / variant.prod_pieces).toFixed(2) : parseFloat(variant.price / variant.packQty).toFixed(2) }}
-                                        </p>
-                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
+                                            <span v-show="child_can_price_edit == 0" class="d-flex">
+                                                <span style="width: 70%;margin-top: 7px;">Piece Price : </span> ${{ variant.product.per_piece_price }}
+                                            </span>
+                                            <span v-show="child_can_price_edit == 1" class="d-flex">
+                                                <span style="width: 70%;margin-top: 7px;">Piece Price : </span> $ <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
                                             Sizes : {{ (variant.product.sizes) ? variant.product.sizes : variant.packSizes }}
                                         </p>
-                                        <p v-else="variant.sku && !variant.sku.includes('single')">
+                                        <!--<p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
+                                            <span v-show="child_can_price_edit == 0">
+                                                Piece Price : ${{ variant.per_piece_price }}
+                                            </span>
+                                            <span v-show="child_can_price_edit == 1">
+                                                Piece Price : <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
                                             Sizes : {{ (variant.sizes) ? variant.sizes : variant.packSizes }}
-                                        </p>
+                                        </p>-->
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
@@ -424,9 +426,7 @@
                     <div class="next-card-section border-none-t">
                         <ul class="ws-nm">
                             <li>
-                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle"
-                                     alt="User Picture"
-                                     :src="child_customer.avatar_url">
+                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle" alt="User Picture" :src="child_customer.avatar_url">
                                 <div class="pull-right color_darkblue mt20">
                                     <i class="fas fa-inbox"></i>
                                     <span>
@@ -435,26 +435,20 @@
                                     {{ __('order(s)') }}
                                 </div>
                             </li>
-                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{
-                                    child_customer.name
-                                }}</a>
-                            </li>
+                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{child_customer.name }}</a></li>
                             <li>
                                 <div class="flexbox-grid-default">
                                     <div class="flexbox-auto-content-left overflow-ellipsis">
                                         <a :href="'mailto:' + child_customer.email">
                                             <span>{{ child_customer.email ? child_customer.email : '-' }}</span>
                                         </a>
-                                        <input type="hidden" :value="child_customer_id"
-                                               id="customer_id">
+                                        <input type="hidden" :value="child_customer_id" id="customer_id">
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-email>
-                                            <span data-placement="top" data-toggle="tooltip"
-                                                  data-original-title="Chỉnh sửa email">
+                                            <span data-placement="top" data-toggle="tooltip" data-original-title="Chỉnh sửa email">
                                                 <svg class="svg-next-icon svg-next-icon-size-12">
-                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                         xlink:href="#next-edit"></use>
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
                                                 </svg>
                                             </span>
                                         </a>
@@ -472,13 +466,11 @@
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-address>
-                                                <span data-placement="top" title="Update address"
-                                                      data-toggle="tooltip">
-                                                    <svg class="svg-next-icon svg-next-icon-size-12">
-                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                             xlink:href="#next-edit"></use>
-                                                    </svg>
-                                                </span>
+                                            <span data-placement="top" title="Update address" data-toggle="tooltip">
+                                                <svg class="svg-next-icon svg-next-icon-size-12">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
+                                                </svg>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
@@ -493,34 +485,26 @@
                                                 {{
                                                     address_item.address + ', ' + address_item.city + ', ' +
                                                     address_item.state + ', ' +
-                                                    address_item.country + (zip_code_enabled ? ', ' +
-                                                        address_item.zip_code : '')
+                                                    address_item.country + (zip_code_enabled ? ', ' + address_item.zip_code : '')
                                                 }}
                                             </option>
                                         </select>
                                         <svg class="svg-next-icon svg-next-icon-size-16">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="#select-chevron"></use>
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
                                         </svg>
                                     </div>
                                     <br>
                                 </div>
                                 <div>{{ child_customer_address.name }}</div>
                                 <div>{{ child_customer_address.phone }}</div>
-                                <div><a :href="'mailto:' + child_customer_address.email">{{
-                                        child_customer_address.email
-                                    }}</a>
-                                </div>
+                                <div><a :href="'mailto:' + child_customer_address.email">{{child_customer_address.email }}</a></div>
                                 <div>{{ child_customer_address.address }}</div>
                                 <div>{{ child_customer_address.city }}</div>
                                 <div>{{ child_customer_address.state }}</div>
                                 <div>{{ child_customer_address.country }}</div>
                                 <div v-if="zip_code_enabled">{{ child_customer_address.zip_code }}</div>
                                 <div>
-                                    <a target="_blank" class="hover-underline"
-                                       :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{
-                                            __('See on maps')
-                                        }}</a>
+                                    <a target="_blank" class="hover-underline" :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{                                        __('See on maps') }}</a>
                                 </div>
                             </li>
                             <li class="clearfix"></li>
@@ -535,8 +519,7 @@
                                             <span data-placement="top" title="Update Billing address"
                                                   data-toggle="tooltip">
                                                 <svg class="svg-next-icon svg-next-icon-size-12">
-                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                         xlink:href="#next-edit"></use>
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
                                                 </svg>
                                             </span>
                                         </a>
@@ -1366,6 +1349,7 @@ export default {
                     id: (item.configurable_product_id ? item.product_id : item.id),
                     quantity: item.select_qty,
                     sale_price: item.price,
+                    per_piece_price: item.per_piece_price,
                 });
             });
 
@@ -1735,6 +1719,18 @@ export default {
             }
         },
         handleChangeQuantity: function () {
+            this.calculateAmount(this.child_products);
+        },
+        handleChangePerPiecePrice: function () {
+            let context = this;
+            let products = this.child_products;
+            _.each(products, function (item) {
+                console.log(item.per_piece_price, "===");
+                if (item.packQty) {
+                    item.price = parseFloat(item.per_piece_price) * parseInt(item.packQty);
+                }
+            });
+            this.child_products = products;
             this.calculateAmount(this.child_products);
         },
         resetProductData: function () {
