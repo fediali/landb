@@ -998,21 +998,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -1258,7 +1243,8 @@ __webpack_require__.r(__webpack_exports__);
       child_is_selected_shipping: this.is_selected_shipping,
       child_can_price_edit: this.can_price_edit,
       child_payment_method: this.payment_method,
-      creating_order: false
+      creating_order: false,
+      cancelSource: null
     };
   },
   mounted: function mounted() {
@@ -1313,11 +1299,19 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_.isEmpty(context.list_products.data) || force) {
         context.loading = true;
+
+        if (context.cancelSource) {
+          context.cancelSource.cancel('Start new search, stop active search');
+        }
+
+        context.cancelSource = axios.CancelToken.source();
         axios.get(route('products.get-all-products-and-variations', {
           keyword: context.product_keyword,
           order_type: context.order_type,
           page: page
-        })).then(function (res) {
+        }), {
+          cancelToken: context.cancelSource.token
+        }).then(function (res) {
           context.list_products = res.data.data;
           context.loading = false;
         })["catch"](function (res) {
