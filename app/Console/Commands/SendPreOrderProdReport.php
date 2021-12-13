@@ -47,7 +47,7 @@ class SendPreOrderProdReport extends Command
         $today = Carbon::now();//->format('Y-m-d');
         $dates = ['from_date' => $from_date, 'to_date' => $today,];
 
-        Mail::to(['shakir@bargoventures.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($dates));
+        Mail::to(['amir@landbapparel.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($dates));
 
         echo 'success';
     }
