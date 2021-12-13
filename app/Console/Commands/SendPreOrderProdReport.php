@@ -71,7 +71,7 @@ class SendPreOrderProdReport extends Command
             }
         }
 
-        Mail::to(['amir@landbapparel.com ','farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($data, $dates));
+        Mail::to(['amir@landbapparel.com','farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($data, $dates));
 
         echo 'success';
     }
