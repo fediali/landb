@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Exports\PreOrderProdExport;
+use App\Mail\OrderCreate;
 use App\Mail\PreOrderProdQty;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Facades\Excel;
 
 class SendPreOrderProdReport extends Command
 {
