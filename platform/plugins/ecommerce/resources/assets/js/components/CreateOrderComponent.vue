@@ -42,7 +42,7 @@
                                         </p>
                                         <p v-if="variant.product && !variant.product.sku.includes('single')">
                                             Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
-                                            <span v-show="child_can_price_edit == 0" class="d-flex">
+                                                <span v-show="child_can_price_edit == 0" class="d-flex">
                                                 <span style="width: 70%;margin-top: 7px;">Piece Price : </span> ${{ variant.product.per_piece_price }}
                                             </span>
                                             <span v-show="child_can_price_edit == 1" class="d-flex">
