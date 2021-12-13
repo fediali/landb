@@ -2,12 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\OrderCreate;
+use App\Exports\PreOrderProdExport;
 use App\Mail\PreOrderProdQty;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SendPreOrderProdReport extends Command
 {
@@ -45,33 +46,9 @@ class SendPreOrderProdReport extends Command
         $to_date = Carbon::now();
         $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
         $today = Carbon::now();//->format('Y-m-d');
+        $dates = ['from_date' => $from_date, 'to_date' => $today,];
 
-        $products = DB::connection('mysql2')
-            ->table('hw_order_details')
-            ->select('hw_order_details.product_code')
-            ->selectRaw('hw_order_details.amount')
-            ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
-            ->where('hw_orders.status', 'AZ')
-            //->whereDate('hw_orders.created_at', '>=', $from_date)
-            //->whereDate('hw_orders.created_at', '<=', $today)
-            ->where('hw_orders.timestamp', '>=', strtotime($from_date))
-            ->where('hw_orders.timestamp', '<=', strtotime($today))
-            ->get();
-
-        $dates = [
-            'from_date' => $from_date,
-            'to_date' => $today,
-        ];
-        $data = [];
-        foreach ($products as $product) {
-            if (isset($data[$product->product_code])) {
-                $data[$product->product_code] += $product->amount;
-            } else {
-                $data = [$product->product_code => $product->amount];
-            }
-        }
-
-        Mail::to(['shakir@bargoventures.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($data, $dates));
+        Mail::to(['shakir@bargoventures.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com'])->send(new PreOrderProdQty($dates));
 
         echo 'success';
     }

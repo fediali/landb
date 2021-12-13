@@ -6,7 +6,8 @@
 <body>
 
 <div>
-    <table>
+    <h1>Please Find Attachment.</h1>
+    {{--<table>
         <thead>
             <th>Product Code</th>
             <th>Quantity</th>
@@ -19,7 +20,7 @@
             </tr>
         @endforeach
         </tbody>
-    </table>
+    </table>--}}
 </div>
 
 </body>
