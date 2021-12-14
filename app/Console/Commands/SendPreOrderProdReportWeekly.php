@@ -4,26 +4,27 @@ namespace App\Console\Commands;
 
 use App\Mail\OrderCreate;
 use App\Mail\PreOrderProdQty;
+use App\Mail\PreOrderProdQtyWeekly;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
-class SendPreOrderProdReport extends Command
+class SendPreOrderProdReportWeekly extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'send:preorder-report';
+    protected $signature = 'send:preorder-report-weekly';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send Pre Order Product Report';
+    protected $description = 'Send Pre Order Product Report Weekly';
 
     /**
      * Create a new command instance.
@@ -42,7 +43,12 @@ class SendPreOrderProdReport extends Command
      */
     public function handle()
     {
-        Mail::to(['amir@landbapparel.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com','shakir@bargoventures.com'])->send(new PreOrderProdQty());
+        $to_date = Carbon::now();
+        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
+        $today = Carbon::now();//->format('Y-m-d');
+        $dates = ['from_date' => $from_date, 'to_date' => $today,];
+
+        Mail::to(['amir@landbapparel.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com','shakir@bargoventures.com'])->send(new PreOrderProdQtyWeekly($dates));
 
         echo 'success';
     }
