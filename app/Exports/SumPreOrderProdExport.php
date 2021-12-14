@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadings, WithEvents, WithHeadingRow
+class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadings, WithEvents, WithTitle
 {
     public $dates;
 
@@ -21,10 +21,8 @@ class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadi
     public function collection()
     {
         $to_date = Carbon::now();
-        $from_date = $to_date->subDays($to_date->dayOfWeek - 1)->subWeek();//->format('Y-m-d');
+        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
         $today = Carbon::now();//->format('Y-m-d');
-
-        $this->dates = date('m-d-Y', strtotime($from_date)) . ' to ' . date('m-d-Y', strtotime($today));
 
         $products = DB::connection('mysql2')
             ->table('hw_order_details')
@@ -59,7 +57,14 @@ class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadi
         ];
     }
 
-
+    public function title(): string
+    {
+        $to_date = Carbon::now();
+        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
+        $today = Carbon::now();//->format('Y-m-d');
+        $this->dates = date('m-d-Y', strtotime($from_date)).' to '.date('m-d-Y', strtotime($today));
+        return $this->dates;
+    }
 
     /**
      * @return array
@@ -67,8 +72,8 @@ class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadi
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $cellRange = 'A2:B2'; // All headers
+            AfterSheet::class    => function(AfterSheet $event) {
+                $cellRange = 'A1:B1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(16)->getBold();
             },
         ];

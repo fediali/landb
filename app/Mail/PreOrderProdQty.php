@@ -32,19 +32,14 @@ class PreOrderProdQty extends Mailable
      */
     public function build()
     {
-        $date = date('m-d-Y', strtotime($this->dates['from_date'])) . ' to ' . date('m-d-Y', strtotime($this->dates['to_date']));
+        $date = date('m-d-Y', strtotime($this->dates['from_date'])).' to '.date('m-d-Y', strtotime($this->dates['to_date']));
         $fileName = 'report-' . $date . '.xlsx';
-        $email = $this->view('emails.pre_order_prod_qty')->subject('[L&B Pre Order Product Qty][' . $date . ']')
-            ->attach(Excel::download(new SumPreOrderProdExport, 'sum--' . $fileName)->getFile(), ['as' => 'sum--' . $fileName]);
+        $email =  $this->view('emails.pre_order_prod_qty')->subject('[L&B Pre Order Product Qty]['.$date.']')
+        ->attach(Excel::download(new SumPreOrderProdExport, 'sum-'.$fileName)->getFile(), ['as' => 'sum-'.$fileName]);
         //->attach(Excel::download(new PreOrderProdExport, $fileName)->getFile(), ['as' => $fileName]);
         return $email;
-        //->from('')
-        //->replyTo($this->data['email'])
-        //->with(['data' => $this->data]);
-    }
-
-    public function title(): string
-    {
-        return 'Vouchers';
+            //->from('')
+            //->replyTo($this->data['email'])
+            //->with(['data' => $this->data]);
     }
 }
