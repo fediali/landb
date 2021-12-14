@@ -46,7 +46,7 @@ class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadi
                 $data = [$product->product_code => $product->amount];
             }
         }*/
-
+dd($products);
         return $products;
     }
 
