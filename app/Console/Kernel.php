@@ -25,10 +25,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-            $schedule->command('active:scheduled-product')->hourly();
+            //$schedule->command('active:scheduled-product')->hourly();
 
-        $schedule->command('update:active-prod-qty')->everyMinute();
-        $schedule->command('update:hidden-prod-qty')->everyThirtyMinutes();
+       // $schedule->command('update:active-prod-qty')->everyMinute();
+       // $schedule->command('update:hidden-prod-qty')->everyThirtyMinutes();
         $schedule->command('send:preorder-report-weekly')->sundays()->at('00:00');
     }
 
