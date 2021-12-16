@@ -10,6 +10,7 @@ use Botble\Textmessages\Models\Textmessages;
 use Botble\Textmessages\Repositories\Interfaces\TextmessagesInterface;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class sendSms extends Command
 {
@@ -55,12 +56,38 @@ class sendSms extends Command
      */
     public function handle()
     {
-        $tz = Carbon::now('America/Chicago')->toDateTimeString();
-        $time = Carbon::createFromFormat('Y-m-d H:i:s', $tz)->toDateTimeString();
-        $text_message = Textmessages::where('schedule_date', '<', $time)->where('status', BaseStatusEnum::SCHEDULE)->pluck('id')->toArray();
+//        $tz = Carbon::now('America/Chicago')->toDateTimeString();
+//        $time = Carbon::createFromFormat('Y-m-d H:i:s', $tz)->toDateTimeString();
+//        $text_message = Textmessages::where('schedule_date', '<', $time)->where('status', BaseStatusEnum::SCHEDULE)->pluck('id')->toArray();
+//
+//        $controller = app(ChatingController::class);
+//        $d = app()->call([$controller, 'smsCampaign'], ['text_id' => $text_message]);
+//        return 'Success';
 
-        $controller = app(ChatingController::class);
-        $d = app()->call([$controller, 'smsCampaign'], ['text_id' => $text_message]);
-        return 'Success';
+        $products = DB::connection('mysql2')
+            ->table('hw_products')
+            ->where('count_preorder', '>', 0)
+            ->where('quantity_preorder', '>', 0)
+//            ->where('product_id', 76777)
+            ->get();
+        foreach ($products as $pro) {
+            $orders = DB::connection('mysql2')
+                ->table('hw_order_details')
+//                ->select('hw_order_details.product_id', 'hw_orders.order_id')
+                ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
+                ->where('hw_orders.status', 'B')
+                ->where('hw_order_details.product_id', $pro->product_id)
+                ->count();
+            if (!$orders) {
+                $data ['count_preorder'] = 0;
+                $data ['quantity_preorder'] = 0;
+                DB::connection('mysql2')
+                    ->table('hw_products')
+                    ->where('product_id', $pro->product_id)
+                    ->update($data);
+            }
+        }
+
+
     }
 }
