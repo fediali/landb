@@ -48,7 +48,18 @@ class SendPreOrderProdReportWeekly extends Command
         $today = Carbon::now();//->format('Y-m-d');
         $dates = ['from_date' => $from_date, 'to_date' => $today,];
 
-        Mail::to(['amir@landbapparel.com', 'farhad.ali@luckyandblessed.com', 'farhad.surani@gmail.com','shakir@bargoventures.com'])->send(new PreOrderProdQtyWeekly($dates));
+        Mail::to([
+            'amir@landbapparel.com',
+            'erika.ibarra@luckyfactory.com.mx',
+            'heron.femat@landbapparel.com',
+            'luis.garza@luckyfactory.com.mx',
+            'jesus.arredondo@luckyfactory.com.mx',
+            'magdalena@landbapparel.com',
+            'bintou@landbapparel.com',
+            'ramsha@landbapparel.com',
+            'farhad.surani@gmail.com',
+            'edgarb@landbapparel.com',
+        ])->send(new PreOrderProdQtyWeekly($dates));
 
         echo 'success';
     }
