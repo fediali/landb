@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
        // $schedule->command('update:active-prod-qty')->everyMinute();
        // $schedule->command('update:hidden-prod-qty')->everyThirtyMinutes();
         $schedule->command('send:preorder-report-weekly')->sundays()->at('00:00');
+        $schedule->command('send:sms')->everyFiveMinutes();
     }
 
     /**
