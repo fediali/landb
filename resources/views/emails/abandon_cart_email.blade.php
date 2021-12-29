@@ -26,7 +26,7 @@
     <div style="background:#ddd; padding:20px; margin:20px; border-radius:5px;">
         @foreach($sessions as $session)
             <a href="#" style="display:flex; text-decoration:none;">
-                <div style="width:15%;margin: auto;">
+                <div style="width:20%;margin: auto;">
                     @php
                         $getProdImage = Illuminate\Support\Facades\DB::connection('mysql2')->table('hw_images_links')
                             ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
@@ -44,7 +44,7 @@
                     @endphp
                     <img style="height: 60px;" src="https://landbapparel.com/images/thumbnails/278/417/detailed/{{$folder}}/{{$getProdImage->image_path}}"/>
                 </div>
-                <div style="width:85%;margin: auto;">
+                <div style="width:80%;margin: auto;">
                     <p style="color:#000;">{{$session->product_name}}</p>
                     <p style="color:#000;"><b>$ {{$session->price}}</b></p>
                 </div>
@@ -64,6 +64,8 @@
           margin-top: 40px !important;
           display: block;
           margin-bottom: 40px;
+          text-align: center;
+    width: 160px;
         ">
         Continue Shopping
     </a>
