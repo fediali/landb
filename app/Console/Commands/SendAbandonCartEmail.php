@@ -63,7 +63,7 @@ class SendAbandonCartEmail extends Command
             }
             if (in_array($diff_in_days, [0,1,3])) {
                 // $session->email
-                Mail::to(['shakir@bargoventures.com'])->send(new AbandonCartEmail($session));
+                Mail::to(['farhad.surani@gmail.com'])->send(new AbandonCartEmail($session));
             }
         }
 
