@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('send:preorder-report-weekly')->sundays()->at('10:00');
         $schedule->command('send:preorder-report')->sundays()->at('11:00');
         $schedule->command('send:sms')->everyFiveMinutes();
+        $schedule->command('update:prod-pre-order-qty')->daily()->at('09:00');
     }
 
     /**
