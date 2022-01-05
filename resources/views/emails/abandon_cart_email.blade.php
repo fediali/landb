@@ -67,6 +67,7 @@
           margin-top: 40px !important;
           display: block;
           margin-bottom: 40px;
+          text-decoration:none;
           text-align: center;
     width: 160px;
         ">
@@ -76,9 +77,36 @@
     <p style="text-align:center; margin-top:50px;">
         <b>Do you need help to complete your order?</b>
     </p>
-    <p style="text-align:center; margin-top:20px; padding-bottom:20px;">
-        Call Now: <a href="tel:972-243-7860">972-243-7860</a>
+    <p style="text-align:center; margin-top:20px; font-weight: 600; padding-bottom:20px;">
+        Call Now: <a href="tel:972-243-7860" target="_blank" style="
+    color: #000;
+    text-decoration: none;
+">972-243-7860</a>
     </p>
+    <p style="
+    text-align: center;
+    padding-bottom: 25px;
+">
+    
+    <a href="https://www.linkedin.com/company/luckyandblessed/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/linkedin.png" width="30" height="30" alt="Follow L&amp;B on LinkedIn"></a>
+    <a href="https://twitter.com/landb_official/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/twitter.png" width="30" height="30" alt="Follow L&amp;B on Twitter"></a>
+    <a href="https://www.facebook.com/LuckyandBlessedOfficial/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/facebook.png" width="30" height="30" alt="Follow L&amp;B on Facebook"></a>
+    <a href="https://www.instagram.com/luckyandblessed_official/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/instagram.png" width="30" height="30" alt="Follow L&amp;B on Instagram"></a>
+    <a href="https://www.pinterest.com/landb_official/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/pinterest.png" width="30" height="30" alt="Follow L&amp;B on Pinterest"></a>
+    <a href="https://www.tiktok.com/@luckyandblessed_official" target="_blank" rel="nofollow external"><img src="https://revamp.landbw.co/storage/tiktok.png" width="30" height="30" alt="Follow L&amp;B on Tiktok"></a>
+</p>
+<p style="
+    text-align: center;
+    padding-bottom: 20px;
+    font-weight: 600;
+    padding-left: 30px;
+    padding-right: 30px;
+">Copyright © 2022 Lucky &amp; Blessed, All rights reserved.<br>
+2309 Springlake Rd Suite 650, Farmers Branch, TX 75234
+
+
+
+</p>
 
 </div>
 </body>
