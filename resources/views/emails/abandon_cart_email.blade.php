@@ -72,7 +72,7 @@
     </a>
 
     <p style="text-align:center; margin-top:50px;">
-        <b>Do you need help to complete you order?</b>
+        <b>Do you need help to complete your order?</b>
     </p>
     <p style="text-align:center; margin-top:20px; padding-bottom:20px;">
         Call Now: <a href="tel:972-243-7860">972-243-7860</a>
