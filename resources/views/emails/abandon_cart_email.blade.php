@@ -75,7 +75,7 @@
         <b>Do you need help to complete you order?</b>
     </p>
     <p style="text-align:center; margin-top:20px; padding-bottom:20px;">
-        Call us <a href="tel:972-243-7860">972-243-7860</a>
+        Call Now: <a href="tel:972-243-7860">972-243-7860</a>
     </p>
 
 </div>
