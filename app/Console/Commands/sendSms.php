@@ -96,6 +96,7 @@ class sendSms extends Command
             ->where('hw_orders.status', 'AZ')
             ->groupBy('hw_order_details.product_id')
             ->get();
+
         foreach ($products as $product) {
             $data['paid_preorder'] = $product->sum_quantity;
            DB::connection('mysql2')

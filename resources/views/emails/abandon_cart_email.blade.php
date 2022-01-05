@@ -7,6 +7,7 @@
             font-family: 'Saol';
             src: url('./SaolDisplay-Regular.ttf');
         }
+
         body {
             font-family: 'arial' !important;
         }
@@ -15,7 +16,8 @@
 
 <body style="background:#ddd;">
 <div style="background-color: #fffdfc; width: 500px; margin: auto">
-    <img style="text-align:center; display: block; margin: auto; height: 70px; padding-top: 20px;" src="https://landbapparel.com/images/logos/174/lucky_blessed_logo_BLK.png"/>
+    <img style="text-align:center; display: block; margin: auto; height: 70px; padding-top: 20px;"
+         src="https://landbapparel.com/images/logos/174/lucky_blessed_logo_BLK.png"/>
     <hr>
     <h3 style=" text-align: center;">
         Your Cart made us send this reminder.
@@ -42,7 +44,8 @@
                             $folder = substr($getProdImage->image_id, 0, 3);
                         }
                     @endphp
-                    <img style="height: 60px;" src="https://landbapparel.com/images/thumbnails/278/417/detailed/{{$folder}}/{{$getProdImage->image_path}}"/>
+                    <img style="height: 60px;"
+                         src="https://landbapparel.com/images/thumbnails/278/417/detailed/{{$folder}}/{{$getProdImage->image_path}}"/>
                 </div>
                 <div style="width:80%;margin: auto;">
                     <p style="color:#000;">{{$session->product_name}}</p>
@@ -59,7 +62,7 @@
 		  font-size:16px;
           padding: 15px 45px;
           margin: auto;
-          /* text-align: center; */
+           text-align: center;
           border: none;
           margin-top: 40px !important;
           display: block;
@@ -71,10 +74,10 @@
     </a>
 
     <p style="text-align:center; margin-top:50px;">
-        <b>Do you need help to complete you order?</b>
+        <b>Do you need help to complete your order?</b>
     </p>
     <p style="text-align:center; margin-top:20px; padding-bottom:20px;">
-        Contact our support center
+        Call Now: <a href="tel:972-243-7860">972-243-7860</a>
     </p>
 
 </div>
