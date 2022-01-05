@@ -62,7 +62,7 @@
 		  font-size:16px;
           padding: 15px 45px;
           margin: auto;
-          /* text-align: center; */
+           text-align: center;
           border: none;
           margin-top: 40px !important;
           display: block;
