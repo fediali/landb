@@ -51,7 +51,7 @@ class SendPreOrderProdReport extends Command
             'magdalena@landbapparel.com',
             'bintou@landbapparel.com',
             'ramsha@landbapparel.com',
-            'farhad.surani@gmail.com',
+            'farhad.ali@luckyandblessed.com',
             'edgarb@landbapparel.com',
             ])->send(new PreOrderProdQty());
 

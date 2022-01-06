@@ -45,6 +45,7 @@ class AbandonCartEmail extends Mailable
             ->where('user_id', $this->data->user_id)
             ->update(['email_sent_status' => $email_sent_status]);
 
-        return $this->view('emails.abandon_cart_email')->subject('[Lucky and Blessed Abandon Cart]')->with(['sessions' => $sessions]);
+        return $this->view('emails.abandon_cart_email')->subject('Check out before it sells out! -
+Lucky and Blessed')->with(['sessions' => $sessions]);
     }
 }
