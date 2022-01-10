@@ -50,7 +50,7 @@ class SendAbandonCartEmail extends Command
             ->where('hw_user_session_products.email_sent_status', '!=', 2)
             ->groupBy('hw_user_session_products.user_id')
             ->orderBy('hw_user_session_products.timestamp', 'DESC')
-            ->limit(1)
+            //->limit(1)
             ->get();
 
         foreach ($sessions as $session) {
