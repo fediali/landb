@@ -51,10 +51,14 @@ class UpdateProdPreOrderQty extends Command
                             ->where('hw_order_details.product_id', $row['product_id'])
                             ->groupBy('hw_order_details.product_code')
                             ->first();
-                        DB::connection('mysql2')
-                            ->table('hw_products')
-                            ->where('hw_products.product_id', $row['product_id'])
-                            ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
+
+                        if($product){
+                            DB::connection('mysql2')
+                                ->table('hw_products')
+                                ->where('hw_products.product_id', $row['product_id'])
+                                ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
+                        }
+
                     }
                 }
             });
