@@ -34,14 +34,13 @@ class UpdateProdPreOrderQty extends Command
 
     public function handle()
     {
-        $products = DB::connection('mysql2')
+        DB::connection('mysql2')
             ->table('hw_products')
-            ->where('hw_products.product_id', 83702)->get();
-//            ->orderBy('hw_products.product_id', 'ASC')
-//            ->chunk(500, function ($products) {
+//            ->where('hw_products.product_id', 83702)->get();
+            ->orderBy('hw_products.product_id', 'ASC')
+            ->chunk(500, function ($products) {
         foreach ($products as $product) {
             $row = (array)$product;
-//            dd($row['product_id']);
             if ($row['product_id']) {
                 $product = DB::connection('mysql2')
                     ->table('hw_order_details')
@@ -65,7 +64,7 @@ class UpdateProdPreOrderQty extends Command
 
             }
         }
-//            });
+            });
         echo 'success';
     }
 }
