@@ -93,7 +93,11 @@ class sendSms extends Command
             ->select('hw_order_details.product_id', 'hw_order_details.product_code')
             ->selectRaw('SUM(hw_order_details.amount) AS sum_quantity')
             ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
-            ->where('hw_orders.status', 'AZ')
+            ->where(function($q){
+                $q->where('hw_orders.status', 'AZ');
+                $q->where('hw_orders.status', 'BB');
+                $q->where('hw_orders.status', 'BC');
+            })
             ->groupBy('hw_order_details.product_id')
             ->get();
 
