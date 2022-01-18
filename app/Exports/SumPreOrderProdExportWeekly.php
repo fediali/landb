@@ -29,7 +29,12 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
             ->select('hw_order_details.product_code')
             ->selectRaw('SUM(hw_order_details.amount) AS sum_quantity')
             ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
-            ->where('hw_orders.status', 'AZ')
+            //->where('hw_orders.status', 'AZ')
+            ->where(function ($q) {
+                $q->where('hw_orders.status', 'AZ');
+                $q->orWhere('hw_orders.status', 'BB');
+                $q->orWhere('hw_orders.status', 'BC');
+            })
             //->whereDate('hw_orders.created_at', '>=', $from_date)
             //->whereDate('hw_orders.created_at', '<=', $today)
             ->where('hw_orders.timestamp', '>=', strtotime($from_date))
