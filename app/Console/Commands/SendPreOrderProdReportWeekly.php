@@ -44,7 +44,7 @@ class SendPreOrderProdReportWeekly extends Command
     public function handle()
     {
         $to_date = Carbon::now();
-        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
+        $from_date = $to_date->subDays($to_date->dayOfWeek - 1)->subWeek();//->format('Y-m-d');
         $today = Carbon::now();//->format('Y-m-d');
         $dates = ['from_date' => $from_date, 'to_date' => $today,];
 
@@ -61,6 +61,7 @@ class SendPreOrderProdReportWeekly extends Command
             'edgarb@landbapparel.com',
             'alejandro.ruiz@luckyfactory.com.mx',
             'monica.rodriguez@luckyfactory.com.mx',
+            'hilda.dealba@luckyfactory.com.mx',
         ])->send(new PreOrderProdQtyWeekly($dates));
 
         echo 'success';
