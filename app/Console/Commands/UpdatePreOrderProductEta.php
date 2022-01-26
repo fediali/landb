@@ -89,6 +89,7 @@ class UpdatePreOrderProductEta extends Command
             ->get();
 
         foreach ($order_products as $order_product) {
+            dump($order_product);
             DB::connection('mysql2')
                 ->table('hw_order_details')
                 ->where(['order_id' => $order_product->order_id, 'product_id' => $order_product->product_id])
