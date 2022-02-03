@@ -39,25 +39,34 @@ class UpdatePreOrderProductEta extends Command
     public function handle()
     {
         $codes = [
-            'JJE1-DW',
-            'JJE5-MW',
-            'JJE5-DW',
-            'L17061-LW',
-            'L17061-DW',
-            'L18006',
-            'L18027-DW',
-            'L18027-MW',
-            'L18052-DW',
-            'L18052-MW',
-            'L18052-BLK',
-            'LB-8877-MW',
-            'LB-8888-MID-ZIP',
-            'LB-9879-ZIP-LW',
-            'LB-9879-ZIP-MW',
-            'LB-9881',
-            'NJE04-LW',
-            'NJE04-MW',
-            'NSH10',
+            'KA-0411-G',
+            'KA-0431-G-LB',
+            'KA0431-LB',
+            'KA0422-G',
+            'KA0422-G',
+            'GKJE01-G',
+            'L18018-MW',
+            'L18018-DW',
+            'L18074-MW',
+            'L18074-DW',
+            'L18074-BLK',
+            'AN18116-MW',
+            'AN18116-SW',
+            'AN18116-BLK',
+            '052419-2-G',
+            'AN18115-DW',
+            'AN18115-MW',
+            'KA0431-LB',
+            'L18021-DW',
+            'L18021-MW',
+            'L18021-LW',
+            'AN18117',
+            '18087-2',
+            'L19581-MW',
+            'L19581-DW',
+            'NJE26-DW',
+            'NJE26-TS',
+            'L18074-G'
         ];
 
         $order_products = DB::connection('mysql2')
@@ -67,7 +76,7 @@ class UpdatePreOrderProductEta extends Command
             ->join('hw_products', 'hw_products.product_id', 'hw_order_details.product_id')
             ->where('hw_products.ptype', 'P')
             ->whereIn('hw_order_details.product_code', $codes)
-            ->where('hw_orders.timestamp', '<=', 1643209200)
+            ->where('hw_orders.timestamp', '<=', 1642809599)
             ->where(function($q){
                 $q->where('hw_orders.status', 'AR');
                 $q->orWhere('hw_orders.status', 'AZ');
@@ -80,10 +89,11 @@ class UpdatePreOrderProductEta extends Command
             ->get();
 
         foreach ($order_products as $order_product) {
+            dump($order_product);
             DB::connection('mysql2')
                 ->table('hw_order_details')
                 ->where(['order_id' => $order_product->order_id, 'product_id' => $order_product->product_id])
-                ->update(['eta_from' => '1645401600', 'eta_to' => '1645747200', 'from_query' => 1]);
+                ->update(['eta_from' => '1645444800', 'eta_to' => '1645747200', 'from_query' => 1]);
         }
 
         echo 'success';
