@@ -89,10 +89,11 @@ class UpdatePreOrderProductEta extends Command
             ->get();
 
         foreach ($order_products as $order_product) {
+            dump($order_product);
             DB::connection('mysql2')
                 ->table('hw_order_details')
                 ->where(['order_id' => $order_product->order_id, 'product_id' => $order_product->product_id])
-                ->update(['eta_from' => '1645401600', 'eta_to' => '1645747200', 'from_query' => 1]);
+                ->update(['eta_from' => '1645444800', 'eta_to' => '1645747200', 'from_query' => 1]);
         }
 
         echo 'success';
