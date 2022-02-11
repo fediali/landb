@@ -33,14 +33,20 @@
                             ->where('hw_images_links.object_id', $product->product_id)
                             ->orderBy('hw_images_links.type', 'DESC')
                             ->first();
-                        $idLen = getDigitsLength($getProdImage->image_id);
-                        if ($idLen <= 5) {
-                            $folder = substr($getProdImage->image_id, 0, 2);
-                        } elseif ($idLen >= 6) {
-                            $folder = substr($getProdImage->image_id, 0, 3);
+                        if ($getProdImage) {
+                            $idLen = getDigitsLength($getProdImage->image_id);
+                            if ($idLen <= 5) {
+                                $folder = substr($getProdImage->image_id, 0, 2);
+                            } elseif ($idLen >= 6) {
+                                $folder = substr($getProdImage->image_id, 0, 3);
+                            }
                         }
                     @endphp
-                    <img style="height: 60px;" src="https://landbapparel.com/images/thumbnails/278/417/detailed/{{$folder}}/{{$getProdImage->image_path}}"/>
+                    @if($getProdImage)
+                        <img style="height: 60px;" src="https://landbapparel.com/images/thumbnails/278/417/detailed/{{$folder}}/{{$getProdImage->image_path}}"/>
+                    @else
+                        <img style="height: 60px;" src="https://landbapparel.com/images/logos/174/logo_lnb_new.png"/>
+                    @endif
                 </div>
                 <div style="width:80%;margin: auto;">
                     <p style="color:#000;">{{$product->product_name}}</p>
