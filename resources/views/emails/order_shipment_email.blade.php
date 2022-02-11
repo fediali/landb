@@ -58,7 +58,7 @@
     </div>
 
     <p style="text-align:center; margin-top:50px;">
-        <b>Do you need with help your order?</b>
+        <b>Do you need help with your order?</b>
     </p>
     <p style="text-align:center; margin-top:20px; font-weight: 600; padding-bottom:20px;">
         Call Now: <a href="tel:972-243-7860" target="_blank" style="
