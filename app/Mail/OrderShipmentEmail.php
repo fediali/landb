@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderShipmentEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use /*Queueable, */SerializesModels;
 
     public $data;
 
