@@ -16,3 +16,11 @@ Route::group(['prefix' => 'html'], function () {
     return view('index');
   });
 });
+
+
+Route::post('send-order-prod-shipment-email/{order_id}', function(\Illuminate\Http\Request $request) {
+    $order_id = $request->get('order_id');
+    $order_product_ids = $request->get('order_product_ids');
+    $job = new \App\Jobs\SendOrderProdShipmentEmail($order_id, $order_product_ids);
+    dispatch($job);
+});
