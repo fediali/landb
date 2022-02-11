@@ -3,6 +3,8 @@
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
+header('Access-Control-Allow-Origin: *');
+
 define('LARAVEL_START', microtime(true));
 
 /*
