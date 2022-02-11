@@ -14,5 +14,5 @@
 Route::post('send-order-prod-shipment-email/{order_id}', function($order_id, \Illuminate\Http\Request $request) {
     $order_product_ids = $request->get('order_product_ids');
     $job = new \App\Jobs\SendOrderProdShipmentEmail($order_id, $order_product_ids);
-    dispatch($job);
+    dispatch_now($job);
 });
