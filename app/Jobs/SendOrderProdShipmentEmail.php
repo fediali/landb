@@ -43,6 +43,19 @@ class SendOrderProdShipmentEmail implements ShouldQueue
     {
         $data = ['order_id' => $this->order_id, 'order_product_ids' => $this->order_product_ids];
         $user_email = DB::connection('mysql2')->table('hw_orders')->where('order_id', $this->order_id)->value('email');
-        Mail::to([$user_email])->send(new OrderShipmentEmail($data));
+        $srep_email = DB::connection('mysql2')
+            ->table('hw_orders')
+            ->join('hw_hw_user_extra_fields', 'hw_hw_user_extra_fields.user_id', 'hw_orders.user_id')
+            ->join('hw_hw_srep', 'hw_hw_srep.srep_id', 'hw_hw_user_extra_fields.srep_id')
+            ->join('hw_users', 'hw_users.user_id', 'hw_hw_srep.srep_id')
+            ->where('hw_orders.order_id', $this->order_id)
+            ->value('hw_users.email');
+
+        $emails = ['heron.femat@landbapparel.com'];
+        if ($srep_email) {
+            array_push($emails, $srep_email);
+        }
+
+        Mail::to([$user_email])->cc($emails)->send(new OrderShipmentEmail($data));
     }
 }
