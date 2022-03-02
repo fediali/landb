@@ -27,8 +27,11 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
         $products = DB::connection('mysql2')
             ->table('hw_order_details')
             ->select('hw_order_details.product_code')
+            ->selectRaw("FROM_UNIXTIME(hw_products.avail_since, '%b %d, %Y') AS eta_from")
+            ->selectRaw("FROM_UNIXTIME(hw_products.avail_to, '%b %d, %Y') AS eta_to")
             ->selectRaw('SUM(hw_order_details.amount) AS sum_quantity')
             ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
+            ->join('hw_products', 'hw_products.product_id', 'hw_order_details.product_id')
             //->where('hw_orders.status', 'AZ')
             ->where(function ($q) {
                 $q->where('hw_orders.status', 'AZ');
@@ -59,6 +62,8 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
         return [
             'Product Code',
             'Sum Quantity',
+            'Eta From',
+            'Eta To'
         ];
     }
 
