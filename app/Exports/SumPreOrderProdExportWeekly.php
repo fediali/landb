@@ -21,7 +21,7 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
     public function collection()
     {
         $to_date = Carbon::now();
-        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
+        $from_date = $to_date->subDays($to_date->dayOfWeek - 1)->subWeek();//->format('Y-m-d');
         $today = Carbon::now();//->format('Y-m-d');
 
         $products = DB::connection('mysql2')
@@ -61,18 +61,18 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
     {
         return [
             'Product Code',
-            'Sum Quantity',
             'Eta From',
-            'Eta To'
+            'Eta To',
+            'Sum Quantity',
         ];
     }
 
     public function title(): string
     {
         $to_date = Carbon::now();
-        $from_date = $to_date->subDays($to_date->dayOfWeek-1)->subWeek();//->format('Y-m-d');
+        $from_date = $to_date->subDays($to_date->dayOfWeek - 1)->subWeek();//->format('Y-m-d');
         $today = Carbon::now();//->format('Y-m-d');
-        $this->dates = date('m-d-Y', strtotime($from_date)).' to '.date('m-d-Y', strtotime($today));
+        $this->dates = date('m-d-Y', strtotime($from_date)) . ' to ' . date('m-d-Y', strtotime($today));
         return $this->dates;
     }
 
@@ -82,7 +82,7 @@ class SumPreOrderProdExportWeekly implements FromCollection, ShouldAutoSize, Wit
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class    => function(AfterSheet $event) {
+            AfterSheet::class => function (AfterSheet $event) {
                 $cellRange = 'A1:B1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(16)->getBold();
             },
