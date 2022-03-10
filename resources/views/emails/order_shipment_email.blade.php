@@ -16,7 +16,7 @@
 <body style="background:#ddd;">
 <div style="background-color: #fffdfc; width: 500px; margin: auto">
     <img style="text-align:center; display: block; margin: auto; height: 70px; padding-top: 20px;"
-         src="https://landbapparel.com/images/logos/174/logo_lnb_new.png"/>
+         src="https://landbapparel.com/images/logos/174/lucky_blessed_logo_BLK__1_.png"/>
     <hr>
     <h3 style=" text-align: center;">
         Your Order Product has Shipped!
