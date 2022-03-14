@@ -97,7 +97,7 @@ class sendSms extends Command
                 $q->where('hw_orders.status', 'AZ');
                 $q->orWhere('hw_orders.status', 'BB');
                 $q->orWhere('hw_orders.status', 'BC');
-            })
+            })->where('hw_order_details.ship_status', 0)
             ->groupBy('hw_order_details.product_id')
             ->get();
 

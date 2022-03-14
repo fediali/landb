@@ -40,9 +40,9 @@ class SumPreOrderProdExport implements FromCollection, ShouldAutoSize, WithHeadi
     {
         return [
             'Product Code',
-            'Sum Quantity',
             'Eta From',
-            'Eta To'
+            'Eta To',
+            'Sum Quantity',
         ];
     }
 
