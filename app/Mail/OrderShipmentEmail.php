@@ -30,7 +30,7 @@ class OrderShipmentEmail extends Mailable
      */
     public function build()
     {
-        $products = DB::connection('mysql2')
+        $shipped_products = DB::connection('mysql2')
             ->table('hw_order_details')
             ->select('hw_order_details.*', 'hw_product_descriptions.product AS product_name')
             ->join('hw_product_descriptions', 'hw_product_descriptions.product_id', 'hw_order_details.product_id')
@@ -38,6 +38,19 @@ class OrderShipmentEmail extends Mailable
             ->whereIn('hw_order_details.product_id', $this->data['order_product_ids'])
             ->get();
 
-        return $this->view('emails.order_shipment_email')->subject('Your Items has Shipped! - Lucky and Blessed')->with(['products' => $products]);
+        $un_shipped_products = DB::connection('mysql2')
+            ->table('hw_order_details')
+            ->select('hw_order_details.*', 'hw_product_descriptions.product AS product_name')
+            ->join('hw_product_descriptions', 'hw_product_descriptions.product_id', 'hw_order_details.product_id')
+            ->where('hw_order_details.order_id', $this->data['order_id'])
+            ->where('hw_order_details.ship_status', 0)
+            ->get();
+
+        return $this->view('emails.order_shipment_email')
+            ->subject('Your Items has Shipped! - Lucky and Blessed')
+            ->with([
+                'shipped_products' => $shipped_products,
+                'un_shipped_products' => $un_shipped_products,
+            ]);
     }
 }
