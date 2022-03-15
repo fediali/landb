@@ -53,9 +53,9 @@ class MarkProdManifest extends Command
                 ];
                 $batch = DB::connection('mysql2')->table('hw_product_manifest')->where($where)->value('batch_no');
                 if ($batch) {
-                    $batch ++;
+                    //$batch ++;
                 } else {
-                    $batch = 1;
+                    $batch ++;
                 }
                 $data = [
                     'product_id' => $pre_product->product_id,
