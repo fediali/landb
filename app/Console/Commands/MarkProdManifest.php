@@ -46,16 +46,15 @@ class MarkProdManifest extends Command
             ->get();
         foreach ($pre_products as $pre_product) {
             if ($pre_product && $pre_product->avail_since && $pre_product->avail_to) {
+                $batch = DB::connection('mysql2')->table('hw_product_manifest')->where(['product_id' => $pre_product->product_id])->value('batch_no');
                 $where = [
                     'product_id' => $pre_product->product_id,
                     'from_eta_online' => $pre_product->avail_since,
                     'to_eta_online' => $pre_product->avail_to,
                 ];
-                $batch = DB::connection('mysql2')->table('hw_product_manifest')->where($where)->value('batch_no');
-                if ($batch) {
-                    //$batch ++;
-                } else {
-                    $batch ++;
+                $exist = DB::connection('mysql2')->table('hw_product_manifest')->where($where)->value('product_id');
+                if (!$exist && $batch) {
+                    $batch++;
                 }
                 $data = [
                     'product_id' => $pre_product->product_id,
