@@ -62,7 +62,7 @@ class MarkProdManifest extends Command
                     'from_eta_online' => $pre_product->avail_since,
                     'to_eta_online' => $pre_product->avail_to,
                     'qty_required' => $pre_product->quantity_preorder,
-                    'batch_no' => $batch,
+                    'batch_no' => $batch ? $batch : 1,
                 ];
                 DB::connection('mysql2')->table('hw_product_manifest')->updateOrInsert($where, $data);
             }
