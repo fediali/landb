@@ -55,6 +55,7 @@ class SendPreOrderProdReport extends Command
             'monica.rodriguez@luckyfactory.com.mx',
             'hilda.dealba@luckyfactory.com.mx',
             'abiam.vasquez@luckyfactory.com.mx',
+            'hassan@landbapparel.com',
             ])->send(new PreOrderProdQty());
 
         echo 'success';
