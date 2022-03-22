@@ -59,10 +59,12 @@ class SendPreOrderProdReportWeekly extends Command
             'ramsha@landbapparel.com',
             'farhad.ali@luckyandblessed.com',
             'edgarb@landbapparel.com',
+            'luis.parra@luckyfactory.com.mx',
             'alejandro.ruiz@luckyfactory.com.mx',
             'monica.rodriguez@luckyfactory.com.mx',
             'hilda.dealba@luckyfactory.com.mx',
             'abiam.vasquez@luckyfactory.com.mx',
+            'hassan@landbapparel.com',
         ])->send(new PreOrderProdQtyWeekly($dates));
 
         echo 'success';
