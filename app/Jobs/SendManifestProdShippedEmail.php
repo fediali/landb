@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\ManifestProdDelayedEmail;
-use App\Mail\OrderShipmentEmail;
+use App\Mail\ManifestProdShippedEmail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 
-class SendManifestProdDelayedEmail implements ShouldQueue
+class SendManifestProdShippedEmail implements ShouldQueue
 {
     use Dispatchable, SerializesModels;
 
@@ -23,7 +22,7 @@ class SendManifestProdDelayedEmail implements ShouldQueue
     protected $id;
 
     /**
-     * SendManifestProdDelayedEmail constructor.
+     * SendManifestProdShippedEmail constructor.
      * @param $id
      */
     public function __construct($id)
@@ -43,18 +42,12 @@ class SendManifestProdDelayedEmail implements ShouldQueue
             ->where('hw_product_manifest.id', $this->id)
             ->first();
 
-        $emails = [
-            'farhad.surani@gmail.com',
+        $sales_rep_emails = DB::connection('mysql2')
+            ->table('hw_hw_srep')
+            ->whereNotNull('email')
+            ->pluck('email')
+            ->all();
 
-            'hassan@landbapparel.com',
-            'luis.garza@luckyfactory.com.mx',
-            'luis.parra@luckyfactory.com.mx',
-
-            'jesus.arredondo@luckyfactory.com.mx',
-            'heron.femat@landbapparel.com',
-            'ramsha@landbapparel.com',
-        ];
-
-        Mail::to($emails)->send(new ManifestProdDelayedEmail($product));
+        Mail::to($sales_rep_emails)->send(new ManifestProdShippedEmail($product));
     }
 }

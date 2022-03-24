@@ -21,3 +21,8 @@ Route::get('send-manifest-prod-delayed-email/{id}', function($id) {
     $job = new \App\Jobs\SendManifestProdDelayedEmail($id);
     dispatch_now($job);
 });
+
+Route::get('send-manifest-prod-shipped-email/{id}', function($id) {
+    $job = new \App\Jobs\SendManifestProdShippedEmail($id);
+    dispatch_now($job);
+});

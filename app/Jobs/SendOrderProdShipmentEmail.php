@@ -51,8 +51,10 @@ class SendOrderProdShipmentEmail implements ShouldQueue
             ->where('hw_orders.order_id', $this->order_id)
             ->value('hw_users.email');
 
-        $emails = ['heron.femat@landbapparel.com'];
+        $emails = [];
         if ($srep_email) {
+            // array_push($emails, $srep_email);
+            $srep_email = 'heron.femat@landbapparel.com';
             array_push($emails, $srep_email);
         }
 
