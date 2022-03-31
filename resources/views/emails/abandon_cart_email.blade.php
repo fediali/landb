@@ -17,7 +17,7 @@
 <body style="background:#ddd;">
 <div style="background-color: #fffdfc; width: 500px; margin: auto">
     <img style="text-align:center; display: block; margin: auto; height: 70px; padding-top: 20px;"
-         src="https://landbapparel.com/images/logos/174/lucky_blessed_logo_BLK.png"/>
+         src="https://landbapparel.com/images/logos/174/lucky_blessed_logo_BLK__1_.png"/>
     <hr>
     <h3 style=" text-align: center;">
         Your Cart made us send this reminder.
@@ -87,7 +87,7 @@
     text-align: center;
     padding-bottom: 25px;
 ">
-    
+
     <a href="https://www.linkedin.com/company/luckyandblessed/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/linkedin.png" width="30" height="30" alt="Follow L&amp;B on LinkedIn"></a>
     <a href="https://twitter.com/landb_official/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/twitter.png" width="30" height="30" alt="Follow L&amp;B on Twitter"></a>
     <a href="https://www.facebook.com/LuckyandBlessedOfficial/" target="_blank" rel="nofollow external"><img src="https://landbw.co/images/companies/facebook.png" width="30" height="30" alt="Follow L&amp;B on Facebook"></a>
