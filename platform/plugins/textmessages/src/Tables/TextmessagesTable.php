@@ -227,3 +227,7 @@ class TextmessagesTable extends TableAbstract
         return $this->getBulkChanges();
     }
 }
+
+
+
+
