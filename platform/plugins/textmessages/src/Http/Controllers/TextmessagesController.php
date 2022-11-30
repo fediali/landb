@@ -4,9 +4,11 @@ namespace Botble\Textmessages\Http\Controllers;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
+use Botble\Chating\Http\Controllers\ChatingController;
 use Botble\Textmessages\Http\Requests\TextmessagesRequest;
 use Botble\Textmessages\Repositories\Interfaces\TextmessagesInterface;
 use Botble\Base\Http\Controllers\BaseController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use Botble\Textmessages\Tables\TextmessagesTable;
@@ -16,6 +18,7 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Textmessages\Forms\TextmessagesForm;
 use Botble\Base\Forms\FormBuilder;
+use Illuminate\Support\Facades\DB;
 
 class TextmessagesController extends BaseController
 {
@@ -62,16 +65,39 @@ class TextmessagesController extends BaseController
      */
     public function store(TextmessagesRequest $request, BaseHttpResponse $response)
     {
-        $request['status'] = 'schedule';
-        $request['schedule'] = $request->schedule;
+        $request['status'] = 'published';
+        $request['schedule'] = Carbon::now();
         $request['created_by'] = auth()->id();
         $request['updated_by'] = auth()->id();
 
-        if (!count($request->customer_ids)) {
+        if ($request->has('customer_type')) {
+            $phones = [];
+            $message = $request->text;
+            if ($request->customer_type == 'auto') {
+                $limit = $request->customer_range ?? 0;
+                $phones = DB::connection('mysql2')->table('hw_users')
+                    ->where('status', 'A')
+                    ->where('user_type', 'C')
+                    ->orderBy('last_login', 'DESC')
+                    ->limit($limit)
+                    ->pluck('phone')
+                    ->all();
+            } elseif($request->customer_type == 'manual') {
+                if ($request->manual_phone) {
+                    $phones = explode(',', $request->manual_phone);
+                }
+            }
+            //4698450619,2142705837,2149846569,2147747178,2149738953,9727622218,2148598121,2148501109,9724086273
+            if ($message && count($phones)) {
+                app(ChatingController::class)->sendCustomSms($phones, $message);
+            }
+        }
+
+        /*if (!count($request->customer_ids)) {
             $request['customer_ids'] = get_customers_by_sales_rep();
         }
 
-        $request['customer_ids'] = implode(',', $request['customer_ids']);
+        $request['customer_ids'] = implode(',', $request['customer_ids']);*/
 
         $textmessages = $this->textmessagesRepository->createOrUpdate($request->input());
 
