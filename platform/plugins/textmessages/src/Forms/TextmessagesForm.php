@@ -31,7 +31,7 @@ class TextmessagesForm extends FormAbstract
                 'label_attr' => ['class' => 'control-label required'],
                 'attr'       => [
                     'placeholder'  => trans('core/base::forms.name_placeholder'),
-                    'data-counter' => 120,
+                    'data-counter' => 1000,
                 ],
             ])
             ->add('text', 'textarea', [
