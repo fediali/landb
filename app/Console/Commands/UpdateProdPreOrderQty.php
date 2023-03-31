@@ -39,7 +39,9 @@ class UpdateProdPreOrderQty extends Command
             ->table('hw_products')
             ->where('status', 'D')
             ->where('quantity_preorder', '>', 0)
-            ->where('count_preorder', '>', 0)->get();
+            ->where('count_preorder', '>', 0)
+            ->first();
+
         dd($products);
 //            ->update([
 //                'quantity_preorder' => $product->sum_quantity,
