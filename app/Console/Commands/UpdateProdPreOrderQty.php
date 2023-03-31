@@ -34,57 +34,49 @@ class UpdateProdPreOrderQty extends Command
 
     public function handle()
     {
-
-        $products = DB::connection('mysql2')
+        DB::connection('mysql2')
             ->table('hw_products')
-            ->where('status', 'D')
-            ->where('quantity_preorder', '>', 0)
-            ->where('count_preorder', '>', 0)
-            ->update([
-                'quantity_preorder' => 0,
-                'count_preorder' => 0
-            ]);
-//        DB::connection('mysql2')
-//            ->table('hw_products')
-//            ->where('hw_products.ptype', 'P')
-////            ->where('hw_products.product_id', 83702)
-//            ->orderBy('hw_products.product_id', 'ASC')
-//            ->chunk(500, function ($products) {
-//                foreach ($products as $product) {
-//                    $row = (array)$product;
-//                    if ($row['product_id']) {
-//                        $product = DB::connection('mysql2')
-//                            ->table('hw_order_details')
-//                            ->selectRaw('COUNT(hw_order_details.order_id) AS sum_order')
-//                            ->selectRaw('SUM(hw_order_details.amount) AS sum_quantity')
-//                            ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
-//                            ->where(function ($q) {
-//                                $q->where('hw_orders.status', 'AR');
-//                                $q->orWhere('hw_orders.status', 'AZ');
-//                                $q->orWhere('hw_orders.status', 'B');
-//                                $q->orWhere('hw_orders.status', 'L');
-//                                $q->orWhere('hw_orders.status', 'U');
-//                                $q->orWhere('hw_orders.status', 'BB');
-//                                $q->orWhere('hw_orders.status', 'BC');
-//                                $q->orWhere('hw_orders.status', 'AQ');
-//                                $q->orWhere('hw_orders.status', 'BA');
-//                            })
-//                            ->where(function ($query) use ($row) {
-//                                $query->where('hw_order_details.product_id', $row['product_id']);
-//                                $query->where('hw_order_details.ship_status', 0);
-//                            })
-//                            ->groupBy('hw_order_details.product_code')
-//                            ->first();
-//                        if ($product) {
-//                            DB::connection('mysql2')
-//                                ->table('hw_products')
-//                                ->where('hw_products.product_id', $row['product_id'])
-//                                ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
-//                        }
-//
-//                    }
-//                }
-//            });
+            ->where('hw_products.ptype', 'P')
+//            ->where('hw_products.product_id', 83702)
+            ->orderBy('hw_products.product_id', 'ASC')
+            ->chunk(500, function ($products) {
+                foreach ($products as $product) {
+                    $row = (array)$product;
+                    if ($row['product_id']) {
+                        $product = DB::connection('mysql2')
+                            ->table('hw_order_details')
+                            ->selectRaw('COUNT(hw_order_details.order_id) AS sum_order')
+                            ->selectRaw('SUM(hw_order_details.amount) AS sum_quantity')
+                            ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
+                            ->where(function ($q) {
+                                $q->where('hw_orders.status', 'AR');
+                                $q->orWhere('hw_orders.status', 'AZ');
+                                $q->orWhere('hw_orders.status', 'B');
+                                $q->orWhere('hw_orders.status', 'U');
+                                $q->orWhere('hw_orders.status', 'L');
+                                $q->orWhere('hw_orders.status', 'BB');
+                                $q->orWhere('hw_orders.status', 'BC');
+                                $q->orWhere('hw_orders.status', 'AQ');
+                                $q->orWhere('hw_orders.status', 'BA');
+
+
+                            })
+                            ->where(function ($query) use ($row) {
+                                $query->where('hw_order_details.product_id', $row['product_id']);
+                                $query->where('hw_order_details.ship_status', 0);
+                            })
+                            ->groupBy('hw_order_details.product_code')
+                            ->first();
+                        if ($product) {
+                            DB::connection('mysql2')
+                                ->table('hw_products')
+                                ->where('hw_products.product_id', $row['product_id'])
+                                ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
+                        }
+
+                    }
+                }
+            });
         echo 'success';
     }
 }
