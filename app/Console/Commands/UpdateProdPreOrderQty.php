@@ -34,15 +34,15 @@ class UpdateProdPreOrderQty extends Command
 
     public function handle()
     {
-        DB::connection('mysql2')
+        $row  = DB::connection('mysql2')
             ->table('hw_products')
             ->where('hw_products.ptype', 'P')
-//            ->where('hw_products.product_id', 83702)
-            ->orderBy('hw_products.product_id', 'ASC')
-            ->chunk(500, function ($products) {
-                foreach ($products as $product) {
-                    $row = (array)$product;
-                    if ($row['product_id']) {
+            ->where('hw_products.product_id', 116458)->get();
+//            ->orderBy('hw_products.product_id', 'ASC')
+//            ->chunk(500, function ($products) {
+//                foreach ($products as $product) {
+//                    $row = (array)$product;
+//                    if ($row['product_id']) {
                         $product = DB::connection('mysql2')
                             ->table('hw_order_details')
                             ->selectRaw('COUNT(hw_order_details.order_id) AS sum_order')
@@ -65,15 +65,16 @@ class UpdateProdPreOrderQty extends Command
                             })
                             ->groupBy('hw_order_details.product_code')
                             ->first();
+                        dd($product);
                         if ($product) {
                             DB::connection('mysql2')
                                 ->table('hw_products')
                                 ->where('hw_products.product_id', $row['product_id'])
                                 ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
                         }
-                    }
-                }
-            });
+//                    }
+//                }
+//            });
         echo 'success';
     }
 }
