@@ -52,11 +52,12 @@ class UpdateProdPreOrderQty extends Command
                                 $q->where('hw_orders.status', 'AR');
                                 $q->orWhere('hw_orders.status', 'AZ');
                                 $q->orWhere('hw_orders.status', 'B');
+                                $q->orWhere('hw_orders.status', 'L');
+                                $q->orWhere('hw_orders.status', 'U');
                                 $q->orWhere('hw_orders.status', 'BB');
                                 $q->orWhere('hw_orders.status', 'BC');
                                 $q->orWhere('hw_orders.status', 'AQ');
                                 $q->orWhere('hw_orders.status', 'BA');
-
                             })
                             ->where(function ($query) use ($row) {
                                 $query->where('hw_order_details.product_id', $row['product_id']);
@@ -70,7 +71,6 @@ class UpdateProdPreOrderQty extends Command
                                 ->where('hw_products.product_id', $row['product_id'])
                                 ->update(['quantity_preorder' => $product->sum_quantity, 'count_preorder' => $product->sum_order]);
                         }
-
                     }
                 }
             });
