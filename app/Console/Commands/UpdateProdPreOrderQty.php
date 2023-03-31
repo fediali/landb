@@ -46,9 +46,9 @@ class UpdateProdPreOrderQty extends Command
 //                    if ($row['product_id']) {
                         $product = DB::connection('mysql2')
                             ->table('hw_order_details')
-                            ->selectRaw('COALESCE(COUNT(hw_order_details.order_id), 0) AS sum_order')
-                            ->selectRaw( 'COALESCE(SUM(hw_order_details.amount), 0) AS sum_quantity')
-                            ->join('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
+                            ->selectRaw('IFNULL(COUNT(hw_order_details.order_id), 0) AS sum_order')
+                            ->selectRaw('IFNULL(SUM(hw_order_details.amount), 0) AS sum_quantity')
+                            ->leftJoin('hw_orders', 'hw_orders.order_id', 'hw_order_details.order_id')
                             ->where(function ($q) {
                                 $q->where('hw_orders.status', 'AR');
                                 $q->orWhere('hw_orders.status', 'AZ');
