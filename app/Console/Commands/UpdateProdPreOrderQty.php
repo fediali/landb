@@ -38,8 +38,8 @@ class UpdateProdPreOrderQty extends Command
         $products = DB::connection('mysql2')
             ->table('hw_products')
             ->where('status', 'D')
-            ->where('quantity_preorder', '>', 0)
-            ->where('count_preorder', '>', 0)
+            ->where('quantity_preorder', '<', 0)
+            ->where('count_preorder', '<', 0)
             ->first();
 
         dd($products);
