@@ -38,16 +38,12 @@ class UpdateProdPreOrderQty extends Command
         $products = DB::connection('mysql2')
             ->table('hw_products')
             ->where('status', 'D')
-            ->where('quantity_preorder', '<', 0)
-            ->where('count_preorder', '<', 0)
-            ->first();
-
-        dd($products);
-//            ->update([
-//                'quantity_preorder' => $product->sum_quantity,
-//                'count_preorder' => $product->sum_order,
-//                'updated_at' => Carbon::now()
-//            ]);
+            ->where('quantity_preorder', '>', 0)
+            ->where('count_preorder', '>', 0)
+            ->update([
+                'quantity_preorder' => 0,
+                'count_preorder' => 0
+            ]);
 //        DB::connection('mysql2')
 //            ->table('hw_products')
 //            ->where('hw_products.ptype', 'P')
@@ -89,6 +85,6 @@ class UpdateProdPreOrderQty extends Command
 //                    }
 //                }
 //            });
-//        echo 'success';
+        echo 'success';
     }
 }
