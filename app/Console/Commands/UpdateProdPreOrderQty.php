@@ -66,7 +66,7 @@ class UpdateProdPreOrderQty extends Command
                             })
                             ->groupBy('hw_order_details.product_code')
                             ->first();
-                        dd($product);
+                        dd($product, $product->sum_quantity, $product->sum_order);
                         if ($product) {
                             DB::connection('mysql2')
                                 ->table('hw_products')
