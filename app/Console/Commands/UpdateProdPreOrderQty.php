@@ -37,8 +37,8 @@ class UpdateProdPreOrderQty extends Command
         $row  = DB::connection('mysql2')
             ->table('hw_products')
             ->where('hw_products.ptype', 'P')
-            ->where('hw_products.product_id', 116458)->get();
-        dd($row->product_id);
+            ->where('hw_products.product_id', 116458)->first();
+
 //            ->orderBy('hw_products.product_id', 'ASC')
 //            ->chunk(500, function ($products) {
 //                foreach ($products as $product) {
