@@ -61,7 +61,7 @@ class UpdateProdPreOrderQty extends Command
                                 $q->orWhere('hw_orders.status', 'BA');
                             })
                             ->where(function ($query) use ($row) {
-                                $query->where('hw_order_details.product_id', $row['product_id']);
+                                $query->where('hw_order_details.product_id', $row->product_id);
                                 $query->where('hw_order_details.ship_status', 0);
                             })
                             ->groupBy('hw_order_details.product_code')
