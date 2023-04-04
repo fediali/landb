@@ -29,12 +29,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::get('import', [
                 'as'         => 'import',
                 'uses'       => 'OrderController@import',
-                'permission' => 'orders.import',
+                'permission' => 'order-import.index',
             ]);
             Route::post('import-order', [
                 'as'         => 'import-order',
                 'uses'       => 'OrderController@importOrder',
-                'permission' => 'orders.import',
+                'permission' => 'order-import.index',
             ]);
 
             Route::get('edit-order/{id}', [
@@ -157,15 +157,63 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'orders.create',
             ]);
 
+            Route::get('revert-order-refund-product/{order_id}/{prod_id}', [
+                'as'         => 'order.revert.refund.product',
+                'uses'       => 'OrderController@orderRevertRefundProduct',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('order-refund-product/{id}', [
+                'as'         => 'order.refund.product',
+                'uses'       => 'OrderController@orderRefundProduct',
+                'permission' => 'orders.create',
+            ]);
             Route::post('split-order/{id}', [
                 'as'         => 'split.order',
                 'uses'       => 'OrderController@splitOrder',
+                'permission' => 'orders.create',
+            ]);
+            Route::post('split-payment/{id}', [
+                'as'         => 'split.payment',
+                'uses'       => 'OrderController@splitPayment',
                 'permission' => 'orders.create',
             ]);
             Route::post('sales-rep/{id}', [
                 'as'         => 'sales-rep',
                 'uses'       => 'OrderController@salesRepupdate',
                 'permission' => 'orders.create',
+            ]);
+
+            Route::get('remove-discount/{id}', [
+                'as'         => 'remove-discount',
+                'uses'       => 'OrderController@removeDiscount',
+                'permission' => 'orders.create',
+            ]);
+
+            Route::get('order-invoice/{id}', [
+                'as'         => 'orderInvoice',
+                'uses'       => 'OrderController@createInvoice',
+                'permission' => 'orders.create',
+            ]);
+
+            Route::get('push-order-to-old-system/{id}', [
+                'as'         => 'pushOrderToOldSystem',
+                'uses'       => 'OrderController@pushOrderToOldSystem',
+                'permission' => 'orders.edit',
+            ]);
+            Route::get('fetch-old-system-order/{id}', [
+                'as'         => 'fetchOldSystemOrder',
+                'uses'       => 'OrderController@fetchOldSystemOrder',
+                'permission' => 'orders.edit',
+            ]);
+            Route::get('fetch-old-system-card/{id}', [
+                'as'         => 'fetchOldSystemCard',
+                'uses'       => 'OrderController@fetchOldSystemCard',
+                'permission' => 'orders.edit',
+            ]);
+            Route::get('send-invoice/{id}', [
+                'as'         => 'sendInvoice',
+                'uses'       => 'OrderController@sendInvoice',
+                'permission' => 'orders.edit',
             ]);
 
         });

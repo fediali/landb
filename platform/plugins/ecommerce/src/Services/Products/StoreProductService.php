@@ -79,6 +79,8 @@ class StoreProductService
             }
         }
 
+        unset($product['color_products']);
+
         /**
          * @var Product $product
          */

@@ -18,6 +18,12 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
                 'permission' => 'customer.index',
             ]);
 
+            Route::post('change-status', [
+                'as'         => 'changeStatus',
+                'uses'       => 'CustomerController@changeStatus',
+                'permission' => 'customer.create',
+            ]);
+
             Route::get('merge-customer-delete/{id}', [
                 'as'         => 'merge-customer-delete',
                 'uses'       => 'CustomerController@mergeDelete',
@@ -88,22 +94,22 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers\Customers', 'mid
             Route::get('delete-address', [
                 'as'         => 'delete-address',
                 'uses'       => 'CustomerController@deleteAddress',
-                'permission' => 'customers.create',
+                'permission' => 'customer.create',
             ]);
             Route::post('create-customer-address', [
                 'as'         => 'create-customer-address',
                 'uses'       => 'CustomerController@postCustomerAddress',
-                'permission' => 'customers.create',
+                'permission' => 'customer.create',
             ]);
             Route::post('create-customer-payment', [
                 'as'         => 'create-customer-payment',
                 'uses'       => 'CustomerController@postCustomerCard',
-                'permission' => 'customers.create',
+                'permission' => 'customer.create',
             ]);
             Route::post('update-customer-address', [
                 'as'         => 'update-customer-address',
                 'uses'       => 'CustomerController@updateCustomerAddress',
-                'permission' => 'customers.create',
+                'permission' => 'customer.create',
             ]);
         });
     });

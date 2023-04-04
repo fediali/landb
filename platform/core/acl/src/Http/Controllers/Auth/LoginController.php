@@ -4,6 +4,7 @@ namespace Botble\ACL\Http\Controllers\Auth;
 
 use Assets;
 use BaseHelper;
+use Botble\ACL\Enums\UserStatusEnum;
 use Botble\ACL\Repositories\Interfaces\ActivationInterface;
 use Botble\ACL\Repositories\Interfaces\UserInterface;
 use Botble\ACL\Traits\AuthenticatesUsers;
@@ -107,7 +108,7 @@ class LoginController extends BaseController
 
         $user = app(UserInterface::class)->getFirstBy([$this->username() => $request->input($this->username())]);
         if (!empty($user)) {
-            if (!app(ActivationInterface::class)->completed($user)) {
+            if (!app(ActivationInterface::class)->completed($user) || $user->status == UserStatusEnum::DEACTIVATED) {
                 return $this->response
                     ->setError()
                     ->setMessage(trans('core/acl::auth.login.not_active'));

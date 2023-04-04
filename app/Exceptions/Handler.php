@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Throwable;
+
 
 class Handler extends ExceptionHandler
 {
@@ -36,5 +39,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() == 419) {
+                return redirect()->back();
+            }
+        });
     }
+
+
 }

@@ -171,7 +171,7 @@
         var input = document.getElementById("scannerInput");
         // Execute a function when the user releases a key on the keyboard
         input.addEventListener("keyup", function (event) {
-            if (input.val()) {
+          //  if (input.val()) {
                 // Number 13 is the "Enter" key on the keyboard
                 if (event.keyCode === 13) {
                     // Cancel the default action, if needed
@@ -182,7 +182,7 @@
                     $('#scannerInput').removeClass('is-invalid');
                     get_product_by_barcode(this.value, $t);
                 }
-            }
+            //}
         });
         var form = document.getElementsByTagName("form");
         form[0].addEventListener("keydown", function (event) {

@@ -2,6 +2,7 @@
 
 namespace Botble\Ecommerce\Repositories\Eloquent;
 
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Support\Repositories\Eloquent\RepositoriesAbstract;
 use Illuminate\Database\Query\Builder;
@@ -15,6 +16,7 @@ class DiscountRepository extends RepositoriesAbstract implements DiscountInterfa
     {
         return $this->model
             ->where('type', 'promotion')
+            ->where('status', BaseStatusEnum::$Discount['Active'])
             ->where('start_date', '<=', now())
             ->where(function ($query) {
                 /**
@@ -29,7 +31,7 @@ class DiscountRepository extends RepositoriesAbstract implements DiscountInterfa
                  * @var Builder $query
                  */
                 return $query
-                    ->whereIn('target', ['all-orders', 'amount-minimum-order'])
+                    ->whereIn('target', ['all-orders', 'amount-minimum-order', 'specific-product', 'category', 'product-variant'])
                     ->orWhere(function ($sub) {
                         /**
                          * @var Builder $sub
@@ -49,6 +51,7 @@ class DiscountRepository extends RepositoriesAbstract implements DiscountInterfa
     {
         return $this->model
             ->where('type', 'promotion')
+            ->where('status', BaseStatusEnum::$Discount['Active'])
             ->where('start_date', '<=', now())
             ->leftJoin('ec_discount_products', 'ec_discounts.id', '=', 'ec_discount_products.discount_id')
             ->leftJoin('ec_discount_product_collections', 'ec_discounts.id', '=',

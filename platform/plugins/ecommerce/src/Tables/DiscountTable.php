@@ -70,6 +70,9 @@ class DiscountTable extends TableAbstract
                     return '-';
                 }
                 return $item->end_date;
+            })
+            ->editColumn('status', function ($item) {
+                return view('plugins/ecommerce::discounts.discountStatus', ['item' => $item])->render();
             });
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
@@ -93,6 +96,14 @@ class DiscountTable extends TableAbstract
         $query = $model->select($select);
 
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function htmlDrawCallbackFunction(): ?string
+    {
+        return parent::htmlDrawCallbackFunction() . '$(".editable").editable();';
     }
 
     /**
@@ -125,6 +136,12 @@ class DiscountTable extends TableAbstract
             'end_date'   => [
                 'name'  => 'ec_discounts.end_date',
                 'title' => trans('plugins/ecommerce::discount.end_date'),
+                'class' => 'text-center',
+            ],
+            'status'    => [
+                'name'  => 'ec_discounts.status',
+                'title' => trans('core/base::tables.status'),
+                'width' => '100px',
                 'class' => 'text-center',
             ],
         ];

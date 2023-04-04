@@ -858,6 +858,129 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     products: {
@@ -874,6 +997,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     customer_id: {
       type: Number,
+      "default": function _default() {
+        return null;
+      }
+    },
+    paypal_email_prop: {
+      type: String,
       "default": function _default() {
         return null;
       }
@@ -898,6 +1027,12 @@ __webpack_require__.r(__webpack_exports__);
         return [];
       }
     },
+    customer_billing_addresses: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    },
     order_types: {
       type: Object,
       "default": function _default() {
@@ -911,6 +1046,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     customer_address: {
+      type: Object,
+      "default": function _default() {
+        return {
+          name: null,
+          email: null,
+          address: null,
+          phone: null,
+          country: 'AF',
+          state: null,
+          city: null,
+          zip_code: null
+        };
+      }
+    },
+    customer_billing_address: {
       type: Object,
       "default": function _default() {
         return {
@@ -977,6 +1127,12 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": function _default() {
         return false;
+      }
+    },
+    can_price_edit: {
+      type: Number,
+      "default": function _default() {
+        return 0;
       }
     },
     shipping_method_name: {
@@ -1052,9 +1208,12 @@ __webpack_require__.r(__webpack_exports__);
       discount_custom_value: 0,
       child_customer: this.customer,
       child_customer_id: this.customer_id,
+      paypal_email: this.paypal_email_prop,
       child_customer_order_numbers: this.customer_order_numbers,
       child_customer_addresses: this.customer_addresses,
+      child_customer_billing_addresses: this.customer_billing_addresses,
       child_customer_address: this.customer_address,
+      child_customer_billing_address: this.customer_billing_address,
       child_products: this.products,
       child_product_ids: this.product_ids,
       child_sub_amount: this.sub_amount,
@@ -1065,7 +1224,10 @@ __webpack_require__.r(__webpack_exports__);
       child_shipping_option: this.shipping_option,
       child_shipping_method_name: this.shipping_method_name,
       child_is_selected_shipping: this.is_selected_shipping,
-      child_payment_method: this.payment_method
+      child_can_price_edit: this.can_price_edit,
+      child_payment_method: this.payment_method,
+      creating_order: false,
+      cancelSource: null
     };
   },
   mounted: function mounted() {
@@ -1099,6 +1261,8 @@ __webpack_require__.r(__webpack_exports__);
           Botble.handleError(res.response.data);
         });
       }
+
+      context.loadCountries();
     },
     handleSearchCustomer: function handleSearchCustomer(value) {
       if (value !== this.customer_keyword) {
@@ -1118,11 +1282,19 @@ __webpack_require__.r(__webpack_exports__);
 
       if (_.isEmpty(context.list_products.data) || force) {
         context.loading = true;
+
+        if (context.cancelSource) {
+          context.cancelSource.cancel('Start new search, stop active search');
+        }
+
+        context.cancelSource = axios.CancelToken.source();
         axios.get(route('products.get-all-products-and-variations', {
           keyword: context.product_keyword,
           order_type: context.order_type,
           page: page
-        })).then(function (res) {
+        }), {
+          cancelToken: context.cancelSource.token
+        }).then(function (res) {
           context.list_products = res.data.data;
           context.loading = false;
         })["catch"](function (res) {
@@ -1138,6 +1310,9 @@ __webpack_require__.r(__webpack_exports__);
           context.loadListProductsAndVariations(1, true);
         }, 500);
       }
+    },
+    changeOrderType: function changeOrderType() {
+      this.loadListProductsAndVariations();
     },
     selectProductVariant: function selectProductVariant(product) {
       var variation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -1169,21 +1344,33 @@ __webpack_require__.r(__webpack_exports__);
         _productItem.select_qty = 1;
         this.child_products.push(_productItem);
         this.child_product_ids.push(product.id);
-      }
+      } // this.hidden_product_search_panel = true;
 
-      this.hidden_product_search_panel = true;
     },
     selectCustomer: function selectCustomer(customer) {
       this.child_customer = customer;
       this.child_customer_id = customer.id;
+      this.paypal_email = customer.paypal_email ? customer.paypal_email : customer.email;
       this.loadCustomerAddress(this.child_customer_id);
       this.getOrderNumbers();
     },
     removeCustomer: function removeCustomer() {
       this.child_customer = this.customer;
       this.child_customer_id = null;
+      this.paypal_email = null;
       this.child_customer_addresses = [];
+      this.child_customer_billing_addresses = [];
       this.child_customer_address = {
+        name: null,
+        email: null,
+        address: null,
+        phone: null,
+        country: 'AF',
+        state: null,
+        city: null,
+        zip_code: null
+      };
+      this.child_customer_billing_address = {
         name: null,
         email: null,
         address: null,
@@ -1216,8 +1403,11 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     createOrder: function createOrder($event) {
+      var _this = this;
+
       var paid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       $event.preventDefault();
+      this.creating_order = true;
       $($event.target).find('.btn-primary').addClass('button-loading');
       var context = this;
       var products = [];
@@ -1226,7 +1416,8 @@ __webpack_require__.r(__webpack_exports__);
         products.push({
           id: item.configurable_product_id ? item.product_id : item.id,
           quantity: item.select_qty,
-          sale_price: item.price
+          sale_price: item.price,
+          per_piece_price: item.per_piece_price
         });
       });
 
@@ -1241,12 +1432,14 @@ __webpack_require__.r(__webpack_exports__);
         discount_description: this.child_discount_description,
         coupon_code: this.coupon_code,
         customer_id: this.child_customer_id,
+        paypal_email: this.paypal_email,
         order_id: this.order_id,
         note: this.note,
         customer_notes: this.customer_notes,
         order_type: this.order_type,
         amount: this.child_sub_amount,
         customer_address: this.child_customer_address,
+        customer_billing_address: this.child_customer_billing_address,
         order_card: $("select.card_list option:selected").val(),
         billing_address: $("select#billing_address option:selected").val()
       }).then(function (res) {
@@ -1254,6 +1447,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (data.error) {
           Botble.showError(Botble.showError(res.data.message));
+          _this.creating_order = false;
         } else {
           Botble.showSuccess(res.data.message);
 
@@ -1275,6 +1469,7 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         $($event.target).find('.btn-primary').removeClass('button-loading');
+        _this.creating_order = false;
       });
     },
     createProduct: function createProduct($event) {
@@ -1327,21 +1522,40 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateOrderAddress: function updateOrderAddress($event) {
       $event.preventDefault();
+      var context = this;
 
-      if (this.customer) {
-        $($event.target).addClass('button-loading');
+      if (this.child_customer) {
+        $($event.target).find('.btn-primary').addClass('button-loading');
         var $modal = $(event.target).closest('.modal-dialog');
         this.child_customer_address.name = $modal.find('.customer-address-name').val();
         this.child_customer_address.email = $modal.find('.customer-address-email').val();
         this.child_customer_address.phone = $modal.find('.customer-address-phone').val();
         this.child_customer_address.address = $modal.find('.customer-address-address').val();
         this.child_customer_address.city = $modal.find('.customer-address-city').val();
-        this.child_customer_address.state = $modal.find('.customer-address-state').val();
-        this.child_customer_address.country = $modal.find('.customer-address-country').val();
+        this.child_customer_address.state = $modal.find('.customer-address-state').val(); //this.child_customer_address.country = $modal.find('.customer-address-country').val();
+
         this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val(); // this.loadCountries();
 
-        this.$root.$emit('bv::hide::modal', 'edit-address');
-        $($event.target).removeClass('button-loading');
+        context.$root.$emit('bv::hide::modal', 'edit-address');
+        $($event.target).find('.btn-primary').removeClass('button-loading');
+      }
+    },
+    updateOrderBillingAddress: function updateOrderBillingAddress($event) {
+      $event.preventDefault();
+      var context = this;
+
+      if (this.child_customer) {
+        $($event.target).find('.btn-primary').addClass('button-loading');
+        var $modal = $(event.target).closest('.modal-dialog');
+        this.child_customer_billing_address.name = $modal.find('.customer-address-name').val();
+        this.child_customer_billing_address.email = $modal.find('.customer-address-email').val();
+        this.child_customer_billing_address.phone = $modal.find('.customer-address-phone').val();
+        this.child_customer_billing_address.address = $modal.find('.customer-address-address').val();
+        this.child_customer_billing_address.city = $modal.find('.customer-address-city').val();
+        this.child_customer_billing_address.state = $modal.find('.customer-address-state').val();
+        this.child_customer_billing_address.zip_code = $modal.find('.customer-address-zip-code').val();
+        context.$root.$emit('bv::hide::modal', 'edit-billing-address');
+        $($event.target).find('.btn-primary').removeClass('button-loading');
       }
     },
     createNewCustomer: function createNewCustomer($event) {
@@ -1387,6 +1601,15 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    selectCustomerBillingAddress: function selectCustomerBillingAddress(event) {
+      var context = this;
+
+      _.each(this.child_customer_billing_addresses, function (item) {
+        if (parseInt(item.id) === parseInt(event.target.value)) {
+          context.child_customer_billing_address = item;
+        }
+      });
+    },
     getOrderNumbers: function getOrderNumbers() {
       var context = this;
       axios.get(route('customers.get-customer-order-numbers', context.child_customer_id)).then(function (res) {
@@ -1398,10 +1621,19 @@ __webpack_require__.r(__webpack_exports__);
     loadCustomerAddress: function loadCustomerAddress() {
       var context = this;
       axios.get(route('customers.get-customer-addresses', context.child_customer_id)).then(function (res) {
-        context.child_customer_addresses = res.data.data;
+        context.child_customer_addresses = res.data.data.filter(function (addr) {
+          return addr.type == 'shipping';
+        });
+        context.child_customer_billing_addresses = res.data.data.filter(function (addr) {
+          return addr.type == 'billing';
+        });
 
         if (!_.isEmpty(context.child_customer_addresses)) {
           context.child_customer_address = _.first(context.child_customer_addresses);
+        }
+
+        if (!_.isEmpty(context.child_customer_billing_addresses)) {
+          context.child_customer_billing_address = _.first(context.child_customer_billing_addresses);
         }
       })["catch"](function (res) {
         Botble.handleError(res.response.data);
@@ -1521,6 +1753,21 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleChangeQuantity: function handleChangeQuantity() {
+      this.calculateAmount(this.child_products);
+    },
+    handleChangePerPiecePrice: function handleChangePerPiecePrice() {
+      var context = this;
+      var products = this.child_products;
+
+      _.each(products, function (item) {
+        console.log(item.per_piece_price, "===");
+
+        if (item.packQty) {
+          item.price = parseFloat(item.per_piece_price) * parseInt(item.packQty);
+        }
+      });
+
+      this.child_products = products;
       this.calculateAmount(this.child_products);
     },
     resetProductData: function resetProductData() {
@@ -7629,19 +7876,22 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: { id: "order-type" },
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.order_type = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    }
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.order_type = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      },
+                      _vm.changeOrderType
+                    ]
                   }
                 },
                 [
@@ -7694,10 +7944,7 @@ var render = function() {
                                     [
                                       _c("img", {
                                         staticClass: "thumb-image",
-                                        attrs: {
-                                          src: variant.image_url,
-                                          alt: variant.product_name
-                                        }
+                                        attrs: { src: variant.image_url }
                                       })
                                     ]
                                   )
@@ -7727,7 +7974,7 @@ var render = function() {
                                           function(productItem, index) {
                                             return _c("span", [
                                               _vm._v(
-                                                "\n                                            " +
+                                                "\n                                            Type: " +
                                                   _vm._s(
                                                     productItem.attribute_title
                                                   ) +
@@ -7744,23 +7991,124 @@ var render = function() {
                                       )
                                     : _vm._e(),
                                   _vm._v(" "),
+                                  _c("p", [
+                                    _vm._v(
+                                      "\n                                        SKU : " +
+                                        _vm._s(
+                                          variant.product
+                                            ? variant.product.sku
+                                              ? variant.product.sku
+                                              : "No SKU"
+                                            : variant.sku
+                                            ? variant.sku
+                                            : "No SKU"
+                                        ) +
+                                        "\n                                    "
+                                    )
+                                  ]),
+                                  _vm._v(" "),
                                   variant.product &&
-                                  variant.product.sku.includes("pack")
+                                  !variant.product.sku.includes("single")
                                     ? _c("p", [
                                         _vm._v(
                                           "\n                                        Total Pieces : " +
-                                            _vm._s(variant.packQty) +
-                                            "\n                                    "
-                                        )
-                                      ])
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  variant.product &&
-                                  variant.product.sku.includes("pack")
-                                    ? _c("p", [
+                                            _vm._s(
+                                              variant.product.prod_pieces
+                                                ? variant.product.prod_pieces
+                                                : variant.packQty
+                                            ) +
+                                            "\n                                        "
+                                        ),
+                                        _c(
+                                          "span",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value:
+                                                  _vm.child_can_price_edit == 0,
+                                                expression:
+                                                  "child_can_price_edit == 0"
+                                              }
+                                            ]
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                            Piece Price : $" +
+                                                _vm._s(
+                                                  variant.product
+                                                    .per_piece_price
+                                                ) +
+                                                "\n                                        "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value:
+                                                  _vm.child_can_price_edit == 1,
+                                                expression:
+                                                  "child_can_price_edit == 1"
+                                              }
+                                            ]
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                            Piece Price : "
+                                            ),
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value:
+                                                    variant.per_piece_price,
+                                                  expression:
+                                                    "variant.per_piece_price"
+                                                }
+                                              ],
+                                              staticClass:
+                                                "next-input p-none-r",
+                                              attrs: {
+                                                type: "number",
+                                                step: "0.1",
+                                                min: "1"
+                                              },
+                                              domProps: {
+                                                value: variant.per_piece_price
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  return _vm.handleChangePerPiecePrice()
+                                                },
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    variant,
+                                                    "per_piece_price",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]
+                                        ),
                                         _vm._v(
                                           "\n                                        Sizes : " +
-                                            _vm._s(variant.packSizes) +
+                                            _vm._s(
+                                              variant.product.sizes
+                                                ? variant.product.sizes
+                                                : variant.packSizes
+                                            ) +
                                             "\n                                    "
                                         )
                                       ])
@@ -7786,45 +8134,89 @@ var render = function() {
                                         "div",
                                         { staticClass: "d-flex dropdown" },
                                         [
-                                          _c(
-                                            "span",
-                                            {
-                                              staticStyle: {
-                                                "margin-top": "8px !important",
-                                                "margin-right": "5px !important"
-                                              }
-                                            },
-                                            [_vm._v(_vm._s(_vm.currency))]
-                                          ),
+                                          _vm.child_can_price_edit == 0
+                                            ? _c(
+                                                "a",
+                                                {
+                                                  staticClass:
+                                                    "wordwrap hide-print"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(variant.price) +
+                                                      " " +
+                                                      _vm._s(_vm.currency)
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
                                           _vm._v(" "),
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: variant.price,
-                                                expression: "variant.price"
-                                              }
-                                            ],
-                                            staticClass: "next-input p-none-r",
-                                            attrs: { type: "number", min: "1" },
-                                            domProps: { value: variant.price },
-                                            on: {
-                                              change: function($event) {
-                                                return _vm.handleChangeQuantity()
-                                              },
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  variant,
-                                                  "price",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
+                                          _vm.child_can_price_edit == 1
+                                            ? _c(
+                                                "div",
+                                                { staticClass: "d-flex" },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticStyle: {
+                                                        "margin-top":
+                                                          "8px !important",
+                                                        "margin-right":
+                                                          "5px !important"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                                    " +
+                                                          _vm._s(_vm.currency) +
+                                                          "\n                                                "
+                                                      )
+                                                    ]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("input", {
+                                                    directives: [
+                                                      {
+                                                        name: "model",
+                                                        rawName: "v-model",
+                                                        value: variant.price,
+                                                        expression:
+                                                          "variant.price"
+                                                      }
+                                                    ],
+                                                    staticClass:
+                                                      "next-input p-none-r",
+                                                    attrs: {
+                                                      type: "number",
+                                                      step: "0.1",
+                                                      min: "1"
+                                                    },
+                                                    domProps: {
+                                                      value: variant.price
+                                                    },
+                                                    on: {
+                                                      change: function($event) {
+                                                        return _vm.handleChangeQuantity()
+                                                      },
+                                                      input: function($event) {
+                                                        if (
+                                                          $event.target
+                                                            .composing
+                                                        ) {
+                                                          return
+                                                        }
+                                                        _vm.$set(
+                                                          variant,
+                                                          "price",
+                                                          $event.target.value
+                                                        )
+                                                      }
+                                                    }
+                                                  })
+                                                ]
+                                              )
+                                            : _vm._e()
                                         ]
                                       )
                                     ]
@@ -7858,7 +8250,11 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "next-input p-none-r",
-                                    attrs: { type: "number", min: "1" },
+                                    attrs: {
+                                      type: "number",
+                                      step: "1",
+                                      min: "1"
+                                    },
                                     domProps: { value: variant.select_qty },
                                     on: {
                                       change: function($event) {
@@ -7890,7 +8286,10 @@ var render = function() {
                                   _vm._v(
                                     "\n                                    " +
                                       _vm._s(
-                                        variant.select_qty * variant.price
+                                        parseFloat(
+                                          parseInt(variant.select_qty) *
+                                            variant.price
+                                        ).toFixed(2)
                                       ) +
                                       "\n                                    " +
                                       _vm._s(_vm.currency) +
@@ -8077,11 +8476,7 @@ var render = function() {
                                     [
                                       _c("img", {
                                         staticClass: "thumb-image",
-                                        attrs: {
-                                          src: product_item.image_url,
-                                          title: product_item.name,
-                                          alt: product_item.name
-                                        }
+                                        attrs: { src: product_item.image_url }
                                       })
                                     ]
                                   ),
@@ -8149,13 +8544,13 @@ var render = function() {
                                               : _vm._e(),
                                             _vm._v(" "),
                                             product_item.product &&
-                                            product_item.product.sku.includes(
-                                              "pack"
+                                            !product_item.product.sku.includes(
+                                              "single"
                                             )
                                               ? _c("span", [
                                                   _c("small", [
                                                     _vm._v(
-                                                      " (" +
+                                                      " ($" +
                                                         _vm._s(
                                                           product_item.per_piece_price
                                                         ) +
@@ -8288,8 +8683,8 @@ var render = function() {
                                                         : _vm._e(),
                                                       _vm._v(" "),
                                                       variation.product &&
-                                                      variation.product.sku.includes(
-                                                        "pack"
+                                                      !variation.product.sku.includes(
+                                                        "single"
                                                       )
                                                         ? _c("span", [
                                                             _c("small", [
@@ -8713,7 +9108,46 @@ var render = function() {
                         ])
                       ])
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.payment_method == "paypal"
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "text-title-field",
+                            attrs: { for: "paypal_email" }
+                          },
+                          [_vm._v("Paypal Email")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.paypal_email,
+                              expression: "paypal_email"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "email",
+                            id: "paypal_email",
+                            placeholder: "Paypal Email"
+                          },
+                          domProps: { value: _vm.paypal_email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.paypal_email = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e()
                 ])
               ])
             ])
@@ -8746,7 +9180,8 @@ var render = function() {
                       attrs: {
                         disabled:
                           !_vm.child_product_ids.length ||
-                          _vm.child_total_amount === 0
+                          _vm.child_total_amount === 0 ||
+                          _vm.creating_order
                       },
                       on: {
                         click: function($event) {
@@ -8958,6 +9393,21 @@ var render = function() {
                                                   [
                                                     _vm._v(
                                                       _vm._s(customer.name)
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "overflow-ellipsis"
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        customer.detail.company
+                                                      )
                                                     )
                                                   ]
                                                 ),
@@ -9385,7 +9835,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("li", { staticClass: "text-infor-subdued mt15" }, [
-                      _vm.child_customer_addresses.length > 1
+                      _vm.child_customer_addresses.length > 0
                         ? _c("div", [
                             _c("div", { staticClass: "ui-select-wrapper" }, [
                               _c(
@@ -9516,6 +9966,228 @@ var render = function() {
                                 _vm.child_customer_address.country +
                                 (_vm.zip_code_enabled
                                   ? ", " + _vm.child_customer_address.zip_code
+                                  : "")
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.__("See on maps")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "clearfix" }),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "clearfix" }),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "clearfix" }, [
+                      _c("div", { staticClass: "flexbox-grid-default" }, [
+                        _c(
+                          "div",
+                          { staticClass: "flexbox-auto-content-left" },
+                          [
+                            _c("label", { staticClass: "title-text-second" }, [
+                              _vm._v(_vm._s(_vm.__("Billing Address")))
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "flexbox-auto-left" }, [
+                          _c(
+                            "a",
+                            {
+                              directives: [
+                                {
+                                  name: "b-modal",
+                                  rawName: "v-b-modal.edit-billing-address",
+                                  modifiers: { "edit-billing-address": true }
+                                }
+                              ]
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  attrs: {
+                                    "data-placement": "top",
+                                    title: "Update Billing address",
+                                    "data-toggle": "tooltip"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass:
+                                        "svg-next-icon svg-next-icon-size-12"
+                                    },
+                                    [
+                                      _c("use", {
+                                        attrs: {
+                                          "xmlns:xlink":
+                                            "http://www.w3.org/1999/xlink",
+                                          "xlink:href": "#next-edit"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "text-infor-subdued mt15" }, [
+                      _vm.child_customer_billing_addresses.length > 0
+                        ? _c("div", [
+                            _c("div", { staticClass: "ui-select-wrapper" }, [
+                              _c(
+                                "select",
+                                {
+                                  staticClass: "ui-select",
+                                  attrs: { id: "billing_address" },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.selectCustomerBillingAddress(
+                                        $event
+                                      )
+                                    }
+                                  }
+                                },
+                                _vm._l(
+                                  _vm.child_customer_billing_addresses,
+                                  function(address_item) {
+                                    return _c(
+                                      "option",
+                                      {
+                                        domProps: {
+                                          value: address_item.id,
+                                          selected:
+                                            parseInt(address_item.id) ===
+                                            parseInt(_vm.customer_address.email)
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                            " +
+                                            _vm._s(
+                                              address_item.address +
+                                                ", " +
+                                                address_item.city +
+                                                ", " +
+                                                address_item.state +
+                                                ", " +
+                                                address_item.country +
+                                                (_vm.zip_code_enabled
+                                                  ? ", " + address_item.zip_code
+                                                  : "")
+                                            ) +
+                                            "\n                                        "
+                                        )
+                                      ]
+                                    )
+                                  }
+                                ),
+                                0
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "svg",
+                                {
+                                  staticClass:
+                                    "svg-next-icon svg-next-icon-size-16"
+                                },
+                                [
+                                  _c("use", {
+                                    attrs: {
+                                      "xmlns:xlink":
+                                        "http://www.w3.org/1999/xlink",
+                                      "xlink:href": "#select-chevron"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("br")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(_vm._s(_vm.child_customer_billing_address.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(_vm._s(_vm.child_customer_billing_address.phone))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              href:
+                                "mailto:" +
+                                _vm.child_customer_billing_address.email
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(_vm.child_customer_billing_address.email)
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(
+                          _vm._s(_vm.child_customer_billing_address.address)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(_vm._s(_vm.child_customer_billing_address.city))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(_vm._s(_vm.child_customer_billing_address.state))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _vm._v(
+                          _vm._s(_vm.child_customer_billing_address.country)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm.zip_code_enabled
+                        ? _c("div", [
+                            _vm._v(
+                              _vm._s(
+                                _vm.child_customer_billing_address.zip_code
+                              )
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "hover-underline",
+                            attrs: {
+                              target: "_blank",
+                              href:
+                                "https://maps.google.com/?q=" +
+                                _vm.child_customer_billing_address.address +
+                                ", " +
+                                _vm.child_customer_billing_address.city +
+                                ", " +
+                                _vm.child_customer_billing_address.state +
+                                ", " +
+                                _vm.child_customer_billing_address.country +
+                                (_vm.zip_code_enabled
+                                  ? ", " +
+                                    _vm.child_customer_billing_address.zip_code
                                   : "")
                             }
                           },
@@ -9816,9 +10488,6 @@ var render = function() {
             "cancel-title": "Cancel"
           },
           on: {
-            shown: function($event) {
-              return _vm.loadCountries()
-            },
             ok: function($event) {
               return _vm.createNewCustomer($event)
             }
@@ -10750,6 +11419,198 @@ var render = function() {
                       staticClass: "next-input customer-address-zip-code",
                       attrs: { type: "text" },
                       domProps: { value: _vm.child_customer_address.zip_code }
+                    })
+                  ])
+                ])
+              : _vm._e()
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
+          attrs: {
+            id: "edit-billing-address",
+            title: "Update Billing address",
+            "ok-title": "Save",
+            "cancel-title": "Cancel"
+          },
+          on: {
+            shown: function($event) {
+              return _vm.loadCountries()
+            },
+            ok: function($event) {
+              return _vm.updateOrderBillingAddress($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "next-form-section" }, [
+            _c("div", { staticClass: "next-form-grid" }, [
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("Name")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-name",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.child_customer_billing_address.name }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("Phone")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-phone",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.child_customer_billing_address.phone }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "next-form-grid" }, [
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("Address")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-address",
+                  attrs: { type: "text" },
+                  domProps: {
+                    value: _vm.child_customer_billing_address.address
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("Email")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-email",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.child_customer_billing_address.email }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "next-form-grid" }, [
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("Country")))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "ui-select-wrapper" }, [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.child_customer_billing_address.country,
+                          expression: "child_customer_billing_address.country"
+                        }
+                      ],
+                      staticClass: "ui-select",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.child_customer_billing_address,
+                            "country",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.countries, function(countryName, countryCode) {
+                      return _c(
+                        "option",
+                        { domProps: { value: countryCode } },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(countryName) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "svg",
+                    { staticClass: "svg-next-icon svg-next-icon-size-16" },
+                    [
+                      _c("use", {
+                        attrs: {
+                          "xmlns:xlink": "http://www.w3.org/1999/xlink",
+                          "xlink:href": "#select-chevron"
+                        }
+                      })
+                    ]
+                  )
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "next-form-grid" }, [
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("State")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-state",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.child_customer_billing_address.state }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "next-form-grid-cell" }, [
+                _c("label", { staticClass: "text-title-field" }, [
+                  _vm._v(_vm._s(_vm.__("City/District")))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "next-input customer-address-city",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.child_customer_billing_address.city }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.zip_code_enabled
+              ? _c("div", { staticClass: "next-form-grid" }, [
+                  _c("div", { staticClass: "next-form-grid-cell" }, [
+                    _c("label", { staticClass: "text-title-field" }, [
+                      _vm._v(_vm._s(_vm.__("Zip code")))
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "next-input customer-address-zip-code",
+                      attrs: { type: "text" },
+                      domProps: {
+                        value: _vm.child_customer_billing_address.zip_code
+                      }
                     })
                   ])
                 ])

@@ -16,6 +16,8 @@ use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Models\OrderProduct;
 use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Services\HandleApplyCouponService;
+use Botble\Ecommerce\Services\HandleApplyPromotionsService;
 use Botble\Page\Models\Page;
 use Botble\Page\Services\PageService;
 use Botble\Theme\Events\RenderingSingleEvent;
@@ -39,14 +41,19 @@ use OrderHelper;
 class CartController extends Controller
 {
     private $user;
+    protected $coupan_service;
+    protected $promotion_service;
 
-    public function __construct()
+    public function __construct(HandleApplyCouponService $applyCouponService, HandleApplyPromotionsService $applyPromotionsService)
     {
         $this->user = auth('customer')->user();
+        $this->coupan_service = $applyCouponService;
+        $this->promotion_service = $applyPromotionsService;
     }
 
     public function getIndex(Request $request)
     {
+
         if ($request->has('discard')) {
             if ($request->discard == 'true') {
                 if ($request->has('item')) {
@@ -54,12 +61,13 @@ class CartController extends Controller
                 }
             }
         }
-        $cart = Order::where('id', $this->getUserCart())->with(['products' => function ($query) {
+        $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
             $query->with(['product']);
         }])->first();
         if (!count($cart->products)) {
             return redirect()->route('public.products')->with('error', 'Cart is currently empty!');
         }
+
         $token = OrderHelper::getOrderSessionToken();
         return Theme::scope('cart', ['cart' => $cart])->render();
     }
@@ -72,7 +80,7 @@ class CartController extends Controller
             $cart_status = $this->createCartItem($data, $product);
             //dd($cart_status);
             if (empty($cart_status)) {
-                return response()->json(['message' => 'Product added to cart successfully'], 200);
+                return response()->json(['message' => 'Pack added to bag successfully'], 200);
             } else {
                 return response()->json(['message' => $cart_status], 500);
             }
@@ -124,7 +132,7 @@ class CartController extends Controller
                 'order_id'     => $cartId,
                 'product_id'   => $product->id,
                 'qty'          => $data['quantity'],
-                'price'        => $product->price,
+                'price'        => $product->new_sale_price,
                 'tax_amount'   => 0,
                 'product_name' => $product->name,
             ]);
@@ -170,17 +178,50 @@ class CartController extends Controller
 
     public function getOrderAndUpdateAmount()
     {
-        $orderId = $this->getUserCart();
+        $orderId = auth('customer')->user()->getUserCart();
         $products = OrderProduct::where('order_id', $orderId)->get();
         $amount = 0;
 
         foreach ($products as $product) {
             $amount = $amount + ($product->qty * $product->price);
         }
-        Order::find($orderId)->update([
+        $order_current = Order::find($orderId);
+        $coupon_code = $order_current->coupon_code;
+        $order_current->update([
             'sub_total' => $amount,
             'amount'    => $amount
         ]);
+        $promotionAmount = $this->promotion_service->execute();
+
+        $order = Order::find($orderId);
+        /*if($order->promotion_applied == 1){
+          $order->discount_amount = $promotionAmount;
+          $order->amount = $order->sub_total - $order->discount_amount;
+          $order->promotion_applied = 1;
+        }*/
+        $order->promotion_applied = 0;
+
+        if (!empty($coupon_code)) {
+            $applyCoupon = $this->coupan_service->execute($order->coupon_code);
+
+            if (!$applyCoupon['error']) {
+                if (count($products)) {
+                    $order->discount_amount = $applyCoupon['data']['discount_amount'];
+                    $order->amount = $order->sub_total - $order->discount_amount;
+                } else {
+                    $order->coupon_code = null;
+                    $order->discount_amount = 0.00;
+                    $order->amount = $order->sub_total;
+                }
+            } else {
+                $order->coupon_code = null;
+                $order->discount_amount = 0.00;
+                $order->amount = $order->sub_total;
+            }
+        }
+
+        $order->save();
+
     }
 
     public function deleteCartItem($id)
@@ -212,12 +253,16 @@ class CartController extends Controller
         }
     }
 
-    public function checkIfPreOrder($productId){
-      $product = Product::where($this->model->getTable().'.id', $productId)
-                  ->join('ec_product_tag_product as eptp', 'eptp.product_id',$this->model->getTable().'.id')
-                  ->where('tag_id', 3)->first();
+    public function checkIfPreOrder($productId)
+    {
+        $product = Product::where($this->model->getTable() . '.id', $productId)
+            ->join('ec_product_tag_product as eptp', 'eptp.product_id', $this->model->getTable() . '.id')
+            ->where('tag_id', 3)->first();
 
-      if($product){ return true; }
-      else{ return false; }
+        if ($product) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

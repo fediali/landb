@@ -652,7 +652,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                                             @enderror
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="d-flex">
+                                            <div class="d-flex checkbox-contract">
                                                 <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
                                                 <label class="mr-2 tax-checkbox-label" for="vehicle1"> The taxable items
                                                     described above, or on the attached order or invoice, will be
@@ -664,7 +664,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
 
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="d-flex">
+                                            <div class="d-flex checkbox-contract">
                                                 <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
                                                 <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that
                                                     if I make any use of the items in other retention, demonstration or
@@ -676,7 +676,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
 
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="d-flex">
+                                            <div class="d-flex checkbox-contract">
                                                 <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
                                                 <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that
                                                     it is a criminal offense to give a resale certificate to the seller
@@ -719,10 +719,11 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : 'general'
                                         <div class="col-lg-7">
                                             <p class="textbox-label">Purchaser Sign</p>
                                             @if(!empty(@$user->taxCertificate->purchaser_sign))
-                                                <img class="img-responsive"
-                                                     src="{{ asset($user->taxCertificate->purchaser_sign) }}"
-                                                     alt="Image" title="Image Not Available" height="120px"
-                                                     width="130px"/>
+                                                @if(str_contains($user->taxCertificate->purchaser_sign, 'data:image/png;base64'))
+                                                    <img class="img-responsive" src="{{ ($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @else
+                                                    <img class="img-responsive" src="{{ asset($user->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
+                                                @endif
                                             @else
                                                 <span id="undo-sign" class="fa fa-undo"></span>
                                                 <div id="signature"></div>

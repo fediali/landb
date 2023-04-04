@@ -9,6 +9,7 @@ use Botble\Ecommerce\Supports\RenderProductAttributeSetsOnSearchPageSupport;
 use Botble\Ecommerce\Supports\RenderProductSwatchesSupport;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('combinations')) {
     /**
@@ -153,5 +154,65 @@ if (!function_exists('get_product_attributes')) {
     function get_product_attributes($productId)
     {
         return app(ProductVariationItemInterface::class)->getProductAttributes($productId);
+    }
+}
+
+
+if (!function_exists('updateOldSystemProdQty')) {
+    function updateOldSystemProdQty($product, $orderedQty, $orderId, $sum = false)
+    {
+        //TODO::check prod pack/single
+        $checkPackProd = false;
+        $getParentProd = get_parent_product($product->id);
+        if ($getParentProd->sku == $product->sku) {
+            $checkPackProd = true;
+        }
+
+        if (isset($getParentProd->id)) {
+            $oldSystemQty = $oldSystemUpdQty = DB::connection('mysql2')->table('hw_products')->where('product_id', $getParentProd->id)->value('amount');
+            if (!$sum && $oldSystemQty && $orderedQty && $orderedQty <= $oldSystemQty) {
+                if ($checkPackProd && $product->prod_pieces) {
+                    $oldSystemUpdQty = $oldSystemQty - ($orderedQty * $product->prod_pieces);
+                    if ($oldSystemUpdQty < 0) {
+                        $oldSystemUpdQty = 0;
+                    }
+                } else {
+                    $oldSystemUpdQty = $oldSystemQty - $orderedQty;
+                }
+                DB::connection('mysql2')->table('hw_products')->where('product_id', $getParentProd->id)->update(['amount' => $oldSystemUpdQty]);
+                $oldSystemUpdQty *= (-1);
+                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $oldSystemUpdQty);
+            } elseif ($sum && $orderedQty) {
+                if ($checkPackProd && $product->prod_pieces) {
+                    $oldSystemUpdQty = $oldSystemQty + ($orderedQty * $product->prod_pieces);
+                } else {
+                    $oldSystemUpdQty = $oldSystemQty + $orderedQty;
+                }
+                DB::connection('mysql2')->table('hw_products')->where('product_id', $getParentProd->id)->update(['amount' => $oldSystemUpdQty]);
+                updateOldSystemProdQtyHistory($getParentProd->id, $oldSystemQty, $orderId, $oldSystemUpdQty);
+            }
+        }
+    }
+}
+
+
+if (!function_exists('updateOldSystemProdQtyHistory')) {
+    function updateOldSystemProdQtyHistory($productId, $oldQty, $orderId, $orderedQty)
+    {
+        $data = [
+            'product_id' => $productId,
+            'combination_hash' => 0,
+            'old_amount' => $oldQty,
+            'amount' => ($oldQty + $orderedQty),
+            'added' => $orderedQty,
+            'timestamp' => time(),
+            'user_id' => 23172,
+            'create' => 0,
+            'reference' => 'new_portal_order',
+            'order_id' => $orderId,
+            'status_to' => 'P',
+            'status_from' => 'O',
+        ];
+        DB::connection('mysql2')->table('hw_hw_inventory_history')->insert($data);
     }
 }

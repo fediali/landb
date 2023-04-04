@@ -5,10 +5,12 @@ namespace Botble\Ecommerce\Http\Controllers;
 use Assets;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
+use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Ecommerce\Http\Requests\DiscountRequest;
 use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Tables\DiscountTable;
 use Carbon\Carbon;
@@ -108,10 +110,15 @@ class DiscountController extends BaseController
             $productCategories = $request->input('product_categories');
             if ($productCategories) {
                 if (!is_array($productCategories)) {
-                    // $productCategories = [$productCategories];
+                    $productCategories = [$productCategories];
+
                     $products = DB::table('ec_product_category_product')->where('category_id', $productCategories)->pluck('product_id')->all();
-                    $discount->products()->attach($products);
+                    foreach ($products as $product){
+                      $variants = Product::find($product)->variations()->pluck('product_id')->all();
+                      $discount->products()->attach($variants);
+                    }
                 }
+                $discount->categories()->attach($productCategories);
             }
 
             $productCollections = $request->input('product_collections');
@@ -217,4 +224,25 @@ class DiscountController extends BaseController
 
         return $response->setData($code);
     }
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->discountRepository->findOrFail($request->input('pk'));
+
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $product->fill($requestData);
+
+        $this->discountRepository->createOrUpdate($product);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $product));
+
+        return $response;
+    }
+
 }

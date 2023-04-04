@@ -3,6 +3,7 @@
 namespace Botble\Ecommerce\Models;
 
 use App\Models\CardPreAuth;
+use App\Models\OrderSplitPayment;
 use Botble\ACL\Models\Role;
 use Botble\ACL\Models\User;
 use Botble\Base\Models\BaseModel;
@@ -62,8 +63,8 @@ class Order extends BaseModel
     const IMPORT = 'import';
 
     public static $PLATFORMS = [
-        self::ONLINE    => 'Online Order',
-        self::SALES => 'Sales Rep\'s Order',
+        self::ONLINE => 'Online Order',
+        self::SALES  => 'Sales Rep\'s Order',
         self::MOBILE => 'Mobile Order',
         self::IMPORT => 'Imported Order',
     ];
@@ -100,14 +101,21 @@ class Order extends BaseModel
         'parent_order',
         'notes',
         'transaction_error',
-        'po_number'
+        'po_number',
+        'promotion_applied',
+        'promotion_amount',
+        'split_payment',
+        'created_at',
+        'updated_at',
+        'order_completion_date',
+        'old_system_order_id',
     ];
 
     /**
      * @var string[]
      */
     protected $casts = [
-        'status'          => OrderStatusEnum::class,
+//        'status'          => OrderStatusEnum::class,
         'shipping_method' => ShippingMethodEnum::class,
     ];
 
@@ -117,6 +125,7 @@ class Order extends BaseModel
     protected $dates = [
         'created_at',
         'updated_at',
+        'order_completion_date',
     ];
 
     protected static function boot()
@@ -148,7 +157,7 @@ class Order extends BaseModel
      */
     public function user()
     {
-        return $this->belongsTo(Customer::class, 'user_id', 'id')->withDefault();
+        return $this->belongsTo(Customer::class, 'user_id', 'id')->withoutGlobalScope('userScope')->withDefault();
     }
 
     /**
@@ -169,12 +178,12 @@ class Order extends BaseModel
 
     public function shippingAddress()
     {
-      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'shipping');
+        return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'shipping');
     }
 
     public function billingAddress()
     {
-      return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'billing');
+        return $this->hasOne(OrderAddress::class, 'order_id')->where('type', 'billing');
     }
 
     /**
@@ -183,6 +192,14 @@ class Order extends BaseModel
     public function products()
     {
         return $this->hasMany(OrderProduct::class, 'order_id')->with(['product']);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function refund_products()
+    {
+        return $this->hasMany(OrderRefundProduct::class, 'order_id')->with(['product']);
     }
 
     /**
@@ -228,6 +245,19 @@ class Order extends BaseModel
         return $this->belongsTo(Payment::class, 'payment_id')->withDefault();
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function split_payments()
+    {
+        return $this->hasMany(OrderSplitPayment::class, 'order_id');
+    }
+
     /**
      * @return bool
      */
@@ -255,19 +285,24 @@ class Order extends BaseModel
         return $this->hasOne(CardPreAuth::class, 'order_id');
     }
 
+    public function order_cards_preauth()
+    {
+        return $this->hasMany(CardPreAuth::class, 'order_id');
+    }
+
     public function salesperson()
     {
         return $this->belongsTo(User::class, 'salesperson_id');
     }
 
-    public function previousOrder(){
-      return Order::where('id', '<', $this->id)->max('id');
+    public function previousOrder()
+    {
+        return Order::where('id', '<', $this->id)->max('id');
     }
 
-    public function nextOrder(){
-      return Order::where('id', '>', $this->id)->min('id');
+    public function nextOrder()
+    {
+        return Order::where('id', '>', $this->id)->min('id');
     }
-
-
 
 }

@@ -343,7 +343,7 @@ if (!function_exists('get_related_products')) {
     {
         $params = [
             'condition' => [
-                'ec_products.status'       => BaseStatusEnum::PUBLISHED,
+                'ec_products.status'       => BaseStatusEnum::$PRODUCT['Active'],
                 'ec_products.is_variation' => 0,
             ],
             'order_by'  => [
@@ -354,13 +354,16 @@ if (!function_exists('get_related_products')) {
             'select'    => [
                 'ec_products.*',
             ],
-            'with'      => [
+            /*'with'      => [
                 'slugable',
                 'variations',
                 'productCollections',
                 'variationAttributeSwatchesForProductList',
                 'promotions',
-            ],
+            ],*/
+            'with'        =>[
+                'category'
+            ]
         ];
 
         $relatedIds = app(ProductInterface::class)->getRelatedProductIds($product);
@@ -374,6 +377,72 @@ if (!function_exists('get_related_products')) {
         return app(ProductInterface::class)->getProducts($params);
     }
 }
+
+function get_related_products_modded($product, $limit = 4)
+{
+
+  $relatedIds = app(ProductInterface::class)->getRelatedProductIds($product);
+  if(empty($relatedIds)){
+      $categoryIds = $product->categories->pluck('id');
+      if(count($categoryIds)){
+          $relatedIds = \Illuminate\Support\Facades\DB::table('ec_product_category_product')->whereIn('category_id', $categoryIds)->pluck('product_id');
+      }
+  }
+
+  return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
+      ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
+      ->where('ep.quantity', '>', 0)
+      ->join('ec_products as ep', 'epv.product_id', 'ep.id')
+      ->where('ec_products.is_variation' , 0)
+      ->where('ec_products.id' ,'!=', $product->id)
+      ->whereIn('ec_products.id' , $relatedIds)
+      ->orderBy('ec_products.order','ASC')
+      ->orderBy('ec_products.created_at','DESC')
+      ->groupBy('ec_products.id')
+      ->select('ec_products.*')
+      ->limit($limit)
+      ->get();
+
+}
+
+function get_cross_selling_products_modded($product, $limit = 4)
+{
+
+  $cross_selling = app(ProductInterface::class)->getCrossSaleProductIds($product);
+
+  return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
+      ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
+      ->where('ep.quantity', '>', 0)
+      ->join('ec_products as ep', 'epv.product_id', 'ep.id')
+      ->where('ec_products.is_variation' , 0)
+      ->whereIn('ec_products.id' , $cross_selling)
+      ->orderBy('ec_products.order','ASC')
+      ->orderBy('ec_products.created_at','DESC')
+      ->select('ec_products.*')
+      ->limit($limit)
+      ->get();
+
+}
+
+function get_like_products_modded($product, $limit = 4)
+{
+
+  $like_selling = app(ProductInterface::class)->getRelatedCategoryIds($product);
+
+  return Product::where( 'ec_products.status' , BaseStatusEnum::$PRODUCT['Active'])
+      ->join('ec_product_variations as epv', 'epv.configurable_product_id', 'ec_products.id')
+      ->where('ep.quantity', '>', 0)
+      ->join('ec_products as ep', 'epv.product_id', 'ep.id')
+      ->where('ec_products.is_variation' , 0)
+      ->whereIn('ec_products.id' , $like_selling)
+      ->orderBy('ec_products.order','ASC')
+      ->orderBy('ec_products.created_at','DESC')
+      ->select('ec_products.*')
+      ->limit($limit)
+      ->get();
+
+}
+
 
 if (!function_exists('get_cross_sale_products')) {
     /**

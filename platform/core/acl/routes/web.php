@@ -85,6 +85,12 @@ Route::group(['namespace' => 'Botble\ACL\Http\Controllers', 'middleware' => ['we
                     'permission' => ACL_ROLE_SUPER_USER,
                     'middleware' => 'preventDemo',
                 ]);
+
+                Route::post('change-status', [
+                    'as'         => 'changeStatus',
+                    'uses'       => 'UserController@changeStatus',
+                    'permission' => 'users.changeStatus',
+                ]);
             });
 
             Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {

@@ -28,6 +28,7 @@
         "laravel/framework": "^8.12",
         "league/flysystem-aws-s3-v3": "^1.0",
         "milon/barcode": "^8.0",
+        "paypal/rest-api-sdk-php": "^1.14",
         "predis/predis": "^1.1",
         "rollbar/rollbar-laravel": "^7.0",
         "twilio/sdk": "^6.24",

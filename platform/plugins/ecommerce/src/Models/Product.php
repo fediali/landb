@@ -39,11 +39,18 @@ class Product extends BaseModel
         'description',
         'content',
         'status',
+        'thumb_image',
         'images',
         'sku',
         'warehouse_sec',
         'order',
         'quantity',
+        'extra_qty',
+        'single_qty',
+        'sold_qty',
+        'pre_order_qty',
+        'reorder_qty',
+        'in_cart_qty',
         'in_person_sales_qty',
         'online_sales_qty',
         'allow_checkout_when_out_of_stock',
@@ -85,6 +92,9 @@ class Product extends BaseModel
         'color_print',
         'color_products',
         'sizes',
+        'product_label_id',
+        'schedule_date',
+        'color_name'
     ];
 
     /**
@@ -93,8 +103,7 @@ class Product extends BaseModel
     protected $appends = [
         'original_price',
         'front_sale_price',
-        'product_slug',
-        'sold_qty'
+        'product_slug'
     ];
 
     /**
@@ -203,8 +212,11 @@ class Product extends BaseModel
      */
     public function discounts()
     {
-        return $this->belongsToMany(Discount::class, 'ec_discount_products', 'product_id', 'id');
+        return $this->belongsToMany(Discount::class, 'ec_discount_products', 'product_id', 'discount_id');
     }
+
+
+
 
     /**
      * @return BelongsToMany
@@ -373,6 +385,35 @@ class Product extends BaseModel
         }
     }
 
+    public function getFinalPriceAttribute(){
+      if(!is_null($this->sale_price)) {
+        return $this->sale_price;
+      }else{
+        if($this->promotions){
+          if(@$this->promotions[0]->type_option == 'percentage'){
+            return $this->price - ($this->price * @$this->promotions[0]->value / 100);
+          }elseif (@$this->promotions[0]->type_option == 'amount'){
+            if(@$this->promotions[0]->value < $this->price){
+              return $this->price - @$this->promotions[0]->value;
+            }else{
+              return $this->price;
+            }
+          }else{
+            return $this->price;
+          }
+        }
+        return $this->price;
+      }
+    }
+
+    public function getNewSalePriceAttribute(){
+      if(!is_null($this->sale_price)) {
+        return $this->sale_price;
+      }else{
+        return $this->price;
+      }
+    }
+
     /**
      * @param string $value
      * @return mixed
@@ -463,6 +504,34 @@ class Product extends BaseModel
         return $slug;
     }
 
+    /*public function getSkuAttribute($value)
+    {
+        if ($value) {
+            if (str_contains($value, '-pack-all')) {
+                return str_replace('-pack-all', '', $value);
+            } elseif (str_contains($value, ' - 0')) {
+                return str_replace(' - 0', '', $value);
+            } elseif (str_contains($value, ' - 1')) {
+                return str_replace(' - 1', '', $value);
+            } elseif (str_contains($value, ' - 2')) {
+                return str_replace(' - 2', '', $value);
+            }
+        }
+        return $value;
+    }*/
+
+    public function setWithStorehouseManagementAttribute($value)
+    {
+        $this->attributes['with_storehouse_management'] = 1;
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $getPackId = ProductVariation::where('configurable_product_id', $this->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['status' => $value]);
+        $this->attributes['status'] = $value;
+    }
+
     /**
      * @return BelongsToMany
      */
@@ -492,13 +561,13 @@ class Product extends BaseModel
             return false;
         }
 
-        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-            $checkQty = $this->online_sales_qty <= 0 ? true : false;
-        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
-        } else {
+//        if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//            $checkQty = $this->online_sales_qty <= 0 ? true : false;
+//        } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//            $checkQty = $this->in_person_sales_qty <= 0 ? true : false;
+//        } else {
             $checkQty = $this->quantity <= 0 ? true : false;
-        }
+//        }
 
         return $checkQty && !$this->allow_checkout_when_out_of_stock;
     }
@@ -541,7 +610,8 @@ class Product extends BaseModel
                                  */
                                 return $subSub
                                     ->where('target', 'specific-product')
-                                    ->orWhere('target', 'product-variant');
+                                    ->orWhere('target', 'product-variant')
+                                    ->orWhere('target', 'category');
                             })
                             ->where('ec_discount_products.product_id', $this->id);
                     })
@@ -622,37 +692,23 @@ class Product extends BaseModel
         return $this->hasMany(InventoryHistory::class, 'parent_product_id');
     }
 
-    public function getSoldQtyAttribute()
-    {
-        $getProdIds = ProductVariation::where('configurable_product_id', $this->id)->pluck('product_id')->all();
-        $getProdIds[] = $this->id;
-        $soldQty = OrderProduct::join('ec_orders', 'ec_orders.id', 'ec_order_product.order_id')
-            ->whereIn('product_id', $getProdIds)
-            ->whereNotIn('status', [OrderStatusEnum::CANCELED, OrderStatusEnum::PENDING])
-            ->sum('qty');
-        return ($soldQty > 0) ? $soldQty : 0;
-    }
-
-    public function inCart()
-    {
-        $variations = $this->variations()->pluck('product_id');
-        $orders = Order::where('ec_orders.is_finished', 0)->join('ec_order_product as ecp', 'ecp.order_id', 'ec_orders.id')->whereIn('ecp.product_id', $variations);
-
-        $order_ids = $orders->select('ec_orders.*')->groupBy('ec_orders.id')->pluck('ec_orders.id');
-        $sumdata = $orders->select(DB::raw('sum(ecp.qty) as sum'))->get();
-        $sum = 0;
-        foreach ($sumdata as $data) {
-            $sum = $sum + $data->sum;
-        }
-
-        return [
-            'order_ids' => $order_ids,
-            'sum'       => $sum
-        ];
-    }
-
     public function product_colors()
     {
-        return $this->whereIn('id', (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []))->with('slugable')->select('id', 'color_print', 'name')->get();
+        $color = (!is_null($this->getModel()->color_products) ? json_decode($this->getModel()->color_products) : []);
+
+        $colors = [];
+        if ($color && count($color) == 1) {
+            $colors = array_map('intval', explode(',', $color[0]));
+        }else{
+          $colors = $color;
+        }
+        return $this->whereIn('id', $colors)->with('slugable')->where(['status'=>BaseStatusEnum::ACTIVE])
+//            ->select('id', 'color_print', 'name')
+            ->get();
+    }
+
+    public function label()
+    {
+        return $this->belongsTo(ProductLabel::class, 'product_label_id');
     }
 }

@@ -10,7 +10,7 @@
 
                     <div class="form-group">
                         <label class="text-title-field">Select Order Type</label>
-                        <select class="form-control" id="order-type" v-model="order_type">
+                        <select class="form-control" id="order-type" v-model="order_type" @change="changeOrderType">
                             <option value="" :disabled="true" :selected="true">Select Order Type</option>
                             <option v-for="(value, index) in order_types" :value="index">
                                 {{ value }}
@@ -25,54 +25,67 @@
                                 <tr v-for="variant in child_products">
                                     <td class="width-60-px min-width-60-px">
                                         <div class="wrap-img vertical-align-m-i">
-                                            <img class="thumb-image" :src="variant.image_url"
-                                                 :alt="variant.product_name">
+                                            <img class="thumb-image" :src="variant.image_url">
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 min-width-200-px">
                                         <!--<a class="hover-underline pre-line" :href="variant.product_link" target="_blank">{{ variant.product_name }}</a>-->
                                         <a class="hover-underline pre-line" href="#">{{ variant.product_name }}</a>
-                                        <p class="type-subdued"
-                                           v-if="variant.variation_items && variant.variation_items.length">
+                                        <p class="type-subdued" v-if="variant.variation_items && variant.variation_items.length">
                                             <span v-for="(productItem, index) in variant.variation_items">
-                                                {{ productItem.attribute_title }}
+                                                Type: {{ productItem.attribute_title }}
                                                 <span v-if="index !== variant.variation_items.length - 1">/</span>
                                             </span>
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Total Pieces : {{ variant.packQty }}
+                                        <p>
+                                            SKU : {{ variant.product ? (variant.product.sku ? variant.product.sku : 'No SKU') : (variant.sku ? variant.sku : 'No SKU') }}
                                         </p>
-                                        <p v-if="variant.product && variant.product.sku.includes('pack')">
-                                            Sizes : {{ variant.packSizes }}
+                                        <p v-if="variant.product && !variant.product.sku.includes('single')">
+                                            Total Pieces : {{ variant.product.prod_pieces ? variant.product.prod_pieces : variant.packQty }}
+                                            <span v-if="child_can_price_edit == 0" class="d-flex">
+                                                <span style="width: 70%;margin-top: 7px;">Piece Price : </span> ${{ variant.product.per_piece_price }}
+                                            </span>
+                                            <span v-if="child_can_price_edit == 1" class="d-flex">
+                                                <span style="width: 70%;margin-top: 7px;">Piece Price : </span> $ <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
+                                            Sizes : {{ (variant.product.sizes) ? variant.product.sizes : variant.packSizes }}
                                         </p>
+                                        <!--<p v-else="variant.sku && !variant.sku.includes('single')">
+                                            Total Pieces : {{ variant.prod_pieces ? variant.prod_pieces : variant.packQty }}
+                                            <span v-show="child_can_price_edit == 0">
+                                                Piece Price : ${{ variant.per_piece_price }}
+                                            </span>
+                                            <span v-show="child_can_price_edit == 1">
+                                                Piece Price : <input class="next-input p-none-r" v-model="variant.per_piece_price" type="number" step="0.1" min="1" @change="handleChangePerPiecePrice()">
+                                            </span>
+                                            Sizes : {{ (variant.sizes) ? variant.sizes : variant.packSizes }}
+                                        </p>-->
                                     </td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px text-center">
                                         <div class="dropup dropdown-priceOrderNew">
                                             <div class="d-flex dropdown">
-                                                <!--<a class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>-->
-                                                <span
-                                                    style=" margin-top: 8px !important; margin-right: 5px !important;">{{
-                                                        currency
-                                                    }}</span>
-                                                <input class="next-input p-none-r" v-model="variant.price" type="number"
-                                                       min="1" @change="handleChangeQuantity()">
+                                                <a v-if="child_can_price_edit == 0" class="wordwrap hide-print">{{ variant.price }} {{ currency }}</a>
+                                                <div class="d-flex" v-if="child_can_price_edit == 1">
+                                                    <span style=" margin-top: 8px !important; margin-right: 5px !important;">
+                                                        {{currency}}
+                                                    </span>
+                                                    <input class="next-input p-none-r" v-model="variant.price" type="number" step="0.1" min="1" @change="handleChangeQuantity()">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="pl5 p-r5 width-20-px min-width-20-px text-center"> x</td>
                                     <td class="pl5 p-r5 width-100-px min-width-100-px">
-                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number"
-                                               min="1" @change="handleChangeQuantity()">
+                                        <input class="next-input p-none-r" v-model="variant.select_qty" type="number" step="1" min="1" @change="handleChangeQuantity()">
                                     </td>
                                     <td style="width:75px;" class="pl5 p-r5 width-100-px min-width-100-px text-center">
-                                        {{ variant.select_qty * variant.price }}
+                                        {{ parseFloat(parseInt(variant.select_qty) * variant.price).toFixed(2) }}
                                         {{ currency }}
                                     </td>
                                     <td class="pl5 p-r5 text-right width-20-px min-width-20-px">
                                         <a href="#" @click="handleRemoveVariant($event, variant)">
                                             <svg class="svg-next-icon svg-next-icon-size-12">
-                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                     xlink:href="#next-remove"></use>
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                             </svg>
                                         </a>
                                     </td>
@@ -106,31 +119,27 @@
                                                 v-bind:class="{ 'item-selectable' : !product_item.variations.length, 'item-not-selectable' : product_item.variations.length }"
                                                 v-on="!product_item.variations.length ? { click : () => selectProductVariant(product_item) } : {}">
                                                 <div class="wrap-img inline_block vertical-align-t float-left">
-                                                    <img class="thumb-image"
-                                                         :src="product_item.image_url"
-                                                         :title="product_item.name" :alt="product_item.name">
+                                                    <img class="thumb-image" :src="product_item.image_url">
                                                 </div>
                                                 <label class="inline_block ml10 mt10 ws-nm" style="width:calc(100% - 50px);">
                                                     {{ product_item.name }} ({{ product_item.sku }})
                                                     <span v-if="!product_item.variations.length">
                                                         <span v-if="product_item.is_out_of_stock" class="text-danger">
-                                                            <small>&nbsp;({{__('Out of stock')}})</small>
+                                                            <small>&nbsp;({{ __('Out of stock') }})</small>
                                                         </span>
                                                         <span v-if="!product_item.is_out_of_stock && product_item.quantity > 0">
-                                                            <small>&nbsp;({{product_item.quantity}} {{ __('product(s) available') }})</small>
+                                                            <small>&nbsp;({{ product_item.quantity }} {{__('product(s) available')}})</small>
                                                         </span>
-                                                        <span v-if="product_item.product && product_item.product.sku.includes('pack')">
-                                                            <small>&nbsp;({{ product_item.per_piece_price }} per piece price) </small>
+                                                        <span v-if="product_item.product && !product_item.product.sku.includes('single')">
+                                                            <small>&nbsp;(${{ product_item.per_piece_price }} per piece price) </small>
                                                         </span>
                                                     </span>
                                                 </label>
                                                 <div v-if="product_item.variations.length">
                                                     <div class="clear"></div>
                                                     <ul>
-                                                        <li class="clearfix product-variant"
-                                                            v-for="variation in product_item.variations"
-                                                            @click="selectProductVariant(product_item, variation)"
-                                                            v-if="variation.variation_items.length">
+                                                        <li class="clearfix product-variant" v-for="variation in product_item.variations"
+                                                            @click="selectProductVariant(product_item, variation)" v-if="variation.variation_items.length">
                                                             <a class="color_green float-left">
                                                                 <span v-for="(productItem, index) in variation.variation_items">
                                                                     {{ productItem.attribute_title }}
@@ -139,12 +148,12 @@
                                                             </a>
                                                             <span>&nbsp;({{ variation.product.sku }})</span>
                                                             <span v-if="variation.is_out_of_stock" class="text-danger">
-                                                                <small>&nbsp;({{__('Out of stock')}})</small>
+                                                                <small>&nbsp;({{ __('Out of stock') }})</small>
                                                             </span>
                                                             <span v-if="!variation.is_out_of_stock && variation.quantity > 0">
-                                                                <small>&nbsp;({{variation.quantity}} {{ __('product(s) available') }})</small>
+                                                                <small>&nbsp;({{ variation.quantity }} {{__('product(s) available')}})</small>
                                                             </span>
-                                                            <span v-if="variation.product && variation.product.sku.includes('pack')">
+                                                            <span v-if="variation.product && !variation.product.sku.includes('single')">
                                                                 <small>&nbsp;({{ variation.per_piece_price }} per piece price) </small>
                                                             </span>
                                                         </li>
@@ -263,6 +272,11 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="form-group" v-if="payment_method == 'paypal'">
+                                    <label class="text-title-field" for="paypal_email">Paypal Email</label>
+                                    <input type="email" id="paypal_email" class="form-control"
+                                           placeholder="Paypal Email" v-model="paypal_email">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -284,7 +298,7 @@
                             <!--<button class="btn btn-primary ml15" v-b-modal.make-pending :disabled="!child_product_ids.length || child_total_amount === 0">{{ __('Pay later') }}</button>-->
                             <!--<input type="hidden" v-model="child_payment_method" value="cod">-->
                             <button class="btn btn-primary ml15" @click="createOrder($event)"
-                                    :disabled="!child_product_ids.length || child_total_amount === 0">
+                                    :disabled="!child_product_ids.length || child_total_amount === 0 || creating_order">
                                 {{ this.order_id ? 'Update Order' : 'Create Order' }}
                             </button>
                         </div>
@@ -342,6 +356,7 @@
                                                         </div>
                                                         <div class="flexbox-auto-content-right">
                                                             <div class="overflow-ellipsis">{{ customer.name }}</div>
+                                                            <div class="overflow-ellipsis">{{ customer.detail.company }}</div>
                                                             <div class="overflow-ellipsis">
                                                                 <a :href="'mailto:' + customer.email">
                                                                     <span class="asd">{{
@@ -399,7 +414,8 @@
                                 <label class="title-product-main">{{ __('Customer') }}</label>
                             </div>
                             <div class="flexbox-auto-left">
-                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top" title="Delete customer" @click="removeCustomer()">
+                                <a href="#" id="remove-customer" data-toggle="tooltip" data-placement="top"
+                                   title="Delete customer" @click="removeCustomer()">
                                     <svg class="svg-next-icon svg-next-icon-size-12">
                                         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use>
                                     </svg>
@@ -410,9 +426,7 @@
                     <div class="next-card-section border-none-t">
                         <ul class="ws-nm">
                             <li>
-                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle"
-                                     alt="User Picture"
-                                     :src="child_customer.avatar_url">
+                                <img v-if="child_customer.avatar_url" class="width-60-px radius-cycle" alt="User Picture" :src="child_customer.avatar_url">
                                 <div class="pull-right color_darkblue mt20">
                                     <i class="fas fa-inbox"></i>
                                     <span>
@@ -421,26 +435,20 @@
                                     {{ __('order(s)') }}
                                 </div>
                             </li>
-                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{
-                                    child_customer.name
-                                }}</a>
-                            </li>
+                            <li class="mt10"><a class="hover-underline text-capitalize" href="#">{{child_customer.name }}</a></li>
                             <li>
                                 <div class="flexbox-grid-default">
                                     <div class="flexbox-auto-content-left overflow-ellipsis">
                                         <a :href="'mailto:' + child_customer.email">
                                             <span>{{ child_customer.email ? child_customer.email : '-' }}</span>
                                         </a>
-                                        <input type="hidden" :value="child_customer_id"
-                                               id="customer_id">
+                                        <input type="hidden" :value="child_customer_id" id="customer_id">
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-email>
-                                            <span data-placement="top" data-toggle="tooltip"
-                                                  data-original-title="Chỉnh sửa email">
+                                            <span data-placement="top" data-toggle="tooltip" data-original-title="Chỉnh sửa email">
                                                 <svg class="svg-next-icon svg-next-icon-size-12">
-                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                         xlink:href="#next-edit"></use>
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
                                                 </svg>
                                             </span>
                                         </a>
@@ -458,22 +466,71 @@
                                     </div>
                                     <div class="flexbox-auto-left">
                                         <a v-b-modal.edit-address>
-                                                <span data-placement="top" title="Update address"
-                                                      data-toggle="tooltip">
-                                                    <svg class="svg-next-icon svg-next-icon-size-12">
-                                                        <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                             xlink:href="#next-edit"></use>
-                                                    </svg>
-                                                </span>
+                                            <span data-placement="top" title="Update address" data-toggle="tooltip">
+                                                <svg class="svg-next-icon svg-next-icon-size-12">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
+                                                </svg>
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
                             </li>
                             <li class="text-infor-subdued mt15">
-                                <div v-if="child_customer_addresses.length > 1">
+                                <div v-if="child_customer_addresses.length > 0">
                                     <div class="ui-select-wrapper">
                                         <select class="ui-select" @change="selectCustomerAddress($event)">
                                             <option v-for="address_item in child_customer_addresses"
+                                                    :value="address_item.id"
+                                                    :selected="parseInt(address_item.id) === parseInt(customer_address.email)">
+                                                {{
+                                                    address_item.address + ', ' + address_item.city + ', ' +
+                                                    address_item.state + ', ' +
+                                                    address_item.country + (zip_code_enabled ? ', ' + address_item.zip_code : '')
+                                                }}
+                                            </option>
+                                        </select>
+                                        <svg class="svg-next-icon svg-next-icon-size-16">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
+                                        </svg>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div>{{ child_customer_address.name }}</div>
+                                <div>{{ child_customer_address.phone }}</div>
+                                <div><a :href="'mailto:' + child_customer_address.email">{{child_customer_address.email }}</a></div>
+                                <div>{{ child_customer_address.address }}</div>
+                                <div>{{ child_customer_address.city }}</div>
+                                <div>{{ child_customer_address.state }}</div>
+                                <div>{{ child_customer_address.country }}</div>
+                                <div v-if="zip_code_enabled">{{ child_customer_address.zip_code }}</div>
+                                <div>
+                                    <a target="_blank" class="hover-underline" :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{                                        __('See on maps') }}</a>
+                                </div>
+                            </li>
+                            <li class="clearfix"></li>
+                            <li class="clearfix"></li>
+                            <li class="clearfix">
+                                <div class="flexbox-grid-default">
+                                    <div class="flexbox-auto-content-left">
+                                        <label class="title-text-second">{{ __('Billing Address') }}</label>
+                                    </div>
+                                    <div class="flexbox-auto-left">
+                                        <a v-b-modal.edit-billing-address>
+                                            <span data-placement="top" title="Update Billing address"
+                                                  data-toggle="tooltip">
+                                                <svg class="svg-next-icon svg-next-icon-size-12">
+                                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-edit"></use>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="text-infor-subdued mt15">
+                                <div v-if="child_customer_billing_addresses.length > 0">
+                                    <div class="ui-select-wrapper">
+                                        <select class="ui-select" @change="selectCustomerBillingAddress($event)" id="billing_address">
+                                            <option v-for="address_item in child_customer_billing_addresses"
                                                     :value="address_item.id"
                                                     :selected="parseInt(address_item.id) === parseInt(customer_address.email)">
                                                 {{
@@ -491,20 +548,19 @@
                                     </div>
                                     <br>
                                 </div>
-                                <div>{{ child_customer_address.name }}</div>
-                                <div>{{ child_customer_address.phone }}</div>
-                                <div><a :href="'mailto:' + child_customer_address.email">{{
-                                        child_customer_address.email
-                                    }}</a>
-                                </div>
-                                <div>{{ child_customer_address.address }}</div>
-                                <div>{{ child_customer_address.city }}</div>
-                                <div>{{ child_customer_address.state }}</div>
-                                <div>{{ child_customer_address.country }}</div>
-                                <div v-if="zip_code_enabled">{{ child_customer_address.zip_code }}</div>
+                                <div>{{ child_customer_billing_address.name }}</div>
+                                <div>{{ child_customer_billing_address.phone }}</div>
+                                <div><a :href="'mailto:' + child_customer_billing_address.email">{{
+                                        child_customer_billing_address.email
+                                    }}</a></div>
+                                <div>{{ child_customer_billing_address.address }}</div>
+                                <div>{{ child_customer_billing_address.city }}</div>
+                                <div>{{ child_customer_billing_address.state }}</div>
+                                <div>{{ child_customer_billing_address.country }}</div>
+                                <div v-if="zip_code_enabled">{{ child_customer_billing_address.zip_code }}</div>
                                 <div>
                                     <a target="_blank" class="hover-underline"
-                                       :href="'https://maps.google.com/?q=' + child_customer_address.address + ', ' + child_customer_address.city + ', ' + child_customer_address.state + ', ' + child_customer_address.country + (zip_code_enabled ? ', ' + child_customer_address.zip_code : '')">{{
+                                       :href="'https://maps.google.com/?q=' + child_customer_billing_address.address + ', ' + child_customer_billing_address.city + ', ' + child_customer_billing_address.state + ', ' + child_customer_billing_address.country + (zip_code_enabled ? ', ' + child_customer_billing_address.zip_code : '')">{{
                                             __('See on maps')
                                         }}</a>
                                 </div>
@@ -558,8 +614,10 @@
             </div>
         </b-modal>
 
+
+        <!--@shown="loadCountries()"-->
         <b-modal id="add-customer" title="Create a new customer" ok-title="Save" cancel-title="Cancel"
-                 @shown="loadCountries()" @ok="createNewCustomer($event)">
+                 @ok="createNewCustomer($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
@@ -734,8 +792,9 @@
             </div>
         </b-modal>
 
-        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel"
-                 @shown="loadCountries()" @ok="updateOrderAddress($event)">
+        <!--@shown="loadCountries()" -->
+        <b-modal id="edit-address" title="Update address" ok-title="Save" cancel-title="Cancel" @shown="loadCountries()"
+                 @ok="updateOrderAddress($event)">
             <div class="next-form-section">
                 <div class="next-form-grid">
                     <div class="next-form-grid-cell">
@@ -793,6 +852,70 @@
                         <label class="text-title-field">{{ __('Zip code') }}</label>
                         <input type="text" class="next-input customer-address-zip-code"
                                :value="child_customer_address.zip_code">
+                    </div>
+                </div>
+            </div>
+        </b-modal>
+
+        <b-modal id="edit-billing-address" title="Update Billing address" ok-title="Save" cancel-title="Cancel"
+                 @shown="loadCountries()" @ok="updateOrderBillingAddress($event)">
+            <div class="next-form-section">
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Name') }}</label>
+                        <input type="text" class="next-input customer-address-name"
+                               :value="child_customer_billing_address.name">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Phone') }}</label>
+                        <input type="text" class="next-input customer-address-phone"
+                               :value="child_customer_billing_address.phone">
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Address') }}</label>
+                        <input type="text" class="next-input customer-address-address"
+                               :value="child_customer_billing_address.address">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Email') }}</label>
+                        <input type="text" class="next-input customer-address-email"
+                               :value="child_customer_billing_address.email">
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Country') }}</label>
+                        <div class="ui-select-wrapper">
+                            <select class="ui-select" v-model="child_customer_billing_address.country">
+                                <option v-for="(countryName, countryCode) in countries" :value="countryCode">
+                                    {{ countryName }}
+                                </option>
+                            </select>
+                            <svg class="svg-next-icon svg-next-icon-size-16">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select-chevron"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="next-form-grid">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('State') }}</label>
+                        <input type="text" class="next-input customer-address-state"
+                               :value="child_customer_billing_address.state">
+                    </div>
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('City/District') }}</label>
+                        <input type="text" class="next-input customer-address-city"
+                               :value="child_customer_billing_address.city">
+                    </div>
+                </div>
+                <div class="next-form-grid" v-if="zip_code_enabled">
+                    <div class="next-form-grid-cell">
+                        <label class="text-title-field">{{ __('Zip code') }}</label>
+                        <input type="text" class="next-input customer-address-zip-code"
+                               :value="child_customer_billing_address.zip_code">
                     </div>
                 </div>
             </div>
@@ -859,6 +982,10 @@ export default {
             type: Number,
             default: () => null,
         },
+        paypal_email_prop: {
+            type: String,
+            default: () => null,
+        },
         order_id: {
             type: Number,
             default: () => null,
@@ -875,6 +1002,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        customer_billing_addresses: {
+            type: Array,
+            default: () => [],
+        },
         order_types: {
             type: Object,
             default: () => [],
@@ -884,6 +1015,19 @@ export default {
             default: () => [],
         },
         customer_address: {
+            type: Object,
+            default: () => ({
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            }),
+        },
+        customer_billing_address: {
             type: Object,
             default: () => ({
                 name: null,
@@ -931,6 +1075,10 @@ export default {
         is_selected_shipping: {
             type: Boolean,
             default: () => false,
+        },
+        can_price_edit: {
+            type: Number,
+            default: () => 0,
         },
         shipping_method_name: {
             type: String,
@@ -995,9 +1143,12 @@ export default {
             discount_custom_value: 0,
             child_customer: this.customer,
             child_customer_id: this.customer_id,
+            paypal_email: this.paypal_email_prop,
             child_customer_order_numbers: this.customer_order_numbers,
             child_customer_addresses: this.customer_addresses,
+            child_customer_billing_addresses: this.customer_billing_addresses,
             child_customer_address: this.customer_address,
+            child_customer_billing_address: this.customer_billing_address,
             child_products: this.products,
             child_product_ids: this.product_ids,
             child_sub_amount: this.sub_amount,
@@ -1008,7 +1159,12 @@ export default {
             child_shipping_option: this.shipping_option,
             child_shipping_method_name: this.shipping_method_name,
             child_is_selected_shipping: this.is_selected_shipping,
+            child_can_price_edit: this.can_price_edit,
             child_payment_method: this.payment_method,
+
+            creating_order: false,
+
+            cancelSource: null,
         }
     },
     mounted: function () {
@@ -1042,6 +1198,7 @@ export default {
                         Botble.handleError(res.response.data);
                     });
             }
+            context.loadCountries();
         },
         handleSearchCustomer: function (value) {
             if (value !== this.customer_keyword) {
@@ -1058,12 +1215,16 @@ export default {
             $('.textbox-advancesearch.product').closest('.box-search-advance.product').find('.panel').addClass('active');
             if (_.isEmpty(context.list_products.data) || force) {
                 context.loading = true;
+                if(context.cancelSource) {
+                    context.cancelSource.cancel('Start new search, stop active search');
+                }
+                context.cancelSource = axios.CancelToken.source();
                 axios
                     .get(route('products.get-all-products-and-variations', {
                         keyword: context.product_keyword,
                         order_type: context.order_type,
-                        page: page
-                    }))
+                        page: page,
+                    }), {cancelToken: context.cancelSource.token})
                     .then(res => {
                         context.list_products = res.data.data;
                         context.loading = false;
@@ -1081,6 +1242,9 @@ export default {
                     context.loadListProductsAndVariations(1, true);
                 }, 500);
             }
+        },
+        changeOrderType: function () {
+            this.loadListProductsAndVariations();
         },
         selectProductVariant: function (product, variation = null) {
             if ((!_.isEmpty(variation) && variation.is_out_of_stock) || (_.isEmpty(variation) && product.is_out_of_stock)) {
@@ -1111,11 +1275,12 @@ export default {
                 this.child_products.push(productItem);
                 this.child_product_ids.push(product.id);
             }
-            this.hidden_product_search_panel = true;
+            // this.hidden_product_search_panel = true;
         },
         selectCustomer: function (customer) {
             this.child_customer = customer;
             this.child_customer_id = customer.id;
+            this.paypal_email = customer.paypal_email ? customer.paypal_email : customer.email;
 
             this.loadCustomerAddress(this.child_customer_id);
 
@@ -1124,8 +1289,20 @@ export default {
         removeCustomer: function () {
             this.child_customer = this.customer;
             this.child_customer_id = null;
+            this.paypal_email = null;
             this.child_customer_addresses = [];
+            this.child_customer_billing_addresses = [];
             this.child_customer_address = {
+                name: null,
+                email: null,
+                address: null,
+                phone: null,
+                country: 'AF',
+                state: null,
+                city: null,
+                zip_code: null,
+            };
+            this.child_customer_billing_address = {
                 name: null,
                 email: null,
                 address: null,
@@ -1162,6 +1339,7 @@ export default {
         },
         createOrder: function ($event, paid = false) {
             $event.preventDefault();
+            this.creating_order = true;
             $($event.target).find('.btn-primary').addClass('button-loading');
             let context = this;
 
@@ -1171,6 +1349,7 @@ export default {
                     id: (item.configurable_product_id ? item.product_id : item.id),
                     quantity: item.select_qty,
                     sale_price: item.price,
+                    per_piece_price: item.per_piece_price,
                 });
             });
 
@@ -1186,12 +1365,14 @@ export default {
                     discount_description: this.child_discount_description,
                     coupon_code: this.coupon_code,
                     customer_id: this.child_customer_id,
+                    paypal_email: this.paypal_email,
                     order_id: this.order_id,
                     note: this.note,
                     customer_notes: this.customer_notes,
                     order_type: this.order_type,
                     amount: this.child_sub_amount,
                     customer_address: this.child_customer_address,
+                    customer_billing_address: this.child_customer_billing_address,
                     order_card: $("select.card_list option:selected").val(),
                     billing_address: $("select#billing_address option:selected").val(),
                 })
@@ -1199,6 +1380,7 @@ export default {
                     let data = res.data.data;
                     if (data.error) {
                         Botble.showError(Botble.showError(res.data.message))
+                        this.creating_order = false;
                     } else {
                         Botble.showSuccess(res.data.message);
                         if (paid) {
@@ -1219,6 +1401,7 @@ export default {
                         Botble.handleError(res.response.data);
                     }
                     $($event.target).find('.btn-primary').removeClass('button-loading');
+                    this.creating_order = false;
                 });
         },
         createProduct: function ($event) {
@@ -1287,10 +1470,10 @@ export default {
         },
         updateOrderAddress: function ($event) {
             $event.preventDefault();
+            let context = this;
 
-            if (this.customer) {
-
-                $($event.target).addClass('button-loading');
+            if (this.child_customer) {
+                $($event.target).find('.btn-primary').addClass('button-loading');
 
                 let $modal = $(event.target).closest('.modal-dialog');
                 this.child_customer_address.name = $modal.find('.customer-address-name').val();
@@ -1299,12 +1482,32 @@ export default {
                 this.child_customer_address.address = $modal.find('.customer-address-address').val();
                 this.child_customer_address.city = $modal.find('.customer-address-city').val();
                 this.child_customer_address.state = $modal.find('.customer-address-state').val();
-                this.child_customer_address.country = $modal.find('.customer-address-country').val();
+                //this.child_customer_address.country = $modal.find('.customer-address-country').val();
                 this.child_customer_address.zip_code = $modal.find('.customer-address-zip-code').val();
 
                 // this.loadCountries();
-                this.$root.$emit('bv::hide::modal', 'edit-address');
-                $($event.target).removeClass('button-loading');
+                context.$root.$emit('bv::hide::modal', 'edit-address');
+                $($event.target).find('.btn-primary').removeClass('button-loading');
+            }
+        },
+        updateOrderBillingAddress: function ($event) {
+            $event.preventDefault();
+            let context = this;
+
+            if (this.child_customer) {
+                $($event.target).find('.btn-primary').addClass('button-loading');
+
+                let $modal = $(event.target).closest('.modal-dialog');
+                this.child_customer_billing_address.name = $modal.find('.customer-address-name').val();
+                this.child_customer_billing_address.email = $modal.find('.customer-address-email').val();
+                this.child_customer_billing_address.phone = $modal.find('.customer-address-phone').val();
+                this.child_customer_billing_address.address = $modal.find('.customer-address-address').val();
+                this.child_customer_billing_address.city = $modal.find('.customer-address-city').val();
+                this.child_customer_billing_address.state = $modal.find('.customer-address-state').val();
+                this.child_customer_billing_address.zip_code = $modal.find('.customer-address-zip-code').val();
+
+                context.$root.$emit('bv::hide::modal', 'edit-billing-address');
+                $($event.target).find('.btn-primary').removeClass('button-loading');
             }
         },
         createNewCustomer: function ($event) {
@@ -1357,6 +1560,14 @@ export default {
                 }
             });
         },
+        selectCustomerBillingAddress: function (event) {
+            let context = this;
+            _.each(this.child_customer_billing_addresses, (item) => {
+                if (parseInt(item.id) === parseInt(event.target.value)) {
+                    context.child_customer_billing_address = item;
+                }
+            });
+        },
         getOrderNumbers: function () {
             let context = this;
             axios
@@ -1373,9 +1584,17 @@ export default {
             axios
                 .get(route('customers.get-customer-addresses', context.child_customer_id))
                 .then(res => {
-                    context.child_customer_addresses = res.data.data;
+                    context.child_customer_addresses = res.data.data.filter(function (addr) {
+                        return addr.type == 'shipping'
+                    });
+                    context.child_customer_billing_addresses = res.data.data.filter(function (addr) {
+                        return addr.type == 'billing'
+                    });
                     if (!_.isEmpty(context.child_customer_addresses)) {
                         context.child_customer_address = _.first(context.child_customer_addresses);
+                    }
+                    if (!_.isEmpty(context.child_customer_billing_addresses)) {
+                        context.child_customer_billing_address = _.first(context.child_customer_billing_addresses);
                     }
                 })
                 .catch(res => {
@@ -1500,6 +1719,18 @@ export default {
             }
         },
         handleChangeQuantity: function () {
+            this.calculateAmount(this.child_products);
+        },
+        handleChangePerPiecePrice: function () {
+            let context = this;
+            let products = this.child_products;
+            _.each(products, function (item) {
+                console.log(item.per_piece_price, "===");
+                if (item.packQty) {
+                    item.price = parseFloat(item.per_piece_price) * parseInt(item.packQty);
+                }
+            });
+            this.child_products = products;
             this.calculateAmount(this.child_products);
         },
         resetProductData: function () {

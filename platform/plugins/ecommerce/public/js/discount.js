@@ -389,6 +389,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // let moment = require('moment');
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -429,11 +510,15 @@ __webpack_require__.r(__webpack_exports__);
       products: [],
       product_keyword: null,
       product_text: 'Select product',
-      customers: [],
+      customers: {
+        data: []
+      },
       customer_id: null,
       customer_name: 'Select customer',
       loading: false,
-      discountUnit: '$'
+      discountUnit: '$',
+      hidden_customer_search_panel: true,
+      customer_keyword: null
     };
   },
   props: {
@@ -452,11 +537,41 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!container.is(e.target) && container.has(e.target).length === 0) {
         context.hidden_product_search_panel = true;
+        context.hidden_customer_search_panel = true;
       }
     });
     this.discountUnit = this.currency;
   },
   methods: {
+    loadListCustomersForSearch: function loadListCustomersForSearch() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var context = this;
+      context.hidden_customer_search_panel = false;
+      $('.textbox-advancesearch.customer').closest('.box-search-advance.customer').find('.panel').addClass('active');
+
+      if (_.isEmpty(context.customers.data) || force) {
+        context.loading = true;
+        axios.get(route('customers.get-list-customers-for-search', {
+          keyword: context.customer_keyword,
+          page: page
+        })).then(function (res) {
+          context.customers = res.data.data;
+          context.loading = false;
+        })["catch"](function (res) {
+          Botble.handleError(res.response.data);
+        });
+      }
+    },
+    handleSearchCustomer: function handleSearchCustomer(value) {
+      if (value !== this.customer_keyword) {
+        var context = this;
+        this.customer_keyword = value;
+        setTimeout(function () {
+          context.loadListCustomersForSearch(1, true);
+        }, 500);
+      }
+    },
     generateCouponCode: function generateCouponCode(event) {
       event.preventDefault();
       var context = this;
@@ -645,6 +760,7 @@ __webpack_require__.r(__webpack_exports__);
     handleSelectCustomers: function handleSelectCustomers(customer) {
       this.customer_id = customer.id;
       this.customer_name = customer.name;
+      this.hidden_customer_search_panel = true;
     },
     selectProductVariant: function selectProductVariant(productVariant, variation) {
       if (!_.includes(this.variant_ids, variation.product_id)) {
@@ -757,7 +873,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "flexbox-grid no-pd-none" }, [
-    _c("div", { staticClass: "flexbox-content" }, [
+    _c("div", { staticClass: "flexbox-content pb-4" }, [
       _c("div", { staticClass: "wrapper-content" }, [
         _c("div", { staticClass: "pd-all-20 ws-nm" }, [
           _c("label", { staticClass: "title-product-main text-no-bold" }, [
@@ -869,11 +985,13 @@ var render = function() {
               },
               [
                 _vm._v(
-                  _vm._s(
-                    _vm.__(
-                      "Customers will enter this coupon code when they checkout"
-                    )
-                  ) + "."
+                  "\n                        " +
+                    _vm._s(
+                      _vm.__(
+                        "Customers will enter this coupon code when they checkout"
+                      )
+                    ) +
+                    "."
                 )
               ]
             )
@@ -1127,7 +1245,7 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "pd-all-20 border-top-color" }, [
+        _c("div", { staticClass: "pd-all-20 border-top-color pb-5" }, [
           _c(
             "label",
             { staticClass: "title-product-main text-no-bold block-display" },
@@ -1342,7 +1460,10 @@ var render = function() {
                           _vm._v(" "),
                           _vm.type_option !== "same-price"
                             ? _c("option", { attrs: { value: "all-orders" } }, [
-                                _vm._v(_vm._s(_vm.__("All orders")))
+                                _vm._v(
+                                  _vm._s(_vm.__("All orders")) +
+                                    "\n                                "
+                                )
                               ])
                             : _vm._e(),
                           _vm._v(" "),
@@ -1350,7 +1471,13 @@ var render = function() {
                             ? _c(
                                 "option",
                                 { attrs: { value: "amount-minimum-order" } },
-                                [_vm._v(_vm._s(_vm.__("Order amount from")))]
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(_vm.__("Order amount from")) +
+                                      "\n                                "
+                                  )
+                                ]
                               )
                             : _vm._e(),
                           _vm._v(" "),
@@ -1366,7 +1493,10 @@ var render = function() {
                           _vm._v(" "),
                           _vm.type_option !== "same-price"
                             ? _c("option", { attrs: { value: "customer" } }, [
-                                _vm._v(_vm._s(_vm.__("Customer")))
+                                _vm._v(
+                                  _vm._s(_vm.__("Customer")) +
+                                    "\n                                "
+                                )
                               ])
                             : _vm._e(),
                           _vm._v(" "),
@@ -1450,7 +1580,12 @@ var render = function() {
                                     {
                                       domProps: { value: product_category.id }
                                     },
-                                    [_vm._v(_vm._s(product_category.name))]
+                                    [
+                                      _vm._v(
+                                        _vm._s(product_category.name) +
+                                          "\n                                    "
+                                      )
+                                    ]
                                   )
                                 }),
                                 0
@@ -1704,11 +1839,18 @@ var render = function() {
                         [
                           _c(
                             "div",
-                            {
-                              staticClass:
-                                "drop-select-search drop-control dropdown dropdown-collection"
-                            },
+                            { staticClass: "box-search-advance customer" },
                             [
+                              _c(
+                                "span",
+                                { staticClass: "overflow-title max-250 p-r15" },
+                                [
+                                  _c("strong", [
+                                    _vm._v(_vm._s(_vm.customer_name))
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
                               _c("input", {
                                 directives: [
                                   {
@@ -1730,89 +1872,341 @@ var render = function() {
                                 }
                               }),
                               _vm._v(" "),
-                              _c(
-                                "button",
-                                {
+                              _c("div", [
+                                _c("input", {
                                   staticClass:
-                                    "btn btn-secondary dropdown-toggle",
+                                    "next-input textbox-advancesearch customer",
                                   attrs: {
-                                    type: "button",
-                                    "data-toggle": "dropdown",
-                                    "aria-haspopup": "true",
-                                    "aria-expanded": "false"
+                                    type: "text",
+                                    placeholder:
+                                      "Search or create a new customer"
                                   },
                                   on: {
                                     click: function($event) {
-                                      return _vm.loadListCustomersForSelect()
+                                      return _vm.loadListCustomersForSearch()
+                                    },
+                                    keyup: function($event) {
+                                      return _vm.handleSearchCustomer(
+                                        $event.target.value
+                                      )
                                     }
                                   }
-                                },
-                                [
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass:
-                                        "overflow-title max-250 p-r15"
-                                    },
-                                    [_vm._v(_vm._s(_vm.customer_name))]
-                                  )
-                                ]
-                              ),
+                                })
+                              ]),
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "dropdown-menu" },
+                                {
+                                  staticClass: "panel panel-default",
+                                  class: {
+                                    active: _vm.customers,
+                                    hidden: _vm.hidden_customer_search_panel
+                                  }
+                                },
                                 [
-                                  _c(
-                                    "div",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "show",
-                                          rawName: "v-show",
-                                          value: _vm.loading,
-                                          expression: "loading"
-                                        }
-                                      ],
-                                      staticClass: "has-loading"
-                                    },
-                                    [
-                                      _c("i", {
-                                        staticClass: "fa fa-spinner fa-spin"
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._l(_vm.customers, function(customer) {
-                                    return _c(
-                                      "a",
-                                      {
-                                        directives: [
+                                  _c("div", { staticClass: "panel-body" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "list-search-data" },
+                                      [
+                                        _c(
+                                          "div",
                                           {
-                                            name: "show",
-                                            rawName: "v-show",
-                                            value: !_vm.loading,
-                                            expression: "!loading"
-                                          }
-                                        ],
-                                        staticClass: "dropdown-item",
-                                        attrs: {
-                                          href: "#",
-                                          value: customer.id
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.handleSelectCustomers(
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value: _vm.loading,
+                                                expression: "loading"
+                                              }
+                                            ],
+                                            staticClass: "has-loading"
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-spinner fa-spin"
+                                            })
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "ul",
+                                          {
+                                            directives: [
+                                              {
+                                                name: "show",
+                                                rawName: "v-show",
+                                                value: !_vm.loading,
+                                                expression: "!loading"
+                                              }
+                                            ],
+                                            staticClass:
+                                              "clearfix select-customer"
+                                          },
+                                          [
+                                            _vm._l(_vm.customers.data, function(
                                               customer
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [_vm._v(_vm._s(customer.name))]
+                                            ) {
+                                              return _c(
+                                                "li",
+                                                {
+                                                  staticClass: "row",
+                                                  attrs: { value: customer.id },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.handleSelectCustomers(
+                                                        customer
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "flexbox-grid-default flexbox-align-items-center"
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "flexbox-auto-40"
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "wrap-img inline_block vertical-align-t radius-cycle"
+                                                            },
+                                                            [
+                                                              _c("img", {
+                                                                staticClass:
+                                                                  "thumb-image radius-cycle",
+                                                                attrs: {
+                                                                  src:
+                                                                    customer.avatar_url
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "flexbox-auto-content-right"
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "overflow-ellipsis"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  customer.name
+                                                                )
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass:
+                                                                "overflow-ellipsis"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "a",
+                                                                {
+                                                                  attrs: {
+                                                                    href:
+                                                                      "mailto:" +
+                                                                      customer.email
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "span",
+                                                                    {
+                                                                      staticClass:
+                                                                        "asd"
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        _vm._s(
+                                                                          customer.email
+                                                                            ? customer.email
+                                                                            : "-"
+                                                                        )
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            }),
+                                            _vm._v(" "),
+                                            _vm.customers.data.length === 0
+                                              ? _c("li", [
+                                                  _c("span", [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        _vm.__(
+                                                          "No customer found!"
+                                                        )
+                                                      )
+                                                    )
+                                                  ])
+                                                ])
+                                              : _vm._e()
+                                          ],
+                                          2
+                                        )
+                                      ]
                                     )
-                                  })
-                                ],
-                                2
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm.customers.next_page_url ||
+                                  _vm.customers.prev_page_url
+                                    ? _c(
+                                        "div",
+                                        { staticClass: "panel-footer" },
+                                        [
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass:
+                                                "btn-group float-right"
+                                            },
+                                            [
+                                              _c(
+                                                "button",
+                                                {
+                                                  class: {
+                                                    "btn btn-secondary":
+                                                      _vm.customers
+                                                        .current_page !== 1,
+                                                    "btn btn-secondary disable":
+                                                      _vm.customers
+                                                        .current_page === 1
+                                                  },
+                                                  attrs: {
+                                                    type: "button",
+                                                    disabled:
+                                                      _vm.customers
+                                                        .current_page === 1
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.loadListCustomersForSearch(
+                                                        _vm.customers
+                                                          .prev_page_url
+                                                          ? _vm.customers
+                                                              .current_page - 1
+                                                          : _vm.customers
+                                                              .current_page,
+                                                        true
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "svg",
+                                                    {
+                                                      staticClass:
+                                                        "svg-next-icon svg-next-icon-size-16 svg-next-icon-rotate-180",
+                                                      attrs: { role: "img" }
+                                                    },
+                                                    [
+                                                      _c("use", {
+                                                        attrs: {
+                                                          "xmlns:xlink":
+                                                            "http://www.w3.org/1999/xlink",
+                                                          "xlink:href":
+                                                            "#next-chevron"
+                                                        }
+                                                      })
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "button",
+                                                {
+                                                  class: {
+                                                    "btn btn-secondary":
+                                                      _vm.customers
+                                                        .next_page_url,
+                                                    "btn btn-secondary disable": !_vm
+                                                      .customers.next_page_url
+                                                  },
+                                                  attrs: {
+                                                    type: "button",
+                                                    disabled: !_vm.customers
+                                                      .next_page_url
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.loadListCustomersForSearch(
+                                                        _vm.customers
+                                                          .next_page_url
+                                                          ? _vm.customers
+                                                              .current_page + 1
+                                                          : _vm.customers
+                                                              .current_page,
+                                                        true
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "svg",
+                                                    {
+                                                      staticClass:
+                                                        "svg-next-icon svg-next-icon-size-16",
+                                                      attrs: { role: "img" }
+                                                    },
+                                                    [
+                                                      _c("use", {
+                                                        attrs: {
+                                                          "xmlns:xlink":
+                                                            "http://www.w3.org/1999/xlink",
+                                                          "xlink:href":
+                                                            "#next-chevron"
+                                                        }
+                                                      })
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("div", { staticClass: "clearfix" })
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ]
                               )
                             ]
                           )
@@ -2311,7 +2705,7 @@ var render = function() {
                       expression: "is_promotion"
                     }
                   ],
-                  staticStyle: { margin: "10px 0" }
+                  staticStyle: { margin: "40px 0 10px 0" }
                 },
                 [
                   _c("span", { staticClass: "lb-dis" }, [

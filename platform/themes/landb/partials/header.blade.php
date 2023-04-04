@@ -1,30 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+    $product_detail = (request()->segment(1) == 'products' && !empty(request()->segment(2))) ? true : false;
+    $home = empty(request()->segment(1)) ? true : false;
+?>
 <head>
     <meta charset="UTF-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <!-- <link rel="icon" href="img/SwingsationsFavicon.png" sizes="36x36" type="image/png"> -->
+{{--{!! SeoHelper::render() !!}--}}
+{!! Theme::partial('metas') !!}
+     <link rel="icon" href="{{asset('public/images/favicon.png')}}" sizes="36x36" type="image/png">
     <!--    Font Awesome 5.9-->
-    <script src="https://kit.fontawesome.com/9c7309bfe2.js"></script>
+<!--    <script async src="https://kit.fontawesome.com/9c7309bfe2.js"></script>-->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.14.0/css/all.css">
-
+    @if($home || $product_detail)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/assets/owl.carousel.min.css'>
+    @endif
     <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
     <!--    Bootstrap 4.3.1-->
     <link rel="stylesheet" href="{{ asset('landb/css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('landb/css/jquery.fancybox.css') }}"/>
+<!--    <link rel="stylesheet" href="{{ asset('landb/css/jquery.fancybox.css') }}"/>-->
     <!-- Custom Style Sheet -->
-    <link type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" rel="stylesheet" href="{{ asset('landb/css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
-    <script src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
-    <script src="{{ asset('js/barcodeScanner.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">
-    <script src="{{ asset('landb/js/datepickk.min.js') }}"></script>
-    <script src="{{ asset('landb/js/lazyload.min.js') }}"></script>
-    <title>LandBAppreal</title>
+    @if($home)
+
+    @endif
+    @if(request()->segment(1) == 'checkout')
+    <script async src="https://fattjs.fattpay.com/js/fattmerchant.js"></script>
+    @endif
+    {{--<script src="{{ asset('js/barcodeScanner.js') }}"></script>--}}
+{{--    <link rel="stylesheet" href="{{ asset('landb/css/datepickk.min.css') }}">--}}
+{{--    <script async src="{{ asset('landb/js/datepickk.min.js') }}"></script>--}}
+    <script async src="{{ asset('landb/js/lazyload.min.js') }}"></script>
+<!--    <link rel="stylesheet" href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
+ <link rel="stylesheet" href="{{ asset('landb/css/vgnav.css') }}">
+    <link rel="stylesheet" href="{{ asset('landb/css/vgnav-theme.css') }}">
+    @if($product_detail)
+        <link rel="stylesheet" href="{{ asset('landb/css/jquery.magnify.css') }}">
+    @endif
+
+{{--  <link href="{{ asset('landb/css/jquery.exzoom.css') }}" rel="stylesheet" type="text/css"/>--}}
+
     <style>
         .loading-overlay {
             display: none;
@@ -66,7 +86,7 @@
 
             <ul>
                 <li>
-                    <a href="tel:+1234567890"><i class="fal fa-phone-alt"></i> <span>972-243-7860
+                    <a href="tel:+9722437860"><i class="fal fa-phone-alt"></i> <span>972-243-7860
 
 </span></a>
                 </li>
@@ -77,9 +97,9 @@
 
                 </li>
                 <div id="top-sear" class="top-search">
-                      <form action="#">
+                      <form action="{{ route('public.searchProducts') }}" method="GET">
                         <div class="d-flex main-search">
-                        <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." name="search">
+                        <input class="search-inp" type="text" autocomplete="off" placeholder="Search.." id="main_search" name="keyword">
                         <button class="tp-search-btn" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                         <span class="tp-close-btn pl-2"><i class="fa fa-times" aria-hidden="true"></i></span>
                         </div>
@@ -99,7 +119,7 @@
                     border-radius: 30px;
                     font-size: 12px;
                     /* vertical-align: -webkit-baseline-middle; */
-                    /* display: inherit; */
+                    padding-top: 2px
                     margin: a;
                     margin-top: -10px;
                 " id="user-cart-count">{{ cart_count() }}</span>
@@ -108,11 +128,11 @@
                 </li>
                 <li>
                     @if(auth('customer')->user())
-                        <a href="{{ route('customer.edit-account') }}">Welcome, {{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
+                        <a href="{{ route('customer.overview') }}">Welcome, {{ auth('customer')->user()->name }}</a> | <a href="{{ route('public.logout') }}"><i
                                 class="fa fa-sign-out"></i></a>
                     @else
                         <a href="{{ route('customer.login') }}">Sign In</a>
-                        <a href="{{ route('customer.login') }}">Sign Up</a>
+                        <a href="{{ route('public.register') }}">Sign Up</a>
                     @endauth
 
                 </li>
@@ -135,9 +155,14 @@
                         'view' => 'main-menu',
                     ])
                 !!}
-                <button class="toggle-menu">
-                    <span></span>
-                </button>
+                {!!
+                    Menu::renderMenuLocation('categories-menu', [
+                        'options' => [],
+                        'theme' => true,
+                        'view' => 'mobile-menu',
+                    ])
+                !!}
+
                 <div id="menu" class="">
                     {!!
                         Menu::renderMenuLocation('categories-menu', [
@@ -235,7 +260,7 @@
   background: #bbb;
 }
 </style> -->
-<script src="{{ asset('landb/js/flipbook.js') }}"></script>
+{{--<script src="{{ asset('landb/js/flipbook.js') }}"></script>--}}
 
 <!-- <script>
 function openSearch() {

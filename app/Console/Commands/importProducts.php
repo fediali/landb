@@ -18,6 +18,7 @@ use Botble\Ecommerce\Repositories\Interfaces\ProductVariationInterface;
 use Botble\Slug\Models\Slug;
 use File;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use SlugHelper;
@@ -48,7 +49,11 @@ class importProducts extends Command
      *
      * @return void
      */
-    public function __construct(ProductVariationInterface $productVariation, ProductCategoryInterface $productCategoryRepository, BaseHttpResponse $response)
+    public function __construct(
+        ProductVariationInterface $productVariation,
+        ProductCategoryInterface $productCategoryRepository,
+        BaseHttpResponse $response
+    )
     {
         parent::__construct();
         $this->response = $response;
@@ -66,24 +71,74 @@ class importProducts extends Command
         /*$file = public_path('lnb-products-3000.xlsx');
         Excel::import(new ImportProduct($this->productVariation, $this->productCategoryRepository, $this->response), $file);*/
 
-        $file = File::get(public_path('lnb-products-3000.json'));
+
+//        DB::table('ec_products')->truncate();
+//        DB::table('ec_product_with_attribute_set')->truncate();
+//        DB::table('ec_product_with_attribute')->truncate();
+//        DB::table('ec_product_variations')->truncate();
+//        DB::table('ec_product_variation_items')->truncate();
+//        DB::table('ec_product_collection_products')->truncate();
+//        DB::table('ec_product_category_product')->truncate();
+
+        //DB::table('ec_order_addresses')->truncate();
+        //DB::table('ec_order_histories')->truncate();
+        //DB::table('ec_order_product')->truncate();
+        //DB::table('ec_orders')->truncate();
+
+        // DB::statement("ALTER TABLE ec_products AUTO_INCREMENT = 150000;");
+
+        // Slug::where('prefix', 'products')->delete();
+
+//        $file = File::get(public_path('lnb-prod-active_2949.json'));
+//        $data = json_decode(utf8_encode($file), true);
+//        $this->insertProducts($data);
+//        echo 'success-active';
+
+        $file = File::get(storage_path('app/public/lnb-products-43246.json'));
         $data = json_decode(utf8_encode($file), true);
+        $this->insertProducts($data);
+        echo 'success-inactive';
+        $this->bounds();
+    }
 
+    public function bounds()
+    {
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            $getBound = DB::connection('mysql2')->table('hw_hw_bounded_products')->where('product_id', $product->id)->first();
+            if ($getBound) {
+                $getBoundProducts = DB::connection('mysql2')->table('hw_hw_bounded_products')
+                    ->where('bound_id', $getBound->bound_id)
+                    //->where('product_id', '!=', $product->id)
+                    ->pluck('product_id')
+                    ->all();
+                if (count($getBoundProducts)) {
+                    Product::where('id', $product->id)->update(['color_products' => json_encode($getBoundProducts)]);
+                }
+            }
+            echo $product->sku . '<br>';
+        }
+    }
+
+    public function insertProducts($data)
+    {
         foreach ($data['rows'] as $row) {
-
             if ($row['product_id'] && $row['product_code'] && $row['category_id'] && $row['product'] && $row['category']) {
 
                 $category = ProductCategory::where('name', $row['category'])->first();
-                if (!$category && $row['category'] && $row['parent_id']) {
+
+                if (!$category && $row['category'] /*&& $row['parent_id']*/) {
                     $category = new ProductCategory();
                     $category->name = $row['category'];
-                    $category->parent_id = $row['parent_id'];
+                    $category->parent_id = @$row['parent_id'];
                     $category->save();
                 }
 
-                $check = Product::where('sku', $row['product_code'])->first();
+                $check = Product::where('id', $row['product_id'])->first();
                 if (!$check && $category) {
-                    $packQuantity = quantityCalculate($category->id);
+//                    $packQuantity = quantityCalculate($category->id);
+                    $packQuantity = 0;
                     $product = new Product();
                     $product->id = $row['product_id'];
                     $product->name = $row['product'];
@@ -98,12 +153,24 @@ class importProducts extends Command
                         $product->status = BaseStatusEnum::$STATUSES[$row['status']];
                     }
                     $product->cost_price = $row['cost_price'];
-                    $product->creation_date = date('Y-m-d', strtotime($row['timestamp']));
+                    $product->creation_date = date('Y-m-d', $row['timestamp']);
                     $product->sku = $row['product_code'];
                     $product->prod_pieces = $row['min_qty'];
                     $product->sizes = $row['variant_name'];
                     $product->category_id = $category->id;
+
                     $product->quantity = 0;
+                    if ($row['amount']) {
+                        if ($row['min_qty']) {
+                            $packQty = floor($row['amount'] / $row['min_qty']);
+                            $looseQty = $packQty * $row['min_qty'];
+                            $diff = $row['amount'] - $looseQty;
+                            $product->quantity = $packQty;
+                            $product->extra_qty = $diff;
+                        } else {
+                            $product->extra_qty = $row['amount'];
+                        }
+                    }
 
                     $percentage = !is_null(setting('sales_percentage')) ? setting('sales_percentage') : 0;
 
@@ -114,23 +181,41 @@ class importProducts extends Command
                             $packQuantity = $product->prod_pieces;
                         }
                         $extras = ($row['price'] * $packQuantity) * $percentage / 100;
-                        $packPrice = $row['price'] * $packQuantity ;
+                        $packPrice = $row['price'] * $packQuantity;
                         $single = $row['price'] * $percentage / 100;
                         $singlePrice = $row['price'];
                         $product->price = $packPrice;
                     }
                     // $product->sale_price = $variation->cost + $extras;
 
-                    if ($row['image_path']) {
-                        $product->images = json_encode([$row['image_path']]);
+                    // if ($row['image_id'] && $row['image_path']) {
+
+                    $getProdImages = DB::connection('mysql2')->table('hw_images_links')
+                        ->select('hw_images.image_id', 'hw_images.image_path', 'hw_images_links.type')
+                        ->join('hw_images', 'hw_images.image_id', 'hw_images_links.detailed_id')
+                        ->where('hw_images_links.object_type', 'product')
+                        ->where('hw_images_links.object_id', $row['product_id'])
+                        ->orderBy('hw_images_links.type', 'DESC')
+                        ->get();
+                    $arrr = [];
+                    foreach ($getProdImages as $getProdImage) {
+                        $idLen = getDigitsLength($getProdImage->image_id);
+                        if ($idLen <= 5) {
+                            $folder = substr($getProdImage->image_id, 0, 2);
+                        } elseif ($idLen >= 6) {
+                            $folder = substr($getProdImage->image_id, 0, 3);
+                        }
+                        $arrr[] = 'product-images/detailed/' . $folder . '/' . $getProdImage->image_path;
                     }
+                    $product->images = json_encode($arrr);
+                    // }
                     $product->tax_id = 1;
 
                     if ($row['upc_pack']) {
                         $product->upc = $row['upc_pack'];
-                        try {
+                        /*try {
                             $product->barcode = get_barcode_by_upc($row['upc_pack'])['barcode'];
-                        } catch (\ErrorException $exception) {}
+                        } catch (\ErrorException $exception) {}*/
                     }
 
                     if ($row['restock']) {
@@ -150,12 +235,18 @@ class importProducts extends Command
                         $product->categories()->sync([$category->id]);
                         $product->productCollections()->detach();
                         $product->productCollections()->attach([1]);//new arrival
-                        Slug::create([
+
+                        $slugParams = [
                             'reference_type' => Product::class,
-                            'reference_id' => $product->id,
-                            'key' => Str::slug($product->name),
-                            'prefix' => SlugHelper::getPrefix(Product::class),
-                        ]);
+                            'reference_id'   => $product->id,
+                            'key'            => Str::slug($product->name),
+                            'prefix'         => SlugHelper::getPrefix(Product::class),
+                        ];
+                        $checkSlug = Slug::where(['key' => Str::slug($product->name), 'prefix' => SlugHelper::getPrefix(Product::class)])->first();
+                        if ($checkSlug) {
+                            $slugParams['key'] .= '-' . time();
+                        }
+                        Slug::create($slugParams);
 
                         $getTypeAttrSet = ProductAttributeSet::where('slug', 'type')->value('id');
                         if ($getTypeAttrSet) {
@@ -196,27 +287,35 @@ class importProducts extends Command
                                         ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                                         $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                                        filter_product_sku($prodId);
                                         $packAllProd = Product::where('id', $prodId)->first();
 
+                                        //no barcode image need
                                         try {
-                                            $barcodePackAll = get_barcode_by_upc($row['upc_pack']);
-                                            $packAllProd->upc = $barcodePackAll['upc'];
-                                            $packAllProd->barcode = $barcodePackAll['barcode'];
-                                        } catch (\ErrorException $exception) {}
+                                            //$barcodePackAll = get_barcode_by_upc($row['upc_pack']);
+                                            //$packAllProd->upc = $barcodePackAll['upc'];
+                                            //$packAllProd->barcode = $barcodePackAll['barcode'];
+                                            $packAllProd->upc = $row['upc_pack'];
+                                        } catch (\ErrorException $exception) {
+                                        }
 
+                                        //change
                                         $packAllProd->private_label = $product->private_label;
                                         $packAllProd->restock = $product->restock;
                                         $packAllProd->new_label = $product->new_label;
                                         $packAllProd->usa_made = $product->usa_made;
                                         $packAllProd->ptype = $product->ptype;
+                                        $packAllProd->prod_pieces = $product->prod_pieces;
+                                        $packAllProd->sizes = $product->sizes;
+                                        $packAllProd->images = $product->images;
                                         $packAllProd->save();
 
                                         $logParam = [
                                             'parent_product_id' => $product->id,
-                                            'product_id' => $prodId,
-                                            'sku' => $packAllProd->sku,
-                                            'created_by' => 1,
-                                            'reference' => InventoryHistory::PROD_PUSH_ECOM
+                                            'product_id'        => $prodId,
+                                            'sku'               => $packAllProd->sku,
+                                            'created_by'        => 1,
+                                            'reference'         => InventoryHistory::PROD_PUSH_ECOM
                                         ];
                                         log_product_history($logParam, false);
                                     }
@@ -236,26 +335,50 @@ class importProducts extends Command
 
                                                 $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                                 Product::where('id', $prodId)->update(['price' => $singlePrice]);
+                                                filter_product_sku($prodId);
                                                 $sizeProd = Product::where('id', $prodId)->first();
 
-                                                //$barcodeSize = get_barcode();
-                                                //$sizeProd->upc = $barcodeSize['upc'];
-                                                //$sizeProd->barcode = $barcodeSize['barcode'];
-                                                $sizeProd->private_label = $product->private_label;
-                                                $sizeProd->restock = $product->restock;
-                                                $sizeProd->new_label = $product->new_label;
-                                                $sizeProd->usa_made = $product->usa_made;
-                                                $sizeProd->ptype = $product->ptype;
-                                                $sizeProd->save();
+                                                if ($sizeProd) {
 
-                                                $logParam = [
-                                                    'parent_product_id' => $product->id,
-                                                    'product_id' => $prodId,
-                                                    'sku' => $sizeProd->sku,
-                                                    'created_by' => 1,
-                                                    'reference' => InventoryHistory::PROD_PUSH_ECOM
-                                                ];
-                                                log_product_history($logParam, false);
+                                                    //$barcodeSize = get_barcode();
+                                                    //$sizeProd->upc = $barcodeSize['upc'];
+                                                    //$sizeProd->barcode = $barcodeSize['barcode'];
+
+
+                                                    //TODO:: get attribute slug from id($getSizeAttr) then match it with exploded form from hw table if match then get upc and save it to our db.
+                                                    $getAttrSlug = ProductAttribute::where('id', $getSizeAttr)->value('slug');
+                                                    if ($getAttrSlug) {
+                                                        $getAttrSlug = str_replace(' ', '', $getAttrSlug);
+                                                        $get_HW_UPCs = DB::table('hw_hw_upc_extra')->where('product_id', $row['product_id'])->get();
+                                                        foreach ($get_HW_UPCs as $get_HW_UPC) {
+                                                            $explode = explode('|', $get_HW_UPC->description);
+                                                            if (isset($explode[1])) {
+                                                                $explode[1] = str_replace(' ', '', strtolower($explode[1]));
+                                                                if ($explode[1] == $getAttrSlug) {
+                                                                    $sizeProd->upc = $get_HW_UPC->upc;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+
+                                                    $sizeProd->private_label = $product->private_label;
+                                                    $sizeProd->restock = $product->restock;
+                                                    $sizeProd->new_label = $product->new_label;
+                                                    $sizeProd->usa_made = $product->usa_made;
+                                                    $sizeProd->ptype = $product->ptype;
+                                                    $sizeProd->save();
+
+                                                    $logParam = [
+                                                        'parent_product_id' => $product->id,
+                                                        'product_id'        => $prodId,
+                                                        'sku'               => $sizeProd->sku,
+                                                        'created_by'        => 1,
+                                                        'reference'         => InventoryHistory::PROD_PUSH_ECOM
+                                                    ];
+                                                    log_product_history($logParam, false);
+
+                                                }
 
                                             }
                                         }
@@ -269,10 +392,9 @@ class importProducts extends Command
                 }
 
                 //echo $check ? $check->sku : $row['product_code'].'\n';
-                echo isset($product) ? $product->sku : '--no--'.'====';
+                echo isset($product) ? $row['product_id'] : $row['product_id'] . '====';
             }
         }
-
-        echo 'success';
     }
+
 }

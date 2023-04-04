@@ -8,6 +8,7 @@ use App\Models\CustomerCard;
 use App\Models\MergeAccount;
 use Assets;
 use Botble\ACL\Repositories\Interfaces\UserInterface;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\CreatedContentEvent;
 use Botble\Base\Events\DeletedContentEvent;
 use Botble\Base\Events\UpdatedContentEvent;
@@ -22,6 +23,7 @@ use Botble\Ecommerce\Http\Requests\CustomerEditRequest;
 use Botble\Ecommerce\Http\Requests\CustomerUpdateEmailRequest;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
+use Botble\Ecommerce\Models\CustomerHistory;
 use Botble\Ecommerce\Models\UserSearch;
 use Botble\Ecommerce\Models\UserSearchItem;
 use Botble\Ecommerce\Repositories\Interfaces\AddressInterface;
@@ -30,6 +32,7 @@ use Botble\Ecommerce\Tables\CustomerTable;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
@@ -82,7 +85,8 @@ class CustomerController extends BaseController
 
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        return $formBuilder->create(CustomerForm::class)->remove('is_change_password')->renderForm();
+        return view('plugins/ecommerce::customers.create');
+//        return $formBuilder->create(CustomerForm::class)->remove('is_change_password')->renderForm();
     }
 
     /**
@@ -93,8 +97,13 @@ class CustomerController extends BaseController
     public function store(CustomerCreateRequest $request, BaseHttpResponse $response)
     {
         $request->merge(['password' => bcrypt($request->input('password'))]);
+        $request['old_customer'] = 0;
         $customer = $this->customerRepository->createOrUpdate($request->input());
-
+        $data = $request->all();
+        $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
+        $data = array_diff_key($data, array_flip($remove));
+        $data['customer_type'] = json_encode($data['customer_type']);
+        CustomerDetail::updateOrCreate(['customer_id' => $customer->id], $data);
         event(new CreatedContentEvent(CUSTOMER_MODULE_SCREEN_NAME, $request, $customer));
 
         return $response
@@ -111,21 +120,32 @@ class CustomerController extends BaseController
     {
         Assets::addScriptsDirectly('vendor/core/plugins/ecommerce/js/customer.js');
 
-        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate'])->findOrFail($id);
-        //dd($customer);
+        $customer = Customer::with(['details', 'shippingAddress', 'BillingAddress', 'storeLocator', 'taxCertificate', 'card'])->findOrFail($id);
+
         page_title()->setTitle(trans('plugins/ecommerce::customer.edit', ['name' => $customer->name]));
-        $card = [];
+
         $customer->password = null;
-        if (!$customer->card->isEmpty()) {
-            if ($customer->card[0]->customer_omni_id !== null) {
-                $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-                list($card, $info) = omni_api($url);
-                $card = json_decode($card);
+
+        $cards = [];
+        if ($customer->card->count() > 0) {
+            $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
+
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+
+                    list($card, $info) = omni_api($url);
+
+                    if ($card) {
+                        $cards = collect(json_decode($card));
+                    }
+                }
             }
         }
 
 
-        return view('plugins/ecommerce::customers.edit', compact('customer', 'card'));
+        return view('plugins/ecommerce::customers.edit', compact('customer', 'cards'));
         //return $formBuilder->create(CustomerForm::class, ['model' => $customer])->renderForm();
     }
 
@@ -173,6 +193,17 @@ class CustomerController extends BaseController
         $data['is_private'] = isset($data['is_private']) ? $data['is_private'] : 0;
 
         $customer = $this->customerRepository->createOrUpdate($data, ['id' => $id]);
+
+        if (isset($data['status'])) {
+            $custHist = [
+                'action' => 'customer_status_changed',
+                'description' => $customer->name.' status changed to '.$data['status'].' by '.auth()->user()->username,
+                'user_id' => auth()->user()->id,
+                'customer_id' => $customer->id,
+            ];
+            CustomerHistory::create($custHist);
+        }
+
         $data = $request->all();
         $remove = ['_token', 'name', 'email', 'password', 'password_confirmation', 'submit', 'status', 'salesperson_id'];
         $data = array_diff_key($data, array_flip($remove));
@@ -237,19 +268,43 @@ class CustomerController extends BaseController
      * @param BaseHttpResponse $response
      * @return BaseHttpResponse
      */
-    public function getListCustomerForSelect($id, BaseHttpResponse $response)
+    public function getListCustomerForSelect($id = null, Request $request, BaseHttpResponse $response)
     {
+        $search = null;
+        if ($request->get('search', null)) {
+            $search = $request->get('search');
+        }
         if ($id) {
-            $customer = $this->customerRepository
-                ->allBy([], [], ['id', 'name', 'email'])->where('id', '!=', $id)->take(200)->toArray();
+            $customer = Customer::select('ec_customers.id','ec_customers.name')
+                ->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
+                ->where('ec_customers.id', '!=', $id)
+                ->when($search != null, function($q) use($search) {
+                    $q->where('ec_customers.name', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customers.email', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.company', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.business_phone', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.phone', 'LIKE', '%'.$search.'%');
+                })
+                ->limit(200)
+                ->get()
+                ->toArray();
             $account = MergeAccount::where('user_id_one', $id)->pluck('user_id_two');
             $merge = Customer::whereIn('id', $account)->get()->toArray();
             $customers['customer'] = $customer;
             $customers['merge'] = $merge;
 
         } else {
-            $customers = $this->customerRepository
-                ->allBy([], [], ['id', 'name'])
+            $customers = Customer::select('ec_customers.id','ec_customers.name')
+                ->join('ec_customer_detail', 'ec_customer_detail.customer_id', 'ec_customers.id')
+                ->when($search != null, function($q) use($search) {
+                    $q->where('ec_customers.name', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customers.email', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.company', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.business_phone', 'LIKE', '%'.$search.'%');
+                    $q->orWhere('ec_customer_detail.phone', 'LIKE', '%'.$search.'%');
+                })
+                ->limit(200)
+                ->get()
                 ->toArray();
         }
         return $response->setData($customers);
@@ -262,15 +317,19 @@ class CustomerController extends BaseController
      */
     public function getListCustomerForSearch(Request $request, BaseHttpResponse $response)
     {
+
         $customers = $this->customerRepository
             ->getModel()
             ->whereHas('detail', function ($query) use ($request) {
-                return $query->where('business_phone', 'LIKE', '%' . $request->input('keyword') . '%')
+                return $query
+                    ->where('business_phone', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('name', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('email', 'LIKE', '%' . $request->input('keyword') . '%')
                     ->orWhere('company', 'LIKE', '%' . $request->input('keyword') . '%');
-            })
+
+            })->where('status', BaseStatusEnum::ACTIVE)
             ->simplePaginate(15);
+
 
         foreach ($customers as &$customer) {
             $customer->avatar_url = (string)$customer->avatar_url;
@@ -299,7 +358,16 @@ class CustomerController extends BaseController
      */
     public function getCustomerAddresses($id, BaseHttpResponse $response)
     {
-        $addresses = $this->addressRepository->allBy(['customer_id' => $id]);
+//        $addresses = $this->addressRepository->allBy([
+//            'customer_id' => $id,
+//        ]);
+        $addresses = CustomerAddress::where('customer_id', $id)
+            ->whereNotNull('state')
+            ->whereNotNull('city')
+            ->whereNotNull('zip_code')
+            ->whereNotNull('country')
+            ->whereNotNull('address')->get();
+
         return $response->setData($addresses);
     }
 
@@ -360,10 +428,12 @@ class CustomerController extends BaseController
 
     public function postCustomerCard(Request $request)
     {
+//        dd($request->all());
         $request['customer_omni_id'] = $request->customer_data['customer_id'];
         $request['customer_data'] = json_encode($request->customer_data);
         $card = CustomerCard::create($request->all());
         $customer = json_decode($request->customer_data);
+
         $data = [
             'payment_method_id' => $customer->id,
             'meta'              => [
@@ -376,7 +446,8 @@ class CustomerController extends BaseController
             'pre_auth'          => 1
         ];
 
-        $url = (env("OMNI_URL") . "charge/");
+        $url = (env('OMNI_URL') . "charge");
+
         list($response, $info) = omni_api($url, $data, 'POST');
 
         $status = $info['http_code'];
@@ -398,15 +469,28 @@ class CustomerController extends BaseController
     public function getCustomerCard($id, BaseHttpResponse $response)
     {
         $customer = $this->customerRepository->findOrFail($id);
-        if (count($customer->card) > 0) {
-            $url = (env("OMNI_URL") . "customer/" . $customer->card[0]->customer_omni_id . "/payment-method");
-            list($card, $info) = omni_api($url);
-            $cards = collect(json_decode($card));
-        } else {
-            $cards = 0;
-        }
-        return $response->setData($cards);
+        $cards = 0;
 
+        if ($customer->card->count() > 0) {
+            $omniId = $customer->card()->whereNotNull('customer_omni_id')->get();
+            foreach ($omniId as $item) {
+                if ($item->customer_omni_id) {
+                    $url = (env("OMNI_URL") . "customer/" . $item->customer_omni_id . "/payment-method");
+                    list($card, $info) = omni_api($url);
+                    $cards = collect(json_decode($card));
+                }
+            }
+        }
+//        if (count($customer->card) > 0) {
+//            $omniId = $customer->card()->whereNotNull('customer_omni_id')->value('customer_omni_id');
+//
+//            if ($omniId) {
+//                $url = (env("OMNI_URL") . "customer/" . $omniId . "/payment-method");
+//                list($card, $info) = omni_api($url);
+//                $cards = collect(json_decode($card));
+//            }
+//        }
+        return $response->setData($cards);
     }
 
     public function updateCustomerAddress(Request $request)
@@ -550,6 +634,20 @@ class CustomerController extends BaseController
     {
         MergeAccount::where('user_id_two', $id)->delete();
         return $response->setMessage('Customer Merge Delete Successfully');
+    }
+
+    public function changeStatus(Request $request, BaseHttpResponse $response)
+    {
+        $customer = $this->customerRepository->findOrFail($request->input('pk'));
+        $requestData['status'] = $request->input('value');
+        $requestData['updated_by'] = auth()->user()->id;
+
+        $customer->fill($requestData);
+
+        event(new UpdatedContentEvent(THREAD_MODULE_SCREEN_NAME, $request, $customer));
+        $this->customerRepository->createOrUpdate($customer);
+
+        return $response;
     }
 
 }

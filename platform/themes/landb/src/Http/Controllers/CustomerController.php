@@ -9,6 +9,7 @@ use App\Models\CustomerStoreLocator;
 use App\Models\CustomerTaxCertificate;
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Ecommerce\Models\Customer;
 use Botble\Ecommerce\Models\CustomerDetail;
 use Botble\Ecommerce\Models\StoreLocator;
@@ -60,6 +61,7 @@ class CustomerController extends Controller
         break;
       case 'tax_certificate':
         $this->updateTaxCertificate($request);
+        return redirect('/');
         break;
       case 'store_locator':
         $this->updateStoreLocator($request);
@@ -180,6 +182,9 @@ class CustomerController extends Controller
         'title' => 'required|max:255',
         'date' => 'required',
         'purchaser_sign' => $sign,
+        'first_check' => 'required',
+        'second_check' => 'required',
+        'last_check' => 'required',
     ]);
     $data = $request->all();
     if(!$cert){
@@ -196,10 +201,12 @@ class CustomerController extends Controller
       unset($data['_token']);
 
 
-     //dd($data);
+
 
     $submit = CustomerTaxCertificate::updateOrCreate(['customer_id' => $user->id] , $data);
 return $submit;
+
+
   }
 
   public function updateStoreLocator($request) {
@@ -281,6 +288,9 @@ return $submit;
   }
 
   public function pendingNotification(){
+     if(auth('customer')->user()->status == BaseStatusEnum::ACTIVE){
+         return redirect()->route('public.index');
+     }
     return Theme::scope('customer.verify')->render();
   }
 

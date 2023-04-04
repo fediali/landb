@@ -170,6 +170,12 @@ class EcommerceServiceProvider extends ServiceProvider
         $router->aliasMiddleware('customer', RedirectIfNotCustomer::class);
         $router->aliasMiddleware('customer.guest', RedirectIfCustomer::class);
 
+        $this->app->bind(\Botble\Ecommerce\Repositories\Interfaces\ProductLabelInterface::class, function () {
+            return new \Botble\Ecommerce\Repositories\Caches\ProductLabelCacheDecorator(
+                new \Botble\Ecommerce\Repositories\Eloquent\ProductLabelRepository(new \Botble\Ecommerce\Models\ProductLabel)
+            );
+        });
+
         $this->app->bind(ProductInterface::class, function () {
             return new ProductCacheDecorator(
                 new ProductRepository(new Product)

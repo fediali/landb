@@ -36,7 +36,8 @@ class ProductCategoryTable extends TableAbstract
         DataTables $table,
         UrlGenerator $urlGenerator,
         ProductCategoryInterface $productCategoryRepository
-    ) {
+    )
+    {
         $this->repository = $productCategoryRepository;
         $this->setOption('id', 'table-product-categories');
         parent::__construct($table, $urlGenerator);
@@ -61,7 +62,6 @@ class ProductCategoryTable extends TableAbstract
                 if (!Auth::user()->hasPermission('product-categories.edit')) {
                     return $item->name;
                 }
-
                 return Html::link(route('product-categories.edit', $item->id), $item->name);
             })
             ->editColumn('image', function ($item) {
@@ -74,6 +74,9 @@ class ProductCategoryTable extends TableAbstract
             ->editColumn('is_plus_cat', function ($item) {
                 return $item->is_plus_cat_html;
             })
+            /*->editColumn('prod_count', function ($item) {
+                return $item->count->count();
+            })*/
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
             })
@@ -111,6 +114,11 @@ class ProductCategoryTable extends TableAbstract
             ->orderBy('ec_product_categories.order', 'asc')
             ->select($select);
 
+        $query = $query->selectRaw('(SELECT COUNT(`ec_product_category_product`.`product_id`) 
+        FROM `ec_product_category_product` 
+        JOIN `ec_products` ON ec_products.`id` = ec_product_category_product.`product_id` 
+        WHERE ec_product_categories.id = ec_product_category_product.category_id AND ec_products.`is_variation` = 0 AND `ec_products`.`ptype` = "R" AND `ec_products`.`status` = "'.BaseStatusEnum::ACTIVE.'") AS prod_count');
+
         return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
     }
 
@@ -120,36 +128,42 @@ class ProductCategoryTable extends TableAbstract
     public function columns()
     {
         return [
-            'id'         => [
+            'id'          => [
                 'name'  => 'ec_product_categories.id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
                 'class' => 'text-left',
             ],
-            'image'      => [
+            'image'       => [
                 'name'  => 'ec_product_categories.image',
                 'title' => trans('core/base::tables.image'),
                 'width' => '70px',
                 'class' => 'text-left',
             ],
-            'name'       => [
+            'name'        => [
                 'name'  => 'ec_product_categories.name',
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
-            'is_plus_cat'   => [
+            'is_plus_cat' => [
                 'name'  => 'is_plus_cat',
                 'title' => 'Is Plus Category',
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'created_at' => [
+            'prod_count'  => [
+                'name'  => 'ec_product_categories.name',
+                'title' => 'Active Product',
+                'width' => '100px',
+                'class' => 'text-left',
+            ],
+            'created_at'  => [
                 'name'  => 'ec_product_categories.created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
                 'class' => 'text-left',
             ],
-            'status'     => [
+            'status'      => [
                 'name'  => 'ec_product_categories.status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',

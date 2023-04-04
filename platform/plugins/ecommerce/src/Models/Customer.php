@@ -22,6 +22,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use RvMedia;
+use OrderHelper;
 
 /**
  * @mixin \Eloquent
@@ -55,6 +56,7 @@ class Customer extends Authenticatable
         'avatar',
         'phone',
         'dob',
+        'paypal_email',
         'status',
         'login_status',
         'is_private',
@@ -62,12 +64,14 @@ class Customer extends Authenticatable
         'salesperson_id',
         'phone_validation_error',
         'last_visit',
-        'document'
+        'document',
+        'old_customer'
     ];
     protected $with = [
         'detail',
-
     ];
+
+    protected $appends = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -85,14 +89,14 @@ class Customer extends Authenticatable
         '2' => 'Social',
         '3' => 'LAShowroom',
         '4' => 'Fashiongo',
-        '5' => 'Dallas Market',
-        '6' => 'Atlanta Market',
-        '7' => 'Other'
+        '16' => 'Dallas Market',
+        '19' => 'Atlanta Market',
+        '11' => 'Other'
     ];
     public static $preferredCommunication = [
-        '1' => 'Email',
-        '2' => 'Phone',
-        '3' => 'Email & Phone'
+        '12' => 'Email',
+        '13' => 'Phone',
+        '14' => 'Email & Phone'
     ];
 
     /**
@@ -131,6 +135,14 @@ class Customer extends Authenticatable
     }
 
     /**
+     * @return HasMany
+     */
+    public function billing_addresses()
+    {
+        return $this->hasMany(Address::class, 'customer_id', 'id')->where('type', 'billing');
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function discounts()
@@ -158,7 +170,7 @@ class Customer extends Authenticatable
 
         static::addGlobalScope('userScope', function (Builder $query) {
             if (isset(auth()->user()->roles[0])) {
-                if (in_array(auth()->user()->roles[0]->slug, [Role::ONLINE_SALES, Role::IN_PERSON_SALES])) {
+                if (in_array(auth()->user()->roles[0]->slug, [Role::IN_PERSON_SALES])) {
                     $query->where('salesperson_id', auth()->user()->id);
                 }
             }
@@ -301,5 +313,37 @@ class Customer extends Authenticatable
       $date =  $this->orders()->where('is_finished' , 1)->latest()->pluck('created_at')->first();
       $date = !is_null($date) ? date('m/d/y', strtotime($date)) : '-';
       return $date;
+    }
+
+    public function getUserCart()
+    {
+      $check = $this->pendingOrder();
+      $token = OrderHelper::getOrderSessionToken();
+
+      if (!$check) {
+        $cart = Order::create([
+            'user_id'         => auth('customer')->user()->id,
+            'salesperson_id'  => auth('customer')->user()->salesperson_id,
+            'amount'          => 0,
+            'sub_total'       => 0,
+            'is_finished'     => 0,
+            'token'           => $token,
+            'tax_amount'      => 0,
+            'discount_amount' => 0,
+            'shipping_amount' => 0,
+            'currency_id'     => 1,
+        ]);
+        return $cart->id;
+      } else {
+        return $this->pendingOrderId();
+      }
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function histories()
+    {
+        return $this->hasMany(CustomerHistory::class, 'customer_id')->with(['user', 'customer']);
     }
 }

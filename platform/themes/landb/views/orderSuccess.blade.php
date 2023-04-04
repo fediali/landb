@@ -1,7 +1,7 @@
-<section class="ml-5 mr-5 mt-3">
+<section class="ml-5 mr-5 mt-3 invoice-final">
         <div class="row">
         <div class="col-lg-9">
-            <img src="{{ asset('landb/img/Logo.png') }}" />
+            <img style="height: 60px;" src="{{ asset('landb/img/Logo.png') }}" />
         </div>
         <div class="col-lg-3">
             <p>
@@ -18,9 +18,9 @@
             </p>
 
         </div>
-            
+
         </div>
-        <div class="row mt-5"> 
+        <div class="row mt-5">
             <div class="col-lg-4">
                 <div style="background: #eaeaea;" class="p-3">
                 <h3>
@@ -31,13 +31,13 @@
                     12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
                 </p>
                 <p>
-                    97251235552 
+                    97251235552
                 </p>
                 <p>
                     customerservice@landapparel.com
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -49,7 +49,7 @@
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
-                    {{ $order->billingAddress->name.', '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
+                    {{ $order->billingAddress->name.', '.$order->billingAddress->address.' , '.$order->billingAddress->city.' ,'.$order->billingAddress->state.' ,'.$order->billingAddress->country. ' ,'. $order->billingAddress->zip_code }}
                 </p>
                 <p>
                     {{ $order->billingAddress->phone }}
@@ -58,7 +58,7 @@
                     {{ $order->billingAddress->email }}
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -71,7 +71,7 @@
                      </h3>
                      <hr style="border: 2px solid #DDD;">
                 <p>
-                    {{ $order->shippingAddress->name.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
+                    {{ $order->shippingAddress->name.', '.$order->shippingAddress->address.', '.$order->shippingAddress->city.' ,'.$order->shippingAddress->state.' ,'.$order->shippingAddress->country. ' ,'. $order->shippingAddress->zip_code }}
                 </p>
                 <p>
                     {{ $order->shippingAddress->phone }}
@@ -80,7 +80,7 @@
                     {{ $order->shippingAddress->email }}
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>
@@ -95,13 +95,13 @@
                     12801 N, Stemmons Fwt, Suite 710 Farmers Branch, Texas 78865 United States
                 </p>
                 <p>
-                    97251235552 
+                    97251235552
                 </p>
                 <p>
                     customerservice@landapparel.com
                 </p>
                 <p>
-                    https://landapparel.com/
+                    https://landbapparel.com/
                 </p>
             </div>
             </div>  --}}
@@ -122,22 +122,20 @@
                 <p class="cart-head">Price</p>
 
             </div>
-           
+
             <div class="col-lg-1 mt-2 mb-3 text-center">
                 <p class="cart-head"> Discount</p>
 
             </div>
             <div class="col-lg-1 mt-2 mb-3 text-center">
                 <p class="cart-head">Tax</p>
-
             </div>
             <div class="col-lg-1 mt-2 mb-3">
                 <p class="cart-head">Item Total</p>
-
             </div>
         </div>
         @foreach($order->products as $order_product)
-            <div class="row mb-4 mt-4">
+            <div class="row order-view-box mb-4 mt-4">
             <div class="col-lg-7 mt-2">
                 <div class="d-flex">
                     {!! image_html_generator(@$order_product->product->images[0], @$order_product->product->name, '95', '75' ) !!}
@@ -150,24 +148,35 @@
 
                         @endphp
                         @if($variation)
-                            <p class="cart-product-size">SIZE: {{ $variation->title }}</p>
+                            @if($variation->title == 'Pack')
+                            <p class="cart-product-size invoice-final-p mt-1">TYPE: {{ $variation->title }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1">SIZE: {{ $order_product->product->sizes }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1">Pieces Per Pack: {{ $order_product->product->prod_pieces }}</p>
+                            <p class="cart-product-size invoice-final-p mt-1"><b>Price Per Piece:</b>  ${{ ($order_product->product->prod_pieces) ? $order_product->price/$order_product->product->prod_pieces: $order_product->price}}
+                               </p>
+                            @else
+                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                    Type: Single</p>
+                                <p style="font-size:12px;" class="cart-product-size mb-2">
+                                    Size: {{ substr($variation->title,0,-3) }}</p>
+                            @endif
                         @endif
                     </div>
                 </div>
             </div>
-            <div class="col-lg-1 mt-2 text-center">
+            <div class="col-lg-1 col-2 mt-2 text-center">
                 <p class="mt-2">{{ $order_product->qty }}</p>
             </div>
-            <div class="col-lg-1 mt-2">
+            <div class="col-lg-1 col-3 mt-2">
                 <p class="mt-2">$ {{ $order_product->price }}</p>
             </div>
-            <div class="col-lg-1 mt-2 mb-txt-center text-center">
+            <div class="col-lg-1 col-2 mt-2 mb-txt-center text-center">
                 <p class="mt-2">-</p>
             </div>
-            <div class="col-lg-1 mt-2 text-center">
+            <div class="col-lg-1 col-2 mt-2 text-center">
                 <p class="mt-2">-</p>
             </div>
-            <div class="col-lg-1 mt-2">
+            <div class="col-lg-1 col-3 mt-2">
                 <p class="mt-2">$ {{ $order_product->qty*$order_product->price  }}</p>
             </div>
         </div>
@@ -182,10 +191,19 @@
         </div>--}}
         <div class="row">
             <div class="col-lg-6 col-6">
+                <p class="mt-2">Notes</p>
+            </div>
+            <div class="col-lg-6 col-6 text-right">
+                <p class="mt-2">{{ $order->notes }}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-6 col-6">
                 <p class="mt-2">Subtotal</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ {{ $order->amount }}</p>
+                <p class="mt-2">$ {{ $order->sub_total }}</p>
             </div>
         </div>
         <div class="row">
@@ -193,7 +211,15 @@
                 <p class="mt-2">Shipping</p>
             </div>
             <div class="col-lg-6 col-6 text-right">
-                <p class="mt-2">$ 00.00</p>
+                <p class="mt-2">$ {{ $order->shipping_amount }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-6">
+                <p class="mt-2">Discount</p>
+            </div>
+            <div class="col-lg-6 col-6 text-right">
+                <p class="mt-2">$ {{ $order->discount_amount }}</p>
             </div>
         </div>
         <hr>
@@ -211,8 +237,8 @@
         </div>
         <div class="row mt-3">
             <div class="col-lg-12 col-12">
-                <p class="mt-2"> For return policy please visit landapparel.com/faq.html
+                <p class="mt-2"> For return policy please visit <a href="https://www.landapparel.com/page/refund-policy">landapparel.com/page/refund-policy</a>
                 </p>
-            </div> 
+            </div>
         </div>
     </section>

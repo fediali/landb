@@ -211,7 +211,6 @@ class Menu
      */
     public function renderMenuLocation(string $location, array $attributes = []): string
     {
-
         $this->load();
 
         $html = '';
@@ -246,7 +245,7 @@ class Menu
      */
     protected function read()
     {
-        return $this->menuRepository->allBy(['status' => BaseStatusEnum::PUBLISHED], ['menuNodes', 'locations']);
+        return $this->menuRepository->allBy(['status' => BaseStatusEnum::PUBLISHED]/*, ['menuNodes', 'locations']*/);
     }
 
     /**

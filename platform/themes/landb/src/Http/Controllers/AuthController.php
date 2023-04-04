@@ -7,9 +7,15 @@ use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
 use Botble\Ecommerce\Models\Customer;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use SeoHelper;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,13 +76,13 @@ class AuthController extends Controller
     public function checkOldLoginCredentials($email, $password)
     {
         $post_data = array(
-            'email' => $email,
+            'email'    => $email,
             'password' => $password,
         );
         $post_data = json_encode($post_data);
-
+        $token = base64_encode('amir@landbapparel.com:6sHei1lh9D3ixRMR43L265fat481bJwD');
         $header = array(
-            'Authorization:Basic emF5YW50aGFyYW5pQGdtYWlsLmNvbTpHYTVNTXI4cnVzbDIzOVIxaGQ2M2dwVzMya0ZBTU0yWg==',
+            'Authorization:Basic ' . $token . '',
             'Content-Type: application/json'
         );
 
@@ -108,7 +114,9 @@ class AuthController extends Controller
     {
         $email = $request->get('email');
         $password = $request->get('password');
+
         $checkOld = Customer::where('email', $email)->value('old_customer');
+
         if ($checkOld) {
             $res = $this->checkOldLoginCredentials($email, $password);
             if ($res && isset($res->token)) {
@@ -173,14 +181,14 @@ class AuthController extends Controller
     public function process_signup(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
+            'name'     => 'required',
+            'email'    => 'required',
             'password' => 'required'
         ]);
 
         $user = User::create([
-            'name' => trim($request->input('name')),
-            'email' => strtolower($request->input('email')),
+            'name'     => trim($request->input('name')),
+            'email'    => strtolower($request->input('email')),
             'password' => bcrypt($request->input('password')),
         ]);
 
@@ -192,5 +200,53 @@ class AuthController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $user->update(['last_visit' => Carbon::now()]);
+    }
+
+    public function forgetPassword(){
+      return Theme::scope('auth.forget-password', [])->render();
+    }
+
+    public function postForgetPassword(Request $request)
+    {
+
+        $request->validate(['email' => 'required|email|exists:ec_customers']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+
+      /*return back()->with('message', 'We have e-mailed your password reset link!');*/
+    }
+
+    public function resetPassword($token){
+        return Theme::scope('auth.reset-password', ['token' => $token])->render();
+    }
+
+    public function postResetPassword(Request  $request){
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+                $user['old_customer'] = 0;
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('customer.login')->with('success', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }

@@ -23,6 +23,7 @@ class OrderStatusEnum extends Enum
     public const DELIVERED = 'delivered';
     public const COMPLETED = 'completed';
     public const CANCELED = 'canceled';
+    public const REFUND = 'refund';
 
     /**
      * @var string

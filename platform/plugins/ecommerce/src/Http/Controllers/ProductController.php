@@ -47,6 +47,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use RvMedia;
 use Throwable;
@@ -110,8 +111,7 @@ class ProductController extends BaseController
     {
         page_title()->setTitle(trans('plugins/ecommerce::products.name'));
 
-        Assets::addScripts(['bootstrap-editable'])
-            ->addStyles(['bootstrap-editable']);
+        Assets::addScripts(['bootstrap-editable'])->addStyles(['bootstrap-editable']);
 
         return $dataTable->renderTable();
     }
@@ -163,12 +163,15 @@ class ProductController extends BaseController
         StoreProductTagService $storeProductTagService
     )
     {
-
         $product = $this->productRepository->getModel();
 
         $product = $service->execute($request, $product);
         $storeProductTagService->execute($request, $product);
-        $this->updateColors($product->id, $product->color_products);
+
+        if (isset($request->color_products) && $request->color_products) {
+            $this->updateColors($product->id, $request->color_products);
+        }
+
         /*$addedAttributes = $request->input('added_attributes', []);
 
         if ($request->input('is_added_attributes') == 1 && $addedAttributes) {
@@ -203,7 +206,7 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id' => $item,
+                    'id'  => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
@@ -251,13 +254,20 @@ class ProductController extends BaseController
                             ProductVariation::where('id', $result['variation']->id)->update(['is_default' => 1]);
 
                             $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
+                            filter_product_sku($prodId);
                             $packAllProd = Product::where('id', $prodId)->first();
 
                             $barcodePackAll = get_barcode();
-                            $packAllProd->upc = $barcodePackAll['upc'];
-                            $packAllProd->barcode = $barcodePackAll['barcode'];
+                            $packAllProd->upc = $product->upc = $barcodePackAll['upc'];
+                            $packAllProd->barcode = $product->barcode = $barcodePackAll['barcode'];
                             $packAllProd->private_label = $product->private_label;
+                            $packAllProd->prod_pieces = $product->prod_pieces;
                             $packAllProd->save();
+
+                            $product->sku = $packAllProd->sku;
+                            $product->upc = $packAllProd->upc;
+                            $product->barcode = $packAllProd->barcode;
+                            $product->save();
                         }
 
                         if (count($getSizeAttrs)) {
@@ -275,6 +285,7 @@ class ProductController extends BaseController
 
                                     $prodId = ProductVariation::where('id', $result['variation']->id)->value('product_id');
                                     Product::where('id', $prodId)->update(['price' => 0]);
+                                    filter_product_sku($prodId);
                                     $sizeProd = Product::where('id', $prodId)->first();
 
                                     $barcodeSize = get_barcode();
@@ -289,6 +300,14 @@ class ProductController extends BaseController
                 }
             }
         }
+
+
+        foreach ($product->variations as $variation) {
+            $variation->product->ptype = 'R';
+            $variation->product->save();
+        }
+        $product->ptype = 'R';
+        $product->save();
 
 
         return $response
@@ -509,12 +528,22 @@ class ProductController extends BaseController
         if ($request->has('grouped_products')) {
             $groupedProductRepository->createGroupedProducts($product->id, array_map(function ($item) {
                 return [
-                    'id' => $item,
+                    'id'  => $item,
                     'qty' => 1,
                 ];
             }, array_filter(explode(',', $request->input('grouped_products', '')))));
         }
-        $this->updateColors($product->id, $product->color_products);
+
+        if (isset($request->color_products) && $request->color_products) {
+            $this->updateColors($product->id, $request->color_products);
+        }
+
+
+        $product->defaultVariation->product = $product->replicate();
+        $product->defaultVariation->product->is_variation = 1;
+        $product->defaultVariation->product->save();
+
+
         return $response
             ->setPreviousUrl(route('products.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
@@ -870,22 +899,24 @@ class ProductController extends BaseController
      */
     public function getListProductForSearch($id, Request $request, BaseHttpResponse $response)
     {
+
         $availableProducts = $this->productRepository
             ->advancedGet([
                 'condition' => [
                     'status' => BaseStatusEnum::ACTIVE,
                     ['is_variation', '<>', 1],
                     ['id', '<>', $id],
-                    ['name', 'LIKE', '%' . $request->input('keyword') . '%'],
+//                    ['sku', 'LIKE', '%' . $request->input('keyword') . '%'],
+                    ['sku', 'LIKE', '%' . $request->input('keyword') . '%'],
                 ],
-                'select' => [
+                'select'    => [
                     'id',
                     'name',
                     'images',
                 ],
-                'paginate' => [
-                    'per_page' => 5,
-                    'type' => 'simplePaginate',
+                'paginate'  => [
+                    'per_page'      => 5,
+                    'type'          => 'simplePaginate',
                     'current_paged' => (int)$request->input('page', 1),
                 ],
             ]);
@@ -925,7 +956,7 @@ class ProductController extends BaseController
     {
         $availableProducts = $this->productRepository
             ->getModel()
-            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where('name', 'LIKE', '%' . $request->input('keyword') . '%')
             ->select([
@@ -948,7 +979,7 @@ class ProductController extends BaseController
         if ($includeVariation) {
             foreach ($availableProducts as &$availableProduct) {
                 $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null,
-                    'thumb', false, RvMedia::getDefaultImage());
+                    null, false, RvMedia::getDefaultImage());
                 $availableProduct->price = $availableProduct->front_sale_price;
                 foreach ($availableProduct->variations as &$variation) {
                     $variation->price = $variation->product->front_sale_price;
@@ -1002,9 +1033,9 @@ class ProductController extends BaseController
         $availableProducts = $this->productRepository
             ->getModel()
             ->when($excludeOOS == true, function ($q) {
-                $q->where('quantity', '>', 0);
+                //$q->where('quantity', '>', 0);
+                $q->whereIn('status', [BaseStatusEnum::ACTIVE, BaseStatusEnum::HIDDEN]);
             })
-            ->where('status', BaseStatusEnum::ACTIVE)
             ->where('is_variation', '<>', 1)
             ->where(function ($q) use ($request) {
                 $q->where('name', 'LIKE', '%' . $request->input('keyword') . '%');
@@ -1015,16 +1046,14 @@ class ProductController extends BaseController
             ])
             ->distinct('ec_products.id')
             ->leftJoin('ec_product_variations', 'ec_product_variations.configurable_product_id', '=', 'ec_products.id')
-            ->leftJoin('ec_product_variation_items', 'ec_product_variation_items.variation_id', '=',
-                'ec_product_variations.id')
-            ->simplePaginate(5);
+            ->leftJoin('ec_product_variation_items', 'ec_product_variation_items.variation_id', '=', 'ec_product_variations.id')
+            ->simplePaginate(15);
 
         foreach ($availableProducts as $pk => &$availableProduct) {
             /**
              * @var Product $availableProduct
              */
-            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, 'thumb',
-                false, RvMedia::getDefaultImage());
+            $availableProduct->image_url = RvMedia::getImageUrl(Arr::first($availableProduct->images) ?? null, null, false, RvMedia::getDefaultImage());
             $availableProduct->price = $availableProduct->front_sale_price;
             $availableProduct->is_out_of_stock = $availableProduct->isOutOfStock();
             foreach ($availableProduct->variations as $k => &$variation) {
@@ -1033,40 +1062,44 @@ class ProductController extends BaseController
 
                 $variation->packQty = 0;
                 $variation->packSizes = '';
-                if (str_contains($variation->product->sku, 'pack')) {
-                    $variation->packQty = packProdQtyCalculate($variation->product->category_id);
+                if ($variation->product->sku && !str_contains($variation->product->sku, 'single')) {
+                    $variation->packQty = $availableProduct->prod_pieces ? $availableProduct->prod_pieces : packProdQtyCalculate($variation->product->category_id);
                     $variation->packSizes = packProdSizes($variation->product->category_id);
                     if ($variation->packQty) {
-                        $variation->per_piece_price = $variation->price / $variation->packQty;
+                        $variation->per_piece_price = round($variation->price / $variation->packQty, 2);
                     }
                 }
 
-                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
-                    $variation->quantity = $variation->product->online_sales_qty;
-                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
-                    $variation->quantity = $variation->product->in_person_sales_qty;
-                } else {
-                    $variation->quantity = $variation->product->quantity;
-                }
+//                if (@auth()->user()->roles[0]->slug == Role::ONLINE_SALES) {
+//                    $variation->quantity = $variation->product->online_sales_qty;
+//                } elseif (@auth()->user()->roles[0]->slug == Role::IN_PERSON_SALES) {
+//                    $variation->quantity = $variation->product->in_person_sales_qty;
+//                }
+//                else {
+                $variation->quantity = $variation->product->quantity;
+//                }
 
                 foreach ($variation->variationItems as &$variationItem) {
                     $variationItem->attribute_title = strtok($variationItem->attribute->title, '-');;
                 }
 
-                if ($variation->product->status != BaseStatusEnum::ACTIVE) {
+                if (!in_array($variation->product->status, [BaseStatusEnum::ACTIVE, BaseStatusEnum::HIDDEN])  && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
                 }
-                if ($variation->quantity < 1 && $excludeOOS) {
+
+                /*if ($variation->quantity < 1 && $excludeOOS) {
                     unset($availableProduct->variations[$k]);
                     continue;
-                }
+                }*/
+
             }
 
             if (!count($availableProducts[$pk]->variations)) {
                 unset($availableProducts[$pk]);
                 continue;
             }
+
         }
         return $response->setData($availableProducts);
     }
@@ -1088,7 +1121,9 @@ class ProductController extends BaseController
     public function inventory_history($id)
     {
         $data = Product::with(['inventory_history'])->where('id', $id)->first();
-        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data'));
+        $varIds = $data->variations()->pluck('product_id')->all();
+        $prodVariations = Product::whereIn('id', $varIds)->orderBy('id', 'ASC')->get();//->pluck('sku')->all();
+        return view('plugins/ecommerce::products.partials.inventory_history_table', compact('data', 'prodVariations'));
     }
 
     public function product_timeline($id)
@@ -1102,6 +1137,42 @@ class ProductController extends BaseController
         $product = $this->productRepository->findOrFail($id);
         $product->warehouse_sec = $request->input('warehouse_sec', NULL);
         $this->productRepository->createOrUpdate($product);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function updateProductPrice($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->price = $request->input('product_price', 0) * $product->prod_pieces;
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['price' => $product->price]);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function updateProductPackQty($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->quantity = $request->input('product_pack_qty', 0);
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['quantity' => $product->quantity]);
+
+        return $response->setMessage(trans('core/base::notices.update_success_message'));
+    }
+
+    public function updateProductExtraQty($id, Request $request, BaseHttpResponse $response)
+    {
+        $product = $this->productRepository->findOrFail($id);
+        $product->extra_qty = $request->input('product_extra_qty', 0);
+        $this->productRepository->createOrUpdate($product);
+
+        $getPackId = ProductVariation::where('configurable_product_id', $product->id)->where('is_default', 1)->value('product_id');
+        Product::where('id', $getPackId)->update(['extra_qty' => $product->extra_qty]);
 
         return $response->setMessage(trans('core/base::notices.update_success_message'));
     }
@@ -1123,14 +1194,36 @@ class ProductController extends BaseController
 
     public function updateColors($id, $ids)
     {
-        if($ids) {
+        if ($ids) {
+            $ids = array_map('intval', explode(',', $ids[0]));
+
+            $product = Product::find($id);
+            $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+            $n = array_merge($product_colors, $ids);
+            $array = array_filter($n, function ($a) {
+                if ($a !== 0) return $a;
+            });
+            $array = array_unique($array);
+            $array = array_values($array);
+            $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
+            $product->save();
+
             foreach ($ids as $colorId) {
-                $product = Product::find($colorId);
-                $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
-                if (!in_array($id, $product_colors)) {
-                    array_push($product_colors, $id);
+                if ($colorId) {
+                    $product = Product::find($colorId);
+                    $product_colors = !empty($product->color_products) ? json_decode($product->color_products) : [];
+                    $product_colors = (array)$product_colors;
+                    if (!in_array($id, $product_colors)) {
+                        array_push($product_colors, $id);
+                    }
+                    $array = array_filter($product_colors, function ($a) {
+                        if ($a !== 0) return $a;
+                    });
+                    $array = array_unique($array);
+                    $array = array_values($array);
+                    $product->color_products = !empty($array) ? json_encode(($array)) : NULL;
+                    $product->save();
                 }
-                $product->update(['color_products' => $product_colors]);
             }
         }
     }
@@ -1154,5 +1247,59 @@ class ProductController extends BaseController
 
         return $response;
     }
+
+    public function loadProductImage($product_id)
+    {
+        $product = $this->productRepository->findOrFail($product_id);
+        $html = '';
+        if (@getimagesize(asset('storage/' . $product->image))) {
+            $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($product->image, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
+        } else {
+            $image1 = str_replace('.JPG', '.jpg', @$product->image);
+            $image2 = str_replace('.jpg', '.JPG', @$product->image);
+            if (@getimagesize(asset('storage/' . $image1))) {
+                $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($image1, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
+            } elseif (@getimagesize(asset('storage/' . $image2))) {
+                $html = "<img width='50' src='" . asset('landb/defaultLogo.png') . "' alt='Product image' loading='lazy' class='lazyload ' data-src='" . RvMedia::getImageUrl($image2, null, false, RvMedia::getDefaultImage()) . "' onerror='this.src='" . asset('images/default.jpg') . "''>";
+            }
+        }
+        return $html;
+    }
+
+
+    /**
+     * @param Request $request
+     * @param BaseHttpResponse $response
+     */
+    public function updateProdVarQty(Request $request, BaseHttpResponse $response)
+    {
+        $prods = $request->get('product_qty', []);
+        if (count($prods)) {
+            foreach ($prods as $id => $qty) {
+                $product = $this->productRepository->findOrFail($id);
+                if ($product->quantity != $qty) {
+                    $requestData['quantity'] = $qty;
+                    $requestData['updated_by'] = auth()->user()->id;
+                    $product->fill($requestData);
+                    $this->productRepository->createOrUpdate($product);
+
+                    $getParentProdId = ProductVariation::where('product_id', $product->id)->value('configurable_product_id');
+                    $logParam = [
+                        'parent_product_id' => $getParentProdId,
+                        'product_id'        => $product->id,
+                        'sku'               => $product->sku,
+                        'quantity'          => $qty,
+                        'new_stock'         => $qty,
+                        'old_stock'         => $product->quantity,
+                        'created_by'        => Auth::user()->id,
+                        'reference'         => InventoryHistory::PROD_STOCK_UPDATED
+                    ];
+                    log_product_history($logParam);
+                }
+            }
+        }
+        return $response->setMessage('Updated Successfully!');
+    }
+
 
 }

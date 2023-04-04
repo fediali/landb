@@ -34,7 +34,7 @@
                     <label class="mr-2" for="Remember"> Remember me</label>
                 </div>
                 <div class="col-lg-6 col-6 mt-3 text-right">
-                    <a href="#" class="color-black"> Forgot Password?</a>
+                    <a href="{{ route('public.forget-password') }}" class="color-black"> Forgot Password?</a>
                 </div>
                 <div class="col-lg-12 mt-5">
                     <input type="submit" form="login-form" class=" btn border-btn w-100" value="Sign In">{{--<a href="#" class=" btn cart-btn w-100">Sign In</a>--}}

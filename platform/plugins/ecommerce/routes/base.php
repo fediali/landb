@@ -165,6 +165,24 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'products.edit',
             ]);
 
+            Route::post('update-product-price/{id}', [
+                'as'         => 'update-product-price',
+                'uses'       => 'ProductController@updateProductPrice',
+                'permission' => 'products.edit',
+            ]);
+
+            Route::post('update-product-pack-qty/{id}', [
+                'as'         => 'update-product-pack-qty',
+                'uses'       => 'ProductController@updateProductPackQtyActive',
+                'permission' => 'products.editqty',
+            ]);
+
+            Route::post('update-product-extra-qty/{id}', [
+                'as'         => 'update-product-extra-qty',
+                'uses'       => 'ProductController@updateProductExtraQty',
+                'permission' => 'products.editqty',
+            ]);
+
             Route::post('add-product-demand/{id}', [
                 'as'         => 'add-product-demand',
                 'uses'       => 'ProductController@addCustomerProductDemandQty',
@@ -174,8 +192,21 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
             Route::post('change-status', [
                 'as'         => 'changeStatus',
                 'uses'       => 'ProductController@changeStatus',
-                'permission' => 'products.status',
+                'permission' => 'products.edit',
             ]);
+
+            Route::get('load-product-image/{id}', [
+                'as'         => 'loadProductImage',
+                'uses'       => 'ProductController@loadProductImage',
+                'permission' => 'products.index',
+            ]);
+
+            Route::post('update-product-var-qty', [
+                'as'         => 'update.prod.var.qty',
+                'uses'       => 'ProductController@updateProdVarQty',
+                'permission' => 'products.editProdVarQty',
+            ]);
+
         });
 
         Route::group(['prefix' => 'product-categories', 'as' => 'product-categories.'], function () {
@@ -210,6 +241,16 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'product-tag.index',
             ]);
         });
+
+        Route::group(['prefix' => 'product-labels', 'as' => 'product-label.'], function () {
+            Route::resource('', 'ProductLabelController')->parameters(['' => 'product-label']);
+            Route::delete('items/destroy', [
+                'as'         => 'deletes',
+                'uses'       => 'ProductLabelController@deletes',
+                'permission' => 'product-label.destroy',
+            ]);
+        });
+
 
 
         Route::group(['prefix' => 'brands', 'as' => 'brands.'], function () {
@@ -284,6 +325,62 @@ Route::group(['namespace' => 'Botble\Ecommerce\Http\Controllers', 'middleware' =
                 'permission' => 'flash-sale.destroy',
             ]);
         });
+
+
+
+        Route::group(['prefix' => 'custom-reports'], function () {
+            Route::get('top-inventories', [
+                'as'         => 'ecommerce.custom-report.top-inventories',
+                'uses'       => 'ReportController@getTopInventories',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-customers', [
+                'as'         => 'ecommerce.custom-report.top-customers',
+                'uses'       => 'ReportController@getTopCustomers',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('return-reports', [
+                'as'         => 'ecommerce.custom-report.return-reports',
+                'uses'       => 'ReportController@getReturnReports',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('pre-orders', [
+                'as'         => 'ecommerce.custom-report.pre-orders',
+                'uses'       => 'ReportController@getPreOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-orders', [
+                'as'         => 'ecommerce.custom-report.top-orders',
+                'uses'       => 'ReportController@getTopOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-sold-products', [
+                'as'         => 'ecommerce.custom-report.top-sold-products',
+                'uses'       => 'ReportController@getTopSoldProducts',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('sales-rep-orders', [
+                'as'         => 'ecommerce.custom-report.sales-rep-orders',
+                'uses'       => 'ReportController@getTopSalesRepOrders',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('sold-out-products', [
+                'as'         => 'ecommerce.custom-report.sold-out-products',
+                'uses'       => 'ReportController@getTopSoldOutProducts',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('most-orders-states', [
+                'as'         => 'ecommerce.custom-report.most-orders-states',
+                'uses'       => 'ReportController@getMostOrdersStates',
+                'permission' => 'ecommerce.report.index',
+            ]);
+            Route::get('top-products-statuses', [
+                'as'         => 'ecommerce.custom-report.top-products-statuses',
+                'uses'       => 'ReportController@getTopProductsStatuses',
+                'permission' => 'ecommerce.report.index',
+            ]);
+        });
+
 
     });
 });

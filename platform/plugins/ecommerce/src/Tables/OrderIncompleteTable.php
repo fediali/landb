@@ -21,6 +21,16 @@ class OrderIncompleteTable extends OrderTable
     protected $hasActions = true;
 
     /**
+     * @var bool
+     */
+    public $hasCustomFilter = false;
+
+    /**
+     * @var bool
+     */
+    public $hasCustomBottom = false;
+
+    /**
      * {@inheritDoc}
      */
     public function ajax()
@@ -101,16 +111,16 @@ class OrderIncompleteTable extends OrderTable
         $query = $model
             ->select($select)
             ->join('ec_customers', 'ec_customers.id', 'ec_orders.user_id')
-            ->with(['user'])
+            ->with(['user','products'])
             ->where('ec_orders.is_finished', 0);
 
         $order_id = $this->request()->input('order_id', false);
         $order_ids = $this->request()->input('order_ids', false);
-
-        if($order_id){
+        $count = $query->join('ec_order_product', 'ec_order_product.order_id', 'ec_orders.id')->count();
+        if($order_id && $count > 0){
           $query->where('ec_orders.id', $order_id);
         }
-        if($order_ids){
+        if($order_ids && $count > 0){
           $query->whereIn('ec_orders.id', json_decode($order_ids));
         }
 

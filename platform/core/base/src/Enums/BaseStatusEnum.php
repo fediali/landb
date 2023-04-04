@@ -21,6 +21,8 @@ class BaseStatusEnum extends Enum
 
     public const SCHEDULE = 'schedule';
 
+    public const HIDE = 'Hide';
+    public const NEW = 'new';
 
     public const VERIFIED = 'verified';
     public const HIDDEN = 'Hidden';
@@ -29,7 +31,8 @@ class BaseStatusEnum extends Enum
     public const PRODUCTION = 'Production';
     public const COMPLETE = 'Complete';
     public const SHIPPED = 'Shipped';
-    public const DECLINED = 'declined';
+    public const DECLINED = 'Declined';
+    public const CANCELLED = 'canceled';
 
     public static $THREADSAMPLE = [
         'pending'    => self::PENDING,
@@ -43,10 +46,13 @@ class BaseStatusEnum extends Enum
         'Disabled' => self::DISABLED,
         //'Published' => self::PUBLISHED,
     ];
+    public static $Discount = [
+        'Active'   => self::ACTIVE,
+        'Disabled' => self::DISABLED,
+    ];
     public static $SCHEDULE = [
         'schedule'  => self::SCHEDULE,
         'published' => self::PUBLISHED,
-
     ];
     public static $DEFAULT = [
         'published' => self::PUBLISHED,
@@ -59,8 +65,8 @@ class BaseStatusEnum extends Enum
         'D' => self::DISABLED,
     ];
     public static $CUSTOMERS = [
-        self::VERIFIED => self::VERIFIED,
-        self::PENDING => self::PENDING,
+        self::ACTIVE => self::ACTIVE,
+        self::DISABLED => self::DISABLED,
         self::DECLINED => self::DECLINED,
     ];
     public static $THREAD = [

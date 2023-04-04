@@ -51,4 +51,10 @@ class OrderAddress extends BaseModel
     {
         return (string)(new Avatar)->create($this->name)->toBase64();
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
 }

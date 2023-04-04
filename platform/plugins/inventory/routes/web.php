@@ -28,6 +28,11 @@ Route::group(['namespace' => 'Botble\Inventory\Http\Controllers', 'middleware' =
                 'uses'       => 'InventoryController@deletes',
                 'permission' => 'inventory.destroy',
             ]);
+            Route::get('detail/{id}', [
+                'as'         => 'details',
+                'uses'       => 'InventoryController@showInventoryDetail',
+                'permission' => 'inventory.create',
+            ]);
         });
     });
 

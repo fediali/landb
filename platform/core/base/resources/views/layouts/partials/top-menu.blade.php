@@ -2,9 +2,21 @@
     <ul class="nav navbar-nav float-right">
         @auth
             <li class="dropdown">
-                <form method="get" action="{{route('orders.quick-search')}}">
-                    <input type="text" class="mt-quick-search" name="quick_search">
+                <form method="get" id="mt-quick-search-form">
+                    <input type="text" class="mt-quick-search" id="mt-quick-search" name="quick_search" required value="{{request('order_ids')}}">
                 </form>
+                <script>
+                    $('form#mt-quick-search-form').submit(function(e) {
+                        e.preventDefault();
+                        let ids = $('input#mt-quick-search').val();
+                        let idsArr = ids.split(',');
+                        if (idsArr.length > 1) {
+                            window.location.href = "{{url('/admin/orders')}}" + '?order_ids=' + ids;
+                        } else {
+                            window.location.href = "{{url('/admin/orders/edit')}}" + '/' + ids;
+                        }
+                    });
+                </script>
             </li>
             @if (BaseHelper::getAdminPrefix() != '')
                 <li class="dropdown">

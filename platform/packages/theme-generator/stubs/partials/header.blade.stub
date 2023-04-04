@@ -6,13 +6,13 @@
         <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=1" name="viewport"/>
 
         <!-- Fonts-->
-        <link href="https://fonts.googleapis.com/css?family={{ urlencode(theme_option('primary_font', 'Roboto')) }}" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family={{ urlencode(theme_option('primary_font', 'Madeglin')) }}" rel="stylesheet" type="text/css">
         <!-- CSS Library-->
 
         <style>
             :root {
                 --color-1st: {{ theme_option('primary_color', '#ff2b4a') }};
-                --primary-font: '{{ theme_option('primary_font', 'Roboto') }}', sans-serif;
+                --primary-font: '{{ theme_option('primary_font', 'Madeglin') }}', sans-serif;
             }
         </style>
 

@@ -121,24 +121,24 @@
 
                 </div>
                 <div class="p-2 bg-white">
-                    @php
-                        $options = [
-                                    ['value' => 'verified', 'text' => 'Verified'],
-                                    ['value' => 'pending', 'text' => 'Pending'],
-                                    ['value' => 'draft', 'text' => 'Draft']
-                                   ];
-                    @endphp
                     Status:
-                    <select name="status" class="w-100">
-                        @foreach($options as $key => $option)
-                            <option
-                                value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>
-                        @endforeach
-                    </select>
-<hr>
-                    <a class="w-100 btn btn-lg btn-primary" href="{{route('orders.index', ['user_id' => $customer->id])}}">View
+
+                    @if(Auth::user()->hasAnyPermission(["customer.status"]))
+                        {!! Form::select('status', \Botble\Base\Enums\BaseStatusEnum::$CUSTOMERS,  $customer->status , ['class' => 'w-100','placeholder'=>'Select Status']) !!}
+                    @endif
+
+                    {{--                    <select name="status" class="w-100">--}}
+                    {{--                        @foreach($options as $key => $option)--}}
+                    {{--                            <option--}}
+                    {{--                                value="{{ $option['value'] }}" {!! ($customer->status == $option['value']) ? 'selected' : '' !!}>{{ $option['text'] }}</option>--}}
+                    {{--                        @endforeach--}}
+                    {{--                    </select>--}}
+                    <hr>
+                    <a class="w-100 btn btn-lg btn-primary"
+                       href="{{route('orders.index', ['user_id' => $customer->id])}}">View
                         All Orders</a>
-                    <a class="w-100 mt-2 btn btn-md btn-warning" href="javascript:void(0);" data-toggle="modal" data-target="#certificate_modal">Tax Certificate</a>
+                    <a class="w-100 mt-2 btn btn-md btn-warning" href="javascript:void(0);" data-toggle="modal"
+                       data-target="#certificate_modal">Tax Certificate</a>
                 </div>
 
             </div>
@@ -186,12 +186,12 @@
                             @enderror
                         </div>
                         <div class="col-lg-12">
-                            <p class="textbox-label">Customer Type  </p>
-                                @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
-                                    <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
-                                          @if(isset($customer->details) && !empty($customer->details->customer_type)) @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif @endif>
-                                    <label class="mr-2" for="vehicle1"> {{ $type }}</label>
-                                @endforeach
+                            <p class="textbox-label">Customer Type </p>
+                            @foreach(\Botble\Ecommerce\Models\Customer::$customerType as $type)
+                                <input class="ml-2" type="checkbox" name="customer_type[]" value="{{ $type }}"
+                                       @if(isset($customer->details) && !empty($customer->details->customer_type)) @if(in_array($type, json_decode(isset($customer->details) ? $customer->details->customer_type : '[]')) || old('customer_type') == $type) checked @endif @endif>
+                                <label class="mr-2" for="vehicle1"> {{ $type }}</label>
+                            @endforeach
                             @error('customer_type')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -263,15 +263,16 @@
     </form>
 
     <div class="row">
+
         <div class="col-lg-6">
             <div class="p-3 bg-white">
                 {!! Form::open(['route' => 'customers.create-customer-address', 'class' => 'ps-form--account-setting', 'method' => 'POST']) !!}
-
                 <div class="row">
                     <div class="col-lg-6 mt-2">
                         <label for="name">{{ __('Full Name') }}:</label>
                         <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
-                        <input type="hidden" class="form-control" name="customer_id" value="{{$customer->id}}">
+                        <input type="hidden" class="form-control" name="customer_id" id="customer_id"
+                               value="{{$customer->id}}">
                     </div>
                     {!! Form::error('name', $errors) !!}
 
@@ -298,7 +299,7 @@
                             @endforeach--}}
                             @foreach(get_countries() as $key => $country)
                                 <option @if(old('country') == $key) selected
-                                @endif value="{{ $key }}">{{ $country }}</option>
+                                        @endif value="{{ $key }}">{{ $country }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -312,7 +313,8 @@
                             <option selected hidden disabled>Select a State</option>
                             @if(!empty(old('country')))
                                 @foreach(get_states(old('country')) as $key => $state)
-                                    <option @if(old('state') == $key) selected @endif value="{{ $key }}">{{ $state }}</option>
+                                    <option @if(old('state') == $key) selected
+                                            @endif value="{{ $key }}">{{ $state }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -326,21 +328,20 @@
                     </div>
                     {!! Form::error('city', $errors) !!}
 
-                    <div class="col-lg-12 mt-2">
+                    <div class="col-lg-6 mt-2 @if ($errors->has('zip_code')) has-error @endif">
+                        <label>{{ __('Zip code') }}:</label>
+                        <input id="zip_code" type="text" class="form-control" name="zip_code"
+                               value="{{ old('zip_code') }}">
+                        {!! Form::error('zip_code', $errors) !!}
+                    </div>
+
+                    <div class="col-lg-6 mt-2">
                         <label for="address">{{ __('Address') }}:</label>
                         <input id="address" type="text" class="form-control" name="address"
                                value="{{ old('address') }}">
                     </div>
                     {!! Form::error('address', $errors) !!}
 
-                    @if (EcommerceHelper::isZipCodeEnabled())
-                        <div class="form-group">
-                            <label>{{ __('Zip code') }}:</label>
-                            <input id="zip_code" type="text" class="form-control" name="zip_code"
-                                   value="{{ old('zip_code') }}">
-                            {!! Form::error('zip_code', $errors) !!}
-                        </div>
-                    @endif
 
                     <div class="form-group col-lg-12">
                         <div class="ps-checkbox mt-3">
@@ -362,65 +363,81 @@
                 {!! Form::close() !!}
             </div>
         </div>
+
         <div class="col-lg-6">
             <div class="p-3 bg-white">
-
-
-                <form onsubmit="return false;">
-                    <!--      Make your own form or copy this one -->
-                    <div class="row group">
-                        @isset($customer->billingAddress)
-                            <label class="col-lg-12">
-                                <span>Billing Address</span>
-                                {!!
-                        Form::select('billing_address', $customer->billingAddress->pluck('address', 'id'),null ,['class' => 'form-control selectpicker','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address',
-                        ])
-                    !!}
-                            </label>
-                        @endisset
-                    </div>
-                    <div class="group row">
-                        <label class="col-lg-12">
-
-                            <div id="card-element" class="field">
-                                <span>Card</span>
-                                <div id="fattjs-number" style="height: 35px"></div>
-                                <span class="mt-2">CVV</span>
-                                <div id="fattjs-cvv" style="height: 35px"></div>
+                <div id="main-order">
+                    <div class="flexbox-grid no-pd-none">
+                        <div class="flexbox-content">
+                            <div class="wrapper-content bg-gray-white mb20">
+                                <button class="btn btn-info btn-card credit_card">
+                                    Credit Card
+                                </button>
+                                <div class="bg-white">
+                                    <div class="card_fields">
+                                        <input type="hidden" value="{{$customer->id}}" id="customer_id">
+                                        <div class="row group m-0 pt-4 ">
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Credit Card</span>
+                                                {!!Form::select('order_card', ['Add New Card'], null, ['class' => 'form-control card_list','id'=> 'card_id',])!!}
+                                            </label>
+                                        </div>
+                                        <div class="row group m-0 pt-4 ">
+                                            <label class="col-lg-12 ">
+                                                <span class="mb-2">Billing Address</span>
+                                                {!! Form::select('billing_address',$customer->billing_addresses->pluck('address', 'id'), null ,['class' => 'form-control','id'   => 'billing_address','data-live-search'=>'true', 'placeholder'=>'Select Address', ]) !!}
+                                            </label>
+                                        </div>
+                                        <div class="add_card">
+                                            <div class="group row m-0">
+                                                <label class="col-lg-12">
+                                                    <div id="card-element" class="field">
+                                                        <span>Card</span>
+                                                        <div id="fattjs-number" style="height: 35px"></div>
+                                                        <span class="mt-2">CVV</span>
+                                                        <div id="fattjs-cvv" style="height: 35px"></div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-3">
+                                                    <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
+                                                </div>
+                                                <p class="mt-2"> / </p>
+                                                <div class="col-lg-3">
+                                                    <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
+                                                </div>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-6">
+                                                    <button class="btn btn-success mt-3" id="tokenizebutton">
+                                                        Add Credit Card
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="col-lg-12">
+                                                    <div class="outcome">
+                                                        <div class="error"></div>
+                                                        <div class="success">
+                                                            Successful! The ID is
+                                                            <span class="token"></span>
+                                                        </div>
+                                                        <div class="loader" style="margin: auto"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </label>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <input name="month" size="3" maxlength="2" placeholder="MM" class="form-control month">
-                        </div>
-                        <p class="mt-2"> / </p>
-                        <div class="col-lg-3">
-                            <input name="year" size="5" maxlength="4" placeholder="YYYY" class="form-control year">
                         </div>
                     </div>
-                    {{--                    <button class="btn btn-info mt-3" id="paybutton">Pay $1</button>--}}
-                    <button class="btn btn-success mt-3" id="tokenizebutton">Add Credit Card</button>
-                    <div class="outcome">
-                        <div class="error"></div>
-                        <div class="success">
-                            Successful! The ID is
-                            <span class="token"></span>
-                        </div>
-                        <div class="loader" style="margin: auto">
-                        </div>
-                    </div>
-                </form>
-                {{--                <form method="POST" action="{{route('thread.testingPayment')}}">--}}
-                {{--                    @csrf--}}
-                {{--                    <button class="btn btn-info mt-3 ">Pay $1</button>--}}
-                {{--                </form>--}}
+                </div>
             </div>
-
         </div>
 
     </div>
-
 
     <div class="p-3 bg-white mt-3">
         <div class="row">
@@ -488,28 +505,58 @@
                         </tr>
                         </thead>
                         <tbody>
-
-                        @if(isset($card))
-                            @foreach($card as $cards)
+                        @if(isset($cards))
+                            @foreach($cards as $card)
                                 <tr>
-                                    <td>{{$cards->person_name}}</td>
-                                    <td>{{$cards->card_exp}}</td>
-                                    <td>{{$cards->card_last_four}}</td>
-                                    {{--                                <td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
-
-                                    {{--                                    &nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
+                                    <td>{{@$card->person_name}}</td>
+                                    <td>{{@$card->card_exp}}</td>
+                                    <td>{{@$card->card_last_four}}</td>
+                                    {{--<td><a data-toggle="modal" data-target="#edit_address"><i class="fa fa-edit"></i></a>--}}
+                                    {{--&nbsp;<a><i class="fa fa-trash"></i></a></td>--}}
                                 </tr>
                             @endforeach
                         @endif
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-
     </div>
 
+    <div class="mt20 mb20">
+        <div>
+            <div class="comment-log ws-nm">
+                <div class="comment-log-title">
+                    <label class="bold-light m-xs-b hide-print">Customer History</label>
+                </div>
+                <div class="comment-log-timeline">
+                    <div class="column-left-history ps-relative" id="customer-history-wrapper">
+                        @foreach ($customer->histories()->orderBy('id', 'DESC')->get() as $history)
+                            <div class="item-card">
+                                <div class="item-card-body clearfix">
+                                    <div class="item comment-log-item comment-log-item-date ui-feed__timeline">
+                                        <div class="ui-feed__item ui-feed__item--message">
+                                            <span class="ui-feed__marker @if ($history->user_id) ui-feed__marker--user-action @endif"></span>
+                                            <div class="ui-feed__message">
+                                                <div class="timeline__message-container">
+                                                    <div class="timeline__inner-message">
+                                                        <span>{{ OrderHelper::processCustomerHistoryVariables($history) }}</span>
+                                                    </div>
+                                                    <time class="timeline__time">
+                                                        <span>{{ $history->created_at }}</span>
+                                                    </time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="edit_address" role="dialog">
@@ -521,7 +568,7 @@
                     <div class="d-flex w-100">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                         <h4 class="modal-title text-center w-100 thread-pop-head">Edit Address <span
-                                class="variation-name"></span></h4>
+                                    class="variation-name"></span></h4>
                         <div></div>
                     </div>
                 </div>
@@ -532,15 +579,15 @@
                             <div class="col-lg-6">
                                 <p class="textbox-label">First Name</p>
                                 <input
-                                    class="input-textbox form-control @error('address_first_name') is-invalid @enderror"
-                                    type="text" name="address_first_name" value=""/>
+                                        class="input-textbox form-control @error('address_first_name') is-invalid @enderror"
+                                        type="text" name="address_first_name" value=""/>
 
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Last Name</p>
                                 <input
-                                    class="input-textbox form-control @error('address_last_name') is-invalid @enderror"
-                                    type="text" name="address_last_name" value=""/>
+                                        class="input-textbox form-control @error('address_last_name') is-invalid @enderror"
+                                        type="text" name="address_last_name" value=""/>
                                 @error('address_last_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -588,8 +635,8 @@
                                 </select>--}}
                                 {{--<input class="input-textbox form-control @error('address_country') is-invalid @enderror" type="text"  name="address_country" value="{{ old('address_country',@$customer->addresses[0]->country) }}"/>--}}
                                 <select
-                                    class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror"
-                                    name="address_country">
+                                        class="input-textbox address-country form-control  @error('address_country') is-invalid @enderror"
+                                        name="address_country">
                                     <option selected hidden disabled>Select a Country</option>
                                 </select>
                                 @error('address_country')
@@ -613,23 +660,31 @@
                             <div class="col-lg-6">
                                 <p class="textbox-label">Zip/Postal Code</p>
                                 <input
-                                    class="input-textbox form-control @error('address_zip_code') is-invalid @enderror"
-                                    type="text" name="address_zip_code"
-                                    value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
+                                        class="input-textbox form-control @error('address_zip_code') is-invalid @enderror"
+                                        type="text" name="address_zip_code"
+                                        value="{{ old('address_zip_code',@$customer->addresses[0]->zip_code) }}"/>
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-lg-6">
                                 <p class="textbox-label">Type</p>
-                                <input
-                                    class="input-textbox form-control"
-                                    type="radio" name="address_type"
-                                    placeholder="Shipping" id="shipping_type" value="shipping"/> Shipping
-                                <input
-                                    class="input-textbox form-control"
-                                    type="radio" name="address_type"
-                                    placeholder="Billing"  id="billing_type" value="billling"/> Billing
+                                <div class="d-flex">
+                                    <input
+                                            class="input-textbox mt-1"
+                                            type="radio" name="address_type"
+                                            placeholder="Shipping" id="shipping_type" value="shipping"/>
+                                    <p>Shipping</p>
+                                </div>
+
+                                <div class="d-flex">
+                                    <input
+                                            class="input-textbox mt-1"
+                                            type="radio" name="address_type"
+                                            placeholder="Billing" id="billing_type" value="billling"/>
+                                    <p>Billing</p>
+                                </div>
+
                                 @error('address_zip_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -645,6 +700,7 @@
 
         </div>
     </div>
+
     <div class="modal fade" id="certificate_modal" role="dialog">
         <div class="modal-dialog modal-lg">
 
@@ -654,225 +710,269 @@
                     <div class="d-flex w-100">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                         <h4 class="modal-title text-center w-100 thread-pop-head">Tax Certificate <span
-                                class="variation-name"></span></h4>
+                                    class="variation-name"></span></h4>
                         <div></div>
                     </div>
                 </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <p class="textbox-label">
-                                    Name of purchaser, firm or agency as shown on permit *
-                                </p>
-                                <input class="input-textbox form-control @error('purchaser_name') is-invalid @enderror" type="text"  name="purchaser_name" value="{{ old('purchaser_name',@$customer->taxCertificate->purchaser_name) }}"/>
-                                @error('purchaser_name')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-5">
-                                <p class="textbox-label">Phone (Area code and number) *</p>
-                                <input class="input-textbox form-control @error('purchaser_phone') is-invalid @enderror" type="text"  name="purchaser_phone" value="{{ old('purchaser_phone',@$customer->taxCertificate->purchaser_phone) }}"/>
-                                @error('purchaser_phone')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">
-                                    Address (Street & number, P.O. Box or Route number) *
-                                </p>
-                                <input class="input-textbox form-control @error('purchaser_address') is-invalid @enderror" type="text"  name="purchaser_address" value="{{ old('purchaser_address',@$customer->taxCertificate->purchaser_address) }}"/>
-                                @error('purchaser_address')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">City, State, ZIP Code *</p>
-                                <input class="input-textbox form-control @error('purchaser_city') is-invalid @enderror" type="text"  name="purchaser_city" value="{{ old('purchaser_city',@$customer->taxCertificate->purchaser_city) }}"/>
-                                @error('purchaser_city')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">
-                                    Texas Sales and Use Tax Permit Number (must contain 11
-                                    digits) *
-                                </p>
-                                <input class="input-textbox form-control @error('permit_no') is-invalid @enderror" type="text"  name="permit_no" value="{{ old('permit_no',@$customer->taxCertificate->permit_no) }}"/>
-                                @error('permit_no')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">
-                                    Out-of-state retailer's registration number or Federal
-                                    Taxpayers Registry (RFC) number for retailers based in
-                                    Mexico *
-                                </p>
-                                <input class="input-textbox form-control @error('registration_no') is-invalid @enderror" type="text"  name="registration_no" value="{{ old('registration_no',@$customer->taxCertificate->registration_no) }}"/>
-                                @error('registration_no')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12 mt-2 mb-5">
-                                <p class="textbox-label">
-                                    Retailers based in Mexico must also provide a copy of their
-                                    Mexico registration form to the seller.)
-                                </p>
-                            </div>
-                            <p class="textbox-label pl-2 pr-2">
-                                <b>
-                                    I, the purchaser named above, claim the right to make a
-                                    non-taxable purchase (for resale of the taxable items
-                                    described below or on the attached order or invoice) from:
-                                </b>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <p class="textbox-label">
+                                Name of purchaser, firm or agency as shown on permit *
                             </p>
-                            <div class="col-lg-12">
-                                <div class="row mt-3">
-                                    <div class="col-lg-2 col-5">
-                                        <p class="tax-label ">Seller:</p>
-                                    </div>
-                                    <div class="col-lg-3 col-7">
-                                        <p class="tax-address">L&B</p>
-                                    </div>
+                            <input class="input-textbox form-control @error('purchaser_name') is-invalid @enderror"
+                                   type="text" name="purchaser_name"
+                                   value="{{ old('purchaser_name',@$customer->taxCertificate->purchaser_name) }}"/>
+                            @error('purchaser_name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-5">
+                            <p class="textbox-label">Phone (Area code and number) *</p>
+                            <input class="input-textbox form-control @error('purchaser_phone') is-invalid @enderror"
+                                   type="text" name="purchaser_phone"
+                                   value="{{ old('purchaser_phone',@$customer->taxCertificate->purchaser_phone) }}"/>
+                            @error('purchaser_phone')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">
+                                Address (Street & number, P.O. Box or Route number) *
+                            </p>
+                            <input class="input-textbox form-control @error('purchaser_address') is-invalid @enderror"
+                                   type="text" name="purchaser_address"
+                                   value="{{ old('purchaser_address',@$customer->taxCertificate->purchaser_address) }}"/>
+                            @error('purchaser_address')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">City, State, ZIP Code *</p>
+                            <input class="input-textbox form-control @error('purchaser_city') is-invalid @enderror"
+                                   type="text" name="purchaser_city"
+                                   value="{{ old('purchaser_city',@$customer->taxCertificate->purchaser_city) }}"/>
+                            @error('purchaser_city')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">
+                                Texas Sales and Use Tax Permit Number (must contain 11
+                                digits) *
+                            </p>
+                            <input class="input-textbox form-control @error('permit_no') is-invalid @enderror"
+                                   type="text" name="permit_no"
+                                   value="{{ old('permit_no',@$customer->taxCertificate->permit_no) }}"/>
+                            @error('permit_no')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">
+                                Out-of-state retailer's registration number or Federal
+                                Taxpayers Registry (RFC) number for retailers based in
+                                Mexico *
+                            </p>
+                            <input class="input-textbox form-control @error('registration_no') is-invalid @enderror"
+                                   type="text" name="registration_no"
+                                   value="{{ old('registration_no',@$customer->taxCertificate->registration_no) }}"/>
+                            @error('registration_no')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12 mt-2 mb-5">
+                            <p class="textbox-label">
+                                Retailers based in Mexico must also provide a copy of their
+                                Mexico registration form to the seller.)
+                            </p>
+                        </div>
+                        <p class="textbox-label pl-2 pr-2">
+                            <b>
+                                I, the purchaser named above, claim the right to make a
+                                non-taxable purchase (for resale of the taxable items
+                                described below or on the attached order or invoice) from:
+                            </b>
+                        </p>
+                        <div class="col-lg-12">
+                            <div class="row mt-3">
+                                <div class="col-lg-2 col-5">
+                                    <p class="tax-label ">Seller:</p>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-lg-2 col-5">
-                                        <p class="tax-label ">Street address:</p>
-                                    </div>
-                                    <div class="col-lg-3 col-7">
-                                        <p class="tax-address">12801 N STEMMONS FWY STE 710</p>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-lg-2 col-5">
-                                        <p class="tax-label ">City, State, ZIP code:</p>
-                                    </div>
-                                    <div class="col-lg-3 col-7">
-                                        <p class="tax-address">FARMERS BRANCH, TX 75234</p>
-                                    </div>
+                                <div class="col-lg-3 col-7">
+                                    <p class="tax-address">L&B</p>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">
-                                    Description of items to be purchased on the attached order
-                                    or invoice. *
-                                </p>
-                                <textarea rows="4" class="input-textbox form-control @error('items_description') is-invalid @enderror" name="items_description">{{ old('items_description',@$customer->taxCertificate->items_description) }}</textarea>
-                                @error('items_description')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <p class="textbox-label">
-                                    Description of the type of business activity generally
-                                    engaged in or type of items normally sold by the purchase. *
-                                </p>
-                                <textarea rows="4" class="input-textbox bg-white form-control @error('business_description') is-invalid @enderror" name="business_description">{{ old('business_description',@$customer->taxCertificate->business_description) }}</textarea>
-                                @error('business_description')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
-                                    <label class="mr-2 tax-checkbox-label" for="vehicle1"> The taxable items described above, or on the attached order or invoice, will be resold, rented or leased by me within the geographical limits of the United States of America, its territories and possessions or within the geographical limits of the United Mexican States, in their present form or attached to other taxable items to be sold.</label>
+                            <div class="row mt-3">
+                                <div class="col-lg-2 col-5">
+                                    <p class="tax-label ">Street address:</p>
                                 </div>
-
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
-                                    <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that if I make any use of the items in other retention, demonstration or display while holding them for sale, lease or rental, I must pay sales tax on the the items at the time of use based upon either the purchase price or the fair market rental value for the period of time used.</label>
+                                <div class="col-lg-3 col-7">
+                                    <p class="tax-address">12801 N STEMMONS FWY STE 710</p>
                                 </div>
-
                             </div>
-                            <div class="col-lg-12">
-                                <div class="d-flex">
-                                    <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
-                                    <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that it is a criminal offense to give a resale certificate to the seller for taxable items that i know, at the time of purchase, are purchased for use rather than for the purpose of resale, lease or rental, and depending on the amount of tax evaded, the offence may range from a Class C misdemeanor to a felony of the second degree.</label>
+                            <div class="row mt-3">
+                                <div class="col-lg-2 col-5">
+                                    <p class="tax-label ">City, State, ZIP code:</p>
                                 </div>
-
-                            </div>
-                            <div class="col-lg-12 mt-2 mb-5 text-center">
-                                <p class="textbox-label">
-                                    The certificate should be furnished to the supplier. Do not
-                                    send the completed certificate to the Comptroller of Public
-                                    Accounts.
-                                </p>
+                                <div class="col-lg-3 col-7">
+                                    <p class="tax-address">FARMERS BRANCH, TX 75234</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="refer-area mt-4">
-                                    <div class="row">
-                                        <div class="col-lg-7">
-                                            <p class="textbox-label">Title</p>
-                                            <input class="input-textbox bg-white form-control @error('title') is-invalid @enderror" type="text"  name="title" value="{{ old('title',@$customer->taxCertificate->title) }}"/>
-                                            @error('title')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-lg-5">
-                                            <p class="textbox-label">Date</p>
-                                            <input class="input-textbox bg-white form-control @error('date') is-invalid @enderror" type="date"  name="date" value="{{ old('date',@$customer->taxCertificate->date) }}"/>
-                                            @error('date')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-lg-7">
-                                            <p class="textbox-label">Purchaser Sign </p>
-                                            @if(!empty(@$customer->taxCertificate->purchaser_sign))
-                                                <img class="img-responsive" src="{{ asset($customer->taxCertificate->purchaser_sign) }}" alt="Image" title="Image Not Available"  height="120px" width="130px"/>
-                                            @else
-                                                <span id="undo-sign" class="fa fa-undo"></span>
-                                                <div id="signature"></div>
-                                            @endif
-                                        </div>
-                                        <input type="hidden" value="" name="purchaser_sign">
-                                        @error('purchaser_sign')
+                        <div class="col-lg-12">
+                            <p class="textbox-label">
+                                Description of items to be purchased on the attached order
+                                or invoice. *
+                            </p>
+                            <textarea rows="4"
+                                      class="input-textbox form-control @error('items_description') is-invalid @enderror"
+                                      name="items_description">{{ old('items_description',@$customer->taxCertificate->items_description) }}</textarea>
+                            @error('items_description')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="textbox-label">
+                                Description of the type of business activity generally
+                                engaged in or type of items normally sold by the purchase. *
+                            </p>
+                            <textarea rows="4"
+                                      class="input-textbox bg-white form-control @error('business_description') is-invalid @enderror"
+                                      name="business_description">{{ old('business_description',@$customer->taxCertificate->business_description) }}</textarea>
+                            @error('business_description')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="d-flex">
+                                <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                <label class="mr-2 tax-checkbox-label" for="vehicle1"> The taxable items described
+                                    above, or on the attached order or invoice, will be resold, rented or leased by me
+                                    within the geographical limits of the United States of America, its territories and
+                                    possessions or within the geographical limits of the United Mexican States, in their
+                                    present form or attached to other taxable items to be sold.</label>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="d-flex">
+                                <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that if I make any
+                                    use of the items in other retention, demonstration or display while holding them for
+                                    sale, lease or rental, I must pay sales tax on the the items at the time of use
+                                    based upon either the purchase price or the fair market rental value for the period
+                                    of time used.</label>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="d-flex">
+                                <input class="mt-1 mr-2" type="checkbox" name=" " value=" ">
+                                <label class="mr-2 tax-checkbox-label" for="vehicle1"> I understand that it is a
+                                    criminal offense to give a resale certificate to the seller for taxable items that i
+                                    know, at the time of purchase, are purchased for use rather than for the purpose of
+                                    resale, lease or rental, and depending on the amount of tax evaded, the offence may
+                                    range from a Class C misdemeanor to a felony of the second degree.</label>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12 mt-2 mb-5 text-center">
+                            <p class="textbox-label">
+                                The certificate should be furnished to the supplier. Do not
+                                send the completed certificate to the Comptroller of Public
+                                Accounts.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="refer-area mt-4">
+                                <div class="row">
+                                    <div class="col-lg-7">
+                                        <p class="textbox-label">Title</p>
+                                        <input
+                                                class="input-textbox bg-white form-control @error('title') is-invalid @enderror"
+                                                type="text" name="title"
+                                                value="{{ old('title',@$customer->taxCertificate->title) }}"/>
+                                        @error('title')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="col-lg-5">
+                                        <p class="textbox-label">Date</p>
+                                        <input
+                                                class="input-textbox bg-white form-control @error('date') is-invalid @enderror"
+                                                type="date" name="date"
+                                                value="{{ old('date',@$customer->taxCertificate->date) }}"/>
+                                        @error('date')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <p class="textbox-label">Purchaser Sign </p>
+                                        @if(!empty(@$customer->taxCertificate->purchaser_sign))
+                                            @if(str_contains($customer->taxCertificate->purchaser_sign, 'data:image/png;base64'))
+                                                <img class="img-responsive"
+                                                     src="{{ ($customer->taxCertificate->purchaser_sign) }}" alt="Image"
+                                                     title="Image Not Available" height="120px" width="130px"/>
+                                            @else
+                                                <img class="img-responsive"
+                                                     src="{{ asset($customer->taxCertificate->purchaser_sign) }}"
+                                                     alt="Image" title="Image Not Available" height="120px"
+                                                     width="130px"/>
+                                            @endif
+                                        @else
+                                            <span id="undo-sign" class="fa fa-undo"></span>
+                                            <div id="signature"></div>
+                                        @endif
+
+                                    </div>
+                                    <input type="hidden" value="" name="purchaser_sign">
+                                    @error('purchaser_sign')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
 
 
         </div>
     </div>
-<script>
-    $(document).ready(function () {
-      $('select[name="country"]').on('change', function () {
-        get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
-      });
 
-    })
-    function get_states(thiss, country, url){
-      $.ajax({
-        type: 'GET',
-        url: url,
-        data: {
-          'country' : country
-        },
-        beforeSend: function () {
-          toggle_loader(true);
-        },
+    <script>
+        $(document).ready(function () {
+            $('select[name="country"]').on('change', function () {
+                get_states($('select[name="state"]'), this.value, '{{ route('ajax.getStates') }}');
+            });
+        });
 
-        success: function (result) {
-          thiss.find('option').remove();
-          jQuery.each(result, function (state, index) {
-            thiss.append(new Option(index, state));
-          });
-          toggle_loader(false);
-        },
-        error: function (e) {
-          toggle_loader(false);
+        function get_states(thiss, country, url) {
+            $.ajax({
+                type: 'GET',
+                url: url,
+                data: {
+                    'country': country
+                },
+                beforeSend: function () {
+                    toggle_loader(true);
+                },
+                success: function (result) {
+                    thiss.find('option').remove();
+                    jQuery.each(result, function (state, index) {
+                        thiss.append(new Option(index, state));
+                    });
+                    toggle_loader(false);
+                },
+                error: function (e) {
+                    toggle_loader(false);
+                }
+            })
         }
-      })
-    }
-</script>
+    </script>
 @stop
 
 

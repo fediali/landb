@@ -140,7 +140,7 @@ class OrderImportController extends BaseController
      * @return Factory|View
      * @throws Throwable
      */
-    public function index(OrderTable $dataTable)
+    public function index(OrderImportTable $dataTable)
     {
         page_title()->setTitle(trans('plugins/ecommerce::order.name'));
 

@@ -11,3 +11,18 @@
 |
 */
 
+Route::post('send-order-prod-shipment-email/{order_id}', function($order_id, \Illuminate\Http\Request $request) {
+    $order_product_ids = $request->get('order_product_ids');
+    $job = new \App\Jobs\SendOrderProdShipmentEmail($order_id, $order_product_ids);
+    dispatch_now($job);
+});
+
+Route::get('send-manifest-prod-delayed-email/{id}', function($id) {
+    $job = new \App\Jobs\SendManifestProdDelayedEmail($id);
+    dispatch_now($job);
+});
+
+Route::get('send-manifest-prod-shipped-email/{id}', function($id) {
+    $job = new \App\Jobs\SendManifestProdShippedEmail($id);
+    dispatch_now($job);
+});

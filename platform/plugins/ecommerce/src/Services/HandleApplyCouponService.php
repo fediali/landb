@@ -2,6 +2,8 @@
 
 namespace Botble\Ecommerce\Services;
 
+use Botble\Base\Enums\BaseStatusEnum;
+use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Cart;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use OrderHelper;
 
-class HandleApplyCouponService
+class  HandleApplyCouponService
 {
     /**
      * @var DiscountInterface
@@ -76,8 +78,11 @@ class HandleApplyCouponService
                 'message' => trans('plugins/ecommerce::discount.cannot_use_same_time_with_other_discount_program'),
             ];
         }
-
-        $cartItems = Cart::instance('cart')->content();
+/*UPDATE BY TALHA*/
+        /*$cartItems = Cart::instance('cart')->content();*/
+        $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
+          $query->with(['product']);
+        }])->first();
         $couponDiscountAmount = 0;
         $isFreeShipping = false;
 
@@ -92,15 +97,26 @@ class HandleApplyCouponService
                 case 'amount':
                     switch ($discount->target) {
                         case 'amount-minimum-order':
-                            if ($discount->min_order_price <= Cart::instance('cart')->rawTotal()) {
+                            /*if ($discount->min_order_price <= Cart::instance('cart')->rawTotal()) {*/
+                            if ($discount->min_order_price <= $cart->sub_total) {
                                 $couponDiscountAmount += $discount->value;
                             }
                             break;
                         case 'all-orders':
                             $couponDiscountAmount += $discount->value;
                             break;
+                        case 'product-variant' || 'category':
+                          foreach ($discount->products as $p_product){
+                            foreach ($cart->products as $c_product){
+                              if($p_product->id == $c_product->product_id){
+                                $couponDiscountAmount += $c_product->qty * $discount->value ;
+                              }
+                            }
+                          }
+                          break;
                         default:
-                            if (Cart::instance('cart')->count() >= $discount->product_quantity) {
+                            /*if (Cart::instance('cart')->count() >= $discount->product_quantity) {*/
+                            if ($cart->products->count() >= $discount->product_quantity) {
                                 $couponDiscountAmount += $discount->value;
                             }
                             break;
@@ -109,24 +125,38 @@ class HandleApplyCouponService
                 case 'percentage':
                     switch ($discount->target) {
                         case 'amount-minimum-order':
-                            if ($discount->min_order_price <= Cart::instance('cart')->rawTotal()) {
-                                $couponDiscountAmount = Cart::instance('cart')->rawTotal() * $discount->value / 100;
+                            /*if ($discount->min_order_price <= Cart::instance('cart')->rawTotal()) {*/
+                            if ($discount->min_order_price <= $cart->sub_total) {
+                                /*$couponDiscountAmount = Cart::instance('cart')->rawTotal() * $discount->value / 100;*/
+                                $couponDiscountAmount = $cart->sub_total * $discount->value / 100;
                             }
                             break;
                         case 'all-orders':
-                            $couponDiscountAmount = Cart::instance('cart')->rawTotal() * $discount->value / 100;
+                            /*$couponDiscountAmount = Cart::instance('cart')->rawTotal() * $discount->value / 100;*/
+                            $couponDiscountAmount = $cart->sub_total * $discount->value / 100;
                             break;
+                        case 'product-variant' || 'category':
+                          foreach ($discount->products as $p_product){
+                            foreach ($cart->products as $c_product){
+                              if($p_product->id == $c_product->product_id){
+                                $couponDiscountAmount = ($c_product->qty * $c_product->price) * $discount->value / 100;
+                              }
+                            }
+                          }
+                          break;
                         default:
-                            if (Cart::instance('cart')->count() >= $discount->product_quantity) {
-                                $couponDiscountAmount += Cart::instance('cart')->rawTotal() * $discount->value / 100;
+                            /*if (Cart::instance('cart')->count() >= $discount->product_quantity) {*/
+                            if ($cart->products->count() >= $discount->product_quantity) {
+                                /*$couponDiscountAmount += Cart::instance('cart')->rawTotal() * $discount->value / 100;*/
+                                $couponDiscountAmount += $cart->sub_total * $discount->value / 100;
                             }
                             break;
                     }
                     break;
                 case 'same-price':
-                    foreach ($cartItems as $item) {
+                    foreach ($cart->products as $item) {
                         if (in_array($discount->target, ['specific-product', 'product-variant']) &&
-                            in_array($item->id, $discount->products()->pluck('product_id')->all())
+                            in_array($item->product_id, $discount->products()->pluck('product_id')->all())
                         ) {
                             $couponDiscountAmount += $item->price - $discount->value;
                         } elseif ($product = $this->productRepository->findById($item->id)) {
@@ -180,6 +210,7 @@ class HandleApplyCouponService
             ->where('code', $couponCode)
             ->where('type', 'coupon')
             ->where('start_date', '<=', now())
+            ->where('status', BaseStatusEnum::$Discount['Active'])
             ->where(function ($query) use ($sessionData) {
                 /**
                  * @var Builder $query
@@ -367,4 +398,6 @@ class HandleApplyCouponService
             ],
         ];
     }
+
+
 }

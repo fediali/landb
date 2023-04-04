@@ -36,6 +36,26 @@ return [
         'flag'        => 'products.destroy',
         'parent_flag' => 'products.index',
     ],
+    [
+        'name'        => 'Cost Price',
+        'flag'        => 'products.costprice',
+        'parent_flag' => 'products.index',
+    ],
+    [
+        'name'        => 'Qty Edit',
+        'flag'        => 'products.editqty',
+        'parent_flag' => 'products.index',
+    ],
+    [
+        'name'        => 'Product Detail Qty Edit',
+        'flag'        => 'products.editproddetailqty',
+        'parent_flag' => 'products.index',
+    ],
+    [
+        'name'        => 'Product Var Qty Edit',
+        'flag'        => 'products.editProdVarQty',
+        'parent_flag' => 'products.index',
+    ],
     /**
      * Categories
      */
@@ -236,6 +256,11 @@ return [
         'parent_flag' => 'orders.index',
     ],
     [
+        'name'        => 'Edit Order Product Price',
+        'flag'        => 'orders.edit_price',
+        'parent_flag' => 'orders.index',
+    ],
+    [
         'name'        => 'Discounts',
         'flag'        => 'discounts.index',
         'parent_flag' => 'plugins.ecommerce',
@@ -261,6 +286,11 @@ return [
         'parent_flag' => 'plugins.ecommerce',
     ],
     [
+        'name'        => 'Order Import',
+        'flag'        => 'order-import.index',
+        'parent_flag' => 'plugins.ecommerce',
+    ],
+    [
         'name'        => 'Create',
         'flag'        => 'customer.create',
         'parent_flag' => 'customer.index',
@@ -273,6 +303,11 @@ return [
     [
         'name'        => 'Delete',
         'flag'        => 'customer.destroy',
+        'parent_flag' => 'customer.index',
+    ],
+    [
+        'name'        => 'Status Change',
+        'flag'        => 'customer.status',
         'parent_flag' => 'customer.index',
     ],
 
@@ -296,8 +331,22 @@ return [
         'parent_flag' => 'flash-sale.index',
     ],
     [
-        'name'        => 'Order Import',
-        'flag'        => 'ecommerce.order-import.index',
-        'parent_flag' => 'plugins.ecommerce',
+        'name' => 'Product labels',
+        'flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Create',
+        'flag'        => 'product-label.create',
+        'parent_flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Edit',
+        'flag'        => 'product-label.edit',
+        'parent_flag' => 'product-label.index',
+    ],
+    [
+        'name'        => 'Delete',
+        'flag'        => 'product-label.destroy',
+        'parent_flag' => 'product-label.index',
     ],
 ];

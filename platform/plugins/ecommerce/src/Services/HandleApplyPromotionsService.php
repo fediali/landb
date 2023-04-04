@@ -3,6 +3,8 @@
 namespace Botble\Ecommerce\Services;
 
 use Botble\Ecommerce\Models\Discount;
+use Botble\Ecommerce\Models\DiscountProduct;
+use Botble\Ecommerce\Models\Order;
 use Botble\Ecommerce\Repositories\Interfaces\DiscountInterface;
 use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Cart;
@@ -37,11 +39,20 @@ class HandleApplyPromotionsService
      * @param string $token
      * @return float
      */
-    public function execute($token = null)
+    public function execute($token = null, $order = null)
     {
         $promotions = $this->discountRepository->getAvailablePromotions();
 
         $promotionDiscountAmount = 0;
+        if ($order) {
+            $cart = Order::where('id', $order)->with(['products' => function ($query) {
+                $query->with(['product']);
+            }])->first();
+        } else {
+            $cart = Order::where('id', auth('customer')->user()->getUserCart())->with(['products' => function ($query) {
+                $query->with(['product']);
+            }])->first();
+        }
 
         foreach ($promotions as $promotion) {
             /**
@@ -51,15 +62,24 @@ class HandleApplyPromotionsService
                 case 'amount':
                     switch ($promotion->target) {
                         case 'amount-minimum-order':
-                            if ($promotion->min_order_price <= Cart::instance('cart')->rawTotal()) {
+                            if ($promotion->min_order_price <= $cart->sub_total) {
                                 $promotionDiscountAmount += $promotion->value;
                             }
                             break;
                         case 'all-orders':
                             $promotionDiscountAmount += $promotion->value;
                             break;
+                        case 'product-variant' || 'category':
+                            foreach ($promotion->products as $p_product){
+                              foreach ($cart->products as $c_product){
+                                if($p_product->id == $c_product->product_id){
+                                  $promotionDiscountAmount += $c_product->qty * $promotion->value;
+                                }
+                              }
+                            }
+                            break;
                         default:
-                            if (Cart::instance('cart')->count() >= $promotion->product_quantity) {
+                            if ($cart->products->count() >= $promotion->product_quantity) {
                                 $promotionDiscountAmount += $promotion->value;
                             }
                             break;
@@ -68,26 +88,32 @@ class HandleApplyPromotionsService
                 case 'percentage':
                     switch ($promotion->target) {
                         case 'amount-minimum-order':
-                            if ($promotion->min_order_price <= Cart::instance('cart')->rawTotal()) {
-                                $promotionDiscountAmount += Cart::instance('cart')
-                                        ->rawTotal() * $promotion->value / 100;
+                            if ($promotion->min_order_price <= $cart->sub_total) {
+                                $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
                             }
                             break;
                         case 'all-orders':
-                            $promotionDiscountAmount += Cart::instance('cart')->rawTotal() * $promotion->value / 100;
+                            $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
+                            break;
+                        case 'product-variant' || 'category':
+                            //TODO::fix this loop
+                            foreach ($cart->products as $c_product){
+                                $check = DiscountProduct::where(['discount_id' => $promotion->id, 'product_id' => $c_product->product_id])->value('product_id');
+                                if($check == $c_product->product_id){
+                                    $promotionDiscountAmount += ($c_product->qty * $c_product->price) * $promotion->value / 100;
+                                }
+                            }
                             break;
                         default:
-                            if (Cart::instance('cart')->count() >= $promotion->product_quantity) {
-                                $promotionDiscountAmount += Cart::instance('cart')
-                                        ->rawTotal() * $promotion->value / 100;
+                            if ($cart->products->count() >= $promotion->product_quantity) {
+                                $promotionDiscountAmount += $cart->sub_total * $promotion->value / 100;
                             }
                             break;
                     }
                     break;
                 case 'same-price':
-                    if ($promotion->product_quantity > 1 && Cart::instance('cart')
-                            ->count() >= $promotion->product_quantity) {
-                        foreach (Cart::instance('cart')->content() as $item) {
+                    if ($promotion->product_quantity > 1 && $cart->products->count() >= $promotion->product_quantity) {
+                        foreach ($cart->products as $item) {
                             if ($item->qty >= $promotion->product_quantity) {
                                 if (in_array($promotion->target, ['specific-product', 'product-variant']) &&
                                     in_array($item->id, $promotion->products()->pluck('product_id')->all())
@@ -124,4 +150,37 @@ class HandleApplyPromotionsService
 
         return $promotionDiscountAmount;
     }
+
+
+    public function applyPromotionIfAvailable($orderId, $token = null)
+    {
+        $this->removePromotionIfAvailable($orderId);
+
+        $promotionAmount = $this->execute($token, $orderId);
+
+        $order = Order::where('id', $orderId)->first();
+        if (!$order->promotion_applied) {
+            $order->discount_amount = !empty($order->coupon_code) ? ($order->discount_amount + $promotionAmount) : $promotionAmount;
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->promotion_amount = $promotionAmount;
+            $order->promotion_applied = 1;
+            $order->save();
+        }
+    }
+
+    public function removePromotionIfAvailable($orderId)
+    {
+        $order = Order::where('id', $orderId)->first();
+        if ($order->promotion_applied) {
+            $order->discount_amount -= $order->promotion_amount;
+            if ($order->discount_amount < 0) {
+                $order->discount_amount = 0;
+            }
+            $order->amount = $order->sub_total - $order->discount_amount;
+            $order->promotion_applied = 0;
+            $order->promotion_amount = 0;
+            $order->save();
+        }
+    }
+
 }

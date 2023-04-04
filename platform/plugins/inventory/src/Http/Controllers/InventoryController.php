@@ -6,6 +6,7 @@ use App\Models\InventoryHistory;
 use App\Models\InventoryProducts;
 use App\Models\QtyAllotmentHistory;
 use Botble\ACL\Models\Role;
+use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductVariation;
@@ -24,6 +25,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Inventory\Forms\InventoryForm;
 use Botble\Base\Forms\FormBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends BaseController
 {
@@ -226,7 +228,8 @@ class InventoryController extends BaseController
 
     public function getProductByBarcode(Request $request)
     {
-        $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+        $products = DB::table('ec_products')
+            ->select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
             'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
             ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
             //->leftJoin('inventory_history', 'inventory_history.parent_product_id', 'ec_products.id')
@@ -237,6 +240,10 @@ class InventoryController extends BaseController
             //->orWhere('ec_products.barcode', $request->get('barcode'))
             //->orWhere('parent_sku', $request->get('barcode'))
             //->where('status', 'published')
+            ->where(['ec_products.ptype' => 'R'])
+            ->where('ec_products.status', '!=', BaseStatusEnum::HIDE)
+            //->orderBy('ec_products.sku', 'ASC')
+            ->orderBy('ec_products.name', 'ASC')
             ->orderBy('thread_order_variations.thread_order_id', 'DESC')
             ->get();
         if ($products && count($products) > 1) {
@@ -246,10 +253,13 @@ class InventoryController extends BaseController
             $getChildIds = ProductVariation::where('configurable_product_id', $getProdIdByUPC)->pluck('product_id')->all();
             $getChildIds[] = $getProdIdByUPC;
 
-            $products = Product::select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
+            $products = DB::table('ec_products')
+                ->select('ec_products.id', 'ec_products.warehouse_sec', 'ec_products.images', 'ec_products.sku', 'ec_products.barcode', 'ec_products.upc', 'ec_products.name',
                 'ec_products.quantity', 'thread_order_variations.quantity AS ordered_qty', 'ec_products.price', 'ec_products.sale_price', 'ec_products.is_variation', 'ec_products.private_label')
                 ->leftJoin('thread_order_variations', 'thread_order_variations.sku', 'ec_products.sku')
                 ->whereIn('ec_products.id', $getChildIds)
+                ->where(['ec_products.ptype' => 'R'])
+                ->where('ec_products.status', '!=', BaseStatusEnum::HIDE)
                 ->orderBy('thread_order_variations.thread_order_id', 'DESC')
                 ->get();
 
@@ -268,14 +278,14 @@ class InventoryController extends BaseController
         if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
-                    $product = Product::where('sku', $inv_product->sku)->where('is_variation', 1)->first();
+                    $product = Product::where('id', $inv_product->product_id)->where('is_variation', 1)->first();
                     if ($product) {
                         if ($inv_product->is_released) {
                             $error = 'some products already released in this inventory!';
                         } else {
 
                             $old_stock = $product->quantity;
-                            $product->quantity = $product->quantity + $inv_product->received_qty;
+                            $product->quantity += $inv_product->received_qty;
                             $product->with_storehouse_management = 1;
 
                             $qtyOS = 0;
@@ -357,7 +367,7 @@ class InventoryController extends BaseController
         if ($inventory && $inventory->status == 'published' && !$inventory->is_full_released) {
             if (count($inventory->products)) {
                 foreach ($inventory->products as $inv_product) {
-                    $product = Product::where('sku', $inv_product->sku)/*->where('is_variation', 1)*/ ->first();
+                    $product = Product::where('id', $inv_product->product_id)/*->where('is_variation', 1)*/ ->first();
                     if ($product) {
                         if ($inv_product->is_released) {
                             $error = 'some products already released in this inventory!';
@@ -424,5 +434,14 @@ class InventoryController extends BaseController
         } else {
             return $response->setPreviousUrl(back())->setMessage('Inventory has been pushed into e-commerce successfully');
         }
+    }
+
+    public function showInventoryDetail($id, Request $request)
+    {
+        page_title()->setTitle('Inventory Detail');
+
+        $inventoryDetail = $this->inventoryRepository->findOrFail($id);
+
+        return view('plugins/inventory::details', compact('inventoryDetail'));
     }
 }

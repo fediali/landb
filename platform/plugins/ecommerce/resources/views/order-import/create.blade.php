@@ -27,12 +27,15 @@
         {!! Form::close() !!}
     </div>
     <br>
+
     @if($import_errors && count($import_errors))
         <div class="col-md-12">
             <div class="row">
                 <ul>
-                    @foreach($import_errors as $error)
-                        <li style="color: red">{{$loop->iteration}}. {{$error}}</li>
+                    @foreach($import_errors as $key => $error)
+                        <li style="color: red">
+                            {{$loop->iteration}}. <a target="_blank" href="{{route('orders.editOrder', [$key])}}"> {{implode(' || ', $error)}} click here to edit order.</a>
+                        </li>
                     @endforeach
                 </ul>
             </div>
@@ -52,6 +55,8 @@
                             <th>Total</th>
                             <th>Order Date</th>
                             <th>From</th>
+                            <th>Not Found Sku(s)</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -60,7 +65,7 @@
                                 <td><input type="checkbox"/></td>
                                 <td>
                                     <p class="m-0">
-                                        <a target="_blank" href="{{route('orders.edit',[$order->id])}}">{{$order->id}}</a>
+                                        <a target="_blank" href="{{route('orders.editOrder',[$order->id])}}">{{$order->id}}</a>
                                     </p>
                                     {{--<p style="font-size:12px" class="m-0">--}}
                                     {{--Street, Rochester, IN, 40975, US--}}
@@ -79,6 +84,10 @@
                                     @else
                                         Orange Shine
                                     @endif
+                                </td>
+                                <td>{{$order->import->not_found_skus}}</td>
+                                <td>
+                                    <p class="m-0"><a target="_blank" href="{{route('orders.editOrder',[$order->id])}}">Edit Order</a></p>
                                 </td>
                             </tr>
                         @endforeach

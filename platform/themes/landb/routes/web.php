@@ -3,6 +3,16 @@
 // Custom routes
 // You can delete this route group if you don't need to add your custom routes.
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
+
+    Route::get('/forget-password', 'AuthController@forgetPassword')
+      ->name('public.forget-password');
+
+    Route::post('/forget-password', 'AuthController@postForgetPassword')
+      ->name('public.post-forget-password');
+
+    Route::get('/password/reset/{token}', 'AuthController@resetPassword')->middleware('guest')->name('customer.password.reset');
+    Route::post('/password/reset', 'AuthController@postResetPassword')->middleware('guest')->name('password.post.reset');
+
     Route::get('/orderr', 'LandbController@orderSuccess');
 
     /*Route::get('/product-timeline', 'ProductsController@timeline')
@@ -10,17 +20,30 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::get('/product-timeline/{id?}', 'ProductsController@timeline')
         ->name('public.cart.timeline');
 
-    Route::get('/products/{slug?}', 'ProductsController@getDetails')
-      ->name('public.singleProduct');
-
     Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
     });
+
+
 });
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
-  Route::get('logout', 'AuthController@logout')->name('public.logout');
+    Route::get('logout', 'AuthController@logout')->name('public.logout');
 });
+
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer']], function () {
+    Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+        Route::post('/edit-account/{type}', [
+            'as'   => 'edit-account-post',
+            'uses' => 'CustomerController@update'
+        ]);
+    });
+});
+
 Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer', 'verifiedCustomer']], function () {
+
+
+
 
     Route::get('/cart', 'CartController@getIndex')
         ->name('public.cart_index');
@@ -55,6 +78,9 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
     Route::post('/checkout', 'CheckoutController@proceedPayment')
         ->name('public.cart.order_checkout');
 
+    Route::post('/apply_coupon', 'CheckoutController@applyCoupon')
+        ->name('public.cart.apply_coupon');
+
     Route::get('/order/success/{id}', 'OrderController@success')
         ->name('public.order.success');
 
@@ -76,16 +102,19 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             'uses' => 'CustomerController@updateDefaultById'
         ]);
 
-        Route::post('/edit-account/{type}', [
+        /*Route::post('/edit-account/{type}', [
             'as'   => 'edit-account-post',
             'uses' => 'CustomerController@update'
-        ]);
+        ]);*/
 
         Route::post('create-customer-payment', [
-            'as'         => 'create-customer-payment',
-            'uses'       => 'CustomerController@postCustomerCard'
+            'as'   => 'create-customer-payment',
+            'uses' => 'CustomerController@postCustomerCard'
         ]);
+
     });
+
+
 });
 Theme::routes();
 
@@ -95,12 +124,12 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
         Route::get('/customer/verify', [
             'as'   => 'customer.pendingNotification',
             'uses' => 'CustomerController@pendingNotification'
-        ]);
+        ])->middleware('customer');
 
         Route::get('customer/contract-form', [
             'as'   => 'customer.contract-form',
             'uses' => 'CustomerController@contractForm'
-        ]);
+        ])->middleware('customer');
 
         Route::get('/', 'LandbController@getIndex')
             ->name('public.index');
@@ -110,9 +139,6 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
 
         Route::get('/register', 'RegisterController@showRegisterForm')
             ->name('public.register');
-
-        Route::get('/products', 'ProductsController@getIndex')
-            ->name('public.products');
 
         Route::get('sitemap.xml', 'LandbController@getSiteMap')
             ->name('public.sitemap');
@@ -125,32 +151,44 @@ Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['w
             ->name('public.register.post');
 
 
-      Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
-        Route::get('get_states', [
-            'as'   => 'getStates',
-            'uses' => 'CustomerController@getStates'
-        ]);
-        Route::get('get_countries', [
-            'as'   => 'getCountries',
-            'uses' => 'CustomerController@getCountries'
-        ]);
-      });
+        Route::group(['prefix' => 'ajax', 'as' => 'ajax.'], function () {
+            Route::get('get_states', [
+                'as'   => 'getStates',
+                'uses' => 'CustomerController@getStates'
+            ]);
+            Route::get('get_countries', [
+                'as'   => 'getCountries',
+                'uses' => 'CustomerController@getCountries'
+            ]);
+        });
 
+        Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
+            ->name('public.single');
+
+        Route::get('sitemap.xml', 'LandbController@getSiteMap')
+            ->name('public.sitemap');
     });
+
 });
 
-Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core']], function () {
-  Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
+Route::group(['namespace' => 'Theme\Landb\Http\Controllers', 'middleware' => ['web', 'core', 'customer','verifiedCustomer']], function () {
+    Route::group(apply_filters(BASE_FILTER_GROUP_PUBLIC_ROUTE, []), function () {
 
-    Route::get('sitemap.xml', 'LandbController@getSiteMap')
-        ->name('public.sitemap');
-
-    Route::get('page/{slug?}' . config('core.base.general.public_single_ending_url'), 'LandbController@getView')
-        ->name('public.single');
-
-    Route::get('/{slug?}', 'ProductsController@productsByCategory')
-        ->name('public.productsByCategory');
+        Route::get('/products', 'ProductsController@getIndex')
+            ->name('public.products');
 
 
-  });
+        Route::get('/{slug?}', 'ProductsController@productsByCategory')
+            ->name('public.productsByCategory');
+
+
+        Route::get('/products/{slug?}', 'ProductsController@getDetails')
+            ->name('public.singleProduct');
+
+        Route::get('/search/product', 'ProductsController@searchProducts')
+            ->name('public.searchProducts');
+
+
+
+    });
 });

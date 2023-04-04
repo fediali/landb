@@ -3,6 +3,10 @@
     @php do_action(BASE_ACTION_TOP_FORM_CONTENT_NOTIFICATION, request(), THEME_OPTIONS_MODULE_SCREEN_NAME) @endphp
     @php
         $products = get_products_data();
+        $categories = \Botble\Ecommerce\Models\ProductCategory::with(['products' ])->withCount('products')
+                ->orderBy('products_count', 'DESC')
+                ->orderBy('order', 'ASC')
+                ->pluck('name', 'id');
     @endphp
     <div id="theme-option-header">
         <div class="display_header">
@@ -104,6 +108,31 @@
                             <div class="flexbox-annotated-section">
                                 <div class="flexbox-annotated-section-annotation">
                                     <div class="annotated-section-title pd-all-20">
+                                        <h2>Browse Collection</h2>
+                                    </div>
+                                    <div class="annotated-section-description pd-all-20 p-none-t">
+                                        <p class="color-note">Category listing</p>
+                                    </div>
+                                </div>
+                                <input type="checkbox" name="home_browse_section_status" value="1" {!! (setting('theme-landb-home_browse_section_status') == 1) ? 'checked': 1 !!}>
+                                <div class="flexbox-annotated-section-content">
+                                    <div class="wrapper-content pd-all-20">
+                                       {{-- <div class="form-group">
+                                            <label for="home_section_1_heading" class="control-label">Heading</label>
+                                            <input class="form-control" placeholder="Heading text" data-counter="120" name="home_section_1_heading" type="text" value="{{ setting('theme-landb-home_section_1_heading') }}" id="home_section_1_heading">
+                                        </div>--}}
+                                        <div class="form-group form-group-no-margin">
+                                            <label for="home_section_1_link" class="control-label">Categories</label>
+                                            <div class="multi-choices-widget list-item-checkbox">
+                                                {!! Form::customSelect("home_browse_section[]", $categories, json_decode(setting('theme-landb-home_browse_section')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><hr>
+                            <div class="flexbox-annotated-section">
+                                <div class="flexbox-annotated-section-annotation">
+                                    <div class="annotated-section-title pd-all-20">
                                         <h2>Hey Y'All</h2>
                                     </div>
                                     <div class="annotated-section-description pd-all-20 p-none-t">
@@ -146,9 +175,10 @@
                                 <div class="flexbox-annotated-section-content">
                                     <div class="wrapper-content pd-all-20">
                                         <div class="form-group">
-                                            <label for="home_section_3_video" class="control-label">Images</label>
+                                            <label for="home_section_3_video" class="control-label">Products (Total: 2)</label>
                                             {{--<input class="form-control" placeholder="Link" data-counter="120" name="home_section_3_images" type="text" value="{{ setting('theme-landb-home_section_3_images') }}" id="home_section_3_images">--}}
-                                            @include('core/base::forms.partials.images', ['name' => 'home_section_3_images[]', 'values' => setting('theme-landb-home_section_3_images')])
+                                            {{--@include('core/base::forms.partials.images', ['name' => 'home_section_3_images[]', 'values' => setting('theme-landb-home_section_3_images')])--}}
+                                            {!! Form::customSelect("home_section_3_products[]", $products, json_decode(setting('theme-landb-home_section_3_products')), ['class'    => 'select-search-full','multiple' => 'multiple']) !!}
                                         </div>
                                     </div>
                                 </div>

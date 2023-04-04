@@ -8,6 +8,7 @@ use Botble\Blog\Repositories\Interfaces\CategoryInterface;
 use Botble\Blog\Repositories\Interfaces\PostInterface;
 use Botble\Blog\Repositories\Interfaces\TagInterface;
 use Botble\Blog\Supports\PostFormat;
+use Botble\Ecommerce\Models\Product;
 use Botble\Ecommerce\Models\ProductCategory;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Orderstatuses\Models\Orderstatuses;
@@ -15,6 +16,7 @@ use Botble\Paymentmethods\Models\Paymentmethods;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Twilio\Rest\Client;
@@ -317,7 +319,7 @@ if (!function_exists('get_salesperson')) {
     {
         return \App\Models\User::join('role_users', 'users.id', 'role_users.user_id')
             ->join('roles', 'role_users.role_id', 'roles.id')
-            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES])
+            ->whereIn('roles.slug', [\Botble\ACL\Models\Role::ONLINE_SALES, \Botble\ACL\Models\Role::IN_PERSON_SALES, \Botble\ACL\Models\Role::SALES_MANAGER, \Botble\ACL\Models\Role::ASS_SALES_MANAGER])
             ->pluck('users.username', 'users.id')->all();
     }
 }
@@ -689,6 +691,25 @@ if (!function_exists('parse_date')) {
     }
 }
 
+if (!function_exists('getDigitsLength')) {
+    function getDigitsLength($num)
+    {
+        return (int)(log($num, 10) + 1);
+    }
+}
+
+if (!function_exists('check_array_equal')) {
+    function check_array_equal($a, $b)
+    {
+        return (
+            is_array($a)
+            && is_array($b)
+            && count($a) == count($b)
+            && array_diff($a, $b) === array_diff($b, $a)
+        );
+    }
+}
+
 if (!function_exists('get_barcode')) {
     function get_barcode()
     {
@@ -779,6 +800,7 @@ if (!function_exists('create_customer')) {
 if (!function_exists('omni_api')) {
     function omni_api($url, $data = [], $type = 'GET')
     {
+
         $curl = curl_init();
         $request = [
             CURLOPT_URL            => $url,
@@ -789,7 +811,7 @@ if (!function_exists('omni_api')) {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST  => $type,
-            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_SANDBOX_TOKEN')]
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . env('OMNI_LIVE_TOKEN')]
         ];
 
         if ($type == 'POST') {
@@ -802,22 +824,30 @@ if (!function_exists('omni_api')) {
         $response = curl_exec($curl);
         $info = curl_getinfo($curl);
         curl_close($curl);
+
         return [$response, $info];
     }
 }
 
 if (!function_exists('get_order_statuses')) {
-    function get_order_statuses()
+    function get_order_statuses($data = 0)
     {
         $pl = [];
-        $statuses = Orderstatuses::where('status', 'published')->get();
-        foreach ($statuses as $status) {
-            $pl[] = [
-                'value' => strtolower($status->name),
-                'text'  => strtoupper($status->name),
-            ];
+        if ($data) {
+            $statuses = Orderstatuses::where('status', 'published')->pluck('name', 'name');
+            return $statuses;
+        } else {
+            $statuses = Orderstatuses::where('status', 'published')->get();
+            foreach ($statuses as $status) {
+                $pl[] = [
+                    'value' => strtolower($status->name),
+                    'text'  => strtoupper($status->name),
+                ];
+            }
+
+            return $pl;
         }
-        return $pl;
+
     }
 }
 
@@ -849,6 +879,17 @@ if (!function_exists('set_product_oos_date')) {
                     'reference'         => InventoryHistory::PROD_OSS
                 ];
                 log_product_history($logParam);
+
+                $subject = "Product Out Of Stock " . $product->sku;
+                $name = $product->sku;
+                $emails = ['bintou@landbapparel.com', 'edgarb@landbapparel.com', 'ebrima.ndow@landbapparel.com', 'ramsha@landbapparel.com', 'alexis.guerrero@landbapparel.com'];
+                Mail::send('emails.oos', ['name' => $name],
+                    function ($mail) use ($emails, $name, $subject) {
+                        //$mail->from(getenv('FROM_EMAIL_ADDRESS'), "L&B Apparel");
+                        $mail->to($emails, $name);
+                        $mail->subject($subject);
+                    });
+
             }
         } else {
             DB::table('ec_products')->where('id', $product->id)->update(['oos_date' => NULL]);
@@ -914,7 +955,7 @@ if (!function_exists('packProdSizes')) {
         $sizes = '';
         try {
             foreach ($category->category_sizes as $cat) {
-                $sizes .= $cat->name . '/';
+                $sizes .= $cat->name . ', ';
             }
         } catch (Exception $error) {
             $sizes = 'No name';
@@ -924,5 +965,223 @@ if (!function_exists('packProdSizes')) {
     }
 }
 
+
+if (!function_exists('filter_product_sku')) {
+    function filter_product_sku($prodId)
+    {
+        $prodSku = Product::where('id', $prodId)->value('sku');
+        if (str_contains($prodSku, '-pack-all')) {
+            $prodSku = str_replace('-pack-all', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 0')) {
+            $prodSku = str_replace(' - 0', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 1')) {
+            $prodSku = str_replace(' - 1', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        } elseif (str_contains($prodSku, ' - 2')) {
+            $prodSku = str_replace(' - 2', '', $prodSku);
+            Product::where('id', $prodId)->update(['sku' => $prodSku]);
+        }
+    }
+}
+
+if (!function_exists('oldToNewStatus')) {
+    function oldToNewStatus($status)
+    {
+        if ($status == 'C') {
+            $status = 'shipping complete';
+        } else if ($status == 'O') {
+            $status = 'processing';
+        } else if ($status == 'F') {
+            $status = 'in store complete';
+        } else if ($status == 'D') {
+            $status = 'declined';
+        } else if ($status == 'I') {
+            $status = 'cancelled';
+        } else if ($status == 'Y') {
+            $status = 'pick up';
+        } else if ($status == 'A') {
+            $status = 'tradeshow';
+        } else if ($status == 'E') {
+            $status = 'exchange';
+        } else if ($status == 'G') {
+            $status = 'awaiting payment';
+        } else if ($status == 'H') {
+            $status = 'net accounts';
+        } else if ($status == 'J') {
+            $status = 'fashiongo complete';
+        } else if ($status == 'K') {
+            $status = 'lashowroom complete';
+        } else if ($status == 'L') {
+            $status = 'online pre-order';
+        } else if ($status == 'Q') {
+            $status = 'paid in full';
+        } else if ($status == 'R') {
+            $status = 'orangeshine complete';
+        } else if ($status == 'S') {
+            $status = 'atlanta pre-order';
+        } else if ($status == 'U') {
+            $status = 'dallas pre-order';
+        } else if ($status == 'V') {
+            $status = 'pita va';
+        } else if ($status == 'W') {
+            $status = 'pita personal';
+        } else if ($status == 'X') {
+            $status = 'store credit';
+        } else if ($status == 'T') {
+            $status = 'send to model';
+        } else if ($status == 'AA') {
+            $status = 'las vegas pre-order';
+        } else if ($status == 'AB') {
+            $status = 'on hold';
+        } else if ($status == 'AC') {
+            $status = 'model purchase';
+        } else if ($status == 'AE') {
+            $status = 'picking complete';
+        } else if ($status == 'AF') {
+            $status = 'dallas kids pre-order';
+        } else if ($status == 'AG') {
+            $status = 'showroom';
+        } else if ($status == 'AH') {
+            $status = 'refund';
+        } else if ($status == 'AD') {
+            $status = 'need tax ID';
+        } else if ($status == 'AI') {
+            $status = 'factory';
+        } else if ($status == 'AJ') {
+            $status = 'ready 2 ship';
+        } else if ($status == 'AM') {
+            $status = 'lashowroom processing';
+        } else if ($status == 'AN') {
+            $status = 'orangeshine processing';
+        } else if ($status == 'AO') {
+            $status = 'pending shipment';
+        } else if ($status == 'AP') {
+            $status = 'Western MKT Pre Order';
+        } else if ($status == 'M') {
+            $status = 'Orangeshine Pre-Order';
+        } else if ($status == 'AQ') {
+            $status = 'LA Showroom Pre-Order';
+        } else if ($status == 'AR') {
+            $status = 'FashionGO Pre-Order';
+        } else if ($status == 'AS') {
+            $status = 'Sample Sent';
+        } else if ($status == 'AT') {
+            $status = 'Pickup & Process';
+        } else if ($status == 'AU') {
+            $status = 'Donation / Gift';
+        } else if ($status == 'AV') {
+            $status = 'Delinquent';
+        } else if ($status == 'AW') {
+            $status = 'Ready to Charge';
+        } else if ($status == 'AY') {
+            $status = 'R2SO';
+        } else {
+            $status = 'Failed Preauth';
+        }
+        return $status;
+    }
+}
+
+if (!function_exists('newToOldStatus')) {
+    function newToOldStatus($status)
+    {
+        if ($status == 'Shipping Complete') {
+
+            $status = 'C';
+        } else if ($status == 'Processing') {
+            $status = 'O';
+        } else if ($status == 'In Store Complete') {
+            $status = 'F';
+        } else if ($status == 'Declined') {
+            $status = 'D';
+        } else if ($status == 'cancelled') {
+            $status = 'I';
+        } else if ($status == 'Pick up') {
+            $status = 'Y';
+        } else if ($status == 'tradeshow') {
+            $status = 'A';
+        } else if ($status == 'exchange') {
+            $status = 'E';
+        } else if ($status == 'Awaiting Payment') {
+            $status = 'G';
+        } else if ($status == 'net accounts') {
+            $status = 'H';
+        } else if ($status == 'fashiongo complete') {
+            $status = 'J';
+        } else if ($status == 'lashowroom complete') {
+            $status = 'K';
+        } else if ($status == 'online pre-order') {
+            $status = 'L';
+        } else if ($status == 'paid in full') {
+            $status = 'Q';
+        } else if ($status == 'orangeshine complete') {
+            $status = 'R';
+        } else if ($status == 'atlanta pre-order') {
+            $status = 'S';
+        } else if ($status == 'dallas pre-order') {
+            $status = 'U';
+        } else if ($status == 'pita va') {
+            $status = 'V';
+        } else if ($status == 'pita personal') {
+            $status = 'W';
+        } else if ($status == 'store credit') {
+            $status = 'X';
+        } else if ($status == 'send to model') {
+            $status = 'T';
+        } else if ($status == 'las vegas pre-order') {
+            $status = 'AA';
+        } else if ($status == 'on hold') {
+            $status = 'AB';
+        } else if ($status == 'model purchase') {
+            $status = 'AC';
+        } else if ($status == 'Picking Complete') {
+            $status = 'AE';
+        } else if ($status == 'dallas kids pre-order') {
+            $status = 'AF';
+        } else if ($status == 'showroom') {
+            $status = 'AG';
+        } else if ($status == 'refund') {
+            $status = 'AH';
+        } else if ($status == 'need tax ID') {
+            $status = 'AD';
+        } else if ($status == 'factory') {
+            $status = 'AI';
+        } else if ($status == 'ready 2 ship') {
+            $status = 'AJ';
+        } else if ($status == 'lashowroom processing') {
+            $status = 'AM';
+        } else if ($status == 'orangeshine processing') {
+            $status = 'AN';
+        } else if ($status == 'Pending Shipment') {
+            $status = 'AO';
+        } else if ($status == 'Western MKT Pre Order') {
+            $status = 'AP';
+        } else if ($status == 'Orangeshine Pre-Order') {
+            $status = 'M';
+        } else if ($status == 'LA Showroom Pre-Order') {
+            $status = 'AQ';
+        } else if ($status == 'FashionGO Pre-Order') {
+            $status = 'AR';
+        } else if ($status == 'Sample Sent') {
+            $status = 'AS';
+        } else if ($status == 'Pick up & Process') {
+            $status = 'AT';
+        } else if ($status == 'Donation / Gift') {
+            $status = 'AU';
+        } else if ($status == 'Delinquent') {
+            $status = 'AV';
+        } else if ($status == 'Ready to Charge') {
+            $status = 'AW';
+        } else if ($status == 'R2SO') {
+            $status = 'AY';
+        } else {
+
+            $status = 'Failed Preauth';
+        }
+        return $status;
+    }
+}
 
 //Utils

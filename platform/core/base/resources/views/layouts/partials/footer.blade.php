@@ -26,7 +26,7 @@
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
                     <h4 class="modal-title text-center w-100 thread-pop-head">Share Quantity <span
-                            class="variation-name"></span></h4>
+                                class="variation-name"></span></h4>
                     <div></div>
                 </div>
             </div>
@@ -55,16 +55,16 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="merge_customer_modal" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <div class="d-flex w-100">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
-                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">Merge Customer <span
-                            class="variation-name"></span></h4>
+                    <h4 class="modal-title text-center w-100 thread-pop-head color-white">
+                        Merge Customer <span class="variation-name"></span>
+                    </h4>
                     <div></div>
                 </div>
             </div>
@@ -74,14 +74,11 @@
                         <form method="post" action="{{route('customers.merge-customer')}}">
                             @csrf
                             <div class="form-group">
-                                <label for="name" class="control-label" aria-required="true">Customer List
-                                </label>
-                                <input type="hidden" value="" name="user_id_one" id="user_id_one">
+                                <label for="name" class="control-label" aria-required="true">Customer List</label>
+                                <input type="hidden" name="user_id_one" id="user_id_one">
                                 <div class="d-flex">
-                                    <select name="user_id_two" id="merge_customer_list"
-                                            class="form-control is-valid select-search-full">
-                                        <option disabled> Select Customer</option>
-                                    </select>
+                                    <select name="user_id_two" id="merge_customer_list" class="form-control select2"
+                                            style="width: 400px"></select>
                                     <button class="btn btn-primary btn-apply ml-2" type="submit">Merge</button>
                                 </div>
                             </div>
@@ -97,18 +94,12 @@
                                 <th>Operation</th>
                             </tr>
                             </thead>
-                            <tbody class="merge_account_body">
-
-                            </tbody>
-
+                            <tbody class="merge_account_body"></tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 
@@ -117,35 +108,55 @@
 
     var address = '';
     var customer = '';
-
+    var extraDetails = '';
     $(document).ready(function () {
+
+        $('#merge_customer_list').select2({
+            ajax: {
+                url: "{{ route('customers.get-list-customers-for-select') }}",
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                    };
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function (obj) {
+                            obj.text = obj.text || obj.name;
+                            return obj;
+                        })
+                    };
+                },
+            }
+        });
 
         $(document).on('click', '.merge-customer', function () {
             $('.merge_account_body').empty();
+            //$('select#merge_customer_list').empty();
             var customer_id = $(this).data('id');
             $('#user_id_one').val(customer_id);
             $.ajax({
                 url: "{{ route('customers.get-list-customers-for-select','') }}" + "/" + customer_id,
                 type: 'get',
                 success: function (data) {
-                    $.each(data.data.customer, function (customerID, customerName) {
-                        console.log('asd', customerID, customerName);
-                        html = `<option value="${customerName.id}">
-                            ${customerName.name} - (${customerName.email})
-                        </option>`
-                        $('select#merge_customer_list').append(html);
+                    let html = '';
+                    /*$.each(data.data.customer, function (customerID, customerName) {
+                        html += `<option value="${customerName.id}"> ${customerName.name} - (${customerName.email}) </option>`;
                     });
+                    $('select#merge_customer_list').append(html);*/
 
+                    html = '';
                     $.each(data.data.merge, function (mergeID, mergeAccount) {
-
-                        html = ` <tr>
+                        html += ` <tr>
                                     <td>${mergeAccount.id}</td>
                                     <td>${mergeAccount.name}</td>
                                     <td>${mergeAccount.email}</td>
                                     <td><a href="{{route('customers.merge-customer-delete','')}}/${mergeAccount.id}" <i class="fa fa-trash"></i></td>
-</tr> `
-                        $('.merge_account_body').append(html);
+                                 </tr> `;
                     });
+                    $('.merge_account_body').append(html);
                 },
                 error: function (request, status, error) {
                     toastr['warning']('No Address', 'Reading Error');
@@ -153,6 +164,7 @@
             });
             $('#merge_customer_modal').modal('toggle');
         });
+
 
         payment_method();
 
@@ -204,7 +216,7 @@
     var tokenizeButton = document.querySelector('#tokenizebutton');
 
     // Init FattMerchant API
-    var fattJs = new FattJs('LandB-Apparel-c03e1af6c561', {
+    var fattJs = new FattJs('Lucky-and-BlessedLLC-b9b76900aed8', {
         number: {
             id: 'fattjs-number',
             placeholder: '0000 0000 0000 0000',
@@ -275,11 +287,11 @@
                                 id: address.id,
                                 text: address.address
                             };
-                            console.log(address);
-                            let html = `<option value="${address.id}"> ${address.address} </option>`;
+                            let html = `<option value="${address.id}"> ${address.address}, ${address.city}, ${address.state}, ${address.country} </option>`;
                             $('select#billing_address').append(html);
                         }
                     });
+
                     $('#billing_address').selectpicker("refresh");
 
                     getCustomer();
@@ -295,6 +307,7 @@
     }
 
     function getbillingadress() {
+        //need fixing
         console.log($("#billing_address option:selected").val(), "===");
         var billing = $("#billing_address option:selected").text();
         tokenizeButton.disabled = billing === 'Select Address';
@@ -306,7 +319,7 @@
                 address = data;
             },
             error: function (request, status, error) {
-                toastr['warning']('No Address', 'Reading Error');
+                //toastr['warning']('No Address', 'Reading Error');
             }
         });
     }
@@ -316,8 +329,7 @@
     });
 
     function getCustomer() {
-        console.log($('#customer_id').val());
-
+        console.log('===', $('#customer_id').val());
 
         $.ajax({
             url: "{{ url('/admin/customers/get-customer') }}" + "/" + $('#customer_id').val(),
@@ -381,6 +393,10 @@
     });
 
     $('button#tokenizebutton').on('click', () => {
+        getCustomer();
+        setTimeout(function () {
+            getbillingadress();
+        }, 500);
 
         var month = $('.month').val();
         var year = $('.year').val();
@@ -394,39 +410,43 @@
         var form = document.querySelector('form');
         console.log('customer data', customer.data)
         console.log('customer address', address)
+        setTimeout(function () {
+             extraDetails = {
+                firstname: customer.data.detail.first_name,
+                lastname: customer.data.detail.last_name,
+                email: customer.data.email,
+                method: "card",
+                month: month,
+                year: year,
+                phone: customer.data.detail.phone,
+                address_1: address.data?.address,
+                address_city: address.data?.city,
+                address_state: address.data?.state,
+                address_zip: address.data?.zip_code,
+                address_country: address.data?.country,
+                url: "https://omni.fattmerchant.com/#/bill/",
+                validate: false,
+            };
+            //console.log(extraDetails)
+            // call tokenize api
+        }, 1500);
 
-        var extraDetails = {
-            firstname: customer.data.detail.first_name,
-            lastname: customer.data.detail.last_name,
-            email: customer.data.email,
-            method: "card",
-            month: month,
-            year: year,
-            phone: customer.data.detail.phone,
-            address_1: address.data?.address,
-            address_city: address.data?.city,
-            address_state: address.data?.state,
-            address_zip: address.data?.zip_code,
-            address_country: address.data?.country,
-            url: "https://omni.fattmerchant.com/#/bill/",
-            validate: false,
-        };
-        //console.log(extraDetails)
-        // call tokenize api
-        fattJs.tokenize(extraDetails).then((result) => {
-            console.log(result);
-            if (result) {
-                successElement.querySelector('.token').textContent = result.id;
-                successElement.classList.add('visible');
-                functionAddCard(result, customer.data.id);
-            }
-            loaderElement.classList.remove('visible');
-        }).catch(err => {
-            console.log(err)
-            errorElement.textContent = err.message;
-            errorElement.classList.add('visible');
-            loaderElement.classList.remove('visible');
-        });
+        setTimeout(function () {
+            fattJs.tokenize(extraDetails).then((result) => {
+                console.log(result);
+                if (result) {
+                    successElement.querySelector('.token').textContent = result.id;
+                    successElement.classList.add('visible');
+                    functionAddCard(result, customer.data.id);
+                }
+                loaderElement.classList.remove('visible');
+            }).catch(err => {
+                console.log(err)
+                errorElement.textContent = err.message;
+                errorElement.classList.add('visible');
+                loaderElement.classList.remove('visible');
+            });
+        }, 2000)
     });
 
     function functionAddCard(result, customer_id) {
@@ -707,5 +727,34 @@
 <script>
     $(document).ready(function () {
         $('.dt-length-style > select').append(new Option("100", "100"));
+
+
+        $("form").submit(function () {
+            $(this).find('input:submit').val('Please wait ...').attr('disabled', 'disabled');
+        });
+        $(document).ajaxComplete(function () {
+            $(".btn").removeAttr("disabled");
+        });
+        var mybutton_counter = 0;
+        // $(".btn").click(function(e) {
+        //     if (mybutton_counter > 0){
+        //         $(this).prop('disabled', 'disabled');
+        //         return false;
+        //     }
+        //     mybutton_counter++;
+        // });
+        // setInterval(function() {
+        //     console.log(mybutton_counter);
+        //     if(mybutton_counter > 0) {
+        //         mybutton_counter--;
+        //     }
+        //     $(".btn").removeAttr("disabled");
+        // }, 6000);
+
+
+
+
+
+
     });
 </script>

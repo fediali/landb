@@ -4,9 +4,11 @@ namespace Botble\Ecommerce\Models;
 
 use Botble\Base\Models\BaseModel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends BaseModel
 {
+    use SoftDeletes;
 
     /**
      * @var string
@@ -31,6 +33,7 @@ class Discount extends BaseModel
         'min_order_price',
         'discount_on',
         'product_quantity',
+        'status',
     ];
 
     /**
@@ -81,7 +84,16 @@ class Discount extends BaseModel
      */
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'ec_discount_products', 'discount_id', 'product_id');
+        //return $this->hasMany(DiscountProduct::class);
+       return $this->belongsToMany(Product::class, 'ec_discount_products', 'discount_id', 'product_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(ProductCategory::class, 'ec_discount_categories', 'discount_id', 'product_category_id');
     }
 
     protected static function boot()
