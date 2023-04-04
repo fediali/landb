@@ -19,8 +19,8 @@ class TextmessagesRequest extends Request
         return [
             'name'   => 'required',
             'text'   => 'required',
-            'schedule_date'   => 'required',
-            'status' => Rule::in(BaseStatusEnum::values()),
+            //'schedule_date'   => 'required',
+            //'status' => Rule::in(BaseStatusEnum::values()),
         ];
     }
 }

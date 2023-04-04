@@ -18,12 +18,22 @@ class TextmessagesTable extends TableAbstract
     /**
      * @var bool
      */
-    protected $hasActions = true;
+    protected $hasActions = false;
 
     /**
      * @var bool
      */
-    protected $hasFilter = true;
+    protected $hasFilter = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasCheckbox = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasOperations = false;
 
     /**
      * TextmessagesTable constructor.
@@ -50,12 +60,12 @@ class TextmessagesTable extends TableAbstract
     {
         $data = $this->table
             ->eloquent($this->query())
-            ->editColumn('name', function ($item) {
+            /*->editColumn('name', function ($item) {
                 if (!Auth::user()->hasPermission('textmessages.edit')) {
                     return $item->name;
                 }
                 return Html::link(route('textmessages.edit', $item->id), $item->name);
-            })
+            })*/
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
             })
@@ -63,9 +73,9 @@ class TextmessagesTable extends TableAbstract
                 return BaseHelper::formatDate($item->created_at);
             })
             ->editColumn('status', function ($item) {
-                return $item->status;
+                return ucwords($item->status);
             })
-            ->addColumn('resend_sms', function ($item) {
+            /*->addColumn('resend_sms', function ($item) {
                 $html = '-';
                 if ($item->status == BaseStatusEnum::PUBLISHED) {
                     $html = '<a href="javascript:void(0)" onclick="confirm_start(' . '\'' . route('chating.smsCampaign', $item->id) . '\'' . ')" class="btn btn-icon btn-sm btn-info">Resend SMS</a><script>function confirm_start(url){
@@ -97,7 +107,7 @@ class TextmessagesTable extends TableAbstract
                       }</script>';
                 }
                 return $html;
-            });
+            })*/;
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
@@ -116,6 +126,7 @@ class TextmessagesTable extends TableAbstract
         $select = [
             'textmessages.id',
             'textmessages.name',
+            'textmessages.text',
             'textmessages.created_at',
             'textmessages.status',
         ];
@@ -141,6 +152,11 @@ class TextmessagesTable extends TableAbstract
                 'title' => trans('core/base::tables.name'),
                 'class' => 'text-left',
             ],
+            'text'       => [
+                'name'  => 'textmessages.text',
+                'title' => 'Text',
+                'class' => 'text-left',
+            ],
             'created_at' => [
                 'name'  => 'textmessages.created_at',
                 'title' => trans('core/base::tables.created_at'),
@@ -151,12 +167,12 @@ class TextmessagesTable extends TableAbstract
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
             ],
-            'resend_sms'    => [
+            /*'resend_sms'    => [
                 'name'    => 'resend_sms',
                 'title'   => 'Resend SMS',
                 'width'   => '100px',
                 //'visible' => (Auth::user()->hasPermission('chating.smsCampaign')) ? true : false,
-            ]
+            ]*/
         ];
     }
 
@@ -175,7 +191,8 @@ class TextmessagesTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('textmessages.deletes'), 'textmessages.destroy', parent::bulkActions());
+        return parent::bulkActions();
+        //return $this->addDeleteAction(route('textmessages.deletes'), 'textmessages.destroy', parent::bulkActions());
     }
 
     /**
@@ -184,7 +201,7 @@ class TextmessagesTable extends TableAbstract
     public function getBulkChanges(): array
     {
         return [
-            'textmessages.name'       => [
+            /*'textmessages.name'       => [
                 'title'    => trans('core/base::tables.name'),
                 'type'     => 'text',
                 'validate' => 'required|max:120',
@@ -198,7 +215,7 @@ class TextmessagesTable extends TableAbstract
             'textmessages.created_at' => [
                 'title' => trans('core/base::tables.created_at'),
                 'type'  => 'date',
-            ],
+            ],*/
         ];
     }
 
@@ -210,3 +227,7 @@ class TextmessagesTable extends TableAbstract
         return $this->getBulkChanges();
     }
 }
+
+
+
+

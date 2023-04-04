@@ -52,10 +52,13 @@ class UpdateProdPreOrderQty extends Command
                                 $q->where('hw_orders.status', 'AR');
                                 $q->orWhere('hw_orders.status', 'AZ');
                                 $q->orWhere('hw_orders.status', 'B');
+                                $q->orWhere('hw_orders.status', 'U');
+                                $q->orWhere('hw_orders.status', 'L');
                                 $q->orWhere('hw_orders.status', 'BB');
                                 $q->orWhere('hw_orders.status', 'BC');
                                 $q->orWhere('hw_orders.status', 'AQ');
                                 $q->orWhere('hw_orders.status', 'BA');
+
 
                             })
                             ->where(function ($query) use ($row) {
