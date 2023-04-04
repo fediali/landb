@@ -1,0 +1,166 @@
+[09-09-2021 22:06:46] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:06:48] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:06:48] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:06:50] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:06:50] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-6ENZ-X4UG-837N-XURF/send
+[09-09-2021 22:06:54] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 400
+[09-09-2021 22:06:54] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 400 when accessing https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-6ENZ-X4UG-837N-XURF/send. {"name":"VALIDATION_ERROR","message":"Invalid request - see details.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"640c787d6caca","details":[{"location":"merchantEmail","value":"accountsreceivable@landbapparel.com"}]}
+[09-09-2021 22:09:55] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:09:56] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:09:56] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:09:59] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:09:59] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-HG3K-FPCN-W4PK-B7E4/send
+[09-09-2021 22:10:00] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 400
+[09-09-2021 22:10:00] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 400 when accessing https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-HG3K-FPCN-W4PK-B7E4/send. {"name":"VALIDATION_ERROR","message":"Invalid request - see details.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"4180cc0381826","details":[{"location":"merchantEmail","value":"accountsreceivable@landbapparel.com"}]}
+[09-09-2021 22:12:46] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:12:47] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:12:47] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:12:49] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:12:49] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E/send
+[09-09-2021 22:12:51] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:12:51] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E
+[09-09-2021 22:12:52] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:13:33] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:13:35] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:13:35] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E
+[09-09-2021 22:13:36] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:13:36] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E/remind
+[09-09-2021 22:13:38] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:17:53] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:17:55] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:17:55] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E
+[09-09-2021 22:17:56] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:17:56] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E/remind
+[09-09-2021 22:17:58] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:21:19] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:21:21] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:21:21] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E
+[09-09-2021 22:21:22] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:21:22] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E/remind
+[09-09-2021 22:21:24] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:25:06] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:25:08] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:25:08] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E
+[09-09-2021 22:25:09] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 404
+[09-09-2021 22:25:09] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 404 when accessing https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-UAMD-VFW6-8B8W-CQ4E. {"name":"RESOURCE_NOT_FOUND_ERROR","message":"invoice with id INV2-UAMD-VFW6-8B8W-CQ4E not found in the system.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"845424b0822b8","details":[{"error_code":"6"}]}
+[09-09-2021 22:25:38] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:25:39] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:25:39] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:25:41] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:25:41] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-RZ68-7Y35-3DYT-Z22J/send
+[09-09-2021 22:25:42] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 400
+[09-09-2021 22:25:42] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 400 when accessing https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-RZ68-7Y35-3DYT-Z22J/send. {"name":"VALIDATION_ERROR","message":"Invalid request - see details.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"c4c68d625cbda","details":[{"location":"merchantEmail","value":"accountsreceivable@landbapparel.com"}]}
+[09-09-2021 22:27:30] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/oauth2/token
+[09-09-2021 22:27:34] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:27:34] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:27:35] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:27:35] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-LWZX-B42F-TXCF-XYEB/send
+[09-09-2021 22:27:37] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 400
+[09-09-2021 22:27:37] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 400 when accessing https://api.sandbox.paypal.com/v1/invoicing/invoices/INV2-LWZX-B42F-TXCF-XYEB/send. {"name":"VALIDATION_ERROR","message":"Invalid request - see details.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"8c33df89b2b08","details":[{"location":"merchantEmail","value":"accountsreceivable@landbapparel.com"}]}
+[09-09-2021 22:29:35] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 22:29:37] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:29:37] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:29:38] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:29:38] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-3WP6-L7E5-9HXU-KNQZ/send
+[09-09-2021 22:29:40] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:29:40] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-3WP6-L7E5-9HXU-KNQZ
+[09-09-2021 22:29:42] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:30:45] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 22:30:46] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:30:46] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-3WP6-L7E5-9HXU-KNQZ
+[09-09-2021 22:30:51] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:30:51] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-3WP6-L7E5-9HXU-KNQZ/remind
+[09-09-2021 22:30:52] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:57:17] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 22:57:19] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:57:19] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices
+[09-09-2021 22:57:20] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 22:57:20] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W/send
+[09-09-2021 22:57:22] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 22:57:22] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 22:57:24] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:57:49] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 22:57:51] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:57:51] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 22:57:52] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 22:57:52] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W/remind
+[09-09-2021 22:57:54] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:05:00] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:05:01] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:05:01] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 23:05:03] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:05:03] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:05:04] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:05:04] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 23:05:06] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:05:06] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W/remind
+[09-09-2021 23:05:07] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:06:18] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:06:19] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:06:19] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 23:06:21] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:06:21] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:06:22] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:06:22] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W
+[09-09-2021 23:06:23] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:06:23] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-JCTC-W59H-2SD5-3L6W/remind
+[09-09-2021 23:06:25] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:14:53] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:14:55] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:14:55] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-XL5E-8DH3-YUMP-6YB5
+[09-09-2021 23:14:56] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:22:03] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:22:06] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:22:06] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-XL5E-8DH3-YUMP-6YB5
+[09-09-2021 23:22:07] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:22:07] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-XL5E-8DH3-YUMP-6YB5/remind
+[09-09-2021 23:22:09] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 405
+[09-09-2021 23:22:09] PayPal\Core\PayPalHttpConnection : ERROR: Got Http response code 405 when accessing https://api.paypal.com/v1/invoicing/invoices/INV2-XL5E-8DH3-YUMP-6YB5/remind. {"name":"BUSINESS_ERROR","message":"Cannot send reminder for a paid entity.","information_link":"https://developer.paypal.com/docs/api/invoicing/#errors","debug_id":"7590fe54b748b","details":[{"error_code":"57"}]}
+[09-09-2021 23:29:42] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:29:43] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:29:43] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices
+[09-09-2021 23:29:45] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 23:29:45] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-EN8W-K4NL-MGS5-3GY5/send
+[09-09-2021 23:29:47] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:29:47] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-EN8W-K4NL-MGS5-3GY5
+[09-09-2021 23:29:48] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:41:43] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:41:45] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:41:45] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices
+[09-09-2021 23:41:46] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 23:41:46] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-6W7H-B6C5-XLQ2-RUH3/send
+[09-09-2021 23:41:48] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:41:48] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-6W7H-B6C5-XLQ2-RUH3
+[09-09-2021 23:41:50] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:46:03] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:46:05] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:46:05] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices
+[09-09-2021 23:46:06] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 201
+[09-09-2021 23:46:06] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-FMJ3-QMMK-TDQV-4GMJ/send
+[09-09-2021 23:46:08] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:46:08] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-FMJ3-QMMK-TDQV-4GMJ
+[09-09-2021 23:46:12] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:48:44] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:48:45] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:48:45] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-6W7H-B6C5-XLQ2-RUH3
+[09-09-2021 23:48:47] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:48:47] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:48:52] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:48:52] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-6W7H-B6C5-XLQ2-RUH3
+[09-09-2021 23:48:54] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:48:54] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-6W7H-B6C5-XLQ2-RUH3/remind
+[09-09-2021 23:48:55] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:49:10] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:49:12] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:49:12] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-FMJ3-QMMK-TDQV-4GMJ
+[09-09-2021 23:49:13] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:49:13] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:49:15] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:49:15] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-FMJ3-QMMK-TDQV-4GMJ
+[09-09-2021 23:49:16] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:49:16] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/invoicing/invoices/INV2-FMJ3-QMMK-TDQV-4GMJ/remind
+[09-09-2021 23:49:18] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 202
+[09-09-2021 23:49:39] PayPal\Core\PayPalHttpConnection : INFO: POST https://api.paypal.com/v1/oauth2/token
+[09-09-2021 23:49:40] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
+[09-09-2021 23:49:40] PayPal\Core\PayPalHttpConnection : INFO: GET https://api.paypal.com/v1/invoicing/invoices/INV2-XL5E-8DH3-YUMP-6YB5
+[09-09-2021 23:49:41] PayPal\Core\PayPalHttpConnection : INFO: Response Status 	: 200
