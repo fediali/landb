@@ -26,3 +26,8 @@ Route::get('send-manifest-prod-shipped-email/{id}', function($id) {
     $job = new \App\Jobs\SendManifestProdShippedEmail($id);
     dispatch_now($job);
 });
+
+Route::get('authorize', 'App\Http\Controllers\OAuthController@redirect');
+Route::get('get-faire-auth', 'App\Http\Controllers\OAuthController@getToken');
+Route::get('revoke-access-token', 'App\Http\Controllers\OAuthController@revokeToken');
+Route::get('get-all-order', 'App\Http\Controllers\OAuthController@getOrders');
