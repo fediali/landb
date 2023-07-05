@@ -1096,7 +1096,7 @@ if (!function_exists('newToOldStatus')) {
             $status = 'F';
         } else if ($status == 'Declined') {
             $status = 'D';
-        } else if ($status == 'cancelled') {
+        } else if ($status == 'cancelled' || $status == 'CANCELED') {
             $status = 'I';
         } else if ($status == 'Pick up') {
             $status = 'Y';
