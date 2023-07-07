@@ -16,7 +16,7 @@ class importOrderFromFaire extends Command
      *
      * @var string
      */
-    protected $signature = 'command:import:faire-order';
+    protected $signature = 'import:faire-order';
 
     /**
      * The console command description.
