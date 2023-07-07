@@ -73,8 +73,9 @@ class importOrderFromFaire extends Command
                 ],
                 'verify' => false,
             ]);
-            dd($result);
+
             $result = $result->getBody()->getContents();
+            dd($result);
             $orders = json_decode($result);
 //            foreach ($orders->orders as $k => $order) {
 //                $this->pushtoCsCART($order);
