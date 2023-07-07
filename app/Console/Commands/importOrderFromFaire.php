@@ -42,8 +42,7 @@ class importOrderFromFaire extends Command
      */
     public function handle()
     {
-        $this->getOrders();
-        echo 'success';
+       return $this->getOrders();
     }
 
     public function getOrders()
