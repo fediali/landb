@@ -89,8 +89,8 @@ class importOrderFromFaire extends Command
         try {
             $connection = 'mysql2';
             if (isset($order->customer)) {
-                dd($order);
                 $checkOrder = DB::connection($connection)->table('hw_orders')->where('copy_order_id', $order->id)->first();
+                dd($checkOrder);
                 if (!$checkOrder) {
                     $email = strtolower($order->customer->first_name).strtolower($order->customer->last_name).'@faire.com';
                     $customer = DB::connection($connection)->table('hw_users')->where('email', $email)->first();
