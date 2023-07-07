@@ -73,14 +73,11 @@ class importOrderFromFaire extends Command
                 ],
                 'verify' => false,
             ]);
-
             $result = $result->getBody()->getContents();
-
             $orders = json_decode($result);
-            dd($result);
-//            foreach ($orders->orders as $k => $order) {
-//                $this->pushtoCsCART($order);
-//            }
+            foreach ($orders->orders as $k => $order) {
+                $this->pushtoCsCART($order);
+            }
             return $orders;
         } catch (\Exception $e) {
             // Handle the exception, log or return an error response
@@ -92,6 +89,7 @@ class importOrderFromFaire extends Command
         try {
             $connection = 'mysql2';
             if (isset($order->customer)) {
+                dd($order);
                 $checkOrder = DB::connection($connection)->table('hw_orders')->where('copy_order_id', $order->id)->first();
                 if (!$checkOrder) {
                     $email = strtolower($order->customer->first_name).strtolower($order->customer->last_name).'@faire.com';
