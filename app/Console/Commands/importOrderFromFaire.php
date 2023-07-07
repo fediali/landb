@@ -1,118 +1,52 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use App\Models\CustomerCard;
 use Botble\Base\Http\Responses\BaseHttpResponse;
-use Botble\Ecommerce\Models\Order;
-use Botble\Ecommerce\Models\OrderAddress;
-use Botble\Ecommerce\Models\Product;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Console\Command;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
-use Exception;
 
-class OAuthController extends BaseController
+class importOrderFromFaire extends Command
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:import:faire-order';
 
-    public function redirect(Request $request, BaseHttpResponse $response)
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Importing order from faire every hour';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        $checkAuth = DB::table('faire_oauth_token')->where('type', 'code')->get();
-        if($checkAuth){
-            DB::table('faire_oauth_token')->where('type', 'code')->delete();
-        }
-        $data =[
-            'type' => 'code',
-            'authorization_token' => $request->authorization_code
-        ];
-     $auth = DB::table('faire_oauth_token')->insert($data);
-      return $response
-            ->setData([
-                'auth' => $auth
-            ]);
+        parent::__construct();
     }
 
-    public function getToken(Request $request, BaseHttpResponse $response)
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
     {
-        $checkAuth = DB::table('faire_oauth_token')->where('type', 'BEARER')->get();
-        if($checkAuth){
-            $revoke = $this->revokeToken();
-        }
-        $token = DB::table('faire_oauth_token')->where(
-            'type', 'code'
-        )->first();
-        $http = new Client();
-
-        $data = $http->request('POST', 'https://www.faire.com/api/external-api-oauth2/token', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ],
-            'json' => [
-                'application_token' => getenv('CLIENT_ID'),
-                'application_secret' =>  getenv('CLIENT_SECRET'),
-                'redirect_url' => 'https://landb-laravel.test/api/authorize',
-                'scope' => ['READ_ORDERS'],
-                'grant_type' => 'AUTHORIZATION_CODE',
-                'authorization_code' => $token->authorization_token,
-            ],
-            'verify' => false,
-        ]);
-
-        $result = $data->getBody()->getContents();
-
-        try {
-            $data =[
-                'type' => 'BEARER',
-                'authorization_token' => json_encode($result)
-            ];
-            $auth = DB::table('faire_oauth_token')->insert($data);
-        }
-        catch (Exception $e){
-            return $response
-                ->setData([
-                    'result' => $result,
-                    'error'=> $e
-                ]);
-        }
-        return $response
-            ->setData([
-                'result' => json_decode($result)
-            ]);
+        $this->getOrders();
+        echo 'success';
     }
 
-    public function revokeToken()
-    {
-        $token = DB::table('faire_oauth_token')->where('type', 'BEARER')->first();
-        if ($token) {
-            $access_token = json_decode($token->authorization_token, true);
-            $access = json_decode($access_token);
-            $http = new Client();
-            $result = $http->request('POST', 'https://www.faire.com/api/external-api-oauth2/revoke', [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                ],
-                'json'    => [
-                    'application_token'   => getenv('CLIENT_ID'),
-                    'application_secret'  => getenv('CLIENT_SECRET'),
-                    'access_token_o_auth' => $access->access_token,
-                ],
-                'verify'  => false,
-            ]);
-            if ($result) {
-                DB::table('faire_oauth_token')->where('type', 'BEARER')->delete();
-            }
-            return response()->json(['message' => 'Token revoked successfully']);
-        }
-        return response()->json(['message' => 'Token not found']);
-    }
-
-    public function getOrders(Request $request,BaseHttpResponse $response)
+    public function getOrders()
     {
         $credentials = base64_encode(getenv('CLIENT_ID') . ':' . getenv('CLIENT_SECRET'));
         $token = DB::table('faire_oauth_token')->where('type', 'BEARER')->first();
@@ -126,15 +60,10 @@ class OAuthController extends BaseController
                 'application_secret' => getenv('CLIENT_SECRET'),
                 'access_token_o_auth' => $access->access_token,
             ];
-            if ($request->has('page')) {
-                $queryParams['page'] = 1;
-            }
-            if ($request->has('limit')) {
-                $queryParams['limit'] = '50';
-            }
+            $queryParams['page'] = 1;
+            $queryParams['limit'] = '50';
             $currentTimestamp = Carbon::today()->toIso8601String();
             $queryParams['created_at_min'] = $currentTimestamp;
-//            dd($queryParams);
             $url .= '?' . http_build_query($queryParams);
             $result = $http->request('GET', $url, [
                 'headers' => [
@@ -147,24 +76,19 @@ class OAuthController extends BaseController
             $result = $result->getBody()->getContents();
 
             $orders = json_decode($result);
-//            foreach ($orders->orders as $k => $order) {
-//                $this->pushtoCsCART($order);
-//            }
-            return $response->setData([
-                'result' => $orders,
-            ]);
+            foreach ($orders->orders as $k => $order) {
+                $this->pushtoCsCART($order);
+            }
+            return $orders;
         } catch (\Exception $e) {
             // Handle the exception, log or return an error response
-            return $response->setData([
-                'error' => $e,
-            ]);
+            return $e;
         }
     }
-
     public function pushtoCsCART($order)
     {
         try {
-            $connection = 'mysql3';
+            $connection = 'mysql2';
             if (isset($order->customer)) {
                 $checkOrder = DB::connection($connection)->table('hw_orders')->where('copy_order_id', $order->id)->first();
                 if (!$checkOrder) {
@@ -235,7 +159,7 @@ class OAuthController extends BaseController
                             if($productData && $checkProduct->amount){
                                 $deductedAmount = $checkProduct->amount - $orderProduct->quantity;
                                 // Update the amount column in the database
-                                DB::connection($connection)
+                                $result = DB::connection($connection)
                                     ->table('hw_products')
                                     ->where('product_code', $orderProduct->sku)
                                     ->update(['amount' => $deductedAmount]);
@@ -244,10 +168,10 @@ class OAuthController extends BaseController
                     }
                 }
             }
+            return 1;
         }
-        catch (Exception $e){
-
+        catch (\Exception $e) {
+            return $e;
         }
-
     }
 }

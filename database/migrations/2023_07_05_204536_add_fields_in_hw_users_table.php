@@ -13,7 +13,7 @@ class AddFieldsInHwUsersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql3')->table('hw_users', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('hw_users', function (Blueprint $table) {
             $table->string('copy_customer_from', 255)->nullable();
             $table->string('copy_customer_id', 255)->nullable();
         });
@@ -26,7 +26,7 @@ class AddFieldsInHwUsersTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql3')->table('hw_users', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('hw_users', function (Blueprint $table) {
             $table->dropColumn('copy_customer_from');
             $table->dropColumn('copy_customer_id');
         });

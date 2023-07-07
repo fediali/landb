@@ -13,7 +13,7 @@ class AddFieldsInEcOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql3')->table('hw_orders', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('hw_orders', function (Blueprint $table) {
             $table->string('copy_order_from', 255)->nullable();
             $table->string('copy_order_id', 255)->nullable();
         });
@@ -26,7 +26,7 @@ class AddFieldsInEcOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql3')->table('hw_orders', function (Blueprint $table) {
+        Schema::connection('mysql2')->table('hw_orders', function (Blueprint $table) {
             $table->dropColumn('copy_order_from');
             $table->dropColumn('copy_order_id');
         });
