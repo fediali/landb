@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class importOrderFromFaire extends Command
 {
@@ -150,7 +151,7 @@ class importOrderFromFaire extends Command
                                 'item_id'      => $item_id,
                                 'order_id'     => $orderId,
                                 'amount'       => $orderProduct->quantity,
-                                'price'        => $orderProduct->price->amount_minor,
+                                'price'        => $orderProduct->price->amount_minor / 100,
                                 'product_id'   => $checkProduct->product_id,
                                 'product_code' => $orderProduct->sku
                             ];
@@ -170,6 +171,7 @@ class importOrderFromFaire extends Command
             return 1;
         }
         catch (\Exception $e) {
+            Log::info($e);
             return $e;
         }
     }
