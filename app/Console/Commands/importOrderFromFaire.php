@@ -47,7 +47,7 @@ class importOrderFromFaire extends Command
 
     public function getOrders()
     {
-        dd('s');
+
         $credentials = base64_encode(getenv('CLIENT_ID') . ':' . getenv('CLIENT_SECRET'));
         $token = DB::table('faire_oauth_token')->where('type', 'BEARER')->first();
         try {
@@ -76,9 +76,9 @@ class importOrderFromFaire extends Command
             $result = $result->getBody()->getContents();
 
             $orders = json_decode($result);
-            foreach ($orders->orders as $k => $order) {
-                $this->pushtoCsCART($order);
-            }
+//            foreach ($orders->orders as $k => $order) {
+//                $this->pushtoCsCART($order);
+//            }
             return $orders;
         } catch (\Exception $e) {
             // Handle the exception, log or return an error response
