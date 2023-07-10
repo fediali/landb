@@ -494,7 +494,7 @@ class ChatingController extends BaseController
 
     public function sendCustomSms($phones, $message)
     {
-        $twilio = new Clien(getenv('TWILIO_AUTH_SID'), getenv('TWILIO_AUTH_TOKEN'));
+        $twilio = new Client(getenv('TWILIO_AUTH_SID'), getenv('TWILIO_AUTH_TOKEN'));
         $twilio_number = '+14692038098';
         foreach ($phones as $phone) {
             try {
