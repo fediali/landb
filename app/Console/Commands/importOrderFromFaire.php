@@ -82,7 +82,8 @@ class importOrderFromFaire extends Command
             return $orders;
         } catch (\Exception $e) {
             // Handle the exception, log or return an error response
-            return $e;
+            Log::info($e->getMessage());
+            echo 'An error occurred: ' . $e->getMessage();
         }
     }
     public function pushtoCsCART($order)
