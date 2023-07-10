@@ -171,8 +171,15 @@ class importOrderFromFaire extends Command
             return 1;
         }
         catch (\Exception $e) {
+            Log::info('faire error ---');
+            Log::info($order->id);
+            Log::info($order->payout_costs->total_payout->amount_minor);
+            Log::info($order->payout_costs->shipping_subsidy->amount_minor);
+            Log::info($order->payout_costs->total_payout->amount_minor / 100);
+            Log::info($order->payout_costs->shipping_subsidy->amount_minor / 100);
             Log::info($e);
-            return $e;
+            Log::info('faire error end ---');
+//            return $e;
         }
     }
 }
